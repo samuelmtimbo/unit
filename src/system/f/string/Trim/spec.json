@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "scissors",
     "description": "remove whitespace from both ends of string `a`",
-    "complexity": 3,
     "tags": ["f", "string"]
   },
   "id": "25cb84d7-ca96-4d79-926d-c01517a8d851",

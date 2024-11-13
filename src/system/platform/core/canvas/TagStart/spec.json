@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "tag",
     "description": "{start: `start`}",
-    "complexity": 7,
     "tags": ["platform", "core", "canvas"]
   },
   "inputs": {

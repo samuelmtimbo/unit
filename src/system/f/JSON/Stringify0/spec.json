@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "string",
     "description": "converts a JSON value to a string",
-    "complexity": 3,
     "tags": ["f", "JSON"]
   },
   "id": "ba0b8e9e-9d8a-4e83-8be3-04e95129e769",

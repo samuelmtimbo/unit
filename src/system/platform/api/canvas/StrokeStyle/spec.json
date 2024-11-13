@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "set the color, gradient, or pattern to use for stroke",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "83d22558-2c6f-4dd4-a231-baba798d1d97",

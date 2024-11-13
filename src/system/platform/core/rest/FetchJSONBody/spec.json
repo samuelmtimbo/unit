@@ -87,7 +87,6 @@
   "metadata": {
     "icon": "send",
     "description": "fetch JSON",
-    "complexity": 16,
     "tags": ["platform", "core", "rest"]
   },
   "inputs": {

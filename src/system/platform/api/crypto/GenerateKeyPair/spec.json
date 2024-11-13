@@ -34,7 +34,6 @@
     "icon": "lock",
     "description": "generate cryptographic public and private key pairs based on `algorithm`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/generateKey",
-    "complexity": 3,
     "tags": ["platform", "api", "crypto"]
   },
   "id": "089d3cef-2597-4777-8558-9942b4029472",

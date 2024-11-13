@@ -281,7 +281,6 @@
   },
   "metadata": {
     "icon": "atom-alt",
-    "complexity": 224,
     "description": "two editor side by side, connected to the same graph",
     "tags": ["platform", "core", "graph"],
     "position": {

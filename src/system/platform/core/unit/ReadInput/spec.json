@@ -89,7 +89,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "read `unit` input `name`",
-    "complexity": 8,
     "tags": ["platform", "core", "unit"]
   },
   "id": "850a3303-cdf7-4232-996f-760743e4f068"

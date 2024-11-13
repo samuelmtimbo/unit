@@ -114,7 +114,6 @@
   "metadata": {
     "icon": "array",
     "description": "map elements of arrays `a` and `b` to a new array `c` starting from index `from`",
-    "complexity": 40,
     "tags": ["core", "array"]
   },
   "id": "28ee1447-9e5d-4e18-8a9d-90fedfceb4ff",

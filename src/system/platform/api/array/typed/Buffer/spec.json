@@ -23,7 +23,6 @@
   "metadata": {
     "icon": "square",
     "description": "get internal `array` buffer from typed array",
-    "complexity": 3,
     "tags": ["platform", "array", "typed"]
   },
   "id": "04d118fd-433e-4dd0-b828-0117eece566a",

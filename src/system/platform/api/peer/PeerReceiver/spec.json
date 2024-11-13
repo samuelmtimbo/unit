@@ -31,7 +31,6 @@
   "metadata": {
     "icon": "link",
     "description": "Peer to Peer (P2P) Receiver",
-    "complexity": 4,
     "tags": ["platform", "api", "peer"]
   },
   "id": "f079a38e-fb4f-496e-8e5f-d5e03a590cda",

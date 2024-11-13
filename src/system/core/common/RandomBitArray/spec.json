@@ -96,7 +96,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "random array of bits of size `n`",
-    "complexity": 59,
     "tags": ["core", "common"]
   },
   "id": "33ec13e7-5a30-4029-af21-07ee422a8a2d",

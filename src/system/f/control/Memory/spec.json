@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "triangle",
     "description": "output `a` then consume `a`",
-    "complexity": 3,
     "tags": ["f", "control"]
   },
   "id": "49e11645-c25d-4bf7-923d-56817f67b686",

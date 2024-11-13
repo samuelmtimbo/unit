@@ -24,7 +24,6 @@
   "metadata": {
     "icon": "activity",
     "description": "copies the current time data into an unsigned byte array",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioAnalyser"]
   },

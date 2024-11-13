@@ -697,7 +697,6 @@
     "defaultHeight": 50
   },
   "metadata": {
-    "complexity": 124,
     "icon": "toggle-right",
     "description": "select between \"on\" or \"off\"",
     "position": {

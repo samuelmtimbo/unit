@@ -131,7 +131,6 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "merge `a` and `default` if `a` is present, `default` otherwise",
-    "complexity": 8,
     "tags": ["core", "object"],
     "position": {
       "merge": {

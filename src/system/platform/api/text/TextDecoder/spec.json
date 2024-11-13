@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "square",
     "description": "`decoder` takes a stream of bytes as input and emits a stream of code points",
-    "complexity": 3,
     "tags": ["platform", "array", "typed"]
   },
   "id": "a64f3008-ad0d-401b-8294-cf222a5a4ca7",

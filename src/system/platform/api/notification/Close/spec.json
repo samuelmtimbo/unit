@@ -14,7 +14,6 @@
   "metadata": {
     "icon": "bell",
     "description": "remove `notification` from system tray",
-    "complexity": 3,
     "tags": ["platform", "api", "notification"]
   },
   "id": "29e974cc-081b-11eb-a607-1fd4ec67a52f",

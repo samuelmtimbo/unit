@@ -127,8 +127,7 @@
   "metadata": {
     "icon": "history",
     "description": "delete all history visits matching `text`",
-    "tags": ["platform", "extension", "history"],
-    "complexity": 47
+    "tags": ["platform", "extension", "history"]
   },
   "id": "dd22949e-ad44-4571-9af4-322a1e194ebe",
   "private": true,

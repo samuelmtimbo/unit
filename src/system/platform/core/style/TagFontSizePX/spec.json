@@ -85,7 +85,6 @@
   "metadata": {
     "description": "create obj with property \"fontSize\" to `n` px",
     "icon": "brackets-curly",
-    "complexity": 17,
     "position": {
       "merge": {
         "0": {

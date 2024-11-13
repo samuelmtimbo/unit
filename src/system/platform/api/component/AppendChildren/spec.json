@@ -38,7 +38,6 @@
   "metadata": {
     "icon": "square",
     "description": "append `children` instances to `parent` at once",
-    "complexity": 3,
     "tags": ["platform", "api", "component"]
   },
   "id": "2ea56c24-642b-420b-ae7d-e434299c7003",

@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "eye",
     "description": "monitors `component` to detect when it intersects with a defined ancestor",
-    "complexity": 3,
     "tags": ["platform", "api", "observer"]
   },
   "id": "e8aded15-a1af-42a0-9a9d-f88fcfd03dc3",

@@ -9,7 +9,6 @@
   "metadata": {
     "icon": "expand",
     "description": "all corner resize handlers",
-    "complexity": 43,
     "tags": ["platform", "component", "app"]
   },
   "id": "6b18c608-7b5a-11ea-bb6e-2ff12a5cc3f3",

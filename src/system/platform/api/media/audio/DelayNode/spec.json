@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "activity",
     "description": "apply delay to audio signal",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioContext"]
   },

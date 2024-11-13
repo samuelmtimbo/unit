@@ -27,7 +27,6 @@
   "metadata": {
     "icon": "activity",
     "description": "periodic waveform, such as a sine wave",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioContext"]
   },

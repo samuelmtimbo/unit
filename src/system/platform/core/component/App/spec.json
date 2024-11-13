@@ -284,7 +284,6 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "editor + gui",
-    "complexity": 227,
     "tags": ["platform", "core", "component"],
     "position": {
       "merge": {

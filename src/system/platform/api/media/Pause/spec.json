@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "play",
     "description": "play media element",
-    "complexity": 3,
     "tags": ["f", "unit"]
   },
   "id": "44968bd5-f1a5-4f81-a32f-8ee5a6e4a842",

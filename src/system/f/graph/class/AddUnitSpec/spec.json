@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "circle",
     "description": "add unit of `unit` spec to `graph`",
-    "complexity": 18,
     "tags": ["f", "graph"]
   },
   "id": "d36729c6-432f-46e9-8fa1-3fc88de022ff",

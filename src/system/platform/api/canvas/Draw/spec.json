@@ -30,7 +30,6 @@
   "metadata": {
     "icon": "square",
     "description": "draw on `canvas`",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"],
     "position": {
       "merge": {

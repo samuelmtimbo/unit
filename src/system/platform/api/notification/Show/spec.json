@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "bell",
     "description": "push `notification` to system tray",
-    "complexity": 3,
     "tags": ["platform", "api", "notification"]
   },
   "id": "5aea0bf0-0815-11eb-9304-5f90b5542620",

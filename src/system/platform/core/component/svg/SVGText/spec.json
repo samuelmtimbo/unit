@@ -104,8 +104,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG text",
-    "complexity": 88
+    "description": "SVG text"
   },
   "render": true,
   "component": {

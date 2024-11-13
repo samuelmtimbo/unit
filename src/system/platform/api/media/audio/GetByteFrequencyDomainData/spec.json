@@ -24,7 +24,6 @@
   "metadata": {
     "icon": "activity",
     "description": "copies the current frequency data into a unsigned byte array",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioAnalyser"]
   },

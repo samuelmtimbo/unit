@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "circle",
     "description": "execute `unit` `method` with `data`",
-    "complexity": 3,
     "tags": ["f", "meta"]
   },
   "id": "56fb9a32-ad10-11ea-b0f4-3b0ea5e3ac2c",

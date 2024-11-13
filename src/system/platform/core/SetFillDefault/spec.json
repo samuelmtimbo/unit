@@ -68,7 +68,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `obj` \"fill\" to `value` if `test` is true or to `default` otherwise",
-    "complexity": 24,
     "tags": ["platform", "core"]
   },
   "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",

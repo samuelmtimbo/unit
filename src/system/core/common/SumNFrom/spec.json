@@ -102,7 +102,6 @@
   "metadata": {
     "icon": "plus",
     "description": "add `n` next numbers to `from`",
-    "complexity": 40,
     "tags": ["core", "common"]
   },
   "inputs": {

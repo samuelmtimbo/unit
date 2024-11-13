@@ -61,7 +61,6 @@
   "metadata": {
     "icon": "alarm-clock",
     "description": "output after `ms` milliseconds",
-    "complexity": 8,
     "tags": ["core", "time"]
   },
   "id": "586fb5b8-4129-4ca1-b0c4-1009485bed95",

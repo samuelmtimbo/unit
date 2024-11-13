@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "circle",
     "description": "connect plug in `graph`",
-    "complexity": 3,
     "tags": ["f", "graph"]
   },
   "id": "2846ce5f-7f05-4c47-a969-8706b5064bbe",

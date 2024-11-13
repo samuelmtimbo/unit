@@ -101,7 +101,6 @@
   "metadata": {
     "icon": "split-half",
     "description": "split array `a` in half",
-    "complexity": 24,
     "tags": ["core", "array"]
   },
   "id": "8babf4fa-e95e-449e-80b9-62e03ba0aae4",

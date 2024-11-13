@@ -9,7 +9,6 @@
   "metadata": {
     "icon": "slash",
     "description": "consume `a`",
-    "complexity": 3,
     "tags": ["f", "control"]
   },
   "id": "9d853ef5-3fff-474d-a951-6af4237cf4c4",

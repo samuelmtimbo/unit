@@ -39,7 +39,6 @@
   "metadata": {
     "icon": "message-circle",
     "description": "say what I say",
-    "complexity": 9,
     "tags": ["platform", "core", "speech"]
   },
   "id": "b7028cdd-41c2-42ab-99d9-7122d372aee2",

@@ -9,7 +9,6 @@
   "metadata": {
     "icon": "keyboard",
     "description": "virtual keyboard",
-    "complexity": 48,
     "tags": ["platform", "component", "app"]
   },
   "id": "fcccb9a4-1a30-11eb-93b0-e7d511d031f2",

@@ -38,7 +38,6 @@
   "metadata": {
     "icon": "plus",
     "description": "increment `a`",
-    "complexity": 5,
     "tags": ["core", "common"]
   },
   "id": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e",

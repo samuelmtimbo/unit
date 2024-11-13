@@ -51,7 +51,6 @@
   "metadata": {
     "icon": "undo",
     "description": "loop subtract the value of `-` from the current value",
-    "complexity": 8,
     "tags": ["core", "common"]
   },
   "inputs": {

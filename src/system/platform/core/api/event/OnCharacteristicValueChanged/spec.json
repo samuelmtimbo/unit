@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to Bluetooth GATT `characteristic` value changed event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "7b1eebd2-e8eb-11ea-a986-af42b73b3719",

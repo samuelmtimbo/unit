@@ -49,7 +49,6 @@
   "metadata": {
     "icon": "x",
     "description": "build new array by multiply arrays `a` and `b` element by element",
-    "complexity": 51,
     "tags": ["core", "array"]
   },
   "inputs": {

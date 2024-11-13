@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "tag",
     "description": "{email: `email`}",
-    "complexity": 7,
     "tags": ["platform", "core", "component"]
   },
   "inputs": {

@@ -23,7 +23,6 @@
   "metadata": {
     "icon": "ruler",
     "description": "watch the size of a component",
-    "complexity": 3,
     "tags": ["platform", "api", "observer"]
   },
   "id": "2f2d5ea4-6dd2-406e-a095-5552ebc235e7",

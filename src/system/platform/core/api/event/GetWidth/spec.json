@@ -40,7 +40,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "extract width from `obj`",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "16249a80-98ac-11eb-95b7-1b64bf84f0d8",

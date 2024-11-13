@@ -58,7 +58,6 @@
   "metadata": {
     "icon": "repeat-1",
     "description": "output `a` `n` times",
-    "complexity": 23,
     "tags": ["core", "common"]
   },
   "inputs": {

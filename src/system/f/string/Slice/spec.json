@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "scissors",
     "description": "extracts a section of a string",
-    "complexity": 3,
     "tags": ["f", "string"]
   },
   "id": "c8a4cd44-a554-4901-8a33-a8adbff63d03",

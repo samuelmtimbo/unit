@@ -155,7 +155,6 @@
   },
   "metadata": {
     "icon": "square",
-    "complexity": 18,
     "description": "listen for \"Enter\" keydown",
     "position": {
       "merge": {

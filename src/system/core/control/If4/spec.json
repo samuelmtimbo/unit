@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "filter",
     "description": "conditionally filter `a`, `b`, `c` and `d` based on `test`",
-    "complexity": 8,
     "tags": ["core", "control"]
   },
   "inputs": {

@@ -58,8 +58,7 @@
   "outputs": {},
   "metadata": {
     "icon": "type",
-    "description": "text paragraph",
-    "complexity": 87
+    "description": "text paragraph"
   },
   "render": true,
   "component": {

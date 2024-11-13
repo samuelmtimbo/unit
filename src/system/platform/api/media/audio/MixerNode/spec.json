@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "activity",
     "description": "add two audio signals together",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioContext"]
   },

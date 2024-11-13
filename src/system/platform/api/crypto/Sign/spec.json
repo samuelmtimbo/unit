@@ -32,7 +32,6 @@
     "icon": "lock",
     "description": "cryptographically generate `signature` of `data` with `key`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/sign",
-    "complexity": 3,
     "tags": ["platform", "api", "crypto"]
   },
   "id": "d3719453-ca94-4827-a6b6-5aa8f87b1dc5",

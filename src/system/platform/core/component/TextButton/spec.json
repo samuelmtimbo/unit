@@ -43,8 +43,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "text button",
-    "complexity": 87
+    "description": "text button"
   },
   "render": true,
   "component": {

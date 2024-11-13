@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "circle",
     "description": "array of 8-bit unsigned integers clamped to 0-255",
-    "complexity": 3,
     "tags": ["platform", "array", "typed"]
   },
   "id": "cd8c1d94-1471-49e2-8b43-d98ae93b70f3",

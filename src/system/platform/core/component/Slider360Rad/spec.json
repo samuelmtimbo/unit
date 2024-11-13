@@ -74,7 +74,6 @@
   "metadata": {
     "icon": "sliders",
     "description": "360 rad slider current value",
-    "complexity": 61,
     "position": {
       "merge": {
         "hgtjcyd": {

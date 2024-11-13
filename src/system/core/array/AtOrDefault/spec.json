@@ -104,7 +104,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "get array `a` element at position `at` or `d` if not present",
-    "complexity": 23,
     "tags": ["core", "array"]
   },
   "inputs": {

@@ -23,7 +23,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set value at given key",
-    "complexity": 3,
     "tags": ["f", "object"]
   },
   "id": "c4784b05-1f50-44ad-b812-545b3ed77614",

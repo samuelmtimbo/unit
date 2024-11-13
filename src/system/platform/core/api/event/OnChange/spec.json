@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` change event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "7f25303a-b1ee-11ea-bab2-5f81e27c8466",

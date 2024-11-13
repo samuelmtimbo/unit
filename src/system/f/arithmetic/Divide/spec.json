@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "divide",
     "description": "divide `a` by `b`",
-    "complexity": 3,
     "tags": ["f", "arithmetic"]
   },
   "id": "158d85eb-28b8-4355-b637-28a7ec751233",

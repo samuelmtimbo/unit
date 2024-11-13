@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "plus",
     "description": "compare two strings in alphabetical order",
-    "complexity": 3,
     "tags": ["f", "string"]
   },
   "id": "065d2fc3-af3b-4704-b26e-228d71f61771",

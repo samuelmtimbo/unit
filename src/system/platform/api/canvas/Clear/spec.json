@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "eraser",
     "description": "clear canvas",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "1ef77768-7394-4b83-ad11-f5905fa9d0d3",

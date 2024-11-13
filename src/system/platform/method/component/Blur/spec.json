@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "remove focus from `component`",
-    "complexity": 3,
     "tags": ["platform", "method", "object"]
   },
   "id": "b51db03f-4d2d-44f9-bbd9-116aa0b086d0",

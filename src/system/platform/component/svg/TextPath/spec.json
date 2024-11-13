@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "square",
     "description": "SVG text path",
-    "complexity": 43,
     "tags": ["platform", "component", "svg"]
   },
   "id": "00c828fc-9243-11ea-b897-5b0fc55820c5",

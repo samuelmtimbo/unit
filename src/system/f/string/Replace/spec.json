@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "search",
     "description": "replace every `regex` match in `str` `with`",
-    "complexity": 3,
     "tags": ["f", "string"]
   },
   "id": "af5469c4-a09e-4b22-8133-a21e721e7639",

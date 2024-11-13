@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "arrow-down",
     "description": "the smallest between `a` and `b`",
-    "complexity": 3,
     "tags": ["f", "math"]
   },
   "id": "4e63c320-f5a5-4f65-982e-632b5adafa29",

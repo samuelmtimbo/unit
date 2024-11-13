@@ -26,7 +26,6 @@
   "metadata": {
     "icon": "square",
     "description": "render a unit",
-    "complexity": 43,
     "tags": ["platform", "component"]
   },
   "id": "7772a2f5-40c8-482e-83f4-bed9bfb364e3",

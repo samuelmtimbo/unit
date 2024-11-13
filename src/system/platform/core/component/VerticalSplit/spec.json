@@ -486,7 +486,6 @@
   "metadata": {
     "icon": "square",
     "description": "adjustable vertically split container",
-    "complexity": 156,
     "tags": ["platform", "core", "component"]
   },
   "id": "01791e01-bfeb-47d0-952a-8dd32a72d1fb",

@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "circle",
     "description": "array of 8-bit unsigned integers",
-    "complexity": 3,
     "tags": ["platform", "array", "typed"]
   },
   "id": "c91ce066-ea5f-496d-8783-8f46c29673de",

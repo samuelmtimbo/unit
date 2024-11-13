@@ -25,7 +25,6 @@
   "metadata": {
     "icon": "image",
     "description": "HTML image element",
-    "complexity": 43,
     "tags": ["platform", "component", "media"]
   },
   "id": "059579bb-184f-435b-ace0-64ec95c9f125",

@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "start new sub-path at the point specified by the given x, y coordinates",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "3c47d4bc-315d-4600-a9cd-6e388b345980",

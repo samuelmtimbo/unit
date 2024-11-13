@@ -17,7 +17,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "get `obj` `keys`",
-    "complexity": 3,
     "tags": ["platform", "method", "object"]
   },
   "id": "e4fb7815-95e1-4cbc-b2e2-750605e30258",

@@ -76,8 +76,7 @@
   "outputs": {},
   "metadata": {
     "icon": "object-set",
-    "description": "set local storage property `name` to `data`",
-    "complexity": 16
+    "description": "set local storage property `name` to `data`"
   },
   "id": "26dc57a1-e372-47b0-8d06-1b6cf2056783"
 }

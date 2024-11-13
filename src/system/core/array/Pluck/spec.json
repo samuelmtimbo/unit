@@ -128,8 +128,7 @@
   },
   "metadata": {
     "icon": "array",
-    "description": "map array objects `a` to their `key` values",
-    "complexity": 48
+    "description": "map array objects `a` to their `key` values"
   },
   "id": "bad2ec99-81c0-4a7d-9b3a-562b870c13eb"
 }

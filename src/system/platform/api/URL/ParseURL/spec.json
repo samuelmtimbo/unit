@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "tilde",
     "description": "decode `url` into its segments `obj`",
-    "complexity": 3,
     "tags": ["platform", "api", "URL"]
   },
   "id": "81ac8195-57ed-4b22-b8b8-fe3e68b11af0",

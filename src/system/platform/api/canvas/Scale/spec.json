@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "scale a `canvas`",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "2e2bede5-41a9-4c35-8b02-482b610837ff",

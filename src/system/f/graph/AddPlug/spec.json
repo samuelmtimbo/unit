@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "circle",
     "description": "set `graph` `id` unit `type` `name` pin `data`",
-    "complexity": 3,
     "tags": ["f", "graph"]
   },
   "id": "c460bfe1-253e-4d9f-8572-1ca06557aba9",

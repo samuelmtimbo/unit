@@ -4,7 +4,6 @@ import { pathExistsSync, readJSONSync } from 'fs-extra'
 import * as glob from 'glob'
 import { join } from 'path'
 import { PATH_SRC, PATH_SRC_SYSTEM } from '../path'
-import { treeComplexity } from '../spec/complexity'
 import __specs from '../system/_specs'
 import { Spec, Specs } from '../types'
 import { removeLastSegment } from '../util/removeLastSegment'
@@ -73,25 +72,27 @@ export function refreshComplexity(specs: Specs, cwd: string): void {
         metadata: { globals = [] },
       } = spec as Spec
 
-      let complexity: number
+      // let complexity: number
 
-      complexity = baseComplexityByPath(folder_path)
+      // complexity = baseComplexityByPath(folder_path)
 
-      let global_complexity = 0
-      for (const global_id of globals) {
-        global_complexity += GLOBAL_COST
-      }
+      // let global_complexity = 0
+      // for (const global_id of globals) {
+      //   global_complexity += GLOBAL_COST
+      // }
 
-      complexity += complexity + global_complexity
+      // complexity += complexity + global_complexity
 
-      complexity = Math.round(complexity)
+      // complexity = Math.round(complexity)
 
-      console.log(folder_path, complexity)
+      // console.log(folder_path, complexity)
 
-      spec.metadata = spec.metadata || {}
-      spec.metadata.complexity = complexity
+      // spec.metadata = spec.metadata || {}
+      // spec.metadata.complexity = complexity
 
-      specs[id] = spec
+      delete spec.metadata.complexity
+
+      // specs[id] = spec
 
       writeFileSync(spec_path, JSON.stringify(spec, null, 2))
     })
@@ -105,22 +106,27 @@ export function refreshComplexity(specs: Specs, cwd: string): void {
       const folder_path = `${cwd}/${_}`
       const spec_path = `${folder_path}/spec.json`
       const spec = readJSONSync(spec_path)
-      const { id, base } = spec as Spec
 
-      if (base) {
-        //
-      } else {
-        const complexity = treeComplexity(specs, spec, {})
+      delete spec.metadata?.complexity
 
-        console.log(folder_path, complexity)
+      // const { id, base } = spec as Spec
 
-        spec.metadata = spec.metadata || {}
-        spec.metadata.complexity = complexity
+      // if (base) {
+      //   //
+      // } else {
+      //   // const complexity = treeComplexity(specs, spec, {})
 
-        specs[id] = spec
+      //   // console.log(folder_path, complexity)
 
-        writeFileSync(spec_path, JSON.stringify(spec, null, 2))
-      }
+      //   // spec.metadata = spec.metadata || {}
+      //   // spec.metadata.complexity = complexity
+
+      //   delete spec.metadata.complexity
+
+      //   // specs[id] = spec
+
+      writeFileSync(spec_path, JSON.stringify(spec, null, 2))
+      // }
     })
 }
 

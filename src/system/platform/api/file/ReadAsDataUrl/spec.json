@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "file-output",
     "description": "read the contents of the specified blob or file",
-    "complexity": 3,
     "tags": ["platform", "api", "file"]
   },
   "id": "27ed8152-aaa0-4ac7-bebc-8b582727b129",

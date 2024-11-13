@@ -82,7 +82,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set context color",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "set"]
   },
   "id": "7b067f38-e437-11ea-ad36-13112ed6b20b",

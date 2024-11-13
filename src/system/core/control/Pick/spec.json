@@ -78,7 +78,6 @@
   "metadata": {
     "icon": "pointer",
     "description": "conditional picker",
-    "complexity": 11,
     "tags": ["core", "control"]
   },
   "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05",

@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "square",
     "description": "offscreen iframe document",
-    "complexity": 3,
     "tags": ["platform", "component"]
   },
   "id": "8be95fbe-8f10-467b-bbdd-87311ca62594",

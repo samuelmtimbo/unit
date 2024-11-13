@@ -25,7 +25,6 @@
   "metadata": {
     "icon": "string",
     "description": "output an empty string",
-    "complexity": 5,
     "tags": ["core", "object"]
   },
   "inputs": {

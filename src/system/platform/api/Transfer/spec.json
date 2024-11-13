@@ -17,7 +17,6 @@
   "metadata": {
     "icon": "send",
     "description": "transfer `data` reference to `window`",
-    "complexity": 3,
     "tags": ["platform", "api"]
   },
   "base": true,

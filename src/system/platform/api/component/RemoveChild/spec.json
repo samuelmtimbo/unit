@@ -17,7 +17,6 @@
   "metadata": {
     "icon": "square",
     "description": "remove `parent` child element `at` index",
-    "complexity": 18,
     "tags": ["platform", "api", "component"]
   },
   "id": "6dbff818-02b9-11eb-9ee7-93b57419f741",

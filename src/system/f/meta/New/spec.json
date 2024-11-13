@@ -17,7 +17,6 @@
   "metadata": {
     "icon": "circle",
     "description": "instantiate `class`",
-    "complexity": 3,
     "tags": ["f", "meta"]
   },
   "id": "1b592040-968f-456b-bdb5-b424e08b80f1",

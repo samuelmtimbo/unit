@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "circle",
     "description": "output `a` only once",
-    "complexity": 3,
     "tags": ["f", "meta"]
   },
   "id": "3be8272d-310a-4aa2-84a1-71f590a8227a",

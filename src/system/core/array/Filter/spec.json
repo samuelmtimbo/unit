@@ -119,7 +119,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "filter a list `a`",
-    "complexity": 54,
     "tags": ["core", "array"]
   },
   "inputs": {

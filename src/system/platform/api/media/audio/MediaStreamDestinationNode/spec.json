@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "speaker",
     "description": "create media stream from audio node",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioDestinationNode"]
   },

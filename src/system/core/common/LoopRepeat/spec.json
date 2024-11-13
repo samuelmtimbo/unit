@@ -97,7 +97,6 @@
   "metadata": {
     "icon": "repeat",
     "description": "repeats `a` while `next` is true",
-    "complexity": 8,
     "tags": ["core", "common"]
   },
   "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",

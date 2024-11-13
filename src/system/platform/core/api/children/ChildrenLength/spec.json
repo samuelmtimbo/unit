@@ -112,8 +112,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "get component children count",
-    "complexity": 8
+    "description": "get component children count"
   },
   "id": "5bfd6983-ac96-4b74-a469-c0add966cdf2"
 }

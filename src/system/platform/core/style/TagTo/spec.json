@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "tag",
     "description": "{to: `to`}",
-    "complexity": 7,
     "tags": ["platform", "core", "style"]
   },
   "inputs": {

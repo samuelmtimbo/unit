@@ -107,7 +107,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
-    "complexity": 22,
     "tags": ["platform", "core"]
   },
   "id": "c0b85780-7e99-11ea-9a99-879f3f411ebd",

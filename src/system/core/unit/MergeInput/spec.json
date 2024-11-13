@@ -154,8 +154,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set each `unit` key value input",
-    "tags": ["core", "unit"],
-    "complexity": 61
+    "tags": ["core", "unit"]
   },
   "id": "568638fd-0338-4ad3-a76f-8581c7b3aa44"
 }

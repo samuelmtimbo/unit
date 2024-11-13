@@ -55,7 +55,6 @@
   },
   "metadata": {
     "icon": "square",
-    "complexity": 88,
     "description": "horizontal scroll container",
     "tags": ["platform", "core", "component"]
   },

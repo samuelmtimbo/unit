@@ -32,7 +32,6 @@
     "icon": "lock",
     "description": "dencrypts `data` with given `key` and `algorithm`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/decrypt",
-    "complexity": 3,
     "tags": ["platform", "api", "crypto"]
   },
   "id": "f6400b55-10af-4983-96bc-6b915433f3b6",

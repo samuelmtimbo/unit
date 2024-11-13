@@ -225,8 +225,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "grid showin",
-    "complexity": 113
+    "description": "grid showin"
   },
   "id": "8d3a4d38-3015-46f2-81d7-694644cec386",
   "system": true,

@@ -4,24 +4,51 @@
   "units": {
     "xor": {
       "id": "3d59edf2-5fca-4475-9df0-d876e14f990d",
-      "input": { "a": {}, "b": { "constant": true, "data": "1" } },
-      "output": { "a ^ b": {} },
-      "metadata": { "position": { "x": 0, "y": 0 } }
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "1"
+        }
+      },
+      "output": {
+        "a ^ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
     }
   },
   "merges": {},
   "inputs": {
     "a": {
-      "plug": { "0": { "unitId": "xor", "pinId": "a", "kind": "input" } },
+      "plug": {
+        "0": {
+          "unitId": "xor",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
       "ref": false
     }
   },
   "outputs": {
     "~a": {
-      "plug": { "0": { "unitId": "xor", "pinId": "a ^ b" } },
+      "plug": {
+        "0": {
+          "unitId": "xor",
+          "pinId": "a ^ b"
+        }
+      },
       "ref": false
     }
   },
-  "metadata": { "icon": "bitwise-not", "description": "bitwise NOT operator" },
+  "metadata": {
+    "icon": "bitwise-not",
+    "description": "bitwise NOT operator"
+  },
   "id": "1c33668d-5aa9-4c45-bb8a-dfce14a2aded"
 }

@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "square",
     "description": "context of the connected `element`",
-    "complexity": 43,
     "tags": ["platform", "component"]
   },
   "id": "d7c86a2a-489f-11eb-b83e-d3767f6d49b7",

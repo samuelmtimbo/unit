@@ -30,7 +30,6 @@
   "metadata": {
     "icon": "repeat-1",
     "description": "style to centralize element on container",
-    "complexity": 5,
     "tags": ["platform", "core", "style"]
   },
   "id": "de473a6a-a0f3-11ea-bc93-ff2e35342869",

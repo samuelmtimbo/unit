@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `obj` property at `path` to `value`",
-    "complexity": 3,
     "tags": ["platform", "method", "object"]
   },
   "id": "64f8e8bc-124d-49f6-a143-625265eafe68",

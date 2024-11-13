@@ -78,7 +78,6 @@
   "metadata": {
     "icon": "array",
     "description": "output every element of array `a`",
-    "complexity": 31,
     "tags": ["core", "array"]
   },
   "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",

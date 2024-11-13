@@ -603,7 +603,6 @@
   },
   "metadata": {
     "icon": "sliders",
-    "complexity": 163,
     "tags": ["platform", "core", "component"],
     "description": "slider + fields for adjusting min max",
     "position": {

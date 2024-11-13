@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "info-square",
     "description": "`a` element at position `i`",
-    "complexity": 3,
     "tags": ["platform", "method", "array"]
   },
   "id": "1625eaa0-a56c-4d35-919b-bc68ed626815",

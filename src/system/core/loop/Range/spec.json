@@ -79,7 +79,6 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "count from `a` to `b`, not inclusive",
-    "complexity": 21,
     "tags": ["core", "loop"]
   },
   "inputs": {

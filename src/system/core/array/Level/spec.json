@@ -107,7 +107,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "match arrays' length",
-    "complexity": 63,
     "tags": ["core", "array"]
   },
   "id": "358fa592-55e4-49f5-be28-b66e5114b266",

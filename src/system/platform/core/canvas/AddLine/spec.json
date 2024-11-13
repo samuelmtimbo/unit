@@ -106,7 +106,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "draw a circle to the canvas",
-    "complexity": 22,
     "tags": ["platform", "core", "canvas"]
   },
   "inputs": {

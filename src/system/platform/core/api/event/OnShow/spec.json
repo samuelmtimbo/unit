@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` \"show\" event",
-    "complexity": 5,
     "tags": ["platform", "api", "notification"]
   },
   "id": "cbb19840-081e-11eb-918d-3f728eda5672",

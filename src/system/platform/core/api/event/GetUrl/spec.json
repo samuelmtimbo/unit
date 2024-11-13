@@ -40,7 +40,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "extract `url` from `obj`",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "19f08be0-560a-11eb-a3a2-e7395ef5830a",

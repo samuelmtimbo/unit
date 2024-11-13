@@ -22,7 +22,6 @@
     "icon": "send",
     "description": "reads response to completion and parse the body as a Blob",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
-    "complexity": 3,
     "tags": ["platform", "api", "network"]
   },
   "id": "e22782a9-31e9-4b12-83ca-1000607fd39b",

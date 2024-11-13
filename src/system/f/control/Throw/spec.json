@@ -9,7 +9,6 @@
   "metadata": {
     "icon": "alert-circle",
     "description": "throw error message",
-    "complexity": 3,
     "tags": ["f", "control"]
   },
   "id": "99657eb7-fb94-474e-b03d-4b08c537c0a2",

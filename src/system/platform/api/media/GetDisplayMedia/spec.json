@@ -16,7 +16,6 @@
   "base": true,
   "metadata": {
     "icon": "film",
-    "complexity": 12,
     "description": "prompts the user to capture the contents of a display or portion thereof",
     "tags": ["platform", "api", "media"],
     "globals": ["MediaDevices"],

@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "sort array `a` by comparing its elements",
-    "complexity": 4,
     "tags": ["f", "array"]
   },
   "id": "d4572f1c-83d3-4a3d-be76-fa16578286d2",

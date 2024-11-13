@@ -144,7 +144,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "a line on canvas",
-    "complexity": 78,
     "tags": ["platform", "core", "canvas"],
     "position": {
       "merge": {

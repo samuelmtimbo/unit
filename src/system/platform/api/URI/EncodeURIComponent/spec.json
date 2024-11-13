@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "tilde",
     "description": "encodes a text string as a valid component of a Uniform Resource Identifier (URI).",
-    "complexity": 3,
     "tags": ["platform", "api", "URI"]
   },
   "id": "27e2f302-c23a-4447-abde-8309a94b331d",

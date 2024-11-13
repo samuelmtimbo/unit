@@ -52,7 +52,6 @@
   "metadata": {
     "icon": "send",
     "description": "build HTTP token auth header options",
-    "complexity": 13,
     "tags": ["platform", "core", "rest"]
   },
   "inputs": {

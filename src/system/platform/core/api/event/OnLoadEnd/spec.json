@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` load event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "be8e421f-efc8-4b58-a091-28514f395fd8",

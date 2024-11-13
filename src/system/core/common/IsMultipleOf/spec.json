@@ -62,7 +62,6 @@
   "metadata": {
     "icon": "question",
     "description": "check whether `a` is a multiple of `b`",
-    "complexity": 8,
     "tags": ["core", "common"]
   },
   "id": "f409eb04-77b5-49ad-b3aa-aeedde9b547f",

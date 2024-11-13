@@ -208,7 +208,6 @@
   "metadata": {
     "icon": "palette",
     "description": "RGB color to hexadecimal",
-    "complexity": 22,
     "tags": ["platform", "core", "color"]
   },
   "id": "d7bf7bad-3b64-4190-9bae-878e88d119e7",

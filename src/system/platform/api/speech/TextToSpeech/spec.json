@@ -18,7 +18,6 @@
   "metadata": {
     "icon": "message-circle",
     "description": "speak the message",
-    "complexity": 3,
     "tags": ["platform", "api", "speech"]
   },
   "id": "6db29a62-2035-4cfc-a9d3-03444a8bc2b8",

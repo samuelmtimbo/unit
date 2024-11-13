@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "equal-not",
     "description": "inequality",
-    "complexity": 3,
     "tags": ["f", "comparison"]
   },
   "id": "bda175a9-a9d2-4282-9b50-1b008ae8a807",

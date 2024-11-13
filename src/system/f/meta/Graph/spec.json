@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "circle",
     "description": "get `unit` `graph`",
-    "complexity": 3,
     "tags": ["f", "meta"]
   },
   "id": "60169f42-7d1d-43db-9e24-53990dde80e0",

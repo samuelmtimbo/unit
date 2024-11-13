@@ -131,7 +131,6 @@
   "metadata": {
     "icon": "bitwise-nand",
     "description": "bitwise NAND operator",
-    "complexity": 11,
     "tags": ["core", "bitwise"],
     "position": {
       "merge": {

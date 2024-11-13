@@ -74,7 +74,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "get hostname `obj` property",
-    "complexity": 8,
     "tags": ["platform", "api", "read"]
   },
   "id": "9a695a17-a448-457f-90c2-02aed4b392af",

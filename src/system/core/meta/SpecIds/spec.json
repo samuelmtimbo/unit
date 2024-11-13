@@ -72,7 +72,6 @@
   "metadata": {
     "icon": null,
     "description": "all system spec ids",
-    "complexity": 8,
     "tags": ["core", "meta"]
   },
   "type": "`U`&`G`",

@@ -48,7 +48,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "head of array or default",
-    "complexity": 27,
     "tags": ["core", "array"]
   },
   "inputs": {

@@ -79,8 +79,7 @@
   "outputs": {},
   "metadata": {
     "icon": "download",
-    "description": "download blob file with `name`",
-    "complexity": 8
+    "description": "download blob file with `name`"
   },
   "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1"
 }

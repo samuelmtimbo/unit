@@ -101,7 +101,6 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "get element then set element after going through a function",
-    "complexity": 8,
     "tags": ["platform", "core"]
   },
   "type": "`U`&`G`",

@@ -134,7 +134,6 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "check whether `obj` has all `keys`",
-    "complexity": 43,
     "tags": ["core", "object"]
   },
   "id": "5db358ae-5975-4a4f-8fa4-ec991624508a",

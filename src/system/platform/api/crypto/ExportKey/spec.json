@@ -20,7 +20,6 @@
     "icon": "lock",
     "description": "export raw key as a `data` array buffer",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/exportKey",
-    "complexity": 3,
     "tags": ["platform", "api", "crypto"]
   },
   "id": "d54cd5d2-91eb-4f95-be2d-62fdaf86f474",

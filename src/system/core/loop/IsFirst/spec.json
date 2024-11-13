@@ -63,7 +63,6 @@
   "metadata": {
     "icon": "question",
     "description": "check whether this is the first element of stream `a`",
-    "complexity": 13,
     "tags": ["core", "loop"]
   },
   "inputs": {

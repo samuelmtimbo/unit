@@ -25,7 +25,6 @@
   "metadata": {
     "icon": "square",
     "description": "request a stream containing a real-time video capture of the `media` element",
-    "complexity": 13,
     "tags": ["platform", "api", "media"],
     "globals": ["MediaSource"]
   },

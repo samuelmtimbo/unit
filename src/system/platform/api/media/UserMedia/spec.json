@@ -16,7 +16,6 @@
   "base": true,
   "metadata": {
     "icon": "film",
-    "complexity": 12,
     "description": "get user's default audio/video media stream",
     "tags": ["platform", "api", "media"],
     "globals": ["MediaDevices"]

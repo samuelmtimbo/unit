@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "ruler",
     "description": "match end of a string against a regular expression",
-    "complexity": 3,
     "tags": ["f", "string"]
   },
   "id": "f2ac8a60-70bc-4743-934b-c5cae16b42c1",

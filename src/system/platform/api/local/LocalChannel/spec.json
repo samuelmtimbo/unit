@@ -23,7 +23,6 @@
   "metadata": {
     "icon": "broadcast-tower",
     "description": "channel for local communication",
-    "complexity": 18,
     "tags": ["platform", "api", "local"]
   },
   "id": "817c76ba-a71c-4136-af86-bd6b69106c45",

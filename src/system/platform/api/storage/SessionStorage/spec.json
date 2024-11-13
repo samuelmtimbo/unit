@@ -5,7 +5,6 @@
   "metadata": {
     "icon": "table",
     "description": "persist data on current session storage",
-    "complexity": 12,
     "tags": ["platform", "api", "storage"],
     "globals": ["SessionStorage"]
   },

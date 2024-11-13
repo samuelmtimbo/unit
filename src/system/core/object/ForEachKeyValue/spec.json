@@ -127,7 +127,6 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "output every key value pair of `obj`",
-    "complexity": 40,
     "tags": ["core", "object"]
   },
   "id": "47771360-640a-11ea-8393-d32f60372182",

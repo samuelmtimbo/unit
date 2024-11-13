@@ -1270,8 +1270,7 @@
         "y": -110
       }
     },
-    "tags": ["platform", "core", "component"],
-    "complexity": 133
+    "tags": ["platform", "core", "component"]
   },
   "id": "6475795b-1953-4d08-975b-15ace80099d3",
   "type": "`U`&`C`&`G`"

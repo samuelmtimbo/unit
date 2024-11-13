@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "play",
     "description": "start unit execution",
-    "complexity": 3,
     "tags": ["f", "unit"]
   },
   "id": "ff84b8cd-216f-4bcf-8e29-e7c9998cae3d",

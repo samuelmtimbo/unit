@@ -98,7 +98,6 @@
   "metadata": {
     "icon": "video",
     "description": "default video media",
-    "complexity": 62,
     "tags": ["platform", "core", "component"]
   },
   "component": {

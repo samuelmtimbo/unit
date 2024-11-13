@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "square",
     "description": "set of key/value pairs representing `form` fields and values",
-    "complexity": 4,
     "tags": ["platform", "component"]
   },
   "id": "0966c9b3-2fd5-4b5b-8146-82fb08bd14c4",

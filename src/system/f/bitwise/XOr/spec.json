@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "bitwise-xor",
     "description": "bitwise XOR operator",
-    "complexity": 3,
     "tags": ["f", "bitwise"]
   },
   "id": "3d59edf2-5fca-4475-9df0-d876e14f990d",

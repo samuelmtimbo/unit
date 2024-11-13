@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "tag",
     "description": "{password: `password`}",
-    "complexity": 7,
     "tags": ["platform", "core", "component"]
   },
   "inputs": {

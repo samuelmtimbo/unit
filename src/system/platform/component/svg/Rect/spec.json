@@ -48,7 +48,6 @@
   "metadata": {
     "icon": "square",
     "description": "SVG rectangle",
-    "complexity": 43,
     "tags": ["platform", "component", "svg"]
   },
   "id": "c0bfe832-8967-11ea-8c4c-1f2995e41b68",

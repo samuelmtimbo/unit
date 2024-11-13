@@ -77,7 +77,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` 'resize' event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "9fd9d2ea-98a7-11eb-8aa3-fbeb43cb1944",

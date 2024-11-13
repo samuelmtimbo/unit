@@ -137,7 +137,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "get unit's current sender",
-    "complexity": 8,
     "tags": ["platform", "core", "api", "get"],
     "position": {
       "merge": {

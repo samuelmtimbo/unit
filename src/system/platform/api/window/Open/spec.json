@@ -37,7 +37,6 @@
     "icon": "external-link",
     "description": "loads `url` into a new or existing `target` browsing context",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Window/open",
-    "complexity": 3,
     "tags": ["platform", "api", "window"]
   },
   "id": "1baddd01-97a9-4971-b74a-e933fefdb629",

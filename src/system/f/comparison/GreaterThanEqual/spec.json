@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "greater-than-equal",
     "description": "greater than equal operator",
-    "complexity": 3,
     "tags": ["f", "comparison"]
   },
   "id": "c9e06816-0d2b-43ec-b7c8-d07563e19b6b",

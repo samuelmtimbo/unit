@@ -56,7 +56,6 @@
   "metadata": {
     "icon": "equal",
     "description": "check whether `obj` has all `keys`",
-    "complexity": 8,
     "tags": ["core", "common"]
   },
   "id": "7a7468e3-c6e4-4c0b-b561-967914250d9b",

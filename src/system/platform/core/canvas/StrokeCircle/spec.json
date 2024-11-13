@@ -96,7 +96,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "stroke a circle path",
-    "complexity": 19,
     "tags": ["platform", "core", "canvas"]
   },
   "id": "89051065-ef45-48b2-ab7f-77ae173e1b4d",

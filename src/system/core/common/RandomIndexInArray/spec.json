@@ -50,7 +50,6 @@
   "metadata": {
     "icon": "random",
     "description": "random element of the array",
-    "complexity": 16,
     "tags": ["core", "common"]
   },
   "id": "e2325503-40a7-4c7e-b06c-d3833c8856e5",

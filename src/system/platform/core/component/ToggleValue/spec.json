@@ -91,7 +91,6 @@
   "metadata": {
     "icon": "toggle-left",
     "description": "toggle `obj` boolean property",
-    "complexity": 18,
     "tags": ["platform", "core", "component"]
   },
   "id": "dae754da-d773-41b9-bbc8-f72b83b6f03d",

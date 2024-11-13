@@ -40,7 +40,6 @@
     "icon": "lock",
     "description": "parse crypto `key` given knowledge of `format`, `algorithm`, `extractable` and `keyUsages`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey",
-    "complexity": 3,
     "tags": ["platform", "api", "crypto"]
   },
   "id": "6fdcf0d8-39ce-4d63-ad68-97d25be769ab",

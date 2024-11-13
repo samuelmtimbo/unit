@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "ruler",
     "description": "watch the position of a component",
-    "complexity": 3,
     "tags": ["platform", "api", "observer"]
   },
   "id": "b27ee28f-54fb-4737-91f5-04b52b7cf92d",

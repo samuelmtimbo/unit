@@ -315,8 +315,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "create new `obj` by picking `keys` from input `obj`",
-    "tags": ["core", "object"],
-    "complexity": 46
+    "tags": ["core", "object"]
   },
   "id": "034734a1-719b-41af-845f-ea50a4964d52",
   "component": {}

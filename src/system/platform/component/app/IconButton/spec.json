@@ -412,7 +412,6 @@
   "metadata": {
     "icon": "square",
     "description": "button with icon",
-    "complexity": 96,
     "tags": ["platform", "component", "app"]
   },
   "id": "65759894-7d11-11ea-a838-93e14e650d65",

@@ -36,7 +36,6 @@
   "metadata": {
     "icon": "square",
     "description": "append `child` instance to `parent`",
-    "complexity": 3,
     "tags": ["platform", "api", "component"]
   },
   "id": "ee4715e6-f479-11ea-b231-bf95a7f38a99",

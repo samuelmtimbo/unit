@@ -18,7 +18,6 @@
   "metadata": {
     "icon": "bluetooth",
     "description": "remote GATT service",
-    "complexity": 3,
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTService",
     "tags": ["platform", "api", "bluetooth"]
   },

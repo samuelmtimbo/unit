@@ -28,7 +28,6 @@
   "metadata": {
     "icon": "question",
     "description": "check whether array `a` is empty",
-    "complexity": 15,
     "tags": ["core", "array"]
   },
   "inputs": {

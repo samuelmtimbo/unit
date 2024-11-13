@@ -20,7 +20,6 @@
   "metadata": {
     "icon": "tilde",
     "description": "convert a number into a string",
-    "complexity": 3,
     "tags": ["f", "number"]
   },
   "id": "f712793d-8ee9-4805-9d4a-8c210cae667a",

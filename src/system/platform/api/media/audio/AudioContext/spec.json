@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "sliders",
     "description": "control an audio-processing graph built from audio modules linked together",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioContext"]
   },

@@ -34,7 +34,6 @@
   "merges": {},
   "component": {},
   "metadata": {
-    "complexity": 38,
     "description": "output true and false, forever",
     "tags": ["core", "common"]
   },

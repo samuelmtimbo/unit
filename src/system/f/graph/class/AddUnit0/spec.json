@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "circle",
     "description": "add unit of `class` to `graph`",
-    "complexity": 18,
     "tags": ["f", "graph"]
   },
   "id": "73967b68-9b4b-44c1-8a19-f505551f6c53",

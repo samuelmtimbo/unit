@@ -106,7 +106,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "accumulatively iterate over array `a` to produce `result`",
-    "complexity": 34,
     "tags": ["core", "array"]
   },
   "id": "5cd76a8a-603b-49e1-bda3-09ad217eb108",

@@ -135,7 +135,6 @@
   "metadata": {
     "icon": "palette",
     "description": "convert RGB color to XYZ",
-    "complexity": 77,
     "tags": ["platform", "core", "color"]
   },
   "inputs": {

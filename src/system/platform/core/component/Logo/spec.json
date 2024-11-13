@@ -175,7 +175,6 @@
   },
   "metadata": {
     "icon": "square",
-    "complexity": 96,
     "tags": ["platform", "core", "component"],
     "description": "Unit logo in SVG",
     "position": {

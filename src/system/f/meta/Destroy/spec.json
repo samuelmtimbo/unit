@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "circle-x",
     "description": "destroy a `unit`",
-    "complexity": 3,
     "tags": ["f", "meta"]
   },
   "id": "e2c36c21-e293-40df-9238-5c9ae7a20299",

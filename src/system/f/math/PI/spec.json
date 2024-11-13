@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "pi",
     "description": "the ratio of the circumference of a circle to its diameter",
-    "complexity": 3,
     "tags": ["f", "math"]
   },
   "id": "3256e26d-8495-4c9d-8998-5b026691231d",

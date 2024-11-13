@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "circle",
     "description": "disconnect plug in `graph`",
-    "complexity": 3,
     "tags": ["f", "graph"]
   },
   "id": "d1e7f8a2-3ef2-4264-a429-79d62e54f0b8",

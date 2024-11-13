@@ -28,7 +28,6 @@
   "metadata": {
     "icon": "link",
     "description": "remote peer graph",
-    "complexity": 19,
     "tags": ["platform", "api", "peer"]
   },
   "id": "d4ec46ab-d065-4d1c-9357-fa8b95be0c36",

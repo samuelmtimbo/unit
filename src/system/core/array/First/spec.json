@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "info-square",
     "description": "`a` element at position 0",
-    "complexity": 5,
     "tags": ["core", "array"]
   },
   "id": "0f77eb13-5c48-4611-a9bf-fe10c903dc63",

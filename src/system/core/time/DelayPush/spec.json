@@ -76,7 +76,6 @@
   "metadata": {
     "icon": "alarm-clock",
     "description": "delay + memory",
-    "complexity": 13,
     "tags": ["core", "time"]
   },
   "id": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",

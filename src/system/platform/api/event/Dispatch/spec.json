@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "circle",
     "description": "dispatch a custom `event` with `data` on `element`",
-    "complexity": 3,
     "tags": ["platform", "api", "event"]
   },
   "id": "a1cd3c3c-b1fa-40a2-80d1-32f416264a3d",

@@ -74,7 +74,6 @@
   "metadata": {
     "icon": "array",
     "description": "build a list of size n",
-    "complexity": 26,
     "tags": ["core", "common"]
   },
   "id": "38033fcc-aa28-4df3-abc8-d4ece231028b",

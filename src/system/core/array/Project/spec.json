@@ -143,8 +143,7 @@
   },
   "metadata": {
     "icon": "array",
-    "description": "create array `b` by getting `keys` from object array `a`",
-    "complexity": 59
+    "description": "create array `b` by getting `keys` from object array `a`"
   },
   "id": "7d7901df-7c97-4c66-b6e5-4a14c7c0fa75"
 }

@@ -75,7 +75,6 @@
   },
   "metadata": {
     "icon": "square",
-    "complexity": 53,
     "description": "div with inline-block display",
     "tags": ["platform", "core", "component"]
   },

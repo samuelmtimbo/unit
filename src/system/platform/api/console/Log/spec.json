@@ -8,7 +8,6 @@
   "metadata": {
     "icon": "terminal",
     "description": "print to the console",
-    "complexity": 3,
     "tags": ["platform", "api", "console"]
   },
   "id": "e7232263-a2cf-4f2b-a862-4fc85933d09f",

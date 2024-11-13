@@ -30,7 +30,6 @@
   "metadata": {
     "icon": "link",
     "description": "output `offer` and input `answer` to stablish a Peer to Peer (P2P) connection with a remote peer",
-    "complexity": 4,
     "tags": ["platform", "api", "peer"]
   },
   "id": "7375aad5-50fd-403c-80ae-471b95088f04",

@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "value-absolute",
     "description": "absolute value of `a`",
-    "complexity": 3,
     "tags": ["f", "math"]
   },
   "id": "fafc23ce-a259-11eb-b14e-af9d1f579af4",

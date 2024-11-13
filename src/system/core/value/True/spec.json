@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "check-circle",
     "description": "output true",
-    "complexity": 5,
     "tags": ["core", "value"]
   },
   "inputs": {

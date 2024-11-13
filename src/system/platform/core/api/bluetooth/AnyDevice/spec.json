@@ -78,7 +78,6 @@
   "metadata": {
     "icon": "bluetooth",
     "description": "select one of all available bluetooth devices",
-    "complexity": 8,
     "tags": ["platform", "core", "api", "bluetooth"]
   },
   "type": "`U`&`G`",

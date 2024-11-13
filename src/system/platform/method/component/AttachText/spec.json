@@ -23,7 +23,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "add drag and drop `text` data to this `component`",
-    "complexity": 3,
     "tags": ["platform", "method", "component"]
   },
   "id": "05b6f707-a009-40aa-aacb-a15888c2a8b3",

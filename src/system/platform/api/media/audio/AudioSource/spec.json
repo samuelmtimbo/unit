@@ -18,7 +18,6 @@
   "metadata": {
     "icon": "file-output",
     "description": "streams audio from a source url silently",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["Audio"]
   },

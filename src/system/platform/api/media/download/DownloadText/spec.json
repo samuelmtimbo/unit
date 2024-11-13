@@ -31,7 +31,6 @@
   "metadata": {
     "icon": "download",
     "description": "download a `text` string",
-    "complexity": 3,
     "tags": ["platform", "api", "media"]
   },
   "type": "`U`",

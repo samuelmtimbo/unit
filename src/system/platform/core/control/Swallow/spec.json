@@ -36,8 +36,7 @@
   "component": {},
   "metadata": {
     "icon": "alert-circle",
-    "description": "throw away any caught error",
-    "complexity": 5
+    "description": "throw away any caught error"
   },
   "type": "`U`&`G`",
   "id": "ecb16ee2-d81f-4f3f-a241-b007087f5055"

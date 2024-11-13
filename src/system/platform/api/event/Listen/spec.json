@@ -21,7 +21,6 @@
   "metadata": {
     "icon": "circle",
     "description": "listen to `emitter` `event`",
-    "complexity": 3,
     "tags": ["platform", "api", "event"]
   },
   "id": "367241d8-ad12-11ea-beed-9777f31699a8",

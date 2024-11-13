@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "info-square",
     "description": "get `a` character at position `i`",
-    "complexity": 3,
     "tags": ["f", "string"]
   },
   "id": "eb345e08-08fd-4032-bd69-a4e9f55e7aa6",

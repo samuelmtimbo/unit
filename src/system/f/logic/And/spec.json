@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "ampersand",
     "description": "AND logical operator",
-    "complexity": 3,
     "tags": ["f", "logic"]
   },
   "id": "407640f7-f1c3-4297-a5ce-baff357a6d31",

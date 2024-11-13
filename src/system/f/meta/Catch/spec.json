@@ -14,7 +14,6 @@
   "metadata": {
     "icon": "circle-alert",
     "description": "catch all `unit` error",
-    "complexity": 3,
     "tags": ["f", "meta"]
   },
   "id": "2520668c-b279-11ea-ace3-5b84eb02bd7f",

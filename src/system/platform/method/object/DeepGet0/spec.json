@@ -18,7 +18,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "get `value` `obj` property at `path`",
-    "complexity": 3,
     "tags": ["platform", "method", "object"]
   },
   "id": "f0779efd-237f-476d-bddc-205d7c28cfb5",

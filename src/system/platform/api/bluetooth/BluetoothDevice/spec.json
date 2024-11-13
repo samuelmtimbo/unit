@@ -14,7 +14,6 @@
   "metadata": {
     "icon": "bluetooth",
     "description": "remote GATT device",
-    "complexity": 3,
     "tags": ["platform", "api", "bluetooth"]
   },
   "id": "4ad5bd0e-e11e-11ea-ad4c-83da30628333",

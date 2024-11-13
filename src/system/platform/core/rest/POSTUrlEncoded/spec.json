@@ -227,7 +227,6 @@
   "metadata": {
     "icon": "send",
     "description": "POST url-encoded body",
-    "complexity": 14,
     "tags": ["platform", "core", "rest"],
     "position": {
       "merge": {

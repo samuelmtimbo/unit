@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "grip-lines-vertical",
     "description": "OR logical operator",
-    "complexity": 3,
     "tags": ["f", "logic"]
   },
   "id": "62a19cd6-04bd-4e46-a72e-4fa3516ad3fa",

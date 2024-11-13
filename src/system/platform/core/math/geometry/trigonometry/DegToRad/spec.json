@@ -73,7 +73,6 @@
   "metadata": {
     "icon": "ruler",
     "description": "convert deg to rad",
-    "complexity": 14,
     "tags": ["platform", "core", "geometry", "trigonometry"]
   },
   "inputs": {

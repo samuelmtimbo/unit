@@ -14,7 +14,6 @@
   "metadata": {
     "icon": "form-input",
     "description": "single line text input",
-    "complexity": 42,
     "tags": ["platform", "component", "value"]
   },
   "id": "c0d13c03-9b10-4a6f-a79f-66294d10aae6",

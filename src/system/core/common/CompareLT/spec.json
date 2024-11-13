@@ -77,7 +77,6 @@
   "metadata": {
     "icon": "less-than",
     "description": "less than + greater than equal",
-    "complexity": 8,
     "tags": ["core", "common"]
   },
   "id": "e2d48ad6-4212-45f4-940b-c614c44eb59b",

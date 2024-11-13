@@ -19,7 +19,6 @@
   "metadata": {
     "icon": "square",
     "description": "wrap all children with `component`",
-    "complexity": 43,
     "tags": ["platform", "component"]
   },
   "id": "454aaff2-cd74-4f6e-baf2-631bb32e7a6b",

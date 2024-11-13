@@ -28,7 +28,6 @@
   "metadata": {
     "icon": "link",
     "description": "remote graph",
-    "complexity": 4,
     "tags": ["platform", "meta", "remote"]
   },
   "id": "57bcdd88-a4f4-49ab-92d4-ed1969895520",

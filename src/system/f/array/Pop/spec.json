@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "axe",
     "description": "remove the `last` element from `a`",
-    "complexity": 3,
     "tags": ["f", "array"]
   },
   "id": "81006022-e4d0-11ea-902a-fbf9fc5c9246",

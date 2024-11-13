@@ -34,7 +34,6 @@
     "icon": "external-link",
     "description": "loads `url` into a new or existing `target` browsing context",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Window/open",
-    "complexity": 3,
     "tags": ["platform", "api", "wakelock"]
   },
   "id": "ed53d847-6336-435b-9e5e-fd38c79dc9c6",

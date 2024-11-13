@@ -73,8 +73,7 @@
   },
   "metadata": {
     "icon": "square",
-    "description": "style children with scroll-snap x",
-    "complexity": 53
+    "description": "style children with scroll-snap x"
   },
   "id": "0b5d4999-21ce-48da-907d-2891514c451d"
 }

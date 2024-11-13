@@ -100,7 +100,6 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "create object with values `x`, `y` and `r`",
-    "complexity": 23,
     "tags": ["platform", "core", "canvas"]
   },
   "id": "4617df3b-4ca5-42c1-bcda-4a3833c645da",

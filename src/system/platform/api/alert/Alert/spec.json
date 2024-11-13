@@ -9,7 +9,6 @@
   "metadata": {
     "icon": "tilde",
     "description": "display a dialog with an optional message and wait until user dismisses it",
-    "complexity": 3,
     "tags": ["platform", "api", "base64"]
   },
   "id": "0b4aa055-010d-4d43-b991-f38a95cdb380",

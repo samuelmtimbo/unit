@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "edit-3",
     "description": "fill a SVG path `d` on `canvas`",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "be59cf84-fcf2-46ef-aa34-6f0f8e055680",

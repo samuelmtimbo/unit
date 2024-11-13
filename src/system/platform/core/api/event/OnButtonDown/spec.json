@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `gamepad` \"buttondown\" event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "98c01feb-afc7-4333-988f-9d516b5038bd",

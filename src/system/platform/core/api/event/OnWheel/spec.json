@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` wheel event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "52e6d3c8-0958-4829-bc25-1f6cdbf6e451",

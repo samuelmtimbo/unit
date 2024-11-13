@@ -40,7 +40,6 @@
     "icon": "edit-3",
     "description": "create new image data from `data`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/getImageData",
-    "complexity": 4,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "8e978642-b686-41fd-b2af-9a4c5db6bfa4",

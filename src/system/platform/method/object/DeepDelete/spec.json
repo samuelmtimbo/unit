@@ -12,7 +12,6 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "remove `obj` key-value pair for given `path`",
-    "complexity": 3,
     "tags": ["f", "object"]
   },
   "id": "ae6e44d8-2c41-496a-ad98-035468622cfa",

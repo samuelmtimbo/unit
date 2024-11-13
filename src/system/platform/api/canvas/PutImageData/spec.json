@@ -62,7 +62,6 @@
     "icon": "edit-3",
     "description": "put `image` data on `canvas`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/putImageData",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "138d16a7-a200-4329-9b4a-17abd24943d4",

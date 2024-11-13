@@ -5,7 +5,6 @@
   "metadata": {
     "icon": "bell",
     "description": "notification object",
-    "complexity": 3,
     "tags": ["platform", "api", "notification"]
   },
   "id": "bb029770-080e-11eb-9d38-f314d076f14b",

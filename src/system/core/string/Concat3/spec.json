@@ -25,7 +25,6 @@
   "metadata": {
     "icon": "plus",
     "description": "concat `a`, `b` and `c`",
-    "complexity": 6,
     "tags": ["core", "string"]
   },
   "inputs": {

@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` pointerdown event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "2beefe96-b1ee-11ea-960c-7f33e07a2ad6",

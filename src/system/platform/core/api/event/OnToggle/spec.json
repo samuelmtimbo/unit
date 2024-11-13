@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` click event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "9649cf39-fd6e-4437-a268-c0b4def6bcbd",

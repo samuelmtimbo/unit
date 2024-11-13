@@ -77,7 +77,6 @@
   "metadata": {
     "icon": "video",
     "description": "default user media",
-    "complexity": 70,
     "tags": ["platform", "core", "component"]
   },
   "component": {

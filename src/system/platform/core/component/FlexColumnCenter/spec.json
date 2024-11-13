@@ -54,7 +54,6 @@
   "metadata": {
     "icon": "square",
     "description": "column flexbox with centered content",
-    "complexity": 56,
     "tags": ["platform", "core", "component"]
   },
   "component": {

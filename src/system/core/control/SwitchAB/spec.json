@@ -78,7 +78,6 @@
   "metadata": {
     "icon": "map-signs",
     "description": "output `a` and `b`, interchangeably, forever",
-    "complexity": 53,
     "tags": ["core", "control"]
   },
   "id": "9c10309b-6ce8-4b92-a0d4-a4b6b2a17a64",

@@ -23,7 +23,6 @@
   "metadata": {
     "icon": "film",
     "description": "takes a snapshot of the live video in a media stream track",
-    "complexity": 13,
     "tags": ["platform", "api", "media"],
     "globals": ["MediaRecorder"]
   },

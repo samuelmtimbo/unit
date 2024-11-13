@@ -6,18 +6,14 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     },
     "attr": {
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -25,10 +21,7 @@
   "metadata": {
     "icon": "square",
     "description": "HTML summary element",
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "58bfcb06-b41d-4205-91f5-c00aff3e209c",
   "base": true,

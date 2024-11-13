@@ -140,7 +140,6 @@
     "icon": "palette",
     "description": "gamma correction algorithm",
     "link": "https://en.wikipedia.org/wiki/Gamma_correction",
-    "complexity": 26,
     "tags": ["platform", "core", "color"]
   },
   "inputs": {

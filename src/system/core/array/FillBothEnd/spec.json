@@ -37,7 +37,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "fill `a` and `b` with `a` until both have size `n`",
-    "complexity": 54,
     "tags": ["core", "array"]
   },
   "inputs": {

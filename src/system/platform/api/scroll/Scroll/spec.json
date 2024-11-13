@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "send",
     "description": "scroll `component`",
-    "complexity": 3,
     "tags": ["platform", "api"]
   },
   "base": true,

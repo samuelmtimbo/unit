@@ -84,7 +84,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "output get if key is present",
-    "complexity": 12,
     "tags": ["core", "object"]
   },
   "inputs": {

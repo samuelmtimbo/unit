@@ -65,7 +65,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "extract `offsetX` and `offsetY` from `obj`",
-    "complexity": 10,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "2307cacf-1363-40bc-bd6b-d58227927ae0",

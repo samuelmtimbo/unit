@@ -16,7 +16,6 @@
   "base": true,
   "metadata": {
     "icon": "image",
-    "complexity": 12,
     "description": "load image",
     "tags": ["platform", "api", "media", "image"]
   },

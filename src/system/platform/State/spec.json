@@ -22,7 +22,6 @@
   "metadata": {
     "icon": "circle",
     "description": "control a value in memory",
-    "complexity": 4,
     "tags": ["state"]
   },
   "id": "c899b675-c3c4-428e-b548-b228305c0302",

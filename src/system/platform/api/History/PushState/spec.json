@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "map-pin",
     "description": "adds an entry to the session history stack",
-    "complexity": 3,
     "tags": ["platform", "api", "history"]
   },
   "id": "53dd6448-f1e8-46ed-b3e8-b03b846133bb",

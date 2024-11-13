@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "pause",
     "description": "pause unit execution",
-    "complexity": 3,
     "tags": ["f", "unit"]
   },
   "id": "a85fd9ad-5aec-4ebc-9008-e22db851dfa8",

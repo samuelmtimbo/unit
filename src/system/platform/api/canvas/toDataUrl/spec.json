@@ -30,7 +30,6 @@
     "icon": "edit-3",
     "description": "get base 64 url from `canvas`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataUrl",
-    "complexity": 3,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "002fbcc6-ec01-4282-b5a6-77ec4812744e",

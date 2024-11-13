@@ -92,7 +92,6 @@
   "metadata": {
     "icon": "pointer",
     "description": "if `c` output `a` as `b`",
-    "complexity": 14,
     "tags": ["core", "control"]
   },
   "id": "f55ab180-3fd5-44c4-915f-f40e6bbcc481",

@@ -51,7 +51,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `obj` property \"value\" to `value`",
-    "complexity": 5,
     "tags": ["platform", "core", "style"]
   },
   "id": "b63a7c25-918c-4783-80bd-828da0e5d08f",

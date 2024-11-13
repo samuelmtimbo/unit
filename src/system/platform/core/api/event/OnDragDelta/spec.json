@@ -326,7 +326,6 @@
   },
   "metadata": {
     "icon": "grab",
-    "complexity": 52,
     "description": "keep track of current pointer x y distance from initial press",
     "tags": ["platform", "core", "api", "event"],
     "position": {

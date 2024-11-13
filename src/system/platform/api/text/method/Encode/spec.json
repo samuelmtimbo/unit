@@ -25,7 +25,6 @@
   "metadata": {
     "icon": "tilde",
     "description": "encode `text` into binary `data`",
-    "complexity": 3,
     "tags": ["platform", "array", "typed"]
   },
   "id": "12de8298-28f6-4b2b-8962-51cb41e5f99b",

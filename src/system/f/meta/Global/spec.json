@@ -5,7 +5,6 @@
   "metadata": {
     "icon": "table",
     "description": "globally accessible object scope",
-    "complexity": 2,
     "tags": ["platform", "api", "storage"],
     "globals": []
   },

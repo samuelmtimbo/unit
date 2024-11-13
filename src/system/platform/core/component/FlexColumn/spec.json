@@ -54,7 +54,6 @@
   "metadata": {
     "icon": "square",
     "description": "flex column div",
-    "complexity": 53,
     "tags": ["platform", "core", "component"]
   },
   "component": {

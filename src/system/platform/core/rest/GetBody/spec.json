@@ -15,7 +15,6 @@
   "metadata": {
     "icon": "send",
     "description": "get body property",
-    "complexity": 5,
     "tags": ["platform", "core", "rest"]
   },
   "inputs": {

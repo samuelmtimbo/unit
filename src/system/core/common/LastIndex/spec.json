@@ -47,7 +47,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "last position of `a`",
-    "complexity": 10,
     "tags": ["core", "common"]
   },
   "id": "f9588979-74e1-477a-8085-594043362fdf",

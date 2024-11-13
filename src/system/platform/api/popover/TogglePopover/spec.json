@@ -13,7 +13,6 @@
   "metadata": {
     "icon": "mouse-pointer",
     "description": "toggle `component` popover",
-    "complexity": 3,
     "tags": ["platform", "api", "popover"]
   },
   "id": "c7183c96-74cb-4ded-a816-e74d986e7ea8",

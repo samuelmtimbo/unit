@@ -90,8 +90,7 @@
   "component": {},
   "metadata": {
     "icon": "send",
-    "description": "fetch a resource across the network through HTTP POST",
-    "complexity": 8
+    "description": "fetch a resource across the network through HTTP POST"
   },
   "id": "c4ff2bad-0d60-4d17-9471-c906075d2751"
 }

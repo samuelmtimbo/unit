@@ -37,7 +37,6 @@
   "metadata": {
     "icon": "git-merge",
     "description": "wait for `b` and `c` before output `a`",
-    "complexity": 6,
     "tags": ["core", "control"]
   },
   "inputs": {

@@ -10,7 +10,6 @@
   "metadata": {
     "icon": "speaker",
     "description": "end destination of an audio graph in a given context",
-    "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioDestinationNode"]
   },

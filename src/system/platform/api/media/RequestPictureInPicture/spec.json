@@ -14,7 +14,6 @@
   },
   "outputs": {},
   "metadata": {
-    "complexity": 13,
     "icon": "arrow-up-right",
     "description": "request picture in picture window for `media`",
     "tags": ["platform", "api", "media"],

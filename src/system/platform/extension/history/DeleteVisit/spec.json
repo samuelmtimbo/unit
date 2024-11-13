@@ -9,7 +9,6 @@
   "metadata": {
     "icon": "history",
     "description": "remove all occurrences of the given URL from the history",
-    "complexity": 3,
     "tags": ["platform", "extension", "history"]
   },
   "id": "002af312-560a-11eb-807c-8769b90eb8e6",

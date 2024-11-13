@@ -104,7 +104,6 @@
   "metadata": {
     "icon": "square",
     "description": "render a unicode char from its code",
-    "complexity": 100,
     "tags": ["platform", "core", "component"]
   },
   "id": "d0c59812-a8ec-4c53-81a9-c9725dda987e",

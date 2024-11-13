@@ -67,7 +67,6 @@
   "metadata": {
     "icon": "square",
     "description": "100% div",
-    "complexity": 53,
     "tags": ["platform", "core", "component"]
   },
   "component": {

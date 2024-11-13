@@ -14,7 +14,6 @@
   "metadata": {
     "icon": "form-input",
     "description": "select HTML element",
-    "complexity": 43,
     "tags": ["platform", "component", "value"]
   },
   "id": "429496bf-98fa-45e8-81b8-960f4e2546ba",

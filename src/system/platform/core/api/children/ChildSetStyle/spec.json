@@ -108,7 +108,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `element` child `at` style to `style`",
-    "complexity": 15,
     "tags": ["platform", "core", "api", "children"]
   },
   "id": "d7d77ad6-91db-4da7-a3c6-c37157574b17",

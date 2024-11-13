@@ -40,7 +40,6 @@
   "metadata": {
     "icon": "object-get",
     "description": "extract offsetX from `obj`",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "cd7cfbb3-c86b-401d-a6b7-9de912672d96",

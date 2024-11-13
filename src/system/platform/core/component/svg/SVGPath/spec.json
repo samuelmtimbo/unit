@@ -74,8 +74,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG path",
-    "complexity": 88
+    "description": "SVG path"
   },
   "render": true,
   "component": {

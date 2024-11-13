@@ -70,8 +70,7 @@
   },
   "metadata": {
     "icon": "square",
-    "description": "container with set scroll snap align start",
-    "complexity": 53
+    "description": "container with set scroll snap align start"
   },
   "id": "b792e421-1c0b-40fc-ac33-87c5c2bbac2a"
 }

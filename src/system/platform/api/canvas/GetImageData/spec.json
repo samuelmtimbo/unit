@@ -55,7 +55,6 @@
     "icon": "edit-3",
     "description": "get `image` data from `canvas`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/getImageData",
-    "complexity": 4,
     "tags": ["platform", "api", "canvas"]
   },
   "id": "3ab81e83-5954-4bae-ad3e-ebf409dd23c4",

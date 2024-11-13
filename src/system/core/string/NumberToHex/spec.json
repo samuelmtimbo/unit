@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "tilde",
     "description": "convert a number to its hexadecimal string",
-    "complexity": 5,
     "tags": ["core", "string"]
   },
   "id": "1a7665a2-2af0-11eb-9fdb-4bdf5feec91c",

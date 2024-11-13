@@ -30,7 +30,6 @@
     "icon": "lock",
     "description": "cryptographically verify signature",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/verify",
-    "complexity": 3,
     "tags": ["platform", "api", "crypto"]
   },
   "id": "65180989-78be-414a-88c7-bf58af08e0f5",

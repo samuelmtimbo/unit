@@ -193,7 +193,6 @@
   "metadata": {
     "icon": "brackets",
     "description": "find index `i` of last element in array `a` for which `test` is true after index `from` or `default` if not found",
-    "complexity": 43,
     "tags": ["core", "array"]
   },
   "id": "08d39098-c38f-4a88-9d8c-cc323730b36c",

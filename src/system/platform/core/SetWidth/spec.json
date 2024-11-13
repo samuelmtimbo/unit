@@ -82,7 +82,6 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `obj` property `name` to `data`",
-    "complexity": 5,
     "tags": ["platform", "core", "component"]
   },
   "id": "7849c9db-bf2d-4d1f-a105-11f0f3eee333",

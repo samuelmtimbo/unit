@@ -16,7 +16,6 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "prepend element `b` to `a`",
-    "complexity": 3,
     "tags": ["f", "array"]
   },
   "id": "d9cf4224-39df-434a-85a6-2b143330cbab",

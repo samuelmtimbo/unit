@@ -41,7 +41,6 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` pointerup event",
-    "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },
   "id": "43a9d452-b1ee-11ea-923f-efb4af36e68e",
