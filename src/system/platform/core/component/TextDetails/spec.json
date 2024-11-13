@@ -1,0 +1,190 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text details",
+  "units": {
+    "summary": {
+      "id": "58bfcb06-b41d-4205-91f5-c00aff3e209c",
+      "input": {
+        "style": {
+          "ignored": false,
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {
+              "fontWeight": "bold"
+            }
+          }
+        },
+        "attr": {
+          "ignored": true
+        }
+      },
+      "output": {}
+    },
+    "text0": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {}
+      },
+      "output": {}
+    },
+    "details": {
+      "id": "0ea7279e-9ca2-48ab-8d70-f5333a717dc4",
+      "input": {
+        "style": {},
+        "attr": {}
+      },
+      "output": {}
+    },
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {
+          "constant": false
+        }
+      },
+      "output": {}
+    },
+    "default": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {},
+        "d": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "Title"
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "default0": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {},
+        "d": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "Text"
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "text": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "1": {
+      "default0": {
+        "output": {
+          "a": true
+        }
+      },
+      "text0": {
+        "input": {
+          "value": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "details",
+          "pinId": "style",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "type": "object"
+    },
+    "attr": {
+      "plug": {
+        "0": {
+          "unitId": "details",
+          "pinId": "attr",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "type": "object"
+    },
+    "title": {
+      "plug": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "text": {
+      "plug": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "text `details` + text `summary`"
+  },
+  "component": {
+    "subComponents": {
+      "summary": {
+        "children": ["text"],
+        "childSlot": {},
+        "width": 120,
+        "height": 120
+      },
+      "text0": {
+        "children": [],
+        "childSlot": {},
+        "width": 180,
+        "height": 90
+      },
+      "details": {
+        "children": ["summary", "text0"],
+        "childSlot": {},
+        "width": 147,
+        "height": 149.21875
+      },
+      "text": {
+        "children": [],
+        "childSlot": {},
+        "width": 180,
+        "height": 90
+      }
+    },
+    "children": ["details"],
+    "defaultWidth": 180,
+    "defaultHeight": 120
+  },
+  "id": "e5c811c0-aee9-4609-b31d-70bd4bacab14",
+  "render": true,
+  "system": true
+}
