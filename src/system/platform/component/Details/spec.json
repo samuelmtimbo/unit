@@ -1,0 +1,41 @@
+{
+  "name": "details",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML details element",
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "0ea7279e-9ca2-48ab-8d70-f5333a717dc4",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "system": true,
+  "render": true
+}
