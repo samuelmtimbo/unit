@@ -24811,85 +24811,85 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._enter_component_frame()
       }
 
-      if (_animate) {
-        const last_sub_component_id = last(ordered_sub_component_ids)
+      if (ordered_sub_component_ids.length > 0) {
+        if (_animate) {
+          const last_sub_component_id = last(ordered_sub_component_ids)
 
-        const last_sub_component = this._get_sub_component(
-          last_sub_component_id
-        )
+          const last_sub_component = this._get_sub_component(
+            last_sub_component_id
+          )
 
-        last_sub_component.focus()
+          last_sub_component.focus()
 
-        this._abort_fullwindow_animation = this._animate_enter_fullwindow(
-          this._fullwindow_component_ids,
-          () => {
-            for (const sub_component_id of this._fullwindow_component_ids) {
-              this._unplug_sub_component_root_base_frame(sub_component_id)
+          this._abort_fullwindow_animation = this._animate_enter_fullwindow(
+            this._fullwindow_component_ids,
+            () => {
+              for (const sub_component_id of this._fullwindow_component_ids) {
+                this._unplug_sub_component_root_base_frame(sub_component_id)
 
-              this._append_sub_component_all_missing_root(sub_component_id)
-              this._append_sub_component_base(sub_component_id)
-            }
-
-            for (const sub_component_id of this._fullwindow_component_ids) {
-              const parent_id =
-                this._spec_get_sub_component_parent_id(sub_component_id)
-
-              if (!parent_id) {
-                this._couple_sub_component(sub_component_id)
-              } else {
-                if (this._fullwindow_component_ids.includes(parent_id)) {
-                  this._couple_sub_component(sub_component_id)
-                } else {
-                  this._append_sub_component_to_root(sub_component_id)
-                }
+                this._append_sub_component_all_missing_root(sub_component_id)
+                this._append_sub_component_base(sub_component_id)
               }
 
-              if (last_sub_component_id === sub_component_id) {
-                const is_last_sub_component =
-                  sub_component_id === last_sub_component_id
+              for (const sub_component_id of this._fullwindow_component_ids) {
+                const parent_id =
+                  this._spec_get_sub_component_parent_id(sub_component_id)
 
-                if (is_last_sub_component) {
-                  if (this._enabled()) {
-                    this._frame.focus()
+                if (!parent_id) {
+                  this._couple_sub_component(sub_component_id)
+                } else {
+                  if (this._fullwindow_component_ids.includes(parent_id)) {
+                    this._couple_sub_component(sub_component_id)
+                  } else {
+                    this._append_sub_component_to_root(sub_component_id)
+                  }
+                }
 
-                    last_sub_component.focus()
+                if (last_sub_component_id === sub_component_id) {
+                  const is_last_sub_component =
+                    sub_component_id === last_sub_component_id
+
+                  if (is_last_sub_component) {
+                    if (this._enabled()) {
+                      this._frame.focus()
+
+                      last_sub_component.focus()
+                    }
                   }
                 }
               }
             }
-          }
-        )
-      } else {
-        if (this._tree_layout) {
-          for (const sub_component_id of sub_component_ids) {
-            const parent_id =
-              this._spec_get_sub_component_parent_id(sub_component_id)
+          )
+        } else {
+          if (this._tree_layout) {
+            for (const sub_component_id of sub_component_ids) {
+              const parent_id =
+                this._spec_get_sub_component_parent_id(sub_component_id)
 
-            if (parent_id) {
-              //
-            } else {
+              if (parent_id) {
+                //
+              } else {
+                this._leave_sub_component_frame(sub_component_id)
+              }
+            }
+          } else {
+            for (const sub_component_id of sub_component_ids) {
               this._leave_sub_component_frame(sub_component_id)
             }
           }
-        } else {
-          for (const sub_component_id of sub_component_ids) {
-            this._leave_sub_component_frame(sub_component_id)
-          }
-        }
 
-        this._couple_all_fullwindow_component()
+          this._couple_all_fullwindow_component()
+        }
       }
 
-      if (sub_component_ids.length > 0) {
-        const last_sub_component_id = last(sub_component_ids)
+      const last_sub_component_id = last(sub_component_ids)
 
-        if (was_focused) {
-          this._fullwindow_focusing = true
+      if (was_focused) {
+        this._fullwindow_focusing = true
 
-          this._focus_sub_component(last_sub_component_id)
+        this._focus_sub_component(last_sub_component_id)
 
-          this._fullwindow_focusing = true
-        }
+        this._fullwindow_focusing = true
       }
     }
 
