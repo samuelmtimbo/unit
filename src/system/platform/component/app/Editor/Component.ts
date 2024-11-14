@@ -20453,10 +20453,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           if (leaf_end_count === base_length) {
             this._animating_sub_component_base_id.delete(sub_component_id)
 
-            return callback()
+            callback()
           }
 
-          return false
+          return true
         }
       )
 
@@ -21081,9 +21081,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const leaf_id = `${sub_component_id}/${leaf_path.join('/')}`
 
             delete this._leaf_target_trait[leaf_id]
-
-            delete this._abort_sub_component_parent_animation[sub_component_id]
           }
+
+          delete this._abort_sub_component_parent_animation[sub_component_id]
         }
 
         return result
@@ -21237,6 +21237,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                   finish()
                 }
               }
+
+              return true
             }
           )
         }
@@ -21564,8 +21566,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const animating_sub_component = !!(
       this._animating_sub_component_base_id.has(sub_component_id) ||
       this._abort_sub_component_enter_base_animation[sub_component_id] ||
-      this._abort_tree_layout_sub_component_base_animation[sub_component_id] ||
-      this._abort_sub_component_parent_animation[sub_component_id]
+      this._abort_tree_layout_sub_component_base_animation[sub_component_id]
     )
 
     return animating_sub_component
@@ -21608,6 +21609,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._cancel_fullwindow_animation()
     this._cancel_all_layout_sub_component_animation()
     this._cancel_all_layout_parent_children_animation()
+    this._cancel_all_sub_component_parent_animation()
 
     this._tree_layout = false
 
@@ -31982,6 +31984,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }) {
       // console.log('_cancel_all_layout_parent_children_animation', slot_name)
       this._cancel_layout_parent_children_animation(sub_component_id)
+    }
+  }
+
+  private _cancel_all_sub_component_parent_animation = () => {
+    for (const sub_component_id in {
+      ...this._abort_sub_component_parent_animation,
+    }) {
+      this._cancel_parent_animation(sub_component_id)
     }
   }
 
