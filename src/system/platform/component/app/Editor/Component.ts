@@ -427,6 +427,7 @@ import {
   REMOVE_MERGE,
   REMOVE_PIN_FROM_MERGE,
   REMOVE_UNIT,
+  REMOVE_UNIT_PIN_DATA,
   SET_COMPONENT_SIZE,
   SET_PIN_SET_FUNCTIONAL,
   SET_SUB_COMPONENT_SIZE,
@@ -54683,6 +54684,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._remove_pin_datum_link(datum_node_id)
           }
         }
+        break
+      case REMOVE_UNIT_PIN_DATA:
         break
       default:
         throw new CodePathNotImplementedError()
