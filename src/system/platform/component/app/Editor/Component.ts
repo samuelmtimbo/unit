@@ -592,6 +592,7 @@ import {
   isPinSpecRef,
   isSelfPin,
   isSubPinSpecRef,
+  isUnitComponent,
   isUnitPinConstant,
   makeFullSpecCollapseMap,
   opposite,
@@ -47920,8 +47921,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const spec_interface: GraphLike = {
       removeUnit: (unitId: string): void => {
-        removeSubComponent({ unitId }, spec.component)
-        removeRoot({ childId: unitId }, spec.component)
+        if (isUnitComponent(specs, spec, unitId)) {
+          removeSubComponent({ unitId }, spec.component)
+          removeRoot({ childId: unitId }, spec.component)
+        }
         removeUnit({ unitId }, spec)
       },
       getMergeData: (mergeId: string) => {

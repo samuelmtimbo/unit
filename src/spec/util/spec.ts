@@ -1,5 +1,5 @@
 import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
-import { getSpec } from '../../client/spec'
+import { getSpec, isComponentId } from '../../client/spec'
 import { SELF } from '../../constant/SELF'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
@@ -55,6 +55,18 @@ export function isUnitPinConstant(
     ['units', unitId, type, pinId, 'constant'],
     false
   )
+}
+
+export function isUnitComponent(
+  specs: Specs,
+  spec: GraphSpec,
+  unitId: string
+): boolean {
+  const { units } = spec
+
+  const unit = units[unitId]
+
+  return isComponentId(specs, unit.id)
 }
 
 export const isPinRef = (
