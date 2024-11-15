@@ -48,7 +48,6 @@ import {
   processAction,
 } from '../../spec/actions/G'
 import { cloneUnit, cloneUnitClass } from '../../spec/cloneUnit'
-import { evaluate } from '../../spec/evaluate'
 import { evaluateData, evaluateDataValue } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
@@ -678,6 +677,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _ensureMergePin = (
     type: IO,
     mergeId: string,
+    data: any = undefined,
     propagate: boolean = false
   ): Pin => {
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
@@ -687,7 +687,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     if (!this._pin[mergePinNodeId]) {
       const oppositeType = opposite(type)
 
-      mergePin = new Pin({}, this.__system)
+      mergePin = new Pin({ data }, this.__system)
 
       this._pin[mergePinNodeId] = mergePin
 
@@ -737,6 +737,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     subPinId: string,
     mergeId: string,
+    data: any,
     opt: PinOpt,
     propagate: boolean = true
   ): void => {
@@ -744,7 +745,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
 
-    this._ensureMergePin(type, mergeId, propagate)
+    this._ensureMergePin(type, mergeId, undefined, propagate)
 
     const subPin = this._pin[mergePinNodeId]
 
@@ -756,11 +757,20 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     subPinId: string,
     mergeId: string,
+    data: any,
     propagate: boolean = true
   ): void => {
+    // console.log('_simPlugPinToMerge', {
+    //   type,
+    //   pinId,
+    //   subPinId,
+    //   data,
+    //   propagate,
+    // })
+
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
 
-    this._ensureMergePin(type, mergeId, propagate)
+    this._ensureMergePin(type, mergeId, data, propagate)
 
     const subPin = this._pin[mergePinNodeId]
 
@@ -1352,7 +1362,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPin: GraphSubPinSpec,
     id: string
   ): void => {
-    this.plugPin('input', id, subPinId, subPin)
+    this.plugPin('output', id, subPinId, undefined, subPin)
   }
 
   public unplugOutput = (subPinId: string, id: string): void => {
@@ -1525,6 +1535,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       type,
       pinId,
       pinSpec,
+      data,
       exposedPin,
       exposeMerge,
       exposedMergeOpposite,
@@ -1559,6 +1570,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       type,
       pinId,
       pinSpec,
+      undefined,
       exposedPin,
       exposedMerge,
       exposedMergeOpposite,
@@ -1613,12 +1625,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     type: IO,
     pinId: string,
     pinSpec: GraphPinSpec,
+    data: any | undefined,
     exposedPin: Pin,
     exposedMerge: Merge,
     exposedMergeOpposite: Merge,
     propagate: boolean = true
   ) {
-    const { plug, ref, data, functional } = pinSpec
+    const { plug, ref, functional } = pinSpec
 
     const oppositeType = opposite(type)
 
@@ -1628,14 +1641,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this.setPin(type, pinId, exposedPin, { ref }, propagate)
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-      this._simExposePin(type, pinId, subPinId, subPinSpec, propagate)
+      this._simExposePin(type, pinId, subPinId, subPinSpec, data, propagate)
     })
-
-    if (data !== undefined) {
-      const data_ = evaluate(data, this.__system.specs, this.__system.classes)
-
-      this.setPinData(type, pinId, data_)
-    }
 
     if (functional) {
       this._plugToWaitAll(type, pinId)
@@ -1851,6 +1858,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
+    data: any,
     propagate: boolean = true
   ): void => {
     // console.log(
@@ -1866,7 +1874,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const { unitId, pinId: _pinId, mergeId } = subPinSpec
 
     if (mergeId || (unitId && _pinId)) {
-      this._simPlugPin(type, pinId, subPinId, subPinSpec, propagate)
+      this._simPlugPin(type, pinId, subPinId, subPinSpec, data, propagate)
     } else {
       this._simPlugEmptyPin(type, pinId, subPinId, propagate)
     }
@@ -2077,12 +2085,24 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
+    data: any,
     emit: boolean = true,
     propagate: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ): void => {
-    // console.log('Graph', 'plugPin', type, pinId, subPinId, subPinSpec, emit, propagate, fork)
+    // console.log(
+    //   'Graph',
+    //   'plugPin',
+    //   type,
+    //   pinId,
+    //   subPinId,
+    //   subPinSpec,
+    //   data,
+    //   emit,
+    //   propagate,
+    //   fork
+    // )
 
     this._plugPin(type, pinId, subPinId, subPinSpec, propagate, fork, bubble)
 
@@ -2112,6 +2132,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
+    data: any,
     propagate: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
@@ -2139,7 +2160,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const opt = { ref: !!ref }
 
     if (mergeId) {
-      this._plugPinToMerge(type, pinId, subPinId, mergeId, opt, propagate)
+      this._plugPinToMerge(type, pinId, subPinId, mergeId, opt, data, propagate)
     } else if (unitId && _pinId) {
       this._plugPinToUnitPin(
         type,
@@ -2177,6 +2198,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
+    data: any,
     propagate: boolean = true
   ): void => {
     // console.log('Graph', '_simPlugPin', pinId, subPinId, subPinSpec)
@@ -2186,7 +2208,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     if (mergeId) {
       propagate = propagate || this.isRefMerge(mergeId)
 
-      this._simPlugPinToMerge(type, pinId, subPinId, mergeId, propagate)
+      this._simPlugPinToMerge(type, pinId, subPinId, mergeId, data, propagate)
     } else {
       propagate = propagate || this.isUnitPinRef(unitId, kind, _pinId)
 
@@ -2207,7 +2229,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPin: GraphSubPinSpec,
     id: string
   ): void => {
-    this.plugPin('input', id, subPinId, subPin)
+    this.plugPin('input', id, subPinId, undefined, subPin)
   }
 
   public unplugInput = (
@@ -2841,6 +2863,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             exposedPin.type,
             exposedPin.pinId,
             exposedPin.subPinId,
+            undefined,
             { mergeId }
           )
         }
@@ -2850,11 +2873,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     forIOObjKV(outerSpec.exposed, (type, pinId, outerPin) => {
       const nextPinId = deepGetOrDefault(nextUnitPinMap, [type, pinId], pinId)
 
-      this._plugPin(outerPin.type, outerPin.pinId, outerPin.subPinId, {
-        unitId: nextUnitId,
-        pinId: nextPinId,
-        kind: outerPin.type,
-      })
+      this._plugPin(
+        outerPin.type,
+        outerPin.pinId,
+        outerPin.subPinId,
+        {
+          unitId: nextUnitId,
+          pinId: nextPinId,
+          kind: outerPin.type,
+        },
+        undefined
+      )
     })
   }
 
@@ -2913,18 +2942,25 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             exposedPin.type,
             exposedPin.pinId,
             exposedPin.subPinId,
-            { mergeId }
+            { mergeId },
+            undefined
           )
         }
       }
     )
 
     forIOObjKV(outerSpec.exposed, (type, pinId, outerPin) => {
-      this._plugPin(outerPin.type, outerPin.pinId, outerPin.subPinId, {
-        unitId: nextUnitId,
-        pinId,
-        kind: outerPin.type,
-      })
+      this._plugPin(
+        outerPin.type,
+        outerPin.pinId,
+        outerPin.subPinId,
+        {
+          unitId: nextUnitId,
+          pinId,
+          kind: outerPin.type,
+        },
+        undefined
+      )
     })
 
     bundle.unit.memory = unit.snapshot()
@@ -4352,6 +4388,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
                 pinId: otherMergeUnitPinId,
                 kind: otherMergeUnitPinType,
               },
+              undefined,
               false
             )
           }
@@ -4366,6 +4403,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
                 pinId: otherMergeUnitPinId,
                 kind: otherMergeUnitPinType,
               },
+              undefined,
               false
             )
           }
@@ -6375,7 +6413,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           plugPin: (data: GraphPlugPinData) => {
             const { type, pinId, subPinId, subPinSpec } = data
 
-            this._plugPin(type, pinId, subPinId, subPinSpec)
+            this._plugPin(type, pinId, subPinId, subPinSpec, undefined)
           },
           unplugPin: (data: GraphUnplugPinData) => {
             const { type, pinId, subPinId } = data

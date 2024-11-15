@@ -225,6 +225,7 @@ export function moveUnit(
                   unitId: nextUnitId,
                   pinId,
                 },
+                undefined,
                 false,
                 propagate
               )
@@ -298,6 +299,7 @@ export function moveUnit(
                       unitId: graphId,
                       pinId: nextPinId,
                     },
+                    undefined,
                     false,
                     propagate
                   )
@@ -408,6 +410,7 @@ export function moveUnit(
               pinId,
               kind,
             },
+            undefined,
             false,
             propagate,
             false,
@@ -427,6 +430,7 @@ export function moveUnit(
               pinId,
               kind,
             },
+            undefined,
             false,
             false,
             false,
@@ -614,10 +618,16 @@ export function moveLinkPinInto(
         false
       )
 
-      source.plugPin(type, plugPinSpec.pinId, plugPinSpec.subPinId, {
-        unitId: graphId,
-        pinId: plugPinSpec.pinId,
-      })
+      source.plugPin(
+        type,
+        plugPinSpec.pinId,
+        plugPinSpec.subPinId,
+        {
+          unitId: graphId,
+          pinId: plugPinSpec.pinId,
+        },
+        undefined
+      )
     }
   }
 }
@@ -903,7 +913,7 @@ export function moveMerge(
             if (isEmptyObject(subPinSpec)) {
               //
             } else {
-              target.plugPin(type, pinId, '0', subPinSpec, false, false)
+              target.plugPin(type, pinId, '0', subPinSpec, data, false, false)
             }
           } else {
             target.exposePin(type, pinId, '0', subPinSpec, false, false)
@@ -1008,6 +1018,7 @@ export function moveMerge(
                         {
                           mergeId: oppositeMergeId ?? '0',
                         },
+                        data,
                         false,
                         false
                       )
@@ -1068,6 +1079,7 @@ export function moveMerge(
                   pinId,
                   subPinId,
                   hasMerge ? { mergeId: nextMergeId } : {},
+                  undefined,
                   false,
                   false
                 )
@@ -1091,7 +1103,15 @@ export function moveMerge(
                   source.unplugPin(type, pinId, subPinId, false, false)
                 }
 
-                source.plugPin(type, pinId, subPinId, subPinSpec, false, false)
+                source.plugPin(
+                  type,
+                  pinId,
+                  subPinId,
+                  subPinSpec,
+                  undefined,
+                  false,
+                  false
+                )
               }
             }
           }
