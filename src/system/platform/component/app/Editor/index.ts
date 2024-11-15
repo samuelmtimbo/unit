@@ -73,9 +73,11 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
   private _fallback = () => {
     const { specs, classes } = this.__system
 
-    const spec = this.__system.newSpec(
-      emptySpec({ id: newSpecId(specs), user: true })
-    )
+    const id = newSpecId(specs)
+
+    const spec = this.__system.newSpec(emptySpec({ id }))
+
+    this.__system.lockSpec(id)
 
     const Class = fromSpec(spec, specs, classes, {})
 

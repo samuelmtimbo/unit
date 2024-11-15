@@ -12,7 +12,6 @@ export type GraphSpec = GraphSpecBase & {
   metadata?: GraphMetadataSpec
   data?: GraphDataSpec
   render?: boolean
-  user?: boolean
   component?: GraphComponentSpec
   id?: string
 }

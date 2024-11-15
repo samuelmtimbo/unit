@@ -1024,6 +1024,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         forkSpec: this._fork_spec,
         injectSpecs: this._inject_specs,
         shouldFork: this._should_fork,
+        lockSpec: this._lock_spec,
+        unlockSpec: this._unlock_spec,
         registerUnit: this._register_unit,
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
@@ -1056,6 +1058,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           shouldFork: this._should_fork,
           registerUnit: this._register_unit,
           unregisterUnit: this._unregister_unit,
+          lockSpec: this._lock_spec,
+          unlockSpec: this._unlock_spec,
           newSpecId: this._new_spec_id,
           dispatchEvent: this._dispatch_event,
           enterFullwindow: this._enter_fullwindow,
@@ -1263,6 +1267,14 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _should_fork = (id: string): boolean => {
     return this._registry.shouldFork(id)
+  }
+
+  private _lock_spec = (id: string): void => {
+    return this._registry.lockSpec(id)
+  }
+
+  private _unlock_spec = (id: string): void => {
+    return this._registry.unlockSpec(id)
   }
 
   private _create_fallback_frame_container = (): Component => {
@@ -1563,6 +1575,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         injectSpecs: this._inject_specs,
         registerUnit: this._register_unit,
         unregisterUnit: this._unregister_unit,
+        lockSpec: this._lock_spec,
+        unlockSpec: this._unlock_spec,
         newSpecId: this._new_spec_id,
         dispatchEvent: this._dispatch_event,
         enterFullwindow: this._enter_fullwindow,
@@ -3717,7 +3731,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const bundle = await this._read_bundle_file(file)
 
             if (bundle) {
-              const specIdMap = injectUserBundle(this.$props, bundle)
+              const specIdMap = injectUserBundle(this.$props.registry, bundle)
 
               const bundle_ = clone(bundle)
 
@@ -29433,6 +29447,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       injectSpecs,
       registerUnit,
       unregisterUnit,
+      lockSpec,
+      unlockSpec,
       newSpecId,
       dispatchEvent,
       enterFullwindow,
@@ -29486,6 +29502,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           injectSpecs,
           registerUnit,
           shouldFork,
+          lockSpec,
+          unlockSpec,
           unregisterUnit,
           newSpecId,
           dispatchEvent,

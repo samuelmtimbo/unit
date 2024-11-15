@@ -2,6 +2,7 @@ import { API } from './API'
 import { Graph } from './Class/Graph'
 import { EventEmitter_ } from './EventEmitter'
 import { Object_ } from './Object'
+import { Registry } from './Registry'
 import { IOElement } from './client/IOElement'
 import { Context } from './client/context'
 import { UnitPointerEvent } from './client/event/pointer'
@@ -13,10 +14,9 @@ import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import { KeyboardState } from './types/global/KeyboardState'
 import { PointerState } from './types/global/PointerState'
-import { R } from './types/interface/R'
 import { S } from './types/interface/S'
 
-export interface System extends S, R {
+export interface System extends S, Registry {
   parent: System | null
   path: string
   emitter: EventEmitter_

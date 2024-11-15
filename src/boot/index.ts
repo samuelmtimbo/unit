@@ -60,6 +60,7 @@ export function boot(
 
   const {
     specsCount,
+    specsLock,
     newSpecId,
     hasSpec,
     emptySpec,
@@ -72,6 +73,8 @@ export function boot(
     registerUnit,
     unregisterUnit,
     shouldFork,
+    lockSpec,
+    unlockSpec,
   } = registry
 
   const emitter = parent ? parent.emitter : new EventEmitter_()
@@ -98,6 +101,7 @@ export function boot(
     icons,
     graphs: [],
     specsCount,
+    specsLock,
     cache,
     feature,
     foreground: {
@@ -141,6 +145,8 @@ export function boot(
     registerUnit: registerUnit.bind(registry),
     unregisterUnit: unregisterUnit.bind(registry),
     shouldFork: shouldFork.bind(registry),
+    lockSpec: lockSpec.bind(registry),
+    unlockSpec: unlockSpec.bind(registry),
     getLocalComponents: function (remoteGlobalId: string): Component[] {
       const components = componentRemoteToLocal[remoteGlobalId]
 

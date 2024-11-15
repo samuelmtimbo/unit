@@ -16,4 +16,6 @@ export interface R {
   deleteSpec(id: string): void
   registerUnit(id: string): void
   unregisterUnit(id: string): void
+  lockSpec(id: string): void
+  unlockSpec(id: string): void
 }
