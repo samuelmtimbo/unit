@@ -63,6 +63,7 @@ import { getRect } from './util/style/getRect'
 import { Scale, getScale } from './util/style/getScale'
 import { getSize } from './util/style/getSize'
 import { getTextAlign } from './util/style/getTextAlign'
+import { getTextRect } from './util/web/getTextRect'
 import { measureSVG } from './util/web/measureSVG'
 
 const $childToComponent = (
@@ -1661,14 +1662,15 @@ export class Component<
       return rectsBoundingRect(rects)
     }
 
+    let bcr: Rect
+
     if (this.$node instanceof Text) {
-      // TODO
-      return { x: 0, y: 0, width: 0, height: 0 }
+      bcr = getTextRect(this.$system, this.$node)
+    } else {
+      bcr = this.$node.getBoundingClientRect()
     }
 
     const { $x, $y, $sx, $sy } = this.$context
-
-    const bcr: Rect = this.$node.getBoundingClientRect()
 
     const { x, y, width, height } = bcr
 
