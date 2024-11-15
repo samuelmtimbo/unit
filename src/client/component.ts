@@ -51,7 +51,7 @@ import { rawExtractStyle } from './rawExtractStyle'
 import { stopImmediatePropagation, stopPropagation } from './stopPropagation'
 import { applyStyle } from './style'
 import { unmount } from './unmount'
-import { addVector } from './util/geometry'
+import { addVector, rectsBoundingRect } from './util/geometry'
 import { Rect } from './util/geometry/types'
 import { getFontSize } from './util/style/getFontSize'
 import { getOpacity } from './util/style/getOpacity'
@@ -1654,7 +1654,11 @@ export class Component<
     } = this.$system
 
     if (!this.$primitive) {
-      throw new Error('cannot calculate position of multiple elements.')
+      const base = this.getRootLeaves()
+
+      const rects = base.map((leaf) => leaf.getBoundingClientRect())
+
+      return rectsBoundingRect(rects)
     }
 
     if (this.$node instanceof Text) {
