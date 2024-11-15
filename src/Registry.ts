@@ -1,5 +1,5 @@
 import { Object_ } from './Object'
-import { emptySpec, isSystemSpecId } from './client/spec'
+import { emptySpec, isSystemSpecId, sameSpec } from './client/spec'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { remapSpec } from './spec/remapSpec'
 import { Spec, Specs } from './types'
@@ -158,7 +158,7 @@ export class Registry implements R {
       visited.add(specId)
 
       if (hasSpec) {
-        if (JSON.stringify(spec) === JSON.stringify(this.getSpec(specId))) {
+        if (sameSpec(spec, this.getSpec(specId) as GraphSpec)) {
           //
         } else {
           specIdMap[specId] = nextSpecId
