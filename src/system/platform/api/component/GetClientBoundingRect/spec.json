@@ -1,0 +1,26 @@
+{
+  "name": "get client bounding rect",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "rect": {
+      "type": "{x:number,y:number,width:number,height:number}"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "get the bounding box rect of `component`",
+    "tags": ["platform", "api", "component"]
+  },
+  "id": "d33eba3a-4a78-40b7-8501-77d74a8451ee",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
