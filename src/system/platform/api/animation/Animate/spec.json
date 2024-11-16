@@ -5,7 +5,13 @@
       "type": "object[]"
     },
     "opt": {
-      "type": "object"
+      "type": "object",
+      "metadata": {
+        "examples": [
+          "{duration:1000,iterations:Infinity}",
+          "{duration:1000,iterations}"
+        ]
+      }
     },
     "element": {
       "type": "`C`",
