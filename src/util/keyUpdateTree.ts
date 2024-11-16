@@ -367,9 +367,9 @@ export const _keyUpdateTree = (
       moveRight()
     }
   } else if (key === 'ArrowUp') {
-    // TODO
+    //
   } else if (key === 'ArrowDown') {
-    // TODO
+    //
   } else if (key === 'Tab') {
     //
   } else if (key === ',') {

@@ -49,8 +49,6 @@ export function listenWheel(
       altKey,
       clientX,
       clientY,
-      // screenX,
-      // screenY,
       offsetX,
       offsetY,
     } = _event
@@ -58,22 +56,6 @@ export function listenWheel(
     if (ctrlKey) {
       return
     }
-
-    if (!altKey) {
-      // RETURN
-      // let targetElement: HTMLElement
-      // const pointerElement = elementFromPoint(clientX, clientY)
-      // if (pointerElement instanceof HTMLElement) {
-      //   targetElement = pointerElement
-      // } else {
-      //   targetElement = pointerElement.parentElement
-      // }
-      // if (targetElement && isScrollable(targetElement)) {
-      //   return
-      // }
-    }
-
-    // _event.preventDefault()
 
     onWheel(
       {

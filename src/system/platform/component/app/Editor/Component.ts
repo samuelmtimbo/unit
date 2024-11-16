@@ -575,6 +575,7 @@ import {
   getExposePinSpec,
   getExposedPinSpecs,
   getInputNodeId,
+  getMerge,
   getMergePinCount,
   getMergePinTypeCount,
   getPinSpec,
@@ -4887,6 +4888,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return getUnitMergesSpec(graph, unit_id)
   }
 
+  private _get_graph_unit_merge = (graph_id: string, merge_id: string) => {
+    const graph = this._get_unit_spec(graph_id) as GraphSpec
+
+    return getMerge(graph, merge_id)
+  }
+
+  private _has_graph_unit_merge = (graph_id: string, merge_id: string) => {
+    const graph = this._get_unit_spec(graph_id) as GraphSpec
+
+    return hasMerge(graph, merge_id)
+  }
+
+  private _has_graph_unit_merge_pin = (
+    graph_id: string,
+    merge_id: string,
+    unitId: string,
+    type: IO,
+    pinId: string
+  ) => {
+    const graph = this._get_unit_spec(graph_id) as GraphSpec
+
+    return hasMergePin(graph, merge_id, unitId, type, pinId)
+  }
+
   private _get_graph_unit_unit_plugs = (graph_id: string, unit_id: string) => {
     const graph = this._get_unit_spec(graph_id) as GraphSpec
 
@@ -6328,9 +6353,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _dispatch_clone_unit_action = (
     unit_id: string,
     new_unit_id: string
-  ): void => {
-    // RETURN
-  }
+  ): void => {}
 
   private _dispatch_action_add_merge = (
     merge_id: string,
@@ -17774,7 +17797,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_search_list_height_offset()
 
     if (this._tree_layout) {
-      this._refresh_layout_node_target_position(null) // RETURN
+      this._refresh_layout_node_target_position(null)
     }
   }
 
@@ -18957,8 +18980,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_on_cabinet_drawer_active', drawer_id)
     if (drawer_id === 'minimap') {
       this._minimap_hidden = false
-    } else if (drawer_id === 'color') {
-      this._palette_hidden = false
     }
   }
 
@@ -18966,8 +18987,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_on_cabinet_drawer_inactive', drawer_id)
     if (drawer_id === 'minimap') {
       this._minimap_hidden = true
-    } else if (drawer_id === 'color') {
-      this._palette_hidden = true
     }
   }
 
@@ -19345,7 +19364,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           // combo: ['Ctrl + /'],
           keydown: this._on_ctrl_semicolon_keydown,
           strict: false,
-          // keyup: this._on_ctrl_p_keydown,
         },
         {
           // combo: 'p',
@@ -19403,11 +19421,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           combo: ['Ctrl + m', 'm'],
           strict: true,
           keydown: this._on_ctrl_m_keydown,
-        },
-        {
-          combo: ['p'],
-          strict: true,
-          keydown: this._on_ctrl_p_keydown,
         },
         {
           combo: 'Ctrl + a',
@@ -28079,7 +28092,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _info_unit = (unit_id: string): void => {
-    // TODO
+    //
   }
 
   private _show_core_description = (unit_id: string): void => {
@@ -28095,11 +28108,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _info_pin = (pin_node_id: string): void => {
-    // TODO
+    //
   }
 
   private _info_ext_pin = (ext_node_id: string) => {
-    // TODO
+    //
   }
 
   private _get_unit_input_data_valid_examples = (
@@ -45978,12 +45991,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _palette_hidden: boolean
-
-  private _toggle_palette = (): void => {
-    // TODO
-  }
-
   private _set_crud_mode = (mode: Mode): void => {
     // console.log('Graph', '_set_crud_mode', mode)
 
@@ -47679,7 +47686,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       },
       isPinIgnored: function (type: IO, name: string): boolean {
-        return false // TODO
+        return false
       },
       isPinRef: function (type: IO, name: string): boolean {
         return isPinRef({ type, pinId: name }, spec)
@@ -50593,26 +50600,32 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             path: [graph_id],
           })
         },
-        addPinToMerge: function (
+        addPinToMerge: (
           unit_id: string,
           type: IO,
           pin_id: string,
           merge_id: string
-        ): void {
-          // TODO
-          return
+        ): void => {
+          this._on_graph_unit_add_pin_to_merge_moment({
+            type,
+            unitId: unit_id,
+            pinId: pin_id,
+            mergeId: merge_id,
+            path: [graph_id],
+          })
         },
         getMerge: (merge_id): GraphMergeSpec => {
-          // TODO
-          return
+          return this._get_graph_unit_merge(graph_id, merge_id)
         },
-        addMerge: function (merge_id: string, merge: GraphMergeSpec) {
-          // TODO
-          return
+        addMerge: (merge_id: string, merge: GraphMergeSpec) => {
+          this._on_graph_unit_add_merge_moment({
+            mergeId: merge_id,
+            mergeSpec: merge,
+            path: [graph_id],
+          })
         },
-        hasMerge: function (merge_id: string): boolean {
-          // TODO
-          return true
+        hasMerge: (merge_id: string): boolean => {
+          return this._has_graph_unit_merge(graph_id, merge_id)
         },
         hasMergePin: function (
           merge_id: string,
@@ -50620,8 +50633,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           type: IO,
           pin_id: string
         ): boolean {
-          // TODO
-          return
+          return this._has_graph_unit_merge_pin(
+            graph_id,
+            merge_id,
+            unit_id,
+            type,
+            pin_id
+          )
         },
       }
     )
@@ -52448,9 +52466,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const updated_graph_spec = clone(graph_spec)
 
         const opposite_type = oppositePinType(type)
-
-        // TODO
-        // const pin_type = this._get_pin_type(pin_node_id)
 
         exposePinSet(
           {
@@ -54315,10 +54330,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._toggle_minimap()
   }
 
-  private _on_ctrl_p_keydown = (key: string): void => {
-    this._toggle_palette()
-  }
-
   private _force_finish_last_action: Unlisten
 
   private _animate_core_resize_unlisten: Dict<Unlisten> = {}
@@ -55283,7 +55294,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }: IOWheelEvent): void => {
     if (!ctrlKey) {
       if (this._unit_count > 0) {
-        // TODO turn into a single expression
         this._zoom_in(deltaY, this._zoom.x, this._zoom.y)
         this._map_zoom_translate(offsetX, offsetY)
       }
@@ -55319,17 +55329,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_minimap_pointer_enter = () => {
     // console.log('Graph', '_on_minimap_pointer_enter')
-    // TODO
+    //
   }
 
   private _on_minimap_pointer_leave = () => {
     // console.log('Graph', '_on_minimap_pointer_leave')
-    // TODO
+    //
   }
 
   private _on_minimap_drag_start = () => {
     // console.log('Graph', '_on_minimap_drag_start')
-    // TODO
+    //
   }
 
   private _on_minimap_pointer_move = (event: UnitPointerEvent): void => {
@@ -57136,7 +57146,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_clone_unit_moment = (unitId: string, newUnitId: string): void => {
     // console.log('Graph', '_on_clone_unit_moment', unitId, newUnitId)
-    // TODO
   }
 
   private _on_unit_pause_moment = () => {
@@ -58905,21 +58914,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_graph_unit_append_child_moment = (moment: GraphMoment): void => {
     // console.log('Graph', '_on_graph_unit_append_child_moment', moment)
-    // TODO
   }
 
   private _on_graph_unit_remove_child_at_moment = (
     moment: GraphMoment
   ): void => {
     // console.log('Graph', '_on_graph_unit_remove_child_at_moment', moment)
-    // TODO
   }
 
   private _on_graph_unit_insert_child_at_moment = (
     moment: GraphMoment
   ): void => {
     // console.log('Graph', '_on_graph_unit_insert_child_at_moment', moment)
-    // TODO
   }
 
   private _for_each_plug = (
@@ -59293,11 +59299,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_link_pin_invalid_moment = () => {
-    // TODO
+    //
   }
 
   private _on_graph_unit_merge_invalid_moment = () => {
-    // TODO
+    //
   }
 
   private _on_graph_unit_set_pin_set_id = (
@@ -59853,7 +59859,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { type, pinId, data } = moment
 
-    // TODO
+    //
   }
 
   private _on_unit_destroy_moment = () => {

@@ -818,7 +818,13 @@ export const renameUnitPin = (
   for (const unitId in units) {
     const unit = units[unitId]
 
-    // TODO
+    const pin = unit[type]?.[pinId]
+
+    if (pin) {
+      delete unit[type]?.[pinId]
+
+      deepSet_(unit, [type, newPinId], pin)
+    }
   }
 
   forEachPinOnMerges(clone(merges), (mergeId, _unitId, _type, _pinId) => {

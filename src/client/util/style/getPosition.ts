@@ -30,7 +30,6 @@ export function getRelativePosition(
   }
 }
 
-// RETURN
 export function getTextRelativePosition(
   element: Text,
   relative: HTMLElement
@@ -46,12 +45,10 @@ export function getTextRelativePosition(
   return rect
 }
 
-// RETURN
 export function getSVGRelativePosition(
   element: SVGElement,
   relative: HTMLElement
 ): Position {
-  // return NULL_VECTOR
   return element.parentElement
     ? getHTMLRelativePosition(element.parentElement, relative)
     : NULL_VECTOR
@@ -165,6 +162,7 @@ export function getLocalPosition(element: HTMLElement): Position {
   height = offsetHeight
 
   // TODO there's more to it
+
   const x = offsetLeft + transform_x
   const y = offsetTop + transform_y
 

@@ -1,7 +1,7 @@
 import { System } from '../../../system'
 import { clamp } from '../../../system/core/relation/Clamp/f'
 import { getActiveElement } from '../../activeElement'
-import { isChar, keyToCode, keyToKeyCode } from './keyCode'
+import { isChar } from './keyCode'
 
 const isAlphaNumCharOrSpace = (str: string): boolean => {
   return /[a-zA-Z\d\s:]/.test(str)
@@ -307,12 +307,7 @@ export function writeToInput(
 
   if (nextValue !== value) {
     input.value = nextValue
-    // TODO
-    // inputType: (Optional) A string specifying the type of change for editible content such as, for example, inserting, deleting, or formatting text.
-    // data: (Optional) A string containing characters to insert. This may be an empty string if the change doesn't insert text (such as when deleting characters, for example).
-    // dataTransfer: (Optional) A DataTransfer object containing information about richtext or plaintext data being added to or removed from editible content.
-    // isComposing: (Optional) A boolean indicating that the event is part of a composition session, meaning it is after a compositionstart event but before a compositionend event.  The default is false.
-    // ranges: (Optional) An array of static ranges that will be affected by a change to the DOM if the input event is not canceled.
+
     const inputEvent = new InputEvent('input', {})
 
     // selection must be set before dispatching input
@@ -439,36 +434,4 @@ export function writeToContentEditable(
   } else {
     _setSelection()
   }
-}
-
-export function emitKeyDown(system: System, key: string): void {
-  const code = keyToCode[key]
-  const keyCode = keyToKeyCode[key]
-  emitKeyboardEvent(system, 'keydown', {
-    key: code,
-    // @ts-ignore
-    keyCode,
-    code,
-    // TODO shiftKey, ctrlKey, ...
-    shiftKey: false,
-    ctrlKey: false,
-    metaKey: false,
-    bubbles: true,
-  })
-}
-
-export function emitKeyUp(system: System, key: string): void {
-  const code = keyToCode[key]
-  const keyCode = keyToKeyCode[key]
-  emitKeyboardEvent(system, 'keyup', {
-    key: code,
-    // @ts-ignore
-    keyCode,
-    code,
-    // TODO shiftKey, ctrlKey, ...
-    shiftKey: false,
-    ctrlKey: false,
-    metaKey: false,
-    bubbles: true,
-  })
 }

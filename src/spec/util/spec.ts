@@ -1021,17 +1021,8 @@ export function makeFullSpecCollapseMap(
           }
         )
       }
-    } else {
-      // TODO
     }
   }
-
-  forEachPinOnMerges(
-    unitMerges,
-    (mergeId, mergeUnitId, mergeUnitType, mergeUnitPinId) => {
-      const merge = getMerge(mergeId)
-    }
-  )
 
   const collapseMap = {
     nodeIds,
@@ -1066,6 +1057,14 @@ export function getUnitMergesSpec(
   }
 
   return unit_merges
+}
+
+export function getMerge(spec: GraphSpec, mergeId: string): GraphMergeSpec {
+  const { merges } = spec
+
+  const merge = merges[mergeId]
+
+  return merge
 }
 
 export function getUnitPinDatum(

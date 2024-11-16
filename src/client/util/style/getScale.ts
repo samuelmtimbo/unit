@@ -24,7 +24,6 @@ export function getScale(element: IOElement): Scale {
 
     return { sx, sy }
   } else {
-    // TODO
     return { sx: 1, sy: 1 }
   }
 }
