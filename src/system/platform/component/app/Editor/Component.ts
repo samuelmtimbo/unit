@@ -36434,7 +36434,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
         if (this._is_link_pin_visible(pin_node_id)) {
-          this._show_link_text(link_id)
+          if (this._is_link_pin_merged(pin_node_id)) {
+            this._show_link_text(link_id)
+          } else {
+            this._hide_link_text(link_id)
+            this._show_link_pin_name(pin_node_id)
+          }
         }
       })
     }
