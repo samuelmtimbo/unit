@@ -1238,6 +1238,8 @@ export class Component<
     }
   }
 
+  public $animationCount: number = 0
+
   animate(
     keyframes: Keyframe[],
     options: KeyframeAnimationOptions
@@ -1248,6 +1250,21 @@ export class Component<
 
     for (const leaf of base) {
       const animation = leaf.$element.animate(keyframes, options)
+
+      leaf.$element.dispatchEvent(new CustomEvent('animationstart'))
+
+      leaf.$animationCount++
+
+      leaf.$element.addEventListener('end', () => {
+        leaf.$animationCount--
+
+        leaf.$element.dispatchEvent(new CustomEvent('animationend'))
+      })
+      leaf.$element.addEventListener('cancel', () => {
+        leaf.$animationCount--
+
+        leaf.$element.dispatchEvent(new CustomEvent('animationend'))
+      })
 
       animations.push(animation)
     }
@@ -2533,17 +2550,23 @@ export class Component<
   private _insertAt = (parent: Component, child: Component, at: number) => {
     insert(this.$domChildren, child, at)
 
-    const target = this._wrapElement(parent.$element, child.$element, at)
+    const target = this._wrapElement(parent, child, at)
 
     insertAt(parent.$element, target, at)
   }
 
   private _svg_wrapper_unlisten: Unlisten[] = []
 
-  private _wrapElement = (parent: Node, element: Node, at: number) => {
+  private _wrapElement = (
+    parent: Component,
+    child: Component<HTMLElement | SVGElement>,
+    at: number
+  ) => {
+    const { $element: element } = child
+
     let target = element
 
-    if (isHTML(this.$system, parent) && isSVG(this.$system, element)) {
+    if (isHTML(this.$system, parent.$element) && isSVG(this.$system, element)) {
       const {
         api: {
           document: { MutationObserver },
@@ -2552,15 +2575,12 @@ export class Component<
 
       const svg = this._svgWrapper() as SVGSVGElement
 
-      svg.style.transition = `viewBox 0.2s linear`
-
       target = svg
 
       const config: MutationObserverInit = {
         childList: false,
         subtree: false,
         attributes: true,
-        // attributeOldValue: true
       }
 
       const mirror = element.cloneNode() as SVGElement
@@ -2572,6 +2592,16 @@ export class Component<
       mirror.style.visibility = 'hidden'
 
       const resize = () => {
+        if (!element.isConnected) {
+          const oldViewBox = element.getAttribute('data-viewbox')
+
+          if (oldViewBox) {
+            svg.setAttribute('viewBox', oldViewBox)
+
+            return
+          }
+        }
+
         const strokeWidth =
           parseLayoutValue(
             (element as SVGElement).style.strokeWidth ??
@@ -2579,18 +2609,22 @@ export class Component<
               '3px'
           )[0] + 3
 
-        const { x, y, width, height } = mirror.getBoundingClientRect()
+        const rect = mirror.getBoundingClientRect()
+        const tRect = getTransformedRect(element as SVGElement, rect)
 
-        svg.setAttribute(
-          'viewBox',
-          `${x - strokeWidth} ${y - strokeWidth} ${width + 2 * strokeWidth} ${height + 2 * strokeWidth}`
-        )
+        const { x, y, width, height } = tRect
+
+        const viewBox = `${x - strokeWidth} ${y - strokeWidth} ${width + 2 * strokeWidth} ${height + 2 * strokeWidth}`
+
+        element.setAttribute('data-viewbox', viewBox)
+
+        svg.setAttribute('viewBox', viewBox)
       }
 
       resize()
 
       const observer = new MutationObserver((records) => {
-        let tapped = new Set()
+        let tapped = new Set(['data-viewbox'])
 
         for (const record of records.reverse()) {
           const { attributeName } = record
@@ -2608,17 +2642,90 @@ export class Component<
 
         mirror.style.visibility = 'hidden'
 
-        resize()
+        if (tapped.size > 1) {
+          resize()
+        }
       })
 
       observer.observe(element, config)
 
-      let transitionCount = 0
+      function parseTransformMatrix(matrixString: string) {
+        if (!matrixString || matrixString === 'none') {
+          return [1, 0, 0, 1, 0, 0]
+        }
+
+        return matrixString
+          .replace('matrix(', '')
+          .replace(')', '')
+          .split(',')
+          .map(parseFloat)
+      }
+
+      function applyMatrixToPoint(matrix: number[], x: number, y: number) {
+        const [a, b, c, d, e, f] = matrix
+
+        const newX = a * x + c * y + e
+        const newY = b * x + d * y + f
+
+        return { x: newX, y: newY }
+      }
+
+      function getTransformedRect(
+        element: HTMLElement | SVGElement,
+        rect: Rect
+      ): Rect {
+        if (!element.isConnected) {
+          return rect
+        }
+
+        const matrixString = getComputedStyle(element).transform
+        const matrix = parseTransformMatrix(matrixString)
+
+        const topLeft = applyMatrixToPoint(matrix, rect.x, rect.y)
+        const topRight = applyMatrixToPoint(matrix, rect.x + rect.width, rect.y)
+        const bottomLeft = applyMatrixToPoint(
+          matrix,
+          rect.x,
+          rect.y + rect.height
+        )
+        const bottomRight = applyMatrixToPoint(
+          matrix,
+          rect.x + rect.width,
+          rect.y + rect.height
+        )
+
+        const xCoords = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]
+        const yCoords = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]
+
+        const maxX = Math.max(...xCoords)
+        const maxY = Math.max(...yCoords)
+        const minX = Math.min(...xCoords)
+        const minY = Math.min(...yCoords)
+
+        return {
+          x: minX,
+          y: minY,
+          width: maxX - minX,
+          height: maxY - minY,
+        }
+      }
+
+      let transitionCount = child.$animationCount
+
+      let cooldown = -1
 
       let frame: number
 
       let start = () => {
         resize()
+
+        if (cooldown > 0) {
+          cooldown--
+
+          if (cooldown === 0) {
+            return
+          }
+        }
 
         frame = requestAnimationFrame(start)
       }
@@ -2627,32 +2734,45 @@ export class Component<
         cancelAnimationFrame(frame)
       }
 
-      element.addEventListener('transitionstart', (event) => {
+      const onTransitionStart = (event) => {
         transitionCount++
 
         if (transitionCount === 1) {
+          cooldown = -1
+
           start()
         }
-      })
+      }
 
-      element.addEventListener('transitionend', (event) => {
+      const onTransitionEnd = (event) => {
         transitionCount--
 
         if (transitionCount === 0) {
-          frame = requestAnimationFrame(resize)
-
-          stop()
+          cooldown = 10
         }
-      })
+      }
+
+      element.addEventListener('transitionstart', onTransitionStart)
+      element.addEventListener('transitionend', onTransitionEnd)
+
+      element.addEventListener('animationstart', onTransitionStart)
+      element.addEventListener('animationstend', onTransitionEnd)
 
       this._svg_wrapper[at] = target as SVGSVGElement
       this._svg_wrapper_unlisten[at] = () => {
         observer.disconnect()
+
+        stop()
       }
 
       target.appendChild(element)
+
+      if (transitionCount > 0) {
+        start()
+      }
     } else if (
-      (isSVG(this.$system, parent) || isSVGSVG(this.$system, parent)) &&
+      (isSVG(this.$system, parent.$element) ||
+        isSVGSVG(this.$system, parent.$element)) &&
       isHTML(this.$system, element)
     ) {
       target = this._htmlWrapper()
