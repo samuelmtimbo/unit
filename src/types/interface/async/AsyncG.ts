@@ -360,7 +360,17 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphPlugPinData) {
-      call(graph, 'plugPin', fork, bubble, type, pinId, subPinId, subPinSpec)
+      call(
+        graph,
+        'plugPin',
+        fork,
+        bubble,
+        type,
+        pinId,
+        subPinId,
+        subPinSpec,
+        undefined
+      )
     },
 
     $unplugPin({

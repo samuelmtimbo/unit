@@ -345,7 +345,7 @@ export class Unit<
     opt: PinOpt = DEFAULT_PIN_OPT,
     propagate: boolean = true
   ) {
-    this._setInput(pinId, input, opt)
+    this._setInput(pinId, input, opt, propagate)
 
     this.emit('set_input', pinId, input, opt, propagate)
   }
@@ -353,10 +353,11 @@ export class Unit<
   public _setInput<K extends keyof I>(
     pinId: K,
     input: Pin<I[K]>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate: boolean
   ) {
     if (this.hasInputNamed(pinId)) {
-      this.removeInput(pinId, true)
+      this.removeInput(pinId, propagate)
     }
 
     this._i_count++

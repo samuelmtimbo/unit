@@ -745,7 +745,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
 
-    this._ensureMergePin(type, mergeId, undefined, propagate)
+    this._ensureMergePin(type, mergeId, data, propagate)
 
     const subPin = this._pin[mergePinNodeId]
 
@@ -2104,7 +2104,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     //   fork
     // )
 
-    this._plugPin(type, pinId, subPinId, subPinSpec, propagate, fork, bubble)
+    this._plugPin(
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
+      data,
+      propagate,
+      fork,
+      bubble
+    )
 
     emit && this.edit('plug_pin', type, pinId, subPinId, subPinSpec, [])
   }
@@ -2160,7 +2169,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const opt = { ref: !!ref }
 
     if (mergeId) {
-      this._plugPinToMerge(type, pinId, subPinId, mergeId, opt, data, propagate)
+      this._plugPinToMerge(type, pinId, subPinId, mergeId, data, opt, propagate)
     } else if (unitId && _pinId) {
       this._plugPinToUnitPin(
         type,
@@ -4577,6 +4586,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         plug.pinId,
         plug.subPinId,
         { mergeId },
+        undefined,
         propagate
       )
     })
@@ -4891,7 +4901,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._simAddPinToMerge(mergeId, unitId, type, pinId, propagate)
 
     if (plug) {
-      this._plugPin(type, plug.pinId, plug.subPinId, { mergeId }, propagate)
+      this._plugPin(
+        type,
+        plug.pinId,
+        plug.subPinId,
+        { mergeId },
+        undefined,
+        propagate
+      )
     }
   }
 
@@ -5475,6 +5492,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             pinId,
             kind: type,
           },
+          undefined,
           propagate
         )
       }
