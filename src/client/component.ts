@@ -1486,6 +1486,7 @@ export class Component<
       'svg'
     ) as SVGSVGElement
 
+    svg.style.display = 'block'
     svg.style.width = '100%'
     svg.style.height = '100%'
 
