@@ -47,6 +47,7 @@ import {
   makeUIEventListener,
 } from './makeEventListener'
 import { mount } from './mount'
+import { parseLayoutValue } from './parseLayoutValue'
 import { rawExtractStyle } from './rawExtractStyle'
 import { stopImmediatePropagation, stopPropagation } from './stopPropagation'
 import { applyStyle } from './style'
@@ -64,7 +65,6 @@ import { Scale, getScale } from './util/style/getScale'
 import { getSize } from './util/style/getSize'
 import { getTextAlign } from './util/style/getTextAlign'
 import { getTextRect } from './util/web/getTextRect'
-import { measureSVG } from './util/web/measureSVG'
 
 const $childToComponent = (
   system: System,
@@ -2551,28 +2551,98 @@ export class Component<
 
       const svg = this._svgWrapper() as SVGSVGElement
 
+      svg.style.transition = `viewBox 0.2s linear`
+
       target = svg
 
-      const config = {
+      const config: MutationObserverInit = {
         childList: false,
         subtree: false,
         attributes: true,
+        // attributeOldValue: true
       }
 
-      const resize = () => {
-        const { width, height } = measureSVG(
-          this.$system,
-          element as SVGElement
-        )
+      const mirror = element.cloneNode() as SVGElement
 
-        svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
+      const { foreground } = this.$system
+
+      foreground.svg.appendChild(mirror)
+
+      mirror.style.visibility = 'hidden'
+
+      const resize = () => {
+        const strokeWidth =
+          parseLayoutValue(
+            (element as SVGElement).style.strokeWidth ??
+              (element as SVGElement).getAttribute('stroke-width') ??
+              '3px'
+          )[0] + 3
+
+        const { x, y, width, height } = mirror.getBoundingClientRect()
+
+        svg.setAttribute(
+          'viewBox',
+          `${x - strokeWidth} ${y - strokeWidth} ${width + 2 * strokeWidth} ${height + 2 * strokeWidth}`
+        )
       }
 
       resize()
 
-      const observer = new MutationObserver(resize)
+      const observer = new MutationObserver((records) => {
+        let tapped = new Set()
+
+        for (const record of records.reverse()) {
+          const { attributeName } = record
+
+          if (tapped.has(attributeName)) {
+            continue
+          }
+
+          tapped.add(attributeName)
+
+          const value = (element as SVGElement).getAttribute(attributeName)
+
+          mirror.setAttribute(attributeName, value)
+        }
+
+        mirror.style.visibility = 'hidden'
+
+        resize()
+      })
 
       observer.observe(element, config)
+
+      let transitionCount = 0
+
+      let frame: number
+
+      let start = () => {
+        resize()
+
+        frame = requestAnimationFrame(start)
+      }
+
+      let stop = () => {
+        cancelAnimationFrame(frame)
+      }
+
+      element.addEventListener('transitionstart', (event) => {
+        transitionCount++
+
+        if (transitionCount === 1) {
+          start()
+        }
+      })
+
+      element.addEventListener('transitionend', (event) => {
+        transitionCount--
+
+        if (transitionCount === 0) {
+          frame = requestAnimationFrame(resize)
+
+          stop()
+        }
+      })
 
       this._svg_wrapper[at] = target as SVGSVGElement
       this._svg_wrapper_unlisten[at] = () => {

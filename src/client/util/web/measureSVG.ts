@@ -1,25 +1,35 @@
 import { System } from '../../../system'
-import { Size } from '../geometry/types'
+import { Point, Size } from '../geometry/types'
 
-export function measureSVG(system: System, element: SVGElement): Size {
+export function measureSVG(
+  system: System,
+  element: SVGElement,
+  clone: boolean = true
+): Point & Size {
   const {
     foreground: { svg },
   } = system
 
-  element = element.cloneNode(true) as SVGAElement
+  if (clone) {
+    element = element.cloneNode(true) as SVGElement
 
-  element.style.visibility = 'hidden'
+    element.style.visibility = 'hidden'
 
-  svg.appendChild(element)
+    svg.appendChild(element)
+  }
 
   const rect = element.getBoundingClientRect()
 
   const { x, y, width, height } = rect
 
-  svg.removeChild(element)
+  if (clone) {
+    svg.removeChild(element)
+  }
 
   return {
-    width: width + 2 * x,
-    height: height + 2 * y,
+    x,
+    y,
+    width,
+    height,
   }
 }
