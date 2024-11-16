@@ -21874,8 +21874,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._subgraph_graph.focus()
     } else if (
       this._core_component_unlocked_count > 0 &&
-      !this._temp_control_lock &&
-      !this._just_pointer_down
+      !this._temp_control_lock
     ) {
       const first = getObjSingleKey(this._core_component_unlocked)
 
