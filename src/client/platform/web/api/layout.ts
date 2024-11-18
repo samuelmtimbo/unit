@@ -1,6 +1,6 @@
 import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
-import { Style } from '../../../../system/platform/Style'
+import { Style, Tag } from '../../../../system/platform/Style'
 import { LayoutNode } from '../../../LayoutNode'
 import { RGBA, colorToHex, hexToRgba } from '../../../color'
 import { parseTransform } from '../../../parseTransform'
@@ -8,22 +8,34 @@ import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
 
+export const isTextName = (tag: string) => {
+  return ['text', 'path'].includes(tag)
+}
+
+export const isSVGName = (tag: string) => {
+  return ['path', 'rect', 'circle', 'line', 'ellipse'].includes(tag)
+}
+
 const fitChildren = (
   window: Window,
   parentTrait: LayoutNode,
   parentNode: HTMLElement,
-  children: Style[],
+  children: Tag[],
   path: number[],
   childrenFontSize: number[],
   childrenOpacity: number[],
   childrenSx: number[],
   childrenSy: number[],
-  expandChild: (path: number[]) => Style[]
+  expandChild: (path: number[]) => Tag[]
 ) => {
   let i = 0
 
-  for (const childStyle of children) {
-    const childNode = window.document.createElement('div')
+  for (const { name, style: childStyle } of children) {
+    let tag = name.replace('#', '').toLocaleLowerCase()
+
+    tag = isTextName(tag) || isSVGName(tag) ? 'div' : tag
+
+    const childNode = window.document.createElement(tag)
 
     let {
       display: childDisplay = 'block',
@@ -114,8 +126,8 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
     reflectChildrenTrait: function (
       parentTrait: LayoutNode,
       parentStyle: Style,
-      childrenStyle: Style[],
-      expandChild: (path: number[]) => Style[]
+      childrenStyle: Tag[],
+      expandChild: (path: number[]) => Tag[]
     ): LayoutNode[] {
       const parentNode = window.document.createElement('div')
 

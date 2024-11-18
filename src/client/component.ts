@@ -590,9 +590,10 @@ export class Component<
     // delete style['transform']
     delete style['opacity']
 
-    const styles = leaves.map((leaf) =>
-      rawExtractStyle(leaf.$element, trait, measureText)
-    )
+    const styles = leaves.map((leaf) => ({
+      name: (leaf.$element as Node).nodeName,
+      style: rawExtractStyle(leaf.$element, trait, measureText),
+    }))
 
     let targetTraits = reflectChildrenTrait(trait, style, styles, () => {
       return []

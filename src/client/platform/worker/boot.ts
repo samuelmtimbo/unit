@@ -3,7 +3,7 @@ import { APINotSupportedError } from '../../../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../../../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../../../exception/MediaDeviceAPINotSupported'
 import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
-import { Style } from '../../../system/platform/Style'
+import { Style, Tag } from '../../../system/platform/Style'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { DownloadDataOpt } from '../../../types/global/DownloadData'
@@ -278,8 +278,8 @@ export function workerApi(): API {
       reflectChildrenTrait: function (
         parentTrait: LayoutNode,
         parentStyle: Style,
-        children: Style[],
-        expandChild?: (path: number[]) => Style[]
+        children: Tag[],
+        expandChild?: (path: number[]) => Tag[]
       ): LayoutNode[] {
         throw new MethodNotImplementedError()
       },

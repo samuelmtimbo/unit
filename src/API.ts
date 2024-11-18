@@ -2,7 +2,7 @@ import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
 import { Theme } from './client/theme'
 import { Rect } from './client/util/geometry/types'
-import { Style } from './system/platform/Style'
+import { Style, Tag } from './system/platform/Style'
 import { MeasureTextFunction } from './text'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
@@ -161,8 +161,8 @@ export type API = {
     reflectChildrenTrait(
       parentTrait: LayoutNode,
       parentStyle: Style,
-      children: Style[],
-      expandChild: (path: number[]) => Style[]
+      children: Tag[],
+      expandChild: (path: number[]) => Tag[]
     ): LayoutNode[]
   }
   speech: {

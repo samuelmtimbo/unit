@@ -707,7 +707,7 @@ import isEqual from '../../../../f/comparison/Equals/f'
 import deepMerge from '../../../../f/object/DeepMerge/f'
 import _dissoc from '../../../../f/object/Delete/f'
 import _keys, { keys } from '../../../../f/object/Keys/f'
-import { Style } from '../../../Style'
+import { Style, Tag } from '../../../Style'
 import { default as Icon, default as IconButton } from '../../Icon/Component'
 import Zoom_ from '../../Zoom/Component'
 import Canvas_ from '../../canvas/Canvas/Component'
@@ -21122,6 +21122,32 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return unlisten
   }
 
+  private _get_graph_sub_component_node_trait = (
+    node_id: string
+  ): LayoutNode => {
+    const graph_node = this._node[node_id]
+
+    const sub_component = this._get_sub_component(node_id)
+
+    const color = sub_component.getColor()
+
+    const { z } = this._zoom
+
+    const trait = {
+      x: 1,
+      y: 1,
+      width: graph_node.width - 2,
+      height: graph_node.height - 2,
+      sx: z,
+      sy: z,
+      opacity: 1,
+      fontSize: 14,
+      color,
+    }
+
+    return trait
+  }
+
   private _animate_leave_tree_layout = (): void => {
     // console.log('Graph', '_animate_leave_tree_layout')
 
@@ -21300,24 +21326,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             leaf_traits,
             leaf_layer,
             (leaf_id: string) => {
-              const color = sub_component.getColor()
-
               const { x, y } = this._get_node_screen_position(sub_component_id)
 
-              const { z } = this._zoom
-
               if (i === 0) {
-                const trait = {
-                  x: 1,
-                  y: 1,
-                  width: graph_node.width - 2,
-                  height: graph_node.height - 2,
-                  sx: z,
-                  sy: z,
-                  opacity: 1,
-                  fontSize: 14,
-                  color,
-                }
+                const trait =
+                  this._get_graph_sub_component_node_trait(sub_component_id)
 
                 const frame_trait = extractTrait(frame, measureText)
                 const frame_style = extractStyle(
@@ -26876,7 +26889,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_component_id: string,
     base: LayoutBase,
     base_node: LayoutNode[],
-    tick: () => { style: Style; trait: LayoutNode },
+    measure: () => { style: Style; trait: LayoutNode },
     callback: () => Promise<boolean>
   ): void => {
     // console.log('Graph', '_animate_sub_component_graph_leave', base, base_node)
@@ -26885,7 +26898,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       sub_component_id,
       base,
       base_node,
-      tick,
+      true,
+      measure,
       async () => {
         let result = callback()
 
@@ -26913,6 +26927,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_component_id: string,
     base: LayoutBase,
     base_node: LayoutNode[],
+    expand: boolean,
     measure: () => { style: Style; trait: LayoutNode },
     callback: () => boolean | Promise<boolean>
   ): void => {
@@ -26964,7 +26979,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               base,
               style,
               trait,
-              false
+              expand
             )
           }
 
@@ -30244,6 +30259,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             sub_base_node,
             () => {
               const trait = extractTrait(frame, measureText)
+
+              trait.x -= 1
+              trait.y -= 1
+
               const style = extractStyle(frame, trait, measureText)
 
               return {
@@ -32372,13 +32391,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } = this.$system
 
     const root_base: Dict<Dict<string[]>> = {}
-    const root_style: Dict<Dict<Style[]>> = {}
+    const root_style: Dict<Dict<Tag[]>> = {}
 
     const parent_slot_base: Dict<string[]> = {}
-    const parent_slot_style: Dict<Style[]> = {}
+    const parent_slot_style: Dict<Tag[]> = {}
 
     const all_leaf_trait: Dict<LayoutNode> = {}
-    const all_leaf_style: Dict<Style> = {}
+    const all_leaf_style: Dict<Tag> = {}
 
     const tick_leaf = (
       leaf_id: string,
@@ -32472,7 +32491,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
 
       all_leaf_trait[slot_leaf_id] = slot_leaf_trait
-      all_leaf_style[slot_leaf_id] = slot_leaf_style
+      all_leaf_style[slot_leaf_id] = {
+        name: child_base_slot.$element.nodeName,
+        style: slot_leaf_style,
+      }
 
       for (const leaf of base) {
         const [leaf_path, leaf_comp] = leaf
@@ -32495,14 +32517,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             root_style[target_id][slot_name] || []
 
           root_base[target_id][slot_name].push(leaf_id)
-          root_style[target_id][slot_name].push(leaf_style)
+          root_style[target_id][slot_name].push({
+            name: leaf_comp.$element.nodeName,
+            style: leaf_style,
+          })
         } else {
           parent_slot_base[slot_leaf_id] = parent_slot_base[slot_leaf_id] || []
           parent_slot_base[slot_leaf_id].push(leaf_id)
 
           parent_slot_style[slot_leaf_id] =
             parent_slot_style[slot_leaf_id] || []
-          parent_slot_style[slot_leaf_id].push(leaf_style)
+          parent_slot_style[slot_leaf_id].push({
+            name: leaf_comp.$element.nodeName,
+            style: leaf_style,
+          })
         }
 
         setup(leaf_id, parent_id, slot_name)
@@ -32536,7 +32564,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           slot_trait,
           slot_style,
           slot_base_style,
-          (path): Style[] => {
+          (path): Tag[] => {
             return []
           }
         )
@@ -32560,18 +32588,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const slot_base_style = parent_slot_style[slot_id]
 
       const slot_trait: LayoutNode = all_leaf_trait[slot_id]
-      const slot_style: Style = all_leaf_style[slot_id]
+      const slot_style: Tag = all_leaf_style[slot_id]
 
       const slot_base_trait = reflectChildrenTrait(
         slot_trait,
-        slot_style,
+        slot_style.style,
         slot_base_style,
         (path) => {
+          if (!should_expand_slot) {
+            return []
+          }
+
           const children_style = expandSlot(
             this._component,
             slot_trait,
             slot_id,
             slot_id === slot_base[0] ? path.slice(1) : path,
+            false,
             (leaf_id, leaf_comp) => {
               return this._extract_style(slot_trait, leaf_id, leaf_comp)
             }
@@ -46802,8 +46835,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const color = sub_component.getColor()
 
             const trait: LayoutNode = {
-              x: x,
-              y: y,
+              x: x - 1,
+              y: y - 1,
               width,
               height,
               sx: z,
