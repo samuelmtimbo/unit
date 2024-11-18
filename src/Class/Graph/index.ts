@@ -1083,8 +1083,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _play(): void {
-    forEachValueKey(this._unit, (u) => u.play())
     forEachValueKey(this._merge, (m) => m.play())
+    forEachValueKey(this._unit, (u) => u.play())
 
     forEach(this._children, (c) => c.play())
   }
