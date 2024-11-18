@@ -3,7 +3,7 @@
   "inputs": {},
   "outputs": {
     "graph": {
-      "type": "`U`&`G`",
+      "type": "`U`&`C`&`G`",
       "ref": true
     }
   },
