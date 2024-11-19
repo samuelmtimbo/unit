@@ -538,7 +538,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
             if (this._list_hidden) {
               this._debounced_refresh_list()
             } else {
-              this._refresh_list()
+              this._refresh_list(true)
 
               if (selected_item_id === specId) {
                 this._select_first_list_item()
