@@ -10,7 +10,6 @@ import {
   BluetoothDevice,
   BluetoothDeviceOpt,
 } from './types/global/BluetoothDevice'
-import { Channel, ChannelOpt } from './types/global/Channel'
 import { DownloadDataOpt as IDownloadTextOpt } from './types/global/DownloadData'
 import { DownloadURLOpt } from './types/global/DownloadURL'
 import { PositionObserverConstructor } from './types/global/PositionObserver'
@@ -77,7 +76,6 @@ export type API = {
     ) => Unlisten
     EventSource: typeof EventSource
   }
-  channel: { local: (opt: ChannelOpt) => Channel }
   crypto: {
     generateKey: (
       algorithm: AlgorithmIdentifier,

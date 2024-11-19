@@ -17,7 +17,6 @@ import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
 import { webAlert } from './api/alert'
 import { webAnimation } from './api/animation'
 import { webBluetooth } from './api/bluetooth'
-import { webChannel } from './api/channel'
 import { webClipboard } from './api/clipboard'
 import { webCrypto } from './api/crypto'
 import { webDB } from './api/db'
@@ -67,7 +66,6 @@ export function webBoot(
   _root.attachShadow({ mode: 'open' })
 
   const http = webHTTP(window, opt)
-  const channel = webChannel(window, opt)
   const file = webFile(window, opt)
   const screen = webScreen(window, opt)
   const device = webDevice(window, opt)
@@ -112,7 +110,6 @@ export function webBoot(
     layout,
     media,
     http,
-    channel,
     input,
     speech,
     document,

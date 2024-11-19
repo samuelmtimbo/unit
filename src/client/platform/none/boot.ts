@@ -133,11 +133,6 @@ export function noneApi(): API {
         throw new APINotSupportedError('HTTP Server')
       },
     },
-    channel: {
-      local: function (opt): any {
-        throw new APINotSupportedError('Local Channel')
-      },
-    },
     speech: {
       SpeechGrammarList: undefined,
       SpeechRecognition: undefined,
