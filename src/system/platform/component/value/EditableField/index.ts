@@ -12,7 +12,7 @@ export interface O {
   value: string
 }
 
-export default class EditableField extends Field<I, O> {
+export default class EditableField extends Field<'value', I, O> {
   constructor(system: System) {
     super(
       {
@@ -21,7 +21,8 @@ export default class EditableField extends Field<I, O> {
       },
       {},
       system,
-      ID_EDITABLE_FIELD
+      ID_EDITABLE_FIELD,
+      'value'
     )
 
     this._defaultState = {

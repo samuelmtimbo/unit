@@ -14,7 +14,7 @@ export interface O {
   value: number
 }
 
-export default class Slider extends Field<I, O> {
+export default class Slider extends Field<'value', I, O> {
   constructor(system: System) {
     super(
       {
@@ -23,7 +23,8 @@ export default class Slider extends Field<I, O> {
       },
       {},
       system,
-      ID_SLIDER
+      ID_SLIDER,
+      'value'
     )
 
     this._defaultState = {

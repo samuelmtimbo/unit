@@ -38,7 +38,7 @@ const findFirstOption = (unit: Unit): Option | null => {
   }
 }
 
-export default class Select extends Field<I, O> {
+export default class Select extends Field<'value', I, O> {
   private _first_option: Option | null = null
 
   constructor(system: System) {
@@ -49,7 +49,8 @@ export default class Select extends Field<I, O> {
       },
       {},
       system,
-      ID_SELECT
+      ID_SELECT,
+      'value'
     )
 
     this._defaultState = {}

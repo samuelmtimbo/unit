@@ -13,7 +13,7 @@ export interface O {
   value: boolean
 }
 
-export default class Checkbox extends Field<I, O> {
+export default class Checkbox extends Field<'value', I, O> {
   constructor(system: System) {
     super(
       {
@@ -22,7 +22,8 @@ export default class Checkbox extends Field<I, O> {
       },
       {},
       system,
-      ID_CHECKBOX
+      ID_CHECKBOX,
+      'value'
     )
 
     this._defaultState = {

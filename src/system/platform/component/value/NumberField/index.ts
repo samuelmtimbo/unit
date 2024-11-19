@@ -11,7 +11,7 @@ export interface O {
   value: number
 }
 
-export default class NumberField extends Field<I, O> {
+export default class NumberField extends Field<'value', I, O> {
   constructor(system: System) {
     super(
       {
@@ -20,7 +20,8 @@ export default class NumberField extends Field<I, O> {
       },
       {},
       system,
-      ID_NUMBER_FIELD
+      ID_NUMBER_FIELD,
+      'value'
     )
 
     this._defaultState = {
