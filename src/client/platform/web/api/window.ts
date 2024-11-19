@@ -18,6 +18,8 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     localStorage: window.localStorage,
     sessionStorage: window.sessionStorage,
     // @ts-ignore
+    BroadcastChannel: window.BroadcastChannel,
+    // @ts-ignore
     Notification: window.Notification,
     // @ts-ignore
     Audio: window.Audio,

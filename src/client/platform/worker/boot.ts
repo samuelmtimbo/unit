@@ -226,6 +226,7 @@ export function workerApi(): API {
       SVGElement: undefined,
       SVGSVGElement: undefined,
       Text: undefined,
+      BroadcastChannel: globalThis.BroadcastChannel,
       localStorage: globalThis.localStorage,
       sessionStorage: globalThis.sessionStorage,
       AudioContext: globalThis.AudioContext,

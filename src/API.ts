@@ -245,6 +245,7 @@ export type API = {
     }
     ReadableStream: typeof ReadableStream
     OffscreenCanvas: typeof OffscreenCanvas
+    BroadcastChannel: typeof BroadcastChannel
     open: (url: string, target: string, features: string) => Window
     getComputedStyle: (element: Element) => CSSStyleDeclaration
     setTimeout(callback: () => any, ms: number): any
