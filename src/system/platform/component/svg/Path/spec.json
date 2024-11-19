@@ -27,7 +27,12 @@
       "defaultIgnored": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "d": {
+      "type": "string",
+      "defaultIgnored": true
+    }
+  },
   "metadata": {
     "icon": "square",
     "description": "SVG path",
