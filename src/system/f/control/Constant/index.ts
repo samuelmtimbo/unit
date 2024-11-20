@@ -1,5 +1,7 @@
 import { Primitive } from '../../../../Primitive'
+import { isPrimitive } from '../../../../spec/primitive'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 import { ID_CONSTANT } from '../../../_ids'
 
 export interface I<T> {
@@ -31,6 +33,7 @@ export default class Constant<T> extends Primitive<I<T>, O<T>> {
 
   onDataInputData(name: string, data: T) {
     this._current = data
+
     this._output.a.push(data)
   }
 
@@ -43,11 +46,28 @@ export default class Constant<T> extends Primitive<I<T>, O<T>> {
 
   onDataOutputDrop(name: string) {
     if (!this._forwarding_empty) {
-      this._output.a.push(this._current)
+      if (this._current !== undefined) {
+        this._output.a.push(this._current)
+      }
     }
   }
 
   onDataInputInvalid(name: string) {
     this._invalidate()
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _current: isPrimitive(this._current) ? this._current : undefined,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _current, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._current = _current
   }
 }
