@@ -2958,7 +2958,7 @@ export class Component<
   }
 
   public removeRoot(component: Component): void {
-    const at = this.$root.indexOf(component)
+    const at = this.$mountRoot.indexOf(component)
 
     this.domRemoveRoot(component, at)
     this.memRemoveRoot(component)
