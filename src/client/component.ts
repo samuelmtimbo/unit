@@ -2636,7 +2636,8 @@ export class Component<
 
           tapped.add(attributeName)
 
-          const value = (element as SVGElement).getAttribute(attributeName)
+          const value =
+            (element as SVGElement).getAttribute(attributeName) ?? ''
 
           mirror.setAttribute(attributeName, value)
         }
