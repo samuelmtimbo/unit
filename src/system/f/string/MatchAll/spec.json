@@ -1,0 +1,25 @@
+{
+  "name": "match all",
+  "inputs": {
+    "str": {
+      "type": "string"
+    },
+    "regex": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "matches": {
+      "type": "string[][]"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "match a string against a regular expression",
+    "tags": ["f", "string"]
+  },
+  "id": "9da2b1ce-005e-4ec1-a73a-eee9850c97e2",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
