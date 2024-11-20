@@ -1,0 +1,98 @@
+{
+  "type": "`U`&`G`",
+  "name": "rad to deg",
+  "units": {
+    "divide": {
+      "id": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "b": {
+          "constant": false
+        },
+        "a": {}
+      }
+    },
+    "multiply": {
+      "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": 180
+          }
+        }
+      }
+    },
+    "PI": {
+      "id": "3256e26d-8495-4c9d-8998-5b026691231d",
+      "input": {
+        "any": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": 0
+          }
+        }
+      },
+      "output": {
+        "PI": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "divide": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "multiply": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "divide": {
+        "input": {
+          "b": true
+        }
+      },
+      "PI": {
+        "output": {
+          "PI": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "rad": {
+      "plug": {
+        "0": {
+          "unitId": "divide",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "angle": {
+      "plug": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a × b",
+          "kind": "output"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "convert angle in radians to degrees"
+  },
+  "id": "b9d50cfc-482c-4106-b036-0e604dbada1b",
+  "system": true
+}
