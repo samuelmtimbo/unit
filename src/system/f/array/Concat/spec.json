@@ -5,12 +5,12 @@
       "type": "<A>[]"
     },
     "b": {
-      "type": "<A>[]"
+      "type": "<B>[]"
     }
   },
   "outputs": {
     "ab": {
-      "type": "<A>[]"
+      "type": "(<A>|<B>)[]"
     }
   },
   "metadata": {

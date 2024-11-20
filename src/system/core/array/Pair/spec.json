@@ -58,8 +58,7 @@
           "unitId": "single",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -69,8 +68,7 @@
           "unitId": "concat",
           "pinId": "ab"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "id": "a7d5c2f3-6134-4248-b9bc-33271c280267",
