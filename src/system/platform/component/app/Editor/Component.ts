@@ -50660,12 +50660,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         hasMerge: (merge_id: string): boolean => {
           return this._has_graph_unit_merge(graph_id, merge_id)
         },
-        hasMergePin: function (
+        hasMergePin: (
           merge_id: string,
           unit_id: string,
           type: IO,
           pin_id: string
-        ): boolean {
+        ): boolean => {
           return this._has_graph_unit_merge_pin(
             graph_id,
             merge_id,
