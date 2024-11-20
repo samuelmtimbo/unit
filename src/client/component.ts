@@ -991,7 +991,7 @@ export class Component<
       (parent, leafComp) => {
         const index = parent.$root.indexOf(leafComp)
 
-        parent.domRemoveRoot(leafComp, index)
+        parent.domRemoveRoot(leafComp, index, index)
       },
       (parent, leafComp) => {
         const index = parent.$parentRoot.indexOf(leafComp)
@@ -1016,7 +1016,7 @@ export class Component<
       (parent, leaf_comp) => {
         const index = parent.$root.indexOf(leaf_comp)
 
-        parent.domRemoveRoot(leaf_comp, index)
+        parent.domRemoveRoot(leaf_comp, index, index)
       },
       (parent, leaf_comp) => {
         const index = parent.$parentRoot.indexOf(leaf_comp)
@@ -1041,7 +1041,11 @@ export class Component<
     this.templateLeaves(
       leaves,
       (parent, leafComp) => {
-        parent.domAppendRoot(leafComp, this.$root.length - 1)
+        parent.domAppendRoot(
+          leafComp,
+          this.$root.length - 1,
+          this.$root.length - 1
+        )
       },
       (parent, leafComp) => {
         const index = parent.$parentRoot.indexOf(leafComp)
@@ -2498,7 +2502,7 @@ export class Component<
     _if(this.$mounted, mount, component, this._$context)
   }
 
-  public domAppendRoot(component: Component, at: number): void {
+  public domAppendRoot(component: Component, at: number, index: number): void {
     set(component, '$slotParent', this)
 
     if (!this.$primitive) {
@@ -2506,15 +2510,18 @@ export class Component<
         let i = 0
 
         for (const root of component.$mountRoot) {
-          this.domAppendRoot(root, at + i)
+          this.domAppendRoot(root, at, index)
 
           i++
         }
       } else {
         if (this.$slotParent) {
-          const i = at + this.$slotParent.$mountParentChildren.length - 1
-
-          this.$slotParent.domAppendParentChildAt(component, 'default', i, i)
+          this.$slotParent.domAppendParentChildAt(
+            component,
+            'default',
+            at + this.$slotParent.$mountParentChildren.length - 1,
+            index + this.$slotParent.$mountParentChildren.length - 1
+          )
         } else {
           this.domCommitAppendChild(component, this.$mountRoot.length - 1)
         }
@@ -2524,7 +2531,7 @@ export class Component<
         let i = 0
 
         for (const root of component.$mountRoot) {
-          this.domAppendRoot(root, i)
+          this.domAppendRoot(root, i, index)
 
           i++
         }
@@ -2857,11 +2864,11 @@ export class Component<
 
   public appendRoot(component: Component): void {
     // console.log('Component', 'appendRoot', component)
-
     const at = this.$mountRoot.length
+    const index = this.$root.indexOf(component)
 
     this.memAppendRoot(component)
-    this.domAppendRoot(component, at)
+    this.domAppendRoot(component, at, index)
     this.postAppendRoot(component)
   }
 
@@ -2959,9 +2966,10 @@ export class Component<
   }
 
   public removeRoot(component: Component): void {
+    const index = this.$root.indexOf(component)
     const at = this.$mountRoot.indexOf(component)
 
-    this.domRemoveRoot(component, at)
+    this.domRemoveRoot(component, index, at)
     this.memRemoveRoot(component)
     this.postRemoveRoot(component)
   }
@@ -2970,7 +2978,7 @@ export class Component<
     pull(this.$mountRoot, component)
   }
 
-  public domRemoveRoot(component: Component, at: number): void {
+  public domRemoveRoot(component: Component, index: number, at: number): void {
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (let i = 0; i < component.$mountRoot.length; i++) {
@@ -2983,7 +2991,7 @@ export class Component<
               this.$slotParent
             )
           } else {
-            this.domRemoveRoot(component.$mountRoot[i], at)
+            this.domRemoveRoot(component.$mountRoot[i], index, at)
           }
         }
       } else {
@@ -2992,20 +3000,20 @@ export class Component<
             component,
             'default',
             at,
-            at,
+            index,
             this.$slotParent
           )
         } else {
-          this.domCommitRemoveChild(component, at)
+          this.domCommitRemoveChild(component, at, index)
         }
       }
     } else {
       if (!component.$primitive) {
         for (const root of component.$mountRoot) {
-          this.domRemoveRoot(root, at)
+          this.domRemoveRoot(root, index, at)
         }
       } else {
-        this.domCommitRemoveChild(component, at)
+        this.domCommitRemoveChild(component, at, index)
       }
     }
 
@@ -3201,7 +3209,7 @@ export class Component<
     component: Component,
     slotName: string,
     at: number,
-    _at: number
+    index: number
   ): void {
     if (!this.$primitive) {
       if (!component.$primitive) {
@@ -3222,7 +3230,7 @@ export class Component<
             this.$slotParent.$mountParentChildren.length
           )
         } else {
-          this.domCommitAppendChild(component, at)
+          this.domCommitAppendChild(component, index)
         }
       }
     } else {
@@ -3245,7 +3253,7 @@ export class Component<
           j++
         }
       } else {
-        this.domCommitAppendChild(component, at)
+        this.domCommitAppendChild(component, index)
       }
     }
 
@@ -3391,7 +3399,7 @@ export class Component<
     component: Component,
     slotName: string,
     at: number,
-    _at: number,
+    index: number,
     slotParent?: Component
   ): void {
     if (!this.$primitive) {
@@ -3402,7 +3410,7 @@ export class Component<
               component.$mountRoot[i],
               slotName,
               at,
-              at,
+              index,
               slotParent
             )
           } else {
@@ -3410,7 +3418,7 @@ export class Component<
               component.$mountRoot[i],
               slotName,
               at,
-              at,
+              index,
               slotParent
             )
           }
@@ -3421,13 +3429,13 @@ export class Component<
             component,
             'default',
             at,
-            at,
+            index,
             slotParent
           )
         } else if (slotParent) {
-          slotParent.domCommitRemoveChild(component, at)
+          slotParent.domCommitRemoveChild(component, at, index)
         } else {
-          this.domCommitRemoveChild(component, at)
+          this.domCommitRemoveChild(component, at, index)
         }
       }
     } else {
@@ -3442,24 +3450,28 @@ export class Component<
                 parentRoot,
                 slotName,
                 at,
-                at,
+                index,
                 slotParent
               )
             }
           }
         }
       } else {
-        this.domCommitRemoveChild(component, at)
+        this.domCommitRemoveChild(component, at, index)
       }
     }
 
     set(component, '$slotParent', null)
   }
 
-  protected domCommitRemoveChild(component: Component, at: number) {
+  protected domCommitRemoveChild(
+    component: Component,
+    at: number,
+    index: number
+  ) {
     if (component.isParent()) {
       for (const root of component.$root) {
-        this.domCommitRemoveChild(root, at)
+        this.domCommitRemoveChild(root, at, index)
       }
 
       return
@@ -3467,12 +3479,12 @@ export class Component<
 
     if (this.isParent()) {
       if (this.$slotParent) {
-        this.$slotParent.domCommitRemoveChild(component, at)
+        this.$slotParent.domCommitRemoveChild(component, at, index)
       } else {
-        this._removeChild(component, at)
+        this._removeChild(component, index)
       }
     } else {
-      this._removeChild(component, at)
+      this._removeChild(component, index)
     }
   }
 
