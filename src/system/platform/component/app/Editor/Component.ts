@@ -53475,7 +53475,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const datumId in data) {
       const { value } = data[datumId]
 
-      const dataRef = evaluateDataValue(value, specs, classes)
+      let dataRef
+
+      try {
+        dataRef = evaluateDataValue(value, specs, classes)
+      } catch {
+        continue
+      }
 
       for (const path of dataRef.ref) {
         let unit_bundle = deepGet(dataRef.data, path) as UnitBundleSpec
