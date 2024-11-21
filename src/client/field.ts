@@ -12,10 +12,10 @@ export type InputElement =
   | HTMLFieldSetElement
   | HTMLDivElement
 
-export function makeFieldInputEventHandler<E extends InputElement>(
+export function makeFieldInputEventHandler(
   component: Element,
   keyName: string = 'value',
-  processValue: (element: E, value: string) => any = identity
+  processValue: (value: string) => any = identity
 ) {
   return function (event: InputEvent) {
     const value = this[keyName]
@@ -23,7 +23,7 @@ export function makeFieldInputEventHandler<E extends InputElement>(
     event.preventDefault()
     event.stopImmediatePropagation()
 
-    const nextValue = processValue(component.$element, value)
+    const nextValue = processValue(value)
 
     component.set('value', nextValue)
     component.dispatchEvent(event.type, nextValue)
@@ -43,7 +43,7 @@ export class Field<
       defaultStyle?: Style
       defaultValue?: any
       defaultAttr?: Dict<any>
-      processValue?: ($element: E, value: string) => any
+      processValue?: (value: string) => any
       parseValue?: (value: string) => any
       propHandlers?: Dict<(value: any) => void>
     }
@@ -53,7 +53,7 @@ export class Field<
       defaultStyle,
       defaultAttr,
       defaultValue = '',
-      processValue = ($element, value) => value,
+      processValue = (value) => value,
       parseValue = identity,
       propHandlers,
     } = opt
