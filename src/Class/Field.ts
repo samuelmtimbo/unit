@@ -42,7 +42,7 @@ export class Field<
     })
 
     this.addListener('play', () => {
-      if (!this._ever_played) {
+      if (!this._ever_played && !this._set_from_input) {
         this._ever_played = true
 
         const value = this.initialValue()
