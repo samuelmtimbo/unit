@@ -57988,80 +57988,95 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const possibly_turned_circle_unit_id = path[1] ?? unitId
 
-    const parent_spec = findSpecAtPath(specs, this._spec, path) as GraphSpec
+    let parent_path_to_update = path
+    let unit_id_to_update = unitId
 
-    const parent_path = butLast(path)
+    const subgraph_path = this.getSubgraphPath()
 
-    if (is_removed_unit_component && all_ancestors_are_component) {
-      const parent_sub_component_count = keyCount(
-        deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
-      )
+    while (parent_path_to_update.length >= 0) {
+      const parent_spec = findSpecAtPath(
+        specs,
+        this._spec,
+        parent_path_to_update
+      ) as GraphSpec
 
-      if (parent_sub_component_count === 0) {
-        const parent_component = this._component.pathGetSubComponent(path)
+      if (parent_spec.component.children.length === 0) {
+        const next_parent_spec = clone(parent_spec)
 
-        const removed_component = parent_component.getSubComponent(unitId)
-
-        const parent_id = getSubComponentParentId(graph_spec, unitId)
-
-        if (parent_id) {
-          removeSubComponentChild(
-            {
-              subComponentId: parent_id,
-              childId: unitId,
-            },
-            next_graph_spec.component
-          )
-
-          if (path.length > 1) {
-            const sub_component_parent_root =
-              parent_component.getSubComponent(parent_id)
-
-            if (
-              sub_component_parent_root.$parentRoot.includes(removed_component)
-            ) {
-              sub_component_parent_root.pullParentRoot(removed_component)
-            }
-          }
-        } else {
-          removeRoot(
-            { childId: possibly_turned_circle_unit_id },
-            next_graph_spec.component
-          )
-
-          if (parent_component.$root.includes(removed_component)) {
-            parent_component.pullRoot(removed_component)
-          }
-        }
-
-        removeSubComponent(
-          { unitId: possibly_turned_circle_unit_id },
-          next_graph_spec.component
-        )
-
-        if (parent_component.$subComponent[unitId]) {
-          parent_component.removeSubComponent(unitId)
-        }
-
-        setSpec(next_graph_spec.id, next_graph_spec)
-      }
-
-      if (graph_unit_was_component) {
         if (is_removed_unit_component && all_ancestors_are_component) {
-          const graph_sub_component = this._get_sub_component(graph_unit_id)
+          const parent_sub_component_count = keyCount(
+            deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
+          )
 
-          let sub_component = graph_sub_component
+          const parent_component = this._component.pathGetSubComponent(
+            parent_path_to_update
+          )
 
-          for (let i = path.length - 1; i > 0; i--) {
-            const unit_id = path[i]
+          const removed_component =
+            parent_component &&
+            parent_component.getSubComponent(unit_id_to_update)
 
-            sub_component = sub_component.getSubComponent(unit_id)
+          const parent_id = getSubComponentParentId(
+            next_parent_spec,
+            unit_id_to_update
+          )
 
-            if (!sub_component) {
-              break
+          if (parent_id) {
+            removeSubComponentChild(
+              {
+                subComponentId: parent_id,
+                childId: unit_id_to_update,
+              },
+              next_parent_spec.component
+            )
+
+            if (parent_component) {
+              const sub_component_parent_root =
+                parent_component.getSubComponent(parent_id)
+
+              if (
+                sub_component_parent_root.$parentRoot.includes(
+                  removed_component
+                )
+              ) {
+                sub_component_parent_root.pullParentRoot(removed_component)
+              }
+            }
+          } else {
+            removeRoot(
+              { childId: possibly_turned_circle_unit_id },
+              next_parent_spec.component
+            )
+
+            if (parent_component) {
+              if (parent_component.$root.includes(removed_component)) {
+                parent_component.pullRoot(removed_component)
+              }
             }
           }
+
+          removeSubComponent(
+            { unitId: possibly_turned_circle_unit_id },
+            next_parent_spec.component
+          )
+
+          if (parent_component) {
+            if (parent_component.$subComponent[unit_id_to_update]) {
+              parent_component.removeSubComponent(unit_id_to_update)
+            }
+          }
+
+          setSpec(next_parent_spec.id, next_parent_spec)
         }
+
+        if (!parent_path_to_update.length) {
+          break
+        }
+
+        unit_id_to_update = last(parent_path_to_update)
+        parent_path_to_update = parent_path_to_update.slice(0, -1)
+      } else {
+        break
       }
     }
 
@@ -58069,7 +58084,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (graph_unit_was_component && !graph_unit_is_component) {
       if (this._get_node_shape(graph_unit_id) === 'rect') {
-        this._decomponentify_core(graph_unit_id, true)
+        this._decomponentify_core(graph_unit_id, false)
       }
     } else if (!graph_unit_was_component && graph_unit_is_component) {
       if (this._get_node_shape(graph_unit_id) === 'circle') {

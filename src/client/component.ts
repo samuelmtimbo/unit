@@ -1661,7 +1661,13 @@ export class Component<
       return this
     } else {
       const [head, ...tail] = path
+
       const subComponent = this.getSubComponent(head)
+
+      if (!subComponent) {
+        return null
+      }
+
       return subComponent.pathGetSubComponent(tail)
     }
   }
