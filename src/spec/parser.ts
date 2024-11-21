@@ -768,11 +768,35 @@ export function _getTypeTree(
 
   const expressionTest = /^\((.+)\)$/.exec(value)
   if (expressionTest) {
-    const children = [getTree(expressionTest[1])]
-    return {
-      value,
-      type: TreeNodeType.Expression,
-      children,
+    const body = expressionTest[1]
+
+    let open = 0
+    let valid = true
+
+    for (let i = 0; i < body.length; i++) {
+      const char = body[i]
+
+      if (char === '(') {
+        open++
+      } else if (char === ')') {
+        open--
+      }
+
+      if (open < 0) {
+        valid = false
+
+        break
+      }
+    }
+
+    if (valid) {
+      const children = [getTree(body)]
+
+      return {
+        value,
+        type: TreeNodeType.Expression,
+        children,
+      }
     }
   }
 

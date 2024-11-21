@@ -91,6 +91,8 @@ assert.deepEqual(
 
 assert.deepEqual(getTreeNodeType("'string|number'"), TreeNodeType.StringLiteral)
 assert.deepEqual(getTreeNodeType('(string)'), TreeNodeType.Expression)
+assert.deepEqual(getTreeNodeType('(string)[]|(<T>[])'), TreeNodeType.Or)
+assert.deepEqual(getTreeNodeType('(string|(number)[])[]|(string|<T>[])'), TreeNodeType.Or)
 assert.deepEqual(
   getTreeNodeType("'{a:number}&{b:string}'"),
   TreeNodeType.StringLiteral
