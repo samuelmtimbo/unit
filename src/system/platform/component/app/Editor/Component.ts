@@ -17971,7 +17971,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._pressed_node_id_pointer_id[pressed_node_id]
           )
 
-          const pointer_position = this._pointer_position[pointer_id]
+          const pointer_position =
+            this._pointer_position[pointer_id] ?? NULL_VECTOR
 
           if (pressed_node_id === this._clone_drag_clone_id) {
             this._on_node_clone_drag_end(this._clone_drag_clone_id)
