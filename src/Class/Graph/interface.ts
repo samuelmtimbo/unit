@@ -121,7 +121,6 @@ export type GraphSetUnitIdData = {
   unitId: string
   newUnitId: string
   name: string
-  specId: string
   fork?: boolean
   bubble?: boolean
 }

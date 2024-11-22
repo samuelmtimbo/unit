@@ -218,11 +218,10 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unitId,
       newUnitId,
       name,
-      specId,
       fork = true,
       bubble = true,
     }: GraphSetUnitIdData): void {
-      call(graph, 'setUnitId', fork, bubble, unitId, newUnitId, name, specId)
+      call(graph, 'setUnitId', fork, bubble, unitId, newUnitId, name)
     },
 
     $setUnitPinData({

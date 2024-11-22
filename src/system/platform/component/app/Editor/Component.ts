@@ -377,6 +377,7 @@ import { GraphMergePinMomentData } from '../../../../../debug/graph/watchGraphPi
 import { GraphPlugMomentData } from '../../../../../debug/graph/watchGraphPlugEvent'
 import { GraphRemoveUnitPinDataMomentData } from '../../../../../debug/graph/watchGraphRemoveUnitPinDataEvent'
 import { GraphReorderSubComponentMomentData } from '../../../../../debug/graph/watchGraphReorderSubComponent'
+import { GraphSetNameMomentData } from '../../../../../debug/graph/watchGraphSetNameEvent'
 import { GraphSetPinSetDefaultIgnoredMomentData } from '../../../../../debug/graph/watchGraphSetPinSetDefaultIgnored'
 import { GraphSetPinSetFunctionalMomentData } from '../../../../../debug/graph/watchGraphSetPinSetFunctionalEvent'
 import { GraphSetPinSetIdMomentData } from '../../../../../debug/graph/watchGraphSetPinSetIdEvent'
@@ -530,6 +531,7 @@ import {
   setComponentSize,
   setDatum,
   setMetadata,
+  setName,
   setPinSetDataType,
   setPinSetDefaultIgnored,
   setPinSetFunctional,
@@ -8442,11 +8444,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _set_unit_name = (unit_id: string, name: string): string => {
     // console.log('Graph', '_set_unit_name', unit_id, name)
 
-    const fork_spec_id = this._spec_set_unit_spec_name(unit_id, name)
+    // this._spec_set_unit_spec_name(unit_id, name)
 
     const new_unit_id = this._state_set_unit_name(unit_id, name)
 
-    this._pod_set_unit_name(unit_id, new_unit_id, name, fork_spec_id)
+    this._pod_set_unit_name(unit_id, new_unit_id, name)
 
     if (this._is_unit_component(new_unit_id)) {
       this._connect_sub_component(new_unit_id)
@@ -8455,25 +8457,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return new_unit_id
   }
 
-  private _spec_set_unit_spec_name = (
-    unit_id: string,
-    name: string
-  ): string => {
+  private _spec_set_unit_spec_name = (unit_id: string, name: string): void => {
     // console.log('Graph', '_spec_set_unit_name', unit_id, name)
 
-    const { setSpec, forkSpec } = this.$props
+    const { setSpec } = this.$props
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
 
-    const [next_spec_id, next_spec] = forkSpec(spec)
+    const next_spec = clone(spec)
 
     deepSet(next_spec, ['name'], name)
 
-    this._spec_set_unit_spec_id(unit_id, next_spec_id)
-
-    setSpec(next_spec_id, next_spec)
-
-    return next_spec_id
+    setSpec(next_spec.id, next_spec)
   }
 
   private _state_set_unit_name = (unit_id: string, value: string): string => {
@@ -8481,9 +8476,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
 
-    const [spec_id, new_spec] = forkSpec(spec)
+    const new_spec = clone(spec)
 
-    const new_unit_id = this._new_unit_id(spec_id)
+    const new_unit_id = this._new_unit_id(new_spec.id)
 
     const unit_data = this._get_unit_data(unit_id)
 
@@ -8498,7 +8493,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._state_swap_unit(
       unit_id,
       new_unit_id,
-      spec_id,
+      new_spec.id,
       new_spec,
       valid_pin_match,
       merged_pin_ids,
@@ -8519,8 +8514,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_set_unit_name = (
     unit_id: string,
     new_unit_id: string,
-    name: string,
-    fork_spec_id: string
+    name: string
   ): void => {
     const { fork, bubble } = this.$props
 
@@ -8528,7 +8522,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       unitId: unit_id,
       newUnitId: new_unit_id,
       name,
-      specId: fork_spec_id,
       fork,
       bubble,
     })
@@ -56390,6 +56383,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           events: [
             'pause',
             'fork',
+            'set_name',
             'input',
             'output',
             'ref_input',
@@ -57237,6 +57231,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._register_spec(forked_unit_spec.id, false)
       this._unregister_spec(specId, false)
+    }
+  }
+
+  private _on_graph_unit_set_name_moment = (
+    data: GraphSetNameMomentData & { unitId: string }
+  ) => {
+    const { setSpec, specs } = this.$props
+
+    const { name, path } = data
+
+    if (this._is_spec_updater(path)) {
+      const next_spec = clone(findSpecAtPath(specs, this._spec, path))
+
+      setName({ name }, next_spec)
+
+      setSpec(next_spec.id, next_spec)
     }
   }
 
@@ -59837,6 +59847,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     },
     graph: {
       fork: this._on_graph_unit_fork_moment,
+      set_name: this._on_graph_unit_set_name_moment,
       add_merge: this._on_graph_unit_add_merge_moment,
       remove_merge: this._on_graph_unit_remove_merge_moment,
       plug_pin: this._on_graph_unit_plug_pin_moment,

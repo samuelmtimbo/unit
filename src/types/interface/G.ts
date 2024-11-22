@@ -245,12 +245,14 @@ export interface G<
     ...extra: any[]
   ): void
   fork(): void
+  setName(name: string): void
 }
 
 export type G_J = {}
 
 export type G_EE = {
   fork: [string, GraphSpec, boolean, string[]]
+  set_name: [string, string[]]
   element: [string[]]
   not_element: [string[]]
   set_exposed_sub_pin: [IO, string, string, Pin, PinOpt, string[]]
@@ -298,7 +300,7 @@ export type G_EE = {
   component_append: [string, GraphUnitSpec, string[]]
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]
-  set_unit_id: [string, string, string, string, string[]]
+  set_unit_id: [string, string, string, string[]]
   add_unit_ghost: [string, string, BundleSpec, string[]]
   remove_unit_ghost: [string, string, BundleSpec, string[]]
   bulk_edit: [Action[], boolean, string[]]

@@ -5437,23 +5437,29 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unit.setPinIgnored(type, pinId, ignored)
   }
 
-  public setUnitId(
-    unitId: string,
-    newUnitId: string,
-    name: string,
-    specId: string
-  ): void {
-    this._setUnitId(unitId, newUnitId, name, specId)
+  public setUnitId(unitId: string, newUnitId: string, name: string): void {
+    this._setUnitId(unitId, newUnitId, name)
 
-    this.edit('set_unit_id', unitId, newUnitId, name, specId, [])
+    this.edit('set_unit_id', unitId, newUnitId, name, [])
   }
 
-  public _setUnitId(
-    unitId: string,
-    newUnitId: string,
-    name: string,
-    specId: string
-  ): void {
+  public setName(name: string, emit: boolean = true, fork: boolean = true) {
+    this._setName(name, fork)
+
+    emit && this.edit('set_name', name, [])
+  }
+
+  private _setName(name: string, fork: boolean = true) {
+    fork && this._fork()
+
+    this._specSetName(name)
+  }
+
+  private _specSetName(name: string) {
+    this._spec.name = name
+  }
+
+  public _setUnitId(unitId: string, newUnitId: string, name: string): void {
     const newUnitMerges = clone(this.getUnitMergesSpec(unitId))
     const newUnitPlugs = clone(this.getUnitPlugsSpec(unitId))
 
@@ -5461,18 +5467,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this.getUnit(unitId) as Graph
 
-    unit.fork(specId, false)
-
-    const spec = this._getUnitSpec(unitId) as GraphSpec
-
-    spec.name = name
-    ;(unit as Graph)._spec.name = name
-
     this._removeUnit(unitId, false) as Graph
 
     this._addUnit(newUnitId, unit, null, null)
     this._addUnitMerges(newUnitMerges, false)
     this._addUnitPlugs(newUnitId, newUnitPlugs, false)
+
+    unit.setName(name)
   }
 
   private _addUnitPlugs(
@@ -6525,9 +6526,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             this._setUnitPinData(unitId, type, pinId, data, fork, bubble)
           },
           setUnitId: (data: GraphSetUnitIdData) => {
-            const { unitId, newUnitId, name, specId } = data
+            const { unitId, newUnitId, name } = data
 
-            this._setUnitId(unitId, newUnitId, name, specId)
+            this._setUnitId(unitId, newUnitId, name)
           },
           removeUnitPinData: (data: GraphRemoveUnitPinDataData) => {
             const { unitId, type, pinId } = data

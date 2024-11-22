@@ -113,6 +113,11 @@ export function lazyFromSpec(
       })
     }
 
+    setName(name: string, ...extra: any[]): void {
+      this._ensure()
+      this.__graph.setName(name, ...extra)
+    }
+
     cloneUnit(unitId: string, newUnitId: string, ...extra: any[]): void {
       this._ensure()
       this.__graph.cloneUnit(unitId, newUnitId, ...extra)
@@ -322,14 +327,9 @@ export function lazyFromSpec(
       return this.__graph.bulkEdit(actions)
     }
 
-    setUnitId(
-      unitId: string,
-      newUnitId: string,
-      name: string,
-      specId: string
-    ): void {
+    setUnitId(unitId: string, newUnitId: string, name: string): void {
       this._ensure()
-      return this.__graph.setUnitId(unitId, newUnitId, name, specId)
+      return this.__graph.setUnitId(unitId, newUnitId, name)
     }
 
     isElement(): boolean {
