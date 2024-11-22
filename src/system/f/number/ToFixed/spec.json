@@ -1,0 +1,28 @@
+{
+  "name": "to fixed",
+  "inputs": {
+    "n": {
+      "type": "number"
+    },
+    "digits": {
+      "type": "number",
+      "metadata": {
+        "description": ""
+      }
+    }
+  },
+  "outputs": {
+    "str": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "convert a number into an integer",
+    "tags": ["f", "number"]
+  },
+  "id": "4a2fc8f5-17a8-4665-8895-eee4b242121e",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
