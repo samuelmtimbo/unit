@@ -58010,10 +58010,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         parent_path_to_update
       ) as GraphSpec
 
-      if (parent_spec.component.children.length === 0) {
-        const next_parent_spec = clone(parent_spec)
+      const next_parent_spec = clone(parent_spec)
 
-        if (is_removed_unit_component && all_ancestors_are_component) {
+      if (is_removed_unit_component && all_ancestors_are_component) {
+        if ((parent_spec.component?.children?.length ?? 0) === 0) {
           const parent_sub_component_count = keyCount(
             deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
           )
