@@ -859,7 +859,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     if (type === 'input' && kind === 'input') {
       const pin = this.getPin(type, name)
 
-      if (subPin.active()) {
+      if (subPin.active() && !pin.active()) {
         const data = subPin.peak()
 
         propagate && pin.push(data, true)
