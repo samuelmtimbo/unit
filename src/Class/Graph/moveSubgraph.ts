@@ -1197,6 +1197,7 @@ export function movePlug(
         pinId,
         nextSubPinId,
         nextSubPinSpec_,
+        undefined,
         false,
         false
       )
@@ -1325,6 +1326,7 @@ export function movePlug(
         pinId: nextPinId,
         unitId: graphId,
       },
+      undefined,
       false
     )
   } else {
