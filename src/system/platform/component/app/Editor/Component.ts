@@ -53883,6 +53883,145 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return { actions }
   }
 
+  private _recenter_graph_position = (graph: GraphSpec) => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
+    const {
+      units = {},
+      merges = {},
+      inputs = {},
+      outputs = {},
+      component = {},
+      data = {},
+      metadata,
+    } = graph
+
+    const positions: Position[] = []
+
+    for (const unit_id in units) {
+      const unit = units[unit_id]
+
+      const unit_position = deepGetOrDefault(
+        graph,
+        ['units', unit_id, 'metadata', 'position'],
+        undefined
+      )
+
+      if (unit_position) {
+        positions.push(unit_position)
+      }
+
+      const { input = {}, output = {} } = unit
+
+      const processPins = (pins) => {
+        for (const pinId in pins) {
+          const pin = pins[pinId]
+
+          const pin_position = pin.metadata?.position
+
+          if (pin_position) {
+            positions.push(unit_position)
+          }
+        }
+      }
+
+      processPins(input)
+      processPins(output)
+    }
+
+    for (const merge_id in merges) {
+      const merge_position = deepGetOrDefault(
+        graph,
+        ['metadata', 'position', 'merge', merge_id],
+        undefined
+      )
+
+      if (merge_position) {
+        positions.push(merge_position)
+      }
+    }
+
+    const type_pins = { input: inputs, output: outputs }
+
+    io((type) => {
+      const pins = type_pins[type]
+
+      for (const pin_id in pins) {
+        const pin = pins[pin_id]
+
+        const { plug = {} } = pin
+
+        for (const subPinId in plug) {
+          const subPin = plug[subPinId]
+
+          const sub_pin_position = deepGetOrDefault(
+            pin,
+            ['metadata', 'position', subPinId],
+            undefined
+          )
+
+          if (sub_pin_position) {
+            positions.push(sub_pin_position)
+          }
+        }
+      }
+    })
+
+    const center = centerOfMass(positions)
+
+    for (const unit_id in units) {
+      const unit = units[unit_id]
+
+      const unit_position = deepGetOrDefault(
+        graph,
+        ['units', unit_id, 'metadata', 'position'],
+        NULL_VECTOR
+      )
+
+      const next_unit_position = subtractVector(unit_position, center)
+
+      deepSet(
+        graph,
+        ['units', unit_id, 'metadata', 'position'],
+        next_unit_position
+      )
+
+      const { input = {}, output = {} } = unit
+
+      const processPins = (pins) => {
+        for (const pinId in pins) {
+          const pin = pins[pinId]
+
+          const pin_position = pin.metadata?.position
+
+          if (pin_position) {
+            const next_pin_position = subtractVector(pin_position, center)
+
+            deepSet(pin, ['metadata', 'position'], next_pin_position)
+          }
+        }
+      }
+
+      processPins(input)
+      processPins(output)
+    }
+
+    for (const merge_id in merges) {
+      const merge_position = deepGetOrDefault(
+        graph,
+        ['metadata', 'position', 'merge', merge_id],
+        undefined
+      )
+
+      if (merge_position) {
+        const next_merge_position = subtractVector(merge_position, center)
+
+        deepSet(graph, ['metadata', 'position', 'merge', merge_id], undefined)
+      }
+    }
+  }
+
   public __state_paste_spec = (
     graph: GraphSpec,
     position: Position,
@@ -53893,6 +54032,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '__state_paste_spec', graph)
 
     this._simulation_prevent_restart = true
+
+    this._recenter_graph_position(graph)
 
     const { classes } = this.$system
     const { specs } = this.$props
