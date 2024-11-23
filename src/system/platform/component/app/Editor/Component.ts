@@ -25122,6 +25122,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return false
     }
 
+    if (this._edit_datum_node_id === datum_node_id) {
+      return false
+    }
+
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
     if (pin_node_id) {
@@ -36833,7 +36837,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._is_link_pin_node_id(pin_node_id)) {
       this.set_unit_pin_data(pin_node_id, data)
     } else if (this._is_merge_node_id(pin_node_id)) {
-      this.add_merge_pin_data(pin_node_id, data)
+      this.set_merge_pin_data(pin_node_id, data)
     }
   }
 
