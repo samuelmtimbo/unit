@@ -2561,7 +2561,7 @@ export class Component<
     return false
   }
 
-  private _insertAt = (parent: Component, child: Component, at: number) => {
+  protected _insertAt(parent: Component, child: Component, at: number) {
     insert(this.$domChildren, child, at)
 
     const target = this._wrapElement(parent, child, at)
@@ -2570,6 +2570,8 @@ export class Component<
   }
 
   private _svg_wrapper_unlisten: Unlisten[] = []
+
+  public $wrapElement: HTMLElement | SVGElement
 
   private _wrapElement = (
     parent: Component,
@@ -2588,6 +2590,8 @@ export class Component<
       } = this.$system
 
       const svg = this._svgWrapper() as SVGSVGElement
+
+      child.$wrapElement = svg
 
       target = svg
 
@@ -2792,6 +2796,8 @@ export class Component<
     ) {
       target = this._htmlWrapper()
 
+      child.$wrapElement = target
+
       this._html_wrapper[at] = target as SVGForeignObjectElement
 
       target.appendChild(element)
@@ -2827,11 +2833,11 @@ export class Component<
   }
 
   protected domCommitAppendChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, this._insertAt)
+    this._domCommitChild__template(component, at, this._insertAt.bind(this))
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, this._insertAt)
+    this._domCommitChild__template(component, at, this._insertAt.bind(this))
   }
 
   protected _domCommitChild__template = (
