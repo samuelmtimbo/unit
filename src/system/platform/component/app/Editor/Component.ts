@@ -34927,6 +34927,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           sub_pin_id
         )
 
+        const outer_plug = this._spec_get_unit_pin_plug(unit_id, type, pinId)
+
         if (
           shouldExposePin(
             type,
@@ -34934,12 +34936,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             pinSpec,
             sub_pin_id,
             sub_pin_spec,
-            merged
+            merged,
+            outer_plug
           )
         ) {
           const ext_node_id = getExtNodeId(type, pinId, next_sub_pin_id)
 
           selected_node_ids.push(ext_node_id)
+        } else if (outer_plug) {
+          const int_node_id = getIntNodeId(type, pinId, sub_pin_id)
+
+          selected_node_ids.push(int_node_id)
         }
       }
     })
