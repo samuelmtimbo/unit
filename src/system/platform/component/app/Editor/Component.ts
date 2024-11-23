@@ -25066,11 +25066,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _should_show_hover_merge_data_on_this_mode() {
-    return this._mode === 'none' || this._mode === 'multiselect'
+    // return this._mode === 'none' || this._mode === 'multiselect'
+    return true
   }
 
   private _should_show_selected_merge_data_on_this_mode() {
-    return this._mode === 'none' || this._mode === 'multiselect'
+    // return this._mode === 'none' || this._mode === 'multiselect'
+    return true
   }
 
   private _should_edge_drag_on_this_mode() {
