@@ -29153,7 +29153,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         (this._is_merge_node_id(pin_node_id) &&
           !this._is_output_only_merge(pin_node_id))
       ) {
-        if (this._is_link_pin_ref(pin_node_id)) {
+        if (
+          this._is_link_pin_node_id(pin_node_id) &&
+          this._is_link_pin_ref(pin_node_id)
+        ) {
           return
         }
 
