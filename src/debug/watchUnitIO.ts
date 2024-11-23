@@ -112,16 +112,19 @@ export function watchUnitIO<T extends Unit>(
     )
   }
 
-  unit.addListener('remove_input', (pinId: string, pin) => {
-    const unlisten = pin_listener_map.input[pinId]
-    if (unlisten) {
-      unlisten()
+  all.push(
+    unit.addListener('remove_input', (pinId: string, pin) => {
+      const unlisten = pin_listener_map.input[pinId]
 
-      remove(all, unlisten)
+      if (unlisten) {
+        unlisten()
 
-      delete pin_listener_map.output[pinId]
-    }
-  })
+        remove(all, unlisten)
+
+        delete pin_listener_map.output[pinId]
+      }
+    })
+  )
 
   all.push(
     unit.addListener('rename_input', (name: string, newName: string) => {
