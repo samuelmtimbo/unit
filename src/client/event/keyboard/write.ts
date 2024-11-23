@@ -1,6 +1,8 @@
 import { System } from '../../../system'
 import { clamp } from '../../../system/core/relation/Clamp/f'
 import { getActiveElement } from '../../activeElement'
+import { isContentEditable } from '../../isContentEditable'
+import { isTextField } from '../../isTextField'
 import { isChar } from './keyCode'
 
 const isAlphaNumCharOrSpace = (str: string): boolean => {
@@ -80,40 +82,29 @@ export function emitKeyboardEvent(
     if (event.type === 'keydown' && !defaultPrevented) {
       const { key } = event
 
-      writeToElement(system, activeElement, key, init)
+      keydownElement(system, activeElement, key, init)
     }
   }
 }
 
-export function writeToActiveElement(system: System, key: string): Element {
+export function keydownActiveElement(system: System, key: string): Element {
   const activeElement = getActiveElement(system)
 
-  writeToElement(system, activeElement, key)
+  keydownElement(system, activeElement, key)
 
   return activeElement
 }
 
-export function writeToElement(
+export function keydownElement(
   system: System,
   element: Element,
   key: string,
   modifier: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean } = {}
 ): void {
-  const { tagName } = element
-  // https://stackoverflow.com/questions/26723648/check-whether-an-html-element-is-editable-or-not-using-js
-  if (
-    (tagName === 'INPUT' &&
-      /^(?:text|email|search|tel|url|password)$/i.test(
-        (element as HTMLInputElement).type
-      )) ||
-    tagName === 'TEXTAREA'
-  ) {
+  if (isTextField(element as HTMLElement)) {
     writeToInput(element as HTMLInputElement, key, modifier)
-  } else if (
-    tagName === 'DIV' &&
-    (element as HTMLDivElement).contentEditable === 'true'
-  ) {
-    writeToContentEditable(system, element as HTMLDivElement, key, modifier)
+  } else if (isContentEditable(element as HTMLDivElement)) {
+    keydownContentEditable(system, element as HTMLDivElement, key, modifier)
   }
 }
 
@@ -380,7 +371,7 @@ export function selectElementContents(
   }
 }
 
-export function writeToContentEditable(
+export function keydownContentEditable(
   system: System,
   input: HTMLDivElement,
   key: string,
@@ -434,4 +425,56 @@ export function writeToContentEditable(
   } else {
     _setSelection()
   }
+}
+
+export function writeToContentEditable(
+  system: System,
+  input: HTMLDivElement,
+  value: string
+) {
+  const current = input.innerText
+
+  const {
+    selectionStart = 0,
+    selectionEnd = 0,
+    selectionDirection = 'none',
+  } = getSelectionRange(system)
+
+  input.innerText =
+    current.slice(0, selectionStart) +
+    value +
+    current.slice(selectionEnd, Infinity)
+
+  const nextSelectionStart = selectionStart
+  const nextSelectionEnd = selectionStart + value.length
+
+  selectElementContents(system, input, nextSelectionStart, nextSelectionEnd)
+
+  input.dispatchEvent(new InputEvent('input', {}))
+}
+
+export function writeToTextField(
+  system: System,
+  input: HTMLInputElement,
+  value: string
+) {
+  const current = input.value
+
+  const {
+    selectionStart = 0,
+    selectionEnd = 0,
+    selectionDirection = 'none',
+  } = input
+
+  input.value =
+    current.slice(0, selectionStart) +
+    value +
+    current.slice(selectionEnd, Infinity)
+
+  const nextSelectionStart = selectionStart
+  const nextSelectionEnd = selectionStart + value.length
+
+  input.setSelectionRange(nextSelectionStart, nextSelectionEnd, 'forward')
+
+  input.dispatchEvent(new InputEvent('input', {}))
 }

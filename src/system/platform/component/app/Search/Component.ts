@@ -1,5 +1,6 @@
 import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
+import { getActiveElement } from '../../../../../client/activeElement'
 import { classnames } from '../../../../../client/classnames'
 import { debounce } from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
@@ -13,6 +14,10 @@ import {
   makeKeyupListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
+import {
+  writeToContentEditable,
+  writeToTextField,
+} from '../../../../../client/event/keyboard/write'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
@@ -20,6 +25,8 @@ import {
   IOScrollEvent,
   makeScrollListener,
 } from '../../../../../client/event/scroll'
+import { isContentEditable } from '../../../../../client/isContentEditable'
+import { isTextField } from '../../../../../client/isTextField'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
 import {
@@ -742,13 +749,37 @@ export default class Search extends Element<HTMLDivElement, Props> {
     (transcript: string) => {
       const value = transcript.toLowerCase().substr(0, 30)
 
-      this._input.setProp('value', value)
+      const activeElement = getActiveElement(this.$system)
 
-      this._input_value = value
+      const writeToSearch = () => {
+        this._input.setProp('value', value)
 
-      this._filter_list()
+        this._input_value = value
 
-      this._input.focus()
+        this._filter_list()
+
+        this._input.focus()
+      }
+
+      if (activeElement) {
+        if (isTextField(activeElement as HTMLInputElement)) {
+          writeToTextField(
+            this.$system,
+            activeElement as HTMLInputElement,
+            value
+          )
+        } else if (isContentEditable(activeElement as HTMLDivElement)) {
+          writeToContentEditable(
+            this.$system,
+            activeElement as HTMLInputElement,
+            value
+          )
+        } else {
+          writeToSearch()
+        }
+      } else {
+        writeToSearch()
+      }
     },
     100
   )

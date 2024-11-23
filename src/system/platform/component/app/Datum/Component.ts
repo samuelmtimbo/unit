@@ -313,7 +313,8 @@ export class Datum extends Element<HTMLDivElement, Props> {
   }) => {
     // console.log('Datum', '_onLeafInput')
     const leaf = this._data_tree.getChildAtPath(path)!
-    const { start: selectionStart } = leaf.getSelectionRange()
+    const { start: selectionStart, end: selectionEnd } =
+      leaf.getSelectionRange()
     const parent = _getParent(this._root, path)
     const ignoreKeyword = !!(
       parent &&
@@ -324,7 +325,7 @@ export class Datum extends Element<HTMLDivElement, Props> {
     let nextRoot = _updateNodeAt(this._root, path, tree)
     let nextPath: number[] = path
 
-    this._onChange(nextRoot, nextPath, selectionStart, selectionStart)
+    this._onChange(nextRoot, nextPath, selectionStart, selectionEnd)
   }
 
   private _onChange = (
