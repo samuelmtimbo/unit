@@ -53974,7 +53974,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     })
 
-    const center = centerOfMass(positions)
+    const center = positions.length ? centerOfMass(positions) : NULL_VECTOR
 
     for (const unit_id in units) {
       const unit = units[unit_id]
@@ -54023,7 +54023,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (merge_position) {
         const next_merge_position = subtractVector(merge_position, center)
 
-        deepSet(graph, ['metadata', 'position', 'merge', merge_id], undefined)
+        deepSet(
+          graph,
+          ['metadata', 'position', 'merge', merge_id],
+          next_merge_position
+        )
       }
     }
   }
