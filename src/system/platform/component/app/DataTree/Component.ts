@@ -99,11 +99,11 @@ export const DEFAULT_STYLE = {
 }
 
 export default class DataTree extends Element<HTMLDivElement, Props> {
-  private _data: TreeNode
-  private _root: Div
-  private _child: Dict<DataTree> = {}
-  private _delimiter_list: Div[] = []
-  private _leaf: DataTreeLeaf | null = null
+  public _data: TreeNode
+  public _root: Div
+  public _child: Dict<DataTree> = {}
+  public _delimiter_list: Div[] = []
+  public _leaf: DataTreeLeaf | null = null
 
   constructor($props: Props, $system: System) {
     super($props, $system)

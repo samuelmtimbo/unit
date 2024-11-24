@@ -4,7 +4,6 @@ import { getActiveElement } from '../../../../../client/activeElement'
 import { classnames } from '../../../../../client/classnames'
 import { debounce } from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
-import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
 import { makeFocusOutListener } from '../../../../../client/event/focus/focusout'
 import { makeInputListener } from '../../../../../client/event/input'
@@ -251,9 +250,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    microphone.addEventListener(
-      makeCustomListener('text', this._on_microphone_transcript)
-    )
+    // microphone.addEventListener(
+    //   makeCustomListener('text', this._on_microphone_transcript)
+    // )
     microphone.preventDefault('mousedown')
     microphone.preventDefault('touchdown')
     this._microphone = microphone

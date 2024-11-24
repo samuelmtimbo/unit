@@ -36,8 +36,8 @@ export interface _Props {
 }
 
 export class Datum extends Element<HTMLDivElement, Props> {
-  private _data_tree: DataTree
-  private _root: TreeNode
+  public _data_tree: DataTree
+  public _root: TreeNode
 
   private _ignore_blur: boolean = false
 

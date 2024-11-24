@@ -175,6 +175,7 @@ import {
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
 import { keyToKeyCode } from '../../../../../client/event/keyboard/keyCode'
+import { writeToTextField } from '../../../../../client/event/keyboard/write'
 import {
   CLICK_TIMEOUT,
   POINTER_CLICK_RADIUS,
@@ -488,6 +489,7 @@ import {
   TreeNode,
   TreeNodeType,
   _filterEmptyNodes,
+  _getNodeAtPath,
   _getValueType,
   _isTypeMatch,
   _isValidTree,
@@ -676,6 +678,7 @@ import { randomInArray } from '../../../../../util/array/randomInArray'
 import { bit } from '../../../../../util/boolean'
 import { callAll } from '../../../../../util/call/callAll'
 import { clone } from '../../../../../util/clone'
+import { parseNumberSentence } from '../../../../../util/dictation'
 import { readFileAsText } from '../../../../../util/file'
 import { hashCode } from '../../../../../util/hashCode'
 import { randomIdNotIn } from '../../../../../util/id'
@@ -19601,6 +19604,91 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else {
         this._show_search()
       }
+
+      this._search._microphone.addEventListener(
+        makeCustomListener('text', this._on_microphone_transcript)
+      )
+    }
+  }
+
+  private _on_microphone_transcript = (transcript: string) => {
+    let value = transcript.toLowerCase()
+
+    const writeToSearch = () => {
+      value = value.substr(0, 30)
+
+      this._search.setValue(value)
+      this._search.focus()
+    }
+
+    const writeToEditDatum = () => {
+      writeToDatum(this._edit_datum_node_id)
+    }
+
+    const writeToDatum = (datum_node_id: string) => {
+      const datum = this._datum[datum_node_id] as Datum
+
+      const leaf = datum._data_tree.getChildAtPath(this._edit_datum_path)
+
+      const current = leaf._leaf._input.$element.value
+
+      const { selectionStart, selectionEnd } = leaf._leaf._input.$element
+
+      if (
+        current === '' ||
+        (selectionStart === 0 && selectionEnd === current.length)
+      ) {
+        let target_type
+
+        const pin_node_id = this._datum_to_pin[datum_node_id]
+
+        if (pin_node_id) {
+          target_type = this._get_link_pin_type(pin_node_id)
+        } else {
+          target_type = ANY_TREE
+        }
+
+        const leaf_type =
+          _getNodeAtPath(target_type, this._edit_datum_path) ?? ANY_TREE
+
+        if (leaf_type.type === TreeNodeType.Number) {
+          const parsed = parseNumberSentence(value)
+
+          value = (parsed && `${parsed}`) || value
+        } else if (leaf_type.type === TreeNodeType.Boolean) {
+          //
+        } else if (leaf_type.type === TreeNodeType.String) {
+          value = `"${value}"`
+        } else {
+          const parsed = parseNumberSentence(value)
+
+          value = (parsed && `${parsed}`) || `"${value}"`
+        }
+      }
+
+      writeToTextField(this.$system, leaf._leaf._input.$element, value)
+    }
+
+    if (this._edit_datum_node_id) {
+      writeToEditDatum()
+    } else if (this._edit_node_name_id) {
+      const name_comp = this._get_node_name_comp(this._edit_node_name_id)
+
+      writeToTextField(this.$system, name_comp.$element, value)
+    } else {
+      writeToSearch()
+    }
+  }
+
+  private _get_node_name_comp = (node_id: string): TextField | TextArea => {
+    if (this._is_unit_node_id(node_id)) {
+      return this._core_name[node_id]
+    } else if (this._is_link_pin_node_id(node_id)) {
+      return this._pin_name[node_id]
+    } else if (this._is_plug_node_id(node_id)) {
+      return this._ext_pin_name[node_id]
+    } else {
+      throw new InvalidStateError()
     }
   }
 

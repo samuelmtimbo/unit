@@ -455,7 +455,7 @@ export function writeToContentEditable(
 
 export function writeToTextField(
   system: System,
-  input: HTMLInputElement,
+  input: HTMLInputElement | HTMLTextAreaElement,
   value: string
 ) {
   const current = input.value
