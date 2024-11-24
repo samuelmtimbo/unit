@@ -81,19 +81,29 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
     } else {
       const base = child.getRootLeaves()
 
-      for (let i = 0; i < base.length; i++) {
-        const j = at + i
+      const first_leaf = base[0]
 
-        const unlisten = this._unlisten[j]
-        const leaf = base[i]
+      if (first_leaf) {
+        const first_leaf_index = base.indexOf(first_leaf)
 
-        unlisten()
+        if (first_leaf_index > -1) {
+          return
+        }
 
-        leaf.refreshProp('style')
+        for (let i = 0; i < base.length; i++) {
+          const j = at + i
+
+          const unlisten = this._unlisten[j]
+          const leaf = base[i]
+
+          unlisten()
+
+          leaf.refreshProp('style')
+        }
+
+        this._unlisten.splice(at, base.length)
+        this._styles.splice(at, base.length)
       }
-
-      this._unlisten.splice(at, base.length)
-      this._styles.splice(at, base.length)
     }
   }
 

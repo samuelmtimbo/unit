@@ -31777,6 +31777,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    if (!this._animating_enter_fullwindow) {
+      this._component.decompose()
+    }
+
     for (const sub_component_id of sub_component_ids) {
       if (
         !this._animating_sub_component_base_id.has(sub_component_id) &&
@@ -31785,10 +31789,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._remove_sub_component_root_base(sub_component_id)
         this._remove_sub_component_all_root(sub_component_id)
       }
-    }
-
-    if (!this._animating_enter_fullwindow) {
-      this._component.decompose()
     }
 
     for (const sub_component_id of sub_component_ids) {
