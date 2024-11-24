@@ -11648,6 +11648,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._link_pin_memory_count++
     }
 
+    if (type === 'input') {
+      this._link_pin_input_set.add(pin_node_id)
+    } else {
+      this._link_pin_output_set.add(pin_node_id)
+    }
+
     const pin_spec_name: string = pin_id
 
     const input = type === 'input'
