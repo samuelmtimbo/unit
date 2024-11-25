@@ -37,7 +37,7 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
       },
     } = __system
 
-    if (SpeechRecognition && SpeechGrammarList) {
+    if (SpeechRecognition) {
       const {
         grammars,
         lang = 'en-US',
