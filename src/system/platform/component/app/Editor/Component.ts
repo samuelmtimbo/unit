@@ -50659,6 +50659,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             //
           } else {
             this._sim_add_link_pin_to_merge(pin_node_id, merge_node_id)
+
+            if (
+              this._is_link_pin_ref(pin_node_id) &&
+              this._is_merge_ref(merge_node_id)
+            ) {
+              if (!this._datum_to_pin[pin_node_id]) {
+                this._on_graph_unit_ref_link_pin_data_moment({
+                  unitId: unit_id,
+                  type,
+                  pinId: pin_id,
+                  data: 'null',
+                })
+              }
+            }
           }
         },
         hasUnit: (unit_id) => {
