@@ -19388,6 +19388,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
         },
         {
+          combo: ['`'],
+          keydown: () => {
+            //
+          },
+          keyup: () => {
+            this._on_backtick_keyup()
+          },
+        },
+        {
           combo: ['Ctrl + s'],
           keydown: () => {
             this._on_ctrl_s_keydown()
@@ -53049,6 +53058,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_alt_keydown() {
     //
+  }
+
+  private _on_backtick_keyup() {
+    const { animate } = this._config()
+
+    this._enter_all_fullwindow(animate)
   }
 
   private _on_ctrl_semicolon_keydown = () => {
