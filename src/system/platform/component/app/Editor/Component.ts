@@ -5479,6 +5479,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         injectSpecs(weakMerge(specs ?? {}, { [spec.id]: spec }))
       }
 
+      this._recenter_graph_position(spec)
+
       this._reset(spec)
       this._setup_pod(this._pod)
     })
