@@ -54053,10 +54053,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             pin,
             ['metadata', 'position', subPinId],
             undefined
-          )
+          ) as GraphPinSpec['metadata']['position'][any]
 
           if (sub_pin_position) {
-            positions.push(sub_pin_position)
+            if (sub_pin_position.ext) {
+              positions.push(sub_pin_position.ext)
+            }
+            if (sub_pin_position.int) {
+              positions.push(sub_pin_position.int)
+            }
           }
         }
       }
@@ -54118,6 +54123,53 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       }
     }
+
+    io((type) => {
+      const pins = type_pins[type]
+
+      for (const pin_id in pins) {
+        const pin = pins[pin_id]
+
+        const { plug = {} } = pin
+
+        for (const subPinId in plug) {
+          const subPin = plug[subPinId]
+
+          const sub_pin_position = deepGetOrDefault(
+            pin,
+            ['metadata', 'position', subPinId],
+            undefined
+          ) as GraphPinSpec['metadata']['position'][any]
+
+          if (sub_pin_position) {
+            if (sub_pin_position.ext) {
+              const new_ext_position = subtractVector(
+                sub_pin_position.ext,
+                center
+              )
+
+              deepSet(
+                pin,
+                ['metadata', 'position', subPinId, 'ext'],
+                new_ext_position
+              )
+            }
+            if (sub_pin_position.int) {
+              const new_int_position = subtractVector(
+                sub_pin_position.int,
+                center
+              )
+
+              deepSet(
+                pin,
+                ['metadata', 'position', subPinId, 'int'],
+                new_int_position
+              )
+            }
+          }
+        }
+      }
+    })
   }
 
   public __state_paste_spec = (
