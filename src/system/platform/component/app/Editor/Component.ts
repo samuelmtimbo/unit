@@ -37653,6 +37653,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._remove_pin_datum_link(datum_node_id)
 
+    this._clear_graph_pin_type(unitId, type, pinId)
+  }
+
+  private _clear_graph_pin_type = (unitId: string, type: IO, pinId: string) => {
     deepDelete(this._graph_type_map, [unitId, type, pinId])
   }
 
@@ -58063,9 +58067,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         if (was_ref && ref && kind === 'output') {
           this._sim_refresh_unit_ref_output_icon(unitId, type, pinId)
         }
+
+        this._clear_graph_pin_type(unitId, type, pinId)
       } else {
         setPinRef()
       }
+
+      
     }
   }
 
@@ -58128,6 +58136,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         } else {
           commit()
         }
+
+        this._clear_graph_pin_type(unitId, type, pinId)
       } else {
         commit()
       }
