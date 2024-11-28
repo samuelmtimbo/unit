@@ -57328,14 +57328,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { setSpec, specs, parent } = this.$props
 
-    const { unitId, newUnitId, name, specId, path } = data
+    const { unitId, newUnitId, name, path } = data
 
     if (this._is_spec_updater(path)) {
       const spec = clone(findSpecAtPath(specs, this._spec, path))
 
       setUnitId({ unitId, newUnitId, name }, spec)
-
-      deepSet(spec, ['units', newUnitId, 'id'], specId)
 
       setSpec(spec.id, spec)
     }
@@ -58072,8 +58070,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else {
         setPinRef()
       }
-
-      
     }
   }
 
