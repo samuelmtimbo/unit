@@ -18,7 +18,7 @@ import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitConnect } from '../../types/GraphUnitConnect'
 import { IO } from '../../types/IO'
-import { IOOf, forIO, forIOObjKV } from '../../types/IOOf'
+import { IOOf, forIO, forIOObjKV, io } from '../../types/IOOf'
 import { UCG } from '../../types/interface/UCG'
 import { clone } from '../../util/clone'
 import {
@@ -177,16 +177,22 @@ export function moveUnit(
         if (target.hasPinNamed(type, nextPinId)) {
           //
         } else {
-          forEachObjVK(pinSpecs[type] || {}, ({ plug = {} }, id) => {
-            for (const subPinId in plug) {
-              const subPinSpec = plug[subPinId]
+          io((type_) => {
+            forEachObjVK(pinSpecs[type_] || {}, ({ plug = {} }, id) => {
+              for (const subPinId in plug) {
+                const subPinSpec = plug[subPinId]
 
-              if (subPinSpec.unitId === unitId && subPinSpec.pinId === pinId) {
-                source.unplugPin(type, id, subPinId, false, false)
+                if (
+                  subPinSpec.unitId === unitId &&
+                  subPinSpec.pinId === pinId &&
+                  (subPinSpec.kind ?? type_) === type
+                ) {
+                  source.unplugPin(type_, id, subPinId, false, false)
 
-                break
+                  break
+                }
               }
-            }
+            })
           })
         }
       }
