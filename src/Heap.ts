@@ -5,6 +5,8 @@ export type Heap<T> = {
   parent?: Heap<T> | null
 }
 
+export type Predicate<T> = (a: T, b: T) => Promise<boolean>
+
 export function bffHeap<T>(
   heap: Heap<T>,
   callback: (heap: Heap<T>) => void,
@@ -294,7 +296,7 @@ export function bubbleDown<T>(
   const gtLeft = !left || predicate(value, left.value)
   const gtRight = !right || predicate(value, right.value)
 
-  const bubbleDownRight = () => {
+  const bubbleDownRight = function () {
     root.left = right.left
 
     right.left && (right.left.parent = root)
@@ -326,7 +328,7 @@ export function bubbleDown<T>(
     bubbleDown(root, predicate)
   }
 
-  const bubbleDownLeft = () => {
+  const bubbleDownLeft = function () {
     root.left = left.left
 
     left.left && (left.left.parent = root)
@@ -382,97 +384,109 @@ export function bubbleDown<T>(
   }
 }
 
+const asyncBubbleDownLeft = async function <T>(
+  root: Heap<T>,
+  parent: Heap<T>,
+  left: Heap<T>,
+  right: Heap<T>,
+  predicate: Predicate<T>
+) {
+  root.left = left.left
+
+  left.left && (left.left.parent = root)
+
+  root.right = left.right
+
+  left.right && (left.right.parent = root)
+
+  root.parent = left
+
+  left.left = root
+  left.right = right
+
+  left.parent = parent
+
+  if (parent) {
+    const isLeft = parent.left === root
+
+    if (isLeft) {
+      parent.left = left
+    } else {
+      parent.right = left
+    }
+  }
+
+  right && (right.parent = left)
+
+  await asyncBubbleDown(root, predicate)
+}
+
+const asyncBubbleDownRight = async function <T>(
+  root: Heap<T>,
+  parent: Heap<T>,
+  left: Heap<T>,
+  right: Heap<T>,
+  predicate: Predicate<T>
+) {
+  root.left = right.left
+
+  right.left && (right.left.parent = root)
+
+  root.right = right.right
+
+  right.right && (right.right.parent = root)
+
+  right.left = left
+
+  left.parent = right
+
+  right.right = root
+
+  root.parent = right
+
+  right.parent = parent
+
+  if (parent) {
+    const isLeft = parent.left === root
+
+    if (isLeft) {
+      parent.left = right
+    } else {
+      parent.right = right
+    }
+  }
+
+  await asyncBubbleDown(root, predicate)
+}
+
 export async function asyncBubbleDown<T>(
   root: Heap<T>,
-  predicate: (a: T, b: T) => Promise<boolean>
+  predicate: Predicate<T>
 ) {
   const { parent, value, left, right } = root
 
   const gtLeft = !left || (await predicate(value, left.value))
   const gtRight = !right || (await predicate(value, right.value))
 
-  const asyncBubbleDownRight = async () => {
-    root.left = right.left
-
-    right.left && (right.left.parent = root)
-
-    root.right = right.right
-
-    right.right && (right.right.parent = root)
-
-    right.left = left
-
-    left.parent = right
-
-    right.right = root
-
-    root.parent = right
-
-    right.parent = parent
-
-    if (parent) {
-      const isLeft = parent.left === root
-
-      if (isLeft) {
-        parent.left = right
-      } else {
-        parent.right = right
-      }
-    }
-
-    await asyncBubbleDown(root, predicate)
-  }
-
-  const asyncBubbleDownLeft = async () => {
-    root.left = left.left
-
-    left.left && (left.left.parent = root)
-
-    root.right = left.right
-
-    left.right && (left.right.parent = root)
-
-    root.parent = left
-
-    left.left = root
-    left.right = right
-
-    left.parent = parent
-
-    if (parent) {
-      const isLeft = parent.left === root
-
-      if (isLeft) {
-        parent.left = left
-      } else {
-        parent.right = left
-      }
-    }
-
-    right && (right.parent = left)
-
-    await asyncBubbleDown(root, predicate)
-  }
-
   if (left && right) {
     if (gtLeft && gtRight) {
       //
     } else if (gtLeft) {
-      await asyncBubbleDownRight()
+      await asyncBubbleDownRight(root, parent, left, right, predicate)
     } else if (gtRight) {
-      await asyncBubbleDownLeft()
+      await asyncBubbleDownLeft(root, parent, left, right, predicate)
     } else {
       if (await predicate(left.value, right.value)) {
-        await asyncBubbleDownLeft()
+        await asyncBubbleDownLeft(root, parent, left, right, predicate)
       } else {
-        await asyncBubbleDownRight()
+        await asyncBubbleDownRight(root, parent, left, right, predicate)
       }
     }
   } else if (left) {
     if (gtLeft) {
       //
     } else {
-      await asyncBubbleDownLeft()
+      await asyncBubbleDownLeft(root, parent, left, right, predicate)
     }
   } else {
     return null
