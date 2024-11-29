@@ -20024,9 +20024,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
 
     animation.onfinish = () => {
-      flushAnimation(animation)
-
       element.style.opacity = `${to}`
+
+      flushAnimation(animation)
 
       callback()
     }
