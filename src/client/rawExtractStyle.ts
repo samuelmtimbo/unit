@@ -1,6 +1,7 @@
 import { Style } from '../system/platform/Style'
 import { MeasureTextFunction } from '../text'
 import { Dict } from '../types/Dict'
+import { camelToDashed } from './id'
 import { IOElement } from './IOElement'
 import { LayoutNode } from './LayoutNode'
 
@@ -23,6 +24,21 @@ export function rawSimulateTextStyle(
   }
 }
 
+export function cssTextToObj(cssText: string): Dict<string> {
+  return Object.fromEntries(
+    cssText
+      .split(';')
+      .filter((rule) => rule.trim())
+      .map((rule) => rule.split(':').map((part) => part.trim()))
+  )
+}
+
+export function objToCssText(obj: Dict<string>): string {
+  return Object.entries(obj)
+    .map(([key, value]) => `${camelToDashed(key)}: ${value};`)
+    .join(' ')
+}
+
 export function rawExtractStyle(
   element: IOElement,
   trait: LayoutNode,
@@ -32,16 +48,7 @@ export function rawExtractStyle(
     return rawSimulateTextStyle(element, trait, measureText)
   }
 
-  const _style: Dict<string> = {}
-
   const { style } = element
 
-  for (let i = 0; i < style.length; i++) {
-    const key = style[i]
-    const value = style.getPropertyValue(key)
-
-    _style[key] = value
-  }
-
-  return _style
+  return cssTextToObj(style.cssText)
 }

@@ -195,10 +195,7 @@ import {
   IOWheelEvent,
   makeWheelListener,
 } from '../../../../../client/event/wheel'
-import {
-  LAYOUT_STYLE_ATTRS,
-  extractStyle,
-} from '../../../../../client/extractStyle'
+import { extractStyle } from '../../../../../client/extractStyle'
 import { extractTrait } from '../../../../../client/extractTrait'
 import { findRef } from '../../../../../client/findRef'
 import { getSize } from '../../../../../client/getSize'
@@ -218,7 +215,6 @@ import { _DEFAULT_STYLE } from '../../../../../client/graph/constant/DEFAULT_STY
 import { enableModeKeyboard } from '../../../../../client/graph/shortcut/modes'
 import { graphComponentFromId } from '../../../../../client/graphComponentFromSpec'
 import {
-  camelToDashed,
   getDatumNodeId,
   getErrNodeId,
   getExtNodeId,
@@ -279,11 +275,7 @@ import {
   stopAllPropagation,
   stopByPropagation,
 } from '../../../../../client/stopPropagation'
-import {
-  applyDynamicStyle,
-  applyStyle,
-  mergeStyle,
-} from '../../../../../client/style'
+import { applyDynamicStyle, applyStyle } from '../../../../../client/style'
 import {
   COLOR_DARK_LINK_YELLOW,
   COLOR_DARK_YELLOW,
@@ -20265,7 +20257,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._leaf_style[leaf_id] = leaf_style
 
       if (!is_text) {
-        mergeStyle(leaf_comp.$node as HTMLElement | SVGElement, temp_style)
+        applyStyle(leaf_comp.$node as HTMLElement | SVGElement, {
+          ...style,
+          ...temp_style,
+        })
 
         if (is_canvas) {
           const canvas_comp = leaf_comp as Canvas_
@@ -20344,13 +20339,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       delete this._leaf_prop_unlisten[leaf_id]
 
       if (!is_text) {
-        const layoutStyle = clone(style)
-
-        for (const attr of LAYOUT_STYLE_ATTRS) {
-          layoutStyle[attr] = style[attr] ?? style[camelToDashed(attr)] ?? ''
-        }
-
-        mergeStyle(leaf_comp.$node, layoutStyle)
+        applyStyle(leaf_comp.$node, style)
 
         const leaf_attr = this._leaf_attr[leaf_id]
 
