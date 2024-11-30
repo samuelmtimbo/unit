@@ -207,7 +207,8 @@ export const reflectComponentBaseTrait = (
     const leaf_parent_parent_id =
       leaf_parent_comp.getSubComponentParentId(leaf_parent_sub_id)
 
-    let leaf_parent_slot_path
+    let leaf_parent_slot_path: string[] = []
+    let leaf_parent_slot: Component = component
 
     if (sub_component_parent_id) {
       const sub_component_parent = component.getSubComponent(
@@ -215,11 +216,11 @@ export const reflectComponentBaseTrait = (
       )
 
       leaf_parent_slot_path = [sub_component_parent_id]
+      leaf_parent_slot = sub_component
 
-      let c = sub_component
       let p = sub_component_parent
 
-      let s = p.getParentRootSlotId(c)
+      let s = p.getParentRootSlotId(leaf_parent_slot)
 
       while (p) {
         const slot_sub_component_id = p.getSlotSubComponentId(s)
@@ -250,6 +251,16 @@ export const reflectComponentBaseTrait = (
     if (!is_root) {
       all_slot_base[leaf_slot_id] = all_slot_base[leaf_slot_id] || []
       all_slot_base[leaf_slot_id].push(leaf_id)
+
+      const leaf_parent_slot_style = extractStyle(
+        `${prefix}${leaf_slot_id === '' ? '' : `${prefix ? '/' : ''}${leaf_slot_id}`}`,
+        leaf_parent_slot
+      )
+
+      all_leaf_style[leaf_slot_id] = {
+        name: leaf_parent_slot.$element.nodeName,
+        style: leaf_parent_slot_style,
+      }
     }
 
     const leaf_style = extractStyle(
