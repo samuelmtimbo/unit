@@ -130,8 +130,6 @@ import { classnames } from '../../../../../client/classnames'
 import {
   RGBA,
   hexToRgba,
-  isHex,
-  nameToColor,
   rgbaToHex,
   setAlpha,
 } from '../../../../../client/color'
@@ -1681,6 +1679,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         ...DEFAULT_STYLE,
         ...current,
       })
+
+      mergePropStyle(this._editor, {
+        color: current?.color,
+      })
     } else if (prop === 'attr') {
       const attr = current ?? {}
 
@@ -3101,9 +3103,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { style = {} } = this.$props
 
-    let { color = $color } = style
-
-    color = nameToColor(color) || color
+    const { color = $color } = style
 
     const dark = $theme === 'dark'
 
@@ -3112,37 +3112,40 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const background = themeBackgroundColor($theme)
 
-    if (isHex(color)) {
-      let k: number = dark ? 1 : 1
-
-      this._theme = {
-        background,
-        node: applyTheme($theme, color, 0),
-        text: applyTheme($theme, color, 10 * k),
-        selected: applyTheme($theme, color, 20 * k),
-        pin_text: applyTheme($theme, color, 30 * k),
-        type: applyTheme($theme, color, 30 * k),
-        sub_text: applyTheme($theme, color, 30 * k),
-        link: applyTheme($theme, color, 50 * k),
-        hovered: applyTheme($theme, color, 60 * k),
-        data,
-        data_link,
-      }
-    } else {
-      this._theme = {
-        background,
-        node: color,
-        text: color,
-        pin_text: color,
-        selected: color,
-        type: color,
-        sub_text: color,
-        link: color,
-        hovered: color,
-        data,
-        data_link,
-      }
+    const theme: {
+      node: string
+      background: string
+      text: string
+      pin_text: string
+      selected: string
+      type: string
+      sub_text: string
+      link: string
+      hovered: string
+      data: string
+      data_link: string
+    } = {
+      background,
+      node: applyTheme($theme, color, 0),
+      text: applyTheme($theme, color, 10),
+      selected: applyTheme($theme, color, 20),
+      pin_text: applyTheme($theme, color, 30),
+      type: applyTheme($theme, color, 30),
+      sub_text: applyTheme($theme, color, 30),
+      link: applyTheme($theme, color, 50),
+      hovered: applyTheme($theme, color, 60),
+      data,
+      data_link,
     }
+
+    const defaults = mapObjVK(
+      theme,
+      (color, name) => `var(--color-${name}, ${color})`
+    )
+
+    const colors = mapObjKeyKV(defaults, (name) => `--default-color-${name}`)
+
+    mergePropStyle(this._graph, colors)
   }
 
   private _refresh_config = (): void => {
@@ -3182,17 +3185,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     data: string
     data_link: string
   } = {
-    node: 'currentColor',
-    background: 'currentColor',
-    text: 'currentColor',
-    pin_text: 'currentColor',
-    selected: 'currentColor',
-    type: 'currentColor',
-    sub_text: 'currentColor',
-    link: 'currentColor',
-    hovered: 'currentColor',
-    data: 'currentColor',
-    data_link: 'currentColor',
+    node: 'var(--default-color-node, currentcolor)',
+    background: 'var(--default-color-background, currentcolor)',
+    text: 'var(--default-color-text, currentcolor)',
+    pin_text: 'var(--default-color-pin_text, currentcolor)',
+    selected: 'var(--default-color-selected, currentcolor)',
+    type: 'var(--default-color-type, currentcolor)',
+    sub_text: 'var(--default-color-sub_text, currentcolor)',
+    link: 'var(--default-color-link, currentcolor)',
+    hovered: 'var(--default-color-hovered, currentcolor)',
+    data: 'var(--default-color-data, currentcolor)',
+    data_link: 'var(--default-color-data_link, currentcolor)',
   }
 
   private _component: Component
@@ -3200,12 +3203,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _pod: $Graph
 
-  // context
-
-  private _x: number = 0
-  private _y: number = 0
-  private _sx: number = 1
-  private _sy: number = 1
   private _width: number = 0
   private _height: number = 0
 
@@ -11317,7 +11314,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             height: `${r}px`,
             top: '50%',
             left: '50%',
-            // fill: 'currentColor',
             stroke: 'currentColor',
             color: 'currentColor',
             transform: 'translate(-50%, -50%)',
@@ -60385,14 +60381,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._refresh_theme()
 
-    for (let node_id in this._node) {
-      this._refresh_node_color(node_id)
-    }
-
-    for (let node_id in this._node_selection) {
-      this._refresh_selection_color(node_id)
-    }
-
     for (const unit_id in this._subgraph_cache) {
       const graph = this._subgraph_cache[unit_id]
 
@@ -60402,8 +60390,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._enabled()) {
       this._refresh_minimap_color()
     }
-
-    this._multiselect_area_svg_rect.$element.style.stroke = this._theme.selected
 
     if (!parent) {
       if (this._transcend) {
@@ -60485,6 +60471,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ..._DEFAULT_STYLE,
         ...style,
       })
+
       this._refresh_color()
     } else if (prop === 'disabled') {
       if (this._focused) {

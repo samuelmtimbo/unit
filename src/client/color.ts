@@ -496,45 +496,11 @@ export function setAlpha(color: string, alpha: number): string {
   const A = AS0 + AS1
   return color.substring(0, 7) + A
 }
-const ff = 255
-const zz = 0
-// set color `percent` closer to #ffffff
 
 export function lightenColor(color: string, percent: number): string {
-  const num = parseInt(color.slice(1), 16)
+  const base = percent > 0 ? 'white' : 'black'
 
-  const r = num >> 16
-  const g = (num >> 8) & 255
-  const b = num & 255
-
-  const t = percent > 0 ? ff : zz
-
-  const dr = t - r
-  const dg = t - g
-  const db = t - b
-
-  const p = Math.abs(percent) / 100
-
-  const pr = p * dr
-  const pg = p * dg
-  const pb = p * db
-
-  const R = Math.round(r + pr)
-  const G = Math.round(g + pg)
-  const B = Math.round(b + pb)
-
-  const _color =
-    '#' +
-    (
-      16777216 +
-      (R < 255 ? (R < 0 ? 0 : R) : 255) * 65536 +
-      (G < 255 ? (G < 0 ? 0 : G) : 255) * 256 +
-      (B < 255 ? (B < 0 ? 0 : B) : 255)
-    )
-      .toString(16)
-      .slice(1)
-
-  return _color
+  return `color-mix(in srgb, ${color}, ${base} ${Math.abs(percent)}%)`
 }
 
 export function darkenColor(color: string, percent: number): string {
