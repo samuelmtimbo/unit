@@ -1,5 +1,6 @@
 import { proxyWrap } from '../../../proxyWrap'
 import { S } from '../S'
+import { UCGEE } from '../UCGEE'
 import { $S, $S_C, $S_G, $S_R, $S_W } from './$S'
 import { AsyncGraph } from './AsyncGraph'
 
@@ -17,14 +18,12 @@ export const AsyncSWatch = (system: S): $S_W => {
 
 export const AsyncSRef = (system: S): $S_R => {
   return {
-    $newGraph({ bundle, _ }) {
-      const _bundle = system.fromBundle(bundle)
-
-      const graph = system.newGraph(_bundle)
+    $start({ bundle }) {
+      const graph = system.start(bundle)
 
       const $graph = AsyncGraph(graph)
 
-      return proxyWrap($graph, _)
+      return proxyWrap($graph, UCGEE)
     },
   }
 }

@@ -4,6 +4,7 @@ import { unitFromId } from '../spec/fromId'
 import _classes from '../system/_classes'
 import _components from '../system/_components'
 import _specs from '../system/_specs'
+import { keys } from '../system/f/object/Keys/f'
 import { clone } from '../util/clone'
 
 const [system] = boot(
@@ -14,11 +15,13 @@ const [system] = boot(
   })
 )
 
+const specIds = keys(system.specs)
+
 const spec = system.emptySpec()
 
 const graph = new Graph<{ number: number }, { sum: number }>(spec, {}, system)
 
-for (const id in system.specs) {
+for (const id of specIds) {
   const unit = unitFromId(system, id, system.specs, system.classes)
 
   let unitId: string
@@ -28,4 +31,7 @@ for (const id in system.specs) {
   } while (graph.hasUnit(unitId))
 
   graph.addUnit(unitId, unit)
+
+  unit.destroy()
 }
+

@@ -16,7 +16,7 @@ export class Registry implements R {
   specs: Specs
   specs_: Object_<Specs>
   specsCount: Dict<number>
-  specsLock: Dict<boolean>
+  lock: Dict<boolean>
 
   constructor(
     specs: Specs,
@@ -26,7 +26,7 @@ export class Registry implements R {
     this.specs = specs
     this.specs_ = specs_ ?? new Object_(specs)
     this.specsCount = specsCount ?? {}
-    this.specsLock = {}
+    this.lock = {}
   }
 
   newSpecId(): string {
@@ -235,9 +235,7 @@ export class Registry implements R {
     if (this.specsCount[id] === 0) {
       delete this.specsCount[id]
 
-      const spec = this.specs[id]
-
-      if (!isSystemSpecId(this.specs, id) && !this.specsLock[id]) {
+      if (!isSystemSpecId(this.specs, id) && !this.lock[id]) {
         this.deleteSpec(id)
       }
     }
@@ -250,10 +248,10 @@ export class Registry implements R {
   }
 
   lockSpec(id: string): void {
-    this.specsLock[id] = true
+    this.lock[id] = true
   }
 
   unlockSpec(id: string): void {
-    delete this.specsLock[id]
+    delete this.lock[id]
   }
 }

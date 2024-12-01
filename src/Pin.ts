@@ -1,4 +1,5 @@
 import { $, $Events } from './Class/$'
+import { Unit } from './Class/Unit'
 import { System } from './system'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
@@ -141,12 +142,13 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
         this._embodied = true
 
         data = new data(this.__system)
-
-        data.play()
-        data.register()
       }
 
       if (data instanceof $) {
+        if (data.__.includes('U')) {
+          ;(data as Unit).play()
+        }
+
         data.register()
 
         this._unlisten = data.addListener('edit', () => {

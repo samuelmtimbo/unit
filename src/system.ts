@@ -25,7 +25,6 @@ export interface System extends S, Registry {
   context: Context[]
   theme: Theme
   color: string
-  graphs: Graph[]
   async: AllTypes<(unit: any) => any>
   cache: {
     iframe: any[]
@@ -65,7 +64,7 @@ export interface System extends S, Registry {
   flags: {
     defaultInputModeNone?: boolean
   }
-  boot: (opt: BootOpt) => System
+  boot: (opt?: BootOpt) => System
   getLocalComponents: (remoteGlobalId: string) => any[]
   registerLocalComponent: (component: any, remoteGlobalId: string) => void
   unregisterLocalComponent: (component: any, remoteGlobalId: string) => void
@@ -87,7 +86,6 @@ export interface System extends S, Registry {
     },
     callback: (event: PointerEvent, track: Point[]) => void
   ) => Unlisten
-  destroy: () => void
 }
 
 export type IFilePickerOpt = {

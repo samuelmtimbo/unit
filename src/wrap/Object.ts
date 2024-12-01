@@ -34,7 +34,7 @@ export function wrapObject<T extends object>(
       return _data.delete(name)
     }
 
-    hasKey<K extends keyof T>(name: K): Promise<boolean> {
+    hasKey(name: string): Promise<boolean> {
       return _data.hasKey(name)
     }
 

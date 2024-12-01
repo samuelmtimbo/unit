@@ -65,15 +65,9 @@ export default class Start extends Holder<I, O> {
       weakMerge(__bundle.specs, this.__system.specs)
     )
 
-    const _ = UCGEE
+    const $graph = system.$start({ bundle })
 
-    const $graph = system.$newGraph({ bundle, _ })
-
-    const graph = $wrap<$Graph>(this.__system, $graph, _)
-
-    if (!paused) {
-      graph.$play({})
-    }
+    const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 
     if (!paused) {
       graph.$play({})
@@ -86,6 +80,8 @@ export default class Start extends Holder<I, O> {
 
   d() {
     if (this._graph) {
+      this._graph.$destroy({})
+
       this._graph = undefined
     }
   }

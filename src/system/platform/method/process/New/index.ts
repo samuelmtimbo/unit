@@ -1,10 +1,8 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../Class/Graph'
 import { Holder } from '../../../../../Class/Holder'
-import { start } from '../../../../../start'
 import { System } from '../../../../../system'
 import { GraphBundle } from '../../../../../types/GraphClass'
-import { GraphSpec } from '../../../../../types/GraphSpec'
 import { ID_NEW_0 } from '../../../../_ids'
 
 export interface I {
@@ -38,16 +36,8 @@ export default class New extends Holder<I, O> {
     )
   }
 
-  f({ graph: graphClass }: I, done: Done<O>): void {
-    // console.log('New', 'f', bundle)
-
-    const { unit, specs = {} } = graphClass.__bundle
-
-    this.__system.injectSpecs(specs)
-
-    const spec = this.__system.getSpec(unit.id) as GraphSpec
-
-    const graph = start(this.__system, { spec, specs })
+  f({ graph: Class }: I, done: Done<O>): void {
+    const graph = new Class(this.__system)
 
     this._graph = graph
 

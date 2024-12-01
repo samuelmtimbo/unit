@@ -1,4 +1,5 @@
 import {
+  UnitDestroyData,
   UnitGetAllInputDataData,
   UnitGetAllPinDataData,
   UnitGetAllRefInputDataData,
@@ -40,6 +41,7 @@ export const U_METHOD_CALL = [
   'pullInput',
   'takeInput',
   'renamePin',
+  'destroy',
 ]
 export const U_METHOD_WATCH = ['watch']
 export const U_METHOD_REF = ['refGlobalObj']
@@ -76,6 +78,7 @@ export interface $U_C {
   $setPinData({ pinId, type, data }: UnitSetPinDataData): void
   $removePinData({ type, pinId }: UnitRemovePinDataData): void
   $reset(data: UnitResetData): void
+  $destroy(data: UnitDestroyData): void
 }
 
 export interface $U_W {

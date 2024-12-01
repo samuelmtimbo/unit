@@ -30,7 +30,9 @@ export default class AudioTarget extends Functional<I, O> {
       system,
       ID_AUDIO_TARGET
     )
+  }
 
+  async f({ stream, id }: I, done: Done<O>) {
     const {
       api: {
         window: { Audio },
@@ -38,9 +40,7 @@ export default class AudioTarget extends Functional<I, O> {
     } = this.__system
 
     this._audio = new Audio()
-  }
 
-  async f({ stream, id }: I, done: Done<O>) {
     this._audio.srcObject = await stream.mediaStream()
 
     try {
@@ -55,6 +55,8 @@ export default class AudioTarget extends Functional<I, O> {
   }
 
   d() {
-    this._audio.pause()
+    if (this._audio) {
+      this._audio.pause()
+    }
   }
 }

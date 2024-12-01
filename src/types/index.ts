@@ -110,7 +110,7 @@ export type GraphSubComponentSpec = {
 export type GraphSubComponentSpecs = Dict<GraphSubComponentSpec>
 
 export type GraphComponentSpec = BaseComponentSpec & {
-  slots?: [string, string][]
+  slots?: string[][]
   subComponents?: GraphSubComponentSpecs
   children?: string[]
 }

@@ -24,7 +24,7 @@ export function start(
 
   const Class = fromSpec(spec, specs, classes, {})
 
-  return startClass(system, Class, true)
+  return startClass(system, Class, play)
 }
 
 export function startClass(
@@ -34,9 +34,9 @@ export function startClass(
 ): Graph {
   const graph = new Class(system)
 
-  system.graphs.push(graph)
-
-  graph.play()
+  if (play) {
+    graph.play()
+  }
 
   return graph
 }

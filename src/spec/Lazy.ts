@@ -38,7 +38,7 @@ export function lazyFromSpec(
     branch: Dict<true>
   ) => GraphBundle
 ): UnitClass {
-  const { inputs, outputs, id } = spec
+  const { inputs = {}, outputs = {}, id } = spec
 
   class Lazy<
       I extends Dict<any> = Dict<any>,

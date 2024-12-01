@@ -13,6 +13,7 @@ export const Async = (
   for (const __ of _) {
     if (!instance.$__.includes(__)) {
       $_.push(__)
+
       instance.$__.push(__)
     }
   }

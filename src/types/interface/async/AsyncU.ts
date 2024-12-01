@@ -1,6 +1,9 @@
 import { $_ } from '../$_'
 import { Unit } from '../../../Class/Unit'
-import { UnitGetPinDataData } from '../../../Class/Unit/interface'
+import {
+  UnitDestroyData,
+  UnitGetPinDataData,
+} from '../../../Class/Unit/interface'
 import { Moment } from '../../../debug/Moment'
 import { watchUnit } from '../../../debug/watchUnit'
 import { getGlobalRef } from '../../../global'
@@ -131,6 +134,7 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
 
     $removePinData(data: { type: IO; pinId: string }) {
       const { type, pinId } = data
+
       unit.removePinData(type, pinId)
     },
 
@@ -140,6 +144,9 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       const input = unit.getInput(pinId)
 
       input.pull()
+    },
+    $destroy: function (data: UnitDestroyData): void {
+      unit.destroy()
     },
   }
 }

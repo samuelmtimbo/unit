@@ -296,18 +296,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._element = render
 
-    this._initAddUnits(units)
-    this._initMerges(merges)
-    this._initInputSets(inputs)
-    this._initOutputSets(outputs)
-    this._initSetComponent(component)
-
     this.addListener('reset', this._reset)
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
     this.addListener('destroy', this._destroy)
     this.addListener('take_err', this._takeErr)
     this.addListener('take_caught_err', this._takeErr)
+
+    this._initAddUnits(units)
+    this._initMerges(merges)
+    this._initInputSets(inputs)
+    this._initOutputSets(outputs)
+    this._initSetComponent(component)
 
     const { global } = system
 
@@ -3593,12 +3593,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return unit
   }
 
-  public addUnitBundle = (unitId: string, unitBundle: UnitBundle) => {
-    this._addUnitBundle(unitId, unitBundle)
-  }
-
-  public _addUnitBundle = (unitId: string, unitBundle: UnitBundle) => {}
-
   public _addUnitBundleSpec(unitId: string, bundle: UnitBundleSpec): Unit {
     // console.log('Graph', '_addUnitBundleSpec', unitId, bundle)
 
@@ -3844,7 +3838,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         if (
           path.length > 0 ||
           this._destroying ||
-          this._removingUnit.has(unitId)
+          (this._removingUnit && this._removingUnit.has(unitId))
         ) {
           bubble()
 
@@ -4514,7 +4508,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _createMerge = (mergeId: string): Merge => {
     const merge = new Merge(this.__system)
 
-    merge.pause()
+    // merge.pause()
 
     const mergeInputPinId = getMergePinNodeId(mergeId, 'input')
 
@@ -4522,9 +4516,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     merge.addInput(mergeInputPinId, mergeInputPin)
 
-    if (!this._paused) {
-      merge.play()
-    }
+    // if (!this._paused) {
+    //   merge.play()
+    // }
 
     return merge
   }

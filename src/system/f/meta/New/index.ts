@@ -37,6 +37,8 @@ export default class New<T> extends Holder<I<T>, O<T>> {
   f({ class: Class }: I<T>, done): void {
     const unit = new Class(this.__system)
 
+    unit.play()
+
     this._unit = unit
 
     done({ unit })

@@ -9,7 +9,7 @@ import { ID_BOOT } from '../../../../_ids'
 
 export interface I {
   init: BootOpt
-  done: unknown
+  done: any
 }
 
 export interface O {
@@ -40,30 +40,26 @@ export default class Boot extends Holder<I, O> {
   }
 
   f({ init }: I, done: Done<O>): void {
-    const { path } = init
-
     const _system = this.__system.boot({
-      path,
       specs: clone(this.__system.specs),
       classes: this.__system.classes,
       components: this.__system.components,
+      ...init,
     })
 
     this._system = _system
 
-    const system = wrapSystem(_system, this.__system)
+    const system_ = wrapSystem(_system, this.__system)
 
-    const $system = Async(system, ['S'], this.__system.async)
+    const system = Async(system_, ['S'], this.__system.async) as $S
 
     done({
-      system: $system,
+      system,
     })
   }
 
   d() {
     if (this._system) {
-      this._system.destroy()
-
       this._system = undefined
     }
   }

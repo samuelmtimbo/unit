@@ -153,7 +153,6 @@ import {
 } from '../../../../../client/componentFromSpecId'
 import { Context } from '../../../../../client/context'
 import { preventContextMenu } from '../../../../../client/contextMenu'
-import { debounce } from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { IODragEvent } from '../../../../../client/event/drag'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
@@ -599,7 +598,7 @@ import {
   validateBundleSpec,
   validateGraphSpec,
 } from '../../../../../spec/validate'
-import { startUnit } from '../../../../../start'
+import { start } from '../../../../../start'
 import {
   flushAnimation,
   waitFinish,
@@ -929,6 +928,7 @@ export interface Props {
   typeCache?: TypeTreeMap
   config?: Config
   fork?: boolean
+  system?: System
 }
 
 export default class Editor extends Element<HTMLDivElement, Props> {
@@ -944,12 +944,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _frame_out: boolean = false
   private _background: Div
 
-  private _specs: Specs
-  private _registry: Registry
+  private _system: System
 
   private _unlisten_graph: Unlisten
   private _unlisten_transcend: Unlisten
-  private _unlisten_registry: Unlisten
 
   private _type_cache: TypeTreeMap = {}
 
@@ -968,17 +966,20 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       fullwindow,
       fallback,
       container,
+      system,
     } = this.$props
 
     let { component, editor, transcend, background, root } = $props
 
     const specs = weakMerge(this.$system.specs, {})
 
-    this._specs = specs
+    this._system =
+      system ??
+      this.$system.boot({
+        specs,
+      })
 
-    this._registry = new Registry(specs)
-
-    mirror(this.$system.specs_, this._registry.specs_)
+    mirror(this.$system.specs_, this._system.specs_)
 
     this._pod = graph
 
@@ -1008,9 +1009,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     if (editor) {
       mergeProps(editor, {
-        specs,
+        specs: this._system.specs,
         typeCache: this._type_cache,
-        registry: this._registry,
+        system: this._system,
         hasSpec: this._has_spec,
         emptySpec: this._empty_spec,
         getSpec: this._get_spec,
@@ -1040,8 +1041,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           zoom,
           fullwindow,
           config,
-          specs,
-          registry: this._registry,
+          specs: this._system.specs,
+          system: this._system,
           typeCache: this._type_cache,
           hasSpec: this._has_spec,
           emptySpec: this._empty_spec,
@@ -1071,7 +1072,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._editor.addEventListeners([
       makeCustomListener('data_removed', ({ datumId, specId }) => {
-        const { specs } = this._registry
+        const { specs } = this._system
 
         if (specs[specId] && isSystemSpecId(specs, specId)) {
           // console.log('data_removed', { datumId, specId })
@@ -1080,11 +1081,11 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
           removeDatum({ datumId }, spec)
 
-          this._registry.setSpec(specId, spec)
+          this._system.setSpec(specId, spec)
         }
       }),
       makeCustomListener('data_added', ({ datumId, specId, value }) => {
-        const { specs } = this._registry
+        const { specs } = this._system
 
         if (specs[specId] && isSystemSpecId(specs, specId)) {
           // console.log('data_added', { datumId, specId, value })
@@ -1093,7 +1094,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
           setDatum({ datumId, value }, spec)
 
-          this._registry.setSpec(specId, spec)
+          this._system.setSpec(specId, spec)
         }
       }),
     ])
@@ -1205,7 +1206,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     delete this._type_cache[id]
 
-    this._registry.setSpec(id, spec)
+    this._system.setSpec(id, spec)
   }
 
   private _fork_spec = (
@@ -1214,7 +1215,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   ): [string, GraphSpec] => {
     // console.log('Graph', '_fork_spec', spec, specId)
 
-    return this._registry.forkSpec(spec, specId)
+    return this._system.forkSpec(spec, specId)
   }
 
   private _enter_fullwindow = () => {
@@ -1226,51 +1227,51 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   }
 
   private _new_spec_id = () => {
-    return this._registry.newSpecId()
+    return this._system.newSpecId()
   }
 
   private _has_spec = (id: string): boolean => {
-    return this._registry.hasSpec(id)
+    return this._system.hasSpec(id)
   }
 
   private _empty_spec = () => {
-    return this._registry.emptySpec()
+    return this._system.emptySpec()
   }
 
   private _new_spec = (spec: GraphSpec) => {
-    return this._registry.newSpec(spec)
+    return this._system.newSpec(spec)
   }
 
   private _get_spec = (id: string): Spec => {
-    return this._registry.getSpec(id)
+    return this._system.getSpec(id)
   }
 
   private _delete_spec = (id: string) => {
-    return this._registry.deleteSpec(id)
+    return this._system.deleteSpec(id)
   }
 
   private _inject_specs = (specs: GraphSpecs) => {
-    return this._registry.injectSpecs(specs)
+    return this._system.injectSpecs(specs)
   }
 
   private _register_unit = (id: string) => {
-    return this._registry.registerUnit(id)
+    return this._system.registerUnit(id)
   }
 
   private _unregister_unit = (id: string) => {
-    return this._registry.unregisterUnit(id)
+    return this._system.unregisterUnit(id)
   }
 
   private _should_fork = (id: string): boolean => {
-    return this._registry.shouldFork(id)
+    return this._system.shouldFork(id)
   }
 
   private _lock_spec = (id: string): void => {
-    return this._registry.lockSpec(id)
+    return this._system.lockSpec(id)
   }
 
   private _unlock_spec = (id: string): void => {
-    return this._registry.unlockSpec(id)
+    return this._system.unlockSpec(id)
   }
 
   private _create_fallback_frame_container = (): Component => {
@@ -1552,11 +1553,11 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       {
         style,
         graph: this._pod,
-        registry: this._registry,
+        system: this._system,
         component: this._component,
         container: this._fallback_frame_container,
         frame: this._fallback_frame,
-        specs: this._specs,
+        specs: this._system.specs,
         typeCache: this._type_cache,
         config,
         disabled: false,
@@ -1797,7 +1798,7 @@ export interface Props_ extends R {
   fork?: boolean
   bubble?: boolean
   specs?: Specs
-  registry?: Registry
+  system?: System
   typeCache?: TypeTreeInterfaceCache
   config?: Config
   zoom?: Zoom
@@ -3209,7 +3210,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _q_was_pressed_before_name_focus: any
   private _q_first_repeat_prevented: boolean = false
 
-  private _registry: Registry
+  private _system: System
 
   constructor($props: Props_, $system: System, $element?: HTMLDivElement) {
     super($props, $system)
@@ -3223,12 +3224,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       graph: pod,
       frame,
       specs,
-      registry,
+      system,
     } = this.$props as Props_ & DefaultProps
 
     const { animate, zoom } = this._config()
 
     component = component ?? parentComponent({}, this.$system)
+
+    this._system = system ?? this.$system.boot()
 
     this._pod = pod
     this._component = component
@@ -3236,8 +3239,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._component.setControlled(true)
 
     this._frame_out = frameOut
-
-    this._registry = registry ?? new Registry(specs)
 
     this._zoom = clone(zoom ?? ZOOM_IDENTITY)
 
@@ -3726,7 +3727,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const bundle = await this._read_bundle_file(file)
 
             if (bundle) {
-              const specIdMap = injectUserBundle(this.$props.registry, bundle)
+              const specIdMap = injectUserBundle(this._system, bundle)
 
               const bundle_ = clone(bundle)
 
@@ -4592,51 +4593,51 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _set_spec = (id: string, spec: GraphSpec): void => {
     // console.log('Graph', '_set_spec', id, spec)
 
-    this._registry.setSpec(id, spec)
+    this._system.setSpec(id, spec)
   }
 
   private _fallback_new_spec_id = () => {
-    return this._registry.newSpecId()
+    return this._system.newSpecId()
   }
 
   private _fallback_has_spec = (id: string): boolean => {
-    return this._registry.hasSpec(id)
+    return this._system.hasSpec(id)
   }
 
   private _fallback_empty_spec = () => {
-    return this._registry.emptySpec()
+    return this._system.emptySpec()
   }
 
   private _fallback_new_spec = (spec: GraphSpec) => {
-    return this._registry.newSpec(spec)
+    return this._system.newSpec(spec)
   }
 
   private _fallback_set_spec = (spec_id: string, spec: GraphSpec) => {
-    return this._registry.setSpec(spec_id, spec)
+    return this._system.setSpec(spec_id, spec)
   }
 
   private _fallback_get_spec = (id: string): Spec => {
-    return this._registry.getSpec(id)
+    return this._system.getSpec(id)
   }
 
   private _fallback_delete_spec = (id: string) => {
-    return this._registry.deleteSpec(id)
+    return this._system.deleteSpec(id)
   }
 
   private _fallback_fork_spec = (spec: GraphSpec) => {
-    return this._registry.forkSpec(spec)
+    return this._system.forkSpec(spec)
   }
 
   private _fallback_inject_specs = (specs: GraphSpecs) => {
-    return this._registry.injectSpecs(specs)
+    return this._system.injectSpecs(specs)
   }
 
   private _fallback_register_unit = (id: string) => {
-    return this._registry.registerUnit(id)
+    return this._system.registerUnit(id)
   }
 
   private _fallback_unregister_unit = (id: string) => {
-    return this._registry.unregisterUnit(id)
+    return this._system.unregisterUnit(id)
   }
 
   private _register_unit = (
@@ -4656,7 +4657,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ) => {
     // console.log('Graph', '_register_spec', spec_id, deep)
 
-    this.__register_spec(this._registry, spec_id, deep, branch)
+    this.__register_spec(this._system, spec_id, deep, branch)
   }
 
   private __register_spec = (
@@ -5490,7 +5491,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _reset(spec: GraphSpec) {
     const { classes } = this.$system
 
-    const { specs } = this.$props
+    const { specs, parent } = this.$props
 
     const { zoom } = this._config()
 
@@ -5863,7 +5864,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._sim_add_unit_core(unit_id, unit, p)
 
-      this._register_unit(unit.id, true)
+      if (!parent) {
+        this._register_unit(unit.id, true)
+      }
 
       if (this._is_unit_component(unit_id)) {
         const layout_position = NULL_VECTOR
@@ -6605,17 +6608,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _spec_update_metadata_complexity = debounce(
-    this.$system,
-    () => {
-      const { specs } = this.$props
+  private _spec_update_metadata_complexity = () => {
+    const { specs } = this.$props
 
-      const c = graphComplexity(specs, this._spec)
+    const c = graphComplexity(specs, this._spec)
 
-      setMetadata({ path: ['metadata', 'complexity'], value: c }, this._spec)
-    },
-    1000
-  )
+    setMetadata({ path: ['metadata', 'complexity'], value: c }, this._spec)
+  }
 
   private _flush_debugger = (): void => {
     // console.log('Graph', '_flush_debugger')
@@ -18748,6 +18747,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    if (this._is_component_framed) {
+      this._leave_component_frame()
+    }
+
     if (!this._frame_out) {
       if (!this._disabled) {
         if (this._core_component_unlocked_count === 0) {
@@ -19595,7 +19598,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const shape = this._tree_layout ? 'rect' : 'circle'
 
       this._search.setProp('selectedColor', COLOR_GREEN)
-      this._search.setProp('registry', this._registry)
+      this._search.setProp('registry', this._system)
       this._search.setProp('shape', shape)
 
       if (this._search_hidden) {
@@ -29550,7 +29553,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const {
       fork,
       specs,
-      registry,
       typeCache,
       frame,
       frameOut,
@@ -29609,7 +29611,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           fork: this._subgraph_fork,
           bubble: fork,
           component: sub_component,
-          registry,
+          system: this._system,
           typeCache,
           specs,
           hasSpec,
@@ -30984,7 +30986,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const {
       fork,
       specs,
-      registry,
       typeCache,
       container,
       config,
@@ -31016,23 +31017,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
     if (is_class_literal) {
-      let bundle = evaluateBundleStr(
+      let unitBundle = evaluateBundleStr(
         datum_tree.value,
         specs,
         this.$system.classes
       )
 
-      bundle = unitBundleSpec(bundle.unit, weakMerge(bundle.specs, specs))
+      unitBundle = unitBundleSpec(
+        unitBundle.unit,
+        weakMerge(unitBundle.specs, specs)
+      )
 
-      const spec = getSpec(bundle.unit.id)
+      const spec = getSpec(unitBundle.unit.id) as GraphSpec
 
       if (isBaseSpec(spec)) {
         return
       }
 
-      const graph = startUnit(this.$system, bundle)
+      const bundle = bundleSpec(spec, weakMerge(unitBundle.specs, specs))
+
+      const graph = start(this._system, bundle, true)
+
       const pod = proxyWrap(AsyncGraph(graph), UCGEE)
-      const component = componentFromUnitBundle(this.$system, bundle)
+      const component = componentFromUnitBundle(this._system, unitBundle)
 
       for (const subComponentId in component.$subComponent) {
         const sub_component = component.$subComponent[subComponentId]
@@ -31055,7 +31062,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           container,
           fullwindow: false,
           component,
-          registry: this.$system,
+          system: this._system,
           typeCache,
           specs,
           config,
@@ -31103,7 +31110,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const modified_value = `$${stringify(modified_bundle)}`
 
-          const specs = weakMerge(this.$system.specs, bundle.specs ?? {})
+          const specs = weakMerge(this.$system.specs, unitBundle.specs ?? {})
 
           const id = modified_bundle.unit.id
 
@@ -57601,7 +57608,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     setSpec(next_spec_id, unit_spec)
 
-    this.__register_spec(this._registry, next_spec_id, false)
+    this.__register_spec(this._system, next_spec_id, false)
     this._unregister_spec(unit_spec_id, false)
   }
 
@@ -60602,7 +60609,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         graph.setProp('frameOut', this._frame_out)
       }
     } else if (prop === 'registry') {
-      this._registry = current
+      this._system = current
     } else if (prop === 'config') {
       this._refresh_config()
     }

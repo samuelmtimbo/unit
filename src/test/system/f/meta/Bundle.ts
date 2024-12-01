@@ -1,4 +1,5 @@
 import { watchUnitAndLog } from '../../../../debug'
+import { fromBundle } from '../../../../spec/fromBundle'
 import { ID_IDENTITY } from '../../../../system/_ids'
 import Bundle from '../../../../system/f/meta/Bundle'
 import { assert } from '../../../../util/assert'
@@ -10,10 +11,14 @@ bundle.play()
 
 false && watchUnitAndLog(bundle)
 
-const Class = system.fromBundle({
-  spec: {},
-  specs: {},
-})
+const Class = fromBundle(
+  {
+    spec: {},
+    specs: {},
+  },
+  system.specs,
+  system.classes
+)
 
 const graph = new Class(system)
 

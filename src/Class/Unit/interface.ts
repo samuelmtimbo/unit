@@ -2,6 +2,8 @@ import { IO } from '../../types/IO'
 
 export type UnitGetGlobalIdData = {}
 
+export type UnitDestroyData = {}
+
 export type UnitPlayData = {}
 
 export type UnitPauseData = {}

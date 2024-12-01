@@ -8,7 +8,7 @@ export interface J<T extends Dict<any> = Dict<any>> {
   get<K extends keyof T>(name: K): Promise<T[K]>
   set<K extends keyof T>(name: K, data: T[K]): Promise<void>
   delete<K extends keyof T>(name: K): Promise<void>
-  hasKey<K extends keyof T>(name: K): Promise<boolean>
+  hasKey(name: string): Promise<boolean>
   keys(): Promise<string[]>
   deepGet(path: string[]): Promise<any>
   deepSet(path: string[], data: any): Promise<void>

@@ -1,16 +1,15 @@
 import { API } from '../API'
+import { Graph } from '../Class/Graph'
 import { EventEmitter_ } from '../EventEmitter'
 import { Object_ } from '../Object'
 import { Registry } from '../Registry'
 import { Component } from '../client/component'
-import { unmount } from '../client/context'
 import { icons } from '../client/icons'
 import { themeColor } from '../client/theme'
-import { fromBundle } from '../spec/fromBundle'
+import { start } from '../start'
 import { BootOpt, System } from '../system'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
-import { GraphBundle } from '../types/GraphClass'
 import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
 import { ASYNC } from '../types/interface/async/wrapper'
@@ -60,7 +59,7 @@ export function boot(
 
   const {
     specsCount,
-    specsLock,
+    lock: specsLock,
     newSpecId,
     hasSpec,
     emptySpec,
@@ -99,9 +98,8 @@ export function boot(
     classes,
     components,
     icons,
-    graphs: [],
     specsCount,
-    specsLock,
+    lock: specsLock,
     cache,
     feature,
     foreground: {
@@ -124,14 +122,11 @@ export function boot(
       defaultInputModeNone: false,
       ...flags,
     },
-    boot: (opt: BootOpt) => boot(system, api, opt),
-    fromBundle: (bundle: BundleSpec) => {
-      return fromBundle(bundle, specs, {})
+    boot: (opt_: BootOpt = {}) => {
+      return boot(system, api, weakMerge(opt, opt_))
     },
-    newGraph: (Bundle: GraphBundle) => {
-      const graph = new Bundle(system)
-
-      return graph
+    start: (bundle: BundleSpec): Graph => {
+      return start(system, bundle)
     },
     getSpec: getSpec.bind(registry),
     hasSpec: hasSpec.bind(registry),
@@ -170,25 +165,8 @@ export function boot(
 
       remove(components, component)
     },
-    destroy: function (): void {
-      for (const graph of system.graphs) {
-        graph.destroy()
-      }
-    },
     color,
   }
 
   return system
-}
-
-export function destroy(system: System) {
-  const { graphs, context } = system
-
-  for (const graph of graphs) {
-    graph.destroy()
-  }
-
-  for (const context_ of context) {
-    unmount(context_)
-  }
 }

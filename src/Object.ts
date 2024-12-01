@@ -171,7 +171,7 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     this._set_path([name] as string[], data)
   }
 
-  public async hasKey<K extends keyof T>(name: K): Promise<boolean> {
+  public async hasKey(name: string): Promise<boolean> {
     return this._obj[name] !== undefined
   }
 

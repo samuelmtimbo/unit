@@ -143,8 +143,6 @@ export function webBoot(
 
   const unlisten = () => {
     root.removeChild(_root)
-
-    system.destroy()
   }
 
   return [system, unlisten]

@@ -101,9 +101,11 @@ export default class BluetoothCharacteristic_ extends Functional<
   }
 
   d() {
-    this.stopNotification()
+    if (this._characteristic) {
+      this.stopNotification()
 
-    this._characteristic = undefined
+      this._characteristic = undefined
+    }
   }
 
   private _started: boolean = false
