@@ -12,20 +12,20 @@ export interface Props {
   ry?: number
 }
 
-export default class SVGEllipse extends SVGElement_<SVGCircleElement, Props> {
+export default class SVGEllipse extends SVGElement_<SVGEllipseElement, Props> {
   constructor($props: Props, $system: System) {
     super(
       $props,
       $system,
-      $system.api.document.createElementNS(namespaceURI, 'circle'),
+      $system.api.document.createElementNS(namespaceURI, 'ellipse'),
       $system.style['ellipse'],
       {},
       {
         x: (x: number | undefined = 0) => {
-          this.$element.setAttribute('x', `${x}`)
+          this.$element.setAttribute('cx', `${x}`)
         },
         y: (y: number | undefined = 0) => {
-          this.$element.setAttribute('y', `${y}`)
+          this.$element.setAttribute('cy', `${y}`)
         },
         rx: (rx: number | undefined = 0) => {
           this.$element.setAttribute('rx', `${rx}`)
