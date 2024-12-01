@@ -1,0 +1,122 @@
+{
+  "type": "`U`&`G`",
+  "name": "distance",
+  "units": {
+    "norm": {
+      "id": "54d339fb-76af-4a37-9f0a-08015fb51850",
+      "input": {
+        "y": {},
+        "x": {}
+      },
+      "output": {
+        "d": {}
+      }
+    },
+    "subtract": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {}
+      }
+    },
+    "subtract0": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "norm": {
+        "input": {
+          "x": true
+        }
+      },
+      "subtract0": {
+        "output": {
+          "a - b": true
+        }
+      }
+    },
+    "1": {
+      "norm": {
+        "input": {
+          "y": true
+        }
+      },
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "y1": {
+      "plug": {
+        "2": {
+          "unitId": "subtract",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "y0": {
+      "plug": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "x1": {
+      "plug": {
+        "0": {
+          "unitId": "subtract0",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "x0": {
+      "plug": {
+        "0": {
+          "unitId": "subtract0",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "d": {
+      "plug": {
+        "0": {
+          "unitId": "norm",
+          "pinId": "d",
+          "kind": "output"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "euclidian distance between points (x0,y0) and (x1,y1)"
+  },
+  "id": "3bd18787-017f-4477-a182-8956aad82ffd",
+  "system": true
+}
