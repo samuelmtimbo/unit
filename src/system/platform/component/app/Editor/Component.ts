@@ -18125,7 +18125,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (prev_mode !== 'remove' && this._mode === 'remove') {
         for (const pointer_id in this._pointer_id_pressed_node_id) {
           const pressed_node_id = this._pointer_id_pressed_node_id[pointer_id]
-          const drag_node_ids = [...this._drag_pointer_id_node[pointer_id]]
+          const drag_node_ids = [
+            ...(this._drag_pointer_id_node[pointer_id] ?? []),
+          ]
 
           this._on_node_red_drag_start(
             pressed_node_id,
