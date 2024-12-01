@@ -2516,7 +2516,7 @@ export class Component<
         let i = 0
 
         for (const root of component.$mountRoot) {
-          this.domAppendRoot(root, at, index)
+          this.domAppendRoot(root, at + i, index + i)
 
           i++
         }

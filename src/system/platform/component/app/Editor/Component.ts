@@ -5874,21 +5874,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._mem_add_unit_component(unit_id, {})
 
         this._connect_sub_component(unit_id)
-
-        if (this._is_fullwindow) {
-          this._fullwindow_component_ids.push(unit_id)
-          this._fullwindow_component_set.add(unit_id)
-
-          if (this._in_component_control) {
-            this._couple_sub_component(unit_id)
-          }
-        } else {
-          if (this._in_component_control) {
-            if (this._subgraph_unit_id !== unit_id) {
-              this._enter_sub_component_frame(unit_id)
-            }
-          }
-        }
       }
 
       const unit_pin_position = this._get_spec_init_unit_pin_position(
@@ -5914,6 +5899,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const unit_id in units) {
       if (this._is_unit_component(unit_id)) {
         this._mem_add_unit_component_parent(unit_id)
+
+        if (this._is_fullwindow) {
+          this._fullwindow_component_ids.push(unit_id)
+          this._fullwindow_component_set.add(unit_id)
+
+          if (this._in_component_control) {
+            this._couple_sub_component(unit_id)
+          }
+        } else {
+          if (this._in_component_control) {
+            if (this._subgraph_unit_id !== unit_id) {
+              this._enter_sub_component_frame(unit_id)
+            }
+          }
+        }
       }
     }
 
