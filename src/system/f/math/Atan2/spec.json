@@ -9,7 +9,7 @@
     }
   },
   "outputs": {
-    "atan2(x,y)": {
+    "rad": {
       "type": "number"
     }
   },

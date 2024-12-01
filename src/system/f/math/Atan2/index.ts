@@ -8,7 +8,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  'atan2(x,y)': number
+  rad: number
 }
 
 export default class Atan2<T> extends Functional<I<T>, O<T>> {
@@ -16,7 +16,7 @@ export default class Atan2<T> extends Functional<I<T>, O<T>> {
     super(
       {
         i: ['x', 'y'],
-        o: ['atan2(x,y)'],
+        o: ['rad'],
       },
       {},
       system,
@@ -25,6 +25,6 @@ export default class Atan2<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ x, y }: I<T>, done): void {
-    done({ 'atan2(x,y)': Math.atan2(x, y) })
+    done({ rad: Math.atan2(x, y) })
   }
 }
