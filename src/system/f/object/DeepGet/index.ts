@@ -10,7 +10,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  result: T
+  value: T
 }
 
 export default class DeepGet<T> extends Functional<I<T>, O<T>> {
@@ -18,7 +18,7 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
     super(
       {
         i: ['obj', 'path'],
-        o: ['result'],
+        o: ['value'],
       },
       {},
       system,
@@ -27,10 +27,10 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ obj, path }: I<T>, done: Done<O<T>>): void {
-    let result: any
+    let value: any
 
     try {
-      result = deepGet(obj, path)
+      value = deepGet(obj, path)
     } catch (err) {
       done(undefined, 'key not found')
 
@@ -38,7 +38,7 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
     }
 
     done({
-      result,
+      value,
     })
   }
 }
