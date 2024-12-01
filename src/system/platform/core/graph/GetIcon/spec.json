@@ -1,0 +1,182 @@
+{
+  "type": "`U`&`G`",
+  "name": "get icon",
+  "units": {
+    "deepget1": {
+      "id": "2ff102a7-b469-461f-a3b1-a61b81c1b325",
+      "input": {
+        "path": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": ["metadata", "icon"]
+          },
+          "metadata": {
+            "position": {
+              "x": 75,
+              "y": 30
+            },
+            "data": {
+              "position": {
+                "x": 111,
+                "y": 51
+              }
+            }
+          }
+        },
+        "obj": {}
+      },
+      "output": {
+        "result": {
+          "metadata": {
+            "position": {
+              "x": 57,
+              "y": -30
+            }
+          }
+        },
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 75,
+              "y": -7
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 31,
+          "y": 12
+        }
+      }
+    },
+    "spec": {
+      "id": "ae1f7fc0-d6e7-489c-94ed-dee71c68dbb7",
+      "input": {
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": -117,
+              "y": 30
+            }
+          }
+        },
+        "any": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -117,
+              "y": -7
+            }
+          }
+        }
+      },
+      "output": {
+        "spec": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -73,
+          "y": 12
+        }
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "deepget1": {
+        "input": {
+          "obj": true
+        }
+      },
+      "spec": {
+        "output": {
+          "spec": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "spec",
+          "pinId": "any",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -133,
+              "y": -23
+            }
+          }
+        }
+      }
+    },
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "spec",
+          "pinId": "unit",
+          "kind": "input"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -133,
+              "y": 47
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "icon": {
+      "plug": {
+        "0": {
+          "unitId": "deepget1",
+          "pinId": "value",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 92,
+              "y": -23
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get `unit` spec icon",
+    "position": {
+      "merge": {
+        "1": {
+          "x": -21,
+          "y": 12
+        }
+      },
+      "data": {
+        "x": -158,
+        "y": -51
+      }
+    }
+  },
+  "id": "912fddea-98d5-4e6c-9901-936e6f276767",
+  "system": true
+}
