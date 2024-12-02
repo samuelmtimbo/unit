@@ -121,7 +121,7 @@
           "pinId": "initb"
         }
       },
-      "type": "any"
+      "functional": true
     },
     "from": {
       "plug": {
@@ -130,7 +130,7 @@
           "pinId": "inita"
         }
       },
-      "type": "any"
+      "functional": true
     }
   },
   "outputs": {
