@@ -224,7 +224,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   } = {}
 
   private _exposedPin: IOOf<Dict<Pin>> = {}
-  private _exposedMerge: IOOf<Dict<IOOf<Merge>>> = {}
+  private _exposedMerge: IOOf<Dict<Merge>> = {}
   private _exposedEmptySubPin: IOOf<Dict<Dict<Pin>>> = {
     input: {},
     output: {},
@@ -396,31 +396,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const { functional } = opt
 
     const exposedPin = deepGet(this._exposedPin, [type, name])
-    const exposedMerge = deepGet(this._exposedMerge, [type, name, type])
-    const exposedMergeOpposite = deepGet(this._exposedMerge, [
-      type,
-      name,
-      oppositeType,
-    ])
+    const exposedMerge = deepGet(this._exposedMerge, [type, name])
 
     exposedMerge.renamePin(type, name, newName)
-    exposedMergeOpposite.renamePin(oppositeType, name, newName)
 
     if (functional) {
       this._unplugFromWaitAll(type, name)
     }
 
     deepDestroy(this._exposedPin, [type, name])
-    deepDestroy(this._exposedMerge, [type, name, type])
-    deepDestroy(this._exposedMerge, [type, name, oppositeType])
+    deepDestroy(this._exposedMerge, [type, name])
 
     deepSet(this._exposedPin, [type, newName], exposedPin)
-    deepSet(this._exposedMerge, [type, newName, type], exposedMerge)
-    deepSet(
-      this._exposedMerge,
-      [type, newName, oppositeType],
-      exposedMergeOpposite
-    )
+    deepSet(this._exposedMerge, [type, newName], exposedMerge)
 
     const emptySubPins = deepGet(this._exposedEmptySubPin, [type, name])
 
@@ -925,25 +913,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const oppositeType = opposite(type)
 
-    const exposedMerge = deepGet(this._exposedMerge, [type, name, type])
-    const exposedMergeOpposite = deepGet(this._exposedMerge, [
-      type,
-      name,
-      oppositeType,
-    ])
+    const exposedMerge = deepGet(this._exposedMerge, [type, name])
 
-    if (
+    const type_ =
       type === kind ||
       deepGetOrDefault(
         this._exposedEmptySubPin,
         [type, name, subPinId],
         undefined
       )
-    ) {
-      exposedMerge.setPin(oppositeType, subPinId, subPin, {}, propagate)
-    } else {
-      exposedMergeOpposite.setPin(type, subPinId, subPin, {}, propagate)
-    }
+        ? oppositeType
+        : type
+
+    exposedMerge.setPin(type_, subPinId, subPin, {}, propagate)
   }
 
   private _simRemoveExposedSubPin(
@@ -958,29 +940,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const oppositeType = opposite(type)
 
-    const exposedMerge = deepGet(this._exposedMerge, [
-      type,
-      name,
-      type,
-    ]) as Merge
-    const exposedMergeOpposite = deepGet(this._exposedMerge, [
-      type,
-      name,
-      oppositeType,
-    ])
+    const exposedMerge = deepGet(this._exposedMerge, [type, name]) as Merge
 
-    if (
+    const type_ =
       type === kind ||
       deepGetOrDefault(
         this._exposedEmptySubPin,
         [type, name, subPinId],
         undefined
       )
-    ) {
-      exposedMerge.removePin(oppositeType, subPinId, propagate)
-    } else {
-      exposedMergeOpposite.removePin(type, subPinId)
-    }
+        ? oppositeType
+        : type
+
+    exposedMerge.removePin(type_, subPinId, propagate)
   }
 
   private _takeErr = (): void => {
@@ -1021,8 +993,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       pin.destroy()
     })
     forIOObjKV(this._exposedMerge, (type, name, merge) => {
-      merge.input?.destroy()
-      merge.output?.destroy()
+      merge.destroy()
     })
     forIOObjKV(this._exposedEmptySubPin, (type, name, pins) => {
       for (const subPinId in pins) {
@@ -1223,24 +1194,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     forIOObjKV(this._exposedMerge, (type, pinId) => {
-      const oppositeType = opposite(type)
-
-      const merge = deepGet(this._exposedMerge, [type, pinId, type])
-      const mergeOpposite = deepGet(this._exposedMerge, [
-        type,
-        pinId,
-        oppositeType,
-      ])
+      const merge = deepGet(this._exposedMerge, [type, pinId])
 
       const mergeState = merge.snapshot()
-      const mergeOppositeState = mergeOpposite.snapshot()
 
-      deepSet(state.exposedMerge, [type, pinId, type], mergeState)
-      deepSet(
-        state.exposedMerge,
-        [type, pinId, oppositeType],
-        mergeOppositeState
-      )
+      deepSet(state.exposedMerge, [type, pinId], mergeState)
     })
 
     state.waitAll = this._waitAll['input'].snapshot()
@@ -1272,32 +1230,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     forIOObjKV(this._exposedMerge, (type, pinId) => {
-      const oppositeType = opposite(type)
-
       if (this.hasDataPinNamed(type, pinId)) {
-        const merge = deepGet(this._exposedMerge, [type, pinId, type])
-        const mergeOpposite = deepGet(this._exposedMerge, [
-          type,
-          pinId,
-          oppositeType,
-        ])
+        const merge = deepGet(this._exposedMerge, [type, pinId])
 
         const mergeState = deepGetOrDefault(
           state,
-          ['exposedMerge', type, pinId, type],
-          undefined
-        )
-        const mergeOppositeState = deepGetOrDefault(
-          state,
-          ['exposedMerge', type, pinId, oppositeType],
+          ['exposedMerge', type, pinId],
           undefined
         )
 
         if (mergeState) {
           merge.restore(mergeState)
-        }
-        if (mergeOppositeState) {
-          mergeOpposite.restore(mergeOppositeState)
         }
       }
     })
@@ -1518,19 +1461,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const exposedPin = new Pin({ data }, this.__system)
 
     const exposeMerge = new Merge(this.__system)
-    const exposedMergeOpposite = new Merge(this.__system)
 
     fork && this._fork(undefined, true, bubble)
 
     this._specExposePinSet(type, pinId, pinSpec)
-    this._memExposePinSet(
-      type,
-      pinId,
-      pinSpec,
-      exposedPin,
-      exposeMerge,
-      exposedMergeOpposite
-    )
+    this._memExposePinSet(type, pinId, pinSpec, exposedPin, exposeMerge)
     this._simExposePinSet(
       type,
       pinId,
@@ -1538,7 +1473,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       data,
       exposedPin,
       exposeMerge,
-      exposedMergeOpposite,
       propagate && data === undefined
     )
   }
@@ -1556,16 +1490,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const exposedPin = new Pin({ ref }, this.__system)
 
     const exposedMerge = new Merge(this.__system)
-    const exposedMergeOpposite = new Merge(this.__system)
 
-    this._memExposePinSet(
-      type,
-      pinId,
-      pinSpec,
-      exposedPin,
-      exposedMerge,
-      exposedMergeOpposite
-    )
+    this._memExposePinSet(type, pinId, pinSpec, exposedPin, exposedMerge)
     this._simExposePinSet(
       type,
       pinId,
@@ -1573,7 +1499,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       undefined,
       exposedPin,
       exposedMerge,
-      exposedMergeOpposite,
       propagate
     )
   }
@@ -1599,22 +1524,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     pinSpec: GraphPinSpec,
     exposedPin: Pin,
-    exposedMerge: Merge,
-    exposedMergeOpposite: Merge
+    exposedMerge: Merge
   ) => {
     // console.log('Graph', '_memExposePinSet', type, pinId, pinSpec)
 
     const { plug } = pinSpec
 
-    const oppositeType = opposite(type)
-
     deepSet(this._exposedPin, [type, pinId], exposedPin)
-    deepSet(this._exposedMerge, [type, pinId, type], exposedMerge)
-    deepSet(
-      this._exposedMerge,
-      [type, pinId, oppositeType],
-      exposedMergeOpposite
-    )
+    deepSet(this._exposedMerge, [type, pinId], exposedMerge)
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._memExposePin(type, pinId, subPinId, subPinSpec)
@@ -1628,7 +1545,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     data: any | undefined,
     exposedPin: Pin,
     exposedMerge: Merge,
-    exposedMergeOpposite: Merge,
     propagate: boolean = true
   ) {
     const { plug, ref, functional } = pinSpec
@@ -1636,7 +1552,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const oppositeType = opposite(type)
 
     exposedMerge.setPin(type, pinId, exposedPin)
-    exposedMergeOpposite.setPin(oppositeType, pinId, exposedPin)
 
     this.setPin(type, pinId, exposedPin, { ref }, propagate)
 
@@ -1945,22 +1860,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     deepDestroy(this._exposedPin, [type, pinId])
 
-    const exposedMergeInput = deepGet(this._exposedMerge, [
-      type,
-      pinId,
-      'input',
-    ])
-    const exposedMergeOutput = deepGet(this._exposedMerge, [
-      type,
-      pinId,
-      'output',
-    ])
+    const exposedMerge = deepGet(this._exposedMerge, [type, pinId])
 
-    deepDestroy(this._exposedMerge, [type, pinId, 'input'])
-    deepDestroy(this._exposedMerge, [type, pinId, 'output'])
+    deepDestroy(this._exposedMerge, [type, pinId])
 
-    exposedMergeInput.destroy()
-    exposedMergeOutput.destroy()
+    exposedMerge.destroy()
   }
 
   private _specCoverPinSet = (type: IO, pinId: string): void => {
@@ -3131,7 +3035,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public getPlug(type: IO, pinId: string, subPinId: string): Pin {
     const oppositeType = opposite(type)
 
-    const exposedMerge = deepGet(this._exposedMerge, [type, pinId, type])
+    const exposedMerge = deepGet(this._exposedMerge, [type, pinId])
 
     const plug = exposedMerge.getPin(oppositeType, subPinId)
 
@@ -3142,7 +3046,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return this._merge[mergeId]
   }
 
-  public refExposedMerges(): IOOf<Dict<IOOf<Merge>>> {
+  public refExposedMerges(): IOOf<Dict<Merge>> {
     return this._exposedMerge
   }
 
