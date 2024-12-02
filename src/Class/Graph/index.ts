@@ -540,14 +540,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     const oppositeType = opposite(type)
 
-    const pin = new Pin({}, this.__system)
+    const exposedPin = this.getPin(type, name)
+
+    const data = exposedPin.peak()
+
+    const pin = new Pin({ data }, this.__system)
 
     const oppositePin = this.getExposedPin(type, name)
 
     const waitAll = this._waitAll[type]
 
-    waitAll.addPin(type, name, pin, {})
-    waitAll.setPin(oppositeType, name, oppositePin)
+    waitAll.addPin(type, name, pin, {}, false)
+    waitAll.setPin(oppositeType, name, oppositePin, {}, false)
 
     this.setPin(type, name, pin, {})
   }

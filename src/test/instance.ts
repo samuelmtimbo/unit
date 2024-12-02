@@ -34,4 +34,3 @@ for (const id of specIds) {
 
   unit.destroy()
 }
-

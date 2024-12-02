@@ -1,3 +1,5 @@
+import { Pin } from '../../Pin'
+import { PinOpt } from '../../PinOpt'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
@@ -126,6 +128,17 @@ export class Functional<
     this._on_data_output_drop(name)
   }
 
+  public onInputSet<K extends keyof I>(
+    name: K,
+    input: Pin<any>,
+    opt: PinOpt,
+    propagate: boolean
+  ): void {
+    super.onInputSet(name, input, opt, propagate)
+
+    this._invalidate()
+  }
+
   f(i: Partial<I>, done: Done<O>) {}
 
   d() {}
@@ -142,6 +155,7 @@ export class Functional<
       !this._forwarding &&
       !this._err &&
       !this._caughtErr &&
+      this._i_count > 0 &&
       this._o_active.size === 0
     ) {
       this._looping = false

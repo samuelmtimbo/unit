@@ -412,24 +412,26 @@ export class Unit<
     type: T,
     name: K,
     pin: Pin<any>,
-    opt: PinOpt
+    opt: PinOpt,
+    propagate?: boolean
   ): void {
     if (type === 'input') {
-      this.addInput(name as keyof I, pin, opt)
+      this.addInput(name as keyof I, pin, opt, propagate)
     } else {
-      this.addOutput(name as keyof O, pin, opt)
+      this.addOutput(name as keyof O, pin, opt, propagate)
     }
   }
 
   public addInput<K extends keyof I>(
     name: K,
     input: Pin<any>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate?: boolean
   ): void {
     if (this.hasInputNamed(name)) {
       throw new DuplicatedInputFoundError(name)
     }
-    this.setInput(name, input, opt)
+    this.setInput(name, input, opt, propagate)
   }
 
   public removeInput<K extends keyof I>(
@@ -563,12 +565,13 @@ export class Unit<
   public addOutput<K extends keyof O>(
     name: K,
     output: Pin<any>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate?: boolean
   ): void {
     if (this.hasOutputNamed(name)) {
       throw new DuplicatedOutputFoundError(name)
     }
-    this.setOutput(name, output, opt)
+    this.setOutput(name, output, opt, propagate)
   }
 
   private _memRemoveRefPin = (type: IO, name: string): void => {
