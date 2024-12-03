@@ -59028,6 +59028,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               unlisten()
             })
           )
+        } else if (subgraph._animating_unit_explosion[data.graphId]) {
+          ;(async () => {
+            await subgraph._animating_unit_explosion[data.graphId]
+
+            commit()
+          })()
         } else {
           commit()
         }
