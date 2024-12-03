@@ -37659,6 +37659,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _clear_graph_pin_type = (unitId: string, type: IO, pinId: string) => {
+    if (!this._graph_type_map) {
+      return
+    }
+
     deepDelete(this._graph_type_map, [unitId, type, pinId])
   }
 
