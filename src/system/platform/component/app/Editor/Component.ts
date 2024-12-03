@@ -35048,11 +35048,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             outer_plug
           )
         ) {
-          const ext_node_id = getExtNodeId(type, pinId, next_sub_pin_id)
+          const ext_node_id = getExtNodeId(
+            type,
+            outer_plug?.pinId ?? pinId,
+            next_sub_pin_id
+          )
 
           selected_node_ids.push(ext_node_id)
         } else if (outer_plug) {
-          const int_node_id = getIntNodeId(type, pinId, sub_pin_id)
+          const int_node_id = getIntNodeId(
+            type,
+            outer_plug?.pinId ?? pinId,
+            sub_pin_id
+          )
 
           selected_node_ids.push(int_node_id)
         }
