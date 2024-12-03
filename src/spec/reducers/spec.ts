@@ -230,9 +230,9 @@ export const addPinToMerge = (
       for (const subPinId in plug) {
         const subPin = plug[subPinId]
 
-        const { unitId: _unitId, pinId: _pinId, kind = type } = subPin
+        const { unitId: _unitId, pinId: _pinId, kind = type_ } = subPin
 
-        if (_unitId === unitId && _pinId === pinId && kind === type_) {
+        if (_unitId === unitId && _pinId === pinId && kind === type) {
           unplugPin({ pinId: exposedPinId, type: kind, subPinId }, spec)
           plugPin(
             {
