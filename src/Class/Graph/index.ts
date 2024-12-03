@@ -4836,7 +4836,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   public _removeMerge(
     mergeId: string,
-    propagate: boolean,
+    propagate: boolean = false,
     fork: boolean = true,
     bubble: boolean = true
   ): Merge {
@@ -6329,7 +6329,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           coverPinSet: (data: GraphCoverPinSetData) => {
             const { type, pinId } = data
 
-            this._coverPinSet(type, pinId, false, fork, bubble)
+            this._coverPinSet(type, pinId, undefined, fork, bubble)
           },
           plugPin: (data: GraphPlugPinData) => {
             const { type, pinId, subPinId, subPinSpec } = data
@@ -6339,12 +6339,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           unplugPin: (data: GraphUnplugPinData) => {
             const { type, pinId, subPinId } = data
 
-            this._unplugPin(type, pinId, subPinId, false, fork, bubble)
+            this._unplugPin(type, pinId, subPinId, undefined, fork, bubble)
           },
           removeMerge: (data: GraphRemoveMergeData) => {
             const { mergeId } = data
 
-            this._removeMerge(mergeId, false, fork, bubble)
+            this._removeMerge(mergeId, undefined, fork, bubble)
           },
           removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
             const { mergeId, unitId, type, pinId } = data
