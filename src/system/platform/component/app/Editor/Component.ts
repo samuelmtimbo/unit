@@ -289,6 +289,7 @@ import {
 import {
   NULL_VECTOR,
   Shape,
+  Thing,
   _surfaceDistance,
   addVector,
   applyVector,
@@ -868,6 +869,8 @@ export const KEYBOARD_POINTER_ID = -1
 export const LAYER_OPACITY_MULTIPLIER = 0.1
 
 export const DEFAULT_IGNORED_PIN_SET_OPACITY = 0.5
+
+export const DEFAULT_SELECTION_PADDING = 6
 
 const DEFAULT_STYLE = {
   position: 'relative',
@@ -15318,10 +15321,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unit_id: string,
     width: number
   ): void => {
-    const selection_opt = this._selection_opt[unit_id]
+    const selection_opt = this._get_selection_opt(unit_id)
+
     const selection = this._node_selection[unit_id]
 
-    const { shape, strokeWidth = 1, paddingX = 6, paddingY = 6 } = selection_opt
+    const { paddingX } = selection_opt
 
     const _width = width + paddingX
 
@@ -15334,10 +15338,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unit_id: string,
     height: number
   ): void => {
-    const selection_opt = this._selection_opt[unit_id]
+    const selection_opt = this._get_selection_opt(unit_id)
+
     const selection = this._node_selection[unit_id]
 
-    const { shape, strokeWidth = 1, paddingX = 6, paddingY = 6 } = selection_opt
+    const { paddingY } = selection_opt
 
     const _height = height + paddingY
 
@@ -15481,15 +15486,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const l = this._get_node_selection_length(node_id, paddingX, paddingY)
 
     const node = this.get_node(node_id)
+
     const { shape } = node
+
     if (shape === 'circle') {
       return -l / 16
     } else {
-      const { width, height } = node
-      // const k = (height + 2 * paddingX) / (width + 2 * paddingY)
-      const k = width / height
-      // return (l / 16) + (height - width) / 2
-      // return (l / 16)
       return 0
     }
   }
@@ -15548,10 +15550,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_resize_selection', node_id, width, height)
 
-    const selection_opt = this._selection_opt[node_id]
+    const selection_opt = this._get_selection_opt(node_id)
+
     const selection = this._node_selection[node_id]
 
-    const { paddingX = 6, paddingY = 6 } = selection_opt
+    const {
+      paddingX = DEFAULT_SELECTION_PADDING,
+      paddingY = DEFAULT_SELECTION_PADDING,
+    } = selection_opt
 
     const _width = width + paddingX
     const _height = height + paddingY
@@ -26625,7 +26631,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _refresh_selection_dasharray = (node_id: string): void => {
     // console.log('Graph', '_refresh_selection_dasharray')
 
-    const { paddingX = 6, paddingY = 6 } = this._selection_opt[node_id]
+    const { paddingX, paddingY } = this._get_selection_opt(node_id)
 
     const selection_stroke_dasharray = this._get_node_selection_dasharray(
       node_id,
@@ -26636,8 +26642,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_selection_dasharray(node_id, selection_stroke_dasharray)
   }
 
+  private _get_selection_opt = (node_id: string): SelectionOpt => {
+    const selection_opt = this._selection_opt[node_id]
+
+    return {
+      paddingX: DEFAULT_SELECTION_PADDING,
+      paddingY: DEFAULT_SELECTION_PADDING,
+      strokeWidth: 1,
+      ...selection_opt,
+    }
+  }
+
   private _refresh_selection_dashoffset = (node_id: string): void => {
-    const { paddingX = 6, paddingY = 6 } = this._selection_opt[node_id]
+    const { paddingX, paddingY } = this._get_selection_opt(node_id)
+
     const selection_stroke_dashoffset = this._get_node_selection_dashoffset(
       node_id,
       paddingX,
@@ -42482,6 +42500,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this.__on_node_drag_start(node_id, pointerId, x, y)
 
+    this._tick_closest_compatible_selection(node_id)
+
     if (this._selected_node_id[node_id]) {
       for (const selected_node_id in this._selected_node_id) {
         if (selected_node_id !== node_id) {
@@ -44255,6 +44275,112 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _selection_rotation_unlisten: Dict<Unlisten> = {}
+
+  private _drag_node_closest_compatible_node_id: Dict<string> = {}
+
+  private _start_selection_rotation = (node_id: string): void => {
+    const selection = this._node_selection[node_id]
+
+    const { paddingX, paddingY } = this._get_selection_opt(node_id)
+
+    const strokeDashOffset = this._get_node_selection_dashoffset(
+      node_id,
+      paddingX,
+      paddingY
+    )
+
+    let offset = 0
+
+    this._selection_rotation_unlisten[node_id] = animateSimulate(
+      this.$system,
+      { offset },
+      () => {
+        offset = (offset + 0.6) % Number.MAX_SAFE_INTEGER
+
+        return {
+          offset,
+        }
+      },
+      [['offset', ANIMATION_DELTA_THRESHOLD / 10]],
+      ({ offset }) => {
+        selection.setProp('strokeDashOffset', strokeDashOffset + offset)
+
+        return false
+      },
+      () => {
+        //
+      }
+    )
+  }
+
+  private _stop_selection_rotation = (node_id: string) => {
+    const selection = this._node_selection[node_id]
+
+    const unlisten = this._selection_rotation_unlisten[node_id]
+
+    if (unlisten) {
+      unlisten()
+
+      delete this._selection_rotation_unlisten[node_id]
+
+      selection._selection.$element.style.transform = `translate(-50%, -50%)`
+    }
+  }
+
+  private _set_pressed_node_closest_compatible = (
+    pressed_node_id: string,
+    closest_compatible_node_id: string
+  ) => {
+    this._start_selection_rotation(closest_compatible_node_id)
+
+    this._drag_node_closest_compatible_node_id[pressed_node_id] =
+      closest_compatible_node_id
+  }
+
+  private _remove_pressed_node_closest_compatible = (
+    pressed_node_id: string
+  ) => {
+    const closest_compatible_node_id =
+      this._drag_node_closest_compatible_node_id[pressed_node_id]
+
+    this._stop_selection_rotation(closest_compatible_node_id)
+
+    delete this._drag_node_closest_compatible_node_id[pressed_node_id]
+  }
+
+  private _tick_closest_compatible_selection = (pressed_node_id: string) => {
+    const { node_id: closest_compatible_node_id } =
+      this._get_closest_compatible(pressed_node_id)
+
+    const current_closest_compatible_node_id =
+      this._drag_node_closest_compatible_node_id[pressed_node_id]
+
+    if (closest_compatible_node_id) {
+      if (current_closest_compatible_node_id) {
+        if (current_closest_compatible_node_id === closest_compatible_node_id) {
+          //
+        } else {
+          this._stop_selection_rotation(current_closest_compatible_node_id)
+
+          this._set_pressed_node_closest_compatible(
+            pressed_node_id,
+            closest_compatible_node_id
+          )
+        }
+      } else {
+        this._set_pressed_node_closest_compatible(
+          pressed_node_id,
+          closest_compatible_node_id
+        )
+      }
+    } else {
+      if (current_closest_compatible_node_id) {
+        this._remove_pressed_node_closest_compatible(pressed_node_id)
+      }
+    }
+  }
+
   private _on_pointer_move = (
     event: UnitPointerEvent,
     _event: PointerEvent
@@ -44332,6 +44458,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             }
           }
         } else {
+          this._tick_closest_compatible_selection(pressed_node_id)
+
           if (this._is_draggable_mode()) {
             // delay "drag start" conditioning it to pointer's "first move"
             if (!this._drag_node_id[pressed_node_id]) {
@@ -45655,6 +45783,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       } else {
         if (this._drag_node_id[pressed_node_id]) {
+          const closest_compatible_node_id =
+            this._drag_node_closest_compatible_node_id[pressed_node_id]
+
+          if (closest_compatible_node_id) {
+            this._remove_pressed_node_closest_compatible(pressed_node_id)
+          }
+
           if (this._is_draggable_mode()) {
             if (this._is_freeze_mode()) {
               if (
@@ -56103,6 +56238,43 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._force_link_y(alpha, this._ignored_link)
   }
 
+  private _get_closest_compatible = (
+    node_id: string
+  ): { node_id: string; l: number } => {
+    const node = this._node[node_id]
+
+    return this.__get_closest_compatible((other_node) => {
+      const { l } = surfaceDistance(node, other_node)
+
+      return l
+    })
+  }
+
+  private __get_closest_compatible = (
+    distance: (compatible_node: Thing) => number
+  ): { node_id: string; l: number } => {
+    let closest_comp_node_id = null
+    let closest_l = Number.MAX_SAFE_INTEGER
+
+    for (const compatible_node_id in this._compatible_node_id) {
+      const comp_node = this._node[compatible_node_id]
+
+      const l = distance(comp_node)
+
+      if (l < NEAR) {
+        if (l < closest_l) {
+          closest_l = l
+          closest_comp_node_id = compatible_node_id
+        }
+      }
+    }
+
+    return {
+      node_id: closest_comp_node_id,
+      l: closest_l,
+    }
+  }
+
   private _force_custom_layer_exposed = (alpha: number): void => {
     const { $width, $height } = this.$context
 
@@ -56141,26 +56313,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         a.ax += a_u.x * k
         a.ay += a_u.y * k
       } else {
-        // PERF remove (define this._closest_compatible_node)
         let closest_comp_node_id = null
         let closest_l = Number.MAX_SAFE_INTEGER
 
         if (this._compatible_node_count > 0) {
-          for (const pin_node_id in this._compatible_node_id) {
-            const comp_node = this._node[pin_node_id]
+          ;({ l: closest_l, node_id: closest_comp_node_id } =
+            this.__get_closest_compatible((compatible_node) => {
+              const { l: l_a } = surfaceDistance(a, compatible_node)
+              const { l: l_b } = surfaceDistance(b, compatible_node)
 
-            const { l: l_a } = surfaceDistance(a, comp_node)
-            const { l: l_b } = surfaceDistance(b, comp_node)
+              const comp_closest_l = Math.min(l_a, l_b)
 
-            const comp_closest_l = Math.min(l_a, l_b)
-
-            if (comp_closest_l < NEAR) {
-              if (comp_closest_l < closest_l) {
-                closest_l = comp_closest_l
-                closest_comp_node_id = pin_node_id
-              }
-            }
-          }
+              return comp_closest_l
+            }))
         }
 
         if (this._drag_node_id[a_id]) {

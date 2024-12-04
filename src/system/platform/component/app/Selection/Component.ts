@@ -21,17 +21,9 @@ export interface Props {
   strokeDashOffset?: number
 }
 
-export const DEFAULT_STYLE = {
-  position: 'absolute',
-  fill: 'none',
-  pointerEvents: 'none',
-  transform: 'translate(-50%, -50%)',
-  userSelect: 'none',
-}
-
 export default class Selection extends Element<HTMLDivElement, Props> {
-  private _selection: SVGSVG
-  private _selection_shape: SVGElement_
+  public _selection: SVGSVG
+  public _selection_shape: SVGElement_
 
   constructor($props: Props, $system: System) {
     super($props, $system)
