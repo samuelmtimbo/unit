@@ -6485,11 +6485,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     deep: boolean = true
   ) => {
     // console.log('Graph', '_spec_add_unit', unitId, unit)
+    const { parent } = this.$props
 
     addUnit({ unitId, unit: clone(unit) }, this._spec)
 
-    if (register) {
-      this._register_unit(unit.id, deep)
+    if (!parent) {
+      if (register) {
+        this._register_unit(unit.id, deep)
+      }
     }
 
     this._spec_update_metadata_complexity()
