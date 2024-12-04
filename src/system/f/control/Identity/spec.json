@@ -11,7 +11,7 @@
     }
   },
   "metadata": {
-    "icon": "unit",
+    "icon": "circle",
     "description": "output `a`",
     "tags": ["f", "control"]
   },
