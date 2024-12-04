@@ -39151,7 +39151,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._set_node_position(node_id, { x, y })
         this._on_node_pointer_enter(node_id, event)
         this._on_node_pointer_down(node_id, event)
-        this._on_node_drag_start(node_id, event)
+        this._drag_start(node_id, event)
+
+        this._node_drag_max_distance[node_id] = MIN_DRAG_DROP_MAX_D + 1
       }
     }
   }
