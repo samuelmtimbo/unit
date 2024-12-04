@@ -16229,6 +16229,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return { x, y }
   }
 
+  private _get_anchor_node = (node_id: string): SimNode => {
+    const anchor_node_id = this._get_node_anchor_node_id(node_id)
+
+    return this.get_node(anchor_node_id)
+  }
+
   private _get_anchor_node_position = (node_id: string): Position => {
     const anchor_node_id = this._get_node_anchor_node_id(node_id)
 
@@ -39132,9 +39138,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (node_id) {
         const { clientX, clientY, pointerId } = event
 
-        const { x, y } = this._screen_to_world(clientX, clientY)
+        const pointer_position = this._screen_to_world(clientX, clientY)
 
         const anchor_position = this._get_anchor_node_position(node_id)
+        const anchor_node = this._get_anchor_node(node_id)
 
         if (this._is_link_pin_node_id(node_id)) {
           if (this._node_target[node_id]) {
@@ -39156,7 +39163,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         }
 
-        this._set_node_position(node_id, anchor_position)
+        const u = pointUnitVector(anchor_position, pointer_position)
+        const r = centerToSurfaceDistance(anchor_node, u)
+
+        const start_position = addVector(
+          anchor_position,
+          resizeVector(u, r - PIN_RADIUS)
+        )
+
+        this._set_node_position(node_id, start_position)
 
         this._on_node_pointer_enter(node_id, event)
         this._on_node_pointer_down(node_id, event)
@@ -39164,12 +39179,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const node = this._node[node_id]
 
-        node.hx -= x - anchor_position.x
-        node.hy -= y - anchor_position.y
+        node.hx -= pointer_position.x - start_position.x
+        node.hy -= pointer_position.y - start_position.y
 
         this._drag_anchor_animation[node_id] = animateSimulate(
           this.$system,
-          anchor_position,
+          this._get_node_position(node_id),
           () => {
             const pointer_position = this._pointer_position[pointerId]
 
