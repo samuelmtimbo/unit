@@ -34222,6 +34222,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const spec = this._get_unit_spec(unit_id)
 
     const new_name = spec.name
+    const new_type = spec.type
 
     const new_render = this._is_unit_component(unit_id)
 
@@ -34265,6 +34266,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       outputs: new_outputs,
       render: new_render,
       component: new_component,
+      type: new_type,
     })
 
     return new_spec
