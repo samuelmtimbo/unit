@@ -57580,7 +57580,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       setSpec(next_parent_spec.id, next_parent_spec)
 
       this._register_spec(forked_unit_spec.id, false)
-      this._unregister_spec(specId, false)
     }
   }
 
