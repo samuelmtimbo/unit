@@ -22581,18 +22581,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const node = this.get_node(node_id)
 
-    node.fx = x - node.hx
-    node.fy = y - node.hy
-
-    node.x = node.fx
-    node.y = node.fy
-
     const d = pointDistance({ x, y }, this._node_drag_init_position[node_id])
 
     this._node_drag_max_distance[node_id] = Math.max(
       this._node_drag_max_distance[node_id],
       d
     )
+
+    if (this._drag_anchor_animation[node_id]) {
+      return
+    }
+
+    node.fx = x - node.hx
+    node.fy = y - node.hy
+
+    node.x = node.fx
+    node.y = node.fy
   }
 
   private _on_node_drag_end_and_drop = (
@@ -39114,6 +39118,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _drag_anchor_animation: Dict<Unlisten> = {}
+
   private _on_link_pointer_down = (
     link_id: string,
     event: UnitPointerEvent
@@ -39124,9 +39130,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const node_id = this._link_id_to_node_id(link_id)
 
       if (node_id) {
-        const { clientX, clientY } = event
+        const { clientX, clientY, pointerId } = event
 
         const { x, y } = this._screen_to_world(clientX, clientY)
+
+        const anchor_position = this._get_anchor_node_position(node_id)
 
         if (this._is_link_pin_node_id(node_id)) {
           if (this._node_target[node_id]) {
@@ -39148,10 +39156,41 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         }
 
-        this._set_node_position(node_id, { x, y })
+        this._set_node_position(node_id, anchor_position)
+
         this._on_node_pointer_enter(node_id, event)
         this._on_node_pointer_down(node_id, event)
         this._drag_start(node_id, event)
+
+        const node = this._node[node_id]
+
+        node.hx -= x - anchor_position.x
+        node.hy -= y - anchor_position.y
+
+        this._drag_anchor_animation[node_id] = animateSimulate(
+          this.$system,
+          anchor_position,
+          () => {
+            const pointer_position = this._pointer_position[pointerId]
+
+            const pointer_world_position = this._screen_to_world(
+              pointer_position.x,
+              pointer_position.y
+            )
+
+            return pointer_world_position
+          },
+          [
+            ['x', ANIMATION_DELTA_THRESHOLD * 6],
+            ['y', ANIMATION_DELTA_THRESHOLD * 6],
+          ],
+          ({ x, y }) => {
+            this._set_node_position(node_id, { x, y })
+          },
+          () => {
+            delete this._drag_anchor_animation[node_id]
+          }
+        )
 
         this._node_drag_max_distance[node_id] = MIN_DRAG_DROP_MAX_D + 1
       }
@@ -45854,6 +45893,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             if (!this._collapse_node_id.has(pressed_node_id)) {
               this._on_node_drag_end_and_drop(pressed_node_id, pointerId, drop)
+            }
+
+            if (this._drag_anchor_animation[pressed_node_id]) {
+              this._drag_anchor_animation[pressed_node_id]()
+
+              delete this._drag_anchor_animation[pressed_node_id]
             }
 
             if (this._is_freeze_mode()) {
