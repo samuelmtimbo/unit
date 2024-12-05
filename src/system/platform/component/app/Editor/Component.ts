@@ -28322,6 +28322,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             value = examples[0]
           } else {
             value = randomInArray(examples)
+
+            if (examples.length > 1) {
+              do {
+                value = randomInArray(examples)
+              } while (value === current_value)
+            }
           }
         } else {
           let i = 0
