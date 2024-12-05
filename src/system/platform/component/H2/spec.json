@@ -27,7 +27,7 @@
   "id": "321f971c-b898-4ca4-9e6e-3d75d68940f7",
   "base": true,
   "component": {
-    "defaultWidth": 120,
+    "defaultWidth": 180,
     "defaultHeight": 120
   },
   "system": true,
