@@ -54,6 +54,8 @@ export type G_MoveSubgraphIntoArgs = [
   GraphMoveSubGraphData['nextSubComponentChildrenMap'],
   GraphMoveSubGraphData['nextSubComponentIndexMap'],
   GraphMoveSubGraphData['nextUnitPinMergeMap'],
+  GraphMoveSubGraphData['nextSubComponentSlot'],
+  GraphMoveSubGraphData['nextSubComponentParentSlot'],
 ]
 
 export interface G<
@@ -246,6 +248,8 @@ export interface G<
   ): void
   fork(): void
   setName(name: string): void
+  setSlot(slotName: string, subComponentId: string): void
+  getSlot(slotName: string): string
 }
 
 export type G_J = {}

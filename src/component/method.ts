@@ -179,10 +179,10 @@ export function refSlot(
   slotName: string,
   slot: Dict<string>
 ): Component_ {
-  const unitId = slot[slotName]
+  const subComponentId = slot[slotName]
 
-  if (unitId) {
-    return element.getSubComponent(slotName)
+  if (subComponentId) {
+    return element.getSubComponent(subComponentId)
   } else {
     return element
   }

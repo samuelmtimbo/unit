@@ -34,7 +34,6 @@ import {
   newSpecId,
   newUnitId,
   newUnitIdFromName,
-  newUnitIdInSpecId,
 } from '../../../../../client/spec'
 import {
   ZOOM_IDENTITY,
@@ -2887,6 +2886,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _collapse_sub_component_parent_id: Dict<string | null> = {}
   private _collapse_next_sub_component_index_map: GraphMoveSubGraphData['nextSubComponentIndexMap'] =
+    {}
+  private _collapse_next_sub_component_parent_slot: GraphMoveSubGraphData['nextSubComponentParentSlot'] =
+    {}
+  private _collapse_next_sub_component_slot: GraphMoveSubGraphData['nextSubComponentSlot'] =
     {}
   private _collapse_sub_component_children: Dict<string[]> = {}
   private _collapse_sub_component_next_parent_id: Dict<string | null> = {}
@@ -22645,6 +22648,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._delete_all_node_to_node_charge(node_id)
       this._delete_all_node_to_node_charge(int_node_id)
     }
+
+    this._refresh_node_fixed(node_id)
   }
 
   private _on_node_drag_end = (node_id: string) => {
@@ -26499,12 +26504,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (let datum_node_id in this._datum) {
       this._refresh_node_fixed(datum_node_id)
       this._refresh_node_selection(datum_node_id)
-    }
-  }
-
-  private _refresh_fixed = (): void => {
-    for (let node_id in this._node) {
-      this._refresh_node_fixed(node_id)
     }
   }
 
@@ -34060,6 +34059,68 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return keys(this._selected_node_id)
   }
 
+  private _add_empty_unit = (
+    partial_spec: Partial<GraphSpec>,
+    position: Position
+  ) => {
+    const { specs } = this.$props
+
+    const new_spec_id = newSpecId(specs)
+
+    this._add_empty_spec(new_spec_id, partial_spec)
+
+    const new_unit_id = this._new_unit_id(new_spec_id)
+
+    const unit: GraphUnitSpec = {
+      id: new_spec_id,
+    }
+
+    const bundle = unitBundleSpec(unit, specs)
+
+    const pin_position = { input: {}, output: {} }
+
+    const layout_position = { x: 0, y: 0 }
+
+    this.add_unit(
+      new_unit_id,
+      bundle,
+      position,
+      pin_position,
+      layout_position,
+      null
+    )
+
+    const { render } = partial_spec
+
+    if (render) {
+      this._mem_add_unit_component(new_unit_id, {})
+      this._mem_add_unit_component_parent(new_unit_id)
+
+      this._enter_sub_component_frame(new_unit_id)
+    }
+
+    return new_unit_id
+  }
+
+  private _compose_contained_nodes = (
+    contained_node_ids: string[],
+    partial_spec: Partial<GraphSpec>,
+    position: Position,
+    animate: boolean,
+    partial_collapse_map?: Partial<GraphMoveSubGraphData>
+  ): string => {
+    const new_unit_id = this._add_empty_unit(partial_spec, position)
+
+    this._move_contained_nodes(
+      new_unit_id,
+      contained_node_ids,
+      animate,
+      partial_collapse_map
+    )
+
+    return new_unit_id
+  }
+
   private _on_graph_group_unit_long_press = (
     unit_id: string,
     pointerId: number,
@@ -34104,27 +34165,83 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     } else {
-      if (this._is_unit_base(unit_id)) {
-        //
-      } else {
-        const screen_position = this._get_node_screen_position(unit_id)
-        const all_selected_node_ids = this._get_all_selected_node_ids()
-        const long_press_collapse_started = this._start_long_press_collapse(
-          pointerId,
-          unit_id,
-          all_selected_node_ids,
-          screen_position
-        )
+      const all_selected_node_ids = this._get_all_selected_node_ids()
 
-        if (long_press_collapse_started) {
-          if (!this._drag_node_id[unit_id]) {
-            this.__drag_start(unit_id, pointerId, clientX, clientY)
+      let target_unit_id = unit_id
+
+      if (this._is_unit_base(unit_id)) {
+        const position = this._get_node_position(unit_id)
+        const render = this._get_unit_spec_render(unit_id)
+
+        let partial_spec: Partial<GraphSpec> = {
+          render,
+        }
+
+        const is_component = this._is_unit_component(unit_id)
+
+        if (is_component) {
+          const { width, height } = this._get_node_size(unit_id)
+
+          partial_spec = {
+            ...partial_spec,
+            component: {
+              slots: [],
+              defaultWidth: width,
+              defaultHeight: height,
+            },
           }
         }
 
-        this._cancel_long_click = true
-        this._cancel_long_press = true
+        const new_unit_id = this._add_empty_unit(partial_spec, position)
+
+        if (is_component) {
+          for (const selected_node_id of all_selected_node_ids) {
+            if (
+              this._is_unit_node_id(selected_node_id) &&
+              this._is_unit_component(selected_node_id)
+            ) {
+              const parent_id =
+                this._spec_get_sub_component_parent_id(selected_node_id)
+
+              if (parent_id !== unit_id) {
+                this._state_pre_append_sub_component_child(
+                  unit_id,
+                  selected_node_id,
+                  'default'
+                )
+              }
+            }
+          }
+        }
+
+        this._force_pointer_drag_swap(
+          unit_id,
+          new_unit_id,
+          pointerId,
+          clientX,
+          clientY
+        )
+
+        target_unit_id = new_unit_id
       }
+
+      const screen_position = this._get_node_screen_position(target_unit_id)
+
+      const long_press_collapse_started = this._start_long_press_collapse(
+        pointerId,
+        target_unit_id,
+        [...all_selected_node_ids, unit_id],
+        screen_position
+      )
+
+      if (long_press_collapse_started) {
+        if (!this._drag_node_id[target_unit_id]) {
+          this.__drag_start(target_unit_id, pointerId, clientX, clientY)
+        }
+      }
+
+      this._cancel_long_click = true
+      this._cancel_long_press = true
     }
   }
 
@@ -42568,7 +42685,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    if (this._mode == 'multiselect') {
+    if (this._mode == 'multiselect' && node_id !== this._collapse_unit_id) {
       this._extend_drag_along_to_subgraph(node_id)
     }
 
@@ -45347,29 +45464,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const position = { x, y }
 
     if (this._mode === 'none') {
-      const new_spec_id = newSpecId(specs)
-
-      this._add_empty_spec(new_spec_id, { render: false })
-
-      const new_unit_id = this._new_unit_id(new_spec_id)
-
-      const unit: GraphUnitSpec = {
-        id: new_spec_id,
-      }
-
-      const bundle = unitBundleSpec(unit, specs)
-
-      const pin_position = { input: {}, output: {} }
-
-      const layout_position = { x: 0, y: 0 }
-
-      this.add_unit(
-        new_unit_id,
-        bundle,
+      const new_unit_id = this._compose_contained_nodes(
+        contained_nodes,
+        { render: false },
         position,
-        pin_position,
-        layout_position,
-        null
+        true
       )
 
       const contains_rect = contained_nodes.find((node_id) => {
@@ -45407,10 +45506,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         )
       }
-
-      this._move_contained_nodes(new_unit_id, contained_nodes)
     } else if (this._mode === 'add') {
       this._search_unit_graph_position = position
+
       this._set_search_filter((id: string) => {
         if (!isComponentId(specs, id)) {
           return true
@@ -45419,8 +45517,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       })
       this._show_search()
-    } else if (this._mode === 'change') {
-      // TODO
     }
   }
 
@@ -45477,13 +45573,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._sim_add_sub_component(new_unit_id)
       this._connect_sub_component(new_unit_id)
 
-      this._move_contained_nodes(new_unit_id, contained_nodes)
+      this._move_contained_nodes(new_unit_id, contained_nodes, true)
     } else if (this._mode === 'add') {
       this._search_unit_graph_position = position
       this._search_unit_component_size = {
         width,
         height,
       }
+
       this._set_search_filter((id: string) => {
         if (isComponentId(specs, id)) {
           return true
@@ -45491,22 +45588,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           return false
         }
       })
+
       this._show_search()
-    } else if (this._mode === 'change') {
-      // TODO
     }
   }
 
   private _move_contained_nodes = (
     new_unit_id: string,
-    contained_nodes: string[]
+    contained_nodes: string[],
+    animate: boolean,
+    partial_collapse_map?: Partial<GraphMoveSubGraphData>
   ) => {
     const { fork, bubble } = this.$props
 
     if (contained_nodes.length > 0) {
-      const collapse_map = this._predict_collapse_map(
-        new_unit_id,
-        contained_nodes
+      const collapse_map = deepMerge(
+        this._predict_collapse_map(new_unit_id, contained_nodes),
+        partial_collapse_map ?? {}
       )
 
       const data: GraphMoveSubGraphIntoData = {
@@ -45539,7 +45637,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         data,
         should_predict_size,
         do_not_animate_graph_size,
-        position
+        position,
+        animate
       )
 
       // console.log(data)
@@ -45910,6 +46009,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             if (!this._collapse_node_id.has(pressed_node_id)) {
               this._on_node_drag_end_and_drop(pressed_node_id, pointerId, drop)
+            } else {
+              this.__on_node_drag_end(pressed_node_id, pointerId)
             }
 
             if (this._drag_anchor_animation[pressed_node_id]) {
@@ -46826,7 +46927,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       collapse_map,
       should_predict_size,
       graph_render,
-      { x, y }
+      { x, y },
+      true
     )
 
     const graph_bundle = this._get_graph_unit_bundle_spec(graph_id)
@@ -46850,6 +46952,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       nextSubComponentChildrenMap: this._collapse_sub_component_next_children,
       nextUnitPinMergeMap: this._collapse_next_unit_pin_merge_map,
       nextSubComponentIndexMap: this._collapse_next_sub_component_index_map,
+      nextSubComponentParentSlot: this._collapse_next_sub_component_parent_slot,
+      nextSubComponentSlot: this._collapse_next_sub_component_slot,
       position,
     }
 
@@ -46925,7 +47029,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     collapse_map: GraphMoveSubGraphData,
     should_predict_size: boolean,
     do_not_animate_graph_size: boolean,
-    { x, y }: Position
+    { x, y }: Position,
+    animate: boolean
   ): boolean => {
     // console.log(
     //   'Graph',
@@ -47029,7 +47134,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       if (!unit_is_component && graph_component) {
-        // do not resize if unit is circle and graph is rectangle
+        //
       } else {
         this._animate_core_size_and_opacity(
           unit_id,
@@ -47120,72 +47225,89 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             graph_component.pushRoot(sub_component)
           }
         } else {
+          const next_parent_id =
+            collapse_map.nextSubComponentParentMap[sub_component_id]
+
           this._component.pullRoot(sub_component)
 
           graph_component.pushRoot(sub_component)
         }
+
+        const slot = collapse_map.nextSubComponentSlot[sub_component_id] ?? null
+
+        if (slot) {
+          graph_component.$slot[slot] = sub_component
+        }
       }
 
       if (ordered_sub_component_ids.length) {
-        const sub_component = this._get_sub_component(graph_unit_id)
-        const base = this._get_sub_component_base(graph_unit_id)
-
-        this._measure_sub_component_base(graph_unit_id, base)
-
-        for (const sub_component_id of ordered_sub_component_ids) {
-          const next_sub_component_id =
-            this._collapse_next_id_map.unit[sub_component_id] ??
-            sub_component_id
-
-          const sub_component = graph_component.getSubComponent(
-            next_sub_component_id
-          )
-
-          this.__leave_sub_component_frame(sub_component_id, sub_component)
+        const finish = () => {
+          for (const unit_id of ordered_sub_component_ids) {
+            this._mem_remove_component(unit_id)
+          }
         }
 
-        this._decompose_sub_component(graph_unit_id)
+        if (animate) {
+          const sub_component = this._get_sub_component(graph_unit_id)
+          const base = this._get_sub_component_base(graph_unit_id)
 
-        this._animate_sub_component_graph_leave(
-          graph_unit_id,
-          base,
-          [],
-          () => {
-            const style = {}
+          this._measure_sub_component_base(graph_unit_id, base)
 
-            const { x, y } = this._get_node_screen_position(graph_unit_id)
+          for (const sub_component_id of ordered_sub_component_ids) {
+            const next_sub_component_id =
+              this._collapse_next_id_map.unit[sub_component_id] ??
+              sub_component_id
 
-            const { z } = this._zoom
+            const sub_component = graph_component.getSubComponent(
+              next_sub_component_id
+            )
 
-            const { width, height } = get_final_size()
-
-            const color = sub_component.getColor()
-
-            const trait: LayoutNode = {
-              x: x - 1,
-              y: y - 1,
-              width,
-              height,
-              sx: z,
-              sy: z,
-              opacity: 1,
-              fontSize: 14,
-              color,
-            }
-
-            return {
-              style,
-              trait,
-            }
-          },
-          async () => {
-            for (const unit_id of ordered_sub_component_ids) {
-              this._mem_remove_component(unit_id)
-            }
-
-            return true
+            this.__leave_sub_component_frame(sub_component_id, sub_component)
           }
-        )
+
+          this._decompose_sub_component(graph_unit_id)
+
+          this._animate_sub_component_graph_leave(
+            graph_unit_id,
+            base,
+            [],
+            () => {
+              const style = {}
+
+              const { x, y } = this._get_node_screen_position(graph_unit_id)
+
+              const { z } = this._zoom
+
+              const { width, height } = get_final_size()
+
+              const color = sub_component.getColor()
+
+              const trait: LayoutNode = {
+                x: x - 1,
+                y: y - 1,
+                width,
+                height,
+                sx: z,
+                sy: z,
+                opacity: 1,
+                fontSize: 14,
+                color,
+              }
+
+              return {
+                style,
+                trait,
+              }
+            },
+            async () => {
+              finish()
+
+              return true
+            }
+          )
+        } else {
+          finish()
+        }
       }
     }
 
@@ -47248,7 +47370,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    if (!do_not_animate_graph_size) {
+    if (!do_not_animate_graph_size && animate) {
       this._animate_core_size_and_opacity(
         graph_unit_id,
         n0,
@@ -47267,11 +47389,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (graph_unit_id) {
-      // this._set_unit_layer(graph_unit_id, LAYER_NONE)
       this._set_node_layer(graph_unit_id, LAYER_NONE)
     }
 
-    if (none_node_selected) {
+    if (!animate) {
+      for (const collapse_node_id of this._collapse_node_id) {
+        this._stop_node_long_press_collapse(collapse_node_id)
+        this._state_move_node_into_graph(
+          graph_unit_id,
+          collapse_node_id,
+          collapse_map
+        )
+      }
+
+      this._stop_collapse()
+
+      this._refresh_unit_layer(graph_unit_id)
+      this._set_unit_fixed(graph_unit_id, false)
+    } else if (none_node_selected) {
       setTimeout(() => {
         this._stop_collapse()
       }, 0)
@@ -47502,6 +47637,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ...extra: any[]
       ) {
         throw new MethodNotImplementedError()
+      },
+      setSlot: function (slotName: string, subComponentId: string): void {
+        //
       },
     }
 
@@ -47811,6 +47949,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ) {
         throw new MethodNotImplementedError()
       },
+      setSlot: function (slotName: string, subComponentId: string): void {
+        //
+      },
     }
 
     return graph_interface
@@ -47998,6 +48139,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ...extra: any[]
       ) {
         throw new MethodNotImplementedError()
+      },
+      setSlot: function (slotName: string, subComponentId: string): void {
+        //
       },
     }
 
@@ -48541,6 +48685,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ) {
         throw new MethodNotImplementedError()
       },
+      setSlot: function (slotName: string, subComponentId: string): void {
+        //
+      },
     }
 
     return spec_interface
@@ -48622,7 +48769,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const opposite_pin_id_map = {}
     const opposite_merge_id_map = {}
 
-    const graph_unit_spec_id = this._get_unit_spec_id(graph_unit_id)
     const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
 
     const graph_spec_pin_id_set = {
@@ -48794,9 +48940,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       let next_unit_id = unit_id
 
       if (graph_unit_spec?.units[unit_id]) {
-        next_unit_id = newUnitIdInSpecId(
+        next_unit_id = newUnitId(
           specs,
-          graph_unit_spec_id,
+          graph_unit_spec,
           unit_spec_id,
           next_unit_id_blacklist
         )
@@ -49585,6 +49731,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       nextSubComponentParentMap: sub_component_parent_id_map,
       nextSubComponentChildrenMap: sub_component_children_map,
       nextSubComponentIndexMap: sub_component_index_map,
+      nextSubComponentParentSlot: {},
+      nextSubComponentSlot: {},
     }
   }
 
@@ -49667,7 +49815,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       link: {},
       plug: {},
     }
-
+    this._collapse_next_map = null
     this._collapse_next_unit_id = null
 
     for (const selected_node_id in this._selected_node_id) {
@@ -50181,6 +50329,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_pin_position: UnitPinPosition,
     unit: GraphUnitSpec,
     sub_component_spec: InjectSubComponentOpt | null,
+    sub_component_slot: string | null,
+    sub_component_parent_slot: string,
     unit_sub_componennt: Component | null,
     meta: GraphConnectUnitMeta
   ) {
@@ -50192,7 +50342,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       next_pin_id_map,
       next_unit_merges,
       unit,
-      sub_component_spec
+      sub_component_spec,
+      sub_component_slot,
+      sub_component_parent_slot
     )
     this._sim_move_unit_into_graph__inject(
       graph_id,
@@ -50202,6 +50354,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       next_pin_id_map,
       unit,
       sub_component_spec,
+      sub_component_slot,
+      sub_component_parent_slot,
       unit_sub_componennt,
       next_pin_position,
       meta
@@ -50216,6 +50370,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_pin_id_map: GraphMoveSubGraphData['nextPinIdMap'],
     unit: GraphUnitSpec,
     sub_component_spec: InjectSubComponentOpt | null,
+    sub_component_slot: string | null,
+    sub_component_parent_slot: string,
     sub_component: Component | null,
     pin_position: UnitPinPosition,
     meta: GraphConnectUnitMeta
@@ -50313,7 +50469,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_pin_id_map: GraphMoveSubGraphData['nextPinIdMap'],
     next_unit_pin_merges: Dict<IOOf<Dict<string>>>,
     unit: GraphUnitSpec,
-    sub_component: InjectSubComponentOpt | null
+    sub_component: InjectSubComponentOpt | null,
+    sub_component_slot: string | null,
+    sub_component_parent_slot: string
   ) {
     // console.log(
     //   'Graph',
@@ -50323,7 +50481,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   next_unit_id,
     //   next_pin_id_map,
     //   unit,
-    //   sub_component
+    //   sub_component,
+    //   sub_component_slot,
+    //   sub_component_parent_slot
     // )
 
     const { getSpec, setSpec } = this.$props
@@ -50390,6 +50550,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
+      if (sub_component_slot) {
+        updated_graph_spec.component.slots =
+          updated_graph_spec.component.slots ?? []
+        updated_graph_spec.component.slots.push([
+          next_unit_id,
+          sub_component_slot,
+        ])
+      }
+
       deepDelete(updated_graph_spec, ['metadata', 'complexity'])
     }
 
@@ -50399,7 +50568,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { id: unit_spec_id } = unit
 
-    // const unit_spec = getSpec(unit_spec_id) as GraphSpec
     const unit_spec = this._collapse_unit_spec[unit_id] as GraphSpec
 
     const insert_pin = (type, pin_id) => {
@@ -51274,6 +51442,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const unit_pin_position = this._get_unit_pin_position(unit_id)
 
     let sub_component_spec: InjectSubComponentOpt | null = null
+    let sub_component_slot: string | null = null
+    let sub_component_parent_slot: string | null = 'default'
     let sub_component: Component | null = null
 
     if (this._is_unit_component(unit_id)) {
@@ -51303,6 +51473,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         width,
         height,
       }
+
+      sub_component_slot =
+        this._collapse_next_map.nextSubComponentSlot[unit_id] ?? null
+
+      sub_component_parent_slot =
+        this._collapse_next_map.nextSubComponentParentSlot[unit_id] ?? 'default'
     }
 
     this._state_move_unit_into_graph__remove(graph_id, unit_id, next_unit_id)
@@ -51316,6 +51492,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       unit_pin_position,
       unit,
       sub_component_spec,
+      sub_component_slot,
+      sub_component_parent_slot,
       sub_component,
       connect_meta
     )
@@ -57261,7 +57439,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       data,
       should_predict_size,
       do_not_animate_graph_size,
-      position
+      position,
+      true
     )
   }
 

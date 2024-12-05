@@ -70,6 +70,8 @@ composition0.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -149,6 +151,8 @@ composition1.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -274,6 +278,8 @@ composition2.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -363,6 +369,8 @@ composition3.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -481,6 +489,8 @@ composition4.moveSubgraphInto(
     },
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -612,6 +622,8 @@ composition5.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -774,6 +786,8 @@ composition6.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -872,6 +886,8 @@ composition7.moveSubgraphInto(
     [UNIT_ID_DIV]: [UNIT_ID_DIV_0],
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -962,6 +978,8 @@ composition8.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -1057,6 +1075,8 @@ composition9.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -1171,6 +1191,8 @@ composition10.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -1292,6 +1314,8 @@ composition11.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {},
   {},
@@ -1448,6 +1472,8 @@ composition12.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -1571,6 +1597,8 @@ composition13.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -1669,6 +1697,8 @@ composition14.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -1751,6 +1781,8 @@ composition15.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -1775,6 +1807,8 @@ composition15.moveSubgraphInto(
     unit: {},
     plug: {},
   },
+  {},
+  {},
   {},
   {},
   {},
