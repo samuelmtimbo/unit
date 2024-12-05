@@ -115,7 +115,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "euclidian distance between points (x0,y0) and (x1,y1)"
+    "description": "euclidean distance between points (x0,y0) and (x1,y1)"
   },
   "id": "3bd18787-017f-4477-a182-8956aad82ffd",
   "system": true
