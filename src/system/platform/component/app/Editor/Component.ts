@@ -34167,6 +34167,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       const all_selected_node_ids = this._get_all_selected_node_ids()
 
+      let collapse_node_ids = all_selected_node_ids
+
       let target_unit_id = unit_id
 
       if (this._is_unit_base(unit_id)) {
@@ -34225,6 +34227,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
 
         target_unit_id = new_unit_id
+
+        collapse_node_ids = [...collapse_node_ids, unit_id]
       }
 
       const screen_position = this._get_node_screen_position(target_unit_id)
@@ -34232,7 +34236,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const long_press_collapse_started = this._start_long_press_collapse(
         pointerId,
         target_unit_id,
-        [...all_selected_node_ids, unit_id],
+        collapse_node_ids,
         screen_position
       )
 
