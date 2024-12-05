@@ -1024,7 +1024,7 @@ export function makeFullSpecCollapseMap(
     }
   }
 
-  const collapseMap = {
+  const collapseMap: GraphMoveSubGraphData = {
     nodeIds,
     nextSpecId: null,
     nextIdMap,
@@ -1035,6 +1035,8 @@ export function makeFullSpecCollapseMap(
     nextSubComponentParentMap: {},
     nextSubComponentChildrenMap: {},
     nextSubComponentIndexMap: {},
+    nextSubComponentSlot: {},
+    nextSubComponentParentSlot: {},
   }
 
   return collapseMap

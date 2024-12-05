@@ -1,3 +1,4 @@
+import { Graph } from '../Class/Graph'
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
 import { evaluateDataValue } from '../spec/evaluateDataValue'
 import { resolveDataRef } from '../spec/resolveDataValue'
@@ -174,11 +175,17 @@ export function refChildren(
 }
 
 export function refSlot(
-  element: Component_,
+  element: Graph,
   slotName: string,
-  slot: Dict<Component_>
+  slot: Dict<string>
 ): Component_ {
-  return slot[slotName] || element
+  const unitId = slot[slotName]
+
+  if (unitId) {
+    return element.getSubComponent(slotName)
+  } else {
+    return element
+  }
 }
 
 export function registerParentRoot(

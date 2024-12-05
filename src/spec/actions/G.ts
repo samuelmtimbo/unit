@@ -174,7 +174,9 @@ export const makeMoveSubgraphIntoAction = (
   nextPlugSpec: GraphMoveSubGraphIntoData['nextPlugSpec'],
   nextSubComponentParentMap: GraphMoveSubGraphIntoData['nextSubComponentParentMap'],
   nextSubComponentChildrenMap: GraphMoveSubGraphIntoData['nextSubComponentChildrenMap'],
-  nextSubComponentIndexMap: GraphMoveSubGraphIntoData['nextSubComponentIndexMap']
+  nextSubComponentIndexMap: GraphMoveSubGraphIntoData['nextSubComponentIndexMap'],
+  nextSubComponentSlot: GraphMoveSubGraphIntoData['nextSubComponentSlot'],
+  nextSubComponentParentSlot: GraphMoveSubGraphIntoData['nextSubComponentParentSlot']
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
@@ -190,6 +192,8 @@ export const makeMoveSubgraphIntoAction = (
     nextSubComponentParentMap,
     nextSubComponentChildrenMap,
     nextSubComponentIndexMap,
+    nextSubComponentSlot,
+    nextSubComponentParentSlot,
   })
 }
 
@@ -253,7 +257,9 @@ export const makeMoveSubgraphOutOfAction = (
   },
   nextSubComponentParentMap: Dict<string | null>,
   nextSubComponentChildrenMap: Dict<string[]>,
-  nextSubComponentIndexMap: Dict<number>
+  nextSubComponentIndexMap: Dict<number>,
+  nextSubComponentSlot: GraphMoveSubGraphIntoData['nextSubComponentSlot'],
+  nextSubComponentParentSlot: GraphMoveSubGraphIntoData['nextSubComponentParentSlot']
 ) => {
   return wrapMoveSubgraphOutOfData({
     graphId,
@@ -269,6 +275,8 @@ export const makeMoveSubgraphOutOfAction = (
     nextSubComponentChildrenMap,
     nextSubComponentIndexMap,
     nextUnitPinMergeMap,
+    nextSubComponentParentSlot,
+    nextSubComponentSlot,
   })
 }
 
@@ -961,7 +969,9 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.nextPlugSpec,
         data.nextSubComponentParentMap,
         data.nextSubComponentChildrenMap,
-        data.nextSubComponentIndexMap
+        data.nextSubComponentIndexMap,
+        {},
+        {}
       )
     }
 
@@ -1075,7 +1085,9 @@ export const reverseAction = ({ type, data }: Action): Action => {
         nextPlugSpec_,
         data_.nextSubComponentParentMap,
         data_.nextSubComponentChildrenMap,
-        data_.nextSubComponentIndexMap
+        data_.nextSubComponentIndexMap,
+        {},
+        {}
       )
     }
 

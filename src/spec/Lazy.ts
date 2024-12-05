@@ -282,6 +282,8 @@ export function lazyFromSpec(
         nextSubComponentChildrenMap,
         nextSubComponentIndexMap,
         nextUnitPinMergeMap,
+        nextSubComponentSlot,
+        nextSubComponentParentSlot,
       ]: G_MoveSubgraphIntoArgs
     ): void {
       this._ensure()
@@ -298,7 +300,9 @@ export function lazyFromSpec(
         nextSubComponentParentMap,
         nextSubComponentChildrenMap,
         nextSubComponentIndexMap,
-        nextUnitPinMergeMap
+        nextUnitPinMergeMap,
+        nextSubComponentSlot,
+        nextSubComponentParentSlot
       )
     }
 
@@ -402,6 +406,8 @@ export function lazyFromSpec(
         nextSubComponentChildrenMap,
         nextSubComponentIndexMap,
         nextUnitPinMergeMap,
+        nextSubComponentSlot,
+        nextSubComponentParentSlot,
       ]: G_MoveSubgraphIntoArgs
     ): void {
       this._ensure()
@@ -418,26 +424,28 @@ export function lazyFromSpec(
         nextSubComponentParentMap,
         nextSubComponentChildrenMap,
         nextSubComponentIndexMap,
-        nextUnitPinMergeMap
+        nextUnitPinMergeMap,
+        nextSubComponentSlot,
+        nextSubComponentParentSlot
       )
     }
 
-    registerRoot(component: Component_, emit?: boolean): void {
+    public registerRoot(component: Component_, emit?: boolean): void {
       this._ensure()
       return this.__graph.registerRoot(component, emit)
     }
 
-    unregisterRoot(component: Component_, emit?: boolean): void {
+    public unregisterRoot(component: Component_, emit?: boolean): void {
       this._ensure()
       return this.__graph.unregisterRoot(component, emit)
     }
 
-    registerParentRoot(component: Component_, slotName: string): void {
+    public registerParentRoot(component: Component_, slotName: string): void {
       this._ensure()
       return this.__graph.registerParentRoot(component, slotName)
     }
 
-    unregisterParentRoot(component: Component_): void {
+    public unregisterParentRoot(component: Component_): void {
       this._ensure()
       return this.__graph.unregisterParentRoot(component)
     }
@@ -531,7 +539,7 @@ export function lazyFromSpec(
       return this.__graph.hasChild(at)
     }
 
-    refRoot(at: number): Component_ {
+    public refRoot(at: number): Component_ {
       this._ensure()
       return this.__graph.refRoot(at)
     }
@@ -551,17 +559,27 @@ export function lazyFromSpec(
       return this.__graph.refSlot(slotName)
     }
 
-    animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
+    public setSlot(slotName: string, subComponentId: string): void {
+      this._ensure()
+      return this.__graph.setSlot(slotName, subComponentId)
+    }
+
+    public getSlot(slotName: string): string {
+      this._ensure()
+      return this.__graph.getSlot(slotName)
+    }
+
+    public animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
       this._ensure()
       return this.__graph.animate(keyframes, opt)
     }
 
-    cancelAnimation(id: string): void {
+    public cancelAnimation(id: string): void {
       this._ensure()
       return this.__graph.cancelAnimation(id)
     }
 
-    getAnimations(): AnimationSpec[] {
+    public getAnimations(): AnimationSpec[] {
       this._ensure()
       return this.__graph.getAnimations()
     }
@@ -886,7 +904,7 @@ export function lazyFromSpec(
       return this.__graph.removeUnit(unitId, ...extra)
     }
 
-    addUnitGhost(
+    public addUnitGhost(
       unitId: string,
       nextUnitId: string,
       nextUnitBundle: UnitBundleSpec,

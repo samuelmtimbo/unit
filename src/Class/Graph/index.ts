@@ -5610,6 +5610,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     this._moveSubgraphInto(
@@ -5625,7 +5627,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
-      nextUnitPinMergeMap
+      nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot
     )
 
     this.edit(
@@ -5643,6 +5647,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
       []
     )
   }
@@ -5660,7 +5666,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     nextSubComponentParentMap: GraphMoveSubGraphData['nextSubComponentParentMap'],
     nextSubComponentChildrenMap: GraphMoveSubGraphData['nextSubComponentChildrenMap'],
     nextSubComponentIndexMap: GraphMoveSubGraphData['nextSubComponentIndexMap'],
-    nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap']
+    nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap'],
+    nextSubComponentSlot: GraphMoveSubGraphData['nextSubComponentSlot'],
+    nextSubComponentParentSlot: GraphMoveSubGraphData['nextSubComponentParentSlot']
   ) {
     const graph = this.getUnit(graphId) as Graph
 
@@ -5680,7 +5688,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
-      nextUnitPinMergeMap
+      nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot
     )
 
     graph.endTransaction()
@@ -5699,7 +5709,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     nextSubComponentParentMap: GraphMoveSubGraphData['nextSubComponentParentMap'],
     nextSubComponentChildrenMap: GraphMoveSubGraphData['nextSubComponentChildrenMap'],
     nextSubComponentIndexMap: GraphMoveSubGraphData['nextSubComponentIndexMap'],
-    nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap']
+    nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap'],
+    nextSubComponentSlot: GraphMoveSubGraphData['nextSubComponentSlot'],
+    nextSubComponentParentSlot: GraphMoveSubGraphData['nextSubComponentParentSlot']
   ) {
     const graph = this.getUnit(graphId) as Graph
 
@@ -5720,6 +5732,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         nextSubComponentChildrenMap,
         nextUnitPinMergeMap,
         nextSubComponentIndexMap,
+        nextSubComponentSlot,
+        nextSubComponentParentSlot,
       },
       {
         merges,
@@ -5805,6 +5819,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5834,7 +5850,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
-      nextUnitPinMergeMap
+      nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot
     )
 
     this.edit(
@@ -5851,6 +5869,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
       []
     )
   }
@@ -5870,6 +5890,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5904,7 +5926,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
-      nextUnitPinMergeMap
+      nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot
     )
 
     graph.endTransaction()
@@ -5925,6 +5949,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     const graph = this.getUnit(graphId) as Graph
@@ -5943,6 +5969,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
     }
 
     const connectOpt = {
@@ -6101,11 +6129,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       const [unitId, slotName] = slot
 
-      const slotUnit = this.getUnit(unitId) as Element_ | Graph
-
       const _slotName = i === 0 ? 'default' : `${i}`
 
-      this._slot[_slotName] = slotUnit
+      this._slot[_slotName] = unitId
     }
   }
 
@@ -6125,7 +6151,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _root: Component_[] = []
   private _parent_root: Component_[] = []
   private _parent_children: Component_[] = []
-  private _slot: Dict<Component_> = {}
+  private _slot: Dict<string> = {}
 
   appendParentChild(component: Component_, slotName: string): void {
     return appendParentChild(this, this._parent_children, component, slotName)
@@ -6213,6 +6239,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   refSlot(slotName: string): Component_ {
     return refSlot(this, slotName, this._slot)
+  }
+
+  setSlot(slotName: string, subComponentId: string): void {
+    this._slot[slotName] = subComponentId
+  }
+
+  getSlot(slotName: string): string {
+    return this._slot[slotName]
   }
 
   getAnimations(): AnimationSpec[] {
@@ -6475,6 +6509,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               nextSubComponentChildrenMap,
               nextSubComponentIndexMap,
               nextUnitPinMergeMap,
+              nextSubComponentSlot,
+              nextSubComponentParentSlot,
             } = data
 
             this._moveSubgraphInto(
@@ -6490,7 +6526,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               nextSubComponentParentMap,
               nextSubComponentChildrenMap,
               nextSubComponentIndexMap,
-              nextUnitPinMergeMap
+              nextUnitPinMergeMap,
+              nextSubComponentSlot,
+              nextSubComponentParentSlot
             )
           },
           moveSubgraphOutOf: (data: GraphMoveSubGraphOutOfData) => {
@@ -6508,6 +6546,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               nextSubComponentChildrenMap,
               nextSubComponentIndexMap,
               nextUnitPinMergeMap,
+              nextSubComponentSlot,
+              nextSubComponentParentSlot,
             } = data
 
             this._moveSubgraphOutOf(
@@ -6523,7 +6563,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               nextSubComponentParentMap,
               nextSubComponentChildrenMap,
               nextSubComponentIndexMap,
-              nextUnitPinMergeMap
+              nextUnitPinMergeMap,
+              nextSubComponentSlot,
+              nextSubComponentParentSlot
             )
           },
           reorderSubComponent: (data: GraphReorderSubComponentData) => {

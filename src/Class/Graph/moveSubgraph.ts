@@ -77,6 +77,7 @@ export type GraphLike<T extends UCG = UCG<Dict<any>, Dict<any>>> = Pick<
   | 'getSpec'
   | 'setUnitSize'
   | 'setSubComponentSize'
+  | 'setSlot'
 >
 
 export function moveUnit(
@@ -86,7 +87,6 @@ export function moveUnit(
   unitId: string,
   collapseMap: GraphMoveSubGraphData,
   connectOpt: GraphUnitConnect,
-  ignoredUnit: Set<string>,
   unitIgnoredPin: Dict<IOOf<Set<string>>>,
   ignoredMerge: Set<string>,
   pinSpecs: IOOf<Dict<GraphPinSpec>>,
@@ -97,6 +97,7 @@ export function moveUnit(
     nextPinIdMap,
     nextSubComponentParentMap,
     nextSubComponentChildrenMap,
+    nextSubComponentSlot,
   } = collapseMap
 
   const unit = source.getUnit(unitId)
@@ -144,6 +145,12 @@ export function moveUnit(
         target.moveRoot(nextUnitId, nextSubComponentChildId, i, 'default')
       }
     }
+  }
+
+  const slot = nextSubComponentSlot[unitId]
+
+  if (slot) {
+    target.setSlot(slot, unitId)
   }
 
   if (subComponent) {
@@ -1486,7 +1493,6 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
       unitId,
       collapseMap,
       connectOpt,
-      ignoredUnit,
       ignoredUnitPin,
       ignoredMerge,
       sourcePinSpecs,

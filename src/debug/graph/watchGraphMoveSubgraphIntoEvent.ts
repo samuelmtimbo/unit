@@ -31,6 +31,8 @@ export function watchGraphMoveSubgraphEvent(
       nextSubComponentChildrenMap,
       nextSubComponentIndexMap,
       nextUnitPinMergeMap,
+      nextSubComponentSlot,
+      nextSubComponentParentSlot,
       path,
     ]: G_EE['move_subgraph_into']
   ) => {
@@ -51,6 +53,8 @@ export function watchGraphMoveSubgraphEvent(
         nextSubComponentChildrenMap,
         nextSubComponentIndexMap,
         nextUnitPinMergeMap,
+        nextSubComponentSlot,
+        nextSubComponentParentSlot,
         path,
       },
     })

@@ -4,7 +4,9 @@
     "value": {
       "type": "string",
       "optional": true,
-      "examples": ["\"Hello world!\""]
+      "metadata": {
+        "examples": ["\"Text\"", "\"Hello world!\""]
+      }
     }
   },
   "outputs": {},

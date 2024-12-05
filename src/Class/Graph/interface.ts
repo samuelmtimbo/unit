@@ -63,7 +63,9 @@ export type GraphMoveSubGraphData = {
   nextPlugSpec: IOOf<Dict<Dict<GraphSubPinSpec>>>
   nextSubComponentIndexMap: Dict<number>
   nextSubComponentParentMap: Dict<string | null>
-  nextSubComponentChildrenMap: Dict<string[]>
+  nextSubComponentChildrenMap: Dict<string[]>,
+  nextSubComponentParentSlot: Dict<string>,
+  nextSubComponentSlot: Dict<string>,
   position?: Position
 }
 
