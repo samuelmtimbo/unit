@@ -4675,7 +4675,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const spec = registry.getSpec(spec_id)
 
-    if (!isSystemSpec(spec)) {
+    if (!isBaseSpec(spec)) {
       registry.registerUnit(spec_id)
 
       if (registry.specsCount[spec_id] === 1) {
