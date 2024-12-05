@@ -34195,6 +34195,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const new_unit_id = this._add_empty_unit(partial_spec, position)
 
         if (is_component) {
+          this._connect_sub_component(new_unit_id)
+
           for (const selected_node_id of all_selected_node_ids) {
             if (
               this._is_unit_node_id(selected_node_id) &&
