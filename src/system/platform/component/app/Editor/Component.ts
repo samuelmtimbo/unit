@@ -1514,6 +1514,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         root: this._root,
         component: this._component,
         fullwindow: true,
+        system: this._system,
       },
       this.$system
     )
