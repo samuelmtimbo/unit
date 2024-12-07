@@ -51213,33 +51213,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             }
           }
 
-          const next_datum_id = this._new_datum_id()
-          const next_datum_node_id = getDatumNodeId(next_datum_id)
           const position =
             this._predict_pin_datum_initial_position(anchor_node_id)
 
-          if (this._pin_to_datum[pin_node_id]) {
-            this._mem_remove_pin_datum_tree(pin_node_id)
-          }
-
-          this.__sim_add_datum_node(next_datum_id, datum_tree, position, false)
-
-          this._sim_add_pin_datum_link(next_datum_node_id, pin_node_id, false)
-          this._spec_set_pin_data(pin_node_id, datum_tree.value)
-          this._mem_set_pin_datum(pin_node_id, next_datum_id)
+          this._graph_debug_set_pin_data_tree(pin_node_id, datum_tree)
         }
       })
     })
-
-    // this._refresh_node_color(graph_id)
-
-    for (const merge_id of meta.selected.merges) {
-      const merge_node_id = getMergeNodeId(merge_id)
-
-      if (this._spec_has_merge(merge_node_id)) {
-        // this._ensure_node_long_press_collapse(merge_node_id)
-      }
-    }
   }
 
   private _state_move_unit_into_graph = (
