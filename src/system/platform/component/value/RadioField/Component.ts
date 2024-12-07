@@ -18,6 +18,7 @@ export default class RadioField extends Field<HTMLInputElement, Props> {
       defaultAttr: {
         type: 'radio',
       },
+      emitOnChange: false,
     })
   }
 }

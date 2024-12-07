@@ -17,15 +17,18 @@ export function makeFieldInputEventHandler(
   keyName: string = 'value',
   processValue: (value: string) => any = identity
 ) {
-  return function (event: InputEvent) {
-    const value = this[keyName]
+  return function (event: InputEvent, emit: boolean) {
+    const value = component.$element[keyName]
 
     event.preventDefault()
     event.stopImmediatePropagation()
 
     const nextValue = processValue(value)
 
-    component.set('value', nextValue)
+    if (emit) {
+      component.set('value', nextValue)
+    }
+
     component.dispatchEvent(event.type, nextValue)
   }
 }
@@ -46,6 +49,7 @@ export class Field<
       processValue?: (value: string) => any
       parseValue?: (value: string) => any
       propHandlers?: Dict<(value: any) => void>
+      emitOnChange?: boolean
     }
   ) {
     const {
@@ -56,6 +60,7 @@ export class Field<
       processValue = (value) => value,
       parseValue = identity,
       propHandlers,
+      emitOnChange = true,
     } = opt
 
     super($props, $system, $element, defaultStyle, defaultAttr, propHandlers)
@@ -75,8 +80,12 @@ export class Field<
       processValue
     )
 
-    this.$element.addEventListener('change', inputEventHandler)
-    this.$element.addEventListener('input', inputEventHandler)
+    this.$element.addEventListener('input', (event) =>
+      inputEventHandler(event, true)
+    )
+    this.$element.addEventListener('change', (event) =>
+      inputEventHandler(event, emitOnChange)
+    )
 
     this.$propHandler = {
       ...this.$propHandler,

@@ -18,6 +18,7 @@ export default class Checkbox extends Field<HTMLInputElement, Props> {
       defaultAttr: {
         type: 'checkbox',
       },
+      emitOnChange: false,
     })
   }
 }
