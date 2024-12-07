@@ -95,7 +95,7 @@ export const removeUnitExposedTypePins = (
 
       const { unitId, kind = type } = subPin
 
-      if (unitId === id && kind === type) {
+      if (unitId === id) {
         deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], {})
       }
     }
