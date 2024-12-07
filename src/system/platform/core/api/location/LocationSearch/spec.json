@@ -1,0 +1,170 @@
+{
+  "type": "`U`&`G`",
+  "name": "location search",
+  "units": {
+    "parseurl": {
+      "id": "81ac8195-57ed-4b22-b8b8-fe3e68b11af0",
+      "input": {
+        "url": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -1,
+          "y": -104
+        }
+      }
+    },
+    "location": {
+      "id": "30f6738c-1938-4dcd-9e7f-6c10f9730021",
+      "input": {
+        "any": {
+          "metadata": {
+            "position": {
+              "x": 147,
+              "y": -101
+            }
+          }
+        }
+      },
+      "output": {
+        "url": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 99,
+          "y": -101
+        }
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "\"search\"",
+          "metadata": {
+            "position": {
+              "x": -152,
+              "y": -121
+            },
+            "data": {
+              "position": {
+                "x": -201,
+                "y": -118
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -72,
+              "y": -154
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -103,
+          "y": -122
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "parseurl": {
+        "input": {
+          "url": true
+        }
+      },
+      "location": {
+        "output": {
+          "url": true
+        }
+      }
+    },
+    "1": {
+      "parseurl": {
+        "output": {
+          "obj": true
+        }
+      },
+      "get": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "location",
+          "pinId": "any"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 170,
+              "y": -101
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "search": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -72,
+              "y": -177
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "map-pin",
+    "description": "get current web context location url search",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 50,
+          "y": -102
+        },
+        "1": {
+          "x": -53,
+          "y": -109
+        }
+      },
+      "data": {
+        "x": -71,
+        "y": -212
+      }
+    }
+  },
+  "id": "4ed1cdd6-1514-4871-9845-489366cf3dbd"
+}
