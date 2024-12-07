@@ -31060,10 +31060,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this.$system.classes
       )
 
-      unitBundle = unitBundleSpec(
-        unitBundle.unit,
-        weakMerge(unitBundle.specs, specs)
-      )
+      const specs_ = weakMerge(specs, unitBundle.specs)
+
+      unitBundle = unitBundleSpec(unitBundle.unit, specs_)
 
       const spec = getSpec(unitBundle.unit.id) as GraphSpec
 
@@ -31071,7 +31070,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return
       }
 
-      const bundle = bundleSpec(spec, weakMerge(unitBundle.specs, specs))
+      const bundle = bundleSpec(spec, specs_)
 
       const graph = start(this._system, bundle, true)
 
@@ -31147,7 +31146,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const modified_value = `$${stringify(modified_bundle)}`
 
-          const specs = weakMerge(this.$system.specs, unitBundle.specs ?? {})
+          const specs = weakMerge(
+            this.$system.specs,
+            modified_bundle.specs ?? {}
+          )
 
           const id = modified_bundle.unit.id
 
@@ -31157,12 +31159,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._set_spec_node_positions(spec, editor, node_positions)
 
+          setSpec(spec.id, spec)
+
           const class_datum_comp = this._datum[datum_node_id] as ClassDatum
 
-          class_datum_comp.setProp(
-            'specs',
-            weakMerge(specs, modified_bundle.specs)
-          )
+          class_datum_comp.setProp('specs', specs)
 
           if (pin_node_id) {
             this._set_unit_pin_data(pin_node_id, modified_value)
@@ -53536,10 +53537,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     editor: Editor_,
     node_positions: Dict<Position>
   ) => {
-    if (!spec) {
-      return
-    }
-
     for (const node_id in node_positions) {
       const node_position = node_positions[node_id]
 
