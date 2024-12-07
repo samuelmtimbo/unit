@@ -385,7 +385,7 @@ import { CodePathNotImplementedError } from '../../../../../exception/CodePathNo
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { ShouldNeverHappenError } from '../../../../../exception/ShouldNeverHappenError'
-import { injectUserBundle } from '../../../../../injectBundle'
+import { injectUserBundle, injectUserSpecs } from '../../../../../injectBundle'
 import { isFrameRelativeValue } from '../../../../../isFrameRelative'
 import { proxyWrap } from '../../../../../proxyWrap'
 import {
@@ -3707,11 +3707,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const bundle = await this._read_bundle_file(file)
 
           if (bundle) {
-            const specIdMap = injectUserBundle(this.$props, bundle)
+            const { specs } = bundle
 
-            const bundle_ = clone(bundle)
-
-            remapBundle(bundle_, specIdMap)
+            injectUserSpecs(this.$props, specs)
           }
         } else if (handle.kind === 'directory') {
           this._paste_file_system_directory_handle(
