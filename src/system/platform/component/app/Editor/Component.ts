@@ -43365,6 +43365,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._set_node_position(next_node_id, next_position)
 
+      if (this._is_ext_node_id(selected_node_id)) {
+        const int_node_id = getIntNodeIdFromExtNodeId(selected_node_id)
+        const next_int_node_id = getIntNodeIdFromExtNodeId(next_node_id)
+
+        const int_pin_node_id = this._int_to_node[int_node_id]
+        const next_int_pin_node_id = this._int_to_node[next_int_node_id]
+
+        if (int_pin_node_id && !next_int_pin_node_id) {
+          const int_pin_node_position = this._get_node_position(int_pin_node_id)
+
+          this._set_node_position(next_int_node_id, int_pin_node_position)
+        }
+      }
+
       if (selected_node_id !== node_id) {
         this._set_node_drag_along(new_node_id, next_node_id)
 
