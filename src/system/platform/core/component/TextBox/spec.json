@@ -7,8 +7,15 @@
           "unitId": "text",
           "pinId": "value"
         }
-      },
-      "type": "string"
+      }
+    },
+    "attr": {
+      "plug": {
+        "0": {
+          "unitId": "box",
+          "pinId": "attr"
+        }
+      }
     },
     "style": {
       "plug": {
@@ -16,8 +23,7 @@
           "unitId": "box",
           "pinId": "style"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -31,6 +37,14 @@
       "defaultIgnored": true,
       "ref": true,
       "component": true
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "text",
+          "pinId": "value"
+        }
+      }
     }
   },
   "units": {

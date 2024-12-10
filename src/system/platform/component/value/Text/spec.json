@@ -9,7 +9,13 @@
       }
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
   "metadata": {
     "icon": "type",
     "description": "text",
