@@ -40279,8 +40279,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._spec_remove_component(unitId)
     }
 
-    if (unregister) {
-      this._unregister_unit(unit.id, deep)
+    if (!parent) {
+      if (unregister) {
+        this._unregister_unit(unit.id, deep)
+      }
     }
 
     removeUnit({ unitId }, this._spec)
