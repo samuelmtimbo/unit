@@ -57757,10 +57757,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       setUnitId({ unitId, newUnitId, name }, spec)
 
       setSpec(spec.id, spec)
-    }
 
-    if (path.length === 1) {
-      //
+      if (path.length === 0) {
+        this._spec = spec
+      }
     }
   }
 
@@ -59195,6 +59195,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const action of actions) {
       this._execute_action(action, false)
     }
+  }
+
+  private _on_set_unit_id = (data: GraphSetUnitIdMomentData) => {
+    // console.log('_on_set_unit_id', data, this._id)
+
+    this._on_graph_unit_set_unit_id(data)
   }
 
   private _on_metadata = (data: GraphSetMetadataData) => {
@@ -60765,6 +60771,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       set_unit_pin_constant: this._on_set_unit_pin_constant,
       set_unit_pin_ignored: this._on_set_unit_pin_ignored,
       set_unit_pin_data: this._on_set_unit_pin_data,
+      set_unit_id: this._on_set_unit_id,
       bulk_edit: this._on_bulk_edit,
       metadata: this._on_metadata,
     },
