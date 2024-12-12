@@ -8,8 +8,8 @@ export interface GraphMetadataMomentData {
 
 export interface GraphMetadataMoment extends Moment<GraphMetadataMomentData> {}
 
-export function watchGraphMetadataEvent(
-  event: 'metadata',
+export function watchGraphSetMetadataEvent(
+  event: 'set_metadata',
   graph: Graph,
   callback: (moment) => void
 ): () => void {

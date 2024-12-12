@@ -10,7 +10,7 @@ import { watchGraphExposePinEvent } from './watchGraphExposedPinEvent'
 import { watchGraphExposedPinSetEvent } from './watchGraphExposedPinSetEvent'
 import { watchGraphForkEvent } from './watchGraphForkEvent'
 import { watchGraphMergeEvent } from './watchGraphMergeEvent'
-import { watchGraphMetadataEvent } from './watchGraphMetadataEvent'
+import { watchGraphSetMetadataEvent } from './watchGraphMetadataEvent'
 import { watchGraphMoveSubComponentRoot } from './watchGraphMoveSubComponentRoot'
 import { watchGraphMoveSubgraphEvent } from './watchGraphMoveSubgraphIntoEvent'
 import { watchGraphPinMergeEvent } from './watchGraphPinMergeEvent'
@@ -66,7 +66,7 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   set_unit_id: watchGraphSetUnitIdEvent,
   bulk_edit: watchGraphBulkEditEvent,
   destroy: watchGraphDestroyEvent,
-  metadata: watchGraphMetadataEvent,
+  set_metadata: watchGraphSetMetadataEvent,
 }
 
 export function watchGraphInternal(

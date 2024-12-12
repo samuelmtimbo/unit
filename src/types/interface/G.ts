@@ -300,7 +300,7 @@ export type G_EE = {
   set_unit_pin_set_id: [string, IO, string, string, string[]]
   remove_unit_pin_data: [string, IO, string, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
-  metadata: [{ path: string[]; data: any }, string[]]
+  set_metadata: [{ path: string[]; data: any }, string[]]
   component_append: [string, GraphUnitSpec, string[]]
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]

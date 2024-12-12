@@ -5503,7 +5503,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public setMetadata(path: string[], data: any): void {
     deepSet_(this._spec.metadata, path, data)
 
-    this.edit('metadata', { path, data }, [])
+    this.edit('set_metadata', { path, data }, [])
   }
 
   public getSubComponentsParentMap(

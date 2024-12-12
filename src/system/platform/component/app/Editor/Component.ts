@@ -129,6 +129,7 @@ import { classnames } from '../../../../../client/classnames'
 import {
   RGBA,
   hexToRgba,
+  randomColorString,
   rgbaToHex,
   setAlpha,
 } from '../../../../../client/color'
@@ -735,6 +736,13 @@ const PLUG_NAME_MAX_CHAR_LINE: number = 12
 
 export const UNIT_NAME_MAX_SIZE: number =
   UNIT_NAME_MAX_LINE_COUNT * UNIT_NAME_MAX_CHAR_LINE
+
+const UNIT_DESCRIPTION_FONT_SIZE: number = 10
+const UNIT_DESCRIPTION_MAX_LINE_COUNT: number = 3
+const UNIT_DESCRIPTION_MAX_LINE_LENGTH: number = 24
+
+export const UNIT_DESCRIPTION_MAX_SIZE: number =
+  UNIT_DESCRIPTION_MAX_LINE_COUNT * UNIT_DESCRIPTION_MAX_LINE_LENGTH
 
 const LINK_TEXT_FONT_SIZE: number = 10
 
@@ -2409,7 +2417,7 @@ const remapGraph = (
   return _graph
 }
 
-export const formatUnitName = (name: string, fontSize: number): string => {
+export const formatUnitName = (name: string, maxLineLength: number): string => {
   const emptyStartSize = name.length - name.trimStart().length
   const emptyEndSize = name.length - name.trimEnd().length
 
@@ -2418,7 +2426,7 @@ export const formatUnitName = (name: string, fontSize: number): string => {
 
   const _name = name.trim()
 
-  const lines = getTextLines(_name, fontSize)
+  const lines = getTextLines(_name, maxLineLength)
 
   const _lines = []
 
@@ -2568,7 +2576,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _core_area: Dict<Div> = {}
   private _core_icon: Dict<Icon> = {}
   private _core_name: Dict<TextArea> = {}
-  private _core_description: Dict<Div> = {}
+  private _core_description: Dict<TextArea> = {}
 
   private _edit_node_name_id: string | null = null
   private _edit_node_name_was_selected: boolean
@@ -4680,9 +4688,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!isBaseSpec(spec)) {
       registry.registerUnit(spec_id)
 
-      if (registry.specsCount[spec_id] === 1) {
-        this._mirror_spec(registry, spec_id)
-      }
+      this._mirror_spec(registry, spec_id)
 
       if (deep) {
         const { units = {} } = spec as GraphSpec
@@ -7108,6 +7114,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     ])
   }
 
+  private _set_core_description_size = (
+    unit_id: string,
+    width: number,
+    height: number
+  ): void => {
+    const description = this._core_description[unit_id]
+
+    description.$element.style.width = `${width}px`
+    description.$element.style.height = `${height + 3}px`
+  }
+
   private _sim_add_unit_core = (
     unit_id: string,
     unit: GraphUnitSpec,
@@ -7295,9 +7312,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     core_name.$element.addEventListener('dragstart', (event) => {
       event.preventDefault()
     })
-    core_name.$element.addEventListener('pointerdown', (event) => {
-      this._name_to_be_focused = true
-    })
+
     this._sim_setup_node_name(unit_id, core_name)
     this._core_name[unit_id] = core_name
 
@@ -7307,7 +7322,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { width: description_width, height: description_height } =
       getDivTextSize(spec_description, 10, 30)
 
-    const core_description = new Div(
+    const core_description = new TextArea(
       {
         className: 'core-description',
         style: {
@@ -7318,26 +7333,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           borderWidth: '0px',
           borderStyle: 'solid',
           textDecoration: 'none',
-          justifyContent: 'center',
           textAlign: 'center',
-          pointerEvents: 'none',
           touchAction: 'none',
           color: this._theme.pin_text,
           width: `${description_width}px`,
           height: `${description_height}px`,
-          overflowWrap: 'break-word',
-          // whiteSpace: 'break-spaces',
           left: `50%`,
           top: `calc(100% + ${6}px)`,
           transform: `translateX(-50%)`,
           overflow: 'visible',
-          // ...userSelect('none'),
         },
-        innerText: spec_description,
+        attr: {
+          maxLength: UNIT_DESCRIPTION_MAX_SIZE,
+          tabindex: -1,
+        },
+        value: spec_description,
       },
       this.$system
     )
+    core_description.$element.addEventListener('dragstart', (event) => {
+      event.preventDefault()
+    })
     this._core_description[unit_id] = core_description
+
+    this._sim_setup_core_description(unit_id, core_description)
 
     const core_content = new Div(
       {
@@ -7549,6 +7568,40 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_node_selection_to_name(pin_node_id, -1, 0, 0, -2)
   }
 
+  private _set_core_selection_to_name = (unit_id: string): void => {
+    this._set_node_selection_to_name(unit_id, 1, 0, 0, -2)
+  }
+
+  private __set_core_selection_to_description = (
+    unit_id: string,
+    value: string
+  ): void => {
+    const { width, height } = this._get_node_description_size(unit_id, value)
+
+    const name_size = this._get_core_name_size(unit_id)
+
+    this._set_node_selection_to_field(
+      unit_id,
+      6 + name_size.height,
+      0,
+      0,
+      0,
+      width,
+      height
+    )
+  }
+
+  private _get_node_description_size = (
+    unit_id: string,
+    value: string
+  ): Size => {
+    return getDivTextSize(
+      replaceNodeName(value),
+      UNIT_DESCRIPTION_FONT_SIZE,
+      UNIT_DESCRIPTION_MAX_LINE_LENGTH
+    )
+  }
+
   private _set_node_selection_to_node = (unit_id: string): void => {
     const {
       width: node_width,
@@ -7577,9 +7630,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_set_node_selection_to_name')
 
-    const { height: node_height } = this.get_node(node_id)
-
     const { width, height } = this._get_node_name_size(node_id)
+
+    this._set_node_selection_to_field(node_id, dy, dx, dw, dh, width, height)
+  }
+
+  private _set_node_selection_to_field = (
+    node_id: string,
+    dy: number = 0,
+    dx: number = 0,
+    dw: number = 0,
+    dh: number = 0,
+    width: number,
+    height: number
+  ): void => {
+    // console.log('Graph', '_set_node_selection_to_field')
+
+    const { height: node_height } = this.get_node(node_id)
 
     const x = dx
     const y = node_height / 2 + dy + height / 2 + 3
@@ -8253,6 +8320,34 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _set_unit_temp_description = (unit_id: string, value: string) => {
+    // console.log('Graph', '_set_unit_temp_description', unit_id, value)
+
+    let _value = replaceNodeName(value)
+
+    const core_description = this._core_description[unit_id]
+
+    const { selectionStart, selectionEnd } = core_description.$element
+
+    if (_value.length > UNIT_DESCRIPTION_MAX_SIZE) {
+      _value = _value.substring(0, UNIT_DESCRIPTION_MAX_SIZE)
+
+      // this._mem_set_node_temp_name(unit_id, _value)
+    }
+
+    const dom_value = formatUnitName(_value, UNIT_DESCRIPTION_MAX_LINE_LENGTH)
+
+    this._dom_set_core_temp_description(unit_id, dom_value)
+
+    core_description.$element.setSelectionRange(selectionStart, selectionEnd)
+
+    const { width, height } = this._get_node_description_size(unit_id, _value)
+
+    this._refresh_unit_description_color(unit_id)
+
+    this._set_core_description_size(unit_id, width, height)
+  }
+
   private _set_unit_temp_name = (unit_id: string, value: string): void => {
     // console.log('Graph', '_set_unit_temp_name', unit_id, value)
 
@@ -8280,10 +8375,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_core_name_size(unit_id)
   }
 
-  private _set_core_selection_to_name(unit_id): void {
-    this._set_node_selection_to_name(unit_id, 1, 0)
-  }
-
   private _dom_set_core_temp_name = (unit_id: string, value: string) => {
     // console.log(
     //   'Graph',
@@ -8295,6 +8386,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const core_name = this._core_name[unit_id]
 
     core_name.setProp('value', value)
+  }
+
+  private _dom_set_core_temp_description = (unit_id: string, value: string) => {
+    // console.log('Graph', '_dom_set_core_temp_description', unit_id)
+
+    const core_description = this._core_description[unit_id]
+
+    core_description.setProp('value', value)
   }
 
   private _refresh_core_name_color = (unit_id: string) => {
@@ -8526,16 +8625,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       fork,
       bubble,
     })
-  }
-
-  private _spec_set_unit_metadata_rename = (
-    unit_id: string,
-    value: string
-  ): void => {
-    setMetadata(
-      { path: ['units', unit_id, 'metadata', 'rename'], value },
-      this._spec
-    )
   }
 
   private _set_unit_pin_temp_name = (
@@ -9135,53 +9224,163 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._sim_add_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec, position)
   }
 
+  private _sim_setup_core_description = (
+    unit_id: string,
+    description: Component
+  ) => {
+    this._unlisten_core_description[unit_id] = description.addEventListeners([
+      makePointerDownListener(() => {
+        this._name_to_be_focused = true
+      }),
+      makeFocusListener(() => {
+        this._on_core_description_focus(unit_id)
+      }),
+      makeBlurListener(() => {
+        this._on_core_description_blur(unit_id)
+      }),
+      makeInputListener((value: string) => {
+        this._on_core_description_input(unit_id, value)
+      }),
+      makeKeydownListener((event, _event) => {
+        this._on_core_description_keydown(unit_id, event, _event)
+      }),
+    ])
+  }
+
+  private _on_core_description_focus = (unit_id: string) => {
+    // console.log('_on_core_description_focus', unit_id)
+
+    const value = this._get_core_description_value(unit_id)
+
+    this.__set_core_selection_to_description(unit_id, value)
+
+    this._on_node_field_focus(unit_id)
+  }
+
+  private _get_core_description_value = (unit_id: string) => {
+    const description = this._core_description[unit_id]
+
+    const { value } = description.$element
+
+    return value
+  }
+
+  private _is_valid_unit_description = (value: string) => {
+    return value.length >= 3
+  }
+
+  private _on_core_description_blur = (unit_id: string) => {
+    this._on_node_field_blur()
+
+    const value = this._get_core_description_value(unit_id)
+
+    if (this._is_valid_unit_description(value)) {
+      this._set_unit_description(unit_id, value)
+    } else {
+      this._set_unit_temp_description(unit_id, '...')
+    }
+
+    this._set_node_selection_to_node(unit_id)
+  }
+
+  private _set_unit_description = (unit_id: string, description: string) => {
+    this._pod_set_unit_description(unit_id, description)
+  }
+
+  private _pod_set_unit_description = (
+    unitId: string,
+    description: string
+  ): void => {
+    const $unit = this._pod.$refUnit({
+      unitId,
+      _: UCGEE,
+      detached: false,
+    }) as $Graph
+
+    const { fork, bubble } = this.$props
+
+    $unit.$setMetadata({
+      path: ['description'],
+      data: description,
+      fork,
+      bubble,
+    })
+  }
+
+  private _on_core_description_input = (unit_id: string, value: string) => {
+    this._set_unit_temp_description(unit_id, value)
+    this.__set_core_selection_to_description(unit_id, value)
+  }
+
+  private _on_core_description_keydown = (
+    node_id: string,
+    event: IOKeyboardEvent,
+    _event: KeyboardEvent
+  ) => {
+    this._on_node_field_keydown(node_id, event, _event)
+  }
+
+  private _on_node_name_keydown = (
+    node_id: string,
+    event: IOKeyboardEvent,
+    _event: KeyboardEvent
+  ) => {
+    this._on_node_field_keydown(node_id, event, _event)
+  }
+
+  private _on_node_field_keydown = (
+    node_id: string,
+    event: IOKeyboardEvent,
+    _event: KeyboardEvent
+  ) => {}
+
+  private _unlisten_node_name: Dict<Unlisten> = {}
+  private _unlisten_core_description: Dict<Unlisten> = {}
+
   private _sim_setup_node_name = (
     node_id: string,
     name_component: Component
   ) => {
-    name_component.addEventListener(
+    this._unlisten_node_name[node_id] = name_component.addEventListeners([
+      makePointerDownListener(() => {
+        this._name_to_be_focused = true
+      }),
       makeFocusListener(() => {
         this._on_node_name_focus(node_id)
-      })
-    )
-    name_component.addEventListener(
+      }),
       makeBlurListener(() => {
         this._on_node_name_blur(node_id)
-      })
-    )
-    name_component.addEventListener(
+      }),
       makeInputListener((value: string) => {
         this._on_node_name_input(node_id, value)
-      })
-    )
-    name_component.addEventListener(
+      }),
       makeKeydownListener((event, _event) => {
-        if (event.key === 'Enter') {
-          _event.preventDefault()
-
-          this.focus()
-        } else if (
-          event.key === 'q' &&
-          this._q_was_pressed_before_name_focus &&
-          !this._q_first_repeat_prevented
-        ) {
-          _event.preventDefault()
-
-          this._q_first_repeat_prevented = true
-        }
-      })
-    )
+        this._on_node_name_keydown(node_id, event, _event)
+      }),
+    ])
   }
 
-  private _node_name_just_focused: boolean = false
+  private _on_node_field_focus = (node_id: string) => {
+    const selected = this._is_node_selected(node_id)
+
+    this._edit_node_name_id = node_id
+    this._edit_node_name_was_selected = selected
+
+    this._q_first_repeat_prevented = false
+    this._q_was_pressed_before_name_focus = this._is_key_pressed('q')
+
+    if (!selected) {
+      this._select_node(node_id)
+    }
+
+    this._disable_crud()
+    this._disable_keyboard()
+  }
 
   private _on_node_name_focus = (node_id: string): void => {
     // console.log('Graph', '_on_node_name_focus', node_id)
 
-    this._edit_node_name_was_selected = this._is_node_selected(node_id)
-    this._q_first_repeat_prevented = false
-
-    this._q_was_pressed_before_name_focus = this._is_key_pressed('q')
+    this._on_node_field_focus(node_id)
 
     if (this._is_unit_node_id(node_id)) {
       this._on_core_name_focus(node_id)
@@ -9190,15 +9389,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (this._is_link_pin_node_id(node_id)) {
       this._on_unit_pin_name_focus(node_id)
     }
+  }
 
-    this._edit_node_name_id = node_id
+  private _on_node_field_blur = () => {
+    // console.log('_on_node_field_blur')
 
-    if (!this._is_node_selected(node_id)) {
-      this._select_node(node_id)
+    this._enable_crud()
+    this._enable_keyboard()
+
+    this._edit_node_name_id = null
+
+    if (this._mode === 'info') {
+      if (this._q_was_pressed_before_name_focus && !this._name_to_be_focused) {
+        this._q_was_pressed_before_name_focus = false
+
+        this._set_crud_mode('none')
+      }
     }
-
-    this._disable_crud()
-    this._disable_keyboard()
   }
 
   private _on_node_name_blur = (node_id: string): void => {
@@ -9210,18 +9417,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._on_unit_pin_name_blur(node_id)
     }
 
-    this._enable_crud()
-    this._enable_keyboard()
-
-    this._edit_node_name_id = null
-
-    if (this._mode === 'info') {
-      if (this._q_was_pressed_before_name_focus) {
-        this._q_was_pressed_before_name_focus = false
-
-        this._set_crud_mode('none')
-      }
-    }
+    this._on_node_field_blur()
   }
 
   private _on_core_name_blur = (unit_id: string): void => {
@@ -20203,7 +20399,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }px`,
       width: `${width}px`,
       height: `${height}px`,
-      // border: `1px solid ${randomColorString()}`,
+      border: `1px solid ${randomColorString()}`,
       zIndex: '0',
       boxSizing: 'content-box',
       transform: `scale(${sx}, ${sy})`,
@@ -42049,8 +42245,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return position
   }
 
-  private _just_pointer_down = false
-
   private _on_pointer_down = (
     event: UnitPointerEvent,
     _event: PointerEvent
@@ -42062,12 +42256,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         window: { setTimeout },
       },
     } = this.$system
-
-    this._just_pointer_down = true
-
-    setTimeout(() => {
-      this._just_pointer_down = false
-    }, 0)
 
     const { pointerId, clientX, clientY } = event
 
@@ -46357,8 +46545,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._click_just_cancelled.add(pointerId)
   }
 
-  private _just_clicked = false
-
   private _on_click = (event: UnitPointerEvent, _event: PointerEvent): void => {
     // console.log('Graph', '_on_click')
 
@@ -46367,12 +46553,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         window: { setTimeout },
       },
     } = this.$system
-
-    this._just_clicked = true
-
-    setTimeout(() => {
-      this._just_clicked = false
-    }, 0)
 
     if (this._just_node_long_clicked) {
       return
@@ -57189,7 +57369,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             'set_pin_set_functional',
             'set_pin_set_default_ignored',
             'bulk_edit',
-            'metadata',
+            'set_metadata',
             'destroy',
           ],
         },
@@ -59213,8 +59393,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._on_graph_unit_set_unit_id(data)
   }
 
-  private _on_metadata = (data: GraphSetMetadataData) => {
-    // console.log('Graph', '_on_metadata', data)
+  private _on_set_metadata = (data: GraphSetMetadataData) => {
+    // console.log('Graph', '_on_set_metadata', data)
   }
 
   private _on_graph_unit_set_pin_set_functional = (
@@ -60497,6 +60677,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._set_core_icon(unitId, icon)
         }
+      } else if (path_[0] === 'description') {
+        const description = data_
+
+        setMetadata({ path: ['metadata', ...path_], value: data_ }, spec)
+
+        if (path.length === 1) {
+          const unitId = path[0]
+
+          this._set_unit_temp_description(unitId, description)
+        }
       }
 
       setSpec(spec.id, spec)
@@ -60661,8 +60851,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       set_unit_pin_ignored: this._on_graph_unit_set_unit_pin_ignored,
       set_unit_pin_data: this._on_graph_unit_set_unit_pin_data,
       remove_unit_pin_data: this._on_graph_unit_remove_unit_pin_data_moment,
+      set_metadata: this._on_graph_unit_metadata,
       bulk_edit: this._on_graph_unit_bulk_edit,
-      metadata: this._on_graph_unit_metadata,
     },
   }
 
@@ -60772,6 +60962,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       cover_pin: this._on_cover_pin,
       plug_pin: this._on_plug_pin,
       unplug_pin: this._on_unplug_pin,
+      set_unit_id: this._on_set_unit_id,
       set_pin_set_functional: this._on_set_pin_set_functional,
       set_pin_set_default_ignored: this._on_set_pin_set_default_ignored,
       move_subgraph_into: this._on_move_subgraph_into,
@@ -60781,9 +60972,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       set_unit_pin_constant: this._on_set_unit_pin_constant,
       set_unit_pin_ignored: this._on_set_unit_pin_ignored,
       set_unit_pin_data: this._on_set_unit_pin_data,
-      set_unit_id: this._on_set_unit_id,
+      set_metadata: this._on_set_metadata,
       bulk_edit: this._on_bulk_edit,
-      metadata: this._on_metadata,
     },
   }
 
