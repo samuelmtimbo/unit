@@ -8,22 +8,36 @@ export function measureText(
 ): Size {
   ctx.font = `${Math.ceil(fontSize)}px Inconsolata`
 
-  const textMetrics = ctx.measureText(str)
+  const textMetrics = ctx.measureText('xHÁQWÍjgpqy')
 
-  const {
-    width: textWidth,
-    fontBoundingBoxAscent,
-    fontBoundingBoxDescent,
-  } = textMetrics
+  const { fontBoundingBoxAscent, fontBoundingBoxDescent } = textMetrics
 
   const lineHeight =
     Math.abs(fontBoundingBoxAscent) + Math.abs(fontBoundingBoxDescent)
 
-  const lineCount = Math.ceil(textWidth / Math.ceil(maxWidth))
+  const words = str.split(' ')
 
-  const width = Math.min(textWidth, maxWidth)
+  const lines: string[] = []
 
-  const height = lineHeight * lineCount
+  let currentLine = words[0]
+
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i]
+    const width = ctx.measureText(currentLine + ' ' + word).width
+
+    if (width < maxWidth) {
+      currentLine += ' ' + word
+    } else {
+      lines.push(currentLine)
+
+      currentLine = word
+    }
+  }
+  lines.push(currentLine)
+
+  const height = lineHeight * lines.length * 1.2
+
+  const width = Math.max(...lines.map((line) => ctx.measureText(line).width))
 
   return {
     width,
