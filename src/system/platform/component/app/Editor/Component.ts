@@ -15460,6 +15460,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_area.$element.style.height = `${height + NODE_PADDING}px`
 
     this._resize_selection(datum_node_id, width, height)
+    this._refresh_datum_overflow(datum_node_id)
     this._start_graph_simulation(LAYER_DATA_LINKED)
   }
 
@@ -39644,8 +39645,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       let { width, height } = getDatumSize(tree, DATUM_FONT_SIZE, measureText)
 
-      const overflowX = width > DATUM_MAX_WIDTH ? 3 : 0
-      const overflowY = height > DATUM_MAX_HEIGHT ? 3 : 0
+      const overflow = width > DATUM_MAX_WIDTH || height > DATUM_MAX_HEIGHT
+
+      const overflowX = overflow ? 6 : 0
+      const overflowY = overflow ? 6 : 0
 
       width = Math.min(width, DATUM_MAX_WIDTH) + overflowY
       height = Math.min(height, DATUM_MAX_HEIGHT) + overflowX
@@ -39855,17 +39858,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       datum.setProp('id', id)
       datum.dispatchEvent('datumchange', { data: tree })
     } else {
-      datum = datum as Datum
-
-      const datum_pin_node_id = this._datum_to_pin[datum_node_id]
-
-      let valid: boolean
-      if (datum_pin_node_id) {
-        valid = this._is_datum_pin_type_match(datum_node_id, datum_pin_node_id)
-      } else {
-        valid = _isValidValue(tree)
-      }
-
       this._refresh_datum_color(datum_node_id)
     }
 
@@ -39883,11 +39875,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._disable_datum_overlay(datum_node_id)
 
-    const datum = this._datum_container[datum_node_id]
-
-    datum.$element.style.overflow = 'auto'
+    this._refresh_datum_overflow(datum_node_id)
 
     this._unlock_node(datum_node_id)
+  }
+
+  private _refresh_datum_overflow = (datum_node_id: string) => {
+    const datum = this._datum_container[datum_node_id]
+
+    if (this._is_datum_unlocked(datum_node_id)) {
+      datum.$element.style.overflow = 'visible'
+
+      const tree = this._get_datum_tree(datum_node_id)
+
+      const datum_size = this._get_datum_tree_size(tree)
+
+      if (datum_size.width > DATUM_MAX_WIDTH) {
+        datum.$element.style.overflowX = 'auto'
+      }
+      if (datum_size.height >= DATUM_MAX_HEIGHT) {
+        datum.$element.style.overflowY = 'auto'
+      }
+    } else {
+      datum.$element.style.overflowX = 'hidden'
+      datum.$element.style.overflowY = 'hidden'
+    }
   }
 
   private _lock_datum = (datum_node_id: string): void => {
@@ -39895,9 +39907,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._enable_datum_overlay(datum_node_id)
 
-    const datum = this._datum_container[datum_node_id]
-
-    datum.$element.style.overflow = 'hidden'
+    this._refresh_datum_overflow(datum_node_id)
 
     this._lock_node(datum_node_id)
   }
