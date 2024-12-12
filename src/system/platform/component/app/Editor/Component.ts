@@ -28238,7 +28238,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _show_core_description = (unit_id: string): void => {
     const core_description = this._core_description[unit_id]
 
-    core_description.$element.style.display = 'flex'
+    core_description.$element.style.display = 'table'
   }
 
   private _hide_core_description = (unit_id: string): void => {
