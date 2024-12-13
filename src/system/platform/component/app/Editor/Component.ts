@@ -129,7 +129,6 @@ import { classnames } from '../../../../../client/classnames'
 import {
   RGBA,
   hexToRgba,
-  randomColorString,
   rgbaToHex,
   setAlpha,
 } from '../../../../../client/color'
@@ -20399,7 +20398,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }px`,
       width: `${width}px`,
       height: `${height}px`,
-      border: `1px solid ${randomColorString()}`,
+      // border: `1px solid ${randomColorString()}`,
       zIndex: '0',
       boxSizing: 'content-box',
       transform: `scale(${sx}, ${sy})`,
@@ -34368,6 +34367,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     } else {
+      const is_component = this._is_unit_component(unit_id)
+
       const all_selected_node_ids = this._get_all_selected_node_ids()
 
       let collapse_node_ids = all_selected_node_ids
@@ -34381,8 +34382,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         let partial_spec: Partial<GraphSpec> = {
           render,
         }
-
-        const is_component = this._is_unit_component(unit_id)
 
         if (is_component) {
           const { width, height } = this._get_node_size(unit_id)
@@ -34401,24 +34400,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         if (is_component) {
           this._connect_sub_component(new_unit_id)
-
-          for (const selected_node_id of all_selected_node_ids) {
-            if (
-              this._is_unit_node_id(selected_node_id) &&
-              this._is_unit_component(selected_node_id)
-            ) {
-              const parent_id =
-                this._spec_get_sub_component_parent_id(selected_node_id)
-
-              if (parent_id !== unit_id) {
-                this._state_pre_append_sub_component_child(
-                  unit_id,
-                  selected_node_id,
-                  'default'
-                )
-              }
-            }
-          }
         }
 
         this._force_pointer_drag_swap(
@@ -34432,6 +34413,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         target_unit_id = new_unit_id
 
         collapse_node_ids = [...collapse_node_ids, unit_id]
+      }
+
+      if (is_component) {
+        for (const selected_node_id of all_selected_node_ids) {
+          if (
+            this._is_unit_node_id(selected_node_id) &&
+            this._is_unit_component(selected_node_id)
+          ) {
+            const parent_id =
+              this._spec_get_sub_component_parent_id(selected_node_id)
+
+            if (parent_id !== unit_id) {
+              this._state_pre_append_sub_component_child(
+                unit_id,
+                selected_node_id,
+                'default'
+              )
+            }
+          }
+        }
       }
 
       const screen_position = this._get_node_screen_position(target_unit_id)
@@ -47417,6 +47418,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         graph_component.setSubComponent(next_sub_component_id, sub_component)
 
+        const push = () => {
+          const next_parent_id =
+            collapse_map.nextSubComponentParentMap[sub_component_id]
+
+          if (next_parent_id) {
+            console.log('A', next_parent_id)
+
+            const graph_sub_parent =
+              graph_component.getSubComponent(next_parent_id)
+
+            const graph_sub_parent_slot_name =
+              collapse_map.nextSubComponentParentSlot[sub_component_id] ??
+              'default'
+
+            graph_sub_parent.pushParentRoot(
+              sub_component,
+              graph_sub_parent_slot_name
+            )
+          } else {
+            graph_component.pushRoot(sub_component)
+          }
+        }
+
         if (parent_id) {
           const parent_component = this._get_sub_component(parent_id)
 
@@ -47440,15 +47464,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           } else {
             parent_component.pullParentRoot(sub_component)
 
-            graph_component.pushRoot(sub_component)
+            push()
           }
         } else {
-          const next_parent_id =
-            collapse_map.nextSubComponentParentMap[sub_component_id]
-
           this._component.pullRoot(sub_component)
 
-          graph_component.pushRoot(sub_component)
+          push()
         }
 
         const slot = collapse_map.nextSubComponentSlot[sub_component_id] ?? null
@@ -48964,9 +48985,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const link_pins: GraphUnitPinOuterSpec[] = []
     const plugs: GraphPlugOuterSpec[] = []
 
-    const sub_component_parent_id_map = {}
-    const sub_component_index_map = {}
-    const sub_component_children_map = {}
+    const next_sub_component_parent_id_map: GraphMoveSubGraphData['nextSubComponentParentMap'] =
+      {}
+    const next_sub_component_index_map: GraphMoveSubGraphData['nextSubComponentIndexMap'] =
+      {}
+    const next_sub_component_children_map: GraphMoveSubGraphData['nextSubComponentChildrenMap'] =
+      {}
 
     const next_id_map: GraphMoveSubGraphData['nextIdMap'] = {
       unit: {},
@@ -49712,7 +49736,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const unit_id of unit_ids) {
       const unit_spec_id = this._get_unit_spec_id(unit_id)
 
-      const next_unit_id = next_id_map[unit_id]
+      const next_unit_id = next_id_map[unit_id] ?? unit_id
 
       if (this._is_unit_component(unit_id)) {
         const sub_component_parent_id =
@@ -49728,23 +49752,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               sub_component_parent_id
             )
 
-            // PERF
             const i = parent_children.indexOf(unit_id)
 
-            sub_component_parent_id_map[unit_id] = sub_component_parent_id
-            sub_component_index_map[unit_id] = i
-            sub_component_children_map[sub_component_parent_id] =
-              sub_component_children_map[sub_component_parent_id] || []
+            next_sub_component_parent_id_map[unit_id] = sub_component_parent_id
+            next_sub_component_index_map[unit_id] = i
+            next_sub_component_children_map[sub_component_parent_id] =
+              next_sub_component_children_map[sub_component_parent_id] || []
 
             insert(
-              sub_component_children_map[sub_component_parent_id],
+              next_sub_component_children_map[sub_component_parent_id],
               unit_id,
               i
             )
 
             if (sub_component_parent_next_id) {
-              sub_component_parent_id_map[next_unit_id] =
+              next_sub_component_parent_id_map[next_unit_id] =
                 sub_component_parent_next_id
+            }
+          } else if (sub_component_parent_id === graph_unit_id) {
+            if (this._is_unit_component(graph_unit_id)) {
+              const { slots } = graph_unit_spec.component ?? { slots: [] }
+
+              for (const slot of slots) {
+                const [graph_sub_component_id, slot_name] = slot
+
+                if (slot_name === 'default') {
+                  next_sub_component_parent_id_map[unit_id] =
+                    graph_sub_component_id
+
+                  break
+                }
+              }
             }
           }
         }
@@ -49946,9 +49984,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       nextMergePinId: next_merge_pin_id,
       nextUnitPinMergeMap: next_unit_pin_merge_map,
       nextPlugSpec: next_plug_spec_map,
-      nextSubComponentParentMap: sub_component_parent_id_map,
-      nextSubComponentChildrenMap: sub_component_children_map,
-      nextSubComponentIndexMap: sub_component_index_map,
+      nextSubComponentParentMap: next_sub_component_parent_id_map,
+      nextSubComponentChildrenMap: next_sub_component_children_map,
+      nextSubComponentIndexMap: next_sub_component_index_map,
       nextSubComponentParentSlot: {},
       nextSubComponentSlot: {},
     }
@@ -50742,10 +50780,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         if (this._spec_graph_unit_has_unit(graph_id, sub_component.parent_id)) {
           removeRoot({ childId: next_unit_id }, updated_graph_spec.component)
 
-          const at =
+          const at = (
             this._collapse_init_spec.component.subComponents[
               sub_component.parent_id
-            ].children.indexOf(unit_id)
+            ] ?? { children: [] }
+          ).children.indexOf(unit_id)
 
           insertSubComponentChild(
             { parentId: sub_component.parent_id, childId: next_unit_id, at },

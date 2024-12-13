@@ -112,9 +112,10 @@ export function moveUnit(
     output: new Set(),
   }
 
-  const spec = source.getSpec() as GraphSpec
+  const specSpec = source.getSpec() as GraphSpec
+  const targetSpec = target.getSpec() as GraphSpec
 
-  const { units, component = {} } = spec
+  const { units, component = {} } = specSpec
 
   const { subComponents = {} } = component
 
@@ -128,10 +129,15 @@ export function moveUnit(
 
   if (nextSubComponentParentId) {
     if (target.hasUnit(nextSubComponentParentId)) {
-      const to =
-        nextSubComponentChildrenMap[nextSubComponentParentId].indexOf(
-          nextUnitId
-        )
+      const nextSubComponentParent = targetSpec.component.subComponents[
+        nextSubComponentParentId
+      ] ?? { children: [] }
+
+      const to = nextSubComponentChildrenMap[nextSubComponentParentId]
+        ? nextSubComponentChildrenMap[nextSubComponentParentId].indexOf(
+            nextUnitId
+          )
+        : (nextSubComponentParent.children ?? []).length
 
       target.moveRoot(nextSubComponentParentId, nextUnitId, to, 'default')
     }
