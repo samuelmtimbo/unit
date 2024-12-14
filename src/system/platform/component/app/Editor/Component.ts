@@ -9331,7 +9331,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     node_id: string,
     event: IOKeyboardEvent,
     _event: KeyboardEvent
-  ) => {}
+  ) => {
+    if (event.key === 'Enter') {
+      _event.preventDefault()
+
+      this.focus()
+    } else if (
+      event.key === 'q' &&
+      this._q_was_pressed_before_name_focus &&
+      !this._q_first_repeat_prevented
+    ) {
+      _event.preventDefault()
+
+      this._q_first_repeat_prevented = true
+    }
+  }
 
   private _unlisten_node_name: Dict<Unlisten> = {}
   private _unlisten_core_description: Dict<Unlisten> = {}
@@ -47423,8 +47437,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             collapse_map.nextSubComponentParentMap[sub_component_id]
 
           if (next_parent_id) {
-            console.log('A', next_parent_id)
-
             const graph_sub_parent =
               graph_component.getSubComponent(next_parent_id)
 
