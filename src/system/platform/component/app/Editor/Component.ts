@@ -40855,7 +40855,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (layout_layer) {
-      parent_layout_layer.layers.removeChild(layout_layer.layer)
+      if (parent_layout_layer.layers.$children.includes(layout_layer.layer)) {
+        parent_layout_layer.layers.removeChild(layout_layer.layer)
+      }
     }
 
     const layout_parent_id = this._layout_sub_component_parent[unit_id] || null
