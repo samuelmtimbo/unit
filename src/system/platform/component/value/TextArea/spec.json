@@ -23,7 +23,8 @@
     "attr": {
       "type": "object",
       "optional": true,
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "examples": ["{spellcheck:true}"]
     }
   },
   "outputs": {
