@@ -118,10 +118,14 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       unit.push(pinId, _data)
     },
 
-    $takeInput(data: { path: string[]; pinId: string }): void {
+    $takeInput(data: { pinId: string }): void {
       const { pinId } = data
 
       unit.takeInput(pinId)
+    },
+
+    $takeErr(data: {}): void {
+      unit.takeErr()
     },
 
     $setPinData({ type, pinId, data }: { type: IO; pinId: string; data: any }) {

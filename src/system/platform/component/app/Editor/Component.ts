@@ -426,6 +426,7 @@ import {
   SET_UNIT_PIN_DATA,
   SET_UNIT_PIN_IGNORED,
   SET_UNIT_SIZE,
+  TAKE_UNIT_ERR,
   UNPLUG_PIN,
   makeAddMergeAction,
   makeAddPinToMergeAction,
@@ -650,6 +651,7 @@ import { R } from '../../../../../types/interface/R'
 import { U, U_EE } from '../../../../../types/interface/U'
 import { UCG } from '../../../../../types/interface/UCG'
 import { UCGEE } from '../../../../../types/interface/UCGEE'
+import { $U } from '../../../../../types/interface/async/$U'
 import {
   randomTreeOfType,
   randomValueOfType,
@@ -8959,11 +8961,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._start_graph_simulation(LAYER_ERR)
   }
 
-  private _pod_remove_unit_err = (unitId: string): void => {
-    this._pod.$takeUnitErr({ unitId })
+  private _pod_take_unit_err = (unitId: string): void => {
+    const $unit = this._pod.$refUnit({
+      unitId,
+      _: ['U'],
+      detached: false,
+    }) as $U
+
+    $unit.$takeErr({})
   }
 
   private _sim_remove_unit_err = (unit_id: string): void => {
+    delete this._err[unit_id]
+
     this._sim_remove_unit_err_link(unit_id)
     this._sim_remove_unit_err_node(unit_id)
   }
@@ -41158,6 +41168,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     for (const datum_node_id of datum_node_ids) {
       if (this._has_node(datum_node_id)) {
+        const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+        if (
+          datum_pin_node_id &&
+          !link_pin_node_ids.includes(datum_pin_node_id)
+        ) {
+          this._spec_remove_pin_data(datum_pin_node_id)
+        }
+
         this._sim_remove_datum(datum_node_id)
       }
     }
@@ -41190,6 +41209,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { unitId } = segmentErrNodeId(err_id)
 
       this._sim_remove_unit_err(unitId)
+      this._refresh_node_color(unitId)
+
+      if (!unit_ids.includes(unitId)) {
+        this._pod_take_unit_err(unitId)
+      }
     }
 
     for (const merge_node_id of merge_node_ids) {
@@ -43341,7 +43365,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (l > 1.5 * LINK_DISTANCE) {
         this._removing_err = true
 
-        this._pod_remove_unit_err(unitId)
+        this._sim_remove_unit_err(unitId)
+        this._pod_take_unit_err(unitId)
       }
     }
   }
@@ -55736,6 +55761,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         break
       case REMOVE_UNIT_PIN_DATA:
         break
+      case TAKE_UNIT_ERR:
+        break
       default:
         throw new CodePathNotImplementedError()
     }
@@ -59986,9 +60013,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _graph_debug_take_err = (unitId: string): void => {
     // console.log('Graph', '_graph_debug_take_err', unitId)
 
-    if (this._has_node(unitId)) {
-      delete this._err[unitId]
+    const errNodeId = getErrNodeId(unitId)
 
+    if (this._has_node(unitId) && this._has_node(errNodeId)) {
       this._reset_core_border_color(unitId)
       this._sim_remove_unit_err(unitId)
     }

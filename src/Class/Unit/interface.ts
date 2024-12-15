@@ -21,6 +21,8 @@ export type UnitTakeInputData = {
   pinId: string
 }
 
+export type UnitTakeErrData = {}
+
 export type UnitSetPinIgnoredData = {
   pinId: string
   type: IO

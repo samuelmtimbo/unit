@@ -13,6 +13,7 @@ import {
   UnitRemovePinDataData,
   UnitResetData,
   UnitSetPinDataData,
+  UnitTakeErrData,
   UnitTakeInputData,
 } from '../../../Class/Unit/interface'
 import { Callback } from '../../Callback'
@@ -40,6 +41,7 @@ export const U_METHOD_CALL = [
   'push',
   'pullInput',
   'takeInput',
+  'takeErr',
   'renamePin',
   'destroy',
 ]
@@ -72,11 +74,12 @@ export interface $U_G {
 export interface $U_C {
   $play(data: UnitPlayData): void
   $pause(data: UnitPauseData): void
-  $push({ pinId, data }: UnitPushData): void
-  $pullInput({ pinId }: UnitPullInputData): void
-  $takeInput({ pinId }: UnitTakeInputData): void
-  $setPinData({ pinId, type, data }: UnitSetPinDataData): void
-  $removePinData({ type, pinId }: UnitRemovePinDataData): void
+  $push(data: UnitPushData): void
+  $pullInput(data: UnitPullInputData): void
+  $takeInput(data: UnitTakeInputData): void
+  $takeErr(data: UnitTakeErrData): void
+  $setPinData(data: UnitSetPinDataData): void
+  $removePinData(data: UnitRemovePinDataData): void
   $reset(data: UnitResetData): void
   $destroy(data: UnitDestroyData): void
 }

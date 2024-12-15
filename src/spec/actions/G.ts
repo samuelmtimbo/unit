@@ -23,6 +23,7 @@ import {
   GraphSetUnitMetadataData,
   GraphSetUnitPinDataData,
   GraphSetUnitSizeData,
+  GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry/types'
@@ -67,6 +68,7 @@ import {
 export const ADD_UNIT = 'addUnitSpec'
 export const ADD_UNITS = 'addUnits'
 export const REMOVE_UNIT = 'removeUnit'
+export const TAKE_UNIT_ERR = 'takeUnitErr'
 export const REMOVE_UNITS = 'removeUnits'
 export const ADD_MERGE = 'addMerge'
 export const ADD_MERGES = 'addMerges'
@@ -296,6 +298,13 @@ export const wrapMakeRemoveUnitAction = (data: GraphRemoveUnitData) => {
   }
 }
 
+export const wrapMakeTakeUnitErrAction = (data: GraphTakeUnitErrData) => {
+  return {
+    type: TAKE_UNIT_ERR,
+    data,
+  }
+}
+
 export const makeRemoveUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
@@ -315,6 +324,12 @@ export const makeRemoveUnitAction = (
     parentId,
     merges,
     plugs,
+  })
+}
+
+export const makeTakeUnitErrAction = (unitId: string) => {
+  return wrapMakeTakeUnitErrAction({
+    unitId,
   })
 }
 
