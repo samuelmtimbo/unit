@@ -677,6 +677,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
+      nextSubComponentParentSlot,
+      nextSubComponentSlot,
       fork = true,
       bubble = true,
     }: GraphMoveSubGraphIntoData): void {
@@ -698,7 +700,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextMergePinId,
         nextPlugSpec,
         nextSubComponentParentMap,
-        nextSubComponentChildrenMap
+        nextSubComponentChildrenMap,
+        nextSubComponentParentSlot,
+        nextSubComponentSlot
       )
     },
 
@@ -712,6 +716,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
+      nextSubComponentParentSlot,
+      nextSubComponentSlot,
       fork = true,
       bubble = true,
     }: GraphMoveSubGraphIntoData): void {
@@ -733,7 +739,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextMergePinId,
         nextPlugSpec,
         nextSubComponentParentMap,
-        nextSubComponentChildrenMap
+        nextSubComponentChildrenMap,
+        nextSubComponentParentSlot,
+        nextSubComponentSlot
       )
     },
 
