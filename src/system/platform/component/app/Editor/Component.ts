@@ -54041,7 +54041,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _reload = () => {
-    this._pod.$reset({})
+    if (this._selected_node_count) {
+      const unit_ids = keys(this._selected_node_id).filter(
+        this._is_unit_node_id
+      )
+
+      for (const unitId of unit_ids) {
+        const $unit = this._pod.$refUnit({ unitId, _: ['U'], detached: true })
+
+        $unit.$reset({})
+      }
+    } else {
+      this._pod.$reset({})
+    }
   }
 
   private _decant_node_ids = (
