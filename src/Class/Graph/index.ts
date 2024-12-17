@@ -48,7 +48,7 @@ import {
   processAction,
 } from '../../spec/actions/G'
 import { cloneUnit, cloneUnitClass } from '../../spec/cloneUnit'
-import { evaluateData, evaluateDataValue } from '../../spec/evaluateDataValue'
+import { evaluateData } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
 import {
@@ -75,7 +75,6 @@ import {
   setUnitSize,
   unplugPin,
 } from '../../spec/reducers/spec'
-import { resolveDataRef } from '../../spec/resolveDataValue'
 import { stringify } from '../../spec/stringify'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import { getSubComponentParentId } from '../../spec/util/component'
@@ -1017,42 +1016,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _reset = (): void => {
-    const paused = this._paused
-
-    !paused && this._pause()
-
     forEachValueKey(this._unit, (u) => u.reset())
-
     forEach(this._children, (c) => c.reset())
-
-    forEachValueKey(this._unit, (u, unitId: string) => {
-      const unitSpec = this.getGraphUnitSpec(unitId)
-
-      const { input = {} } = unitSpec
-
-      for (const name in input) {
-        const inputSpec = input[name]
-
-        const { data } = inputSpec
-
-        if (data !== undefined) {
-          const dataRef = evaluateDataValue(
-            data,
-            this.__system.specs,
-            this.__system.classes
-          )
-          const data_ = resolveDataRef(
-            dataRef,
-            this.__system.specs,
-            this.__system.classes
-          )
-
-          u.pushInput(name, data_)
-        }
-      }
-    })
-
-    !paused && this._play()
 
     this.emit('call', { method: 'reset', data: [] })
   }
