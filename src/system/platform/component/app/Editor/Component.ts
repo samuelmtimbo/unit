@@ -35979,11 +35979,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               const sub_pin_next_unit_id =
                 map_unit_id[sub_pin.unitId] ?? sub_pin.unitId
 
-              this._state_plug_exposed_pin(type_, pinId, subPinId, {
-                unitId: sub_pin_next_unit_id,
-                pinId: sub_pin.pinId,
-                kind: sub_pin.kind ?? type,
-              })
+              const ext_node_id = getIntNodeId(type_, pinId, subPinId)
+
+              const plug_pin_node_id = this._int_to_node[ext_node_id]
+
+              if (plug_pin_node_id) {
+                const new_sub_pin_id = this._new_sub_pin_id(type_, pinId)
+
+                this._state_add_exposed_pin(
+                  type_,
+                  pinId,
+                  new_sub_pin_id,
+                  {
+                    unitId: sub_pin_next_unit_id,
+                    pinId: sub_pin.pinId,
+                    kind: sub_pin.kind ?? type,
+                  },
+                  {}
+                )
+              } else {
+                this._state_plug_exposed_pin(type_, pinId, subPinId, {
+                  unitId: sub_pin_next_unit_id,
+                  pinId: sub_pin.pinId,
+                  kind: sub_pin.kind ?? type,
+                })
+              }
             } else if (sub_pin.mergeId) {
               const sub_pin_next_merge_id =
                 map_merge_id[sub_pin.mergeId] ?? sub_pin.mergeId

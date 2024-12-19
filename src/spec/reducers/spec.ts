@@ -202,7 +202,7 @@ export const addMerge = (
           subPinSpec.pinId &&
           deepGetOrDefault(
             mergeSpec,
-            [subPinSpec.unitId, type, subPinSpec.pinId],
+            [subPinSpec.unitId, subPinSpec.kind ?? type, subPinSpec.pinId],
             null
           )
         ) {

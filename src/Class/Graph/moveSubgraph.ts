@@ -420,21 +420,49 @@ export function moveUnit(
         if (target.hasPlug(type_, pinId_, subPinId)) {
           const propagate = isSelfPin(kind, pinId)
 
-          target.plugPin(
-            type_,
-            pinId_,
-            subPinId,
-            {
-              unitId: nextUnitId,
-              pinId,
-              kind,
-            },
-            undefined,
-            false,
-            propagate,
-            false,
-            false
-          )
+          const pinSpec = target.getExposedPinSpec(type_, pinId_)
+
+          const plugSpec = pinSpec.plug[subPinId]
+
+          if (plugSpec.unitId || plugSpec.mergeId) {
+            let i = 0
+            let newSubPinId: string
+
+            do {
+              newSubPinId = `${i}`
+
+              i++
+            } while (pinSpec.plug[newSubPinId])
+
+            target.exposePin(
+              type_,
+              pinId_,
+              newSubPinId,
+              {
+                unitId: nextUnitId,
+                pinId,
+                kind,
+              },
+              false,
+              propagate
+            )
+          } else {
+            target.plugPin(
+              type_,
+              pinId_,
+              subPinId,
+              {
+                unitId: nextUnitId,
+                pinId,
+                kind,
+              },
+              undefined,
+              false,
+              propagate,
+              false,
+              false
+            )
+          }
         } else {
           //
         }
