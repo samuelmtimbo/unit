@@ -310,6 +310,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const { global } = system
 
+    this.register()
+
     deepSet_(global.graph, [this.id, this.__global_id], this)
 
     system.registerUnit(id)
