@@ -32501,7 +32501,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     children: string[],
     pack: [string, string, string, string][],
     target: Dict<Component>,
-    should_expand_slot: boolean,
+    expand: boolean,
     offset: () => Point,
     include_scroll: () => boolean,
     callback: Callback
@@ -32512,7 +32512,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         slot_name,
         pack,
         target,
-        should_expand_slot,
+        expand,
         offset,
         include_scroll
       )
@@ -32737,7 +32737,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     target: Dict<Component>,
     setup: (leaf_id: string, parent_id: string, slot_name: string) => void,
     callback: (leaf_id: string, ended: boolean) => void,
-    should_expand_slot: boolean = true,
+    expand: boolean = true,
     offset: () => Point,
     include_scroll: () => boolean
   ) => {
@@ -32953,16 +32953,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         slot_style.style,
         slot_base_style,
         (path) => {
-          if (!should_expand_slot) {
-            return []
-          }
-
           const children_style = expandSlot(
             this._component,
             slot_trait,
             slot_id,
             slot_id === slot_base[0] ? path.slice(1) : path,
-            false,
+            expand,
             (leaf_id, leaf_comp) => {
               return this._extract_style(slot_trait, leaf_id, leaf_comp)
             }
@@ -32991,7 +32987,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     slot_name: string,
     pack: [string, string, string, string][],
     target: Dict<Component>,
-    should_expand_slot: boolean,
+    expand: boolean,
     offset: () => Point,
     include_scroll: () => boolean
   ) => {
@@ -33018,7 +33014,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
         }
       },
-      should_expand_slot,
+      expand,
       offset,
       include_scroll
     )
@@ -40719,7 +40715,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           unit_id,
           'default',
           children,
-          true,
+          false,
           () => {
             this._end_layout_sub_component_transfer_children_animation(
               unit_id,
