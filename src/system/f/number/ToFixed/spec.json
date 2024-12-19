@@ -5,20 +5,17 @@
       "type": "number"
     },
     "digits": {
-      "type": "number",
-      "metadata": {
-        "description": ""
-      }
+      "type": "number"
     }
   },
   "outputs": {
     "str": {
-      "type": "number"
+      "type": "string"
     }
   },
   "metadata": {
     "icon": "tilde",
-    "description": "convert a number into an integer",
+    "description": "round the number `n` to the specified number of `digits`",
     "tags": ["f", "number"]
   },
   "id": "4a2fc8f5-17a8-4665-8895-eee4b242121e",

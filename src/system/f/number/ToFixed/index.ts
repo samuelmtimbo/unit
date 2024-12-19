@@ -1,17 +1,18 @@
-import { MIMO } from '../../../../MIMO'
+import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_TO_FIXED } from '../../../_ids'
 
 export interface I {
-  str: string
-  radix: number
+  n: number
+  digits: number
 }
 
 export interface O {
-  n: number
+  str: string
 }
 
-export default class ToFixed extends MIMO<I, O> {
+export default class ToFixed extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
@@ -24,14 +25,11 @@ export default class ToFixed extends MIMO<I, O> {
     )
   }
 
-  m({ str, radix }: I): Partial<O> | undefined {
-    const n = Number.parseInt(str, radix)
-    if (isNaN(n)) {
-      throw 'invalid number string'
-    } else {
-      return {
-        n,
-      }
-    }
+  f({ n, digits }: I, done: Done<O>): void {
+    const str = n.toFixed(digits)
+
+    done({
+      str,
+    })
   }
 }
