@@ -44365,18 +44365,33 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_multiselect_area = (event: UnitPointerEvent): void => {
-    const { pointerId, clientX, clientY } = event
-    const { x, y } = this._multiselect_area_start_position
-    const minX = Math.min(x, clientX)
-    const maxX = Math.max(x, clientX)
-    const minY = Math.min(y, clientY)
-    const maxY = Math.max(y, clientY)
+    const { clientX, clientY } = event
+
+    let { x, y } = this._multiselect_area_start_position
+
+    if (this._mode !== 'multiselect') {
+      const dx = event.clientX - this._multiselect_area_rect.x1
+      const dy = event.clientY - this._multiselect_area_rect.y1
+
+      x += dx
+      y += dy
+
+      this._multiselect_area_start_position.x = x
+      this._multiselect_area_start_position.y = y
+    }
+
+    let minX = Math.min(x, clientX)
+    let maxX = Math.max(x, clientX)
+    let minY = Math.min(y, clientY)
+    let maxY = Math.max(y, clientY)
+
     this._multiselect_area_rect = {
       x0: minX,
       y0: minY,
       x1: maxX,
       y1: maxY,
     }
+
     this._tick_multiselect_area()
   }
 
