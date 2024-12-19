@@ -2,13 +2,11 @@ import { isFrameRelativeValue } from '../isFrameRelative'
 import { Style } from '../system/platform/Style'
 import { MeasureTextFunction } from '../text'
 import { Component } from './component'
-import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
 import { camelToDashed } from './id'
 import { IOElement } from './IOElement'
 import { isContentEditable } from './isContentEditable'
 import { LayoutNode } from './LayoutNode'
 import { rawExtractStyle } from './rawExtractStyle'
-import { parseFontSize } from './util/style/getFontSize'
 
 export const LAYOUT_STYLE_ATTRS = [
   'position',
@@ -169,24 +167,6 @@ export function _extractFromRawStyle(
   }
 
   if (element instanceof HTMLInputElement) {
-    if (
-      element.type === 'text' ||
-      element.type === 'number' ||
-      element.type === 'password'
-    ) {
-      if (style.height === 'fit-content') {
-        const { value } = element
-
-        const fontSize = element.style.fontSize
-
-        const fontSizeNum = parseFontSize(fontSize) ?? DEFAULT_FONT_SIZE
-
-        const { height } = measureText(value, fontSizeNum, trait.width)
-
-        style.height = `${height}px`
-      }
-    }
-
     if (element.type === 'range') {
       style.height = '18px'
     }
