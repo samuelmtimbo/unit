@@ -34450,6 +34450,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 selected_node_id,
                 'default'
               )
+              this._layout_layer_move_sub_component_child(
+                parent_id,
+                unit_id,
+                selected_node_id
+              )
             }
           }
         }
@@ -40837,9 +40842,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _sim_remove_layout_core = (unit_id: string): void => {
     // console.log('Graph', '_sim_remove_layout_core', unit_id)
-
-    const parent_id = this._spec_get_sub_component_parent_id(unit_id)
-    const children = this._spec_get_sub_component_children(unit_id)
 
     const layout_core = this._layout_core[unit_id]
 
@@ -50618,7 +50620,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // )
 
     if (this._is_unit_component(unit_id)) {
-      // this._sim_remove_layout_core(unit_id)
       this._sim_remove_component(unit_id, false, false)
     }
 
