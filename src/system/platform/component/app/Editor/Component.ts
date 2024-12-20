@@ -60062,8 +60062,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const errNodeId = getErrNodeId(unitId)
 
     if (this._has_node(unitId) && this._has_node(errNodeId)) {
-      this._reset_core_border_color(unitId)
       this._sim_remove_unit_err(unitId)
+
+      this._reset_core_border_color(unitId)
     }
   }
 
