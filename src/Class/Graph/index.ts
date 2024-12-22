@@ -3698,11 +3698,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         setup_unit_constant_pin('input', pinId)
       }
     })
-    // forEach(outputs, (pinId) => {
-    //   if (unit.isPinConstant('output', pinId)) {
-    //     setup_unit_constant_pin('output', pinId)
-    //   }
-    // })
 
     all_unlisten.push(
       unit.addListener('destroy', (path: string[] = []) => {

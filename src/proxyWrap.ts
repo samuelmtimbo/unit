@@ -30,8 +30,12 @@ export function proxy<T extends object>(
         const value = target[name]
 
         if (call.has(name)) {
-          stop_event = camelToSnake(name.slice(1))
-          stop_depth = depth
+          return (...args: any[]) => {
+            stop_event = camelToSnake(name.slice(1))
+            stop_depth = depth
+
+            return value.call(target, ...args)
+          }
         } else if (watch.has(name)) {
           return (data: any, callback: Callback<any>): Unlisten => {
             return value.call(target, data, (moment: Moment) => {
