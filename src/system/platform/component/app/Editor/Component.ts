@@ -9901,7 +9901,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (input) {
       const end_d = `${functional ? ARROW_MEMORY : ''}${arrow_share}`
       end_marker = new SVGPath(
-        { d: end_d, style: marker_style, attr: { 'stroke-linecap': 'normal' } },
+        { d: end_d, style: marker_style, attr: { 'stroke-linecap': 'round' } },
         this.$system
       )
     } else {
@@ -9910,7 +9910,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         {
           d: start_d,
           style: marker_style,
-          attr: { 'stroke-linecap': 'normal' },
+          attr: { 'stroke-linecap': 'round' },
         },
         this.$system
       )
