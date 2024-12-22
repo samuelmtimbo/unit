@@ -40533,6 +40533,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ) => {
     // console.log('Graph', '_spec_remove_unit', unitId, unregister, deep)
 
+    const { parent } = this.$props
+
     const unit = this._get_unit(unitId)
 
     if (this._is_unit_component(unitId)) {
@@ -47061,7 +47063,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       init_unit_spec_id = this._get_unit_spec_id(init_unit_id)
 
       next_spec_id = init_unit_spec_id
-      next_spec = init_unit_spec
+      next_spec = clone(init_unit_spec)
+
+      delete next_spec.system
     }
 
     let graph_id: string = init_unit_id
@@ -47155,8 +47159,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         delete graph_spec.system
 
         graph_spec.render = init_unit_spec.render ?? false
-
-        setSpec(graph_spec.id, graph_spec)
       }
     }
 
