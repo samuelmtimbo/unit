@@ -13282,27 +13282,27 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { l, d } = surfaceDistance(a, t)
 
       const on_plug_target_end = (
-        int_node_id,
-        int_node,
-        target_id,
-        target_node
+        int_node_id: string,
+        int_node: SimNode,
+        target_id: string,
+        target_node: SimNode
       ) => {
         const { type } = segmentInternalNodeId(int_node_id)
 
         const b_id = getExtNodeIdFromIntNodeId(int_node_id)
 
-        const is_close = isInside(int_node, target_node, 3)
+        const is_close = isInside(int_node, target_node, 3 + int_node.r)
         const is_inside = isInside(int_node, target_node, 1)
 
         this._set_plug_marker_to_default(type, b_id, int_node_id)
 
         if (is_close) {
-          this._set_exposed_pin_marker_to_node(
+          this._set_plug_marker_to_node(
             type,
             b_id,
             int_node_id,
             int_node_id,
-            3 - l
+            -l - 2
           )
         }
 
@@ -13385,7 +13385,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const { x: c_x, y: c_y, r: c_r } = c
 
             if (closest_l_a + a.r < 3) {
-              this._set_exposed_pin_marker_to_node(
+              this._set_plug_marker_to_node(
                 type,
                 b_id,
                 a_id,
@@ -13397,7 +13397,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             }
 
             if (closest_l_b < 1) {
-              this._set_exposed_pin_marker_to_node(
+              this._set_plug_marker_to_node(
                 type,
                 b_id,
                 a_id,
@@ -13437,7 +13437,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 closest_l_a + 2 * PIN_RADIUS < 1 &&
                 closest_l_b < SURFACE_UNPLUG_DISTANCE
               ) {
-                this._set_exposed_pin_marker_to_node(
+                this._set_plug_marker_to_node(
                   type,
                   b_id,
                   a_id,
@@ -41516,7 +41516,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return marker
   }
 
-  private _set_exposed_pin_marker_to_node = (
+  private _set_plug_marker_to_node = (
     type: IO,
     ext_node_id: string,
     int_node_id: string,
@@ -41621,7 +41621,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     anchor_node_id: string | null
   ): void => {
     if (anchor_node_id) {
-      this._set_exposed_pin_marker_to_node(
+      this._set_plug_marker_to_node(
         type,
         ext_node_id,
         int_node_id,
