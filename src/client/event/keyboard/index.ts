@@ -45,6 +45,7 @@ export type Shortcut = {
   keydown?: (key: string, event: IOKeyboardEvent) => boolean | void
   keyup?: (key: string, event: IOKeyboardEvent) => boolean | void
   preventDefault?: boolean
+  stopPropagation?: boolean
 }
 
 export class KeyboardController {
@@ -301,8 +302,11 @@ export class KeyboardController {
     const shortcuts = this._keydown(keyCode)
 
     for (const shortcut of shortcuts) {
-      if (shortcut && shortcut.preventDefault) {
+      if (shortcut.preventDefault) {
         event.preventDefault()
+      }
+      if (shortcut.stopPropagation) {
+        event.stopPropagation()
       }
     }
   }

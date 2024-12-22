@@ -19275,6 +19275,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             combo: 'Escape',
             keydown: this._on_escape_keydown,
             strict: true,
+            stopPropagation: true,
           },
         ])
       )
