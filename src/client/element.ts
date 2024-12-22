@@ -32,6 +32,7 @@ export class Element<
   private _element_unlisten: Unlisten
 
   public $preventLoad: boolean = false
+  public $input: Dict<string[]>
 
   onConnected($unit: $Element) {
     const handler = {
@@ -47,7 +48,9 @@ export class Element<
             const _data = evaluate(data, specs, classes, (url) => {
               const globalId = url.slice(7)
 
-              return this.$unit.$refGlobalObj({ globalId })
+              const _ = this.$input[name] ?? []
+
+              return this.$unit.$refGlobalObj({ globalId, _ })
             })
 
             this.setProp(name, _data)
@@ -75,18 +78,24 @@ export class Element<
       $unit.$read({}, (state) => {
         const { specs, classes } = this.$system
 
-        const _state = evaluate(state, specs, classes, (url) => {
-          if (url.startsWith('unit://')) {
-            const globalId = url.slice(7)
-
-            return $unit.$refGlobalObj({ globalId })
-          } else {
-            throw new Error('resolver not implemented')
-          }
+        state = evaluate(state, specs, classes, (url) => {
+          return url
         })
 
-        for (const name in _state) {
-          const data = _state[name]
+        for (const name in this.$input) {
+          const url = state[name]
+
+          if (url) {
+            const globalId = url.slice(7)
+
+            const _ = this.$input[name]
+
+            state[name] = this.$unit.$refGlobalObj({ globalId, _ })
+          }
+        }
+
+        for (const name in state) {
+          const data = state[name]
 
           this.setProp(name as keyof P, data)
         }

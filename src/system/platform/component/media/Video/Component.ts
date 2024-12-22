@@ -18,6 +18,10 @@ export default class Video_
   extends HTMLElement_<HTMLVideoElement, Props>
   implements CS
 {
+  public $input: Dict<string[]> = {
+    stream: ['MS'],
+  }
+
   constructor($props: Props, $system: System) {
     super(
       $props,

@@ -13,7 +13,7 @@ export interface $S_C {}
 export interface $S_W {}
 
 export interface $S_R {
-  $start(data: { bundle: BundleSpec }): $Graph
+  $start(data: { bundle: BundleSpec; _: string[] }): $Graph
 }
 
 export interface $S extends $S_G, $S_C, $S_W, $S_R {}

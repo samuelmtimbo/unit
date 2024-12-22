@@ -65,7 +65,7 @@ export default class Start extends Holder<I, O> {
       weakMerge(__bundle.specs, this.__system.specs)
     )
 
-    const $graph = system.$start({ bundle })
+    const $graph = system.$start({ bundle, _: UCGEE })
 
     const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 

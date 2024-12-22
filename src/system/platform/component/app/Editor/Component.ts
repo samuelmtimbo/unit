@@ -943,6 +943,10 @@ export interface Props {
 }
 
 export default class Editor extends Element<HTMLDivElement, Props> {
+  public $input: Dict<string[]> = {
+    graph: UCGEE,
+  }
+
   private _pod: $Graph
 
   private _root: Frame
@@ -2470,6 +2474,10 @@ export type LayoutLayer = {
 }
 
 export class Editor_ extends Element<HTMLDivElement, Props_> {
+  public $input: Dict<string[]> = {
+    graph: UCGEE,
+  }
+
   private _spec: GraphSpec = emptyGraphSpec()
 
   private _disabled: boolean = true

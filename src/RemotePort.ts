@@ -62,7 +62,7 @@ export class RemotePort {
       this._call_emitter.emit(id, __data)
     } else if (type === WATCH) {
       if (!this._watch_id.has(id)) {
-        throw new Error('unexpected worker watch message id')
+        //
       }
 
       this._watch_emitter.emit(id, __data)

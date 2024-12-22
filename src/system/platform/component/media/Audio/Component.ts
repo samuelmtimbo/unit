@@ -15,6 +15,10 @@ export default class Audio_
   extends HTMLElement_<HTMLAudioElement, Props>
   implements CS
 {
+  public $input: Dict<string[]> = {
+    stream: ['MS'],
+  }
+
   constructor($props: Props, $system: System) {
     super(
       $props,
