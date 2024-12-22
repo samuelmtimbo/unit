@@ -100,7 +100,7 @@ export default class Socket extends Holder<I, O, SocketEvents> {
 
   d() {
     if (this._web_socket) {
-      if (this._web_socket.readyState === WebSocket.OPEN) {
+      if (this._web_socket.readyState !== WebSocket.CLOSED) {
         this._web_socket.close()
       }
 
