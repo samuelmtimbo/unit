@@ -49851,7 +49851,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             }
           } else if (sub_component_parent_id === graph_unit_id) {
             if (this._is_unit_component(graph_unit_id)) {
-              const { slots } = graph_unit_spec.component ?? { slots: [] }
+              const { slots = [] } = graph_unit_spec.component ?? { slots: [] }
 
               for (const slot of slots) {
                 const [graph_sub_component_id, slot_name] = slot
