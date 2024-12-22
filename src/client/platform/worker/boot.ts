@@ -243,6 +243,7 @@ export function workerApi(): API {
       Image: globalThis.Image,
       Audio: globalThis.Audio,
       OffscreenCanvas: globalThis.OffscreenCanvas,
+      WebSocket: globalThis.WebSocket,
       open: function (url: string, target: string, features: string): Window {
         throw new MethodNotImplementedError()
       },

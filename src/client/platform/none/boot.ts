@@ -243,6 +243,7 @@ export function noneApi(): API {
       Image: undefined,
       Audio: undefined,
       OffscreenCanvas: undefined,
+      WebSocket: undefined,
       open: function (url: string, target: string, features: string): Window {
         throw new MethodNotImplementedError()
       },

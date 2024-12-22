@@ -5,6 +5,7 @@ import {
   Semifunctional_EE,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
+import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
 import { wrapWebSocket } from '../../../../../wrap/Socket'
@@ -48,6 +49,18 @@ export default class Socket extends Holder<I, O, SocketEvents> implements CH {
   }
 
   f({ url }: I, done: Done<O>) {
+    const {
+      api: {
+        window: { WebSocket },
+      },
+    } = this.__system
+
+    if (!WebSocket) {
+      done(undefined, apiNotSupportedError('WebSocket'))
+
+      return
+    }
+
     if (this._web_socket) {
       this._web_socket.close()
     }

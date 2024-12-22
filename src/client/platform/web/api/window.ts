@@ -47,6 +47,8 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     ReadableStream: window.ReadableStream,
     // @ts-ignore
     OffscreenCanvas: window.OffscreenCanvas,
+    // @ts-ignore
+    WebSocket: window.WebSocket,
     open(url: string, target: string, features: string) {
       return window.open(url, target, features)
     },
