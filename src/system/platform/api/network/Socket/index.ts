@@ -96,6 +96,10 @@ export default class Socket extends Holder<I, O, SocketEvents> {
 
       channel.emit('close', code, reason)
     }
+
+    channel.addListener('error', (err) => {
+      this.err(err)
+    })
   }
 
   d() {

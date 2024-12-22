@@ -6,6 +6,7 @@ import { CH } from '../types/interface/CH'
 export type SocketEE = {
   message: [string]
   close: [number, string]
+  error: [string]
 }
 
 export type SocketEvents<_EE extends Dict<any[]>> = $Events<_EE & SocketEE> &
@@ -19,7 +20,9 @@ export function wrapWebSocket(
     __: string[] = ['CH']
 
     async send(data: any): Promise<void> {
-      webSocket.send(data)
+      if (webSocket.readyState === WebSocket.OPEN) {
+        webSocket.send(data)
+      }
 
       return
     }
