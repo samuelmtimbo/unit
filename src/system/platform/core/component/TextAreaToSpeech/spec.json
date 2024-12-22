@@ -35,7 +35,7 @@
         }
       }
     },
-    "a": {
+    "voice": {
       "plug": {
         "0": {
           "unitId": "default",
@@ -211,7 +211,7 @@
         }
       }
     },
-    "ntxmggphc": {
+    "3": {
       "default": {
         "output": {
           "a": true
@@ -236,7 +236,7 @@
   },
   "metadata": {
     "icon": "align-left",
-    "description": "speech text on enter",
+    "description": "speak text on enter",
     "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
@@ -248,7 +248,7 @@
           "x": 22,
           "y": -2
         },
-        "ntxmggphc": {
+        "3": {
           "x": 130,
           "y": -14
         }
