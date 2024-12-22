@@ -24,7 +24,7 @@ export type Socket_EE = { message: [any]; close: [any, any] }
 
 export type SocketEvents = SemifunctionalEvents<Semifunctional_EE> & Socket_EE
 
-export default class Socket extends Holder<I, O, SocketEvents> implements CH {
+export default class Socket extends Holder<I, O, SocketEvents> {
   private _web_socket: WebSocket | null = null
 
   constructor(system: System) {
@@ -110,14 +110,6 @@ export default class Socket extends Holder<I, O, SocketEvents> implements CH {
       this._web_socket.onclose = null
 
       this._web_socket = null
-    }
-  }
-
-  async send(data: any): Promise<void> {
-    if (this._web_socket) {
-      if (this._web_socket.readyState === WebSocket.OPEN) {
-        this._web_socket.send(data)
-      }
     }
   }
 }
