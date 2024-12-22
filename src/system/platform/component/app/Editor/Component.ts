@@ -23683,11 +23683,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const nearest_compatible_node_id: string = this._find_nearest_node_id(
         int_node_id,
         NEAR,
-        // 4 * LINK_DISTANCE + 2 * PIN_RADIUS,
         this._is_plug_node_match
       )
 
       if (nearest_compatible_node_id) {
+        const plug_datum_node_id = this._plug_to_datum[ext_node_id]
+
+        this._negate_node_layer(int_node_id)
+        this._negate_node_layer(ext_node_id)
+
+        if (plug_datum_node_id) {
+          this._negate_node_layer(plug_datum_node_id)
+        }
+
         this._set_node_target(int_node_id, nearest_compatible_node_id)
       } else {
         this._refresh_plug_layer(ext_node_id, int_node_id)
