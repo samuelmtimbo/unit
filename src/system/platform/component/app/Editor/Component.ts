@@ -42187,6 +42187,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // if (this._is_external_pin_node_id(node_id)) {
     //   return false
     // }
+
     if (this._is_datum_node_id(node_id) && this._hidden_data_node[node_id]) {
       return false
     }
@@ -42195,6 +42196,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (this._spec_is_link_pin_ignored(node_id)) {
         return false
       }
+    }
+
+    if (this._is_type_node_id(node_id)) {
+      return false
     }
 
     return true
