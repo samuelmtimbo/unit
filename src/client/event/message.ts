@@ -1,5 +1,5 @@
-import { Listenable } from '../../Listenable'
-import { Listener } from '../../Listener'
+import { Listenable } from '../Listenable'
+import { Listener } from '../Listener'
 
 export function makeMessageListener(
   listener: (event: any, _event: MessageEvent) => void,
