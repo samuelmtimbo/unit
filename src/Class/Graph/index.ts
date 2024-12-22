@@ -629,8 +629,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinNodeId: string,
     propagate: boolean
   ) {
-    // console.log('Graph', '_simSetBranch', mergeId, type, pinNodeId)
-
     const merge = this._merge[mergeId]
 
     if (type === 'input') {

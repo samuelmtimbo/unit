@@ -2,12 +2,12 @@
   "name": "flex column center",
   "units": {
     "flexcolumn": {
-      "id": "67a6fb5a-feab-11ea-8bd1-a3c19e76592a",
+      "id": "435e106b-9ee5-4457-818b-3f41a62992a6",
       "input": {},
       "metadata": {
         "component": {
-          "width": 120,
-          "height": 210
+          "width": 240,
+          "height": 240
         }
       }
     },
@@ -17,7 +17,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{alignItems:'center',justifyContent:'center'}"
+          "data": "{flexWrap:'wrap',alignContent:'center',justifyContent:'center'}"
         }
       },
       "output": {

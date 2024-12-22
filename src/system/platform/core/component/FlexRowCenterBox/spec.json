@@ -1,13 +1,12 @@
 {
-  "name": "flex column box",
+  "name": "flex row center box",
   "units": {
-    "div": {
-      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
-      "input": {},
+    "flexrowcenter": {
+      "id": "af731047-6d74-4dfd-93bd-0daa4d649d4d",
       "metadata": {
         "component": {
-          "width": 180,
-          "height": 270
+          "width": 240,
+          "height": 240
         }
       }
     },
@@ -17,7 +16,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{display:'flex',flexDirection:'column',overflow:'auto',height:'100%',width:'100%'}"
+          "data": "{height:\"100%\"}"
         }
       },
       "output": {
@@ -32,7 +31,7 @@
           "a": true
         }
       },
-      "div": {
+      "flexrowcenter": {
         "input": {
           "style": true
         }
@@ -53,22 +52,22 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "full-size column flexbox",
+    "description": "full-size flexbox with content centered",
     "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [["div", "default"]],
-    "defaultWidth": 180,
-    "defaultHeight": 270,
+    "slots": [["flexrowcenter", "default"]],
+    "defaultWidth": 240,
+    "defaultHeight": 240,
     "subComponents": {
-      "div": {
+      "flexrowcenter": {
         "children": []
       }
     },
-    "children": ["div"]
+    "children": ["flexrowcenter"]
   },
-  "id": "67a6fb5a-feab-11ea-8bd1-a3c19e76592a",
-  "type": "`U`&`G`&`C`",
+  "id": "5a7018ba-079d-4749-982d-16326e708a71",
+  "type": "`U`&`C`&`G`",
   "system": true,
   "render": true
 }

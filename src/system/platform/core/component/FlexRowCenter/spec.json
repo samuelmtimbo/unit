@@ -1,18 +1,12 @@
 {
   "name": "flex row center",
   "units": {
-    "div": {
-      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
-      "input": {
-        "style": {
-          "constant": true,
-          "data": "{width:\"100%\"}"
-        }
-      },
+    "flexrow": {
+      "id": "7d6383c6-9791-4f2a-8f9a-e80415551f15",
       "metadata": {
         "component": {
-          "width": 120,
-          "height": 210
+          "width": 240,
+          "height": 240
         }
       }
     },
@@ -22,7 +16,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{display:'flex',flexDirection:'row',flexWrap:'wrap',alignContent:'center',justifyContent:'center'}"
+          "data": "{flexWrap:'wrap',alignContent:'center',justifyContent:'center'}"
         }
       },
       "output": {
@@ -37,7 +31,7 @@
           "a": true
         }
       },
-      "div": {
+      "flexrow": {
         "input": {
           "style": true
         }
@@ -62,15 +56,15 @@
     "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [["div", "default"]],
+    "slots": [["flexrow", "default"]],
     "defaultWidth": 240,
     "defaultHeight": 240,
     "subComponents": {
-      "div": {
+      "flexrow": {
         "children": []
       }
     },
-    "children": ["div"]
+    "children": ["flexrow"]
   },
   "id": "af731047-6d74-4dfd-93bd-0daa4d649d4d",
   "type": "`U`&`C`&`G`",

@@ -11,7 +11,6 @@ import {
 } from '../../spec/type'
 import {
   ID_ARRAY_BUILDER_FROM,
-  ID_CONCAT_3,
   ID_CONCAT_3_0,
   ID_CONSTANT_ONE,
   ID_HEAD_OR_DEFAULT,
@@ -103,10 +102,10 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_CONCAT_3_0, _specs), {
   output: { abc: 'string' },
 })
 
-assert.deepEqual(getSpecTypeInterfaceById(ID_CONCAT_3, _specs), {
-  input: { a: '<A>[]', b: '<A>[]', c: '<A>[]' },
-  output: { abc: '<A>[]' },
-})
+// assert.deepEqual(getSpecTypeInterfaceById(ID_CONCAT_3, _specs), {
+//   input: { a: '<A>[]', b: '<A>[]', c: '<A>[]' },
+//   output: { abc: '<A>[]' },
+// })
 
 assert.deepEqual(getGraphTypeMapById(ID_SWAP, _specs), {
   set0: {

@@ -53,7 +53,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "row flexbox",
+    "description": "full-size row flexbox",
     "tags": ["platform", "core", "component"]
   },
   "component": {
