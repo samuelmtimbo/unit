@@ -1,5 +1,6 @@
 import * as http from 'http'
 import { JSDOM } from 'jsdom'
+import * as ws from 'ws'
 import { BasicHTTPHandler, BasicHTTPRequest } from '../../../API'
 import { BootOpt, System } from '../../../system'
 import { Unlisten } from '../../../types/Unlisten'
@@ -26,6 +27,9 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
     return null
   }
+
+  // @ts-ignore
+  window.WebSocket = ws.WebSocket
 
   // @ts-ignore
   const [system, unlisten] = webBoot(window, root, opt)
