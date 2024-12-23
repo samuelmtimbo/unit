@@ -120,6 +120,30 @@ export class Primitive<
           } else if (event === 'start') {
             this._onInputStart(name as keyof I)
           }
+        } else {
+          const { ref } = this.getOutputOpt(name as keyof O)
+
+          if (event === 'data') {
+            this._activateOutput(name as keyof O)
+
+            if (ref) {
+              this._onRefOutputData(name as keyof O, data)
+            } else {
+              this.onDataOutputData(name as keyof O, data)
+            }
+          } else if (event === 'drop') {
+            this._deactivateOutput(name as keyof O)
+
+            if (ref) {
+              this._onRefOutputDrop(name as keyof O)
+            } else {
+              this.onDataOutputDrop(name as keyof O)
+            }
+          } else if (event === 'invalid') {
+            this._onOutputInvalid(name as string)
+          } else if (event === 'start') {
+            //
+          }
         }
       }
     })
