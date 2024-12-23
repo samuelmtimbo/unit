@@ -13,7 +13,10 @@ import { render as render_ } from '../../render'
 import { defaultWebBoot, webBoot } from './boot'
 import { webInit } from './init'
 
-export function render(bundle: BundleSpec, opt?: BootOpt): [System, Unlisten] {
+export function render(
+  bundle: BundleSpec,
+  opt?: BootOpt
+): [System, Graph, Unlisten] {
   const { spec = {}, specs = {} } = bundle
 
   bundle.spec = spec
@@ -36,7 +39,7 @@ export function render(bundle: BundleSpec, opt?: BootOpt): [System, Unlisten] {
 
   const destroy = callAll([deinit, unrender, deboot])
 
-  return [system, destroy]
+  return [system, graph, destroy]
 }
 
 export function renderBundle(
