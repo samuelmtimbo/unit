@@ -6,5 +6,5 @@ import { UnitClass } from './UnitClass'
 export interface UnitBundle<T extends Unit = any> extends UnitClass<T> {
   readonly __bundle: UnitBundleSpec
 
-  new (system: System): T
+  new (system: System, push?: boolean): T
 }

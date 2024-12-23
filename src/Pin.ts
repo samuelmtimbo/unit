@@ -265,7 +265,7 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
   public snapshot(): Pin_M<T> {
     return {
-      _register: this._register,
+      _register: this._register instanceof $ ? undefined : this._register,
       _invalid: this._invalid,
       _constant: this._constant,
       _ignored: this._ignored,

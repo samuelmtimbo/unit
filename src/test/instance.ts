@@ -22,7 +22,7 @@ const spec = system.emptySpec()
 const graph = new Graph<{ number: number }, { sum: number }>(spec, {}, system)
 
 for (const id of specIds) {
-  const unit = unitFromId(system, id, system.specs, system.classes)
+  const unit = unitFromId(system, id, system.specs, system.classes, {}, true)
 
   let unitId: string
 

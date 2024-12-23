@@ -16,7 +16,7 @@ export function graphComponentFromSpec(
 ): Client {
   const { specs } = system
 
-  const graph = graphFromSpec(system, spec, specs)
+  const graph = graphFromSpec(system, spec, specs, {}, true)
 
   for (const pinId in input) {
     const data = input[pinId]

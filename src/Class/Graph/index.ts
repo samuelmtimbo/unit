@@ -259,7 +259,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     spec: GraphSpec,
     branch: Dict<true> = {},
     system: System,
-    id?: string
+    id?: string,
+    push?: boolean
   ) {
     if (!spec.id) {
       system.newSpec(spec, id)
@@ -302,7 +303,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this.addListener('take_err', this._takeErr)
     this.addListener('take_caught_err', this._takeErr)
 
-    this._initAddUnits(units)
+    this._initAddUnits(units, push)
     this._initMerges(merges)
     this._initInputSets(inputs)
     this._initOutputSets(outputs)
@@ -3116,13 +3117,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
-  private _initAddUnit(unitId: string, unit: GraphUnitSpec): void {
+  private _initAddUnit(
+    unitId: string,
+    unit: GraphUnitSpec,
+    push: boolean = true
+  ): void {
     const bundle = unitBundleSpec(unit, this.__system.specs)
 
     const _unit = unitFromBundleSpec(
       this.__system,
       bundle,
       this.__system.specs,
+      push,
       this._branch
     )
 
@@ -3130,9 +3136,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._simAddUnit(unitId, { unit }, _unit, null, false)
   }
 
-  private _initAddUnits(units: GraphUnitsSpec): void {
+  private _initAddUnits(units: GraphUnitsSpec, push: boolean): void {
     forEachValueKey(units, (unit: Unit, unitId: string) => {
-      this._initAddUnit(unitId, unit)
+      this._initAddUnit(unitId, unit, push)
     })
   }
 
@@ -3439,7 +3445,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     applyUnitDefaultIgnored(bundle.unit, specs_)
 
-    const unit = unitFromBundleSpec(this.__system, bundle, specs_, this._branch)
+    const unit = unitFromBundleSpec(
+      this.__system,
+      bundle,
+      specs_,
+      true,
+      this._branch
+    )
 
     this.addUnit(unitId, unit, bundle, parentId, emit, fork, bubble)
 
@@ -3459,7 +3471,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     applyUnitDefaultIgnored(bundle.unit, specs)
 
-    const unit = unitFromBundleSpec(this.__system, bundle, specs, this._branch)
+    const unit = unitFromBundleSpec(
+      this.__system,
+      bundle,
+      specs,
+      true,
+      this._branch
+    )
 
     this._addUnit(unitId, unit, bundle, parentId, fork, bubble)
 
@@ -3473,6 +3491,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       this.__system,
       bundle,
       this.__system.specs,
+      true,
       this._branch
     )
 

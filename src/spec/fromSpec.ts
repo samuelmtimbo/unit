@@ -87,13 +87,13 @@ export function classFromSpec<I, O>(
 ): GraphClass<I, O> {
   applyDefaultIgnored(spec, specs)
 
-  const { id, name } = spec
+  const { name } = spec
 
   class Class extends Graph<I, O> {
-    constructor(system: System) {
+    constructor(system: System, id: string, push?: boolean) {
       const spec = specs[id] as GraphSpec
 
-      super(spec, branch, system, id)
+      super(spec, branch, system, id, push)
     }
   }
 
@@ -108,9 +108,10 @@ export function graphFromSpec<I, O>(
   system: System,
   spec: GraphSpec,
   specs: Specs,
-  branch: { [path: string]: true } = {}
+  branch: { [path: string]: true },
+  push: boolean
 ): Graph<I, O> {
   applyDefaultIgnored(spec, specs)
 
-  return new Graph(spec, branch, system, spec.id)
+  return new Graph(spec, branch, system, spec.id, push)
 }

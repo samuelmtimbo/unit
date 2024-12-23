@@ -24,14 +24,14 @@ export function bundleClass<T extends Unit = any>(
   class Bundle extends Class {
     static __bundle = bundle
 
-    constructor(system: System) {
+    constructor(system: System, push: boolean) {
       if (bundle.specs) {
         const map = system.injectSpecs(bundle.specs)
 
         remapSpecs(bundle, map)
       }
 
-      super(system, id)
+      super(system, id, push)
 
       if (memory) {
         this.restore(memory)

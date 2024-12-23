@@ -12,7 +12,7 @@ export function cloneUnit<T extends Unit>(
 
   const [NewBundle, bundle] = cloneUnitClass(unit, deep)
 
-  const newUnit = new NewBundle(__system)
+  const newUnit = new NewBundle(__system, false)
 
   return [newUnit, bundle]
 }

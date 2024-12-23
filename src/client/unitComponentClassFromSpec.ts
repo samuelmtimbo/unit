@@ -22,7 +22,7 @@ export function localComponentClassFromSpec<
     constructor($props, $system, $element?) {
       super($props, $system, $element)
 
-      const graph = graphFromSpec<I, O>($system, spec, $system.specs)
+      const graph = graphFromSpec<I, O>($system, spec, $system.specs, {}, true)
 
       for (const pinId in $props) {
         const data = $props[pinId]

@@ -66,7 +66,8 @@ export function unitFromId<I, O>(
   id: string,
   specs: Specs,
   classes: Classes,
-  branch: Dict<true> = {}
+  branch: Dict<true>,
+  push: boolean
 ): Unit<I, O> {
   let spec: Spec = specs[id]
 
@@ -86,10 +87,16 @@ export function unitFromId<I, O>(
 
       unit = new Class(system, id)
     } else {
-      unit = graphFromSpec(system, spec, specs, {
-        ...branch,
-        [id]: true,
-      })
+      unit = graphFromSpec(
+        system,
+        spec,
+        specs,
+        {
+          ...branch,
+          [id]: true,
+        },
+        push
+      )
     }
   } else {
     unit = new Class(system, id)

@@ -18,7 +18,8 @@ export function unitFromBundleSpec<I, O>(
   system: System,
   bundle: UnitBundleSpec,
   specs: Specs,
-  branch: Dict<true> = {}
+  push: boolean,
+  branch: Dict<true>
 ): Unit<I, O> {
   const specs_ = weakMerge(specs, bundle.specs ?? {})
 
@@ -34,7 +35,7 @@ export function unitFromBundleSpec<I, O>(
 
   remapSpecs(bundle, spec_map_id)
 
-  const unit = unitFromId<I, O>(system, id, specs_, classes, branch)
+  const unit = unitFromId<I, O>(system, id, specs_, classes, branch, push)
 
   io((type: IO) => {
     const pins = bundle.unit[type as IO] ?? {}
@@ -62,19 +63,21 @@ export function unitFromBundleSpec<I, O>(
     unit.restore(memory_)
   }
 
-  forEachValueKey(input || {}, (unitPinSpec, pinId) => {
-    const { data } = unitPinSpec ?? {}
+  if (push) {
+    forEachValueKey(input || {}, (unitPinSpec, pinId) => {
+      const { data } = unitPinSpec ?? {}
 
-    const dataRef = evaluateDataValue(data, specs, classes)
+      const dataRef = evaluateDataValue(data, specs, classes)
 
-    if (dataRef.data !== undefined) {
-      const input = unit.getInput(pinId as any)
+      if (dataRef.data !== undefined) {
+        const input = unit.getInput(pinId as any)
 
-      const data_ = resolveDataRef(dataRef, specs, classes)
+        const data_ = resolveDataRef(dataRef, specs, classes)
 
-      input.push(data_)
-    }
-  })
+        input.push(data_)
+      }
+    })
+  }
 
   return unit
 }
