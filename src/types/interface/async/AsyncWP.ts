@@ -6,21 +6,21 @@ import {
 } from '../../../component/$wrapper'
 import { WP } from '../WP'
 import { $Component } from './$Component'
-import { $W, $W_C, $W_G, $W_R, $W_W } from './$W'
+import { $WP, $WP_C, $WP_G, $WP_R, $WP_W } from './$WP'
 
-export const AsyncWGet = (wrapper: WP): $W_G => {
+export const AsyncWPGet = (wrapper: WP): $WP_G => {
   return {}
 }
 
-export const AsyncWCall = (wrapper: WP): $W_C => {
+export const AsyncWPCall = (wrapper: WP): $WP_C => {
   return {}
 }
 
-export const AsyncWWatch = (wrapper: WP): $W_W => {
+export const AsyncWPWatch = (wrapper: WP): $WP_W => {
   return {}
 }
 
-export const AsyncWRef = (wrapper: WP & $): $W_R => {
+export const AsyncWPRef = (wrapper: WP & $): $WP_R => {
   return {
     $refChildContainer({ at, _ }: { at: number; _: string[] }): $Component {
       const $container = $refChildContainer(wrapper, { at, _ })
@@ -49,11 +49,11 @@ export const AsyncWRef = (wrapper: WP & $): $W_R => {
   }
 }
 
-export const AsyncW: (wrapper: WP & $) => $W = (wrapper: WP & $) => {
+export const AsyncWP: (wrapper: WP & $) => $WP = (wrapper: WP & $) => {
   return {
-    ...AsyncWGet(wrapper),
-    ...AsyncWCall(wrapper),
-    ...AsyncWWatch(wrapper),
-    ...AsyncWRef(wrapper),
+    ...AsyncWPGet(wrapper),
+    ...AsyncWPCall(wrapper),
+    ...AsyncWPWatch(wrapper),
+    ...AsyncWPRef(wrapper),
   }
 }

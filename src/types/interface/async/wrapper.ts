@@ -29,7 +29,7 @@ import { AsyncTD } from './AsyncTD'
 import { AsyncTE } from './AsyncTE'
 import { AsyncU } from './AsyncU'
 import { AsyncV } from './AsyncV'
-import { AsyncW } from './AsyncW'
+import { AsyncWP } from './AsyncWP'
 
 export const ASYNC: AllTypes<(unit: any) => any> = {
   C: AsyncC,
@@ -39,7 +39,7 @@ export const ASYNC: AllTypes<(unit: any) => any> = {
   MS: AsyncMS,
   U: AsyncU,
   J: AsyncJ,
-  W: AsyncW,
+  WP: AsyncWP,
   EE: AsyncEE,
   S: AsyncS,
   B: AsyncB,

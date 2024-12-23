@@ -180,11 +180,11 @@ import {
   V_METHOD_WATCH,
 } from '../types/interface/async/$V'
 import {
-  W_METHOD_CALL,
-  W_METHOD_GET,
-  W_METHOD_REF,
-  W_METHOD_WATCH,
-} from '../types/interface/async/$W'
+  WP_METHOD_CALL,
+  WP_METHOD_GET,
+  WP_METHOD_REF,
+  WP_METHOD_WATCH,
+} from '../types/interface/async/$WP'
 
 export type MethodType = 'get' | 'call' | 'watch' | 'ref'
 
@@ -364,11 +364,11 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     watch: TD_METHOD_WATCH,
     ref: TE_METHOD_REF,
   },
-  W: {
-    get: W_METHOD_GET,
-    call: W_METHOD_CALL,
-    watch: W_METHOD_WATCH,
-    ref: W_METHOD_REF,
+  WP: {
+    get: WP_METHOD_GET,
+    call: WP_METHOD_CALL,
+    watch: WP_METHOD_WATCH,
+    ref: WP_METHOD_REF,
   },
   ME: {
     get: ME_METHOD_GET,

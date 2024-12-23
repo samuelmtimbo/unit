@@ -42,7 +42,6 @@ export function boot(
   }
 
   const cache = {
-    iframe: [],
     dragAndDrop: {},
     pointerCapture: {},
     spriteSheetMap: {},
@@ -88,6 +87,7 @@ export function boot(
     parent,
     emitter,
     root: null,
+    color,
     theme,
     customEvent,
     async: ASYNC,
@@ -165,7 +165,6 @@ export function boot(
 
       remove(components, component)
     },
-    color,
   }
 
   return system

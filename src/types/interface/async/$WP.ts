@@ -1,24 +1,24 @@
 import { $Component } from './$Component'
 
-export const W_METHOD_GET = []
-export const W_METHOD_CALL = []
-export const W_METHOD_WATCH = []
-export const W_METHOD_REF = [
+export const WP_METHOD_GET = []
+export const WP_METHOD_CALL = []
+export const WP_METHOD_WATCH = []
+export const WP_METHOD_REF = [
   'refChildContainer',
   'refParentRootContainer',
   'refParentChildContainer',
 ]
 
-export interface $W_G {}
+export interface $WP_G {}
 
-export interface $W_C {}
+export interface $WP_C {}
 
-export interface $W_W {}
+export interface $WP_W {}
 
-export interface $W_R {
+export interface $WP_R {
   $refChildContainer(data: { at: number; _: string[] }): $Component
   $refParentRootContainer(data: { at: number; _: string[] }): $Component
   $refParentChildContainer(data: { at: number; _: string[] }): $Component
 }
 
-export interface $W extends $W_G, $W_C, $W_W, $W_R {}
+export interface $WP extends $WP_G, $WP_C, $WP_W, $WP_R {}

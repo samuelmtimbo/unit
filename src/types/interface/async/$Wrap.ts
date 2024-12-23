@@ -1,4 +1,4 @@
 import { $Element } from './$Element'
-import { $W } from './$W'
+import { $WP } from './$WP'
 
-export interface $Wrap extends $Element, $W {}
+export interface $Wrap extends $Element, $WP {}

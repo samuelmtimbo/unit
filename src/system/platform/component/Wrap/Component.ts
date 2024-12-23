@@ -15,7 +15,7 @@ export interface Props {
 export const DEFAULT_STYLE = {}
 
 export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
-  $_ = ['W']
+  $_ = ['WP']
 
   private _Container: ComponentClass = parentClass()
 

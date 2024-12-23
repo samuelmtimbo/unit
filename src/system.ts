@@ -27,7 +27,6 @@ export interface System extends S, Registry {
   color: string
   async: AllTypes<(unit: any) => any>
   cache: {
-    iframe: any[]
     dragAndDrop: Dict<any>
     pointerCapture: Dict<any>
     spriteSheetMap: Dict<boolean>

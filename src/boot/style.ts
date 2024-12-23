@@ -2,12 +2,6 @@ import { userSelect } from '../client/util/style/userSelect'
 
 export const style = {
   div: {},
-  iframe: {
-    display: 'block',
-    border: 'none',
-    width: '100%',
-    height: '100%',
-  },
   label: {
     color: 'currentColor',
     width: 'fit-content',
