@@ -9,7 +9,7 @@ import { apiNotSupportedError } from '../../../../../exception/APINotImplemented
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
 import { wrapWebSocket } from '../../../../../wrap/Socket'
-import { ID_SOCKET } from '../../../../_ids'
+import { ID_WEB_SOCKET } from '../../../../_ids'
 
 export type I = {
   url: string
@@ -20,11 +20,12 @@ export type O = {
   channel: CH & $
 }
 
-export type Socket_EE = { message: [any]; close: [any, any] }
+export type WebSocket_EE = { message: [any]; close: [any, any] }
 
-export type SocketEvents = SemifunctionalEvents<Semifunctional_EE> & Socket_EE
+export type WebSocketEvents = SemifunctionalEvents<Semifunctional_EE> &
+  WebSocket_EE
 
-export default class Socket extends Holder<I, O, SocketEvents> {
+export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
   private _web_socket: WebSocket | null = null
 
   constructor(system: System) {
@@ -43,7 +44,7 @@ export default class Socket extends Holder<I, O, SocketEvents> {
         },
       },
       system,
-      ID_SOCKET,
+      ID_WEB_SOCKET,
       'close'
     )
   }

@@ -1,5 +1,5 @@
 {
-  "name": "socket",
+  "name": "web socket",
   "inputs": {
     "url": {
       "type": "string"
