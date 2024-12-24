@@ -76,8 +76,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     const { className, style = {}, animated = true } = this.$props
 
-    const pointerEvents = style.pointerEvents === 'none' ? 'inherit' : 'all'
-
     const modes = new Modes(
       {
         className: 'graph-gui-crud',
@@ -87,7 +85,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           left: '0px',
           transform: 'translate(0%, -50%)',
           backgroundColor: 'none',
-          pointerEvents,
         },
       },
       this.$system
@@ -103,7 +100,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           left: '50%',
           transform: 'translate(-50%, 0%)',
           backgroundColor: 'none',
-          pointerEvents,
         },
       },
       this.$system
@@ -283,9 +279,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         className: 'graph-gui-cabinet',
         style: {
           backgroundColor: 'none',
-          pointerEvents,
         },
-        // hidden: true,
       },
       this.$system
     )
@@ -331,11 +325,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       {
         className: 'gui-control',
         style: {
-          position: 'absolute',
           top: '0px',
           overflow: 'visible',
           background: 'none',
-          pointerEvents: 'none',
         },
       },
       this.$system

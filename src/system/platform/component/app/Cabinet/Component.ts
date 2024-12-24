@@ -332,7 +332,6 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
         style: {
           backgroundColor,
           color,
-          pointerEvents: 'all',
         },
         shortcut,
       },
