@@ -8667,22 +8667,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_pin_selection_to_name(pin_node_id)
   }
 
-  private _set_unit_pin_name = (pin_node_id: string, value: string): void => {
-    this._spec_set_unit_pin_metadata_rename(pin_node_id, value)
-  }
-
-  private _spec_set_unit_pin_metadata_rename = (
-    pin_node_id: string,
-    value: string
-  ): void => {
-    const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
-
-    setMetadata(
-      { path: ['units', unitId, type, pinId, 'metadata', 'rename'], value },
-      this._spec
-    )
-  }
-
   private _set_pin_name = (exposed_pin_node_id: string, name: string): void => {
     const { type, pinId } = segmentPlugNodeId(exposed_pin_node_id)
 
@@ -12888,7 +12872,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _set_merge_name = (merge_node_id: string, name: string): void => {
-    // console.log('Graph', '_set_merge_name', merge_node_id, name)
+    const merge_ref_output = this._merge_to_ref_output[merge_node_id]
+
+    if (merge_ref_output) {
+      this._show_link_pin_name(merge_ref_output)
+
+      return
+    }
 
     const merge_name = this._merge_name[merge_node_id]
 
