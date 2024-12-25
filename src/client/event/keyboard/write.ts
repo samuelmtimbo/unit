@@ -3,7 +3,7 @@ import { clamp } from '../../../system/core/relation/Clamp/f'
 import { getActiveElement } from '../../activeElement'
 import { isContentEditable } from '../../isContentEditable'
 import { isTextField } from '../../isTextField'
-import { isChar } from './keyCode'
+import { isChar } from './key'
 
 const isAlphaNumCharOrSpace = (str: string): boolean => {
   return /[a-zA-Z\d\s:]/.test(str)

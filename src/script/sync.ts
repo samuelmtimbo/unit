@@ -2,7 +2,7 @@ import { existsSync } from 'fs'
 import { ensureDir, readJSONSync, writeFile } from 'fs-extra'
 import * as glob from 'glob'
 import * as path from 'path'
-import { isNotSymbol } from '../client/event/keyboard/keyCode'
+import { isNotSymbol } from '../client/event/keyboard/key'
 import { GraphSpec } from '../types/GraphSpec'
 import { removeLastSegment } from '../util/removeLastSegment'
 

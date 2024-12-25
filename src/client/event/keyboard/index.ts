@@ -1,23 +1,17 @@
 import { System } from '../../../system'
 import isEqual from '../../../system/f/comparison/Equals/f'
 import { keys } from '../../../system/f/object/Keys/f'
-import { Dict } from '../../../types/Dict'
 import { randomIdNotIn } from '../../../util/id'
 import { addGlobalBlurListener } from '../../addGlobalBlurListener'
 import { IOElement } from '../../IOElement'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import { keyCodeToKey, keyToKeyCode } from './keyCode'
 
 export function sameSetArray(a: string[], b: string[]): boolean {
   const _ = (a: string, b: string) => {
     return a.localeCompare(b)
   }
   return isEqual(a.sort(_), b.sort(_))
-}
-
-export function getKey(keyCode: number): string {
-  return keyCodeToKey[keyCode]
 }
 
 export function isSupportedKeyboardEvent(event: KeyboardEvent): boolean {
@@ -49,14 +43,12 @@ export type Shortcut = {
 }
 
 export class KeyboardController {
-  public static keys = keyCodeToKey
-
   private _ctrl: boolean = false
   private _meta: boolean = false
   private _shift: boolean = false
   private _alt: boolean = false
   private _repeat: boolean = false
-  private _pressed: number[] = []
+  private _pressed: string[] = []
   private _shortcuts: { [id: string]: Shortcut[] }
 
   public $element: IOElement
@@ -109,8 +101,8 @@ export class KeyboardController {
     // AD HOC
     this._repeat = false
 
-    // for (const keyCode of pressed) {
-    //   this._keydown(keyCode)
+    // for (const key of pressed) {
+    //   this._keydown(key)
     // }
     this._pressed = [...$pressed]
   }
@@ -165,8 +157,7 @@ export class KeyboardController {
   }
 
   public isKeyPressed(key: string): boolean {
-    const keyCode = keyToKeyCode[key]
-    return !!keyCode && this._pressed.indexOf(keyCode) > -1
+    return this._pressed.indexOf(key) > -1
   }
 
   private _flush = (): void => {
@@ -206,30 +197,30 @@ export class KeyboardController {
     return filtered
   }
 
-  private _remove(keyCode: number): void {
-    const index: number = this._pressed.indexOf(keyCode)
+  private _remove(key: string): void {
+    const index: number = this._pressed.indexOf(key)
+
     if (index > -1) {
       this._pressed.splice(index, 1)
     }
   }
 
-  private _keydown = (keyCode: number): Shortcut[] => {
-    const index: number = this._pressed.indexOf(keyCode)
-    // const previous = this.getCurrentCombo()
+  private _keydown = (key: string): Shortcut[] => {
+    const index: number = this._pressed.indexOf(key)
+
     if (index === -1) {
-      this._pressed.push(keyCode)
+      this._pressed.push(key)
     }
-    // const current = this.getCurrentCombo()
-    // console.log('_keydown', `${previous} -> ${current}`)
+
     const filtered = this._filterShortcuts('keydown')
+
     for (const shortcut of filtered) {
       if (this._repeat && !shortcut.multiple) {
         continue
       }
-      const key = keyCodeToKey[keyCode]
+
       shortcut.keydown(key, {
         key,
-        keyCode,
         ctrlKey: this._ctrl,
         shiftKey: this._shift,
         altKey: this._alt,
@@ -237,25 +228,25 @@ export class KeyboardController {
         repeat: this._repeat,
       })
     }
+
     // if (sameSetArray(current, ['meta', 'alt', 'i'])) {
     //   this._flush()
     // }
+
     return filtered
   }
 
-  private _keyup = (keyCode: number) => {
-    const index: number = this._pressed.indexOf(keyCode)
+  private _keyup = (key: string) => {
+    const index: number = this._pressed.indexOf(key)
+
     if (index > -1) {
       const filtered = this._filterShortcuts('keyup')
-      // const previous = this.getCurrentCombo()
-      this._remove(keyCode)
-      // const current = this.getCurrentCombo()
-      // console.log('_keyup', `${previous} -> ${current}`)
-      const key = keyCodeToKey[keyCode]
+
+      this._remove(key)
+
       for (const shortcut of filtered) {
         shortcut.keyup(key, {
           key,
-          keyCode,
           ctrlKey: this._ctrl,
           shiftKey: this._shift,
           altKey: this._alt,
@@ -279,7 +270,7 @@ export class KeyboardController {
   private _onKeydown = (event: KeyboardEvent): void => {
     const {} = this.$system
 
-    const { keyCode, key, ctrlKey, shiftKey, metaKey, altKey, repeat } = event
+    const { key, ctrlKey, shiftKey, metaKey, altKey, repeat } = event
 
     if (metaKey) {
       // event.preventDefault()
@@ -299,7 +290,7 @@ export class KeyboardController {
     this._alt = altKey
     this._repeat = repeat
 
-    const shortcuts = this._keydown(keyCode)
+    const shortcuts = this._keydown(key)
 
     for (const shortcut of shortcuts) {
       if (shortcut.preventDefault) {
@@ -312,30 +303,22 @@ export class KeyboardController {
   }
 
   public getCurrentCombo(): string[] {
-    return this._pressed.map((c) => {
-      const key: string = keyCodeToKey[c]
-      return key
-    })
-  }
-
-  private _comboToKeyCodes(combo: string): (number | null)[] {
-    return combo.split('+').map((key) => keyToKeyCode[key])
+    return this._pressed
   }
 
   private _onKeyup = (event: KeyboardEvent): void => {
-    // console.log('KeyboardController', '_onKeyup')
     if (!isSupportedKeyboardEvent(event)) {
       return
     }
 
-    const { keyCode, key, ctrlKey, shiftKey, metaKey, altKey } = event
+    const { key, ctrlKey, shiftKey, metaKey, altKey } = event
 
     this._ctrl = ctrlKey
     this._meta = metaKey
     this._shift = shiftKey
     this._alt = altKey
 
-    this._keyup(keyCode)
+    this._keyup(key)
 
     // if (this._pressed.length > 0) {
     //   this._keydown(this._pressed[this._pressed.length - 1])
@@ -372,7 +355,6 @@ export function listenShortcut(
 
 export interface IOKeyboardEvent {
   key: string
-  keyCode: number
   ctrlKey: boolean
   shiftKey: boolean
   altKey: boolean
@@ -385,15 +367,16 @@ export function listenKeydown(
   onKeydown: (event: IOKeyboardEvent, _event: KeyboardEvent) => void
 ) {
   const { $element } = component
+
   const keydownListener = (_event: KeyboardEvent) => {
-    const { key, keyCode, ctrlKey, shiftKey, altKey, metaKey, repeat } = _event
+    const { key, ctrlKey, shiftKey, altKey, metaKey, repeat } = _event
+
     onKeydown &&
-      onKeydown(
-        { key, keyCode, ctrlKey, shiftKey, altKey, metaKey, repeat },
-        _event
-      )
+      onKeydown({ key, ctrlKey, shiftKey, altKey, metaKey, repeat }, _event)
   }
+
   $element.addEventListener('keydown', keydownListener)
+
   return () => {
     $element.removeEventListener('keydown', keydownListener)
   }
@@ -405,12 +388,9 @@ export function listenKeypress(
 ) {
   const { $element } = component
   const keypressListener = (_event: KeyboardEvent) => {
-    const { key, keyCode, ctrlKey, shiftKey, altKey, metaKey, repeat } = _event
+    const { key, ctrlKey, shiftKey, altKey, metaKey, repeat } = _event
     onKeydown &&
-      onKeydown(
-        { key, keyCode, ctrlKey, shiftKey, altKey, metaKey, repeat },
-        _event
-      )
+      onKeydown({ key, ctrlKey, shiftKey, altKey, metaKey, repeat }, _event)
   }
   $element.addEventListener('keypress', keypressListener)
   return () => {
@@ -439,15 +419,16 @@ export function listenKeyup(
   onKeyup: (event: IOKeyboardEvent, _event: KeyboardEvent) => void
 ) {
   const { $element } = component
+
   const keyupListener = (_event: KeyboardEvent) => {
-    const { key, keyCode, ctrlKey, shiftKey, altKey, metaKey, repeat } = _event
+    const { key, ctrlKey, shiftKey, altKey, metaKey, repeat } = _event
+
     onKeyup &&
-      onKeyup(
-        { key, keyCode, ctrlKey, shiftKey, altKey, metaKey, repeat },
-        _event
-      )
+      onKeyup({ key, ctrlKey, shiftKey, altKey, metaKey, repeat }, _event)
   }
+
   $element.addEventListener('keyup', keyupListener)
+
   return () => {
     $element.removeEventListener('keyup', keyupListener)
   }
@@ -461,80 +442,14 @@ export function makeKeyupListener(
   }
 }
 
-const codeToKey: Dict<[string, string, string, string]> = {
-  Backquote: ['`', '~', '`', '`'],
-  Digit1: ['1', '!', '¡', '⁄'],
-  Digit2: ['2', '@', '™', '€'],
-  Digit3: ['3', '#', '£', '‹'],
-  Digit4: ['4', '$', '¢', '›'],
-  Digit5: ['5', '%', '∞', 'ﬁ'],
-  Digit6: ['6', '^', '§', 'ﬂ'],
-  Digit7: ['7', '&', '¶', '‡'],
-  Digit8: ['8', '*', '•', '°'],
-  Digit9: ['9', '(', 'ª', '·'],
-  Digit0: ['0', ')', 'º', '‚'],
-  Minus: ['-', '_', '–', '—'],
-  Equal: ['=', '+', '≠', '±'],
-  Backspace: ['Backspace', 'Backspace', 'Backspace', 'Backspace'],
-  Tab: ['Tab', 'Tab', 'Tab', 'Tab'],
-  KeyQ: ['q', 'Q', 'œ', 'Œ'],
-  KeyW: ['w', 'W', '∑', '„'],
-  KeyE: ['e', 'E', '´', '´'],
-  KeyR: ['r', 'R', '®', '‰'],
-  KeyT: ['t', 'T', '†', 'ˇ'],
-  KeyY: ['y', 'Y', '¥', 'Á'],
-  KeyU: ['u', 'U', '¨', '¨'],
-  KeyI: ['i', 'I', 'ˆ', 'ˆ'],
-  KeyO: ['o', 'O', 'ø', 'Ø'],
-  KeyP: ['p', 'P', 'π', '∏'],
-  BracketLeft: ['[', '{', '“', '”'],
-  BracketRight: [']', '}', '‘', '’'],
-  Backlash: ['\\', '|', '«', '»'],
-  CapsLock: ['CapsLock', 'CapsLock', 'CapsLock', 'CapsLock'],
-  KeyA: ['a', 'A', 'å', 'Å'],
-  KeyS: ['s', 'S', 'ß', 'Í'],
-  KeyD: ['d', 'D', '∂', 'Î'],
-  KeyF: ['f', 'F', 'ƒ', 'Ï'],
-  KeyG: ['g', 'G', '©', '˝'],
-  KeyH: ['h', 'H', '˙', 'Ó'],
-  KeyJ: ['j', 'J', '∆', 'Ô'],
-  KeyK: ['k', 'K', '˚', ''],
-  KeyL: ['l', 'L', '¬', 'Ò'],
-  Semicolon: [';', ':', '…', 'Ú'],
-  Quote: ["'", '"', 'æ', 'Æ'],
-  Enter: ['Enter', 'Enter', 'Enter', 'Enter'],
-  ShiftLeft: ['Shift', 'Shift', 'Shift', 'Shift'],
-  KeyZ: ['z', 'Z', 'Ω', '¸'],
-  KeyX: ['x', 'X', '≈', '˛'],
-  KeyC: ['c', 'C', 'ç', 'Ç'],
-  KeyV: ['v', 'V', '√', '◊'],
-  KeyB: ['b', 'B', '∫', 'ı'],
-  KeyN: ['n', 'N', '˜', '˜'],
-  KeyM: ['m', 'M', 'µ', 'Â'],
-  Comma: [',', '<', '≤', '¯'],
-  Slash: ['/', '?', '÷', '¿'],
-  Period: ['.', '>', '≥', '˘'],
-  ShiftRight: ['Shift', 'Shift', 'Shift', 'Shift'],
-  ControlLeft: ['Control', 'Control', 'Control', 'Control'],
-  AltLeft: ['Alt', 'Alt', 'Alt', 'Alt'],
-  MetaLeft: ['Meta', 'Meta', 'Meta', 'Meta'],
-  Space: [' ', ' ', ' ', ' '],
-  MetaRight: ['Meta', 'Meta', 'Meta', 'Meta'],
-  AltRight: ['Alt', 'Alt', 'Alt', 'Alt'],
-  ArrowLeft: ['ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft'],
-  ArrowUp: ['ArrowUp', 'ArrowUp', 'ArrowUp', 'ArrowUp'],
-  ArrowDown: ['ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown'],
-  ArrowRight: ['ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight'],
-}
-
 export function isKeyPressed(system: System, key: string): boolean {
-  const { input } = system
-  const { keyboard } = input
-  const { pressed } = keyboard
+  const {
+    input: {
+      keyboard: { pressed },
+    },
+  } = system
 
-  const keyCode = keyToKeyCode[key]
-
-  return pressed.indexOf(keyCode) > -1
+  return pressed.indexOf(key) > -1
 }
 
 export function isKeyRepeat($system: System): boolean {

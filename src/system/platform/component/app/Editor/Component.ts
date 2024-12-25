@@ -170,7 +170,6 @@ import {
   makeKeydownListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
-import { keyToKeyCode } from '../../../../../client/event/keyboard/keyCode'
 import { writeToTextField } from '../../../../../client/event/keyboard/write'
 import {
   CLICK_TIMEOUT,
@@ -19255,9 +19254,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       input: { keyboard },
     } = this.$system
 
-    const keyCode = keyToKeyCode[key]
-
-    const key_pressed = keyboard.pressed.indexOf(keyCode) > -1
+    const key_pressed = keyboard.pressed.indexOf(key) > -1
 
     return key_pressed
   }
@@ -19598,11 +19595,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           keydown: this._on_backspace_keydown,
         },
         {
-          // combo: 'Ctrl + p',
+          // combo: 'Control + p',
           // combo: 'p',
           // combo: 'space',
-          combo: ['Ctrl + ;', ';'],
-          // combo: ['Ctrl + /'],
+          combo: ['Control + ;', ';'],
+          // combo: ['Control + /'],
           keydown: this._on_ctrl_semicolon_keydown,
           strict: false,
         },
@@ -19635,70 +19632,70 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
         },
         {
-          combo: ['Ctrl + s'],
+          combo: ['Control + s'],
           keydown: () => {
             this._on_ctrl_s_keydown()
           },
           preventDefault: true,
         },
         {
-          combo: ['Ctrl + Shift + s'],
+          combo: ['Control + Shift + s'],
           keydown: () => {
             this._on_ctrl_shift_s_keydown()
           },
           preventDefault: true,
         },
         {
-          combo: ['Ctrl + o'],
+          combo: ['Control + o'],
           keydown: () => {
             this._on_ctrl_o_keydown()
           },
           preventDefault: true,
         },
         {
-          combo: ['Ctrl + r'],
+          combo: ['Control + r'],
           keydown: () => {
             this._on_ctrl_r_keydown()
           },
           preventDefault: true,
         },
         {
-          combo: ['Ctrl + l', 'l'],
+          combo: ['Control + l', 'l'],
           strict: true,
           keydown: this._on_ctrl_l_keydown,
         },
         {
-          combo: ['Ctrl + m', 'm'],
+          combo: ['Control + m', 'm'],
           strict: true,
           keydown: this._on_ctrl_m_keydown,
         },
         {
-          combo: 'Ctrl + a',
+          combo: 'Control + a',
           keydown: this._on_ctrl_a_keydown,
         },
         {
-          combo: 'Ctrl + c',
+          combo: 'Control + c',
           keydown: this._on_ctrl_c_keydown,
         },
         {
-          combo: 'Ctrl + Shift + c',
+          combo: 'Control + Shift + c',
           keydown: this._on_ctrl_shift_c_keydown,
         },
         {
-          combo: 'Ctrl + x',
+          combo: 'Control + x',
           keydown: this._on_ctrl_x_keydown,
         },
         {
-          combo: 'Ctrl + v',
+          combo: 'Control + v',
           keydown: this._on_ctrl_v_keydown,
         },
         {
-          combo: 'Ctrl + z',
+          combo: 'Control + z',
           multiple: true,
           keydown: this._on_ctrl_z_keydown,
         },
         {
-          combo: 'Ctrl + Shift + z',
+          combo: 'Control + Shift + z',
           multiple: true,
           keydown: this._on_ctrl_shift_z_keydown,
         },

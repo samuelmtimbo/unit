@@ -198,9 +198,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
         },
         { combo: 'Escape', keydown: this._on_escape_keydown },
         {
-          // combo: 'Ctrl + p',
-          combo: ['Ctrl + ;', ';'],
-          // combo: 'Ctrl + /',
+          // combo: 'Control + p',
+          combo: ['Control + ;', ';'],
+          // combo: 'Control + /',
           keydown: this._on_ctrl_p_keydown,
           strict: false,
         },
@@ -808,12 +808,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _on_input_keydown = (
-    { keyCode, repeat, key }: IOKeyboardEvent,
+    { repeat, key }: IOKeyboardEvent,
     _event: KeyboardEvent
   ) => {
-    // console.log('Search', '_on_input_keydown', keyCode, repeat)
-    // prevent arrow up/down default
-    if (keyCode === 38 || keyCode === 40 || keyCode === 186) {
+    if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'F27') {
       _event.preventDefault()
     }
 
@@ -826,7 +824,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
 
     if (repeat) {
-      if (keyCode === 8) {
+      if (key === 'Backspace') {
         //
       } else {
         _event.preventDefault()

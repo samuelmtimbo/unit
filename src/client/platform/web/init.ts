@@ -28,19 +28,18 @@ export function webInit(
       return
     }
 
-    const { metaKey, keyCode, key, repeat } = event
+    const { metaKey, key, repeat } = event
 
-    // ignore all key events when meta key is pressed
     if (metaKey) {
       return
     }
 
-    const index = system.input.keyboard.pressed.indexOf(keyCode)
+    const index = system.input.keyboard.pressed.indexOf(key)
 
     system.input.keyboard.repeat = repeat
 
     if (index === -1) {
-      system.input.keyboard.pressed.push(keyCode)
+      system.input.keyboard.pressed.push(key)
     }
   }
 
@@ -49,13 +48,13 @@ export function webInit(
       return
     }
 
-    const { metaKey, keyCode, key } = event
+    const { metaKey, key } = event
 
     if (metaKey) {
       return
     }
 
-    const index = system.input.keyboard.pressed.indexOf(keyCode)
+    const index = system.input.keyboard.pressed.indexOf(key)
 
     system.input.keyboard.pressed.splice(index, 1)
   }

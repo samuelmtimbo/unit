@@ -1,4 +1,4 @@
 export interface KeyboardState {
-  pressed: number[]
+  pressed: string[]
   repeat: boolean
 }

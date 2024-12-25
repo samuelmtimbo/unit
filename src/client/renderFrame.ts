@@ -26,6 +26,8 @@ export function renderFrame(
 
   $element.style.color = $color
 
+  $element.tabIndex = -1
+
   const $resizeObserver = new ResizeObserver((entries) => {
     const entry = entries[0]
 
