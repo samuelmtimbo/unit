@@ -64,6 +64,29 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
 
     this.$element.classList.add('frame')
 
+    this.$element.addEventListener('keydown', (event: KeyboardEvent) => {
+      const {
+        api: {
+          document: { getSelection, createRange },
+        },
+      } = this.$system
+
+      if ((event.metaKey) && event.key === 'a') {
+        event.preventDefault()
+
+        const range = createRange()
+
+        range.selectNodeContents(this.$element)
+
+        const selection = getSelection()
+
+        selection.removeAllRanges()
+        selection.addRange(range)
+
+        event.stopPropagation()
+      }
+    })
+
     if (className !== undefined) {
       this.$element.classList.add(className)
     }

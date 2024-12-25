@@ -64,6 +64,7 @@ export function webInit(
   const wheelListener = (event: MouseEvent) => {
     if (window.visualViewport) {
       const scale = window.visualViewport.scale || 1
+
       if (scale > 1) {
         event.stopPropagation()
       }

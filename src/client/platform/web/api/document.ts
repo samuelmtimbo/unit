@@ -45,7 +45,12 @@ export function webDocument(
     },
     getSelection(): Selection {
       // @ts-ignore
-      return root.shadowRoot?.getSelection?.() || document.getSelection()
+      if (root.shadowRoot.getSelection) {
+        // @ts-ignore
+        return root.shadowRoot.getSelection()
+      }
+
+      return document.getSelection()
     },
     createRange(): Range {
       return document.createRange()
