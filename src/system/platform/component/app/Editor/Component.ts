@@ -12657,7 +12657,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }),
         makeCustomListener('datumchange', (event) => {
           this._edit_datum_committed = false
-          this._edit_datum_last_manually_committed = false
+
+          const tree = this._get_datum_tree(datum_node_id)
+
+          if (datum_id === this._edit_datum_id) {
+            if (tree.value !== event.data.value) {
+              this._edit_datum_last_manually_committed = false
+            }
+          }
 
           this._on_datum_change(datum_id, event)
         }),
