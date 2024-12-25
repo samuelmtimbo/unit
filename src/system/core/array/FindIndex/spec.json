@@ -128,8 +128,7 @@
         "0": {
           "mergeId": "3"
         }
-      },
-      "type": "any"
+      }
     },
     "test": {
       "plug": {
@@ -137,8 +136,7 @@
           "unitId": "andnot",
           "pinId": "a"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -149,8 +147,7 @@
           "pinId": "i"
         }
       },
-      "defaultIgnored": true,
-      "type": "number"
+      "defaultIgnored": true
     },
     "test": {
       "plug": {
@@ -158,8 +155,7 @@
           "mergeId": "0"
         }
       },
-      "defaultIgnored": true,
-      "type": "boolean"
+      "defaultIgnored": true
     },
     "a[i]": {
       "plug": {
@@ -167,8 +163,7 @@
           "unitId": "findlastindex",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "a": {
       "plug": {
@@ -177,8 +172,7 @@
           "pinId": "a"
         }
       },
-      "defaultIgnored": true,
-      "type": "<A>[]"
+      "defaultIgnored": true
     },
     "result": {
       "plug": {
@@ -186,8 +180,7 @@
           "unitId": "findlastindex",
           "pinId": "result"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

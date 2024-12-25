@@ -7,8 +7,7 @@
           "unitId": "stringify",
           "pinId": "json"
         }
-      },
-      "type": "any"
+      }
     },
     "url": {
       "plug": {
@@ -16,8 +15,7 @@
           "unitId": "fetch",
           "pinId": "url"
         }
-      },
-      "type": "string"
+      }
     },
     "opt": {
       "plug": {
@@ -35,8 +33,7 @@
           "unitId": "fetch",
           "pinId": "response"
         }
-      },
-      "type": "{status:number,body:string}"
+      }
     }
   },
   "units": {

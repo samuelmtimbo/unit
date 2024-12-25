@@ -45,8 +45,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -56,8 +55,7 @@
           "unitId": "if0",
           "pinId": "a if b"
         }
-      },
-      "type": "boolean"
+      }
     },
     "a = false": {
       "plug": {
@@ -65,8 +63,7 @@
           "unitId": "if1",
           "pinId": "a if b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

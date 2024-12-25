@@ -55,7 +55,6 @@
           "kind": "input"
         }
       },
-      "type": "string",
       "ref": false
     }
   },
@@ -68,7 +67,6 @@
           "kind": "output"
         }
       },
-      "type": "string",
       "ref": false
     }
   },

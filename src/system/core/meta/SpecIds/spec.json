@@ -7,8 +7,7 @@
           "unitId": "specs",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -18,8 +17,7 @@
           "unitId": "keys",
           "pinId": "keys"
         }
-      },
-      "type": "string[]"
+      }
     }
   },
   "units": {

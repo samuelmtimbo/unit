@@ -34,8 +34,7 @@
           "unitId": "plan0",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -45,8 +44,7 @@
           "unitId": "plan0",
           "pinId": "0"
         }
-      },
-      "type": "<A>"
+      }
     },
     "1": {
       "plug": {
@@ -54,8 +52,7 @@
           "unitId": "plan",
           "pinId": "0"
         }
-      },
-      "type": "<A>"
+      }
     },
     "2": {
       "plug": {
@@ -63,8 +60,7 @@
           "unitId": "plan",
           "pinId": "1"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "0c78466f-f682-4aca-9a15-d4d2eac5e26d",

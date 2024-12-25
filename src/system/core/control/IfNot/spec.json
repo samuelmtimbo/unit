@@ -30,7 +30,6 @@
           "pinId": "a"
         }
       },
-      "type": "<A>",
       "functional": true
     },
     "b": {
@@ -40,7 +39,6 @@
           "pinId": "a"
         }
       },
-      "type": "boolean",
       "functional": true
     }
   },
@@ -51,8 +49,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

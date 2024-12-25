@@ -8,7 +8,6 @@
           "pinId": "style"
         }
       },
-      "type": "object",
       "metadata": {
         "position": {
           "0": {
@@ -41,8 +40,7 @@
             }
           }
         }
-      },
-      "type": "string"
+      }
     },
     "height": {
       "plug": {
@@ -63,8 +61,7 @@
             }
           }
         }
-      },
-      "type": "string"
+      }
     },
     "d": {
       "plug": {
@@ -74,7 +71,6 @@
         }
       },
       "ref": false,
-      "type": "any[][]",
       "metadata": {
         "position": {
           "0": {

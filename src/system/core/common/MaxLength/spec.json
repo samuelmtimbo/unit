@@ -49,8 +49,7 @@
           "unitId": "length0",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "b": {
       "plug": {
@@ -58,8 +57,7 @@
           "unitId": "length",
           "pinId": "a"
         }
-      },
-      "type": "<B>[]"
+      }
     }
   },
   "outputs": {
@@ -69,8 +67,7 @@
           "unitId": "max",
           "pinId": "max"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "85343b1d-93db-4fc0-8fcf-655739dbd494",

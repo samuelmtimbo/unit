@@ -56,7 +56,6 @@
           "mergeId": "0"
         }
       },
-      "type": "`C`",
       "ref": true
     }
   },
@@ -67,8 +66,7 @@
           "unitId": "getvalue",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "metadata": {

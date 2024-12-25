@@ -92,8 +92,7 @@
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -102,8 +101,7 @@
         "0": {
           "mergeId": "4"
         }
-      },
-      "type": "string"
+      }
     },
     "value": {
       "plug": {
@@ -111,8 +109,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     },
     "test": {
       "plug": {
@@ -120,8 +117,7 @@
           "mergeId": "1"
         }
       },
-      "defaultIgnored": true,
-      "type": "boolean"
+      "defaultIgnored": true
     }
   },
   "metadata": {

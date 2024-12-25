@@ -78,8 +78,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "n": {
       "plug": {
@@ -87,8 +86,7 @@
           "unitId": "subtract",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -98,8 +96,7 @@
           "unitId": "split",
           "pinId": "first"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

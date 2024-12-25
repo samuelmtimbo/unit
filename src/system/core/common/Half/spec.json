@@ -18,8 +18,7 @@
           "unitId": "divide",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -29,8 +28,7 @@
           "unitId": "divide",
           "pinId": "a ÷ b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

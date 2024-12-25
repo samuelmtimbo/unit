@@ -6,8 +6,7 @@
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -17,8 +16,7 @@
           "unitId": "bpdlaymdf",
           "pinId": "if"
         }
-      },
-      "type": "<A>"
+      }
     },
     "!first": {
       "plug": {
@@ -26,8 +24,7 @@
           "unitId": "bpdlaymdf",
           "pinId": "else"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "units": {

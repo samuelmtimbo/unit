@@ -19,8 +19,7 @@
           "unitId": "if",
           "pinId": "b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -30,8 +29,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

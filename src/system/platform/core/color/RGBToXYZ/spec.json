@@ -144,8 +144,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "number[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -155,8 +154,7 @@
           "unitId": "triplet",
           "pinId": "a"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "id": "73193df9-d5f4-4689-92ce-d804cf30ee20",

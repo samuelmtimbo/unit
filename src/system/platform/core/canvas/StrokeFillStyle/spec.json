@@ -54,8 +54,7 @@
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "string"
+      }
     },
     "d": {
       "plug": {
@@ -63,8 +62,7 @@
           "unitId": "fillstyle",
           "pinId": "d"
         }
-      },
-      "type": "(number|string|boolean)[][]"
+      }
     }
   },
   "outputs": {
@@ -74,8 +72,7 @@
           "unitId": "strokestyle",
           "pinId": "d"
         }
-      },
-      "type": "(number|string|boolean)[][]"
+      }
     }
   },
   "metadata": {

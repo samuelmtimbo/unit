@@ -7,8 +7,7 @@
           "unitId": "tagheight",
           "pinId": "height"
         }
-      },
-      "type": "any"
+      }
     },
     "width": {
       "plug": {
@@ -16,8 +15,7 @@
           "unitId": "tagwidth",
           "pinId": "width"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -27,8 +25,7 @@
           "unitId": "merge",
           "pinId": "ab"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "units": {

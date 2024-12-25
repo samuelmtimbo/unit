@@ -117,8 +117,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -126,8 +125,7 @@
           "mergeId": "4"
         }
       },
-      "functional": true,
-      "type": "object[]"
+      "functional": true
     },
     "value": {
       "plug": {
@@ -136,8 +134,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -147,8 +144,7 @@
           "unitId": "filter",
           "pinId": "b"
         }
-      },
-      "type": "object[]"
+      }
     }
   },
   "id": "f0386b2f-de73-49a3-be8f-1a2ca10600c5",

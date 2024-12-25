@@ -16,7 +16,6 @@
           "pinId": "any"
         }
       },
-      "type": "<A>[]",
       "functional": true
     },
     "a": {
@@ -26,7 +25,6 @@
           "pinId": "init"
         }
       },
-      "type": "<A>",
       "functional": true
     }
   },
@@ -37,8 +35,7 @@
           "unitId": "loop",
           "pinId": "final"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "units": {

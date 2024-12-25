@@ -46,8 +46,7 @@
           "unitId": "loop",
           "pinId": "test"
         }
-      },
-      "type": "boolean"
+      }
     },
     "init": {
       "plug": {
@@ -55,8 +54,7 @@
           "unitId": "loop",
           "pinId": "init"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -65,8 +63,7 @@
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "number"
+      }
     },
     "local": {
       "plug": {
@@ -74,8 +71,7 @@
           "unitId": "loop",
           "pinId": "local"
         }
-      },
-      "type": "number"
+      }
     },
     "final": {
       "plug": {
@@ -84,8 +80,7 @@
           "pinId": "final"
         }
       },
-      "defaultIgnored": true,
-      "type": "number"
+      "defaultIgnored": true
     }
   },
   "metadata": {

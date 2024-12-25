@@ -35,8 +35,7 @@
           "pinId": "any"
         }
       },
-      "functional": true,
-      "type": "any"
+      "functional": true
     }
   },
   "outputs": {
@@ -46,8 +45,7 @@
           "unitId": "tagbackgroundcolor",
           "pinId": "{bc}"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "051d4600-42e5-403b-b12e-eb58ae78ef0b",

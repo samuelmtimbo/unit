@@ -44,8 +44,7 @@
           "unitId": "length0",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "b": {
       "plug": {
@@ -53,8 +52,7 @@
           "unitId": "length1",
           "pinId": "a"
         }
-      },
-      "type": "<B>[]"
+      }
     }
   },
   "outputs": {
@@ -64,8 +62,7 @@
           "unitId": "add",
           "pinId": "a + b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

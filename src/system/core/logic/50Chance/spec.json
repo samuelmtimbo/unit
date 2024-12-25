@@ -42,8 +42,7 @@
           "unitId": "random",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -53,8 +52,7 @@
           "unitId": "lessthan",
           "pinId": "a < b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

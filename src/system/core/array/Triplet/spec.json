@@ -49,8 +49,7 @@
           "unitId": "pair",
           "pinId": "0"
         }
-      },
-      "type": "<A>"
+      }
     },
     "1": {
       "plug": {
@@ -58,8 +57,7 @@
           "unitId": "pair",
           "pinId": "1"
         }
-      },
-      "type": "<A>"
+      }
     },
     "2": {
       "plug": {
@@ -67,8 +65,7 @@
           "unitId": "single",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -78,8 +75,7 @@
           "unitId": "concat",
           "pinId": "ab"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "id": "91536c82-8e5f-4542-8138-a1a4eb2e5f4d",

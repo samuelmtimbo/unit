@@ -137,8 +137,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -146,8 +145,7 @@
           "mergeId": "2"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -157,8 +155,7 @@
           "unitId": "subtract",
           "pinId": "a - b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "7a09c38d-3866-46e3-a03e-112c4cf6d889",

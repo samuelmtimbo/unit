@@ -29,8 +29,7 @@
           "unitId": "length",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -40,8 +39,7 @@
           "unitId": "decrement",
           "pinId": "a - 1"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

@@ -60,8 +60,7 @@
           "unitId": "loop",
           "pinId": "test"
         }
-      },
-      "type": "boolean"
+      }
     },
     "init": {
       "plug": {
@@ -70,8 +69,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "-": {
       "plug": {
@@ -79,8 +77,7 @@
           "unitId": "subtract",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -90,8 +87,7 @@
           "unitId": "loop",
           "pinId": "final"
         }
-      },
-      "type": "number"
+      }
     },
     "local": {
       "plug": {
@@ -99,16 +95,14 @@
           "unitId": "loop",
           "pinId": "local"
         }
-      },
-      "type": "number"
+      }
     },
     "current": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "6a006c91-181c-48c4-826d-a6eaec21fea3",

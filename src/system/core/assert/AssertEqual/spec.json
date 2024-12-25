@@ -18,8 +18,7 @@
           "unitId": "if",
           "pinId": "a"
         }
-      },
-      "type": "string"
+      }
     },
     "b": {
       "plug": {
@@ -27,8 +26,7 @@
           "unitId": "notequal",
           "pinId": "b"
         }
-      },
-      "type": "<A>"
+      }
     },
     "a": {
       "plug": {
@@ -36,8 +34,7 @@
           "unitId": "notequal",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {},

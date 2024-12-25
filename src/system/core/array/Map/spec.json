@@ -78,16 +78,14 @@
           "unitId": "arraybuilderfrom",
           "pinId": "a"
         }
-      },
-      "type": "<B>"
+      }
     },
     "a": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -97,8 +95,7 @@
           "unitId": "foreach",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "b": {
       "plug": {
@@ -106,8 +103,7 @@
           "unitId": "arraybuilderfrom",
           "pinId": "a[]"
         }
-      },
-      "type": "<B>[]"
+      }
     },
     "test": {
       "plug": {
@@ -115,7 +111,6 @@
           "mergeId": "0"
         }
       },
-      "type": "boolean",
       "defaultIgnored": true
     }
   },

@@ -24,8 +24,7 @@
           "unitId": "temzrvlyb",
           "pinId": "v"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -35,8 +34,7 @@
           "unitId": "temzrvlyb",
           "pinId": "kv"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "99764e75-c4be-4f35-9051-0e3a750dca83",

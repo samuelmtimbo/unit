@@ -41,7 +41,6 @@
           "mergeId": "0"
         }
       },
-      "type": "<A>[]",
       "metadata": {
         "examples": ["[0,1,2,3,4]"]
       }
@@ -54,8 +53,7 @@
           "unitId": "at",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

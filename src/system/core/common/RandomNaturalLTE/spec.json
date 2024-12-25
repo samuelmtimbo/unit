@@ -29,8 +29,7 @@
           "unitId": "increment",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -40,8 +39,7 @@
           "unitId": "randomnaturallt",
           "pinId": "i"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

@@ -28,8 +28,7 @@
           "unitId": "iteratecountfrom",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -39,8 +38,7 @@
           "unitId": "iteratecountfrom",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "fb5bb9ea-bf24-4150-b12d-bc4873a153a2",

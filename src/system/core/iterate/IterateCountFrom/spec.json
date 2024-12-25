@@ -82,8 +82,7 @@
           "unitId": "wait",
           "pinId": "b"
         }
-      },
-      "type": "any"
+      }
     },
     "init": {
       "plug": {
@@ -91,8 +90,7 @@
           "unitId": "iterate",
           "pinId": "init"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -102,8 +100,7 @@
           "unitId": "iterate",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "9fa0c25b-0675-48dc-80e7-eab1829656bd",

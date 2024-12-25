@@ -49,8 +49,7 @@
           "unitId": "foreach",
           "pinId": "a"
         }
-      },
-      "type": "(number|string|boolean)[][]"
+      }
     },
     "canvas": {
       "plug": {
@@ -59,7 +58,6 @@
           "pinId": "canvas"
         }
       },
-      "type": "`CA`",
       "ref": true
     }
   },

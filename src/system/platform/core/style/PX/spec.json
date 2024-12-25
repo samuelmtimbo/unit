@@ -49,8 +49,7 @@
           "unitId": "numbertostring",
           "pinId": "n"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -60,8 +59,7 @@
           "unitId": "concat",
           "pinId": "ab"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "metadata": {

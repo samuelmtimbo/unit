@@ -9,7 +9,6 @@
         }
       },
       "functional": true,
-      "type": "any[][]",
       "metadata": {
         "position": {
           "0": {
@@ -27,7 +26,6 @@
         }
       },
       "functional": true,
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -67,8 +65,7 @@
             "y": 280
           }
         }
-      },
-      "type": "number"
+      }
     },
     "y": {
       "plug": {
@@ -100,8 +97,7 @@
             "y": 287
           }
         }
-      },
-      "type": "number"
+      }
     },
     "r": {
       "plug": {
@@ -125,8 +121,7 @@
             "y": 216
           }
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -137,7 +132,6 @@
           "pinId": "d"
         }
       },
-      "type": "(number|string|boolean)[][]",
       "metadata": {
         "position": {
           "0": {

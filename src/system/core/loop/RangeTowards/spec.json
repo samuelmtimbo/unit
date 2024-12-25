@@ -8,8 +8,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "start": {
       "plug": {
@@ -18,8 +17,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -29,16 +27,14 @@
           "unitId": "loopadd",
           "pinId": "final"
         }
-      },
-      "type": "number"
+      }
     },
     "current": {
       "plug": {
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "units": {

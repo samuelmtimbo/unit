@@ -29,8 +29,7 @@
           "unitId": "or",
           "pinId": "a"
         }
-      },
-      "type": "boolean"
+      }
     },
     "b": {
       "plug": {
@@ -38,8 +37,7 @@
           "unitId": "or",
           "pinId": "b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -49,8 +47,7 @@
           "unitId": "not",
           "pinId": "!a"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

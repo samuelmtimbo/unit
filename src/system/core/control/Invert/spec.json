@@ -37,8 +37,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "c": {
       "plug": {
@@ -51,8 +50,7 @@
           "pinId": "c"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     },
     "b": {
       "plug": {
@@ -65,8 +63,7 @@
           "pinId": "b"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -76,8 +73,7 @@
           "unitId": "pick",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     },
     "a": {
       "plug": {
@@ -85,8 +81,7 @@
           "unitId": "pick0",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

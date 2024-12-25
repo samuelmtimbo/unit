@@ -60,7 +60,6 @@
           "mergeId": "0"
         }
       },
-      "type": "<A>[]",
       "metadata": {
         "examples": ["[1,2,3]"]
       }
@@ -73,8 +72,7 @@
           "unitId": "at0",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "1": {
       "plug": {
@@ -82,8 +80,7 @@
           "unitId": "at1",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "2": {
       "plug": {
@@ -91,8 +88,7 @@
           "unitId": "at",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "697871f5-6515-4426-a011-88d0d6aedcc3",

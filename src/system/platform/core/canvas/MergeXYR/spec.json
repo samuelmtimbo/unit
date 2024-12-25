@@ -64,8 +64,7 @@
           "unitId": "mergexy",
           "pinId": "y"
         }
-      },
-      "type": "number"
+      }
     },
     "x": {
       "plug": {
@@ -73,8 +72,7 @@
           "unitId": "mergexy",
           "pinId": "x"
         }
-      },
-      "type": "number"
+      }
     },
     "r": {
       "plug": {
@@ -82,8 +80,7 @@
           "unitId": "tagr",
           "pinId": "r"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -93,8 +90,7 @@
           "unitId": "merge",
           "pinId": "ab"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

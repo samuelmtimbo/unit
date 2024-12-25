@@ -99,8 +99,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "object"
+      "functional": true
     },
     "keys": {
       "plug": {
@@ -109,8 +108,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "string[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -120,8 +118,7 @@
           "unitId": "loop",
           "pinId": "final"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

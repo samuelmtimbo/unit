@@ -113,8 +113,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -122,8 +121,7 @@
           "mergeId": "2"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     },
     "d": {
       "plug": {
@@ -132,8 +130,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -142,8 +139,7 @@
         "0": {
           "mergeId": "jgunro"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "f962de3a-b87c-4018-bcb6-71921f93ce1d",

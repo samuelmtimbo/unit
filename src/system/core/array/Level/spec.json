@@ -54,8 +54,7 @@
           "pinId": "with"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "a[]": {
       "plug": {
@@ -63,8 +62,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     },
     "b[]": {
       "plug": {
@@ -72,8 +70,7 @@
           "mergeId": "2"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -82,8 +79,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "number"
+      }
     },
     "b[]": {
       "plug": {
@@ -91,8 +87,7 @@
           "unitId": "fillbothend",
           "pinId": "b[]"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "a[]": {
       "plug": {
@@ -100,8 +95,7 @@
           "unitId": "fillbothend",
           "pinId": "a[]"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

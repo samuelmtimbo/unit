@@ -65,8 +65,7 @@
           "unitId": "canvas",
           "pinId": "style"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {

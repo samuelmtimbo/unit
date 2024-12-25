@@ -33,8 +33,7 @@
       "metadata": {
         "examples": ["500", "1000"]
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -43,8 +42,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -54,8 +52,7 @@
           "unitId": "wait",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

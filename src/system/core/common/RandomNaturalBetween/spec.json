@@ -56,8 +56,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "b": {
       "plug": {
@@ -66,8 +65,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -77,8 +75,7 @@
           "unitId": "add",
           "pinId": "a + b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

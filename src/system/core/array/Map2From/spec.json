@@ -50,8 +50,7 @@
           "unitId": "foreach1",
           "pinId": "a"
         }
-      },
-      "type": "<B>[]"
+      }
     },
     "c[i]": {
       "plug": {
@@ -59,8 +58,7 @@
           "unitId": "arraybuilderfrom",
           "pinId": "a"
         }
-      },
-      "type": "<B>"
+      }
     },
     "a": {
       "plug": {
@@ -68,8 +66,7 @@
           "unitId": "foreach",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "init": {
       "plug": {
@@ -78,8 +75,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "<B>[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -89,8 +85,7 @@
           "unitId": "foreach1",
           "pinId": "a[i]"
         }
-      },
-      "type": "<B>"
+      }
     },
     "b": {
       "plug": {
@@ -98,8 +93,7 @@
           "unitId": "arraybuilderfrom",
           "pinId": "a[]"
         }
-      },
-      "type": "<B>[]"
+      }
     },
     "a[i]": {
       "plug": {
@@ -107,8 +101,7 @@
           "unitId": "foreach",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

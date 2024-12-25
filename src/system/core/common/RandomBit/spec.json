@@ -42,8 +42,7 @@
           "unitId": "50chance",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -53,8 +52,7 @@
           "unitId": "pick",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

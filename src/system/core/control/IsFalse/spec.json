@@ -19,8 +19,7 @@
           "unitId": "ifnot",
           "pinId": "b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -30,8 +29,7 @@
           "unitId": "ifnot",
           "pinId": "a if not b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

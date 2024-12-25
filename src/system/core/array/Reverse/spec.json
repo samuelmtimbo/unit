@@ -55,8 +55,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -66,8 +65,7 @@
           "unitId": "narraybuilder",
           "pinId": "a[]"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

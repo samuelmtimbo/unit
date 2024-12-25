@@ -40,8 +40,7 @@
           "unitId": "fetch",
           "pinId": "url"
         }
-      },
-      "type": "string"
+      }
     },
     "opt": {
       "plug": {
@@ -49,8 +48,7 @@
           "unitId": "fetch",
           "pinId": "opt"
         }
-      },
-      "type": "{body?:string|null,headers?:object,method?:string}"
+      }
     }
   },
   "outputs": {
@@ -60,8 +58,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "id": "7ba3db14-6f80-434b-b9dc-bd38462b20fc",

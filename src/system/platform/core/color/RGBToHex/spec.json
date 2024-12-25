@@ -172,8 +172,7 @@
           "unitId": "add3",
           "pinId": "c"
         }
-      },
-      "type": "any"
+      }
     },
     "g": {
       "plug": {
@@ -181,8 +180,7 @@
           "unitId": "multiply",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     },
     "r": {
       "plug": {
@@ -190,8 +188,7 @@
           "unitId": "multiply0",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -201,8 +198,7 @@
           "unitId": "concat",
           "pinId": "ab"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "metadata": {

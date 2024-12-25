@@ -35,8 +35,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -45,8 +44,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     },
     "b": {
       "plug": {
@@ -55,8 +53,7 @@
           "pinId": "b"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -66,8 +63,7 @@
           "unitId": "prependif",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "id": "e75537f8-d35a-45c4-8193-e0c6e015b4c6",

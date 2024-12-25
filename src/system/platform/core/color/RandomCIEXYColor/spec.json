@@ -39,8 +39,7 @@
           "unitId": "randomhexcolor",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -50,8 +49,7 @@
           "unitId": "hextoxy",
           "pinId": "xy"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "id": "09856cbd-2676-4930-8241-08c5bbde0474",

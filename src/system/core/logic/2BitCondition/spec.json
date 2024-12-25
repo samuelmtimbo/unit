@@ -67,8 +67,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -76,8 +75,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     }
   },
   "outputs": {
@@ -87,8 +85,7 @@
           "unitId": "and",
           "pinId": "a and b"
         }
-      },
-      "type": "boolean"
+      }
     },
     "!a && !b": {
       "plug": {
@@ -96,8 +93,7 @@
           "unitId": "nor",
           "pinId": "!a && !b"
         }
-      },
-      "type": "boolean"
+      }
     },
     "a && !b": {
       "plug": {
@@ -105,8 +101,7 @@
           "unitId": "andnot",
           "pinId": "a && !b"
         }
-      },
-      "type": "boolean"
+      }
     },
     "!a && b": {
       "plug": {
@@ -114,8 +109,7 @@
           "unitId": "notand",
           "pinId": "!a && b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

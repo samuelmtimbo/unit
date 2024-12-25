@@ -24,8 +24,7 @@
           "unitId": "get",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -35,8 +34,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "id": "6a529c4d-07af-4778-8086-8a578694ec3f",

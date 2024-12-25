@@ -67,8 +67,7 @@
           "unitId": "lastindex",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -77,8 +76,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     },
     "i": {
       "plug": {
@@ -86,8 +84,7 @@
           "unitId": "loopdecrement",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

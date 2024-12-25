@@ -40,8 +40,7 @@
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -51,8 +50,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

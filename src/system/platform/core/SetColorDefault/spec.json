@@ -23,8 +23,7 @@
           "unitId": "setifordefault",
           "pinId": "default"
         }
-      },
-      "type": "<A>"
+      }
     },
     "test": {
       "plug": {
@@ -32,8 +31,7 @@
           "unitId": "setifordefault",
           "pinId": "test"
         }
-      },
-      "type": "boolean"
+      }
     },
     "value": {
       "plug": {
@@ -41,8 +39,7 @@
           "unitId": "setifordefault",
           "pinId": "value"
         }
-      },
-      "type": "<A>"
+      }
     },
     "obj": {
       "plug": {
@@ -50,8 +47,7 @@
           "unitId": "setifordefault",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -61,8 +57,7 @@
           "unitId": "setifordefault",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

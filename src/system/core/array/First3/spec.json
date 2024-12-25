@@ -59,8 +59,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -70,8 +69,7 @@
           "unitId": "at",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "1": {
       "plug": {
@@ -79,8 +77,7 @@
           "unitId": "at0",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "2": {
       "plug": {
@@ -88,8 +85,7 @@
           "unitId": "at1",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "df8ed55c-5f3d-460a-a7d7-2fa5aebaac53",

@@ -43,8 +43,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     },
     "next": {
       "plug": {
@@ -52,8 +51,7 @@
           "unitId": "loop",
           "pinId": "next"
         }
-      },
-      "type": "<B>"
+      }
     },
     "init": {
       "plug": {
@@ -62,8 +60,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "<B>"
+      "functional": true
     }
   },
   "outputs": {
@@ -73,16 +70,14 @@
           "unitId": "foreach",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "test": {
       "plug": {
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     },
     "result": {
       "plug": {
@@ -90,8 +85,7 @@
           "unitId": "loop",
           "pinId": "final"
         }
-      },
-      "type": "<B>"
+      }
     },
     "local": {
       "plug": {
@@ -99,8 +93,7 @@
           "unitId": "loop",
           "pinId": "current"
         }
-      },
-      "type": "<B>"
+      }
     }
   },
   "metadata": {

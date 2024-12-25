@@ -44,8 +44,7 @@
           "unitId": "iterate",
           "pinId": "init"
         }
-      },
-      "type": "<A>"
+      }
     },
     "a": {
       "plug": {
@@ -53,8 +52,7 @@
           "unitId": "wait",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     },
     "b": {
       "plug": {
@@ -62,8 +60,7 @@
           "unitId": "wait",
           "pinId": "b"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -73,8 +70,7 @@
           "unitId": "iterate",
           "pinId": "current"
         }
-      },
-      "type": "<A>"
+      }
     },
     "local": {
       "plug": {
@@ -83,8 +79,7 @@
           "pinId": "local"
         }
       },
-      "defaultIgnored": true,
-      "type": "<A>"
+      "defaultIgnored": true
     }
   },
   "metadata": {

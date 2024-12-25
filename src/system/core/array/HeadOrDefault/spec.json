@@ -62,8 +62,7 @@
           "pinId": "obj"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     },
     "default": {
       "plug": {
@@ -72,8 +71,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -87,8 +85,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>"
+      }
     },
     "a": {
       "plug": {
@@ -100,16 +97,14 @@
           "unitId": "ifelse",
           "pinId": "if"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "empty": {
       "plug": {
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "919d0a60-87cf-451b-a429-435aa70cde45",

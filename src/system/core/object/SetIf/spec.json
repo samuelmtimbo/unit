@@ -43,8 +43,7 @@
         }
       },
       "name": "test",
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     },
     "obj": {
       "plug": {
@@ -53,8 +52,7 @@
         }
       },
       "name": "obj",
-      "functional": true,
-      "type": "object"
+      "functional": true
     },
     "key": {
       "plug": {
@@ -64,8 +62,7 @@
         }
       },
       "name": "key",
-      "functional": true,
-      "type": "string"
+      "functional": true
     },
     "value": {
       "plug": {
@@ -75,8 +72,7 @@
         }
       },
       "name": "value",
-      "functional": true,
-      "type": "any"
+      "functional": true
     }
   },
   "outputs": {
@@ -87,8 +83,7 @@
           "pinId": "a"
         }
       },
-      "name": "obj",
-      "type": "object"
+      "name": "obj"
     }
   },
   "metadata": {

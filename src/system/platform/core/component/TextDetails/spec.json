@@ -113,8 +113,7 @@
           "kind": "input"
         }
       },
-      "ref": false,
-      "type": "object"
+      "ref": false
     },
     "attr": {
       "plug": {
@@ -124,8 +123,7 @@
           "kind": "input"
         }
       },
-      "ref": false,
-      "type": "object"
+      "ref": false
     },
     "title": {
       "plug": {

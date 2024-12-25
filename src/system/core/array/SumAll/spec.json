@@ -65,8 +65,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "number[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -76,8 +75,7 @@
           "unitId": "reduce",
           "pinId": "result"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

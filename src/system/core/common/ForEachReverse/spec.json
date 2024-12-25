@@ -118,8 +118,7 @@
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -129,8 +128,7 @@
           "unitId": "at",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

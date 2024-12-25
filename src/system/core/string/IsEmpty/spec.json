@@ -40,8 +40,7 @@
           "unitId": "length",
           "pinId": "a"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {
@@ -51,8 +50,7 @@
           "unitId": "equals",
           "pinId": "a = b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "5b497ef5-eff7-45e4-854b-d02da5b89e90",

@@ -75,8 +75,7 @@
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "n": {
       "plug": {
@@ -84,8 +83,7 @@
           "unitId": "subtract",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -93,8 +91,7 @@
           "unitId": "init",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -104,8 +101,7 @@
           "unitId": "concat",
           "pinId": "ab"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "id": "b0995ebb-08d5-4740-9bf3-272d44f09595",

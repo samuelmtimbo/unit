@@ -8,7 +8,6 @@
           "pinId": "obj"
         }
       },
-      "type": "`J`",
       "ref": true,
       "metadata": {
         "position": {
@@ -26,7 +25,6 @@
           "pinId": "b"
         }
       },
-      "type": "any",
       "metadata": {
         "position": {
           "0": {
@@ -45,7 +43,6 @@
           "pinId": "value"
         }
       },
-      "type": "any",
       "metadata": {
         "position": {
           "0": {

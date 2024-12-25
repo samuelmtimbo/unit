@@ -55,8 +55,7 @@
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -66,8 +65,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

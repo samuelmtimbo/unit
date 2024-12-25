@@ -15,8 +15,7 @@
           "unitId": "if",
           "pinId": "a"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {},

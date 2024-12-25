@@ -115,8 +115,7 @@
           "pinId": "b[]"
         }
       },
-      "functional": true,
-      "type": "number[]"
+      "functional": true
     },
     "a[]": {
       "plug": {
@@ -125,8 +124,7 @@
           "pinId": "a[]"
         }
       },
-      "functional": true,
-      "type": "number[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -136,8 +134,7 @@
           "unitId": "narraybuilder",
           "pinId": "a[]"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "metadata": {

@@ -30,8 +30,7 @@
           "unitId": "foreachfrom",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -41,8 +40,7 @@
           "unitId": "foreachfrom",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "a": {
       "plug": {
@@ -51,8 +49,7 @@
           "pinId": "a"
         }
       },
-      "defaultIgnored": true,
-      "type": "<A>[]"
+      "defaultIgnored": true
     },
     "i": {
       "plug": {
@@ -61,8 +58,7 @@
           "pinId": "i"
         }
       },
-      "defaultIgnored": true,
-      "type": "number"
+      "defaultIgnored": true
     },
     "test": {
       "plug": {
@@ -71,8 +67,7 @@
           "pinId": "test"
         }
       },
-      "defaultIgnored": true,
-      "type": "boolean"
+      "defaultIgnored": true
     }
   },
   "metadata": {

@@ -22,8 +22,7 @@
           "pinId": "stream"
         }
       },
-      "ref": true,
-      "type": "`MS`"
+      "ref": true
     }
   },
   "metadata": {

@@ -34,8 +34,7 @@
           "unitId": "merge",
           "pinId": "a"
         }
-      },
-      "type": "object"
+      }
     },
     "b": {
       "plug": {
@@ -43,8 +42,7 @@
           "unitId": "merge0",
           "pinId": "a"
         }
-      },
-      "type": "object"
+      }
     },
     "c": {
       "plug": {
@@ -52,8 +50,7 @@
           "unitId": "merge0",
           "pinId": "b"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -63,8 +60,7 @@
           "unitId": "merge",
           "pinId": "ab"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "23b844e3-1cef-4ff7-9e2a-bb3ffb613055",

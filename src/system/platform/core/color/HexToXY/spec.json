@@ -34,8 +34,7 @@
           "unitId": "hextorgb",
           "pinId": "hex"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {
@@ -45,8 +44,7 @@
           "unitId": "rgbtoxy",
           "pinId": "XY"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "id": "f2043fd6-04d4-4523-939b-f631af07f70e",

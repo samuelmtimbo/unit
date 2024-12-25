@@ -115,8 +115,7 @@
           "unitId": "beginpath",
           "pinId": "d"
         }
-      },
-      "type": "any[][]"
+      }
     },
     "line": {
       "plug": {
@@ -124,8 +123,7 @@
           "unitId": "propx0y0x1y1",
           "pinId": "{x0,y0,x1,y1}"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -135,8 +133,7 @@
           "unitId": "stroke",
           "pinId": "d"
         }
-      },
-      "type": "any[][]"
+      }
     }
   },
   "id": "90dc2942-52fa-4e09-bcef-43fa97cc0b72",

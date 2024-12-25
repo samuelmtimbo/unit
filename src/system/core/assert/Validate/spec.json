@@ -50,8 +50,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "message": {
       "plug": {
@@ -60,8 +59,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     },
     "test": {
       "plug": {
@@ -69,8 +67,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     }
   },
   "outputs": {
@@ -80,8 +77,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "ea515441-7284-49ab-9bac-a0978f25e2c3",

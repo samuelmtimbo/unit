@@ -59,8 +59,7 @@
           "pinId": "b"
         }
       },
-      "functional": true,
-      "type": "any"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -69,8 +68,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "number[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -80,8 +78,7 @@
           "unitId": "map2",
           "pinId": "c"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "id": "2dbdf0a4-09c1-49af-b9f8-d51b5cbab5a2",

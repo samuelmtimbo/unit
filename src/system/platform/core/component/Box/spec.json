@@ -50,8 +50,7 @@
           "unitId": "mergedefault",
           "pinId": "a"
         }
-      },
-      "type": "object"
+      }
     },
     "attr": {
       "plug": {
@@ -59,8 +58,7 @@
           "unitId": "div",
           "pinId": "attr"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {},

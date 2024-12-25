@@ -42,8 +42,7 @@
           "pinId": "c"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     },
     "obj": {
       "plug": {
@@ -51,8 +50,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "object"
+      "functional": true
     },
     "key": {
       "plug": {
@@ -61,8 +59,7 @@
           "pinId": "key"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     },
     "value": {
       "plug": {
@@ -71,8 +68,7 @@
           "pinId": "value"
         }
       },
-      "functional": true,
-      "type": "any"
+      "functional": true
     }
   },
   "outputs": {
@@ -82,8 +78,7 @@
           "unitId": "pick",
           "pinId": "a"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

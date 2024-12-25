@@ -8,7 +8,6 @@
         }
       },
       "functional": true,
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -26,7 +25,6 @@
           "mergeId": "1"
         }
       },
-      "type": "boolean",
       "metadata": {
         "position": {
           "0": {

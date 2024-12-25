@@ -63,8 +63,7 @@
           "unitId": "tagdata",
           "pinId": "data"
         }
-      },
-      "type": "any"
+      }
     },
     "event": {
       "plug": {
@@ -72,8 +71,7 @@
           "unitId": "tagevent",
           "pinId": "event"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {
@@ -83,8 +81,7 @@
           "unitId": "merge",
           "pinId": "ab"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

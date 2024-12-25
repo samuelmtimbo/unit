@@ -56,8 +56,7 @@
       },
       "metadata": {
         "description": "number of elements"
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -68,8 +67,7 @@
           "pinId": "a[]"
         }
       },
-      "metadata": "array",
-      "type": "number[]"
+      "metadata": "array"
     }
   },
   "metadata": {

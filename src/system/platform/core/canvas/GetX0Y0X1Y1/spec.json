@@ -73,8 +73,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -84,8 +83,7 @@
           "unitId": "get0",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     },
     "y0": {
       "plug": {
@@ -93,8 +91,7 @@
           "unitId": "get1",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     },
     "x0": {
       "plug": {
@@ -102,8 +99,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     },
     "y1": {
       "plug": {
@@ -111,8 +107,7 @@
           "unitId": "get2",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "id": "004058a4-3562-4427-a782-66f90bf336a3",

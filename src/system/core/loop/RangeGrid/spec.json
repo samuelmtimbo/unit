@@ -335,7 +335,6 @@
         }
       },
       "functional": true,
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -365,7 +364,6 @@
         }
       },
       "functional": true,
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -409,7 +407,6 @@
           "pinId": "i"
         }
       },
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -428,7 +425,6 @@
         }
       },
       "ref": false,
-      "type": "any",
       "defaultIgnored": true,
       "metadata": {
         "position": {

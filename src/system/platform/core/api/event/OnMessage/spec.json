@@ -23,7 +23,6 @@
           "pinId": "emitter"
         }
       },
-      "type": "`EE`",
       "_type": "<T:`EE`>",
       "ref": true
     }
@@ -36,7 +35,6 @@
           "pinId": "data"
         }
       },
-      "type": "any",
       "_type": "<T:`EE`>['message']"
     }
   },

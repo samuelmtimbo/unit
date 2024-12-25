@@ -9,8 +9,7 @@
             "pinId": "a"
           }
         },
-        "functional": true,
-        "type": "number[]"
+        "functional": true
       },
       "a": {
         "plug": {
@@ -19,8 +18,7 @@
             "pinId": "a"
           }
         },
-        "functional": true,
-        "type": "number[]"
+        "functional": true
       }
     },
     "outputs": {
@@ -30,8 +28,7 @@
             "unitId": "prependif",
             "pinId": "a"
           }
-        },
-        "type": "number[]"
+        }
       },
       "a": {
         "plug": {
@@ -39,8 +36,7 @@
             "unitId": "prependifnot",
             "pinId": "a"
           }
-        },
-        "type": "number[]"
+        }
       },
       "head": {
         "plug": {

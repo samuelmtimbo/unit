@@ -7,8 +7,7 @@
           "unitId": "px",
           "pinId": "n"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -18,8 +17,7 @@
           "unitId": "tagfontsize",
           "pinId": "{fontSize}"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "units": {

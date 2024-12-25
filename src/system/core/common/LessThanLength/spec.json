@@ -29,8 +29,7 @@
           "unitId": "length",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "b": {
       "plug": {
@@ -38,8 +37,7 @@
           "unitId": "lessthan",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -49,8 +47,7 @@
           "unitId": "lessthan",
           "pinId": "a < b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

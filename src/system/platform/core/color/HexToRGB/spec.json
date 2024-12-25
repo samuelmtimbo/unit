@@ -215,8 +215,7 @@
           "mergeId": "9"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     }
   },
   "outputs": {
@@ -226,8 +225,7 @@
           "unitId": "narraybuilder",
           "pinId": "a[]"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "id": "653279dc-893d-4627-854e-d110aece0b72",

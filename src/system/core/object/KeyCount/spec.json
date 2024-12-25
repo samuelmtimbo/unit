@@ -41,8 +41,7 @@
           "unitId": "keys",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -52,8 +51,7 @@
           "unitId": "length",
           "pinId": "length"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

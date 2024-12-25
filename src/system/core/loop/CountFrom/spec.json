@@ -53,8 +53,7 @@
           "unitId": "true",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     },
     "init": {
       "plug": {
@@ -62,8 +61,7 @@
           "unitId": "loopincrement",
           "pinId": "init"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -73,8 +71,7 @@
           "unitId": "loopincrement",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "e087017d-a69a-4a02-ad00-c5263bf47365",

@@ -123,8 +123,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -132,8 +131,7 @@
           "unitId": "concat",
           "pinId": "b"
         }
-      },
-      "type": "string"
+      }
     },
     "n": {
       "plug": {
@@ -142,8 +140,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -153,8 +150,7 @@
           "unitId": "loop",
           "pinId": "final"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "id": "9cab124a-b40d-4614-b032-20b0209e90e3",

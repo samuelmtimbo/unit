@@ -44,8 +44,7 @@
           "unitId": "equals",
           "pinId": "b"
         }
-      },
-      "type": "<A>"
+      }
     },
     "key": {
       "plug": {
@@ -53,8 +52,7 @@
           "unitId": "get",
           "pinId": "key"
         }
-      },
-      "type": "string"
+      }
     },
     "obj": {
       "plug": {
@@ -62,8 +60,7 @@
           "unitId": "get",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -73,8 +70,7 @@
           "unitId": "equals",
           "pinId": "a = b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "9df84140-dd90-48b3-a6a7-0651c8b5bfd7",

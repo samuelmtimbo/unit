@@ -74,7 +74,6 @@
           "mergeId": "1"
         }
       },
-      "type": "`U`",
       "ref": true
     },
     "any": {
@@ -83,8 +82,7 @@
           "unitId": "getvalue",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {},

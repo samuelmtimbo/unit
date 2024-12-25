@@ -40,16 +40,14 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "number"
+      }
     },
     "b": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -60,8 +58,7 @@
           "pinId": "a < b"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     },
     "a ≥ b": {
       "plug": {
@@ -70,8 +67,7 @@
           "pinId": "a ≥ b"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     }
   },
   "metadata": {

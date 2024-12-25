@@ -93,8 +93,7 @@
           "pinId": "b"
         }
       },
-      "functional": true,
-      "type": "any"
+      "functional": true
     }
   },
   "outputs": {
@@ -104,8 +103,7 @@
           "unitId": "nstringbuilderfrom",
           "pinId": "str"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "id": "2f48e431-9338-44dd-9f20-b8b14e710a1f",

@@ -308,7 +308,6 @@
           "kind": "output"
         }
       },
-      "type": "object",
       "ref": false
     }
   },

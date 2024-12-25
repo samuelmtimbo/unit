@@ -45,8 +45,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "{x:number,y:number}"
+      }
     }
   },
   "outputs": {
@@ -56,8 +55,7 @@
           "unitId": "prop0",
           "pinId": "value"
         }
-      },
-      "type": "number"
+      }
     },
     "x": {
       "plug": {
@@ -65,8 +63,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "5bf348b6-9776-4b23-9516-d802b6b3c846",

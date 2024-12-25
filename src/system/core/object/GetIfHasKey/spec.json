@@ -93,8 +93,7 @@
           "mergeId": "3"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     },
     "obj": {
       "plug": {
@@ -102,8 +101,7 @@
           "mergeId": "2"
         }
       },
-      "functional": true,
-      "type": "object"
+      "functional": true
     }
   },
   "outputs": {
@@ -113,16 +111,14 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     },
     "has": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "8c4f4d5e-2c98-4dfb-aeac-d1e6605a673e",

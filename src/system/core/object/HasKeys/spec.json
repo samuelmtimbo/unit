@@ -107,8 +107,7 @@
           "unitId": "reduce",
           "pinId": "a"
         }
-      },
-      "type": "string[]"
+      }
     },
     "obj": {
       "plug": {
@@ -116,8 +115,7 @@
           "unitId": "looprepeat",
           "pinId": "init"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -127,8 +125,7 @@
           "unitId": "reduce",
           "pinId": "result"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

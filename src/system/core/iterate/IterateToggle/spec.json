@@ -69,8 +69,7 @@
           "unitId": "iterate",
           "pinId": "init"
         }
-      },
-      "type": "boolean"
+      }
     },
     "toggle": {
       "plug": {
@@ -78,8 +77,7 @@
           "unitId": "wait",
           "pinId": "b"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -89,8 +87,7 @@
           "unitId": "iterate",
           "pinId": "current"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "58c50bb2-569f-4b7a-aba3-176d9ac91d5c",

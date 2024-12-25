@@ -23,7 +23,6 @@
           "pinId": "emitter"
         }
       },
-      "type": "`C`",
       "ref": true
     }
   },
@@ -34,8 +33,7 @@
           "unitId": "listen",
           "pinId": "data"
         }
-      },
-      "type": "{}"
+      }
     }
   },
   "metadata": {

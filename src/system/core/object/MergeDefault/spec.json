@@ -8,7 +8,6 @@
           "pinId": "b"
         }
       },
-      "type": "object",
       "metadata": {
         "position": {
           "0": {
@@ -24,7 +23,6 @@
           "mergeId": "0"
         }
       },
-      "type": "object",
       "metadata": {
         "position": {
           "0": {
@@ -43,7 +41,6 @@
           "pinId": "a"
         }
       },
-      "type": "object",
       "metadata": {
         "position": {
           "0": {

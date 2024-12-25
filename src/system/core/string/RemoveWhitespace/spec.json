@@ -32,8 +32,7 @@
           "unitId": "replace",
           "pinId": "str"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {
@@ -43,8 +42,7 @@
           "unitId": "replace",
           "pinId": "str"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "id": "2006f85c-a05c-4c42-9270-591880969578",

@@ -7,8 +7,7 @@
           "unitId": "span",
           "pinId": "style"
         }
-      },
-      "type": "object"
+      }
     },
     "value": {
       "plug": {
@@ -16,8 +15,7 @@
           "unitId": "text",
           "pinId": "value"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {},

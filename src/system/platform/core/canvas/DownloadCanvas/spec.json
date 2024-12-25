@@ -12,8 +12,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "type": {
       "plug": {
@@ -22,7 +21,6 @@
           "pinId": "type"
         }
       },
-      "type": "string",
       "functional": true,
       "metadata": {
         "examples": ["\"image/png\""]
@@ -35,7 +33,6 @@
           "pinId": "canvas"
         }
       },
-      "type": "`CA`",
       "ref": true
     }
   },

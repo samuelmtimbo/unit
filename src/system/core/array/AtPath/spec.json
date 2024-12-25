@@ -134,8 +134,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "any[]"
+      "functional": true
     },
     "path": {
       "plug": {
@@ -144,8 +143,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -155,8 +153,7 @@
           "unitId": "loop1",
           "pinId": "final"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "id": "c4de657d-0af7-45a0-b5a9-64127d78fb18",

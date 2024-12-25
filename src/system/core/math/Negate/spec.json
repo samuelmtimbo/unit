@@ -25,8 +25,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -36,8 +35,7 @@
           "unitId": "multiply",
           "pinId": "a × b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "13cbadb7-bbe5-4c6d-a81e-fc6fe5949e30",

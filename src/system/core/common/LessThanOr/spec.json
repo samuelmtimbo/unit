@@ -40,16 +40,14 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "number"
+      }
     },
     "b": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -59,8 +57,7 @@
           "unitId": "lt",
           "pinId": "a < b"
         }
-      },
-      "type": "boolean"
+      }
     },
     "a ≥ b": {
       "plug": {
@@ -68,8 +65,7 @@
           "unitId": "gte",
           "pinId": "a ≥ b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

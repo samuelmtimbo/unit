@@ -27,8 +27,7 @@
           "unitId": "buildarrayfrom",
           "pinId": "n"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -36,8 +35,7 @@
           "unitId": "buildarrayfrom",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -47,8 +45,7 @@
           "unitId": "buildarrayfrom",
           "pinId": "a[]"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "test": {
       "plug": {
@@ -57,7 +54,6 @@
           "pinId": "test"
         }
       },
-      "type": "boolean",
       "defaultIgnored": true
     },
     "acc": {
@@ -67,7 +63,6 @@
           "pinId": "acc"
         }
       },
-      "type": "<A>[]",
       "defaultIgnored": true
     }
   },

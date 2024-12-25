@@ -35,7 +35,6 @@
           "pinId": "any"
         }
       },
-      "type": "any",
       "functional": true
     }
   },
@@ -46,8 +45,7 @@
           "unitId": "tagcolor",
           "pinId": "{color}"
         }
-      },
-      "type": "{color:string}"
+      }
     }
   },
   "id": "8a2d42bf-fc83-4696-9e0c-cf8c6c4641ae",

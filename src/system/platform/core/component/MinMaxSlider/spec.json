@@ -14,7 +14,6 @@
           "mergeId": "7"
         }
       },
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -45,7 +44,6 @@
           "mergeId": "9"
         }
       },
-      "type": "number",
       "metadata": {
         "position": {
           "0": {
@@ -74,7 +72,6 @@
           "pinId": "value"
         }
       },
-      "type": "number",
       "metadata": {
         "position": {
           "0": {

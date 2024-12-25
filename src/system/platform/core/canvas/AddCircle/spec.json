@@ -44,8 +44,7 @@
           "unitId": "addarc",
           "pinId": "d"
         }
-      },
-      "type": "any[][]"
+      }
     },
     "circle": {
       "plug": {
@@ -64,8 +63,7 @@
           "unitId": "addarc",
           "pinId": "d"
         }
-      },
-      "type": "any[][]"
+      }
     }
   },
   "id": "50d23b21-1513-42c0-9722-4a01a32dc161",

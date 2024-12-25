@@ -24,8 +24,7 @@
           "unitId": "set",
           "pinId": "key"
         }
-      },
-      "type": "string"
+      }
     },
     "v": {
       "plug": {
@@ -33,8 +32,7 @@
           "unitId": "set",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -44,8 +42,7 @@
           "unitId": "set",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",

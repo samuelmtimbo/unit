@@ -61,8 +61,7 @@
           "unitId": "httptokenauth",
           "pinId": "token"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {
@@ -72,8 +71,7 @@
           "unitId": "tag",
           "pinId": "kv"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "ba70dd41-d533-4f8f-b476-c76274141468",

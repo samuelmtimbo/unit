@@ -45,8 +45,7 @@
           "unitId": "delaypush",
           "pinId": "ms"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -56,8 +55,7 @@
           "unitId": "delaypush",
           "pinId": "a"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

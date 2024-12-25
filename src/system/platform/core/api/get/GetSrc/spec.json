@@ -46,8 +46,7 @@
           "unitId": "wait",
           "pinId": "b"
         }
-      },
-      "type": "any"
+      }
     },
     "obj": {
       "plug": {
@@ -56,8 +55,7 @@
           "pinId": "obj"
         }
       },
-      "ref": true,
-      "type": "`U`"
+      "ref": true
     }
   },
   "outputs": {
@@ -67,8 +65,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "metadata": {

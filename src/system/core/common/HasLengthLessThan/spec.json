@@ -41,16 +41,14 @@
           "unitId": "lengthlessthan",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -60,8 +58,7 @@
           "unitId": "ifelse",
           "pinId": "if"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "false": {
       "plug": {
@@ -69,8 +66,7 @@
           "unitId": "ifelse",
           "pinId": "else"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

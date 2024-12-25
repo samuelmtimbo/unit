@@ -8,7 +8,6 @@
           "pinId": "disabled"
         }
       },
-      "type": "boolean",
       "metadata": {
         "position": {
           "0": {
@@ -26,7 +25,6 @@
           "pinId": "fullwindow"
         }
       },
-      "type": "boolean",
       "metadata": {
         "position": {
           "0": {
@@ -44,7 +42,6 @@
           "pinId": "style"
         }
       },
-      "type": "object",
       "metadata": {
         "position": {
           "0": {

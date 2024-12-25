@@ -61,8 +61,7 @@
           "unitId": "tagy",
           "pinId": "y"
         }
-      },
-      "type": "number"
+      }
     },
     "x": {
       "plug": {
@@ -70,8 +69,7 @@
           "unitId": "tagx",
           "pinId": "x"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -81,8 +79,7 @@
           "unitId": "merge",
           "pinId": "ab"
         }
-      },
-      "type": "{x:number,y:number}"
+      }
     }
   },
   "id": "2737cd82-d80b-4d3f-b33d-f00f68361e24",

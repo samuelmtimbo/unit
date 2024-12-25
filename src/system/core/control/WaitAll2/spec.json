@@ -45,16 +45,14 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "<A>"
+      }
     },
     "b": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "<B>"
+      }
     }
   },
   "outputs": {
@@ -64,8 +62,7 @@
           "unitId": "wait1",
           "pinId": "a"
         }
-      },
-      "type": "<B>"
+      }
     },
     "a": {
       "plug": {
@@ -73,8 +70,7 @@
           "unitId": "wait0",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "349eb1a9-85ae-4fec-93f2-19ba3370b6c3",

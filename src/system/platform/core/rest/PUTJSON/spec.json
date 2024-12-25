@@ -80,8 +80,7 @@
           "unitId": "stringify",
           "pinId": "json"
         }
-      },
-      "type": "<A>"
+      }
     },
     "url": {
       "plug": {
@@ -89,8 +88,7 @@
           "unitId": "fetch",
           "pinId": "url"
         }
-      },
-      "type": "string"
+      }
     },
     "opt": {
       "plug": {
@@ -98,8 +96,7 @@
           "unitId": "deepmerge",
           "pinId": "b"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -109,8 +106,7 @@
           "unitId": "fetch",
           "pinId": "response"
         }
-      },
-      "type": "{status:number,body:string}"
+      }
     }
   },
   "metadata": {

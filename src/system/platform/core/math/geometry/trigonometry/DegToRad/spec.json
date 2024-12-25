@@ -82,8 +82,7 @@
           "unitId": "remainder",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -93,8 +92,7 @@
           "unitId": "multiply",
           "pinId": "a × b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "3a138358-cc25-45e3-a0ce-bbe54445736f",

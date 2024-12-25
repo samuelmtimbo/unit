@@ -34,8 +34,7 @@
           "unitId": "rgbtoxyz",
           "pinId": "RGB"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "outputs": {
@@ -45,8 +44,7 @@
           "unitId": "xyztoxy",
           "pinId": "xy"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "id": "23cae4c7-b88c-4004-865f-e618bfb0c63f",

@@ -9,8 +9,7 @@
           "pinId": "element"
         }
       },
-      "ref": true,
-      "type": "`U`"
+      "ref": true
     }
   },
   "outputs": {
@@ -20,8 +19,7 @@
           "unitId": "subtract",
           "pinId": "a - b"
         }
-      },
-      "type": "number"
+      }
     },
     "y": {
       "plug": {
@@ -29,8 +27,7 @@
           "unitId": "subtract0",
           "pinId": "a - b"
         }
-      },
-      "type": "number"
+      }
     },
     "test": {
       "plug": {

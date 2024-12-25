@@ -8,7 +8,6 @@
           "pinId": "url"
         }
       },
-      "type": "string",
       "metadata": {
         "position": {
           "0": {
@@ -25,7 +24,6 @@
           "pinId": "obj"
         }
       },
-      "type": "any",
       "metadata": {
         "position": {
           "0": {
@@ -42,7 +40,6 @@
           "pinId": "b"
         }
       },
-      "type": "object",
       "metadata": {
         "position": {
           "0": {
@@ -61,7 +58,6 @@
           "pinId": "response"
         }
       },
-      "type": "{status:number,body:string}",
       "metadata": {
         "position": {
           "0": {

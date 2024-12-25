@@ -42,8 +42,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "b": {
       "plug": {
@@ -51,8 +50,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     }
   },
   "outputs": {
@@ -62,8 +60,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>"
+      }
     },
     "else": {
       "plug": {
@@ -71,8 +68,7 @@
           "unitId": "ifnot",
           "pinId": "a if not b"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

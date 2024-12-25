@@ -24,8 +24,7 @@
           "unitId": "lengthequals",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -35,8 +34,7 @@
           "unitId": "lengthequals",
           "pinId": "equals"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "194683f4-5b90-4501-a8c9-b34f131d4f79",

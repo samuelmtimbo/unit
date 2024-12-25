@@ -295,8 +295,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "string[]"
+      "functional": true
     },
     "obj": {
       "plug": {
@@ -313,8 +312,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "string"
+      "functional": true
     }
   },
   "outputs": {
@@ -332,8 +330,7 @@
           "unitId": "if4",
           "pinId": "a if b"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "id": "7f348adc-e4f0-11ea-b8d1-0ba0ed3f34fe",

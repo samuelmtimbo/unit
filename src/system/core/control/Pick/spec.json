@@ -42,8 +42,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "b": {
       "plug": {
@@ -52,8 +51,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "c": {
       "plug": {
@@ -61,8 +59,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     }
   },
   "outputs": {
@@ -71,8 +68,7 @@
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

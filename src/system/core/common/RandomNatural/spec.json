@@ -55,8 +55,7 @@
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -66,8 +65,7 @@
           "unitId": "floor",
           "pinId": "⌊a⌋"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

@@ -25,8 +25,7 @@
           "unitId": "split",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "n": {
       "plug": {
@@ -34,8 +33,7 @@
           "unitId": "split",
           "pinId": "i"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -45,8 +43,7 @@
           "unitId": "split",
           "pinId": "second"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

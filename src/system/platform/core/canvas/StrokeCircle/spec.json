@@ -76,7 +76,6 @@
           "pinId": "d"
         }
       },
-      "type": "any[][]",
       "metadata": {
         "examples": ["[]"]
       }
@@ -89,8 +88,7 @@
           "unitId": "stroke",
           "pinId": "d"
         }
-      },
-      "type": "any[][]"
+      }
     }
   },
   "metadata": {

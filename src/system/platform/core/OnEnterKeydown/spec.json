@@ -8,8 +8,7 @@
           "pinId": "element"
         }
       },
-      "ref": true,
-      "type": "`U`"
+      "ref": true
     }
   },
   "outputs": {
@@ -19,8 +18,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "{key:string,keyCode:number,ctrlKey:boolean,shiftKey:boolean,altKey:boolean,metaKey:boolean,repeat:boolean}"
+      }
     }
   },
   "units": {

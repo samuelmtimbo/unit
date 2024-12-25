@@ -48,7 +48,6 @@
           "pinId": "start"
         }
       },
-      "type": "number",
       "functional": true
     },
     "a": {
@@ -58,7 +57,6 @@
           "pinId": "a"
         }
       },
-      "type": "<A>[]",
       "functional": true
     }
   },
@@ -69,8 +67,7 @@
           "unitId": "remove",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "a[i]": {
       "plug": {
@@ -78,8 +75,7 @@
           "unitId": "first",
           "pinId": "a[0]"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

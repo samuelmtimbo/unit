@@ -24,8 +24,7 @@
           "unitId": "wait",
           "pinId": "b"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -35,8 +34,7 @@
           "unitId": "wait",
           "pinId": "a"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",

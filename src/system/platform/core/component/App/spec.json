@@ -23,8 +23,7 @@
             "y": 45
           }
         }
-      },
-      "type": "object"
+      }
     },
     "disabled": {
       "plug": {
@@ -48,8 +47,7 @@
             "y": 16
           }
         }
-      },
-      "type": "boolean"
+      }
     },
     "graph": {
       "plug": {
@@ -75,8 +73,7 @@
           "unitId": "editor",
           "pinId": "fullwindow"
         }
-      },
-      "type": "boolean"
+      }
     },
     "frame": {
       "plug": {
@@ -85,7 +82,6 @@
           "pinId": "frame"
         }
       },
-      "type": "`U`",
       "ref": true
     }
   },

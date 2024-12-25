@@ -23,7 +23,6 @@
           "pinId": "emitter"
         }
       },
-      "type": "`EE`",
       "ref": true
     }
   },
@@ -34,8 +33,7 @@
           "unitId": "listen",
           "pinId": "data"
         }
-      },
-      "type": "{key:string,keyCode:number,ctrlKey:boolean,shiftKey:boolean,altKey:boolean,metaKey:boolean,repeat:boolean}"
+      }
     }
   },
   "metadata": {

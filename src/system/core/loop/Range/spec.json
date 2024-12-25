@@ -90,7 +90,6 @@
         }
       },
       "functional": true,
-      "type": "number",
       "metadata": {
         "examples": ["0"]
       }
@@ -103,7 +102,6 @@
         }
       },
       "functional": true,
-      "type": "number",
       "metadata": {
         "examples": ["3"]
       }
@@ -116,8 +114,7 @@
           "unitId": "loopincrement",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     },
     "test": {
       "plug": {
@@ -125,7 +122,6 @@
           "mergeId": "2"
         }
       },
-      "type": "boolean",
       "defaultIgnored": true
     },
     "final": {
@@ -135,7 +131,6 @@
           "pinId": "final"
         }
       },
-      "type": "number",
       "defaultIgnored": true
     }
   },

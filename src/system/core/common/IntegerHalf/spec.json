@@ -29,8 +29,7 @@
           "unitId": "half",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -40,8 +39,7 @@
           "unitId": "floor",
           "pinId": "⌊a⌋"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

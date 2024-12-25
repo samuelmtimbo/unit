@@ -23,8 +23,7 @@
           "unitId": "identity",
           "pinId": "a"
         }
-      },
-      "type": "{position:string,top:string,left:string,transform:string}"
+      }
     }
   },
   "metadata": {

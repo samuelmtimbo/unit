@@ -147,8 +147,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -156,8 +155,7 @@
           "unitId": "append",
           "pinId": "b"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -167,8 +165,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

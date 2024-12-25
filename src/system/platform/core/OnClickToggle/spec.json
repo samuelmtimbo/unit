@@ -75,8 +75,7 @@
           "unitId": "toggle",
           "pinId": "init"
         }
-      },
-      "type": "boolean"
+      }
     },
     "element": {
       "plug": {
@@ -85,7 +84,6 @@
           "pinId": "element"
         }
       },
-      "type": "`C`",
       "ref": true
     },
     "toggle": {
@@ -94,7 +92,6 @@
           "mergeId": "0"
         }
       },
-      "type": "any",
       "ref": false,
       "defaultIgnored": true
     }
@@ -106,8 +103,7 @@
           "unitId": "toggle",
           "pinId": "value"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

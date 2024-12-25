@@ -434,7 +434,6 @@
         }
       },
       "ref": false,
-      "type": "string",
       "metadata": {
         "examples": ["'banana'", "'apple'", "'orange'"],
         "position": {

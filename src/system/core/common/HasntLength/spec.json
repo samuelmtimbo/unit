@@ -55,8 +55,7 @@
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "b": {
       "plug": {
@@ -64,8 +63,7 @@
           "unitId": "equals",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -75,8 +73,7 @@
           "unitId": "ifnot",
           "pinId": "a if not b"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

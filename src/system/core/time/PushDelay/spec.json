@@ -42,8 +42,7 @@
           "unitId": "delay",
           "pinId": "ms"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -51,8 +50,7 @@
           "unitId": "memory",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -62,8 +60,7 @@
           "unitId": "delay",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

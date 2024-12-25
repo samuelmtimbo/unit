@@ -90,8 +90,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -100,8 +99,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -111,8 +109,7 @@
           "mergeId": "4"
         }
       },
-      "defaultIgnored": true,
-      "type": "number"
+      "defaultIgnored": true
     },
     "a": {
       "plug": {
@@ -120,8 +117,7 @@
           "mergeId": "3"
         }
       },
-      "defaultIgnored": true,
-      "type": "<A>[]"
+      "defaultIgnored": true
     },
     "a[i]": {
       "plug": {
@@ -129,16 +125,14 @@
           "unitId": "at",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "test": {
       "plug": {
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

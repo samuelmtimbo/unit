@@ -7,8 +7,7 @@
           "unitId": "canvas",
           "pinId": "style"
         }
-      },
-      "type": "object"
+      }
     },
     "line": {
       "plug": {

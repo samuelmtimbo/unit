@@ -104,8 +104,7 @@
           "pinId": "v"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "x1": {
       "plug": {
@@ -114,8 +113,7 @@
           "pinId": "v"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "y0": {
       "plug": {
@@ -124,8 +122,7 @@
           "pinId": "v"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "y1": {
       "plug": {
@@ -134,8 +131,7 @@
           "pinId": "v"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -145,8 +141,7 @@
           "unitId": "merge4",
           "pinId": "abcd"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "2bd0d83a-bd19-425b-aa75-84a47c73fc81",

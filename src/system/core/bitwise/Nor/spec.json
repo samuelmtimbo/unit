@@ -77,7 +77,6 @@
           "kind": "input"
         }
       },
-      "type": "number",
       "metadata": {
         "examples": ["0", "1"],
         "position": {
@@ -96,7 +95,6 @@
           "kind": "input"
         }
       },
-      "type": "number",
       "metadata": {
         "examples": ["0", "1"],
         "position": {
@@ -117,7 +115,6 @@
           "kind": "output"
         }
       },
-      "type": "number",
       "metadata": {
         "position": {
           "0": {

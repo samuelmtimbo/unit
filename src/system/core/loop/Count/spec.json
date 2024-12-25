@@ -24,8 +24,7 @@
           "unitId": "countfrom",
           "pinId": "any"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -35,8 +34,7 @@
           "unitId": "countfrom",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "5ebc6dca-25d6-11eb-b3e1-5fd1eeef49f9",

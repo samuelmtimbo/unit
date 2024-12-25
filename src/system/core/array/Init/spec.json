@@ -46,8 +46,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -56,8 +55,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -67,8 +65,7 @@
           "unitId": "narraybuilder",
           "pinId": "a[]"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "id": "5a7912c7-9c67-45b6-ae2b-e352405e6c16",

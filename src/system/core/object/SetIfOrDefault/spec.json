@@ -44,8 +44,7 @@
           "unitId": "default",
           "pinId": "d"
         }
-      },
-      "type": "boolean"
+      }
     },
     "default": {
       "plug": {
@@ -53,8 +52,7 @@
           "unitId": "default0",
           "pinId": "d"
         }
-      },
-      "type": "<A>"
+      }
     },
     "test": {
       "plug": {
@@ -63,8 +61,7 @@
           "pinId": "a"
         }
       },
-      "name": "test",
-      "type": "boolean"
+      "name": "test"
     },
     "value": {
       "plug": {
@@ -73,8 +70,7 @@
           "pinId": "a"
         }
       },
-      "name": "value",
-      "type": "<A>"
+      "name": "value"
     },
     "key": {
       "plug": {
@@ -83,8 +79,7 @@
           "pinId": "key"
         }
       },
-      "name": "key",
-      "type": "string"
+      "name": "key"
     },
     "obj": {
       "plug": {
@@ -93,8 +88,7 @@
           "pinId": "obj"
         }
       },
-      "name": "obj",
-      "type": "object"
+      "name": "obj"
     }
   },
   "outputs": {
@@ -105,8 +99,7 @@
           "pinId": "obj"
         }
       },
-      "name": "obj",
-      "type": "object"
+      "name": "obj"
     }
   },
   "metadata": {

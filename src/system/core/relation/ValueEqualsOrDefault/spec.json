@@ -118,24 +118,21 @@
           "pinId": "c"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     },
     "key": {
       "plug": {
         "0": {
           "mergeId": "7"
         }
-      },
-      "type": "string"
+      }
     },
     "obj": {
       "plug": {
         "0": {
           "mergeId": "6"
         }
-      },
-      "type": "object"
+      }
     },
     "d": {
       "plug": {
@@ -144,8 +141,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "boolean"
+      "functional": true
     }
   },
   "outputs": {
@@ -154,8 +150,7 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "id": "1de47760-fc93-4ee0-8cdb-f5338a01d4cd",

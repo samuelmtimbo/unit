@@ -47,7 +47,6 @@
           "pinId": "ms"
         }
       },
-      "type": "number",
       "metadata": {
         "examples": ["1000", "100"]
       }
@@ -58,8 +57,7 @@
           "unitId": "delay",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -69,8 +67,7 @@
           "unitId": "push",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "metadata": {

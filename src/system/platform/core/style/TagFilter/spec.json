@@ -24,8 +24,7 @@
           "unitId": "tag",
           "pinId": "v"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "outputs": {
@@ -35,8 +34,7 @@
           "unitId": "tag",
           "pinId": "kv"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "id": "cb1f45ee-2137-11eb-9b9d-e7e8fc730ec7",

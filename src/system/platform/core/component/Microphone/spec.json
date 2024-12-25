@@ -454,7 +454,6 @@
         }
       },
       "ref": false,
-      "type": "any",
       "metadata": {
         "position": {
           "0": {
@@ -473,7 +472,6 @@
         }
       },
       "ref": false,
-      "type": "any",
       "metadata": {
         "position": {
           "0": {
@@ -547,8 +545,7 @@
             }
           }
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

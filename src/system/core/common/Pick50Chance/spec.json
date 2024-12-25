@@ -67,16 +67,14 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     },
     "b": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -86,8 +84,7 @@
           "unitId": "pick",
           "pinId": "a"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

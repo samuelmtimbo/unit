@@ -15,8 +15,7 @@
             "y": 216
           }
         }
-      },
-      "type": "object"
+      }
     },
     "pathStyle": {
       "plug": {
@@ -32,8 +31,7 @@
             "y": -26
           }
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {},

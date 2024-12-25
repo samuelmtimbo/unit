@@ -23,8 +23,7 @@
           "unitId": "rangearray",
           "pinId": "a"
         }
-      },
-      "type": "number[]"
+      }
     }
   },
   "metadata": {

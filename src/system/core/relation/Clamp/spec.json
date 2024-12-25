@@ -34,8 +34,7 @@
           "unitId": "min",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     },
     "min": {
       "plug": {
@@ -43,8 +42,7 @@
           "unitId": "max",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -52,8 +50,7 @@
           "unitId": "min",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -63,8 +60,7 @@
           "unitId": "max",
           "pinId": "max"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "9ef9ff5b-6a1c-444b-8fc0-bfebbec6f4fd",

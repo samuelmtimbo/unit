@@ -54,8 +54,7 @@
           "unitId": "add",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     },
     "from": {
       "plug": {
@@ -63,8 +62,7 @@
           "unitId": "iterate",
           "pinId": "init"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -74,8 +72,7 @@
           "unitId": "iterate",
           "pinId": "current"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "72513267-174e-4ea4-9561-b11dea518af5",

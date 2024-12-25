@@ -54,8 +54,7 @@
           "unitId": "wait",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -63,8 +62,7 @@
           "unitId": "memory",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "outputs": {
@@ -74,8 +72,7 @@
           "unitId": "delay",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "e55c58b3-8653-4481-b5c9-2a75fce6365a",

@@ -28,7 +28,6 @@
           "kind": "input"
         }
       },
-      "type": "<A>",
       "functional": true,
       "metadata": {
         "position": {
@@ -80,8 +79,7 @@
             }
           }
         }
-      },
-      "type": "any"
+      }
     }
   },
   "units": {

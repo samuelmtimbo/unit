@@ -61,8 +61,7 @@
           "unitId": "video",
           "pinId": "style"
         }
-      },
-      "type": "object"
+      }
     },
     "controls": {
       "plug": {
@@ -71,8 +70,7 @@
           "pinId": "controls"
         }
       },
-      "defaultIgnored": true,
-      "type": "boolean"
+      "defaultIgnored": true
     },
     "opt": {
       "plug": {
@@ -80,8 +78,7 @@
           "unitId": "defaultvideomedia",
           "pinId": "opt"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {

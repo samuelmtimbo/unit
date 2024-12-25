@@ -68,8 +68,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "a": {
       "plug": {
@@ -78,8 +77,7 @@
           "pinId": "init"
         }
       },
-      "functional": true,
-      "type": "<A>"
+      "functional": true
     }
   },
   "outputs": {
@@ -89,8 +87,7 @@
           "unitId": "looprepeat",
           "pinId": "current"
         }
-      },
-      "type": "<A>"
+      }
     }
   },
   "id": "251ba609-a9c5-451b-8162-411c966bf919",

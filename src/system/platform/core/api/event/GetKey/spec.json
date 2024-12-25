@@ -23,8 +23,7 @@
           "unitId": "get",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {

@@ -23,8 +23,7 @@
           "unitId": "numbertostring",
           "pinId": "n"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -34,8 +33,7 @@
           "unitId": "numbertostring",
           "pinId": "str"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "metadata": {

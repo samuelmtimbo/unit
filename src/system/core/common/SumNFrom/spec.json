@@ -111,8 +111,7 @@
           "unitId": "add",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     },
     "n": {
       "plug": {
@@ -140,8 +139,7 @@
           "unitId": "loop2",
           "pinId": "finala"
         }
-      },
-      "type": "any"
+      }
     }
   },
   "id": "57e0cf37-1bf7-449e-91fd-f1ddf62c607d",

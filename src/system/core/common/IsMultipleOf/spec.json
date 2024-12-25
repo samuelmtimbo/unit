@@ -35,8 +35,7 @@
           "unitId": "remainder",
           "pinId": "a"
         }
-      },
-      "type": "number"
+      }
     },
     "b": {
       "plug": {
@@ -44,8 +43,7 @@
           "unitId": "remainder",
           "pinId": "b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -55,8 +53,7 @@
           "unitId": "equals",
           "pinId": "a = b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

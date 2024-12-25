@@ -8,8 +8,7 @@
           "pinId": "graph"
         }
       },
-      "ref": true,
-      "type": "`U`"
+      "ref": true
     },
     "any": {
       "plug": {

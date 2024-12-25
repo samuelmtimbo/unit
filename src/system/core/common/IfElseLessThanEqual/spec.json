@@ -81,8 +81,7 @@
           "mergeId": "1"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     },
     "b": {
       "plug": {
@@ -90,8 +89,7 @@
           "mergeId": "0"
         }
       },
-      "functional": true,
-      "type": "number"
+      "functional": true
     }
   },
   "outputs": {
@@ -101,8 +99,7 @@
           "unitId": "if1",
           "pinId": "a if b"
         }
-      },
-      "type": "number"
+      }
     },
     "a > b ? a": {
       "plug": {
@@ -110,8 +107,7 @@
           "unitId": "if0",
           "pinId": "a if b"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

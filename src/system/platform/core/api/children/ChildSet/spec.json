@@ -21,8 +21,7 @@
             }
           }
         }
-      },
-      "type": "`C`"
+      }
     },
     "at": {
       "plug": {
@@ -43,7 +42,6 @@
           }
         }
       },
-      "type": "number",
       "ref": false,
       "functional": true
     },
@@ -66,7 +64,6 @@
           }
         }
       },
-      "type": "string",
       "ref": false,
       "functional": true
     },

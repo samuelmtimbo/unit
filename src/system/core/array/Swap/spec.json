@@ -129,24 +129,21 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "i": {
       "plug": {
         "0": {
           "mergeId": "3"
         }
-      },
-      "type": "number"
+      }
     },
     "j": {
       "plug": {
         "0": {
           "mergeId": "5"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -156,8 +153,7 @@
           "unitId": "set1",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {

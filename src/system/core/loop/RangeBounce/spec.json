@@ -74,7 +74,6 @@
           "pinId": "a"
         }
       },
-      "type": "number",
       "functional": true
     },
     "b": {
@@ -83,7 +82,6 @@
           "mergeId": "bjpzdvv"
         }
       },
-      "type": "number",
       "functional": true
     }
   },
@@ -93,8 +91,7 @@
         "0": {
           "mergeId": "ymwlenzvu"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "id": "343f1382-4d2d-4022-b4b3-139e40ab6627",

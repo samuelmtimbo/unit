@@ -44,8 +44,7 @@
           "unitId": "default",
           "pinId": "d"
         }
-      },
-      "type": "boolean"
+      }
     },
     "default": {
       "plug": {
@@ -53,8 +52,7 @@
           "unitId": "default0",
           "pinId": "d"
         }
-      },
-      "type": "<A>"
+      }
     },
     "test": {
       "plug": {
@@ -62,8 +60,7 @@
           "unitId": "default",
           "pinId": "a"
         }
-      },
-      "type": "boolean"
+      }
     },
     "value": {
       "plug": {
@@ -71,8 +68,7 @@
           "unitId": "default0",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     },
     "key": {
       "plug": {
@@ -80,8 +76,7 @@
           "unitId": "setif",
           "pinId": "key"
         }
-      },
-      "type": "string"
+      }
     },
     "obj": {
       "plug": {
@@ -89,8 +84,7 @@
           "unitId": "setif",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {
@@ -100,8 +94,7 @@
           "unitId": "setif",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

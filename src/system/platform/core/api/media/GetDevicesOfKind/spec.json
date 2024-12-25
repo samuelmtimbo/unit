@@ -52,8 +52,7 @@
           "mergeId": "1"
         }
       },
-      "name": "kind",
-      "type": "any"
+      "name": "kind"
     }
   },
   "outputs": {
@@ -64,8 +63,7 @@
           "pinId": "b"
         }
       },
-      "name": "devices",
-      "type": "object[]"
+      "name": "devices"
     }
   },
   "id": "e98f03fc-0987-4d21-9642-9078b23183ed",

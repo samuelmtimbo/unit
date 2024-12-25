@@ -29,8 +29,7 @@
           "unitId": "keys",
           "pinId": "obj"
         }
-      },
-      "type": "object"
+      }
     },
     "keys": {
       "plug": {
@@ -38,8 +37,7 @@
           "unitId": "equals",
           "pinId": "a"
         }
-      },
-      "type": "string[]"
+      }
     }
   },
   "outputs": {
@@ -49,8 +47,7 @@
           "unitId": "equals",
           "pinId": "a = b"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "metadata": {

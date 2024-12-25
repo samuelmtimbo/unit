@@ -71,16 +71,14 @@
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "string"
+      }
     },
     "at": {
       "plug": {
         "0": {
           "mergeId": "1"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -90,8 +88,7 @@
           "unitId": "slice",
           "pinId": "a"
         }
-      },
-      "type": "string"
+      }
     },
     "first": {
       "plug": {
@@ -99,8 +96,7 @@
           "unitId": "slice0",
           "pinId": "a"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "id": "306fe446-a495-4ae3-a835-34f1468e92fe",

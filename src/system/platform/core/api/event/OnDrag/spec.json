@@ -24,7 +24,6 @@
           "pinId": "element"
         }
       },
-      "type": "`EE`",
       "ref": true,
       "metadata": {
         "position": {
@@ -60,7 +59,6 @@
           "pinId": "data"
         }
       },
-      "type": "any",
       "metadata": {
         "position": {
           "0": {
@@ -76,7 +74,6 @@
           "mergeId": "0"
         }
       },
-      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
       "metadata": {
         "position": {
           "0": {
@@ -92,7 +89,6 @@
           "mergeId": "2"
         }
       },
-      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
       "metadata": {
         "position": {
           "0": {

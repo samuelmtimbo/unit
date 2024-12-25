@@ -193,8 +193,7 @@
           "mergeId": "6"
         }
       },
-      "functional": true,
-      "type": "any"
+      "functional": true
     },
     "keys": {
       "plug": {
@@ -203,8 +202,7 @@
           "pinId": "a"
         }
       },
-      "functional": true,
-      "type": "string[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -214,8 +212,7 @@
           "unitId": "loop",
           "pinId": "final"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "metadata": {

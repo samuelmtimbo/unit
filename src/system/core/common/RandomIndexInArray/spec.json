@@ -30,7 +30,6 @@
           "pinId": "a"
         }
       },
-      "type": "<A>[]",
       "metadata": {
         "examples": ["[0,1,2,3]"]
       }
@@ -43,8 +42,7 @@
           "unitId": "randomnaturallte",
           "pinId": "i"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

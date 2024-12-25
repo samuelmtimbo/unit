@@ -35,8 +35,7 @@
           "unitId": "findlastindexfromordefault",
           "pinId": "test"
         }
-      },
-      "type": "boolean"
+      }
     },
     "from": {
       "plug": {
@@ -44,8 +43,7 @@
           "unitId": "findlastindexfromordefault",
           "pinId": "from"
         }
-      },
-      "type": "number"
+      }
     },
     "a": {
       "plug": {
@@ -53,8 +51,7 @@
           "unitId": "findlastindexfromordefault",
           "pinId": "a"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "outputs": {
@@ -64,8 +61,7 @@
           "unitId": "findlastindexfromordefault",
           "pinId": "a[i]"
         }
-      },
-      "type": "<A>"
+      }
     },
     "result": {
       "plug": {
@@ -73,8 +69,7 @@
           "unitId": "findlastindexfromordefault",
           "pinId": "result"
         }
-      },
-      "type": "number"
+      }
     },
     "i": {
       "plug": {
@@ -83,8 +78,7 @@
           "pinId": "i"
         }
       },
-      "defaultIgnored": true,
-      "type": "number"
+      "defaultIgnored": true
     },
     "a": {
       "plug": {
@@ -93,8 +87,7 @@
           "pinId": "a"
         }
       },
-      "defaultIgnored": true,
-      "type": "<A>[]"
+      "defaultIgnored": true
     },
     "test": {
       "plug": {
@@ -103,8 +96,7 @@
           "pinId": "test"
         }
       },
-      "defaultIgnored": true,
-      "type": "boolean"
+      "defaultIgnored": true
     }
   },
   "metadata": {

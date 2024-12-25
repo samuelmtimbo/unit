@@ -42,8 +42,7 @@
           "unitId": "if0",
           "pinId": "a"
         }
-      },
-      "type": "<A>"
+      }
     },
     "b": {
       "plug": {
@@ -51,8 +50,7 @@
           "unitId": "if1",
           "pinId": "a"
         }
-      },
-      "type": "<B>"
+      }
     },
     "c": {
       "plug": {
@@ -60,16 +58,14 @@
           "unitId": "if",
           "pinId": "a"
         }
-      },
-      "type": "<C>"
+      }
     },
     "test": {
       "plug": {
         "0": {
           "mergeId": "0"
         }
-      },
-      "type": "boolean"
+      }
     }
   },
   "outputs": {
@@ -79,8 +75,7 @@
           "unitId": "if0",
           "pinId": "a if b"
         }
-      },
-      "type": "<A>"
+      }
     },
     "b": {
       "plug": {
@@ -88,8 +83,7 @@
           "unitId": "if1",
           "pinId": "a if b"
         }
-      },
-      "type": "<B>"
+      }
     },
     "c": {
       "plug": {
@@ -97,8 +91,7 @@
           "unitId": "if",
           "pinId": "a if b"
         }
-      },
-      "type": "<C>"
+      }
     }
   },
   "id": "13a16a8a-5dc6-11ea-a3d4-9bda49772976",

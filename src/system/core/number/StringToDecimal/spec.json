@@ -23,8 +23,7 @@
           "unitId": "stringtoint",
           "pinId": "str"
         }
-      },
-      "type": "string"
+      }
     }
   },
   "outputs": {
@@ -34,8 +33,7 @@
           "unitId": "stringtoint",
           "pinId": "n"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

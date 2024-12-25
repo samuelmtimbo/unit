@@ -126,24 +126,21 @@
           "pinId": "d"
         }
       },
-      "functional": true,
-      "type": "(number|string|boolean)[][]"
+      "functional": true
     },
     "y": {
       "plug": {
         "0": {
           "mergeId": "3"
         }
-      },
-      "type": "number"
+      }
     },
     "x": {
       "plug": {
         "0": {
           "mergeId": "2"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "outputs": {
@@ -153,8 +150,7 @@
           "unitId": "translate",
           "pinId": "d"
         }
-      },
-      "type": "(number|string|boolean)[][]"
+      }
     }
   },
   "id": "389f41b1-0a1d-4b02-ab30-53446c2e13e2",

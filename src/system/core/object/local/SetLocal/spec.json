@@ -58,7 +58,6 @@
           "kind": "input"
         }
       },
-      "type": "string",
       "ref": false
     },
     "data": {
@@ -69,7 +68,6 @@
           "kind": "input"
         }
       },
-      "type": "string",
       "ref": false
     }
   },

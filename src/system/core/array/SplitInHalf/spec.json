@@ -74,8 +74,7 @@
           "mergeId": "2"
         }
       },
-      "functional": true,
-      "type": "<A>[]"
+      "functional": true
     }
   },
   "outputs": {
@@ -85,8 +84,7 @@
           "unitId": "splitat",
           "pinId": "first"
         }
-      },
-      "type": "<A>[]"
+      }
     },
     "second": {
       "plug": {
@@ -94,8 +92,7 @@
           "unitId": "splitat",
           "pinId": "second"
         }
-      },
-      "type": "<A>[]"
+      }
     }
   },
   "metadata": {
