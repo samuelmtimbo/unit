@@ -15938,34 +15938,42 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       opacity = 1,
     } = link_opt
 
-    const link_start_start_id = this._link_start_marker_id(link_id)
-    const link_start_start = this._create_link_marker(link_start_start_id, {
-      component: startMarker,
-      x: startMarkerX,
-    })
+    let link_defs: SVGDefs
+
+    if (startMarker || endMarker) {
+      link_defs = new SVGDefs({}, this.$system)
+    }
+
+    let link_start_id: string
+    let link_end_id: string
+
     if (startMarker) {
+      link_start_id = this._link_start_marker_id(link_id)
+      const link_start_start = this._create_link_marker(link_start_id, {
+        component: startMarker,
+        x: startMarkerX,
+      })
       this._link_marker_start[link_id] = startMarker
+      link_defs.appendChild(link_start_start)
     }
-    const link_end_id = this._link_end_marker_id(link_id)
-    const link_end_end = this._create_link_marker(link_end_id, {
-      component: endMarker,
-      x: endMarkerX,
-    })
+
     if (endMarker) {
+      link_end_id = this._link_end_marker_id(link_id)
+      const link_end_end = this._create_link_marker(link_end_id, {
+        component: endMarker,
+        x: endMarkerX,
+      })
       this._link_marker_end[link_id] = endMarker
+      link_defs.appendChild(link_end_end)
     }
-    const link_defs = new SVGDefs({}, this.$system)
-    link_defs.appendChild(link_start_start)
-    link_defs.appendChild(link_end_end)
 
     const link_base_id = `${this._id}-link-base-${link_id}`
     const link_base = new SVGPath(
       {
-        // id: link_base_id,
         className: 'link-base',
         attr: {
-          'marker-start': `url(#${link_start_start_id})`,
-          'marker-end': `url(#${link_end_id})`,
+          'marker-start': link_start_id && `url(#${link_start_id})`,
+          'marker-end': link_end_id && `url(#${link_end_id})`,
           'stroke-linecap': 'normal',
         },
         style: {
@@ -15982,7 +15990,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const link_base_area = new SVGPath(
       {
-        // id: link_base_id,
         className: 'link-base-area',
         style: {
           display: hidden ? 'none' : 'block',
@@ -16056,7 +16063,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this.$system
     )
 
-    link.appendChild(link_defs)
+    if (link_defs) {
+      link.appendChild(link_defs)
+    }
     link.appendChild(link_base)
     link.appendChild(link_base_area)
     link.appendChild(link_base_text)
