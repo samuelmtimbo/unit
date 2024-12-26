@@ -1,29 +1,85 @@
 {
   "name": "local root",
-  "inputs": {},
+  "inputs": {
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "root",
+          "pinId": "style",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 23,
+              "y": 210
+            }
+          }
+        }
+      }
+    }
+  },
   "outputs": {},
   "units": {
     "root": {
       "id": "9aba266d-5200-4281-b477-749c9b3c5815",
       "input": {
         "disabled": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 22,
+              "y": 216
+            }
+          }
         },
         "fullwindow": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 22,
+              "y": 1
+            }
+          }
         },
-        "style": {},
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 23,
+              "y": 186
+            }
+          }
+        },
         "graph": {}
       },
       "output": {
         "graph": {
-          "ignored": false
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 6,
+              "y": 52
+            }
+          }
+        },
+        "state": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 12,
+              "y": -62
+            }
+          }
         }
       },
       "metadata": {
         "position": {
-          "x": 15,
-          "y": 35
+          "x": 258,
+          "y": 76
         }
       }
     },
@@ -33,8 +89,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 487,
-          "y": 5
+          "x": -241,
+          "y": -227
         }
       }
     },
@@ -44,19 +100,37 @@
         "obj": {},
         "name": {
           "constant": true,
-          "data": "\"bundle\""
+          "data": "\"bundle\"",
+          "metadata": {
+            "position": {
+              "x": -146,
+              "y": -251
+            },
+            "data": {
+              "position": {
+                "x": -123,
+                "y": -279
+              }
+            }
+          }
         },
         "data": {}
       },
       "output": {
         "data": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -135,
+              "y": -230
+            }
+          }
         }
       },
       "metadata": {
         "position": {
-          "x": 430,
-          "y": 22
+          "x": -183,
+          "y": -225
         }
       }
     },
@@ -73,8 +147,8 @@
       },
       "metadata": {
         "position": {
-          "x": -288,
-          "y": -13
+          "x": -245,
+          "y": 200
         }
       }
     },
@@ -84,8 +158,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -340,
-          "y": 15
+          "x": -290,
+          "y": 233
         }
       }
     },
@@ -94,7 +168,19 @@
       "input": {
         "a": {
           "constant": true,
-          "data": "\"bundle\""
+          "data": "\"bundle\"",
+          "metadata": {
+            "position": {
+              "x": -397,
+              "y": 174
+            },
+            "data": {
+              "position": {
+                "x": -445,
+                "y": 170
+              }
+            }
+          }
         }
       },
       "output": {
@@ -102,8 +188,8 @@
       },
       "metadata": {
         "position": {
-          "x": -392,
-          "y": -42
+          "x": -348,
+          "y": 177
         }
       }
     },
@@ -115,36 +201,9 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -242,
-          "y": -46
+          "x": -203,
+          "y": 167
         }
-      }
-    },
-    "graphbundle": {
-      "id": "13d738b9-401d-43c9-852f-e9611545f5bc",
-      "input": {
-        "graph": {},
-        "opt": {}
-      },
-      "output": {
-        "graph": {},
-        "bundle": {}
-      }
-    },
-    "delaypush": {
-      "id": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",
-      "input": {
-        "ms": {
-          "constant": true,
-          "data": "1000"
-        },
-        "a": {
-          "constant": true,
-          "data": "{}"
-        }
-      },
-      "output": {
-        "a": {}
       }
     },
     "stringify": {
@@ -154,6 +213,12 @@
       },
       "output": {
         "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -91,
+          "y": -177
+        }
       }
     },
     "parse": {
@@ -163,6 +228,12 @@
       },
       "output": {
         "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -137,
+          "y": 206
+        }
       }
     },
     "frombundle": {
@@ -172,6 +243,139 @@
       },
       "output": {
         "graph": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -36,
+          "y": 177
+        }
+      }
+    },
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "emitter": {},
+        "event": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "edit"
+          },
+          "metadata": {
+            "position": {
+              "x": -89,
+              "y": 73
+            },
+            "data": {
+              "position": {
+                "x": -116,
+                "y": 96
+              }
+            }
+          }
+        },
+        "remove": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -16,
+              "y": 25
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 49
+        }
+      }
+    },
+    "debounce": {
+      "id": "e55c58b3-8653-4481-b5c9-2a75fce6365a",
+      "input": {
+        "ms": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": 1000
+          },
+          "metadata": {
+            "position": {
+              "x": -206,
+              "y": 29
+            },
+            "data": {
+              "position": {
+                "x": -244,
+                "y": 35
+              }
+            }
+          }
+        },
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -156,
+          "y": 21
+        }
+      }
+    },
+    "get0": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "obj": {},
+        "name": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -38,
+          "y": -94
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "bundle"
+          },
+          "metadata": {
+            "position": {
+              "x": -192,
+              "y": -72
+            },
+            "data": {
+              "position": {
+                "x": -241,
+                "y": -81
+              }
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -142,
+          "y": -65
+        }
       }
     }
   },
@@ -230,9 +434,9 @@
           "graph": true
         }
       },
-      "graphbundle": {
+      "listen": {
         "input": {
-          "graph": true
+          "emitter": true
         }
       }
     },
@@ -261,26 +465,26 @@
       }
     },
     "7": {
+      "get0": {
+        "output": {
+          "value": true
+        }
+      },
       "stringify": {
         "input": {
           "a": true
         }
-      },
-      "graphbundle": {
-        "output": {
-          "bundle": true
-        }
       }
     },
     "8": {
-      "delaypush": {
-        "output": {
+      "debounce": {
+        "input": {
           "a": true
         }
       },
-      "graphbundle": {
-        "input": {
-          "opt": true
+      "listen": {
+        "output": {
+          "data": true
         }
       }
     },
@@ -307,6 +511,42 @@
           "graph": true
         }
       }
+    },
+    "11": {
+      "debounce": {
+        "output": {
+          "a": true
+        }
+      },
+      "wait": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "12": {
+      "get0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "root": {
+        "output": {
+          "state": true
+        }
+      }
+    },
+    "13": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "get0": {
+        "input": {
+          "name": true
+        }
+      }
     }
   },
   "render": true,
@@ -323,7 +563,47 @@
   "metadata": {
     "icon": "square",
     "description": "root app local auto-save",
-    "tags": ["platform", "core", "component"]
+    "tags": ["platform", "core", "component"],
+    "position": {
+      "merge": {
+        "1": {
+          "x": -136,
+          "y": -202
+        },
+        "3": {
+          "x": -190,
+          "y": 209
+        },
+        "5": {
+          "x": -297,
+          "y": 185
+        },
+        "7": {
+          "x": -55,
+          "y": -141
+        },
+        "8": {
+          "x": -104,
+          "y": 36
+        },
+        "9": {
+          "x": -85,
+          "y": 195
+        },
+        "10": {
+          "x": 11,
+          "y": 151
+        },
+        "11": {
+          "x": -170,
+          "y": -25
+        },
+        "13": {
+          "x": -90,
+          "y": -80
+        }
+      }
+    }
   },
   "id": "e1b6acd3-69cd-4edb-8e3e-6c78ffd28b49",
   "type": "`U`&`C`&`G`",
