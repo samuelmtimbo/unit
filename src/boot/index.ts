@@ -86,7 +86,7 @@ export function boot(
     path,
     parent,
     emitter,
-    root: null,
+    root: (parent && parent.root) || null,
     color,
     theme,
     customEvent,
