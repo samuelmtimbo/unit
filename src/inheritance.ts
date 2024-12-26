@@ -1,6 +1,6 @@
 export const INHERITANCE = {
   U: ['EE'],
-  G: ['U', 'J'],
+  G: ['U', 'J', 'C'],
   C: ['U'],
   V: ['EE'],
   CH: ['EE'],
