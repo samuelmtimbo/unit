@@ -1,0 +1,108 @@
+{
+  "type": "`U`&`G`",
+  "name": "child merge",
+  "units": {
+    "foreachkeyvalue": {
+      "id": "47771360-640a-11ea-8393-d32f60372182",
+      "input": {
+        "obj": { "metadata": { "position": { "x": -69, "y": 57 } } }
+      },
+      "output": {
+        "key": { "metadata": { "position": { "x": -38, "y": 79 } } },
+        "value": {},
+        "test": { "ignored": false }
+      },
+      "metadata": { "position": { "x": -20, "y": 38 } }
+    },
+    "childset": {
+      "id": "2633ed12-309e-40fe-910d-44106d917e96",
+      "input": {
+        "parent": { "metadata": { "position": { "x": 125, "y": 11 } } },
+        "at": {},
+        "name": { "metadata": { "position": { "x": 153, "y": 35 } } },
+        "data": {}
+      },
+      "output": {},
+      "metadata": { "position": { "x": 74, "y": 11 } }
+    },
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": { "metadata": { "position": { "x": -66, "y": -57 } } },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": { "position": { "x": -44, "y": -78 } }
+        },
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": { "position": { "x": 16, "y": -69 } }
+        }
+      },
+      "metadata": { "position": { "x": -20, "y": -35 } }
+    }
+  },
+  "merges": {
+    "0": {
+      "childset": { "input": { "at": true } },
+      "looprepeat": { "output": { "current": true } }
+    },
+    "1": {
+      "foreachkeyvalue": { "output": { "key": true } },
+      "childset": { "input": { "name": true } }
+    },
+    "2": {
+      "foreachkeyvalue": { "output": { "test": true } },
+      "looprepeat": { "input": { "test": true } }
+    },
+    "3": {
+      "foreachkeyvalue": { "output": { "value": true } },
+      "childset": { "input": { "data": true } }
+    }
+  },
+  "inputs": {
+    "parent": {
+      "plug": {
+        "0": { "unitId": "childset", "pinId": "parent", "kind": "input" }
+      },
+      "ref": true,
+      "metadata": { "position": { "0": { "ext": { "x": 148, "y": 11 } } } }
+    },
+    "data": {
+      "plug": {
+        "0": {
+          "unitId": "foreachkeyvalue",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": { "position": { "0": { "ext": { "x": -86, "y": 74 } } } }
+    },
+    "at": {
+      "plug": {
+        "0": { "unitId": "looprepeat", "pinId": "init", "kind": "input" }
+      },
+      "ref": false,
+      "metadata": { "position": { "0": { "ext": { "x": -81, "y": -76 } } } }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "merge `parent` child `at` input `name` to `data`",
+    "position": {
+      "merge": {
+        "0": { "x": 33, "y": -23 },
+        "1": { "x": 35, "y": 44 },
+        "2": { "x": -54, "y": 1 },
+        "3": { "x": 26, "y": 21 }
+      }
+    }
+  },
+  "id": "9369ceea-b3ad-44d3-a856-59fe2ea76e32",
+  "system": true
+}
