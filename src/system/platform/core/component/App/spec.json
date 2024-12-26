@@ -95,6 +95,16 @@
       },
       "ref": true,
       "defaultIgnored": true
+    },
+    "state": {
+      "plug": {
+        "0": {
+          "unitId": "editor",
+          "pinId": "state"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": true
     }
   },
   "units": {
@@ -110,6 +120,7 @@
           }
         },
         "disabled": {
+          "ignored": false,
           "metadata": {
             "position": {
               "x": -352,
@@ -165,7 +176,14 @@
           }
         }
       },
-      "output": {},
+      "output": {
+        "graph": {
+          "ignored": false
+        },
+        "state": {
+          "ignored": false
+        }
+      },
       "metadata": {
         "position": {
           "x": 366,

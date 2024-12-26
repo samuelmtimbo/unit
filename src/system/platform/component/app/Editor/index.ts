@@ -1,3 +1,4 @@
+import { $ } from '../../../../../Class/$'
 import { Element_ } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
 import { emptySpec, newSpecId } from '../../../../../client/spec'
@@ -5,9 +6,14 @@ import { Zoom } from '../../../../../client/zoom'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { fromSpec } from '../../../../../spec/fromSpec'
 import { System } from '../../../../../system'
+import { BundleSpec } from '../../../../../types/BundleSpec'
 import { Dict } from '../../../../../types/Dict'
 import { G } from '../../../../../types/interface/G'
+import { J } from '../../../../../types/interface/J'
+import { wrapObject } from '../../../../../wrap/Object'
 import { ID_EDITOR } from '../../../../_ids'
+import { firstGlobalComponentPromise } from '../../../../globalComponent'
+import EditorComponent from './Component'
 
 export interface I<T> {
   style: Dict<string>
@@ -21,13 +27,13 @@ export interface I<T> {
 
 export interface O<T> {
   graph: G
+  state: J & $
 }
 
 export default class Editor<T> extends Element_<I<T>, O<T>> {
   __ = ['U', 'C', 'V', 'J', 'G', 'EE']
 
   private _fallback_graph: Graph
-
   private _graph: Graph
 
   constructor(system: System) {
@@ -44,7 +50,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           'config',
           'attr',
         ],
-        o: ['graph'],
+        o: ['graph', 'state'],
       },
       {
         input: {
@@ -59,6 +65,9 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           graph: {
             ref: true,
           },
+          state: {
+            ref: true,
+          },
         },
       },
       system,
@@ -68,6 +77,31 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     this._fallback()
 
     this._input.graph.push(this._fallback_graph)
+
+    this.register()
+    ;(async () => {
+      const component = (await firstGlobalComponentPromise(
+        this.__system,
+        this.__global_id
+      )) as EditorComponent
+
+      const state = wrapObject(
+        {
+          get bundle(): BundleSpec {
+            return component.getBundle()
+          },
+          get zoom(): Zoom {
+            return component.getZoom()
+          },
+          set zoom(zoom: Zoom) {
+            component.setZoom(zoom)
+          },
+        },
+        this.__system
+      )
+
+      this._output.state.push(state)
+    })()
   }
 
   private _fallback = () => {

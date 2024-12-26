@@ -45,6 +45,11 @@
       "ref": true,
       "defaultIgnored": true,
       "icon": "graph"
+    },
+    "state": {
+      "type": "`J`",
+      "defaultIgnored": true,
+      "ref": true
     }
   },
   "metadata": {

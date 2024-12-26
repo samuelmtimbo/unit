@@ -1728,6 +1728,18 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       this._editor.setProp('config', current)
     }
   }
+
+  public getBundle(): BundleSpec {
+    return this._editor.getBundle()
+  }
+
+  public getZoom(): Zoom {
+    return this._editor.getZoom()
+  }
+
+  public setZoom(zoom: Zoom): void {
+    return this._editor.setZoom(zoom)
+  }
 }
 
 export interface LinkProps {
@@ -16220,8 +16232,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._maybe_refresh_simulation_by_drag()
   }
 
-  public set_zoom = (zoom: Zoom) => {
-    // console.log('Graph', '_set_zoom', zoom)
+  public setZoom = (zoom: Zoom) => {
+    // console.log('Graph', 'setZoom', zoom)
 
     const dx = zoom.x - this._zoom.x
     const dy = zoom.y - this._zoom.y
@@ -22148,7 +22160,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const zoom = translate(this._zoom, dw / 2, dh / 2)
 
-    this.set_zoom(zoom)
+    this.setZoom(zoom)
 
     for (const unit_id in this._subgraph_cache) {
       if (this._subgraph_unit_id !== unit_id) {
@@ -42496,7 +42508,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const zoom = zoomTransformCenteredAt(x, y, this._zoom.z, $width, $height)
 
-    this.set_zoom(zoom)
+    this.setZoom(zoom)
   }
 
   private _animate_zoom_center_unlisten: Unlisten
@@ -43180,7 +43192,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const zoom = translate(this._zoom, -z * dx, -z * dy)
 
-      this.set_zoom(zoom)
+      this.setZoom(zoom)
     }
 
     this._drag_edge_animation = requestAnimationFrame(
@@ -44581,7 +44593,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const zoom = translate(this._zoom, this._translate_x, this._translate_y)
 
-    this.set_zoom(zoom)
+    this.setZoom(zoom)
 
     this._translate_pressed_node()
 
@@ -56421,7 +56433,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const zoom = translate(this._zoom, this._translate_x, this._translate_y)
 
-    this.set_zoom(zoom)
+    this.setZoom(zoom)
 
     this._translate_pressed_node()
 
@@ -56560,7 +56572,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         y: this._zoom.y - (y / _z - y / this._zoom.z),
       }
 
-      this.set_zoom(zoom)
+      this.setZoom(zoom)
 
       this._maybe_refresh_simulation_by_drag()
     }

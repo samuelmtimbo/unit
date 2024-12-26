@@ -79,6 +79,16 @@
       },
       "ref": true,
       "defaultIgnored": true
+    },
+    "state": {
+      "plug": {
+        "0": {
+          "unitId": "io",
+          "pinId": "state"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": true
     }
   },
   "units": {
