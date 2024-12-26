@@ -227,8 +227,8 @@
   },
   "component": {},
   "metadata": {
-    "icon": "triangle",
-    "description": "set `element` child `at` `name` to `data`",
+    "icon": "object-set",
+    "description": "set `parent` child `at` input `name` to `data`",
     "position": {
       "merge": {
         "0": {
