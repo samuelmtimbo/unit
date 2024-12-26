@@ -25,7 +25,7 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
     throw new Error('spec id is required')
   }
 
-  const bundle = unitBundleSpec({ id }, weakMerge({ [id]: spec }, specs_))
+  const bundle = unitBundleSpec({ id }, weakMerge(specs_, { [id]: spec }))
 
   const Bundle = bundleClass(Class, bundle, specs_)
 
@@ -91,8 +91,6 @@ export function classFromSpec<I, O>(
 
   class Class extends Graph<I, O> {
     constructor(system: System, id: string, push?: boolean) {
-      const spec = specs[id] as GraphSpec
-
       super(spec, branch, system, id, push)
     }
   }
