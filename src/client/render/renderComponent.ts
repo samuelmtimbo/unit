@@ -46,8 +46,6 @@ export function renderComponent(
 
     component.connect($component as $Component)
 
-    component.focus()
-
     unlisten = callAll([removeChild])
   })
 
