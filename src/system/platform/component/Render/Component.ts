@@ -22,6 +22,10 @@ const DEFAULT_STYLE = {
 export default class Render extends HTMLElement_<HTMLDivElement, Props> {
   private _unlisten: Unlisten
 
+  public $input = {
+    component: ['C'],
+  }
+
   constructor($props: Props, $system: System) {
     super(
       $props,
