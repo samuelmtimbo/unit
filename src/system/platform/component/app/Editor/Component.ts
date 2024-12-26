@@ -44438,8 +44438,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let { x, y } = this._multiselect_area_start_position
 
     if (this._mode !== 'multiselect') {
-      const dx = event.clientX - this._multiselect_area_rect.x1
-      const dy = event.clientY - this._multiselect_area_rect.y1
+      let dx = clientX - this._multiselect_area_rect.x1
+      let dy = clientY - this._multiselect_area_rect.y1
+
+      if (clientX > x) {
+        //
+      } else {
+        const width = this._multiselect_area_rect.x1 - this._multiselect_area_rect.x0
+
+        dx += width
+      }
+      if (clientY > y) {
+        //
+      } else {
+        const height = this._multiselect_area_rect.y1 - this._multiselect_area_rect.y0
+
+        dy += height
+      }
 
       x += dx
       y += dy
