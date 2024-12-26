@@ -42,7 +42,7 @@ export const enableModeKeyboard = (
           return
         }
 
-        if (mode_key === key) {
+        if (mode_key.toLowerCase() === key.toLowerCase()) {
           _mode_keydown[key] = true
 
           callback(mode as Mode)
@@ -51,7 +51,7 @@ export const enableModeKeyboard = (
       keyup: (key: string) => {
         delete _mode_keydown[key]
 
-        if (key === MODE_TO_KEY[mode]) {
+        if (key.toLowerCase() === MODE_TO_KEY[mode].toLowerCase()) {
           const mode_keydown = keys(_mode_keydown)
 
           const mode_keydown_count = mode_keydown.length

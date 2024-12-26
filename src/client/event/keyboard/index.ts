@@ -170,8 +170,12 @@ export class KeyboardController {
           combo = Array.isArray(combo) ? combo : [combo]
           for (const c of combo) {
             if (
-              c.replace(/ /g, '') === currentComboStr.replace(/ /g, '') ||
-              (strict === false && currentCombo.includes(c.replace(/ /g, '')))
+              c.toLowerCase().replace(/ /g, '') ===
+                currentComboStr.toLowerCase().replace(/ /g, '') ||
+              (strict === false &&
+                currentCombo
+                  .map((key) => key.toLowerCase())
+                  .includes(c.toLowerCase().replace(/ /g, '')))
             ) {
               match = true
               break

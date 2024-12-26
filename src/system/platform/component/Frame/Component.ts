@@ -71,7 +71,7 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
         },
       } = this.$system
 
-      if ((event.metaKey) && event.key === 'a') {
+      if (event.metaKey && event.key.toLowerCase() === 'a') {
         event.preventDefault()
 
         const range = createRange()
