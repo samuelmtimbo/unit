@@ -129,20 +129,9 @@ export class KeyboardController {
     return this._shift
   }
 
-  private _removeEmptySpace(shortcut: Shortcut): Shortcut {
-    if (shortcut.combo) {
-      if (Array.isArray(shortcut.combo)) {
-        shortcut.combo = shortcut.combo.map((c) => c.replace(/ /g, ''))
-      } else {
-        shortcut.combo = shortcut.combo.replace(/ /g, '')
-      }
-    }
-    return shortcut
-  }
-
   public addShortcutGroup(shortcutGroup: Shortcut[]): string {
     const id = randomIdNotIn(this._shortcuts)
-    this._shortcuts[id] = shortcutGroup.map(this._removeEmptySpace)
+    this._shortcuts[id] = shortcutGroup
     if (keys(this._shortcuts).length === 1) {
       this._listen()
     }
@@ -181,8 +170,8 @@ export class KeyboardController {
           combo = Array.isArray(combo) ? combo : [combo]
           for (const c of combo) {
             if (
-              c === currentComboStr ||
-              (strict === false && currentCombo.includes(c))
+              c.replace(/ /g, '') === currentComboStr.replace(/ /g, '') ||
+              (strict === false && currentCombo.includes(c.replace(/ /g, '')))
             ) {
               match = true
               break

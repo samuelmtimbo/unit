@@ -19715,7 +19715,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           keydown: this._on_arrow_keydown,
         },
         {
-          combo: ['Space'],
+          combo: [''],
           keydown: this._on_space_keydown,
           preventDefault: true,
         },
@@ -56097,7 +56097,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (next_selected_node) {
         this.select_node(next_selected_node)
 
-        if (isKeyPressed(this.$system, 'Space')) {
+        if (isKeyPressed(this.$system, ' ')) {
           this._on_space_keydown()
         }
       }
