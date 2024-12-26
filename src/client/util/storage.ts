@@ -47,9 +47,9 @@ export function read(storage: Storage, path: string): Dict<string> {
   const keys_ = keys(storage, path)
 
   for (const key of keys_) {
-    const _key = shiftPath(path, key)
+    const _key = `${path}${key}`
 
-    obj[_key] = storage.getItem(key)
+    obj[key] = storage.getItem(_key)
   }
 
   return obj
