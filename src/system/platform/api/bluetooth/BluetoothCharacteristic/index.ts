@@ -2,6 +2,7 @@ import { $ } from '../../../../../Class/$'
 import { Functional, FunctionalEvents } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
 import { BluetoothCharacteristic } from '../../../../../types/global/BluetoothCharacteristic'
 import { BC } from '../../../../../types/interface/BC'
 import { BSE } from '../../../../../types/interface/BSE'
@@ -80,20 +81,28 @@ export default class BluetoothCharacteristic_ extends Functional<
     const charac = new (class _BluetoothDevice extends $ implements BC {
       __ = ['BC']
 
-      async read(): Promise<any> {
-        const dataView = await characteristic.readValue()
+      read(callback: Callback<any>): void {
+        ;(async () => {
+          const dataView = await characteristic.readValue()
 
-        return dataView.getUint8(0).toString()
+          const data = dataView.getUint8(0).toString()
+
+          callback(data)
+        })()
       }
 
-      async write(data: any): Promise<void> {
-        const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
+      write(data: any, callback: Callback): void {
+        ;(async () => {
+          try {
+            const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
 
-        const buffer = Uint8Array.from(charCodeArray)
+            const buffer = Uint8Array.from(charCodeArray)
 
-        await characteristic.writeValue(buffer)
-
-        return
+            await characteristic.writeValue(buffer)
+          } catch (err) {
+            callback(err.message)
+          }
+        })()
       }
     })(this.__system)
 

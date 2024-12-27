@@ -5,30 +5,20 @@ import { $V, $V_C, $V_G, $V_R, $V_W } from './$V'
 
 export const AsyncVGet: (value: V) => $V_G = (value) => {
   return {
-    async $read({}: {}, callback: Callback<any>): Promise<void> {
-      let data: any
+    $read({}: {}, callback: Callback<any>): void {
+      value.read((data, err) => {
+        const data_ = stringify(data)
 
-      try {
-        data = await value.read()
-      } catch (err) {
-        return callback(undefined, err.message)
-      }
-
-      const _data = stringify(data)
-
-      callback(_data)
+        callback(data_)
+      })
     },
   }
 }
 
 export const AsyncVCall: (value: V) => $V_C = (value) => {
   return {
-    async $write(
-      { data }: { data: any },
-      callback: Callback<void>
-    ): Promise<any> {
-      await value.write(data)
-      callback()
+    $write({ data }: { data: any }, callback: Callback): void {
+      value.write(data, callback)
     },
   }
 }

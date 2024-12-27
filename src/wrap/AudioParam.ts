@@ -1,5 +1,6 @@
 import { $ } from '../Class/$'
 import { System } from '../system'
+import { Callback } from '../types/Callback'
 import { V } from '../types/interface/V'
 
 export function wrapAudioParam(
@@ -9,14 +10,14 @@ export function wrapAudioParam(
   return new (class Node extends $ implements V<number> {
     __: string[] = ['AN']
 
-    read(): Promise<number> {
-      return Promise.resolve(audioParam.value)
+    read(callback: Callback<number>): void {
+      callback(audioParam.value)
     }
 
-    write(data: number): Promise<void> {
+    write(data: number, callback: Callback): void {
       audioParam.value = data
 
-      return
+      callback()
     }
   })(system)
 }

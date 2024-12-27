@@ -12,6 +12,7 @@ import {
 import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { ObjectPathTooDeepError } from '../../../../exception/ObjectPathTooDeep'
 import { System } from '../../../../system'
+import { Callback } from '../../../../types/Callback'
 import { Unlisten } from '../../../../types/Unlisten'
 import { J } from '../../../../types/interface/J'
 import { V } from '../../../../types/interface/V'
@@ -41,20 +42,24 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     throw new MethodNotImplementedError()
   }
 
-  async read(): Promise<any> {
+  read(callback: Callback<any>): void {
     const { path } = this.__system
 
     const storage = this._storage()
 
-    return read(storage, path)
+    const data = read(storage, path)
+
+    callback(data)
   }
 
-  async write(data: any): Promise<void> {
+  write(data: any, callback: Callback): void {
     const { path } = this.__system
 
     const storage = this._storage()
 
-    return write(storage, path, data)
+    write(storage, path, data)
+
+    callback()
   }
 
   async get(name: string): Promise<any> {

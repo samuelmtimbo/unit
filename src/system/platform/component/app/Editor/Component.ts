@@ -22266,11 +22266,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._focused = true
 
+      this._refresh_enabled()
+
       this._lock_control()
     } else {
       this._focused = true
 
-      this._enable()
+      this._refresh_enabled()
       this._refresh_control()
 
       this._show_transcend(true)
@@ -44456,14 +44458,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (clientX > x) {
         //
       } else {
-        const width = this._multiselect_area_rect.x1 - this._multiselect_area_rect.x0
+        const width =
+          this._multiselect_area_rect.x1 - this._multiselect_area_rect.x0
 
         dx += width
       }
       if (clientY > y) {
         //
       } else {
-        const height = this._multiselect_area_rect.y1 - this._multiselect_area_rect.y0
+        const height =
+          this._multiselect_area_rect.y1 - this._multiselect_area_rect.y0
 
         dy += height
       }

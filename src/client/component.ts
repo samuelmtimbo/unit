@@ -1958,7 +1958,7 @@ export class Component<
     // console.log(this.constructor.name, 'connect')
 
     if (this.$connected) {
-      throw new Error('component is already connected')
+      // throw new Error('component is already connected')
       return
     }
 

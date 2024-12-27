@@ -1,6 +1,7 @@
 import { EventEmitter_ } from './EventEmitter'
 import { ObjectUpdateType } from './ObjectUpdateType'
 import { keys } from './system/f/object/Keys/f'
+import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { J } from './types/interface/J'
 import { V } from './types/interface/V'
@@ -147,14 +148,14 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     }
   }
 
-  public async read(): Promise<T> {
-    return this._obj
+  public read(callback: Callback<T>): void {
+    callback(this._obj)
   }
 
-  public write(data: T): Promise<void> {
+  public write(data: T, callback: Callback<undefined>): void {
     this._obj = data
 
-    return
+    callback()
   }
 
   public async get<K extends keyof T>(name: K): Promise<any> {

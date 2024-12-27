@@ -2,6 +2,7 @@ import { MethodNotImplementedError } from '../exception/MethodNotImplementedErro
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { Primitive, PrimitiveEvents } from '../Primitive'
 import { System } from '../system'
+import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
 import { V } from '../types/interface/V'
@@ -95,13 +96,14 @@ export class Stateful<
     return this._state[name] ?? this._defaultState[name]
   }
 
-  public async read(): Promise<any> {
-    return this._state
+  public read(callback: Callback<any>): void {
+    callback(this._state)
   }
 
-  public write(data: any): Promise<void> {
+  public write(data: any, callback: Callback): void {
     this._state = data
-    return
+
+    callback()
   }
 
   public async set<K extends keyof I>(

@@ -2,6 +2,7 @@ import { $ } from '../Class/$'
 import { SharedRef } from '../SharefRef'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
+import { Callback } from '../types/Callback'
 import { A } from '../types/interface/A'
 import { TA } from '../types/interface/TA'
 import { V } from '../types/interface/V'
@@ -72,12 +73,14 @@ export function wrapUint8Array(
       return array.buffer
     }
 
-    async read(): Promise<number[]> {
-      return [...array]
+    read(callback: Callback<number[]>): void {
+      callback([...array])
     }
 
-    async write(data: number[]): Promise<void> {
-      throw array.set(data)
+    write(data: number[], callback: Callback): void {
+      array.set(data)
+
+      callback()
     }
 
     append(a: number): Promise<void> {

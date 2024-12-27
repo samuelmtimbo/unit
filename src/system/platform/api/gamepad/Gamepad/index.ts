@@ -3,6 +3,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
 import { Gamepad_, Gamepad_J } from '../../../../../client/event/gamepad'
 import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
 import { EE } from '../../../../../types/interface/EE'
 import { V } from '../../../../../types/interface/V'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -109,12 +110,12 @@ export default class _Gamepad extends Holder<I, O> {
         extends $<GamepadEvents>
         implements V<Gamepad_J>, EE<GamePad_EE>
       {
-        async read(): Promise<Gamepad_J> {
-          return gamepad_.state
+        read(callback: Callback<Gamepad_J>): void {
+          callback(gamepad_.state)
         }
 
-        async write(data: Gamepad_J): Promise<void> {
-          throw new Error('cannot write to gamepad state')
+        write(data: Gamepad_J, callback: Callback): void {
+          callback(undefined, 'cannot write to gamepad state')
         }
       })(this.__system)
 

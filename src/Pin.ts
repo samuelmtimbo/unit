@@ -1,6 +1,7 @@
 import { $, $Events } from './Class/$'
 import { Unit } from './Class/Unit'
 import { System } from './system'
+import { Callback } from './types/Callback'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
 import { Unlisten } from './types/Unlisten'
@@ -287,15 +288,13 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     }
   }
 
-  async read(): Promise<any> {
-    if (this._register === undefined) {
-      throw new Error('empty')
-    }
-
-    return this._register
+  read(callback: Callback<T>): void {
+    callback(this._register)
   }
 
-  async write(data: any): Promise<void> {
+  write(data: T, callback: Callback<undefined>): void {
     this.push(data)
+
+    callback()
   }
 }
