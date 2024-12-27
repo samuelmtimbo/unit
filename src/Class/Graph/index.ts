@@ -5110,11 +5110,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       const mergeSpec = this.getMergeSpec(mergeId)
 
-      if (this.isUnitRefPin(unitId, 'output', pinId)) {
+      if (this.isUnitRefPin(unitId, type, pinId)) {
         if (type === 'output') {
           forEachInputOnMerge(mergeSpec, (unitId, pinId): void => {
             this._removeUnitPinData(unitId, 'input', pinId)
           })
+        } else {
+          pin.take()
         }
       } else {
         pin.take()
