@@ -1,4 +1,5 @@
 import { Component } from '../../client/component'
+import { isComponentEvent } from '../../client/isComponentEvent'
 import {
   animate,
   appendChild,
@@ -241,7 +242,7 @@ export class Element_<
   getSetup(): ComponentSetup {
     const setup: ComponentSetup = {
       animations: this._animations,
-      events: this.eventNames(),
+      events: this.eventNames().filter(isComponentEvent),
       stopPropagation: Object.keys(this._stopPropagation),
       stopImmediatePropagation: Object.keys(this._stopImmediatePropagation),
       preventDefault: Object.keys(this._preventDefault),

@@ -2074,9 +2074,7 @@ export class Component<
       } = setup
 
       for (const event of events) {
-        if (UI_EVENT_SET.has(event as IOUIEventName) || event.startsWith('_')) {
-          listen(event as IOUIEventName)
-        }
+        listen(event as IOUIEventName)
       }
 
       for (const animation of animations) {

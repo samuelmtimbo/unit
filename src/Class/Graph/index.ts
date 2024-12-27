@@ -5,6 +5,7 @@ import { PinOpt } from '../../PinOpt'
 import { Pins } from '../../Pins'
 import { Primitive } from '../../Primitive'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
+import { isComponentEvent } from '../../client/isComponentEvent'
 import {
   animate,
   appendChild,
@@ -6263,7 +6264,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   getSetup(): ComponentSetup {
     const setup: ComponentSetup = {
       animations: this._animations ?? [],
-      events: this.eventNames(),
+      events: this.eventNames().filter(isComponentEvent),
       stopPropagation: Object.keys(this._stopPropagation ?? {}),
       stopImmediatePropagation: Object.keys(
         this._stopImmediatePropagation ?? {}

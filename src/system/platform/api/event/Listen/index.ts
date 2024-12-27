@@ -40,10 +40,6 @@ export default class Listen<T> extends Holder<I<T>, O<T>> {
 
   f({ emitter, event }: I<T>) {
     const listener = (...data: any[]) => {
-      if (this._paused) {
-        return
-      }
-
       this._output.data.push(data[0])
     }
 
