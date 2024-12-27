@@ -50,6 +50,10 @@
 > [!NOTE]
 > This default behavior can be disabled by the currently focused component.
 
+## Drawing
+
+A <kbd>Click + Long Press</kbd> (sometimes referred to as "Click and Press" or "Click and Hold"), or simply holding <kbd>Alt</kbd>, will start a [Drawing Gesture](/src/docs/start/README.md#drawing).
+
 ## Pointer (Mouse, Touch, Pen)
 
 | Pointer                 | Mode              | Element                  | Action               |
