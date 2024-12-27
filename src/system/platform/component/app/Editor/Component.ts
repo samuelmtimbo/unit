@@ -462,7 +462,6 @@ import {
   wrapRemovePinDataAction,
   wrapTakeInputAction,
 } from '../../../../../spec/actions/U'
-import { graphComplexity } from '../../../../../spec/complexity'
 import { emptyIO } from '../../../../../spec/emptyIO'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { escape } from '../../../../../spec/escape'
@@ -6525,8 +6524,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._register_unit(unit.id, deep)
       }
     }
-
-    this._spec_update_metadata_complexity()
   }
 
   private _mirror_spec = (registry: Registry, specId: string) => {
@@ -6640,14 +6637,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         () => {}
       )
     }
-  }
-
-  private _spec_update_metadata_complexity = () => {
-    const { specs } = this.$props
-
-    const c = graphComplexity(specs, this._spec)
-
-    setMetadata({ path: ['metadata', 'complexity'], value: c }, this._spec)
   }
 
   private _flush_debugger = (): void => {
@@ -36991,7 +36980,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-
     if (is_pin_output_ref) {
       //
     } else {
@@ -37032,7 +37020,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._merge_pin_count[mergeId] === 1) {
       this._remove_merge_empty(merge_node_id)
     }
-
 
     this._refresh_compatible()
 
@@ -40607,8 +40594,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     removeUnit({ unitId }, this._spec)
-
-    this._spec_update_metadata_complexity()
   }
 
   private _spec_remove_component = (unit_id: string) => {
