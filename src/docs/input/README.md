@@ -29,6 +29,7 @@
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> | Redo                |
 | <kbd>Ctrl</kbd> + <kbd>S</kbd>                    | Save                |
 | <kbd>Ctrl</kbd> + <kbd>O</kbd>                    | Open                |
+| <kbd>Ctrl</kbd> + <kbd>R</kbd>                    | Reset               |
 | <kbd>Arrow Up</kbd>                               | Next Unit Up        |
 | <kbd>Arrow Down</kbd>                             | Next Unit Down      |
 | <kbd>Arrow Left</kbd>                             | Next Unit Left      |
