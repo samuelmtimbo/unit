@@ -143,13 +143,13 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
         this._embodied = true
 
         data = new data(this.__system)
-      }
 
-      if (data instanceof $) {
         if (data.__.includes('U')) {
           ;(data as Unit).play()
         }
+      }
 
+      if (data instanceof $) {
         data.register()
 
         this._unlisten = data.addListener('edit', () => {
