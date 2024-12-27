@@ -36969,6 +36969,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    if (
+      (this._is_merge_ref(merge_node_id) &&
+        this._merge_to_ref_output[merge_node_id] &&
+        this._is_pin_active(this._merge_to_ref_output[merge_node_id])) ||
+      this._merge_to_ref_unit[merge_node_id]
+    ) {
+      if (
+        this._is_input_pin_node_id(pin_node_id) &&
+        this._is_link_pin_ref(pin_node_id)
+      ) {
+        if (this._merge_to_ref_unit[merge_node_id]) {
+          const datum_node_id = this._pin_to_datum[pin_node_id]
+
+          if (datum_node_id) {
+            this._sim_remove_datum(datum_node_id)
+          }
+        }
+
+        this._sim_set_pin_data_value(pin_node_id, 'null')
+      }
+    }
+
+
     if (is_pin_output_ref) {
       //
     } else {
@@ -37010,19 +37033,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._remove_merge_empty(merge_node_id)
     }
 
-    if (
-      (this._is_merge_ref(merge_node_id) &&
-        this._merge_to_ref_output[merge_node_id] &&
-        this._is_pin_active(this._merge_to_ref_output[merge_node_id])) ||
-      this._merge_to_ref_unit[merge_node_id]
-    ) {
-      if (
-        this._is_input_pin_node_id(pin_node_id) &&
-        this._is_link_pin_ref(pin_node_id)
-      ) {
-        this._sim_set_pin_data_value(pin_node_id, 'null')
-      }
-    }
 
     this._refresh_compatible()
 
