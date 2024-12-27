@@ -87,6 +87,26 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
       }
     })
 
+    this.$element.addEventListener('focus', () => {
+      if (this.$root.length > 0) {
+        this.$root[0].focus()
+
+        return
+      }
+
+      if (this.$parentRoot.length > 0) {
+        this.$parentRoot[0].focus()
+
+        return
+      }
+
+      if (this.$children.length > 0) {
+        this.$children[0].focus()
+
+        return
+      }
+    })
+
     if (className !== undefined) {
       this.$element.classList.add(className)
     }

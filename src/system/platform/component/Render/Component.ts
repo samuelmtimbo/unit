@@ -54,4 +54,12 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
       }
     )
   }
+
+  focus() {
+    const child = this.$element.childNodes.item(0) as HTMLElement
+
+    if (child) {
+      child.focus()
+    }
+  }
 }
