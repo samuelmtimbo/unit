@@ -320,6 +320,7 @@ assert(
     '(string|number|boolean)[][]'
   )
 )
+assert(_isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
 
 assert(!_isTypeMatch('', 'any'))
 assert(!_isTypeMatch('abc', 'any'))
@@ -342,7 +343,6 @@ assert(!_isTypeMatch('`U`', '`G`'))
 assert(!_isTypeMatch('`U`', '`G`&`U`'))
 assert(!_isTypeMatch('`U`&`C`', '`U`&`G`'))
 assert(!_isTypeMatch('`U`&`C`&`V`&`J`', '`G`'))
-assert(!_isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
 
 assert(isValidValue('null'))
 assert(isValidValue('"foo"'))
