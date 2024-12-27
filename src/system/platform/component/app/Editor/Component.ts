@@ -29892,7 +29892,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             pointerEvents: 'none',
             transition: ifLinearTransition(animate, 'opacity'),
           },
-          disabled: true,
+          disabled: false,
           parent: this,
           frame,
           config,
