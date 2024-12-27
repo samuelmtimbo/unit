@@ -671,18 +671,6 @@ export class Primitive<
   public onDataInputEnd(name: string): void {}
 
   private _onInputStart<K extends keyof I>(name: K): void {
-    if (this._paused) {
-      this.__buffer.push({
-        name,
-        type: 'input',
-        event: 'start',
-        data: undefined,
-        ref: false,
-      })
-
-      return
-    }
-
     this._i_start.add(name)
 
     this.onDataInputStart(name)
@@ -691,18 +679,6 @@ export class Primitive<
   public onDataInputStart<K extends keyof I>(name: K): void {}
 
   private _onDataInputInvalid<K extends keyof I>(name: K): void {
-    if (this._paused) {
-      this.__buffer.push({
-        name,
-        type: 'input',
-        event: 'invalid',
-        data: undefined,
-        ref: false,
-      })
-
-      return
-    }
-
     this._i_invalid.add(name)
 
     this.onDataInputInvalid(name)

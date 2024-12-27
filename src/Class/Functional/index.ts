@@ -49,8 +49,14 @@ export class Functional<
       }
     })
 
-    this.addListener('reset', this.d)
+    this.addListener('reset', this._reset)
     this.addListener('destroy', this.d)
+  }
+
+  private _reset() {
+    this._looping = false
+
+    this.d()
   }
 
   private _on_input_data<K extends keyof I>(name: K): void {

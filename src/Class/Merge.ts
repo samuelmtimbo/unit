@@ -24,7 +24,6 @@ export default class Merge<
     super({}, {}, system, ID_SYSTEM_MERGE)
 
     this.addListener('reset', this._reset)
-    this.addListener('play', this._play)
 
     this.play()
   }
@@ -211,10 +210,6 @@ export default class Merge<
 
   private _reset = (): void => {
     this._current = undefined
-  }
-
-  private _play = (): void => {
-    this._forward_if_ready()
   }
 
   private _forward_if_ready() {

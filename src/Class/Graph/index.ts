@@ -3681,8 +3681,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const setup_unit_constant_pin = (type: IO, pinId: string) => {
       const pin = this.getUnitPin(unitId, type, pinId)
 
-      const data = pin.peak()
-
       const set = (data: any) => {
         if (this._paused) {
           return
