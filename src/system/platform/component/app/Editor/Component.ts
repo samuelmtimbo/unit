@@ -30760,10 +30760,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         parent.insertParentRootAt(leaf_comp, i, slot_name)
       },
-      (leaf_parent, leaf_comp) => {
+      (leaf_parent, leaf_comp, at) => {
         const i = leaf_parent.$root.indexOf(leaf_comp)
 
-        leaf_parent.insertRootAt(leaf_comp, i)
+        leaf_parent.insertRootAt(leaf_comp, i + at)
       }
     )
   }
@@ -30781,18 +30781,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         parent.insertParentRootAt(leaf_comp, i, slot_name)
       },
-      (parent, leaf_comp) => {
+      (parent, leaf_comp, at) => {
         const i = parent.$root.indexOf(leaf_comp)
 
-        parent.insertRootAt(leaf_comp, i)
+        parent.insertRootAt(leaf_comp, i + at)
       }
     )
   }
 
   private __commit_sub_component_base = (
     sub_component_id: string,
-    callback: (parent: Component, leaf_comp: Component) => void,
-    _callback: (leaf_parent: Component, leaf_comp: Component) => void
+    root: (parent: Component, leaf_comp: Component) => void,
+    parent: (leaf_parent: Component, leaf_comp: Component, at: number) => void
   ): void => {
     // console.log('Graph', '__commit_sub_component_base', sub_component_id)
 
@@ -30801,15 +30801,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._commit_sub_component_base__template(
       sub_component_id,
       base,
-      callback,
-      _callback
+      root,
+      parent
     )
   }
 
   private __commit_sub_component_root_base = (
     sub_component_id: string,
-    callback: (parent: Component, leaf_comp: Component) => void,
-    _callback: (leaf_parent: Component, leaf_comp: Component) => void
+    root: (parent: Component, leaf_comp: Component) => void,
+    parent: (leaf_parent: Component, leaf_comp: Component, at: number) => void
   ): void => {
     // console.log('Graph', '__commit_sub_component_root_base', sub_component_id)
 
@@ -30818,8 +30818,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._commit_sub_component_base__template(
       sub_component_id,
       base,
-      callback,
-      _callback
+      root,
+      parent
     )
   }
 
@@ -30852,12 +30852,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _commit_sub_component_base__template = (
     sub_component_id: string,
     base: LayoutBase,
-    callback: (parent: Component, leaf_comp: Component) => void,
-    _callback: (leaf_parent: Component, leaf_comp: Component) => void
+    root: (parent: Component, leaf_comp: Component) => void,
+    parent: (leaf_parent: Component, leaf_comp: Component, at: number) => void
   ): void => {
     // console.log('Graph', '_commit_sub_component_base__template', sub_component_id)
 
     const sub_component = this._get_sub_component(sub_component_id)
+
+    let i = 0
 
     for (const leaf of base) {
       const [leaf_path, leaf_comp] = leaf
@@ -30875,14 +30877,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const parent = leaf_parent.getSubComponent(parent_id)
 
           if (!parent.$mountParentRoot.includes(leaf_comp)) {
-            callback(parent, leaf_comp)
+            root(parent, leaf_comp)
           }
         } else {
           if (!leaf_parent.$mountRoot.includes(leaf_comp)) {
-            _callback(leaf_parent, leaf_comp)
+            parent(leaf_parent, leaf_comp, i)
           }
         }
       }
+
+      i++
     }
   }
 

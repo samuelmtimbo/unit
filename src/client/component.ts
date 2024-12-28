@@ -2922,13 +2922,7 @@ export class Component<
         }
       } else {
         if (this.$slotParent) {
-          let p: Component = this
-          let index: number = this.$slotParent.$mountParentChildren.indexOf(p)
-
-          while (p && !this.$slotParent.$mountParentChildren.includes(p)) {
-            p = p.$parent
-            index = this.$slotParent.$mountParentChildren.indexOf(p)
-          }
+          const index: number = this.$slotParent.$mountParentChildren.length
 
           this.$slotParent.domInsertParentChildAt(
             component,
@@ -3248,18 +3242,8 @@ export class Component<
       if (!component.$primitive) {
         let j = 0
 
-        for (const root of component.$mountRoot) {
+        for (const root of component.$root) {
           this.domAppendParentChildAt(root, slotName, at + j, at + j)
-
-          if (!root.$primitive) {
-            let i = 0
-
-            for (const parentRoot of root.$mountParentChildren) {
-              this.domAppendParentChildAt(parentRoot, slotName, at, at)
-
-              i++
-            }
-          }
 
           j++
         }
