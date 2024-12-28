@@ -19192,9 +19192,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           makeCustomListener('entermode', this._on_enter_mode),
         ])
 
-        if ((this._modes.getProp('mode') ?? 'none') !== this._mode) {
-          this._modes.setProp('mode', this._mode)
-        }
+        // if ((this._modes.getProp('mode') ?? 'none') !== this._mode) {
+        //   this._modes.setProp('mode', this._mode)
+        // }
 
         this._mode = this._modes.getMode()
       }
@@ -47024,7 +47024,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     } else {
-      if (this._mode === 'none') {
+      if (this._mode === 'none' || this._mode === 'info') {
         setTimeout(() => {
           if (this._can_leave()) {
             this.leave()
