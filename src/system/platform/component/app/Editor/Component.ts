@@ -37525,18 +37525,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     data: string,
     lastData: string
   ) => {
+    const { fork, bubble } = this.$props
+
     // console.log('Graph', '_pod_set_unit_pin_data', unitId, type, pinId, data)
 
-    const $unit = this._pod.$refUnit({
-      unitId,
-      _: UCGEE,
-      detached: false,
-    }) as $Graph
+    // const $unit = this._pod.$refUnit({
+    //   unitId,
+    //   _: UCGEE,
+    //   detached: false,
+    // }) as $Graph
 
-    $unit.$setPinData({
-      pinId,
+    // $unit.$setPinData({
+    //   pinId,
+    //   type,
+    //   data,
+    // })
+
+    this._pod.$setUnitPinData({
+      unitId,
       type,
+      pinId,
       data,
+      lastData,
+      fork,
+      bubble,
     })
   }
 

@@ -3686,7 +3686,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           return
         }
 
-        this._fork()
+        if (!this._preventFork) {
+          this._fork()
+        }
 
         this._specSetUnitPinData(unitId, type, pinId, data)
 
@@ -5394,6 +5396,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pin.push(data)
   }
 
+  private _preventFork: boolean = false
+
   public setUnitPinData(
     unitId: string,
     type: IO,
@@ -5403,7 +5407,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ) {
+    this._preventFork = !fork
+
     this._setUnitPinData(unitId, type, pinId, data, fork, bubble)
+
+    this._preventFork = false
 
     emit && this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
   }
