@@ -8580,14 +8580,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     setSpec(next_spec.id, next_spec)
   }
 
-  private _state_set_unit_name = (unit_id: string, value: string): string => {
+  private _state_set_unit_name = (unit_id: string, name: string): string => {
     const { forkSpec } = this.$props
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
 
     const new_spec = clone(spec)
 
-    const new_unit_id = this._new_unit_id(new_spec.id)
+    const new_unit_id = newUnitIdFromName(spec, name, new Set())
 
     const unit_data = this._get_unit_data(unit_id)
 
