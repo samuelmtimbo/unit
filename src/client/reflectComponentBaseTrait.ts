@@ -120,7 +120,11 @@ export const expandSlot = (
         const leaf_id = joinPath(leaf_path)
         const leaf_style = extractStyle(leaf_id, leaf_comp)
 
-        styles.push({ name: leaf_comp.$element.nodeName, style: leaf_style })
+        styles.push({
+          name: leaf_comp.$element.nodeName,
+          style: leaf_style,
+          textContent: (leaf_comp.$element as HTMLElement).children.length > 0 ? '' : leaf_comp.$element.textContent,
+        })
       }
     }
   })
@@ -134,7 +138,11 @@ export const expandSlot = (
         component.$system.api.text.measureText
       )
 
-      styles.push({ name: child.$element.nodeName, style })
+      styles.push({
+        name: child.$element.nodeName,
+        style,
+        textContent: child.$element.textContent,
+      })
     }
   }
 
@@ -260,6 +268,7 @@ export const reflectComponentBaseTrait = (
       all_leaf_style[leaf_slot_id] = {
         name: leaf_parent_slot.$element.nodeName,
         style: leaf_parent_slot_style,
+        textContent: leaf_parent_slot.$element.textContent,
       }
     }
 
@@ -271,6 +280,7 @@ export const reflectComponentBaseTrait = (
     all_leaf_style[leaf_id] = {
       name: leaf_comp.$element.nodeName,
       style: leaf_style,
+      textContent: leaf_comp.$element.textContent,
     }
 
     if (sub_component_parent_id) {
@@ -307,6 +317,7 @@ export const reflectComponentBaseTrait = (
       all_root_style.push({
         name: leaf_comp.$element.nodeName,
         style: leaf_style,
+        textContent: '',
       })
       root_leaf_id.push(leaf_id)
     }

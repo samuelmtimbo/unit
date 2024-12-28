@@ -30,12 +30,14 @@ const fitChildren = (
 ) => {
   let i = 0
 
-  for (const { name, style: childStyle } of children) {
+  for (const { name, style, textContent } of children) {
     let tag = name.replace('#', '').toLocaleLowerCase()
 
     tag = isTextName(tag) || isSVGName(tag) ? 'div' : tag
 
     const childNode = window.document.createElement(tag)
+
+    childNode.textContent = textContent
 
     let {
       display: childDisplay = 'block',
@@ -43,9 +45,9 @@ const fitChildren = (
       height: childHeightStr = 'auto',
       opacity: childOpacityStr = '1',
       transform: childTransform = '',
-    } = childStyle
+    } = style
 
-    const childFontSize = childStyle['fontSize'] ?? childStyle['font-size']
+    const childFontSize = style['fontSize'] ?? style['font-size']
 
     let childFontSizeStr = childFontSize
 
@@ -94,6 +96,8 @@ const fitChildren = (
 
       const childChildrenStyle = expandChild(childPath)
 
+      childNode.textContent = ''
+
       fitChildren(
         window,
         { ...parentTrait, fontSize },
@@ -113,7 +117,7 @@ const fitChildren = (
     childrenSx.push(sx)
     childrenSy.push(sy)
 
-    applyStyle(childNode, childStyle)
+    applyStyle(childNode, style)
 
     parentNode.appendChild(childNode)
 
@@ -136,8 +140,12 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
       parentNode.style.position = 'absolute'
       parentNode.style.left = `${parentTrait.x}px`
       parentNode.style.top = `${parentTrait.y}px`
-      parentNode.style.width = `${parentTrait.width}px`
-      parentNode.style.height = `${parentTrait.height}px`
+      parentNode.style.width = parentStyle.width?.endsWith('px')
+        ? parentStyle.width
+        : `${parentTrait.width}px`
+      parentNode.style.height = parentStyle.height?.endsWith('px')
+        ? parentStyle.height
+        : `${parentTrait.height}px`
       // parentNode.style.transform = `scale(${parentTrait.sx}, ${parentTrait.sy})`
       parentNode.style.transform = ``
       parentNode.style.fontSize = `${parentTrait.fontSize}px`

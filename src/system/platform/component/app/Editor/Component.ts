@@ -32878,6 +32878,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       all_leaf_style[slot_leaf_id] = {
         name: child_base_slot.$element.nodeName,
         style: slot_leaf_style,
+        textContent: child_base_slot.$element.textContent,
       }
 
       for (const leaf of base) {
@@ -32904,6 +32905,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           root_style[target_id][slot_name].push({
             name: leaf_comp.$element.nodeName,
             style: leaf_style,
+            textContent: leaf_comp.$element.textContent,
           })
         } else {
           parent_slot_base[slot_leaf_id] = parent_slot_base[slot_leaf_id] || []
@@ -32914,6 +32916,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           parent_slot_style[slot_leaf_id].push({
             name: leaf_comp.$element.nodeName,
             style: leaf_style,
+            textContent: leaf_comp.$element.textContent,
           })
         }
 

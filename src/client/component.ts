@@ -593,6 +593,7 @@ export class Component<
     const styles = leaves.map((leaf) => ({
       name: (leaf.$element as Node).nodeName,
       style: rawExtractStyle(leaf.$element, trait, measureText),
+      textContent: (leaf.$element as Node).textContent,
     }))
 
     let targetTraits = reflectChildrenTrait(trait, style, styles, () => {
