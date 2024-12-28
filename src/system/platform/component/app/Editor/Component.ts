@@ -21304,6 +21304,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const animating_sub_component =
           animating_sub_component_set.has(sub_component_id)
 
+        const expand =
+          !this._is_layout_component_layer_visible(sub_component_id)
+
         this._abort_tree_layout_sub_component_base_animation[sub_component_id] =
           this._animate_parent_component(
             sub_component_id,
@@ -21312,7 +21315,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             leaf_traits,
             parent_layer.foreground,
             leaf_layer_opacity,
-            true,
+            expand,
             () => {
               return { x: 0, y: -layer.content.$element.scrollTop }
             },
