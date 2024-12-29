@@ -123,7 +123,10 @@ export const expandSlot = (
         styles.push({
           name: leaf_comp.$element.nodeName,
           style: leaf_style,
-          textContent: (leaf_comp.$element as HTMLElement).children.length > 0 ? '' : leaf_comp.$element.textContent,
+          textContent:
+            ((leaf_comp.$element as HTMLElement).children?.length ?? 1) > 0
+              ? ''
+              : leaf_comp.$element.textContent,
         })
       }
     }

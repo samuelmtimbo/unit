@@ -3242,7 +3242,7 @@ export class Component<
       if (!component.$primitive) {
         let j = 0
 
-        for (const root of component.$root) {
+        for (const root of component.$mountRoot) {
           this.domAppendParentChildAt(root, slotName, at + j, at + j)
 
           j++
@@ -3345,7 +3345,7 @@ export class Component<
       if (!component.$primitive) {
         let j = 0
 
-        for (const root of component.$root) {
+        for (const root of component.$mountRoot) {
           this.domInsertParentChildAt(root, 'default', i + j)
 
           j++

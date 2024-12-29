@@ -20426,6 +20426,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): Frame => {
     // console.log('Graph', '_plug_leaf_frame', leaf_id, leaf_node)
 
+    if (this._leaf_frame_active[leaf_id]) {
+      return
+    }
+
     const {
       api: {
         text: { measureText },
@@ -22035,23 +22039,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       layer_layer.children.$element.style.opacity = '0'
     }
 
+    if (animate) {
+      for (const sub_component_id in this._component.$subComponent) {
+        this._measure_sub_component_base(sub_component_id)
+      }
+    }
+
     for (const sub_component_id in this._component.$subComponent) {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const children = this._spec_get_sub_component_children(sub_component_id)
 
       if (animate) {
-        if (!this._layout_path.includes(sub_component_id)) {
-          if (!this._animating_sub_component_base_id.has(sub_component_id)) {
-            for (const child_id of children) {
-              this._measure_sub_component_base(child_id)
-            }
-          }
-        }
-
-        if (!parent_id || this._layout_path.includes(parent_id)) {
-          this._measure_sub_component_base(sub_component_id)
-        }
-
         if (!parent_id || this._layout_path.includes(parent_id)) {
           const animating_sub_component =
             animating_sub_component_set.has(sub_component_id)
@@ -25187,7 +25185,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_component_ids: string[],
     hide: boolean = true
   ) => {
-    // console.log('Graph', '_enter_fullwindow', _animate, sub_component_ids, this._id)
+    // console.log(
+    //   'Graph',
+    //   '_enter_fullwindow',
+    //   _animate,
+    //   sub_component_ids,
+    //   this._id
+    // )
 
     const { container, enterFullwindow } = this.$props
 
@@ -32143,7 +32147,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           base,
           style,
           trait,
-          true
+          false
         )
 
         const layer_trait = extractTrait(layer, measureText)
