@@ -4739,9 +4739,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     type: IO,
     pinId: string,
     emit: boolean = true,
-    propagate: boolean = true
+    propagate: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
-    this._addPinToMerge(mergeId, unitId, type, pinId, propagate)
+    this._addPinToMerge(mergeId, unitId, type, pinId, propagate, fork, bubble)
 
     emit && this.edit('add_pin_to_merge', mergeId, unitId, type, pinId, [])
   }
@@ -4960,9 +4962,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     type: IO,
     pinId: string,
     emit: boolean = true,
-    propagate: boolean = false
+    propagate: boolean = false,
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
-    this._removePinFromMerge(mergeId, unitId, type, pinId, propagate)
+    this._removePinFromMerge(
+      mergeId,
+      unitId,
+      type,
+      pinId,
+      propagate,
+      fork,
+      bubble
+    )
 
     emit && this.edit('remove_pin_from_merge', mergeId, unitId, type, pinId, [])
   }

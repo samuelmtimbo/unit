@@ -368,6 +368,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         pinId,
         subPinId,
         subPinSpec,
+        undefined,
+        undefined,
         undefined
       )
     },
@@ -536,7 +538,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphAddPinToMergeData): void {
-      call(graph, 'addPinToMerge', fork, bubble, mergeId, unitId, type, pinId)
+      call(graph, 'addPinToMerge', fork, bubble, mergeId, unitId, type, pinId, undefined, undefined)
     },
 
     $removePinFromMerge({
