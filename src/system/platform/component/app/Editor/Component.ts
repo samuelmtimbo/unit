@@ -30436,10 +30436,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._force_control_animation_false = true
       this._force_trasncend_animation_false = true
 
-      if (parent) {
-        const { units, links, merges, data, inputs, outputs } =
-          this._segregate_node_id(this._pressed_node_id_pointer_id)
+      const { units, links, merges, data, inputs, outputs } =
+        this._segregate_node_id(this._pressed_node_id_pointer_id)
 
+      const scale = this._zoom.z
+
+      if (parent) {
         all_sub_component_base_trait =
           all_sub_component_base_trait ||
           this._get_all_sub_component_base_trait()
@@ -30459,8 +30461,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._cancel_layout_sub_component_animation(sub_component_id)
         }
 
-        const scale = this._zoom.z
-
         if (!this._in_component_control) {
           return
         }
@@ -30479,21 +30479,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
 
         this._disable_transcend()
-
-        this.dispatchEvent(
-          'leave',
-          {
-            clipboard: { units, links, merges, data, inputs, outputs },
-            component: all_sub_component_base_trait,
-            scale,
-          },
-          false
-        )
       } else {
         if (this._tree_layout) {
           return
         }
       }
+
+      this.dispatchEvent(
+        'leave',
+        {
+          clipboard: { units, links, merges, data, inputs, outputs },
+          component: all_sub_component_base_trait,
+          scale,
+        },
+        false
+      )
     }
   }
 
@@ -31342,7 +31342,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             transition: ifLinearTransition(animate, 'opacity'),
           },
           disabled: true,
-          parent: this,
+          parent: null,
           frame: this._frame,
           frameOut: false,
           container,
