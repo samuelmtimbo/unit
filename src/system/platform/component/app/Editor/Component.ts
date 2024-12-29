@@ -40625,16 +40625,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._spec_remove_component_children(unit_id, parent_id)
 
-    removeSubComponent({ unitId: unit_id }, this._spec.component || {})
+    this._spec.component = this._spec.component ?? {}
 
-    if (parent_id) {
-      removeSubComponentChild(
-        { subComponentId: parent_id, childId: unit_id },
-        this._spec.component || {}
-      )
-    } else {
-      removeRoot({ childId: unit_id }, this._spec.component || {})
-    }
+    removeSubComponent({ unitId: unit_id }, this._spec.component)
+    removeSubComponentFromParent(
+      { subComponentId: unit_id },
+      this._spec.component
+    )
 
     delete this._layout_node[unit_id]
     delete this._layout_target_node[unit_id]
@@ -48876,7 +48873,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       removeUnit: (unitId: string): void => {
         if (isUnitComponent(specs, spec, unitId)) {
           removeSubComponent({ unitId }, spec.component)
-          removeRoot({ childId: unitId }, spec.component)
+          removeSubComponentFromParent(
+            { subComponentId: unitId },
+            spec.component || {}
+          )
         }
         removeUnit({ unitId }, spec)
       },
@@ -50606,18 +50606,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   sub_component_id
     // )
 
-    const sub_component_parent_id =
-      this._spec_get_sub_component_parent_id(sub_component_id)
-
-    if (sub_component_parent_id) {
-      removeSubComponentChild(
-        { subComponentId: sub_component_parent_id, childId: sub_component_id },
-        this._spec.component
-      )
-    }
-
-    removeRoot({ childId: sub_component_id }, this._spec.component)
     removeSubComponent({ unitId: sub_component_id }, this._spec.component)
+    removeSubComponentFromParent(
+      { subComponentId: sub_component_id },
+      this._spec.component
+    )
   }
 
   private _state_move_unit_into_graph__remove = (
@@ -59124,21 +59117,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       delete next_spec.metadata.complexity
 
       if (is_removed_unit_component) {
-        const parent_id = getSubComponentParentId(spec, unitId)
-
         removeSubComponent({ unitId }, next_spec.component)
-
-        if (parent_id) {
-          removeSubComponentChild(
-            {
-              subComponentId: parent_id,
-              childId: unitId,
-            },
-            next_spec.component
-          )
-        } else {
-          removeRoot({ childId: unitId }, next_spec.component)
-        }
+        removeSubComponentFromParent(
+          { subComponentId: unitId },
+          next_spec.component
+        )
       }
 
       setSpec(spec.id, next_spec)
@@ -59209,14 +59192,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
 
           if (parent_id) {
-            removeSubComponentChild(
-              {
-                subComponentId: parent_id,
-                childId: unit_id_to_update,
-              },
-              next_parent_spec.component
-            )
-
             if (parent_component) {
               const sub_component_parent_root =
                 parent_component.getSubComponent(parent_id)
@@ -59230,11 +59205,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
             }
           } else {
-            removeRoot(
-              { childId: possibly_turned_circle_unit_id },
-              next_parent_spec.component
-            )
-
             if (parent_component) {
               if (parent_component.$root.includes(removed_component)) {
                 parent_component.pullRoot(removed_component)
@@ -59244,6 +59214,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           removeSubComponent(
             { unitId: possibly_turned_circle_unit_id },
+            next_parent_spec.component
+          )
+          removeSubComponentFromParent(
+            { subComponentId: unit_id_to_update },
             next_parent_spec.component
           )
 
@@ -59723,14 +59697,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { plug } = nodeIds
 
-    const unit_spec = findSpecAtPath(specs, this._spec, path)
-
     if (this._is_spec_updater(path)) {
       const parent_spec = findSpecAtPath(specs, this._spec, path)
 
       const spec = findSpecAtPath(specs, this._spec, [...path, graphId])
 
-      const next_parent_spec = clone(parent_spec)
+      const next_parent_spec =
+        path.length === 0 ? this._spec : clone(parent_spec)
       const next_spec = clone(spec)
 
       const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
