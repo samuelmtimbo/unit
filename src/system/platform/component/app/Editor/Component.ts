@@ -10879,12 +10879,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _refresh_type_graph_map = () => {
     this._graph_type_map = this._get_graph_type_map()
+
+    this._refresh_all_visible_linked_datum_color()
   }
 
   private _get_graph_type_map = () => {
     const { specs, typeCache } = this.$props
 
-    return _getGraphTypeMap(this._spec, specs, typeCache)
+    return _getGraphTypeMap(this._spec, specs, typeCache, {}, false)
   }
 
   private _ensure_graph_type_map = () => {
@@ -14176,6 +14178,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     return hovered_not_selected_count === 0 && this._search_hidden
+  }
+
+  private _refresh_all_visible_linked_datum_color = (): void => {
+    for (const visible_datum_node_link in this._visible_data_link) {
+      const { datumNodeId } = segmentDatumLinkId(visible_datum_node_link)
+
+      this._refresh_datum_color(datumNodeId)
+    }
   }
 
   private _refresh_all_selected_node_color = (): void => {
@@ -36560,9 +36570,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._dispatch_action(makeAddPinToMergeAction(mergeId, type, unitId, pinId))
+    const action = makeAddPinToMergeAction(mergeId, type, unitId, pinId)
 
-    return this._merge_link_pin_merge_pin(pin_node_id, merge_node_id)
+    const anchor_node_id = this._merge_link_pin_merge_pin(
+      pin_node_id,
+      merge_node_id
+    )
+
+    this._dispatch_action(action)
+
+    return anchor_node_id
   }
 
   private _merge_link_pin_merge_pin = (
@@ -38305,11 +38322,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { mergeId } = segmentMergeNodeId(merge_node_id)
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._dispatch_action(
-      makeRemovePinFromMergeAction(mergeId, type, unitId, pinId)
-    )
+    const action = makeRemovePinFromMergeAction(mergeId, type, unitId, pinId)
 
     this._remove_pin_from_merge(merge_node_id, pin_node_id)
+
+    this._dispatch_action(action)
   }
 
   private _remove_pin_from_merge = (
@@ -38340,7 +38357,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     type: IO,
     pinId: string
   ): void => {
-    // console.log('Graph', '_spec_remove_pin_from_merge', mergeId, unitId, type, pinId)
+    // console.log('Graph', '__state_remove_pin_from_merge', mergeId, unitId, type, pinId)
     this.__sim_remove_pin_from_merge(mergeId, unitId, type, pinId)
     this.__spec_remove_pin_from_merge(mergeId, unitId, type, pinId)
   }
@@ -39144,9 +39161,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   public remove_merge = (merge_node_id: string): void => {
     // console.log('Graph', 'remove_merge', merge_node_id)
 
-    this._dispatch_action_remove_merge(merge_node_id)
+    const action = this._make_remove_merge_action(merge_node_id)
 
     this._remove_merge(merge_node_id)
+
+    this._dispatch_action(action)
   }
 
   private _remove_merge = (

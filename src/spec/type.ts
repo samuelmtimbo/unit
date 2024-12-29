@@ -107,7 +107,8 @@ export const _getSpecTypeInterface = (
       spec as GraphSpec,
       specs,
       cache,
-      visited
+      visited,
+      true
     )
   }
   return typeInterface
@@ -135,35 +136,45 @@ export const _getBaseTypeInterface = (spec: BaseSpec): TypeTreeInterface => {
 export const _getGraphTypeInterfaceById = (
   id: string,
   specs: Specs,
-  cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  cache: TypeTreeInterfaceCache,
+  visited: { [id: string]: true },
+  includeData: boolean
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterfaceById', id)
   const spec = specs[id] as GraphSpec
-  return _getGraphTypeInterface(spec, specs, cache, visited)
+  return _getGraphTypeInterface(spec, specs, cache, visited, includeData)
 }
 
 export const getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
-  cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  cache: TypeTreeInterfaceCache,
+  visited: { [id: string]: true },
+  includeData: boolean
 ) => {
-  const graphTypeTree = _getGraphTypeInterface(spec, specs, cache, visited)
+  const graphTypeTree = _getGraphTypeInterface(
+    spec,
+    specs,
+    cache,
+    visited,
+    includeData
+  )
+
   return typeTreeToType(graphTypeTree)
 }
 
 export const _getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
-  cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  cache: TypeTreeInterfaceCache,
+  visited: { [id: string]: true },
+  includeData: boolean
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterface')
 
   const typeInterface: TypeTreeInterface = emptyIO({}, {})
 
-  const unitTypeMap = _getGraphTypeMap(spec, specs, cache, visited)
+  const unitTypeMap = _getGraphTypeMap(spec, specs, cache, visited, includeData)
 
   const { inputs = {}, outputs = {} } = spec
 
@@ -390,9 +401,16 @@ export const getGraphTypeMapById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  visited: { [id: string]: true } = {},
+  includeData: boolean = true
 ): TypeMap => {
-  const typeTreeMap = _getGraphTypeMapById(id, specs, cache, visited)
+  const typeTreeMap = _getGraphTypeMapById(
+    id,
+    specs,
+    cache,
+    visited,
+    includeData
+  )
   return typeTreeMapToTypeMap(typeTreeMap)
 }
 
@@ -400,28 +418,37 @@ export const _getGraphTypeMapById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  visited: { [id: string]: true } = {},
+  includeData: boolean = true
 ): TypeTreeMap => {
   const spec = specs[id] as GraphSpec
   // console.log('_getGraphTypeMapById', id)
-  return _getGraphTypeMap(spec, specs, cache, { ...visited, [id]: true })
+  return _getGraphTypeMap(
+    spec,
+    specs,
+    cache,
+    { ...visited, [id]: true },
+    includeData
+  )
 }
 
 export const getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  visited: { [id: string]: true } = {},
+  includeData: boolean = true
 ): TypeMap => {
-  const typeTreeMap = _getGraphTypeMap(spec, specs, cache, visited)
+  const typeTreeMap = _getGraphTypeMap(spec, specs, cache, visited, includeData)
   return typeTreeMapToTypeMap(typeTreeMap)
 }
 
 export const _getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
-  cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  cache: TypeTreeInterfaceCache,
+  visited: { [id: string]: true },
+  includeData: boolean
 ): TypeTreeMap => {
   const typeMap: TypeTreeMap = {}
 
@@ -488,26 +515,29 @@ export const _getGraphTypeMap = (
           (input[inputId].data as DataRef).data !== undefined)
       ) {
         if (_hasGeneric(type)) {
-          const dataStr = stringifyDataValue(
-            unitSpec.input[inputId].data,
-            specs,
-            {}
-          )
-          const dataTree = getTree(dataStr)
-          const dataTypeTree = _getValueType(specs, dataTree)
-          if (!_hasGeneric(dataTypeTree)) {
-            unitTypeInterface['input'][inputId] = dataTypeTree
-            const extractedGenerics = _extractGenerics(
+          if (includeData) {
+            const dataStr = stringifyDataValue(
+              unitSpec.input[inputId].data,
               specs,
-              dataTypeTree,
-              type
+              {}
             )
-            forEachValueKey(extractedGenerics, (value, generic) => {
-              const replacedGeneric =
-                genericReplacement[unitId][generic] ?? generic
+            const dataTree = getTree(dataStr)
+            const dataTypeTree = _getValueType(specs, dataTree)
+            if (!_hasGeneric(dataTypeTree)) {
+              unitTypeInterface['input'][inputId] = dataTypeTree
 
-              deepSet_(dataReplacement, [unitId, replacedGeneric], value)
-            })
+              const extractedGenerics = _extractGenerics(
+                specs,
+                dataTypeTree,
+                type
+              )
+              forEachValueKey(extractedGenerics, (value, generic) => {
+                const replacedGeneric =
+                  genericReplacement[unitId][generic] ?? generic
+
+                deepSet_(dataReplacement, [unitId, replacedGeneric], value)
+              })
+            }
           }
         }
       }
@@ -557,10 +587,13 @@ export const _getGraphTypeMap = (
       }
 
       if (equivalence_index[type.value] === undefined) {
-        equivalence_set.add(type.value)
-
         if (_isGeneric(type)) {
+          equivalence_set.add(type.value)
           equivalence_index[type.value] = i
+        } else {
+          if (includeData || kind === 'input') {
+            equivalence_set.add(type.value)
+          }
         }
       } else {
         merged = true
