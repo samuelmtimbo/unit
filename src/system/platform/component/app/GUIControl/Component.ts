@@ -760,12 +760,12 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     this._x = clamp({
       a: this._x,
       min: this._collapsed ? PADDING : BUTTON_WIDTH + PADDING,
-      max: $width - w - PADDING,
+      max: $width - w - PADDING - 1,
     }).a
     this._y = clamp({
       a: this._y,
-      min: 0,
-      max: this._collapsed ? $height : $height - h,
+      min: PADDING + 1,
+      max: this._collapsed ? $height - BUTTON_HEIGHT + 4 : $height - h,
     }).a
   }
 
