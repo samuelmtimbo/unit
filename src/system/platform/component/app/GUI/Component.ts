@@ -71,6 +71,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
   private _manually_changed_color: boolean = false
 
+  private _dock_x: number = 0
+  private _dock_y: number = 0
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -326,9 +329,11 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         className: 'gui-control',
         style: {
           position: 'absolute',
+          left: `0px`,
           top: '0px',
           overflow: 'visible',
           background: 'none',
+          transition: linearTransition('left', 'width', 'height', 'opacity'),
         },
       },
       this.$system
@@ -438,21 +443,31 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     this.addEventListeners([
       makeCustomListener('dock-move', ({ dy = 0, dx = 0 }) => {
-        if (this._hidden) {
-          return
-        }
+        this._dock_x = dx
+        this._dock_y = dy
 
         mergePropStyle(control, {
           left: `${dx}px`,
           width: `calc(100% - ${dx}px)`,
           height: `calc(100% - ${dy}px)`,
-          transition: linearTransition('left', 'width', 'height', 'opacity'),
         })
 
         mergePropStyle(background, {
-          paddingBottom: `${dy}px`,
-          paddingLeft: `${dx}px`,
+          paddingBottom: `${dy / 2}px`,
+          paddingLeft: `${dx / 2}px`,
           transition: linearTransition('padding-bottom', 'padding-left'),
+        })
+
+        mergePropStyle(search, {
+          transform: this._hidden
+            ? `translate(-50%, calc(100% + ${this._dock_y}px))`
+            : 'translate(-50%, 0%)',
+        })
+
+        mergePropStyle(modes, {
+          transform: this._hidden
+            ? `translate(calc(-100% - ${this._dock_x}px), -50%)`
+            : `translate(0%, -50%)`,
         })
 
         if (dy > 0) {
@@ -485,10 +500,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         }
       }),
       makeCustomListener('dock-leave', () => {
-        if (this._hidden) {
-          return
-        }
-
         mergePropStyle(control, {
           left: `${0}px`,
           width: '100%',
@@ -752,7 +763,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     //   animate
     // )
     mergePropStyle(this._search, {
-      transform: 'translate(-50%, 100%)',
+      transform: `translate(-50%, calc(100% + ${this._dock_y}px))`,
       transition: ifLinearTransition(animate, 'transform'),
     })
   }
@@ -783,7 +794,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     //   animate
     // )
     mergePropStyle(this._modes, {
-      transform: 'translate(-100%, -50%)',
+      transform: `translate(calc(-100% - ${this._dock_x}px), -50%)`,
       transition: ifLinearTransition(animate, 'transform'),
     })
   }
