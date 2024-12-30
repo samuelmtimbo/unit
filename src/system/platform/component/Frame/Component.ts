@@ -67,11 +67,18 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
     this.$element.addEventListener('keydown', (event: KeyboardEvent) => {
       const {
         api: {
-          document: { getSelection, createRange },
+          document: { getSelection, createRange, canSelectShadowDom },
         },
       } = this.$system
 
       if (event.metaKey && event.key.toLowerCase() === 'a') {
+        // Selection doesn't work on Safari (2024) inside
+        // shadowRoot; if this can be detected, accept the
+        // default browser behavior
+        if (!canSelectShadowDom()) {
+          return
+        }
+
         event.preventDefault()
 
         const range = createRange()

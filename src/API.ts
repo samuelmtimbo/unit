@@ -267,6 +267,7 @@ export type API = {
     elementsFromPoint(x: number, y: number): Element[]
     elementFromPoint(x: number, y: number): Element
     exitPictureInPicture(): Promise<void>
+    canSelectShadowDom(): boolean
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>

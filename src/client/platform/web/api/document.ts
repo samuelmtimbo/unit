@@ -43,6 +43,10 @@ export function webDocument(
     elementsFromPoint(x: number, y: number): Element[] {
       return root.shadowRoot.elementsFromPoint(x, y)
     },
+    canSelectShadowDom: function (): boolean {
+      // @ts-ignore
+      return !!root.shadowRoot.getSelection
+    },
     getSelection(): Selection {
       // @ts-ignore
       if (root.shadowRoot.getSelection) {

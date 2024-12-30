@@ -161,6 +161,9 @@ export function noneApi(): API {
       elementsFromPoint(x: number, y: number): Element[] {
         throw new MethodNotImplementedError()
       },
+      canSelectShadowDom: function (): boolean {
+        return false
+      },
       getSelection(): Selection {
         // @ts-ignore
         return root.shadowRoot.getSelection() || document.getSelection()
