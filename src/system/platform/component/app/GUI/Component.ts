@@ -47,12 +47,12 @@ export const DEFAULT_STYLE = {
   width: '100%',
   height: '100%',
   overflow: 'hidden',
-  zIndex: '3',
 }
 
 export default class GUI extends Element<HTMLDivElement, Props> {
   public _container: Div
   public _control: Frame
+  public _main: Div
   public _gui: Div
   public _background: Div
   public _search: Search
@@ -324,6 +324,15 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     )
     this._background = background
 
+    const main = new Parent(
+      {
+        className: 'gui-main',
+        style: {},
+      },
+      this.$system
+    )
+    this._main = main
+
     const control = new Frame(
       {
         className: 'gui-control',
@@ -338,18 +347,11 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+    control.registerParentRoot(main)
     control.registerParentRoot(modes)
     control.registerParentRoot(search)
     control.registerParentRoot(cabinet)
     this._control = control
-
-    const main = new Parent(
-      {
-        className: 'gui-main',
-        style: {},
-      },
-      this.$system
-    )
 
     const foreground = new Div(
       {
@@ -377,7 +379,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       this.$system
     )
     gui.registerParentRoot(background)
-    gui.registerParentRoot(main)
     gui.registerParentRoot(control)
     gui.registerParentRoot(foreground)
     this._gui = gui

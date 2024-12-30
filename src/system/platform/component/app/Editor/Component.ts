@@ -955,7 +955,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _transcend: Transcend
   private _frame: Component<HTMLElement>
   private _frame_out: boolean = false
-  private _background: Div
 
   private _system: System
 
@@ -1046,6 +1045,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     } else {
       editor = new Editor_(
         {
+          disabled: false,
           className,
           graph: this._pod,
           frame: this._frame,
@@ -1115,23 +1115,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._reset_frame()
     this._listen_graph()
 
-    background =
-      background ||
-      new Div(
-        {
-          style: {
-            className: 'graph-background',
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-          },
-        },
-        this.$system
-      )
-    this._background = background
-
     root =
       root ||
       new Frame(
@@ -1148,7 +1131,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         },
         this.$system
       )
-    root.registerParentRoot(this._background)
     root.registerParentRoot(this._editor)
     root.registerParentRoot(this._fallback_frame_container)
     root.registerParentRoot(this._transcend)
@@ -1168,7 +1150,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$element = $element
     this.$slot = {
       default: this._editor.$slot['default'],
-      '1': this._background.$slot['default'],
     }
     this.$unbundled = false
     this.$primitive = true
@@ -1177,7 +1158,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     applyDynamicStyle(this, this._root.$element, { ...DEFAULT_STYLE, ...style })
 
     this.setSubComponents({
-      background,
       root,
       editor,
       container: this._fallback_frame_container,
@@ -1491,28 +1471,13 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._root.unregisterParentRoot(this._transcend)
     this._root.unregisterParentRoot(this._fallback_frame_container)
     this._root.unregisterParentRoot(this._editor)
-    this._root.unregisterParentRoot(this._background)
 
     this._fallback_frame_container.unregisterParentRoot(this._fallback_frame)
 
     this.removeSubComponent('transcend')
-    this.removeSubComponent('background')
     this.removeSubComponent('editor')
     this.removeSubComponent('root')
     this.removeSubComponent('frame')
-
-    let graph_slot = this._editor.$slot['default']
-    let graph_slot_element = graph_slot.$element
-
-    let background_slot = this._background.$slot['default']
-    let background_slot_element = background_slot.$element
-
-    const background_slot_children = []
-
-    while (background_slot_element.firstChild) {
-      background_slot_children.unshift(background_slot_element.lastChild)
-      background_slot_element.removeChild(background_slot_element.lastChild)
-    }
 
     const unit_editor = new Editor(
       {
@@ -1521,7 +1486,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         fallback: this._fallback_frame,
         container: this._fallback_frame_container,
         transcend: this._transcend,
-        background: this._background,
         root: this._root,
         component: this._component,
         fullwindow: true,
@@ -1600,21 +1564,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._listen_graph()
 
-    const background = new Div(
-      {
-        style: {
-          className: 'graph-background',
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-        },
-      },
-      this.$system
-    )
-    this._background = background
-
     const root = new Frame(
       {
         className: 'graph-root',
@@ -1631,23 +1580,13 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     )
     this._root = root
 
-    graph_slot = this._editor.$slot['default']
-    graph_slot_element = graph_slot.$element
-
-    background_slot = this._background.$slot['default']
-    background_slot_element = background_slot.$element
+    const graph_slot = this._editor.$slot['default']
 
     this.$slot = {
       default: graph_slot,
-      '1': background_slot,
-    }
-
-    for (const child of background_slot_children) {
-      background_slot_element.appendChild(child)
     }
 
     this.setSubComponents({
-      background,
       root,
       editor,
       frame: this._fallback_frame,
@@ -1657,7 +1596,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._root.$ref['transcend'] = transcend
 
-    this._root.registerParentRoot(this._background)
     this._root.registerParentRoot(this._editor)
     this._root.registerParentRoot(this._fallback_frame_container)
     this._root.registerParentRoot(this._transcend)
@@ -3252,7 +3190,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let {
       style = {},
       component,
-      disabled = true,
+      disabled = false,
       frameOut,
       fullwindow,
       graph: pod,
@@ -4128,18 +4066,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!this._disabled) {
       this._disabled = true
 
-      if (this._subgraph_unit_id) {
-        const sub_graph = this._subgraph_cache[this._subgraph_unit_id]
-
-        sub_graph.setProp('disabled', true)
-      } else {
-        if (this._core_component_unlocked_count > 0) {
-          for (const unit_id in this._core_component_unlocked) {
-            this._disable_core_frame(unit_id)
-          }
-        } else {
-          this._unlock_control(hide)
+      if (this._core_component_unlocked_count > 0) {
+        for (const unit_id in this._core_component_unlocked) {
+          this._disable_core_frame(unit_id)
         }
+      } else {
+        this._unlock_control(hide)
       }
     }
   }
@@ -4353,22 +4285,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._import = findRef(this, 'import') as IconButton | null
     this._export = findRef(this, 'export') as IconButton | null
     this._transcend = findRef(this, 'transcend') as Transcend | null
-
-    if (this._transcend) {
-      if (!this._disabled) {
-        if (!this._subgraph_unit_id) {
-          this._enable_transcend()
-        }
-      }
-    }
-
-    if (!this._disabled) {
-      if (this._input_disabled) {
-        if (!this._core_component_unlocked_count) {
-          this._enable_input()
-        }
-      }
-    }
 
     this._context_unlisten = addListeners(this.$context, [
       makeResizeListener(this._on_context_resize),
@@ -22317,9 +22233,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       if (relatedTarget) {
         if (
-          (this._control &&
-            this._control._control.$element.contains(relatedTarget)) ||
-          this._graph.$element.contains(relatedTarget)
+          this._control._control.$element.contains(relatedTarget) &&
+          !this._control._main.$element.contains(relatedTarget)
         ) {
           return
         }
@@ -61341,8 +61256,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._refresh_color()
     } else if (prop === 'disabled') {
-      if (this._focused) {
-        this._refresh_enabled()
+      const { disabled } = this.$props
+
+      this._refresh_enabled()
+
+      if (disabled) {
+        if (this._subgraph_unit_id) {
+          const sub_graph = this._subgraph_cache[this._subgraph_unit_id]
+
+          sub_graph.setProp('disabled', true)
+        }
       }
     } else if (prop === 'zoom') {
       this._set_zoom(current)
