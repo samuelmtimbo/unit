@@ -325,6 +325,8 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       {
         className: 'gui-control',
         style: {
+          position: 'absolute',
+          left: '0px',
           top: '0px',
           overflow: 'visible',
           background: 'none',
