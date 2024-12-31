@@ -46,6 +46,7 @@ export function boot(
     pointerCapture: {},
     spriteSheetMap: {},
     servers: {},
+    events: {},
   }
 
   const feature = {}

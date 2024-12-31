@@ -2,6 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
+import { uuid } from '../../../../../util/id'
 import { ID_DISPATCH } from '../../../../_ids'
 
 export interface I<T> {
@@ -35,11 +36,11 @@ export default class Dispatch<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ element, event, data, opt }: I<T>, done: Done<O<T>>) {
-    const _event = `_${event}`
+    const id = uuid()
 
     element.emit('call', {
       method: 'dispatchEvent',
-      data: [event, data, opt.bubbles],
+      data: [event, data, opt.bubbles, id],
     })
 
     done()

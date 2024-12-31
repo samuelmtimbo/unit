@@ -249,9 +249,35 @@ export class Component<
     }
   }
 
-  dispatchEvent(type: string, detail: any = {}, bubbles: boolean = true) {
+  dispatchEvent(
+    type: string,
+    detail: any = {},
+    bubbles: boolean = true,
+    id?: string
+  ) {
+    const {
+      cache: { events },
+      api: {
+        window: { nextTick },
+      },
+    } = this.$system
+
+    if (id) {
+      if (events[id]) {
+        return
+      }
+    }
+
+    events[id] = true
+
     for (const root of this.getBaseRoots()) {
       dispatchCustomEvent(root.$element, type, detail, bubbles)
+    }
+
+    if (id) {
+      nextTick(() => {
+        delete events[id]
+      })
     }
   }
 

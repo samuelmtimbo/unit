@@ -31,6 +31,7 @@ export interface System extends S, Registry {
     pointerCapture: Dict<any>
     spriteSheetMap: Dict<boolean>
     servers: Dict<any>
+    events: Dict<any>
   }
   feature: Dict<boolean>
   foreground: {
