@@ -88,6 +88,8 @@ Info Click on an editable unit name to rename.
 
 ![](/public/gif/start/27.gif)
 
+If you "get inside" a graph on Info Mode, edits to the graph will be reflected on all instances of that class.
+
 ## Data Mode
 
 To enter Data Mode (also Chartreuse/Yellow Mode) you can either click on the "triangle" mode button or press key <kbd>A</kbd>.
