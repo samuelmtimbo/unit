@@ -3035,7 +3035,7 @@ export class Component<
             this.$slotParent
           )
         } else {
-          this.domCommitRemoveChild(component, at, index)
+          this.domCommitRemoveChild(component, at)
         }
       }
     } else {
@@ -3044,7 +3044,7 @@ export class Component<
           this.domRemoveRoot(root, index, at)
         }
       } else {
-        this.domCommitRemoveChild(component, at, index)
+        this.domCommitRemoveChild(component, at)
       }
     }
 
@@ -3454,9 +3454,9 @@ export class Component<
             slotParent
           )
         } else if (slotParent) {
-          slotParent.domCommitRemoveChild(component, at, index)
+          slotParent.domCommitRemoveChild(component, at)
         } else {
-          this.domCommitRemoveChild(component, at, index)
+          this.domCommitRemoveChild(component, at)
         }
       }
     } else {
@@ -3478,7 +3478,7 @@ export class Component<
           }
         }
       } else {
-        this.domCommitRemoveChild(component, at, index)
+        this.domCommitRemoveChild(component, at)
       }
     }
 
@@ -3488,11 +3488,10 @@ export class Component<
   protected domCommitRemoveChild(
     component: Component,
     at: number,
-    index: number
   ) {
     if (component.isParent()) {
       for (const root of component.$root) {
-        this.domCommitRemoveChild(root, at, index)
+        this.domCommitRemoveChild(root, at)
       }
 
       return
@@ -3500,12 +3499,12 @@ export class Component<
 
     if (this.isParent()) {
       if (this.$slotParent) {
-        this.$slotParent.domCommitRemoveChild(component, at, index)
+        this.$slotParent.domCommitRemoveChild(component, at)
       } else {
-        this._removeChild(component, index)
+        this._removeChild(component, at)
       }
     } else {
-      this._removeChild(component, index)
+      this._removeChild(component, at)
     }
   }
 
