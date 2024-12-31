@@ -601,6 +601,8 @@ export function moveLinkPinInto(
             pinSpec,
             data,
             false,
+            false,
+            false,
             false
           )
         }
@@ -641,7 +643,7 @@ export function moveLinkPinInto(
             },
           }
 
-          source.addMerge(merge, oppositeMergeId, false, false)
+          source.addMerge(merge, oppositeMergeId, false, false, false, false)
         }
       }
     } else {
@@ -714,7 +716,7 @@ export function moveMerge(
   const mergeOutputCount = getMergeTypePinCount(mergeSpec, 'output')
 
   if (source.hasMerge(mergeId)) {
-    source.removeMerge(mergeId, false, false)
+    source.removeMerge(mergeId, false, false, false, false)
   }
 
   const moveMergePin = (unitId: string, type: IO, pinId: string): void => {
@@ -785,7 +787,7 @@ export function moveMerge(
     if (mergePinCount === 0 || pinIntoCount > 1) {
       const propagate = mergeIsRef
 
-      target.addMerge(nextMerge, nextMergeId, false, propagate)
+      target.addMerge(nextMerge, nextMergeId, false, propagate, false, false)
     }
   } else {
     if (
@@ -796,7 +798,7 @@ export function moveMerge(
     ) {
       const propagate = mergeIsRef
 
-      target.addMerge(nextMerge, nextMergeId, false, propagate)
+      target.addMerge(nextMerge, nextMergeId, false, propagate, false, false)
 
       if (
         keyCount(mergeSpec ?? {}) === 1 &&
@@ -960,10 +962,29 @@ export function moveMerge(
             if (isEmptyObject(subPinSpec)) {
               //
             } else {
-              target.plugPin(type, pinId, '0', subPinSpec, data, false, false)
+              target.plugPin(
+                type,
+                pinId,
+                '0',
+                subPinSpec,
+                data,
+                false,
+                false,
+                false,
+                false
+              )
             }
           } else {
-            target.exposePin(type, pinId, '0', subPinSpec, false, false)
+            target.exposePin(
+              type,
+              pinId,
+              '0',
+              subPinSpec,
+              false,
+              false,
+              false,
+              false
+            )
           }
         } else {
           target.exposePinSet(
@@ -975,6 +996,8 @@ export function moveMerge(
               },
             },
             undefined,
+            false,
+            false,
             false,
             false
           )

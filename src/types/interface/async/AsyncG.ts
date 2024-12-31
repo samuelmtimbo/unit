@@ -266,7 +266,16 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphAddUnitData): void {
-      call(graph, 'addUnitSpec', fork, bubble, unitId, bundle, parentId)
+      call(
+        graph,
+        'addUnitSpec',
+        fork,
+        bubble,
+        unitId,
+        bundle,
+        parentId,
+        undefined
+      )
     },
 
     $cloneUnit({
@@ -515,7 +524,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         bubble,
         mergeSpec,
         mergeId,
-        undefined,
         undefined,
         undefined
       )

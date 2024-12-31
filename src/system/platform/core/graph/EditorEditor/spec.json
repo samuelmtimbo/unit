@@ -72,7 +72,7 @@
         }
       }
     },
-    "graph1": {
+    "new": {
       "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
       "input": {
         "graph": {}
@@ -232,14 +232,14 @@
           "a": true
         }
       },
-      "graph1": {
+      "new": {
         "input": {
           "graph": true
         }
       }
     },
     "1": {
-      "graph1": {
+      "new": {
         "output": {
           "graph": true
         }

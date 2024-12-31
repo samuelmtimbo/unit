@@ -2833,6 +2833,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _collapse_world_position: Position = NULL_VECTOR
   private _collapse_init_spec: GraphSpec = null
+  private _collapse_graph_spec: GraphSpec = null
   private _collapse_unit_id: string | null = null
   private _collapse_unit_spec: Dict<Spec> = {}
   private _collapse_next_unit_id: string | null = null
@@ -27197,7 +27198,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       sub_component_id,
       base,
       base_node,
-      true,
+      false,
       measure,
       async () => {
         let result = callback()
@@ -36991,7 +36992,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
-        if (this._is_link_pin_visible(pin_node_id)) {
+        if (this._has_link(link_id) && this._is_link_pin_visible(pin_node_id)) {
           if (this._is_link_pin_merged(pin_node_id)) {
             this._show_link_text(link_id)
           } else {
@@ -47401,6 +47402,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._collapse_merges = merge
     this._collapse_plugs = plug
 
+    const graph_spec = clone(this._get_unit_spec(graph_unit_id)) as GraphSpec
+
+    this._collapse_graph_spec = clone(graph_spec)
+
     const none_node_selected =
       unit.length === 0 &&
       link.length === 0 &&
@@ -47997,11 +48002,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _state_get_subgraph_graph_interface = (
-    graph_id: string
+    graph_id: string,
+    spec: GraphSpec
   ): GraphLike => {
     const { specs } = this.$props
-
-    const spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
 
     const graph_interface: GraphLike = {
       removeUnit: (unitId: string, destroy: boolean): void => {
@@ -48082,6 +48086,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._state_set_unit_pin_data(pin_node_id, data)
         }
+
+        exposePinSet({ type, pinId, pinSpec }, spec)
       },
       exposePin: (
         type: IO,
@@ -48162,7 +48168,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return this._spec_graph_get_merge_spec(graph_id, mergeId)
       },
       hasPinNamed: (type: IO, name: string): boolean => {
-        return this._spec_unit_has_pin_named(graph_id, type, name)
+        return hasPinNamed(spec, type, name)
+        // return this._spec_unit_has_pin_named(graph_id, type, name)
       },
       getUnit: (unitId: string): U => {
         return this._spec_graph_get_unit_interface_from_spec(spec, unitId, {})
@@ -49058,8 +49065,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       plugs: this._get_unit_plugs(graph_id),
     })
 
+    const graph_spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
+
     moveSubgraph<UCG<any, any, U>>(
-      this._state_get_subgraph_graph_interface(graph_id),
+      this._state_get_subgraph_graph_interface(graph_id, graph_spec),
       this._state_make_this_graph_interface(position),
       graph_id,
       collapse_map,
@@ -51868,8 +51877,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const sub_pin_spec = this._spec[`${type}s`][pinId]['plug'][subPinId]
 
+    const graph_spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
+
     const this_interface = this._state_make_this_graph_interface()
-    const graph_interface = this._state_get_subgraph_graph_interface(graph_id)
+    const graph_interface = this._state_get_subgraph_graph_interface(
+      graph_id,
+      graph_spec
+    )
 
     const {
       pinId: nextPinId,
@@ -53497,7 +53511,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     moveMerge(
       this._state_make_this_graph_interface(),
-      this._state_get_subgraph_graph_interface(graph_id),
+      this._state_get_subgraph_graph_interface(
+        graph_id,
+        this._collapse_graph_spec
+      ),
       graph_id,
       merge_id,
       merge_spec,
@@ -59742,12 +59759,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         plugs,
       }
 
-      const spec_interface = this._make_graph_spec_interface(spec)
+      const spec_interface = this._make_graph_spec_interface(clone(spec))
 
       const subgraph_path = this.getSubgraphPath()
 
-      const subgraph_interface =
-        this._state_get_subgraph_graph_interface(graph_unit_id)
+      const graph_spec = clone(this._get_unit_spec(graph_unit_id)) as GraphSpec
+
+      const subgraph_interface = this._state_get_subgraph_graph_interface(
+        graph_unit_id,
+        graph_spec
+      )
 
       const commit = () => {
         moveSubgraph(

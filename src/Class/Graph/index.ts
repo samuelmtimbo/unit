@@ -2814,8 +2814,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
                 },
               },
             },
-            mergeId,
-            null
+            mergeId
           )
         } else {
           this._addPinToMerge(mergeId, nextUnitId, type, pinId)
@@ -4356,12 +4355,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     mergeId: string,
     emit: boolean = true,
     propagate: boolean = true,
-    merge?: Merge,
     fork?: boolean
   ): void => {
     // console.log('Graph', 'addMerge', mergeId, mergeSpec, emit, propagate, fork)
 
-    merge = this._addMerge(mergeSpec, mergeId, merge, propagate, fork)
+    const merge = this._addMerge(mergeSpec, mergeId, propagate, fork)
 
     emit && this.edit('add_merge', mergeId, mergeSpec, merge, [])
 
@@ -4418,7 +4416,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _addMerge = (
     mergeSpec: GraphMergeSpec,
     mergeId: string,
-    merge: Merge = null,
     propagate: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
@@ -4427,7 +4424,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     fork && this._fork(undefined, true, bubble)
 
-    merge = merge ?? this._createMerge(mergeId)
+    const merge = this._createMerge(mergeId)
 
     this.emit('before_add_merge', mergeId, mergeSpec, merge, [])
 
@@ -5668,11 +5665,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     nextSubComponentIndexMap: GraphMoveSubGraphData['nextSubComponentIndexMap'],
     nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap'],
     nextSubComponentSlot: GraphMoveSubGraphData['nextSubComponentSlot'],
-    nextSubComponentParentSlot: GraphMoveSubGraphData['nextSubComponentParentSlot']
+    nextSubComponentParentSlot: GraphMoveSubGraphData['nextSubComponentParentSlot'],
+    fork: boolean = true
   ) {
     const graph = this.getUnit(graphId) as Graph
 
-    graph.fork(specId)
+    fork && graph.fork(specId)
     graph.startTransaction()
 
     this.__moveSubgraphInto(
@@ -6417,7 +6415,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           addMerge: (data: GraphAddMergeData) => {
             const { mergeId, mergeSpec } = data
 
-            this._addMerge(mergeSpec, mergeId, undefined, undefined, fork)
+            this._addMerge(mergeSpec, mergeId, undefined, fork, undefined)
           },
           addPinToMerge: (data: GraphAddPinToMergeData) => {
             const { mergeId, unitId, type, pinId } = data
@@ -6528,7 +6526,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               nextSubComponentIndexMap,
               nextUnitPinMergeMap,
               nextSubComponentSlot,
-              nextSubComponentParentSlot
+              nextSubComponentParentSlot,
+              fork
             )
           },
           moveSubgraphOutOf: (data: GraphMoveSubGraphOutOfData) => {
