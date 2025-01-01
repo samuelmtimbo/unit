@@ -60203,7 +60203,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_tree?: TreeNode
   ) => {
     const { classes } = this.$system
-    const { specs, injectSpecs } = this.$props
+    const { specs } = this.$props
 
     const tree = this._datum_tree[datum_id]
     const datum = this._datum[datum_node_id]
@@ -60229,8 +60229,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { value } = next_tree
 
       const bundle = evaluateBundleStr(value, specs, classes)
-
-      injectSpecs(bundle.specs ?? {})
 
       const { id } = bundle.unit
 
