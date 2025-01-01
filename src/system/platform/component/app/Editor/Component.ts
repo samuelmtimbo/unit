@@ -28403,6 +28403,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._refresh_compatible()
 
+    this._download_pod_data()
+
     return new_unit_id
   }
 
