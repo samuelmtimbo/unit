@@ -27288,12 +27288,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           return {
             x:
-              -this.$context.$x -
-              frame.$$context.$x * (this._zoom.z - 1) +
+              -frame.$$context.$x * (this._zoom.z - 1) +
               leaf_trait.x * this._zoom.z,
             y:
-              -this.$context.$y -
-              frame.$$context.$y * (this._zoom.z - 1) +
+              -frame.$$context.$y * (this._zoom.z - 1) +
               leaf_trait.y * this._zoom.z,
             width: leaf_trait.width,
             height: leaf_trait.height,
