@@ -71,12 +71,62 @@ export function isUnitComponent(
 
 export const isPinRef = (
   { type, pinId }: { type: IO; pinId: string },
-  spec: Spec
+  spec: Spec,
+  specs: Specs
 ) => {
-  return (
-    deepGetOrDefault(spec, [`${type}s`, pinId, 'ref'], false) ||
-    isSelfPin(type, pinId)
-  )
+  if (isSelfPin(type, pinId)) {
+    return true
+  }
+
+  const pinSpec = deepGet(spec, [`${type}s`, pinId])
+
+  let { ref } = pinSpec
+
+  if (ref === undefined) {
+    const { plug } = pinSpec
+
+    for (const subPinId in plug) {
+      const subPin = plug[subPinId]
+
+      if (isSubPinSpecRef(specs, spec as GraphSpec, type, subPin)) {
+        ref = true
+
+        break
+      }
+    }
+  }
+
+  return ref
+}
+
+export const isMergeRef = (
+  { mergeId }: { mergeId: string },
+  spec: GraphSpec,
+  specs: Specs
+) => {
+  let ref = false
+
+  const merge = getMerge(spec, mergeId)
+
+  forEachPinOnMerge(merge, (unitId, type, pinId) => {
+    ref = ref || isUnitPinRef({ unitId, type, pinId }, spec, specs)
+  })
+
+  return ref
+}
+
+export const isUnitPinRef = (
+  { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
+  spec: GraphSpec,
+  specs: Specs
+) => {
+  let ref = false
+
+  const unit = getUnit(spec, unitId)
+
+  const unitSpec = getSpec(specs, unit.id)
+
+  return isPinRef({ type, pinId }, unitSpec, specs)
 }
 
 export const isSelfPin = (type: IO, pinId: string): boolean => {
@@ -678,22 +728,22 @@ export function isSubPinSpecRef(
 
     const unit = spec.units[subPinSpec.unitId]
 
-    const unit_spec = getSpec(specs, unit.id)
+    const unitSpec = getSpec(specs, unit.id)
 
-    ref = isPinRef({ type: kind, pinId: subPinSpec.pinId }, unit_spec)
+    ref = isPinRef({ type: kind, pinId: subPinSpec.pinId }, unitSpec, specs)
   } else if (subPinSpec.mergeId) {
     const merge = spec.merges[subPinSpec.mergeId]
 
     forEachPinOnMerge(merge, (unitId, type, pinId) => {
       const unit = spec.units[unitId]
 
-      const unit_spec = getSpec(specs, unit.id)
+      const unitSpec = getSpec(specs, unit.id)
 
       if (ref === true) {
         return
       }
 
-      ref = isPinRef({ type, pinId: subPinSpec.pinId }, unit_spec)
+      ref = isPinRef({ type, pinId }, unitSpec, specs)
     })
   }
 
@@ -1059,6 +1109,14 @@ export function getUnitMergesSpec(
   }
 
   return unit_merges
+}
+
+export function getUnit(spec: GraphSpec, unitId: string): GraphUnitSpec {
+  const { units } = spec
+
+  const unit = units[unitId]
+
+  return unit
 }
 
 export function getMerge(spec: GraphSpec, mergeId: string): GraphMergeSpec {

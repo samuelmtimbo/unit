@@ -5320,14 +5320,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _get_link_pin_ref = (pin_node_id: string): boolean | undefined => {
+    const { specs } = this.$props
+
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    const pin_spec: PinSpec = this._get_unit_pin_spec(pin_node_id)
-    const unit_pin_spec = this._get_graph_unit_pin_spec(unitId, type, pinId)
+    const unit_spec = this._get_unit_spec(unitId)
 
-    const { ref = pin_spec.ref } = unit_pin_spec
-
-    return ref
+    return isPinRef({ type, pinId }, unit_spec, specs)
   }
 
   private __get_link_pin_ref = (
@@ -48053,13 +48052,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ) => {
         const { specs } = this.$props
 
-        const ref = false // TODO
-
         this._spec_graph_unit_add_sub_pin(
           graph_id,
           type,
           pinId,
-          ref,
           subPinId,
           subPinSpec
         )
@@ -48546,7 +48542,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return false
       },
       isPinRef: function (type: IO, name: string): boolean {
-        return isPinRef({ type, pinId: name }, spec)
+        const { specs } = this.$props
+
+        return isPinRef({ type, pinId: name }, spec, specs)
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
@@ -51005,7 +51003,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                     kind: type,
                   },
                 },
-                ref,
               },
             },
             updated_graph_spec
@@ -52172,7 +52169,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return ignored
       },
       isPinRef: (type: IO, pinId: string): boolean => {
-        return isPinRef({ type, pinId }, spec)
+        const { specs } = this.$props
+
+        return isPinRef({ type, pinId }, spec, specs)
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
@@ -52482,7 +52481,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return isUnitPinConstant(spec, unit_id, type, name)
       },
       isPinRef: (type: IO, name: string): boolean => {
-        return isPinRef({ type, pinId: name }, spec)
+        const { specs } = this.$props
+
+        return isPinRef({ type, pinId: name }, spec, specs)
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
@@ -52850,7 +52851,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     graph_id: string,
     type: IO,
     pin_id: string,
-    ref: boolean,
     sub_pin_id: string,
     sub_pin_spec: GraphSubPinSpec
   ): void => {
@@ -52878,7 +52878,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (!pin) {
       exposePinSet(
-        { pinId: pin_id, type, pinSpec: { plug: {}, ref } },
+        { pinId: pin_id, type, pinSpec: { plug: {} } },
         next_graph_spec
       )
 
@@ -53359,8 +53359,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
-    const ref = this._is_link_pin_ref(pin_node_id)
-
     const graph_spec_id = this._get_unit_spec_id(graph_id)
     const graph_spec = this._get_unit_spec(graph_id) as GraphSpec
 
@@ -53376,7 +53374,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           {
             pinId: opposite_pin_id,
             type: opposite_type,
-            pinSpec: { plug: { '0': {} }, ref },
+            pinSpec: { plug: { '0': {} } },
           },
           updated_graph_spec
         )
