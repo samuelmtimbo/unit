@@ -2587,7 +2587,7 @@ export class Component<
   }
 
   protected _insertAt(parent: Component, child: Component, at: number) {
-    insert(this.$domChildren, child, at)
+    this.$domChildren[at] = child
 
     const target = this._wrapElement(parent, child, at)
 
@@ -2926,7 +2926,7 @@ export class Component<
     insert(this.$mountRoot, component, _at)
   }
 
-  public domInsertRootAt(component: Component, _at: number): void {
+  public domInsertRootAt(component: Component, at: number): void {
     set(component, '$slotParent', this)
 
     if (!this.$primitive) {
@@ -2938,25 +2938,22 @@ export class Component<
             this.$slotParent.domInsertParentChildAt(
               component,
               'default',
-              _at + i
+              at + i
             )
           } else {
-            this.domCommitInsertChild(root, _at)
+            this.domCommitInsertChild(root, at)
           }
 
           i++
         }
       } else {
         if (this.$slotParent) {
-          const index: number = this.$slotParent.$mountParentChildren.length
+          const index: number =
+            this.$slotParent.$mountParentChildren.indexOf(this)
 
-          this.$slotParent.domInsertParentChildAt(
-            component,
-            'default',
-            index + _at
-          )
+          this.$slotParent.domInsertParentChildAt(component, 'default', index)
         } else {
-          this.domCommitInsertChild(component, _at)
+          this.domCommitInsertChild(component, at)
         }
       }
     } else {
@@ -2964,12 +2961,12 @@ export class Component<
         let i = 0
 
         for (const root of component.$mountRoot) {
-          this.domInsertRootAt(root, _at + i)
+          this.domInsertRootAt(root, at + i)
 
           i++
         }
       } else {
-        this.domCommitInsertChild(component, _at)
+        this.domCommitInsertChild(component, at)
       }
     }
   }
@@ -3354,9 +3351,7 @@ export class Component<
         }
       } else {
         if (this.$slotParent) {
-          const index = this.$parent?.$root.includes(this)
-            ? this.$slotParent.$mountParentChildren.indexOf(this.$parent)
-            : this.$slotParent.$mountParentChildren.indexOf(this)
+          const index = this.$slotParent.$mountParentChildren.indexOf(this)
 
           this.$slotParent.domInsertParentChildAt(
             component,
@@ -3485,10 +3480,7 @@ export class Component<
     set(component, '$slotParent', null)
   }
 
-  protected domCommitRemoveChild(
-    component: Component,
-    at: number,
-  ) {
+  protected domCommitRemoveChild(component: Component, at: number) {
     if (component.isParent()) {
       for (const root of component.$root) {
         this.domCommitRemoveChild(root, at)
