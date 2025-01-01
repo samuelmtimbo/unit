@@ -1,0 +1,72 @@
+{
+  "type": "`U`&`G`",
+  "name": "id to spec",
+  "units": {
+    "specs": {
+      "id": "b5ea15f4-9bbd-11eb-b623-37aff4a9ce60",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "specs": {}
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "specs": {
+        "output": {
+          "specs": true
+        }
+      },
+      "get": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "id": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "key",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "specs",
+          "pinId": "any",
+          "kind": "input"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "spec": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value",
+          "kind": "output"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "get system `spec` with `id`"
+  },
+  "id": "b2626d61-b17d-4737-bea3-627c0322f9d6",
+  "system": true
+}
