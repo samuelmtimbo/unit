@@ -33,14 +33,6 @@ export function watchRefPinEvent(
     })
   }
 
-  if (event === 'data') {
-    if (pin.active()) {
-      const _data = pin.peak()
-
-      listener(_data)
-    }
-  }
-
   pin.prependListener(event, listener)
 
   return () => {
