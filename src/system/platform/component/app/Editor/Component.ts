@@ -38823,6 +38823,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     position?: Position
   ): string => {
     // console.log('Graph', '_remove_pin_or_merge', pin_node_id)
+    const { fork, bubble } = this.$props
+
     return this._dry_remove_pin_or_merge(
       pin_node_id,
       (merge_node_id) => {
@@ -38833,11 +38835,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._update_blue_drag_init_anchor(merge_node_id, other_pin_node_id)
         }
 
+        const actions = []
+
         const unplug = (int_node_id: string): void => {
           if (int_node_id) {
             const { pinId, type, subPinId } = segmentPlugNodeId(int_node_id)
 
-            this._unplug_exposed_pin(type, pinId, subPinId)
+            const subPinSpec = this._get_exposed_sub_pin_spec(
+              type,
+              pinId,
+              subPinId
+            )
+
+            actions.push(
+              makeUnplugPinAction(type, pinId, subPinId, subPinSpec, false)
+            )
           }
         }
 
@@ -38849,11 +38861,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               type: _type,
               pinId: _pinId,
             } = segmentLinkPinNodeId(other_pin_node_id)
-            this._plug_exposed_pin(type, pinId, subPinId, {
+
+            const subPinSpec = {
               unitId,
               pinId: _pinId,
               kind: _type,
-            })
+            }
+
+            actions.push(makePlugPinAction(type, pinId, subPinId, subPinSpec))
           }
         }
 
@@ -38865,10 +38880,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         unplug(int_input_node_id)
         unplug(int_output_node_id)
 
-        this.remove_merge(merge_node_id)
+        actions.push(this._make_remove_merge_action(merge_node_id))
 
         plug(int_input_node_id)
         plug(int_output_node_id)
+
+        this._execute_actions(actions, false)
+
+        this._pod.$bulkEdit({ actions, fork, bubble })
       }
     )
   }
@@ -55475,6 +55494,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _execute_actions = (actions: Action[], emit: boolean) => {
+    for (const action of actions) {
+      this._execute_action(action, emit)
+    }
+  }
+
   private _execute_action = (action: Action, emit: boolean): void => {
     // console.log('Editor', '_execute_action', action)
 
@@ -55774,9 +55799,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         {
           emit && this._pod.$bulkEdit(clone(data))
 
-          for (const action of data.actions) {
-            this._execute_action(action, false)
-          }
+          this._execute_actions(data.actions, false)
         }
         break
       case SET_UNIT_SIZE:
@@ -60902,6 +60925,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
           exposePin: (data) => {
             this._on_graph_unit_expose_pin(data)
+          },
+          unplugPin: (data) => {
+            this._on_graph_unit_unplug_pin_moment({ ...data, path })
           },
           plugPin: (data) => {
             this._on_graph_unit_plug_pin_moment({ ...data, path })

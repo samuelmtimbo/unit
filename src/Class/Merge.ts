@@ -233,6 +233,7 @@ export default class Merge<
     if (
       !this._forwarding &&
       this._current !== undefined &&
+      this._o_count > 0 &&
       this._o_active.size - this._loop_invalid_o_count === 0
     ) {
       this._loop_invalid_o_count = 0

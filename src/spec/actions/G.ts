@@ -470,9 +470,10 @@ export const makeUnplugPinAction = (
   type: IO,
   pinId: string,
   subPinId: string,
-  subPinSpec: GraphPinSpec
+  subPinSpec: GraphPinSpec,
+  take?: boolean
 ) => {
-  return wrapUnplugPinAction({ type, pinId, subPinId, subPinSpec })
+  return wrapUnplugPinAction({ type, pinId, subPinId, subPinSpec, take })
 }
 
 export const wrapCoverPinAction = (data: GraphCoverPinData) => {

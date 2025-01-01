@@ -6369,9 +6369,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             this._plugPin(type, pinId, subPinId, subPinSpec, undefined)
           },
           unplugPin: (data: GraphUnplugPinData) => {
-            const { type, pinId, subPinId } = data
+            const { type, pinId, subPinId, take } = data
 
-            this._unplugPin(type, pinId, subPinId, undefined, fork, bubble)
+            this._unplugPin(type, pinId, subPinId, take, fork, bubble)
           },
           removeMerge: (data: GraphRemoveMergeData) => {
             const { mergeId } = data
