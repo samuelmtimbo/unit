@@ -308,5 +308,5 @@ export type G_EE = {
   add_unit_ghost: [string, string, BundleSpec, string[]]
   remove_unit_ghost: [string, string, BundleSpec, string[]]
   bulk_edit: [Action[], boolean, string[]]
-  edit: [string, any[]]
+  edit: any[]
 }

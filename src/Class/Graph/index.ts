@@ -2074,7 +2074,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   edit(event: string, ...args: any[]): void {
     // @ts-ignore
     super.emit(event, ...args)
-    super.emit('edit', event, args)
+    super.emit('edit', [event, ...args])
   }
 
   private _simPlugPin = (
