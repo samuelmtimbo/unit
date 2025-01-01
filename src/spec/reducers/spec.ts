@@ -366,11 +366,7 @@ export const exposePinSet = (
 }
 
 export const setUnitId = (
-  {
-    unitId,
-    newUnitId,
-    name,
-  }: { unitId: string; newUnitId: string; name: string },
+  { unitId, newUnitId }: { unitId: string; newUnitId: string },
   spec: GraphSpec
 ): void => {
   const unit = spec.units[unitId]

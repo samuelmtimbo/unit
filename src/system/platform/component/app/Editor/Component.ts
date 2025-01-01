@@ -58109,12 +58109,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { setSpec, specs, parent } = this.$props
 
-    const { unitId, newUnitId, name, path } = data
+    const { unitId, newUnitId, path } = data
 
     if (this._is_spec_updater(path)) {
       const spec = clone(findSpecAtPath(specs, this._spec, path))
 
-      setUnitId({ unitId, newUnitId, name }, spec)
+      setUnitId({ unitId, newUnitId }, spec)
 
       setSpec(spec.id, spec)
 
