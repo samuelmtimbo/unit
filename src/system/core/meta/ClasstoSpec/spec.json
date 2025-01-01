@@ -1,0 +1,122 @@
+{
+  "type": "`U`&`G`",
+  "name": "class to spec",
+  "units": {
+    "classtoid": {
+      "id": "1520b630-93aa-11ea-ac56-7718cb2ad75d",
+      "input": {
+        "class": {
+          "metadata": {
+            "position": {
+              "x": -97,
+              "y": 0
+            }
+          }
+        }
+      },
+      "output": {
+        "id": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -50,
+          "y": 0
+        }
+      }
+    },
+    "idtospec": {
+      "id": "b2626d61-b17d-4737-bea3-627c0322f9d6",
+      "input": {
+        "id": {}
+      },
+      "output": {
+        "spec": {
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": 0
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "classtoid": {
+        "output": {
+          "id": true
+        }
+      },
+      "idtospec": {
+        "input": {
+          "id": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "class": {
+      "plug": {
+        "0": {
+          "unitId": "classtoid",
+          "pinId": "class",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -120,
+              "y": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "spec": {
+      "plug": {
+        "0": {
+          "unitId": "idtospec",
+          "pinId": "spec",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 120,
+              "y": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "get spec out of unit `class`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "id": "45313e8a-bc8e-4883-b377-91c063b880a8",
+  "system": true
+}
