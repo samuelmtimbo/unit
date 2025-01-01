@@ -29127,8 +29127,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const { value } = next_tree
 
-        const id = idFromUnitValue(value, specs, classes)
+        const bundle = evaluateBundleStr(value, specs, classes)
 
+        const {
+          unit: { id },
+        } = bundle
+
+        datum.setProp('specs', weakMerge(specs, bundle.specs ?? {}))
         datum.setProp('id', id)
         datum.dispatchEvent('datumchange', { data: getTree(id) })
 
@@ -40130,8 +40135,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (tree.type === TreeNodeType.Unit) {
       datum = datum as ClassDatum
 
-      const id = idFromUnitValue(tree.value, specs, classes)
+      const bundle = evaluateBundleStr(tree.value, specs, classes)
 
+      const {
+        unit: { id },
+      } = bundle
+
+      datum.setProp('specs', weakMerge(specs, bundle.specs ?? {}))
       datum.setProp('id', id)
       datum.dispatchEvent('datumchange', { data: tree })
     } else {
@@ -60257,6 +60267,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const _datum = datum as ClassDatum
 
+      _datum.setProp('specs', weakMerge(specs, bundle.specs ?? {}))
       _datum.setProp('id', id)
       _datum.dispatchEvent('datumchange', { data: getTree(id) })
 
