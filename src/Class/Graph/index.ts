@@ -6306,6 +6306,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _bulkEdit(actions: Action[], fork: boolean, bubble: boolean): void {
     // console.log('Graph', 'bulkEdit', actions)
 
+    actions = clone(actions)
+
     for (const action of actions) {
       processAction(
         action,
