@@ -1,0 +1,29 @@
+{
+  "name": "bundle",
+  "inputs": {
+    "unit": {
+      "type": "`U`&`G`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{snapshot?:boolean}",
+      "medatata": {
+        "examples": ["{}"]
+      }
+    }
+  },
+  "outputs": {
+    "bundle": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "get `unit` `bundle`",
+    "tags": ["f", "meta"]
+  },
+  "id": "53825c2f-1aca-40f5-b739-3c60ef5886a8",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -2,8 +2,12 @@ import { keys } from '../system/f/object/Keys/f'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphSpecs } from '../types/GraphSpecs'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
 
 const ALLOWED_BUNDLE_SPEC_KEY_SET = new Set(['spec', 'specs', 'metadata'])
+const ALLOWED_UNIT_BUNDLE_SPEC_KEY_SET = new Set(['unit', 'specs', 'metadata'])
 
 const ALLOWED_SPEC_KEY_SET = new Set([
   'name',
@@ -52,11 +56,43 @@ export function validateBundleSpec(bundle: BundleSpec) {
     return false
   }
 
+  if (!validateSpecs(specs)) {
+    return false
+  }
+
+  return true
+}
+
+export function validateSpecs(specs: GraphSpecs) {
   for (const specId in specs) {
     if (!validateGraphSpec(specs[specId])) {
       return false
     }
   }
+
+  return true
+}
+
+export function validateUnitBundleSpec(bundle: UnitBundleSpec) {
+  if (!validObjectKeys(bundle, ALLOWED_UNIT_BUNDLE_SPEC_KEY_SET)) {
+    return false
+  }
+
+  const { unit, specs } = bundle
+
+  if (!validateGraphUnitSpec(unit)) {
+    return false
+  }
+
+  if (!validateSpecs(specs)) {
+    return false
+  }
+
+  return true
+}
+
+export function validateGraphUnitSpec(unit: GraphUnitSpec) {
+  // TODO
 
   return true
 }
