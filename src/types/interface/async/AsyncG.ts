@@ -76,12 +76,26 @@ function call(
   if (fork) {
     result = graph[method].call(graph, ...args, fork, bubble)
   } else {
-    const all = global.graph[graph.id]
+    const all = { ...global.graph[graph.id] }
+
+    delete all[graph.__global_id]
+
+    const spec = clone(graph.getSpec())
+
+    result = graph[method].call(graph, ...args, fork, bubble)
 
     for (const globalId in all) {
       const sibling = all[globalId] as Graph
 
-      result = sibling[method].call(sibling, ...args, fork, bubble)
+      sibling[method].call(
+        weakMerge(sibling, {
+          _spec: clone(spec),
+        }),
+        ...args,
+        fork,
+        bubble,
+        false
+      )
     }
   }
 
