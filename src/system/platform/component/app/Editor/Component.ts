@@ -22238,7 +22238,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (relatedTarget) {
         if (
           this._control._control.$element.contains(relatedTarget) &&
-          !this._control._main.$element.contains(relatedTarget)
+          (!this._control._main.$element.contains(relatedTarget) ||
+            this._subgraph_unit_id)
         ) {
           return
         }
@@ -30008,9 +30009,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._dom_enter_subgraph(animate)
 
+    graph.setProp('disabled', false)
     graph.setProp('fork', this._subgraph_fork)
-
-    graph.focus()
 
     graph.enter(
       animate,
@@ -30019,6 +30019,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       can_uncollapse,
       this._main_opacity_animation?.finished
     )
+
+    graph.focus()
 
     dispatchEvent('enterunit', {}, false)
   }
