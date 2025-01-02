@@ -7,10 +7,6 @@
           "unitId": "listen",
           "pinId": "emitter"
         },
-        "1": {
-          "unitId": "onpointerleave",
-          "pinId": "element"
-        },
         "2": {
           "unitId": "onpointerdown",
           "pinId": "element"
@@ -119,28 +115,6 @@
         "position": {
           "x": -178,
           "y": 5
-        }
-      }
-    },
-    "onpointerleave": {
-      "id": "c7dba94e-af78-11ea-b7d7-47e14ca215b5",
-      "input": {
-        "element": {
-          "metadata": {
-            "position": {
-              "x": 165,
-              "y": 31
-            }
-          }
-        }
-      },
-      "output": {
-        "event": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 116,
-          "y": 18
         }
       }
     },
@@ -303,11 +277,6 @@
       }
     },
     "2": {
-      "onpointerleave": {
-        "output": {
-          "event": true
-        }
-      },
       "listen": {
         "input": {
           "remove": true
