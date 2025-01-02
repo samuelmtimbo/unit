@@ -18395,15 +18395,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 }
               }
             } else {
-              if (this._tree_layout) {
+              if (this._resize_pointer_count > 0) {
                 //
               } else {
-                this._start_long_press_collapse(
-                  pointer_id,
-                  null,
-                  all_selected_node_ids,
-                  this._long_press_screen_position
-                )
+                if (this._tree_layout) {
+                  //
+                } else {
+                  this._start_long_press_collapse(
+                    pointer_id,
+                    null,
+                    all_selected_node_ids,
+                    this._long_press_screen_position
+                  )
+                }
               }
             }
           }
