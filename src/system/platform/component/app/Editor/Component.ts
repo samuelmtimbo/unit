@@ -22188,6 +22188,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._refresh_enabled()
 
+      this._enable_transcend()
+
       this._lock_control()
     } else {
       this._focused = true
@@ -22236,11 +22238,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { relatedTarget } = event
 
       if (relatedTarget) {
-        if (
-          this._control._control.$element.contains(relatedTarget) &&
-          (!this._control._main.$element.contains(relatedTarget) ||
-            this._subgraph_unit_id)
-        ) {
+        if (this._zoom_comp._svg.$element.contains(relatedTarget) || this._subgraph_unit_id) {
           return
         }
 
