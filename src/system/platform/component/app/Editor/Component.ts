@@ -47715,6 +47715,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 color,
               }
 
+              trait.x *= this.$context.$sx
+              trait.y *= this.$context.$sy
+
+              trait.x += this.$context.$x
+              trait.y += this.$context.$y
+
+              trait.width *= this.$context.$sx
+              trait.height *= this.$context.$sy
+
+              trait.sx *= this.$context.$sx
+              trait.sy *= this.$context.$sy
+
               return {
                 style,
                 trait,
