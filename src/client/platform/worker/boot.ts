@@ -171,6 +171,9 @@ export function workerApi(): API {
       exitPictureInPicture() {
         throw new MethodNotImplementedError()
       },
+      canSelectShadowDom: function (): boolean {
+        return false
+      },
       MutationObserver: null,
       PositionObserver: null,
       ResizeObserver: null,
