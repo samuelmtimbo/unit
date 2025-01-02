@@ -48595,187 +48595,183 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _make_spec_unit_interface = (unit: GraphUnitSpec, spec: Spec): U => {
     const interface_: U = {
-      setParent: function (parent: Unit<any, any, UnitEvents<U_EE>>) {
+      setParent: (parent: Unit<any, any, UnitEvents<U_EE>>) => {
         throw new MethodNotImplementedError()
       },
-      setInputs: function (inputs: Pins<any>, opts: PinOpts): void {
+      setInputs: (inputs: Pins<any>, opts: PinOpts): void => {
         throw new MethodNotImplementedError()
       },
-      setPinIgnored: function (type: IO, name: string, ignored: boolean): void {
+      setPinIgnored: (type: IO, name: string, ignored: boolean): void => {
         throw new MethodNotImplementedError()
       },
-      setOutputIgnored: function (name: string, ignore?: boolean): boolean {
+      setOutputIgnored: (name: string, ignore?: boolean): boolean => {
         throw new MethodNotImplementedError()
       },
-      setPinRef: function (type: IO, name: string, ref: boolean): void {
+      setPinRef: (type: IO, name: string, ref: boolean): void => {
         throw new MethodNotImplementedError()
       },
-      setInputRef: function (name: string, ref: boolean): void {
+      setInputRef: (name: string, ref: boolean): void => {
         throw new MethodNotImplementedError()
       },
-      setOutputRef: function (name: string, ref: boolean): void {
+      setOutputRef: (name: string, ref: boolean): void => {
         throw new MethodNotImplementedError()
       },
-      setInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
+      setInput: (name: string, input: Pin<any>, opt: PinOpt): void => {
         throw new MethodNotImplementedError()
       },
-      isPinConstant: function (type: IO, name: string): boolean {
+      isPinConstant: (type: IO, name: string): boolean => {
         return (
           deepGetOrDefault(unit, [type, name, 'constant'], undefined) ??
           deepGetOrDefault(spec, [`${type}s`, name, 'defaultIgnored'], false)
         )
       },
-      isPinIgnored: function (type: IO, name: string): boolean {
+      isPinIgnored: (type: IO, name: string): boolean => {
         return false
       },
-      isPinRef: function (type: IO, name: string): boolean {
+      isPinRef: (type: IO, name: string): boolean => {
         const { specs } = this.$props
 
         return isPinRef({ type, pinId: name }, spec, specs)
       },
-      addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
+      addInput: (name: string, input: Pin<any>, opt: PinOpt): void => {
         throw new MethodNotImplementedError()
       },
-      removeInput: function (name: string): void {
+      removeInput: (name: string): void => {
         throw new MethodNotImplementedError()
       },
-      setOutputs: function (outputs: Pins<any>, opts: PinOpts) {
+      setOutputs: (outputs: Pins<any>, opts: PinOpts) => {
         throw new MethodNotImplementedError()
       },
-      setOutput: function (name: string, output: Pin<any>, opt: PinOpt) {
+      setOutput: (name: string, output: Pin<any>, opt: PinOpt) => {
         throw new MethodNotImplementedError()
       },
-      addOutput: function (name: string, output: Pin<any>): void {
+      addOutput: (name: string, output: Pin<any>): void => {
         throw new MethodNotImplementedError()
       },
-      removeOutput: function (name: string): void {
+      removeOutput: (name: string): void => {
         throw new MethodNotImplementedError()
       },
-      removePin: function (type: IO, name: string) {
+      removePin: (type: IO, name: string) => {
         throw new MethodNotImplementedError()
       },
-      getPin: function (type: IO, name: string): Pin<any> {
+      getPin: (type: IO, name: string): Pin<any> => {
         throw new MethodNotImplementedError()
       },
-      getInputs: function (): Pins<any> {
+      getInputs: (): Pins<any> => {
         throw new MethodNotImplementedError()
       },
-      getDataInputs: function (): Pins<Partial<any>> {
+      getDataInputs: (): Pins<Partial<any>> => {
         throw new MethodNotImplementedError()
       },
-      getRefInputs: function (): Pins<Partial<any>> {
+      getRefInputs: (): Pins<Partial<any>> => {
         throw new MethodNotImplementedError()
       },
-      getInput: function <K>(name: K): Pin<K> {
+      getInput: <K>(name: K): Pin<K> => {
         throw new MethodNotImplementedError()
       },
-      getOutputs: function (): Pins<any> {
+      getOutputs: (): Pins<any> => {
         throw new MethodNotImplementedError()
       },
-      getDataOutputs: function (): Pins<Partial<any>> {
+      getDataOutputs: (): Pins<Partial<any>> => {
         throw new MethodNotImplementedError()
       },
-      getRefOutputs: function (): Pins<Partial<any>> {
+      getRefOutputs: (): Pins<Partial<any>> => {
         throw new MethodNotImplementedError()
       },
-      pushAllInput: function <K extends string>(data: Dict<any>): void {
+      pushAllInput: <K extends string>(data: Dict<any>): void => {
         throw new MethodNotImplementedError()
       },
-      pushAllOutput: function <K extends string>(data: Dict<any>): void {
+      pushAllOutput: <K extends string>(data: Dict<any>): void => {
         throw new MethodNotImplementedError()
       },
-      pushAll: function <K extends string>(data: Dict<any>): void {
+      pushAll: <K extends string>(data: Dict<any>): void => {
         throw new MethodNotImplementedError()
       },
-      peakAllOutput: function (): Dict<any> {
+      peakAllOutput: (): Dict<any> => {
         throw new MethodNotImplementedError()
       },
-      peakAll: function (): Dict<any> {
+      peakAll: (): Dict<any> => {
         throw new MethodNotImplementedError()
       },
-      getInputCount: function (): number {
+      getInputCount: (): number => {
         throw new MethodNotImplementedError()
       },
-      getOutputCount: function (): number {
+      getOutputCount: (): number => {
         throw new MethodNotImplementedError()
       },
-      getInputNames: function (): string[] {
+      getInputNames: (): string[] => {
         return keys(spec.inputs)
       },
-      getOutputNames: function (): string[] {
+      getOutputNames: (): string[] => {
         return keys(spec.outputs)
       },
-      setPinData: function (type: IO, name: string, data: any): void {
+      setPinData: (type: IO, name: string, data: any): void => {
         throw new MethodNotImplementedError()
       },
-      removePinData: function (type: IO, name: string): void {
+      removePinData: (type: IO, name: string): void => {
         throw new MethodNotImplementedError()
       },
-      setInputConstant: function (name: string, constant: boolean): void {
+      setInputConstant: (name: string, constant: boolean): void => {
         throw new MethodNotImplementedError()
       },
-      setOutputConstant: function (name: string, constant: boolean): void {
+      setOutputConstant: (name: string, constant: boolean): void => {
         throw new MethodNotImplementedError()
       },
-      getCatchErr: function (): boolean {
+      getCatchErr: (): boolean => {
         throw new MethodNotImplementedError()
       },
-      getConfig: function (): Opt {
+      getConfig: (): Opt => {
         throw new MethodNotImplementedError()
       },
-      reset: function (): void {
+      reset: (): void => {
         throw new MethodNotImplementedError()
       },
-      pause: function (): void {
+      pause: (): void => {
         throw new MethodNotImplementedError()
       },
-      play: function (): void {
+      play: (): void => {
         throw new MethodNotImplementedError()
       },
-      paused: function (): boolean {
+      paused: (): boolean => {
         throw new MethodNotImplementedError()
       },
-      snapshot: function (): Memory {
+      snapshot: (): Memory => {
         throw new MethodNotImplementedError()
       },
-      restore: function (state: Memory): void {
+      restore: (state: Memory): void => {
         throw new MethodNotImplementedError()
       },
-      getSelfPin: function (): Pin<U<any, any>> {
+      getSelfPin: (): Pin<U<any, any>> => {
         throw new MethodNotImplementedError()
       },
-      err: function (err?: string | Error): string {
+      err: (err?: string | Error): string => {
         throw new MethodNotImplementedError()
       },
-      hasErr: function (): boolean {
+      hasErr: (): boolean => {
         throw new MethodNotImplementedError()
       },
-      getErr: function (): string {
+      getErr: (): string => {
         throw new MethodNotImplementedError()
       },
-      takeErr: function (): string {
+      takeErr: (): string => {
         throw new MethodNotImplementedError()
       },
-      getPinsData: function (): { input: Dict<any>; output: Dict<any> } {
+      getPinsData: (): { input: Dict<any>; output: Dict<any> } => {
         throw new MethodNotImplementedError()
       },
-      getInputData: function (): Dict<any> {
+      getInputData: (): Dict<any> => {
         throw new MethodNotImplementedError()
       },
-      getRefInputData: function (): Dict<Unit<any, any, UnitEvents<U_EE>>> {
+      getRefInputData: (): Dict<Unit<any, any, UnitEvents<U_EE>>> => {
         throw new MethodNotImplementedError()
       },
-      getSpec: function (): Spec {
+      getSpec: (): Spec => {
         return spec
       },
-      getPinData: function (type: IO, name: string) {
+      getPinData: (type: IO, name: string) => {
         return undefined
       },
-      setPinConstant: function (
-        type: IO,
-        name: string,
-        constant: boolean
-      ): void {
+      setPinConstant: (type: IO, name: string, constant: boolean): void => {
         throw new MethodNotImplementedError()
       },
       getUnitBundleSpec: (): UnitBundleSpec => {
@@ -48785,110 +48781,115 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         return bundle
       },
-      setPin: function <
+      setPin: <
         T extends IO,
         K extends T extends 'input'
           ? string | number | symbol
           : string | number | symbol,
-      >(type: T, name: K, pin: Pin<any>, opt: PinOpt) {
+      >(
+        type: T,
+        name: K,
+        pin: Pin<any>,
+        opt: PinOpt
+      ) => {
         throw new MethodNotImplementedError()
       },
-      setInputIgnored: function <K extends string | number | symbol>(
+      setInputIgnored: <K extends string | number | symbol>(
         name: K,
         ignore?: boolean
-      ): boolean {
+      ): boolean => {
         throw new MethodNotImplementedError()
       },
-      getOutput: function <K extends string | number | symbol>(
-        name: K
-      ): Pin<any> {
+      getOutput: <K extends string | number | symbol>(name: K): Pin<any> => {
         throw new MethodNotImplementedError()
       },
-      push: function <K extends string | number | symbol>(
+      push: <K extends string | number | symbol>(name: K, data: any): void => {
+        throw new MethodNotImplementedError()
+      },
+      pushInput: <K extends string | number | symbol>(
         name: K,
         data: any
-      ): void {
+      ): void => {
         throw new MethodNotImplementedError()
       },
-      pushInput: function <K extends string | number | symbol>(
+      pushOutput: <K extends string | number | symbol>(
         name: K,
         data: any
-      ): void {
+      ): void => {
         throw new MethodNotImplementedError()
       },
-      pushOutput: function <K extends string | number | symbol>(
-        name: K,
-        data: any
-      ): void {
+      takeInput: <K extends string | number | symbol>(name: K) => {
         throw new MethodNotImplementedError()
       },
-      takeInput: function <K extends string | number | symbol>(name: K) {
+      takeOutput: <K extends string | number | symbol>(name: K) => {
         throw new MethodNotImplementedError()
       },
-      takeOutput: function <K extends string | number | symbol>(name: K) {
+      take: <K extends string | number | symbol>(name: K) => {
         throw new MethodNotImplementedError()
       },
-      take: function <K extends string | number | symbol>(name: K) {
+      takeAll: (): Dict<any> => {
         throw new MethodNotImplementedError()
       },
-      takeAll: function (): Dict<any> {
+      peakInput: <K extends string | number | symbol>(name: K) => {
         throw new MethodNotImplementedError()
       },
-      peakInput: function <K extends string | number | symbol>(name: K) {
+      peakOutput: <K extends string | number | symbol>(name: K) => {
         throw new MethodNotImplementedError()
       },
-      peakOutput: function <K extends string | number | symbol>(name: K) {
+      peak: <K extends string | number | symbol>(name: K) => {
         throw new MethodNotImplementedError()
       },
-      peak: function <K extends string | number | symbol>(name: K) {
-        throw new MethodNotImplementedError()
-      },
-      renamePin: function <
+      renamePin: <
         T extends IO,
         K extends T extends 'input'
           ? string | number | symbol
           : string | number | symbol,
-      >(type: T, name: K, newName: K): void {
-        throw new MethodNotImplementedError()
-      },
-      renameInput: function <K extends string | number | symbol>(
+      >(
+        type: T,
         name: K,
         newName: K
-      ): void {
+      ): void => {
         throw new MethodNotImplementedError()
       },
-      renameOutput: function (name: string, newName: string): void {
+      renameInput: <K extends string | number | symbol>(
+        name: K,
+        newName: K
+      ): void => {
         throw new MethodNotImplementedError()
       },
-      hasRefPinNamed: function <
+      renameOutput: (name: string, newName: string): void => {
+        throw new MethodNotImplementedError()
+      },
+      hasRefPinNamed: <
         T extends IO,
         K extends T extends 'input'
           ? string | number | symbol
           : string | number | symbol,
-      >(type: T, name: K): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefInputNamed: function <K extends string | number | symbol>(
+      >(
+        type: T,
         name: K
-      ): boolean {
+      ): boolean => {
         throw new MethodNotImplementedError()
       },
-      hasRefOutputNamed: function <K extends string | number | symbol>(
+      hasRefInputNamed: <K extends string | number | symbol>(
         name: K
-      ): boolean {
+      ): boolean => {
         throw new MethodNotImplementedError()
       },
-      hasPinNamed: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasInputNamed: function <K extends string | number | symbol>(
+      hasRefOutputNamed: <K extends string | number | symbol>(
         name: K
-      ): boolean {
+      ): boolean => {
         throw new MethodNotImplementedError()
       },
-      hasOutputNamed: function <K extends string | number | symbol>(
+      hasPinNamed: (type: IO, name: string): boolean => {
+        throw new MethodNotImplementedError()
+      },
+      hasInputNamed: <K extends string | number | symbol>(name: K): boolean => {
+        throw new MethodNotImplementedError()
+      },
+      hasOutputNamed: <K extends string | number | symbol>(
         name: K
-      ): boolean {
+      ): boolean => {
         throw new MethodNotImplementedError()
       },
     }
@@ -48959,12 +48960,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       coverPin: (type: IO, pinId: string, subPinId: string) => {
         return coverPin({ type, pinId, subPinId }, spec)
       },
-      setUnitPinConstant: function (
+      setUnitPinConstant: (
         unitId: string,
         type: IO,
         pinId: string,
         constant: boolean
-      ): void {
+      ): void => {
         return setUnitPinConstant({ unitId, type, pinId, constant }, spec)
       },
       coverPinSet: (type: IO, pinId: string, emit?: boolean): void => {
@@ -49025,30 +49026,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ): void => {
         return moveRoot({ parentId, childId, at, slotName }, spec.component)
       },
-      setPinData: function (type: IO, pinId: string, data: any): void {
+      setPinData: (type: IO, pinId: string, data: any): void => {
         //
       },
       getPinPlugCount: (type: IO, pinId: string): number => {
         throw new MethodNotImplementedError()
       },
-      getPinData: function (type: IO, pinId: string): any {
+      getPinData: (type: IO, pinId: string): any => {
         return undefined
       },
-      setPinConstant: function (
-        type: IO,
-        pinId: string,
-        constant: boolean
-      ): void {
+      setPinConstant: (type: IO, pinId: string, constant: boolean): void => {
         //
       },
       hasPlug: (type: IO, pinId: string, subPinId: string): boolean => {
         return hasPlug(spec, type, pinId, subPinId)
       },
-      isUnitPinRef: function (
-        unitId: string,
-        type: IO,
-        pinId: string
-      ): boolean {
+      isUnitPinRef: (unitId: string, type: IO, pinId: string): boolean => {
         throw new MethodNotImplementedError()
       },
       getExposedPinSpecs: (): IOOf<GraphPinsSpec> => {
@@ -49062,14 +49055,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       getExposedPinSpec: (type: IO, pinId: string): GraphPinSpec => {
         return getPinSpec(spec, type, pinId)
       },
-      removePinOrMerge: function (
+      removePinOrMerge: (
         mergeId: string,
         unitId: string,
         type: IO,
         pinId: string,
         emit?: boolean,
         propagate?: boolean
-      ): void {
+      ): void => {
         throw new MethodNotImplementedError()
       },
       isPinConstant: (type: IO, name: string): boolean => {
@@ -49104,29 +49097,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       setUnitSize: (unitId: string, width: number, height: number): void => {
         return setUnitSize({ unitId, width, height }, spec)
       },
-      setSubComponentSize: function (
+      setSubComponentSize: (
         unitId: string,
         width: number,
         height: number
-      ): void {
+      ): void => {
         throw new MethodNotImplementedError()
       },
-      isUnitPinConstant: function (
-        unitId: string,
-        type: IO,
-        pinId: string
-      ): boolean {
+      isUnitPinConstant: (unitId: string, type: IO, pinId: string): boolean => {
         throw new MethodNotImplementedError()
       },
-      removeUnitPinData: function (
+      removeUnitPinData: (
         unitId: string,
         type: IO,
         pinId: string,
         ...extra: any[]
-      ) {
+      ) => {
         throw new MethodNotImplementedError()
       },
-      setSlot: function (slotName: string, subComponentId: string): void {
+      setSlot: (slotName: string, subComponentId: string): void => {
         //
       },
     }
