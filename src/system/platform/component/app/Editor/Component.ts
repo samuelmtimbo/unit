@@ -27286,15 +27286,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           i = (i + 1) % base.length
 
+          const x =
+            (-this.$context.$x -
+              frame.$$context.$x * (this._zoom.z - 1) +
+              leaf_trait.x * this._zoom.z) /
+            this.$context.$sx
+
+          const y =
+            (-this.$context.$y -
+              frame.$$context.$y * (this._zoom.z - 1) +
+              leaf_trait.y * this._zoom.z) /
+            this.$context.$sy
+
           return {
-            x:
-              -frame.$$context.$x * (this._zoom.z - 1) +
-              leaf_trait.x * this._zoom.z,
-            y:
-              -frame.$$context.$y * (this._zoom.z - 1) +
-              leaf_trait.y * this._zoom.z,
-            width: leaf_trait.width,
-            height: leaf_trait.height,
+            x,
+            y,
+            width: leaf_trait.width / this.$context.$sx,
+            height: leaf_trait.height / this.$context.$sy,
             sx: leaf_trait.sx,
             sy: leaf_trait.sy,
             opacity: leaf_trait.opacity,
@@ -29942,6 +29950,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             leaf_trait.x -= this.$context.$x
             leaf_trait.y -= this.$context.$y
 
+            leaf_trait.x /= this.$context.$sx
+            leaf_trait.y /= this.$context.$sy
+
+            leaf_trait.width /= this.$context.$sx
+            leaf_trait.height /= this.$context.$sy
+
             base_node.push(leaf_trait)
           }
 
@@ -30233,11 +30247,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             i = (i + 1) % base_length
 
+            const x = (-this.$context.$x + trait.x) / this.$context.$sx
+            const y = (-this.$context.$y + trait.y) / this.$context.$sy
+
             return {
-              x: -this.$context.$x + trait.x,
-              y: -this.$context.$y + trait.y,
-              width: trait.width,
-              height: trait.height,
+              x,
+              y,
+              width: trait.width / this.$context.$sx,
+              height: trait.height / this.$context.$sy,
               sx: trait.sx,
               sy: trait.sy,
               opacity: trait.opacity,
@@ -30340,13 +30357,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return all_sub_component_trait
   }
 
-  public _get_all_sub_component_base_trait = () => {
+  public _get_all_sub_component_base_trait = (): {
+    sub_base: LayoutBase
+    sub_base_node: LayoutNode[]
+  } => {
     const base = this._component.getBase()
 
     return this._get_base_trait(base)
   }
 
-  public leave = (all_sub_component_base_trait?): void => {
+  public leave = (all_sub_component_base_trait?: {
+    sub_base: LayoutBase
+    sub_base_node: LayoutNode[]
+  }): void => {
     // console.log('Graph', 'leave', all_sub_component_base_trait)
 
     const { animate } = this._config()
@@ -30379,6 +30402,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         all_sub_component_base_trait =
           all_sub_component_base_trait ||
           this._get_all_sub_component_base_trait()
+
+        for (
+          let i = 0;
+          i < all_sub_component_base_trait.sub_base_node.length;
+          i++
+        ) {
+          const leaf_trait = all_sub_component_base_trait.sub_base_node[i]
+
+          leaf_trait.x /= this.$context.$sx
+          leaf_trait.y /= this.$context.$sy
+
+          leaf_trait.width /= this.$context.$sx
+          leaf_trait.height /= this.$context.$sy
+        }
 
         for (const sub_component_id in this._component.$subComponent) {
           if (this._animating_sub_component_base_id.has(sub_component_id)) {
