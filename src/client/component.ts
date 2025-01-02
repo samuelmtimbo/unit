@@ -1447,7 +1447,9 @@ export class Component<
       ) {
         const styleColor = this.$element.style.color
 
-        if (styleColor) {
+        if (styleColor === 'currentcolor') {
+          return defaultColor()
+        } if (styleColor) {
           const hex = colorToHex(styleColor)
 
           return (hex && hexToRgba(hex)) || defaultColor()
