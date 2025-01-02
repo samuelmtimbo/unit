@@ -46678,13 +46678,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     _event.preventDefault()
 
-    const { $x: x, $y: y, $width: width, $height: height } = this.$context
+    const {
+      $x: x,
+      $y: y,
+      $width: width,
+      $height: height,
+      $sx,
+      $sy,
+    } = this.$context
 
     if (
       screenX >= x &&
       screenY >= y &&
-      screenX <= x + width &&
-      screenY <= y + height
+      screenX <= x + width * $sx &&
+      screenY <= y + height * $sy
     ) {
       this._zoom_in(deltaY, clientX, clientY)
     }
