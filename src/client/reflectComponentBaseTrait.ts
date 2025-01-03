@@ -3,6 +3,7 @@ import { Dict } from '../types/Dict'
 import { LayoutNode } from './LayoutNode'
 import { Component } from './component'
 import { joinPath } from './component/app/graph/joinLeafPath'
+import { extractTrait } from './extractTrait'
 import { LayoutBase } from './layout'
 import { rawExtractStyle } from './rawExtractStyle'
 
@@ -165,6 +166,7 @@ export const reflectComponentBaseTrait = (
   const {
     api: {
       layout: { reflectChildrenTrait },
+      text: { measureText }
     },
   } = root.$system
 
@@ -357,7 +359,15 @@ export const reflectComponentBaseTrait = (
       []
     )
 
-    const slot_trait: LayoutNode = all_leaf_trait[slot_id] || trait
+    let slot_trait: LayoutNode = all_leaf_trait[slot_id]
+
+    if (!slot_trait) {
+      const slot_path = slot_id.split('/')
+
+      const slot = component.pathGetSubComponent(slot_path)
+
+      slot_trait = extractTrait(slot, measureText)
+    }
 
     const slot_base_trait = reflectChildrenTrait(
       slot_trait,
