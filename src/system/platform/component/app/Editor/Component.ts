@@ -2493,7 +2493,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _leaf_frame_layer: Dict<Component<HTMLElement>> = {}
   private _leaf_frame_node: Dict<LayoutNode> = {}
 
-  private _layout_parent_children_animation_frame: Dict<number> = {}
+  private _layout_parent_children_animation_frame: Dict<Dict<number>> = {}
 
   private _layout_parent_animation: Dict<number> = {}
 
@@ -22238,7 +22238,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { relatedTarget } = event
 
       if (relatedTarget) {
-        if (this._zoom_comp._svg.$element.contains(relatedTarget) || this._subgraph_unit_id) {
+        if (
+          this._zoom_comp._svg.$element.contains(relatedTarget) ||
+          this._subgraph_unit_id
+        ) {
           return
         }
 
@@ -32394,8 +32397,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const sub_component_id in {
       ...this._layout_parent_children_animation_frame,
     }) {
-      // console.log('_cancel_all_layout_parent_children_animation', slot_name)
-      this._cancel_layout_parent_children_animation(sub_component_id)
+      // console.log('_cancel_all_layout_parent_children_animation')
+      for (const slot_name in {
+        ...this._layout_parent_children_animation_frame[sub_component_id],
+      }) {
+        this._cancel_layout_parent_children_animation(
+          sub_component_id,
+          slot_name
+        )
+      }
     }
   }
 
@@ -32420,20 +32430,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _cancel_layout_parent_children_animation = (
     parent_id: string,
-    slot_name: string = 'default' // TODO
+    slot_name: string
   ): void => {
     if (this._layout_parent_children_animation_frame[parent_id] !== undefined) {
-      // console.log(
-      //   'Graph',
-      //   '_cancel_layout_parent_children_animation',
-      //   parent_id
-      // )
+      if (
+        this._layout_parent_children_animation_frame[parent_id][slot_name] !==
+        undefined
+      ) {
+        // console.log(
+        //   'Graph',
+        //   '_cancel_layout_parent_children_animation',
+        //   parent_id,
+        //   slot_name
+        // )
 
-      cancelAnimationFrame(
-        this._layout_parent_children_animation_frame[parent_id]
-      )
+        cancelAnimationFrame(
+          this._layout_parent_children_animation_frame[parent_id][slot_name]
+        )
 
-      delete this._layout_parent_children_animation_frame[parent_id]
+        delete this._layout_parent_children_animation_frame[parent_id][
+          slot_name
+        ]
+      }
     }
   }
 
@@ -32442,10 +32460,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     slot_name: string,
     frame: () => void
   ): void => {
-    // console.log('Graph', '_start_layout_children_animation', parent_id)
+    // console.log(
+    //   'Graph',
+    //   '_start_layout_children_animation',
+    //   parent_id,
+    //   slot_name
+    // )
 
-    this._layout_parent_children_animation_frame[parent_id] =
+    deepSet(
+      this._layout_parent_children_animation_frame,
+      [parent_id, slot_name],
       requestAnimationFrame(frame)
+    )
   }
 
   private _animate_layout_append_children = (
@@ -32543,7 +32569,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     frame()
 
     return () => {
-      this._cancel_layout_parent_children_animation(parent_id)
+      this._cancel_layout_parent_children_animation(parent_id, slot_name)
     }
   }
 
