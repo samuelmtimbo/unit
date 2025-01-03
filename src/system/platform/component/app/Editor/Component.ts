@@ -5326,7 +5326,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const unit_spec = this._get_unit_spec(unitId)
 
-    return isPinRef({ type, pinId }, unit_spec, specs)
+    return isPinRef({ type, pinId }, unit_spec, specs, new Set())
   }
 
   private __get_link_pin_ref = (
@@ -48657,7 +48657,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       isPinRef: (type: IO, name: string): boolean => {
         const { specs } = this.$props
 
-        return isPinRef({ type, pinId: name }, spec, specs)
+        return isPinRef({ type, pinId: name }, spec, specs, new Set())
       },
       addInput: (name: string, input: Pin<any>, opt: PinOpt): void => {
         throw new MethodNotImplementedError()
@@ -52273,7 +52273,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       isPinRef: (type: IO, pinId: string): boolean => {
         const { specs } = this.$props
 
-        return isPinRef({ type, pinId }, spec, specs)
+        return isPinRef({ type, pinId }, spec, specs, new Set())
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
@@ -52585,7 +52585,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       isPinRef: (type: IO, name: string): boolean => {
         const { specs } = this.$props
 
-        return isPinRef({ type, pinId: name }, spec, specs)
+        return isPinRef({ type, pinId: name }, spec, specs, new Set())
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
@@ -58175,7 +58175,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const next_spec = clone(spec)
 
-      const ref = isPinSpecRef(specs, next_spec, type, pinSpec)
+      const ref = isPinSpecRef(specs, next_spec, type, pinSpec, new Set())
 
       exposePinSet({ type, pinId, pinSpec: clone(pinSpec) }, next_spec)
 
@@ -58916,8 +58916,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const prev_pin_spec = getPinSpec(spec, type, pinId)
 
-      const was_ref = isPinSpecRef(specs, spec, type, prev_pin_spec)
-      const ref = isSubPinSpecRef(specs, spec, type, subPinSpec)
+      const was_ref = isPinSpecRef(specs, spec, type, prev_pin_spec, new Set())
+      const ref = isSubPinSpecRef(specs, spec, type, subPinSpec, new Set())
 
       const setPinRef = () => {
         setPinSetRef({ type, pinId, ref }, next_unit_spec)
@@ -58989,8 +58989,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const sub_pin_spec = getSubPinSpec(spec, type, pinId, subPinId)
       const pinSpec = getPinSpec(next_unit_spec, type, pinId)
 
-      const was_ref = isSubPinSpecRef(specs, spec, type, sub_pin_spec)
-      const ref = isPinSpecRef(specs, spec, type, pinSpec)
+      const was_ref = isSubPinSpecRef(specs, spec, type, sub_pin_spec, new Set())
+      const ref = isPinSpecRef(specs, spec, type, pinSpec, new Set())
 
       const commit = () => {
         setPinSetRef({ type, pinId, ref }, next_unit_spec)
