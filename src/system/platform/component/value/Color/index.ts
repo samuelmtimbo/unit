@@ -24,7 +24,7 @@ export default class Color extends Field<'value', I, O> {
     )
 
     this._defaultState = {
-      value: '#000000',
+      value: system.color,
     }
   }
 }
