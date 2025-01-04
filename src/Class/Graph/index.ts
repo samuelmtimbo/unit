@@ -3723,10 +3723,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         }
 
         if (
-          path.length > 0 ||
           this._destroying ||
           (this._removingUnit && this._removingUnit.has(unitId))
         ) {
+          return
+        }
+
+        if (path.length > 0) {
           bubble()
 
           return
