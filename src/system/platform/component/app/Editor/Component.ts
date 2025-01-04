@@ -58989,7 +58989,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const sub_pin_spec = getSubPinSpec(spec, type, pinId, subPinId)
       const pinSpec = getPinSpec(next_unit_spec, type, pinId)
 
-      const was_ref = isSubPinSpecRef(specs, spec, type, sub_pin_spec, new Set())
+      const was_ref = isSubPinSpecRef(
+        specs,
+        spec,
+        type,
+        sub_pin_spec,
+        new Set()
+      )
       const ref = isPinSpecRef(specs, spec, type, pinSpec, new Set())
 
       const commit = () => {
@@ -60144,6 +60150,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const unit_spec = clone(findSpecAtPath(specs, this._spec, path))
 
       removeUnit({ unitId }, unit_spec)
+
+      if (isComponentSpec(unit_spec)) {
+        removeSubComponent({ unitId }, unit_spec.component)
+        removeSubComponentFromParent(
+          { subComponentId: unitId },
+          unit_spec.component
+        )
+      }
 
       setSpec(unit_spec.id, unit_spec)
     }

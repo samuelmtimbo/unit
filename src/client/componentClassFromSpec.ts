@@ -5,6 +5,7 @@ import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
 import { $Component } from '../types/interface/async/$Component'
 import { $Graph } from '../types/interface/async/$Graph'
+import { clone } from '../util/clone'
 import { weakMerge } from '../weakMerge'
 import { IOElement } from './IOElement'
 import { Component } from './component'
@@ -26,7 +27,7 @@ export function componentClassFromSpec<
     name,
     units = {},
     component = { defaultWidth: 120, defaultHeight: 120 },
-  } = spec
+  } = clone(spec)
 
   const { children = [], subComponents = {}, slots = [] } = component
 
