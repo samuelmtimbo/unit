@@ -34,7 +34,7 @@ import { RGBA, colorToHex, hexToRgba } from './color'
 import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_PROPERTY_DELTA_PAIRS'
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
-import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
+import { Context, dispatchCustomEvent } from './context'
 import { makeCustomListener } from './event/custom'
 import { readDataTransferItemAsText } from './event/drag'
 import { extractTrait } from './extractTrait'
@@ -278,12 +278,6 @@ export class Component<
       nextTick(() => {
         delete events[id]
       })
-    }
-  }
-
-  dispatchContextEvent(type: string, data: any = {}) {
-    if (this._$context) {
-      dispatchContextEvent(this._$context, type, data)
     }
   }
 

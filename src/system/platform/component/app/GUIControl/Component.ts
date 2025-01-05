@@ -29,7 +29,6 @@ import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { rangeArray } from '../../../../../util/array'
 import { callAll } from '../../../../../util/call/callAll'
-import { uuid } from '../../../../../util/id'
 import clamp from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
@@ -197,8 +196,6 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
 
           this.dispatchEvent('dock-leave', {})
         }
-      } else {
-        this.dispatchContextEvent('_control_back', false)
       }
 
       this.dispatchEvent('collapse')
@@ -388,14 +385,6 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     const reset_dim = () => {
       if (this._collapsed) {
         const on_active = (): void => {
-          const message_id = uuid()
-
-          this._message_id[message_id] = true
-
-          this.dispatchContextEvent('_control_foreground', {
-            message_id,
-          })
-
           this._set_z_index(MAX_Z_INDEX)
 
           if (!this._collapsed) {
@@ -749,8 +738,6 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
 
   private _z_index: number = MAX_Z_INDEX
 
-  private _message_id: Dict<boolean> = {}
-
   private _clamp_x_y = () => {
     const { $width, $height } = this.$context
 
@@ -795,13 +782,6 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
         })
 
         this._refresh_dock()
-      }),
-      makeCustomListener('_control_foreground', ({ message_id }) => {
-        if (!this._message_id[message_id]) {
-          this._set_z_index(this._z_index - 1)
-        } else {
-          delete this._message_id[message_id]
-        }
       }),
     ])
 
