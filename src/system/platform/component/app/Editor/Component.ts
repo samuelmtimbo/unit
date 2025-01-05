@@ -5334,9 +5334,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     type: IO,
     pin_id: string
   ): boolean | undefined => {
-    const pin_spec: PinSpec = this.__get_unit_pin_spec(unit_id, type, pin_id)
+    const { specs } = this.$props
 
-    const { ref } = pin_spec
+    const unit_spec = this._get_unit_spec(unit_id)
+
+    const ref = isPinRef({ type, pinId: pin_id }, unit_spec, specs, new Set())
 
     return ref
   }
@@ -10090,15 +10092,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { inputs: swap_inputs = {}, outputs: swap_outputs = {} } =
       new_unit_spec
 
-    const filterObjRef = (obj: Dict<{ ref?: boolean }>, _ref: boolean) => {
-      return filterObj(obj, ({ ref }) => !!ref === _ref)
+    const filterObjRef = (
+      type: IO,
+      obj: Dict<{ ref?: boolean }>,
+      _ref: boolean
+    ) => {
+      return filterObj(obj, ({}, pinId: string) => {
+        const pin_node_id = getPinNodeId(unit_id, type, pinId)
+
+        const ref = this._is_link_pin_ref(pin_node_id)
+
+        return !!ref === _ref
+      })
     }
 
-    const swap_data_inputs = filterObjRef(clone(swap_inputs), false)
-    const swap_ref_inputs = filterObjRef(clone(swap_inputs), true)
+    const swap_data_inputs = filterObjRef('input', clone(swap_inputs), false)
+    const swap_ref_inputs = filterObjRef('input', clone(swap_inputs), true)
 
-    const swap_data_outputs = filterObjRef(clone(swap_outputs), false)
-    const swap_ref_outputs = filterObjRef(clone(swap_outputs), true)
+    const swap_data_outputs = filterObjRef('output', clone(swap_outputs), false)
+    const swap_ref_outputs = filterObjRef('output', clone(swap_outputs), true)
 
     const swap_input_data_ids = keys(swap_data_inputs)
     const swap_input_ref_ids = keys(swap_ref_inputs)
