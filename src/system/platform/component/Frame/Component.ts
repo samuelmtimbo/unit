@@ -1,5 +1,5 @@
 import { addListeners } from '../../../../client/addListener'
-import { Component } from '../../../../client/component'
+import { Component, defaultFocusLookup } from '../../../../client/component'
 import {
   Context,
   disableContext,
@@ -95,13 +95,7 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
     })
 
     this.$element.addEventListener('focus', () => {
-      if (this.$element.childNodes.length > 0) {
-        if ((this.$element.childNodes.item(0) as HTMLElement).focus) {
-          ;(this.$element.childNodes.item(0) as HTMLElement).focus()
-        }
-
-        return
-      }
+      defaultFocusLookup(this)
     })
 
     if (className !== undefined) {

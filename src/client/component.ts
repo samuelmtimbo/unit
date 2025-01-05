@@ -90,6 +90,23 @@ const $childToComponent = (
   return component
 }
 
+export const defaultFocusLookup = (
+  component: Component,
+  options: FocusOptions | undefined = { preventScroll: true }
+): void => {
+  if (component.$root.length > 0) {
+    component.$root[0].focus(options)
+  }
+
+  if (component.$parentRoot.length > 0) {
+    component.$parentRoot[0].focus(options)
+  }
+
+  if (component.$children.length > 0) {
+    component.$children[0].focus(options)
+  }
+}
+
 export class Component<
   E extends IOElement = any,
   P extends Dict<any> = Dict<any>,
@@ -1199,9 +1216,7 @@ export class Component<
       if (this.$primitive) {
         this.$element.focus(options)
       } else {
-        if (this.$root.length > 0) {
-          this.$root[0].focus(options)
-        }
+        defaultFocusLookup(this, options)
       }
     } else {
       this.$slot['default'].focus(options)
