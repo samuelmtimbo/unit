@@ -44,6 +44,12 @@ export default class Fetch extends Functional<I, O> {
     } = this.__system
 
     try {
+      const { method = 'GET' } = opt
+
+      if (method === 'GET' || method === 'HEAD') {
+        delete opt.body
+      }
+
       fetch(url, opt, servers)
         .then((response) => {
           const {
