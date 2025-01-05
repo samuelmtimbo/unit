@@ -4,7 +4,6 @@ import { Done } from '../../../../Class/Functional/Done'
 import { Holder } from '../../../../Class/Holder'
 import { RemotePort } from '../../../../RemotePort'
 import { EXEC, INIT, TERMINATE } from '../../../../constant/STRING'
-import { proxyWrap } from '../../../../proxyWrap'
 import { System } from '../../../../system'
 import { Port } from '../../../../types/global/Port'
 import { UCGEE } from '../../../../types/interface/UCGEE'
@@ -88,12 +87,8 @@ export default class Remote extends Holder<I, O> {
               send: (data) => {
                 this._output.message.push(data)
               },
-              onmessage(data: any) {
-                // TODO
-              },
-              onerror() {
-                // TODO
-              },
+              onmessage(data: any) {},
+              onerror() {},
             }
 
             this._port = port
@@ -102,10 +97,7 @@ export default class Remote extends Holder<I, O> {
 
             this._remote_port = remote_port
 
-            const $graph: $Graph = proxyWrap(
-              AsyncWorker(remote_port, UCGEE),
-              UCGEE
-            )
+            const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
 
             const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 

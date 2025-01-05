@@ -166,7 +166,7 @@ export const reflectComponentBaseTrait = (
   const {
     api: {
       layout: { reflectChildrenTrait },
-      text: { measureText }
+      text: { measureText },
     },
   } = root.$system
 

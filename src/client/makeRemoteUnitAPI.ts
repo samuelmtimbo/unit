@@ -1,3 +1,4 @@
+import { Async } from '../types/interface/async/Async'
 import { ASYNC } from '../types/interface/async/wrapper'
 import { RemoteAPI } from './RemoteAPI'
 import { METHOD, METHOD_TYPES } from './method'
@@ -33,7 +34,7 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
               remoteApi[type][$methodName] = (...args) => {
                 let result = $unit[$methodName](...args)
 
-                result = makeRemoteUnitAPI(result, result.__)
+                result = makeRemoteObjectAPI(result, result.__)
 
                 return result
               }
@@ -53,7 +54,13 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
   return _ref
 }
 
-export function makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
+export function makeRemoteObjectAPI(obj: any, _: string[]): RemoteAPI {
+  const $unit = Async(obj, _, ASYNC)
+
+  return $makeRemoteObjectAPI($unit, _)
+}
+
+export function $makeRemoteObjectAPI($obj: any, _: string[]): RemoteAPI {
   const api: RemoteAPI = {
     get: {},
     call: {},
@@ -63,15 +70,12 @@ export function makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
 
   for (const __ of _) {
     const method = METHOD[__]
-    const async_ = ASYNC[__]
-
-    const $unit = async_(unit)
 
     for (const type of METHOD_TYPES) {
       for (const name of method[type]) {
         const $name = `$${name}`
 
-        api[type] = { ...api[type], [$name]: $unit[$name] }
+        api[type] = { ...api[type], [$name]: $obj[$name] }
       }
     }
   }

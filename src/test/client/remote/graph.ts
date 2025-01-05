@@ -1,6 +1,6 @@
 import { Graph } from '../../../Class/Graph'
 import { RemoteRef } from '../../../client/RemoteRef'
-import { makeRemoteUnitAPI } from '../../../client/makeRemoteUnitAPI'
+import { makeRemoteObjectAPI } from '../../../client/makeRemoteUnitAPI'
 import { INIT } from '../../../constant/STRING'
 import { ID_IDENTITY, ID_RANDOM_COLOR_BOX } from '../../../system/_ids'
 import Remote from '../../../system/f/meta/RemoteGraph'
@@ -13,7 +13,7 @@ const post = (data) => {
   remote.pushInput('message', data)
 }
 
-const api = makeRemoteUnitAPI(graph, ['U', 'G', 'C'])
+const api = makeRemoteObjectAPI(graph, ['U', 'G', 'C'])
 
 const ref = new RemoteRef(api, post)
 
