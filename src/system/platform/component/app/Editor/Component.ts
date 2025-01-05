@@ -58367,6 +58367,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (path.length === 0) {
       this._spec.id = spec.id
+
+      delete this._spec.system
     }
   }
 
