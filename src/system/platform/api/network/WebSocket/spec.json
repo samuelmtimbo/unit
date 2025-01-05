@@ -12,7 +12,8 @@
   "outputs": {
     "channel": {
       "type": "`CH`",
-      "ref": true
+      "ref": true,
+      "icon": "mail"
     }
   },
   "metadata": {
