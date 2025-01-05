@@ -57441,6 +57441,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_on_simulation_end')
 
     this._simulation_end = true
+
+    this.dispatchEvent('simulationend')
   }
 
   private _get_layout_node_anchor_id = (node_id: string): string => {
