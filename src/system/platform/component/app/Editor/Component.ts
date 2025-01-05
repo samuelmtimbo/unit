@@ -36854,6 +36854,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const is_pin_link_ref = this._is_link_pin_ref(pin_node_id)
     const is_pin_output_ref = is_output && is_pin_link_ref
     const is_pin_output_self = pinId === SELF
+    const is_pin_input_ref = is_input && is_pin_link_ref
 
     const opposite_type = opposite(type)
 
@@ -37158,6 +37159,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         1.75
       )
 
+      if (datum_node_id) {
+        const datum_link_id = getLinkId(datum_node_id, pin_node_id)
+
+        this._sim_change_link_target(datum_link_id, merge_ref_output_id)
+      }
+
       this._refresh_pin_anchor_marker(pin_node_id)
     } else {
       this._sim_change_link_node(pin_link_id, merge_node_id, input)
@@ -37166,8 +37173,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const datum_link_id = getLinkId(datum_node_id, pin_node_id)
 
         this._sim_change_link_target(datum_link_id, merge_node_id)
-
-        this._refresh_datum_visible(datum_node_id)
       }
     }
 
@@ -37177,6 +37182,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else {
         this._inc_merge_output_active(merge_node_id)
       }
+
+      this._refresh_datum_visible(datum_node_id)
     }
 
     this._show_link_text(pin_link_id)
