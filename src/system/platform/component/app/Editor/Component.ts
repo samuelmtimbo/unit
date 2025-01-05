@@ -28365,7 +28365,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _turn_class_literal_into_unit = (datum_node_id: string): string => {
-    const { specs, injectSpecs } = this.$props
+    const { specs, parent, injectSpecs } = this.$props
 
     const { classes } = this.$system
 
@@ -28396,6 +28396,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._remove_datum(datum_node_id)
 
     const new_unit_id = this._new_unit_id(spec_id)
+
+    if (parent) {
+      this._register_unit(unit.id, true)
+    }
 
     this._add_unit(
       new_unit_id,
