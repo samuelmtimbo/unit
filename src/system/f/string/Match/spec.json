@@ -9,8 +9,12 @@
     }
   },
   "outputs": {
-    "match": {
-      "type": "string[]&object"
+    "results": {
+      "type": "string[]"
+    },
+    "meta": {
+      "type": "{index:number,input:string,groups:string{}}",
+      "defaultIgnored": true
     }
   },
   "metadata": {

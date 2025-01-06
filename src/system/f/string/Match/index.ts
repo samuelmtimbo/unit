@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 import { ID_MATCH } from '../../../_ids'
 
 export interface I {
@@ -8,7 +9,12 @@ export interface I {
 }
 
 export interface O {
-  match: string
+  results: string[]
+  meta: {
+    index: number
+    groups: Dict<string>
+    input: string
+  }
 }
 
 export default class Match extends Functional<I, O> {
@@ -16,7 +22,7 @@ export default class Match extends Functional<I, O> {
     super(
       {
         i: ['str', 'regex'],
-        o: ['match'],
+        o: ['results', 'meta'],
       },
       {},
       system,
@@ -25,6 +31,29 @@ export default class Match extends Functional<I, O> {
   }
 
   f({ str, regex }: I, done): void {
-    done({ match: str.match(regex) })
+    const results = str.match(new RegExp(regex))
+
+    if (!results) {
+      done({
+        results: [],
+        meta: {
+          index: -1,
+          groups: {},
+          input: str,
+        },
+      })
+
+      return
+    }
+
+    const { index, groups = {}, input } = results
+
+    const meta = {
+      index,
+      groups,
+      input,
+    }
+
+    done({ results, meta })
   }
 }

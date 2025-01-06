@@ -16,7 +16,7 @@ export function stringify(value: any, deref: boolean = false): string | null {
       } else if (Array.isArray(value)) {
         return `[${value.map((v) => stringify(v, deref)).join(',')}]`
       } else {
-        if (value.constructor.name === 'Object') {
+        if (!value.constructor || value.constructor.name === 'Object') {
           return `{${Object.entries(value)
             .filter(([key, value]) => {
               return value !== undefined
