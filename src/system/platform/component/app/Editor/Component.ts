@@ -22209,6 +22209,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._refresh_enabled()
       this._refresh_control()
 
+      this._enable_transcend()
+
       this._show_transcend(true)
     }
   }
@@ -22252,6 +22254,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (relatedTarget) {
         if (
           this._zoom_comp._svg.$element.contains(relatedTarget) ||
+          (this._control._control.$element.contains(relatedTarget) &&
+            !this._control._main.$element.contains(relatedTarget)) ||
           this._subgraph_unit_id
         ) {
           return
