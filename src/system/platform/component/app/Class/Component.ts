@@ -85,6 +85,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot['default'] = svg
+    this.$unbundled = false
 
     this.setSubComponents({
       svg,
