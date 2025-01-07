@@ -18,6 +18,7 @@ import { System } from '../../../../../system'
 import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IO } from '../../../../../types/IO'
+import { ID_EMPTY } from '../../../../_ids'
 import { keys } from '../../../../f/object/Keys/f'
 import Icon from '../../../component/Icon/Component'
 import SVGCircle from '../../svg/Circle/Component'
@@ -47,7 +48,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { id, attr, className } = $props
+    const { id = ID_EMPTY, attr, className } = $props
 
     const { width, height } = this._size()
 
@@ -119,7 +120,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
 
   private _r = (): number => {
     const { classes } = this.$system
-    const { specs = this.$system.specs, id } = this.$props
+    const { specs = this.$system.specs, id = ID_EMPTY } = this.$props
 
     const r = getSpecRadius(specs, classes, id) - 1.5
 
