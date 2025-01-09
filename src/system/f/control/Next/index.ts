@@ -44,7 +44,10 @@ export default class Next<T> extends Primitive<I<T>, O<T>> {
 
     if (name === 'init') {
       this._current = data as T
-      this._output.current.push(data)
+
+      nextTick(() => {
+        this._output.current.push(data)
+      })
     } else if (name === 'next') {
       this._current = data
       this._next = true
