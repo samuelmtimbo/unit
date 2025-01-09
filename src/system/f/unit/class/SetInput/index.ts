@@ -52,15 +52,15 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    const cloneBundle = clone(__bundle)
+    const bundleClone = clone(__bundle)
 
     deepSet_(
-      cloneBundle,
+      bundleClone,
       ['unit', 'input', name, 'data'],
       evaluateData(data, specs, this.__system.classes)
     )
 
-    const NewBundle = fromUnitBundle(cloneBundle, specs, this.__system.classes)
+    const NewBundle = fromUnitBundle(bundleClone, specs, this.__system.classes)
 
     done({ unit: NewBundle })
   }

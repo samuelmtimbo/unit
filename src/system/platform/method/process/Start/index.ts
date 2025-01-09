@@ -62,7 +62,8 @@ export default class Start extends Holder<I, O> {
 
     const bundle = bundleSpec(
       spec,
-      weakMerge(__bundle.specs, this.__system.specs)
+      weakMerge(__bundle.specs, this.__system.specs),
+      false
     )
 
     const $graph = system.$start({ bundle, _: UCGEE })

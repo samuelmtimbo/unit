@@ -1,4 +1,4 @@
-import { Unit } from '../Class/Unit'
+import { SnapshotOpt, Unit } from '../Class/Unit'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { $clone } from '../util/$clone'
@@ -6,11 +6,11 @@ import { fromUnitBundle } from './fromUnitBundle'
 
 export function cloneUnit<T extends Unit>(
   unit: T,
-  deep: boolean = false
+  opt: SnapshotOpt
 ): [T, UnitBundleSpec] {
   const { __system } = unit
 
-  const [NewBundle, bundle] = cloneUnitClass(unit, deep)
+  const [NewBundle, bundle] = cloneUnitClass(unit, opt)
 
   const newUnit = new NewBundle(__system, false)
 
@@ -19,13 +19,13 @@ export function cloneUnit<T extends Unit>(
 
 export function cloneUnitClass<T extends Unit>(
   unit: T,
-  deep: boolean = false
+  opt: SnapshotOpt = { deep: false }
 ): [UnitBundle<T>, UnitBundleSpec] {
   const { __system } = unit
 
   const { specs } = __system
 
-  const bundle_ = unit.getUnitBundleSpec(deep)
+  const bundle_ = unit.getUnitBundleSpec(opt)
 
   const bundle = $clone(bundle_)
 

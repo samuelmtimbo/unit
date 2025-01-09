@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Element_ } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
+import { SnapshotOpt } from '../../../../../Class/Unit'
 import { emptySpec, newSpecId } from '../../../../../client/spec'
 import { Zoom } from '../../../../../client/zoom'
 import { fromBundle } from '../../../../../spec/fromBundle'
@@ -167,8 +168,8 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     // console.log('Editor', 'onRefOutputData', name, data)
   }
 
-  public snapshotSelf(): Dict<any> {
-    const bundle = this._fallback_graph.getUnitBundleSpec()
+  public snapshotSelf(opt: SnapshotOpt = {}): Dict<any> {
+    const bundle = this._fallback_graph.getUnitBundleSpec(opt)
 
     return {
       ...super.snapshotSelf(),

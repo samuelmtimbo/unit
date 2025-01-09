@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { SnapshotOpt } from '../../../../Class/Unit'
 import { System } from '../../../../system'
 import { BundleSpec } from '../../../../types/BundleSpec'
 import { $U } from '../../../../types/interface/async/$U'
@@ -9,9 +10,7 @@ import { ID_BUNDLE_0 } from '../../../_ids'
 
 export interface I<T> {
   unit: $U
-  opt: {
-    snapshot?: boolean
-  }
+  opt: SnapshotOpt
 }
 
 export interface O<T> {
@@ -40,9 +39,7 @@ export default class Bundle0<T> extends Functional<I<T>, O<T>> {
   f({ unit, opt }: I<T>, done: Done<O<T>>): void {
     unit = Async(unit, ['U'], this.__system.async)
 
-    const { snapshot = false } = opt
-
-    unit.$getUnitBundleSpec({ deep: snapshot }, (bundle) => {
+    unit.$getUnitBundleSpec(opt, (bundle) => {
       bundle = clone(bundle)
 
       done({

@@ -1,7 +1,7 @@
 import { GraphPinsSpec, GraphSubPinSpec } from '..'
 import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
 import Merge from '../../Class/Merge'
-import { Unit } from '../../Class/Unit'
+import { SnapshotOpt, Unit } from '../../Class/Unit'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Action } from '../Action'
@@ -87,7 +87,7 @@ export interface G<
   ): void
   unplugPin(type: IO, pinId: string, subPinId: string, ...extra: any[]): void
   getSpec(): GraphSpec
-  getBundleSpec(deep: boolean): BundleSpec
+  getBundleSpec(opt: SnapshotOpt): BundleSpec
   getSubPinSpec(type: IO, pinId: string, subPinId: string): GraphSubPinSpec
   getExposedInputPin<K extends keyof I>(pinId: K): Pin<I[K]>
   getExposedOutputPin<K extends keyof O>(pinId: K): Pin<O[K]>

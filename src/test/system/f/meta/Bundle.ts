@@ -83,7 +83,7 @@ const identity = graph.getUnit('identity')
 
 identity.push('a', 1)
 
-bundle.push('opt', { snapshot: true })
+bundle.push('opt', { deep: true })
 bundle.push('graph', graph)
 
 assert.deepEqual(bundle.take('bundle'), {

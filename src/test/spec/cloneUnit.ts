@@ -18,7 +18,7 @@ identity.push('a', 0)
 assert.equal(identity.peakInput('a'), 0)
 assert.equal(identity.peakOutput('a'), 0)
 
-const [clonedIdentity] = cloneUnit(identity, true)
+const [clonedIdentity] = cloneUnit(identity, { deep: true })
 
 assert.equal(clonedIdentity.peakInput('a'), 0)
 assert.equal(clonedIdentity.peakOutput('a'), 0)
@@ -40,7 +40,7 @@ add.play()
 add.setInputConstant('a', true)
 add.push('a', 1)
 
-const [clonedAdd] = cloneUnit(add, true)
+const [clonedAdd] = cloneUnit(add, { deep: true })
 
 clonedAdd.play()
 
@@ -67,7 +67,7 @@ assert.equal(range.peakInput('a'), 0)
 assert.equal(range.peakInput('b'), 3)
 assert.equal(range.peakOutput('i'), 0)
 
-const [clonedRange] = cloneUnit(range, true)
+const [clonedRange] = cloneUnit(range, { deep: true })
 
 clonedRange.play()
 
@@ -78,7 +78,7 @@ assert.equal(clonedRange.takeOutput('i'), 1)
 assert.equal(clonedRange.takeOutput('i'), 2)
 assert.equal(clonedRange.peakOutput('i'), undefined)
 
-const [clonedRange0] = cloneUnit(range, true)
+const [clonedRange0] = cloneUnit(range, { deep: true })
 
 clonedRange0.play()
 

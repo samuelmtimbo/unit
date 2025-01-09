@@ -1,5 +1,5 @@
 import { Spec } from '..'
-import { Opt, Unit } from '../../Class/Unit'
+import { Opt, SnapshotOpt, Unit } from '../../Class/Unit'
 import { Memory } from '../../Class/Unit/Memory'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
@@ -133,7 +133,7 @@ export interface U<
   pause(): void
   play(): void
   paused(): boolean
-  snapshot(): Memory
+  snapshot(opt: SnapshotOpt): Memory
   restore(state: Memory): void
   getSelfPin(): Pin<U>
   err(err?: string | Error | None): string | null
@@ -146,5 +146,5 @@ export interface U<
   getSpec(): Spec
   getPinData(type: IO, name: string): any
   setPinConstant(type: IO, name: string, constant: boolean): void
-  getUnitBundleSpec(deep?: boolean): UnitBundleSpec
+  getUnitBundleSpec(opt?: SnapshotOpt): UnitBundleSpec
 }

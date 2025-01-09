@@ -11,13 +11,14 @@ import { weakMerge } from './weakMerge'
 
 export function unitBundleSpec(
   unit: GraphUnitSpec,
-  specs: Specs
+  specs: Specs,
+  system: boolean = false
 ): UnitBundleSpec {
   const { id } = unit
 
   const custom = {}
 
-  _bundleUnit(unit, specs, custom, new Set())
+  _bundleUnit(unit, specs, custom, new Set(), system)
 
   return {
     unit: {
@@ -28,7 +29,11 @@ export function unitBundleSpec(
   }
 }
 
-export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
+export function unitBundleSpecById(
+  id: string,
+  specs: Specs,
+  system: boolean = false
+): UnitBundleSpec {
   const spec = getSpec(specs, id)
 
   const { base } = spec
@@ -44,7 +49,7 @@ export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
       [id]: spec as GraphSpec,
     }
 
-    _bundle(spec as GraphSpec, specs, custom, new Set())
+    _bundle(spec as GraphSpec, specs, custom, new Set(), system)
 
     return {
       unit: {
@@ -55,12 +60,16 @@ export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
   }
 }
 
-export function bundleSpec(spec: GraphSpec, specs: Specs): BundleSpec {
+export function bundleSpec(
+  spec: GraphSpec,
+  specs: Specs,
+  system: boolean = false
+): BundleSpec {
   const custom: GraphSpecs = {}
 
   const branch = new Set<string>([])
 
-  _bundle(spec, specs, custom, branch)
+  _bundle(spec, specs, custom, branch, system)
 
   return { spec, specs: custom }
 }
@@ -69,13 +78,14 @@ function _bundle(
   spec: GraphSpec,
   specs: Specs,
   custom: GraphSpecs,
-  branch: Set<string>
+  branch: Set<string>,
+  system: boolean
 ): void {
   if (!spec.id) {
     throw new Error('spec id is required')
   }
 
-  if (spec.system) {
+  if (spec.system && !system) {
     return
   }
 
@@ -85,14 +95,15 @@ function _bundle(
 
   branch.add(spec.id)
 
-  _bundleUnits(spec, specs, custom, branch)
+  _bundleUnits(spec, specs, custom, branch, system)
 }
 
 function _bundleUnit(
   unit: GraphUnitSpec,
   specs: Specs,
   custom: GraphSpecs,
-  branch: Set<string>
+  branch: Set<string>,
+  system: boolean
 ) {
   const { id, input = {} } = unit
 
@@ -112,10 +123,16 @@ function _bundleUnit(
 
           custom[specId] = spec
 
-          _bundle(spec, weakMerge(specs, bundle.specs ?? {}), custom, branch)
+          _bundle(
+            spec,
+            weakMerge(specs, bundle.specs ?? {}),
+            custom,
+            branch,
+            system
+          )
         }
 
-        _bundleUnit(bundle.unit, specs, custom, branch)
+        _bundleUnit(bundle.unit, specs, custom, branch, system)
 
         if (bundle.specs) {
           delete bundle.specs
@@ -130,20 +147,21 @@ function _bundleUnit(
     custom[id] = _spec
   }
 
-  _bundle(_spec, specs, custom, new Set(branch))
+  _bundle(_spec, specs, custom, new Set(branch), system)
 }
 
 function _bundleUnits(
   spec: GraphSpec,
   specs: Specs,
   custom: GraphSpecs,
-  branch: Set<string>
+  branch: Set<string>,
+  system: boolean
 ): void {
   const { units = {} } = spec
 
   for (const unit_id in units) {
     const unit = units[unit_id]
 
-    _bundleUnit(unit, specs, custom, branch)
+    _bundleUnit(unit, specs, custom, branch, system)
   }
 }

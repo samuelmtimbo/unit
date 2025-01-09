@@ -140,7 +140,10 @@ export interface $G_G {
     data: { unitId: string },
     callback: (data: Dict<any>) => void
   ): void
-  $getBundle(data: { deep?: boolean }, callback: Callback<BundleSpec>): void
+  $getBundle(
+    data: { deep?: boolean; prune?: boolean },
+    callback: Callback<BundleSpec>
+  ): void
 }
 
 export interface $G_C {

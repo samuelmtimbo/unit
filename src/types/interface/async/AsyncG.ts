@@ -33,7 +33,7 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
-import { Unit } from '../../../Class/Unit'
+import { BundleOpt, Unit } from '../../../Class/Unit'
 import { Memory } from '../../../Class/Unit/Memory'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
@@ -104,11 +104,8 @@ function call(
 
 export const AsyncGGet = (graph: Graph): $G_G => {
   const obj: $G_G = {
-    $getBundle(
-      { deep }: { deep: boolean },
-      callback: Callback<BundleSpec>
-    ): void {
-      const bundle = graph.getBundleSpec(deep)
+    $getBundle(opt: BundleOpt, callback: Callback<BundleSpec>): void {
+      const bundle = graph.getBundleSpec(opt)
 
       const { spec } = bundle
 

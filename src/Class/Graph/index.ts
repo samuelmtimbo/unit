@@ -151,7 +151,7 @@ import {
 import { weakMerge } from '../../weakMerge'
 import { Element_ } from '../Element'
 import Merge from '../Merge'
-import { Unit, UnitEvents } from '../Unit'
+import { SnapshotOpt, Unit, UnitEvents } from '../Unit'
 import { Memory } from '../Unit/Memory'
 import { UnitRemovePinDataData, UnitTakeInputData } from '../Unit/interface'
 import { WaitAll } from '../WaitAll'
@@ -1085,18 +1085,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return this._spec.component
   }
 
-  public getBundleSpec(deep: boolean = false): BundleSpec {
-    const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
+  public getBundleSpec({ deep, system, state }: SnapshotOpt = {}): BundleSpec {
+    const { spec, specs } = bundleSpec(this._spec, this.__system.specs, system)
 
     const spec_ = clone(spec)
 
-    let memory: Memory
-
     if (deep) {
-      memory = this.snapshot()
-
       forEachObjKV(this._unit, (unitId, unit) => {
-        const unitMemory = unit.snapshot()
+        const unitMemory = unit.snapshot({ deep, state })
 
         deepSet(spec_, ['units', unitId, 'memory'], unitMemory)
       })
@@ -1105,7 +1101,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return { spec: spec_, specs }
   }
 
-  public getUnitBundleSpec(deep: boolean = false): UnitBundleSpec {
+  public getUnitBundleSpec({
+    deep = false,
+    system = false,
+    state = false,
+  }: SnapshotOpt = {}): UnitBundleSpec {
     const { id } = this
 
     const inputPins = this.getInputs()
@@ -1132,49 +1132,64 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const input = mapPins(inputPins)
     const output = mapPins(outputPins)
 
-    let memory = undefined
-
-    if (deep) {
-      memory = this.snapshot()
-    }
+    const memory = this.snapshot({ deep, state })
 
     const unit = { id, input, output, memory }
 
-    const bundle = unitBundleSpec(unit, this.__system.specs)
+    const bundle = unitBundleSpec(unit, this.__system.specs, system)
 
     return bundle
   }
 
-  public snapshotSelf(): Dict<any> {
-    const state = { unit: {}, merge: {}, exposedMerge: {}, waitAll: null }
+  public snapshotSelf(opt: SnapshotOpt = {}): Dict<any> {
+    const { deep, state } = opt
 
-    for (const unitId in this._unit) {
-      const unit = this._unit[unitId]
+    const snapshot: {
+      unit?: Dict<Memory>
+      merge?: Dict<Memory>
+      exposedMerge?: IOOf<Dict<Memory>>
+      waitAll?: Memory
+    } = {}
 
-      const unit_state = unit.snapshot()
+    if (deep || state) {
+      snapshot.unit = {}
 
-      state.unit[unitId] = unit_state
+      for (const unitId in this._unit) {
+        const unit = this._unit[unitId]
+
+        const unit_state = unit.snapshot(opt)
+
+        snapshot.unit[unitId] = unit_state
+      }
     }
 
-    for (const mergeId in this._merge) {
-      const merge = this._merge[mergeId]
+    if (deep) {
+      snapshot.merge = {}
 
-      const merge_state = merge.snapshot()
+      for (const mergeId in this._merge) {
+        const merge = this._merge[mergeId]
 
-      state.merge[mergeId] = merge_state
+        const merge_state = merge.snapshot(opt)
+
+        snapshot.merge[mergeId] = merge_state
+      }
+
+      snapshot.exposedMerge = {}
+
+      forIOObjKV(this._exposedMerge, (type, pinId) => {
+        const merge = deepGet(this._exposedMerge, [type, pinId])
+
+        const mergeState = merge.snapshot()
+
+        deepSet(snapshot.exposedMerge, [type, pinId], mergeState)
+      })
+
+      snapshot.waitAll = {}
+
+      snapshot.waitAll = this._waitAll['input'].snapshot(opt)
     }
 
-    forIOObjKV(this._exposedMerge, (type, pinId) => {
-      const merge = deepGet(this._exposedMerge, [type, pinId])
-
-      const mergeState = merge.snapshot()
-
-      deepSet(state.exposedMerge, [type, pinId], mergeState)
-    })
-
-    state.waitAll = this._waitAll['input'].snapshot()
-
-    return state
+    return snapshot
   }
 
   public restoreSelf(state: Dict<any>): void {
@@ -2788,7 +2803,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this._removeUnit(unitId, false, undefined, fork, bubble)
 
-    const bundle = unitBundleSpec(unitSpec, specs)
+    const bundle = unitBundleSpec(unitSpec, specs, false)
 
     this._addUnitBundleSpec(nextUnitId, {
       unit: { id: newSpec.id },
@@ -3087,7 +3102,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     this._addUnit(unitId, unit, bundle, parentId, fork, bubble)
 
-    bundle = bundle ?? unit.getUnitBundleSpec()
+    bundle = bundle ?? unit.getUnitBundleSpec({})
 
     emit && this.edit('add_unit', unitId, bundle, unit, [])
 
@@ -3122,7 +3137,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unit: GraphUnitSpec,
     push: boolean = true
   ): void {
-    const bundle = unitBundleSpec(unit, this.__system.specs)
+    const bundle = unitBundleSpec(unit, this.__system.specs, false)
 
     const _unit = unitFromBundleSpec(
       this.__system,
@@ -3158,7 +3173,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       throw new Error('duplicated unit id ' + unitId)
     }
 
-    bundle = bundle ?? unit.getUnitBundleSpec(false)
+    bundle = bundle ?? unit.getUnitBundleSpec({})
 
     this.__system.injectSpecs(bundle.specs)
 
@@ -3190,7 +3205,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._specInjectSubComponent(unitId)
     this._simInjectSubComponent(unitId, unitSpec, unit)
 
-    const bundle = unit.getUnitBundleSpec()
+    const bundle = unit.getUnitBundleSpec({})
 
     emit && this.emit('set_sub_component', unitId, bundle)
   }
@@ -3524,7 +3539,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     // console.log('Graph', '_specAddUnit', unitId, bundle?.unit)
 
-    bundle = bundle ?? unit.getUnitBundleSpec()
+    bundle = bundle ?? unit.getUnitBundleSpec({})
 
     const { unit: unitSpec } = bundle
 
@@ -3560,7 +3575,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     // console.log('Graph', '_memAddUnit', unitId, unit)
 
-    bundle = bundle ?? unit.getUnitBundleSpec()
+    bundle = bundle ?? unit.getUnitBundleSpec({})
 
     const { unit: unitSpec } = bundle
 
@@ -3922,7 +3937,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): U {
     const unit = this.getUnit(unitId)
 
-    const unitBundle = unit.getUnitBundleSpec()
+    const unitBundle = unit.getUnitBundleSpec({})
 
     this._removeUnit(unitId, take, destroy, fork, bubble)
 
@@ -3961,7 +3976,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this.getUnit(unitId)
 
-    const [newUnit, bundle] = cloneUnit(unit, true)
+    const [newUnit, bundle] = cloneUnit(unit, { deep: true })
 
     this._addUnit(newUnitId, newUnit, bundle, parentId, fork, bubble)
 
@@ -6001,7 +6016,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public getGraphUnitUnitBundleSpec(graphId: string): UnitBundleSpec {
     const unit = this.getUnit(graphId) as Graph
 
-    const unitBundle = unit.getUnitBundleSpec()
+    const unitBundle = unit.getUnitBundleSpec({})
 
     return unitBundle
   }

@@ -23,7 +23,7 @@ export function $clone<T>(a: T): T {
 
   if (a instanceof $) {
     if (a instanceof Unit) {
-      return cloneUnit(a, false)[0]
+      return cloneUnit(a, { deep: false })[0]
     }
   }
 

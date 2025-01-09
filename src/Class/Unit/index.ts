@@ -26,6 +26,16 @@ import { pull, push, removeAt } from '../../util/array'
 import { mapObjVK } from '../../util/object'
 import { Memory } from './Memory'
 
+export type SnapshotOpt = {
+  deep?: boolean
+  state?: boolean
+  system?: boolean
+}
+
+export type BundleOpt = SnapshotOpt & {
+  system?: boolean
+}
+
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
 
 const toPinMap = <T>(
@@ -1241,12 +1251,12 @@ export class Unit<
     return this.__system.getSpec(this.id)
   }
 
-  public getUnitBundleSpec(deep: boolean = false): UnitBundleSpec {
-    let memory = undefined
-
-    if (deep) {
-      memory = this.snapshot()
-    }
+  public getUnitBundleSpec({
+    deep = false,
+    system = false,
+    state = false,
+  }: BundleOpt = {}): UnitBundleSpec {
+    const memory = this.snapshot({ deep, state })
 
     const input = mapObjVK<Pin<any>, any>(this._input, (input) => {
       const ignored = input.ignored()
@@ -1274,10 +1284,18 @@ export class Unit<
       }
     })
 
-    return { unit: { id: this.id, memory, input, output }, specs: {} }
+    const specs = {}
+
+    const { id } = this
+
+    if (system) {
+      specs[id] = this.__system.specs[id]
+    }
+
+    return { unit: { id, memory, input, output }, specs }
   }
 
-  public snapshotSelf(): Dict<any> {
+  public snapshotSelf(opt: SnapshotOpt = {}): Dict<any> {
     return undefined
   }
 
@@ -1309,11 +1327,17 @@ export class Unit<
     return state
   }
 
-  public snapshot(): Memory {
+  public snapshot(opt: SnapshotOpt = { deep: true }): Memory {
+    const { deep, state } = opt
+
+    if (!deep && !state) {
+      return undefined
+    }
+
     return {
-      input: this.snapshotInputs(),
-      output: this.snapshotOutputs(),
-      memory: this.snapshotSelf(),
+      input: (deep && this.snapshotInputs()) || undefined,
+      output: (deep && this.snapshotOutputs()) || undefined,
+      memory: ((deep || state) && this.snapshotSelf(opt)) || undefined,
     }
   }
 

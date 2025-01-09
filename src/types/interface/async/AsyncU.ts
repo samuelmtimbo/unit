@@ -1,5 +1,5 @@
 import { $_ } from '../$_'
-import { Unit } from '../../../Class/Unit'
+import { BundleOpt, Unit } from '../../../Class/Unit'
 import {
   UnitDestroyData,
   UnitGetPinDataData,
@@ -84,10 +84,10 @@ export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
     },
 
     $getUnitBundleSpec(
-      data: { deep: boolean },
+      data: BundleOpt,
       callback: Callback<UnitBundleSpec>
     ): void {
-      const unitBundleSpec = unit.getUnitBundleSpec(data.deep)
+      const unitBundleSpec = unit.getUnitBundleSpec(data)
 
       const $unitBundleSpec = clone(unitBundleSpec)
 
