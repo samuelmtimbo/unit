@@ -6,7 +6,6 @@ import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
 import { V } from '../types/interface/V'
-import { IO } from '../types/IO'
 import { Unlisten } from '../types/Unlisten'
 import { $ } from './$'
 import { ION, Opt } from './Unit'
@@ -146,10 +145,7 @@ export class Stateful<
     throw new MethodNotImplementedError()
   }
 
-  public setPinIgnored<
-    T extends IO,
-    K extends T extends 'input' ? keyof I : keyof O,
-  >(type: T, pinId: K, ignored: boolean): void {
+  setPinIgnored(): void {
     //
   }
 
