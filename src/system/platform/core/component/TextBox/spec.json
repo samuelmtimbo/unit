@@ -70,7 +70,11 @@
       "input": {
         "value": {}
       },
-      "output": {},
+      "output": {
+        "value": {
+          "ignored": false
+        }
+      },
       "metadata": {
         "position": {
           "x": 20,
