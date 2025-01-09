@@ -17,7 +17,6 @@ export default class Merge<
 > extends Primitive<I, O> {
   private _current: keyof I | undefined = undefined
 
-  private _loop_invalid_o_count: number = 0
   private _loop_invalid_o: Set<Key> = new Set()
 
   constructor(system: System) {
@@ -112,7 +111,7 @@ export default class Merge<
     const invalid = this._i_invalid.has(current)
     const override = current !== undefined && name !== current && !invalid
     const invalidate =
-      override || this._o_active.size - this._loop_invalid_o_count > 0
+      override || this._o_active.size - this._loop_invalid_o.size > 0
 
     if (invalidate) {
       this._invalidate()
@@ -147,7 +146,6 @@ export default class Merge<
   private _on_output_drop<K extends keyof O>(name: K) {
     if (this._loop_invalid_o.has(name)) {
       this._loop_invalid_o.delete(name)
-      this._loop_invalid_o_count--
     }
 
     this._backward_if_ready()
@@ -156,7 +154,6 @@ export default class Merge<
 
   public onOutputInvalid(name: string): void {
     if (this._current !== undefined && !this._forwarding) {
-      this._loop_invalid_o_count++
       this._loop_invalid_o.add(name)
     }
   }
@@ -204,7 +201,6 @@ export default class Merge<
     )
     this._forwarding_empty = false
 
-    this._loop_invalid_o_count = 0
     this._loop_invalid_o = new Set()
   }
 
@@ -222,7 +218,6 @@ export default class Merge<
       this._i_active.has(this._current) &&
       !this._i_invalid.has(this._current)
     ) {
-      this._loop_invalid_o_count = 0
       this._loop_invalid_o = new Set()
 
       this._run()
@@ -234,9 +229,8 @@ export default class Merge<
       !this._forwarding &&
       this._current !== undefined &&
       this._o_count > 0 &&
-      this._o_active.size - this._loop_invalid_o_count === 0
+      this._o_active.size - this._loop_invalid_o.size === 0
     ) {
-      this._loop_invalid_o_count = 0
       this._loop_invalid_o = new Set()
 
       this._backward(this._current)
@@ -259,17 +253,15 @@ export default class Merge<
     return {
       ...super.snapshotSelf(),
       _current: isPrimitive(this._current) ? this._current : undefined,
-      _loop_invalided_o_count: this._loop_invalid_o_count,
     }
   }
 
   public restoreSelf(state: Dict<any>): void {
-    const { _current, _loop_invalided_o_count, ...rest } = state
+    const { _current, ...rest } = state
 
     super.restoreSelf(rest)
 
     this._current = _current
-    this._loop_invalid_o_count = _loop_invalided_o_count
   }
 
   public getData() {
