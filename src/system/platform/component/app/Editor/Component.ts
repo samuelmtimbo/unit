@@ -10098,9 +10098,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       _ref: boolean
     ) => {
       return filterObj(obj, ({}, pinId: string) => {
-        const pin_node_id = getPinNodeId(unit_id, type, pinId)
-
-        const ref = this._is_link_pin_ref(pin_node_id)
+        const ref = isPinRef({ type, pinId }, new_unit_spec, specs, new Set())
 
         return !!ref === _ref
       })
