@@ -278,6 +278,14 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphAddUnitData): void {
+      const { specs, classes } = graph.__system
+
+      const {
+        unit: { memory = {} },
+      } = bundle
+
+      evaluateMemorySpec(memory, specs, classes)
+
       call(
         graph,
         'addUnitSpec',
