@@ -2,7 +2,7 @@
   "name": "bundle",
   "inputs": {
     "unit": {
-      "type": "`U`&`G`",
+      "type": "`U`",
       "ref": true
     },
     "opt": {
