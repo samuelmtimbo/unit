@@ -749,9 +749,9 @@ export class Primitive<
     return {
       ...super.snapshotSelf(),
       // __buffer: this.__buffer,
-      _forwarding: this._forwarding,
-      _backwarding: this._backwarding,
-      _forwarding_empty: this._forwarding_empty,
+      ...(this._forwarding ? { _forwarding: true } : {}),
+      ...(this._backwarding ? { _backwarding: true } : {}),
+      ...(this._forwarding_empty ? { _forwarding_empty: true } : {}),
     }
   }
 

@@ -252,7 +252,9 @@ export default class Merge<
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _current: isPrimitive(this._current) ? this._current : undefined,
+      ...(this._current !== undefined
+        ? { _current: isPrimitive(this._current) ? this._current : undefined }
+        : {}),
     }
   }
 

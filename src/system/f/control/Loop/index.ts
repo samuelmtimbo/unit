@@ -187,11 +187,11 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _current: this._current,
-      _next: this._next,
-      _test: this._test,
-      _nexting: this._nexting,
-      _looping: this._looping,
+      ...(this._current !== undefined ? { _current: this._current } : {}),
+      ...(this._next !== undefined ? { _next: this._next } : {}),
+      ...(this._test !== undefined ? { _test: this._test } : {}),
+      ...(this._nexting ? { _nexting: true } : {}),
+      ...(this._looping ? { _looping: true } : {}),
     }
   }
 

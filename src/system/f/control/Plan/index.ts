@@ -101,8 +101,8 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
   public snapshotSelf() {
     return {
       ...super.snapshotSelf(),
-      _looping: this._looping,
-      _current: this._current,
+      ...(this._looping ? { _looping: true } : {}),
+      ...(this._current !== undefined ? { _current: this._current } : {}),
     }
   }
 

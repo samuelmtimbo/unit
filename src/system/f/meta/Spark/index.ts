@@ -61,7 +61,7 @@ export default class Spark<T> extends Primitive<I<T>, O<T>> {
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _ran: this._ran,
+      ...(this._ran ? { _ran: true } : {}),
     }
   }
 

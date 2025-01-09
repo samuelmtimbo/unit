@@ -97,7 +97,7 @@ export default class Default<T> extends Primitive<I<T>, O<T>> {
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _current: this._current,
+      ...(this._current !== undefined ? { _current: this._current } : {}),
     }
   }
 

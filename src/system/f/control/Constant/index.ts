@@ -59,7 +59,9 @@ export default class Constant<T> extends Primitive<I<T>, O<T>> {
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _current: isPrimitive(this._current) ? this._current : undefined,
+      ...(this._current !== undefined
+        ? { _current: isPrimitive(this._current) ? this._current : undefined }
+        : {}),
     }
   }
 

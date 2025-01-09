@@ -2,6 +2,7 @@ import { MethodNotImplementedError } from '../exception/MethodNotImplementedErro
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { Primitive, PrimitiveEvents } from '../Primitive'
 import { System } from '../system'
+import isEqual from '../system/f/comparison/Equals/f'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
@@ -164,7 +165,7 @@ export class Stateful<
 
     return {
       ...super.snapshotSelf(),
-      _state,
+      ...(!isEqual(this._state, this._defaultState) ? { _state } : {}),
     }
   }
 

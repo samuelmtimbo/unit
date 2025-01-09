@@ -65,7 +65,7 @@ export default class RequestAnimationFrame extends Functional<I, O> {
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _frame: this._frame,
+      ...(this._frame !== undefined ? { _frame: this._frame } : {}),
     }
   }
 

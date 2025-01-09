@@ -89,8 +89,8 @@ export default class Next<T> extends Primitive<I<T>, O<T>> {
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      _current: this._current,
-      _next: this._next,
+      ...(this._current !== undefined ? { _current: this._current } : {}),
+      ...(this._next !== undefined ? { _next: this._next } : {}),
     }
   }
 

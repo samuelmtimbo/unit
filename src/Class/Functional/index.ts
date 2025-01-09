@@ -242,7 +242,7 @@ export class Functional<
   public snapshotSelf(): any {
     return {
       ...super.snapshotSelf(),
-      _looping: this._looping,
+      ...(this._looping ? { _looping: this._looping } : {}),
     }
   }
 

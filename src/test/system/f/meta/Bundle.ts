@@ -96,25 +96,16 @@ assert.deepEqual(bundle.take('bundle'), {
           input: {
             a: {
               _register: '1',
-              _invalid: 'false',
-              _constant: 'false',
-              _ignored: 'false',
               _idle: 'false',
             },
           },
           output: {
             a: {
               _register: '1',
-              _invalid: 'false',
-              _constant: 'false',
-              _ignored: 'false',
               _idle: 'false',
             },
           },
           memory: {
-            _forwarding: 'false',
-            _backwarding: 'false',
-            _forwarding_empty: 'false',
             _looping: 'true',
           },
         },

@@ -39,25 +39,17 @@ assert.deepEqual(snap, {
   input: {
     a: {
       _register: 4,
-      _invalid: false,
       _constant: true,
-      _ignored: false,
       _idle: false,
     },
   },
   output: {
     a: {
       _register: 4,
-      _invalid: false,
-      _constant: false,
-      _ignored: false,
       _idle: false,
     },
   },
   memory: {
-    _backwarding: false,
-    _forwarding: false,
-    _forwarding_empty: false,
     _looping: true,
   },
 })
@@ -70,25 +62,17 @@ assert.deepEqual(another_identity.snapshot(), {
   input: {
     a: {
       _register: 4,
-      _invalid: false,
       _constant: true,
-      _ignored: false,
       _idle: false,
     },
   },
   output: {
     a: {
       _register: 4,
-      _invalid: false,
-      _constant: false,
-      _ignored: false,
       _idle: false,
     },
   },
   memory: {
-    _backwarding: false,
-    _forwarding: false,
-    _forwarding_empty: false,
     _looping: true,
   },
 })

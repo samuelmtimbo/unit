@@ -32,10 +32,10 @@ export type Pin_EE<T> = {
 
 export type Pin_M<T = any> = {
   _register: T | undefined
-  _invalid: boolean
-  _constant: boolean
-  _ignored: boolean
-  _idle: boolean
+  _invalid?: boolean
+  _constant?: boolean
+  _ignored?: boolean
+  _idle?: boolean
 }
 
 export type PinEvents<T> = $Events<Pin_EE<T>> & Pin_EE<T>
@@ -267,10 +267,10 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
   public snapshot(): Pin_M<T> {
     return {
       _register: this._register instanceof $ ? undefined : this._register,
-      _invalid: this._invalid,
-      _constant: this._constant,
-      _ignored: this._ignored,
-      _idle: this._idle,
+      ...(this._invalid ? { _invalid: true } : {}),
+      ...(this._constant ? { _constant: true } : {}),
+      ...(this._ignored ? { _ignored: true } : {}),
+      ...(this._idle ? {} : { _idle: false }),
     }
   }
 
