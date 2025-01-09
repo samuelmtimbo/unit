@@ -1,0 +1,84 @@
+{
+  "type": "`U`&`G`",
+  "name": "if greater than 0",
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    "greaterthan0": {
+      "id": "6f4ac2fa-e9bd-4c0e-8bda-75976f3e4e58",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a > 0": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "greaterthan0": {
+        "output": {
+          "a > 0": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "greaterthan0",
+          "pinId": "a",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "if",
+          "pinId": "a",
+          "kind": "input"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b",
+          "kind": "output"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "greater-than",
+    "description": "let `a` pass if greater than 0"
+  },
+  "id": "0facebfb-2449-430d-8f12-d8fdc5fc04e7",
+  "system": true
+}

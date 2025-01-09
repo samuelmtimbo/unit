@@ -1,0 +1,84 @@
+{
+  "type": "`U`&`G`",
+  "name": "if greater than equal 0",
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    "greaterthanequal0": {
+      "id": "a8d162a8-1c5f-4b7f-abfb-877390ae4354",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a ≥ 0": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "greaterthanequal0": {
+        "output": {
+          "a ≥ 0": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "greaterthanequal0",
+          "pinId": "a",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "if",
+          "pinId": "a",
+          "kind": "input"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b",
+          "kind": "output"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "greater-than-equal",
+    "description": "let `a` pass if greater than or equal to 0"
+  },
+  "id": "4d067752-843a-4c98-b1c4-9ffa29d693b4",
+  "system": true
+}

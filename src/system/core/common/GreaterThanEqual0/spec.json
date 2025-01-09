@@ -1,0 +1,43 @@
+{
+  "name": "greater than equal 0",
+  "units": {
+    "greaterthanequal": {
+      "id": "c9e06816-0d2b-43ec-b7c8-d07563e19b6b",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "greater-than-equal",
+    "description": "output whether `a` is greater than 0",
+    "tags": ["core", "common"]
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "greaterthanequal",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a ≥ 0": {
+      "plug": {
+        "0": {
+          "unitId": "greaterthanequal",
+          "pinId": "a ≥ b"
+        }
+      }
+    }
+  },
+  "id": "a8d162a8-1c5f-4b7f-abfb-877390ae4354",
+  "type": "`U`&`G`",
+  "system": true
+}
