@@ -1,0 +1,25 @@
+{
+  "name": "includes",
+  "inputs": {
+    "str": {
+      "type": "string"
+    },
+    "search": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "test": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "regex",
+    "description": "check whether string `str` contains `search`",
+    "tags": ["f", "string"]
+  },
+  "id": "38bc7001-3543-48ba-99a5-96aeb908494b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
