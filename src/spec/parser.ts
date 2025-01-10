@@ -480,10 +480,20 @@ export function _isTypeMatch(
           _isTypeMatch(specs, source.children[0], target.children[0])) ||
         (source.type === TreeNodeType.ObjectLiteral &&
           (source.children.length === 0 ||
-            !source.children.some(
-              (keyValue) =>
-                !_isTypeMatch(specs, keyValue.children[1], target.children[0])
-            )))
+            !source.children.some((line) => {
+              if (line.type === TreeNodeType.KeyValue) {
+                return !_isTypeMatch(
+                  specs,
+                  line.children[1],
+                  target.children[0]
+                )
+              } else if (
+                line.type === TreeNodeType.String ||
+                line.type === TreeNodeType.Identifier
+              ) {
+                return false
+              }
+            })))
       )
   }
 
