@@ -26,7 +26,7 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ obj, key }: I<T>, done: Done<O<T>>): void {
-    if (obj.hasOwnProperty(key)) {
+    if (obj.hasOwnProperty(key) && obj[key] !== undefined) {
       done({ value: obj[key] })
     } else {
       done(undefined, 'key not found')

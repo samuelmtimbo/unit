@@ -27,6 +27,6 @@ export default class HasKey<T = any> extends Functional<I<T>, O<T>> {
   }
 
   f({ obj, key }: I<T>, done: Done<O<T>>): void {
-    done({ has: obj.hasOwnProperty(key) })
+    done({ has: obj.hasOwnProperty(key) && obj[key] !== undefined })
   }
 }
