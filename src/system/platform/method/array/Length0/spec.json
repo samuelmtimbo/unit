@@ -2,7 +2,7 @@
   "name": "length",
   "inputs": {
     "a": {
-      "type": "<A>[]",
+      "type": "`A`",
       "ref": true
     },
     "any": {
