@@ -301,7 +301,7 @@ export const getSpecPinIcon = (
   } else {
     const { icon } = pin_spec
 
-    pin_icon_name = icon || 'circle'
+    pin_icon_name = icon || 'triangle'
   }
 
   return pin_icon_name
