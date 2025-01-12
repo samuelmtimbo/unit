@@ -286,6 +286,7 @@ export type API = {
   window: {
     localStorage: Storage
     sessionStorage: Storage
+    documentPictureInPicture: any
     HTMLElement: typeof HTMLElement
     SVGElement: typeof SVGElement
     SVGSVGElement: typeof SVGSVGElement

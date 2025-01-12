@@ -246,6 +246,7 @@ export function noneApi(): API {
       SVGSVGElement: undefined,
       Text: undefined,
       BroadcastChannel: undefined,
+      documentPictureInPicture: undefined,
       localStorage: undefined,
       sessionStorage: undefined,
       AudioContext: undefined,

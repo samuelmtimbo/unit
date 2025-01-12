@@ -1,10 +1,13 @@
+import { Component } from '../../../../client/component'
 import HTMLElement_ from '../../../../client/html'
-import { renderComponent } from '../../../../client/render/renderComponent'
+import {
+  $renderComponent,
+  renderComponent,
+} from '../../../../client/render/renderComponent'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { $Component } from '../../../../types/interface/async/$Component'
 import { Unlisten } from '../../../../types/Unlisten'
-import { removeChildren } from '../../../../util/element'
 
 export interface Props {
   component?: $Component
@@ -21,6 +24,7 @@ const DEFAULT_STYLE = {
 
 export default class Render extends HTMLElement_<HTMLDivElement, Props> {
   private _unlisten: Unlisten
+  private _component: Component
 
   public $input = {
     component: ['C'],
@@ -39,20 +43,47 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
             this._unlisten()
 
             this._unlisten = undefined
-
-            removeChildren(this.$element)
           }
 
           if (component) {
-            this._unlisten = renderComponent(
-              this.$element,
+            this._unlisten = $renderComponent(
               this.$system,
-              component
+              this.$context,
+              this.$element,
+              component,
+              (component_) => {
+                this._component = component_
+              }
             )
           }
         },
       }
     )
+  }
+
+  onUnmount(): void {
+    if (this._unlisten) {
+      this._unlisten()
+
+      this._unlisten = undefined
+    }
+  }
+
+  onMount(): void {
+    if (this._unlisten) {
+      this._unlisten()
+
+      this._unlisten = undefined
+    }
+
+    if (this._component) {
+      this._unlisten = renderComponent(
+        this.$system,
+        this.$context,
+        this.$element,
+        this._component
+      )
+    }
   }
 
   focus() {

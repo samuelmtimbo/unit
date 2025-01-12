@@ -1,0 +1,30 @@
+{
+  "name": "document picture in picture",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{preferInitialWindowPlacement?:boolean}",
+      "metadata": {
+        "examples": ["{},{preferInitialWindowPlacement:true}"]
+      }
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "complexity": 13,
+    "icon": "arrow-up-right",
+    "description": "request picture in picture window for `media`",
+    "tags": ["platform", "api", "media"],
+    "globals": ["Video"]
+  },
+  "base": true,
+  "id": "ba8b9b28-79f5-42d6-9c98-3555ce4982cb",
+  "type": "`U`",
+  "system": true
+}

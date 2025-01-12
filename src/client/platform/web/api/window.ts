@@ -20,6 +20,8 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     // @ts-ignore
     BroadcastChannel: window.BroadcastChannel,
     // @ts-ignore
+    documentPictureInPicture: window.documentPictureInPicture,
+    // @ts-ignore
     Notification: window.Notification,
     // @ts-ignore
     Audio: window.Audio,

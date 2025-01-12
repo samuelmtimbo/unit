@@ -1,7 +1,6 @@
 import { NOOP } from '../../NOOP'
 import { evaluateMemorySpec } from '../../spec/evaluate/evaluateMemorySpec'
 import { System } from '../../system'
-import Frame from '../../system/platform/component/Frame/Component'
 import { BundleSpec } from '../../types/BundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { $Graph } from '../../types/interface/async/$Graph'
@@ -9,16 +8,15 @@ import { callAll } from '../../util/call/callAll'
 import { clone } from '../../util/clone'
 import { weakMerge } from '../../weakMerge'
 import { componentFromSpec } from '../componentFromSpec'
-import { appendChild, mount, unmount } from '../context'
-import { renderFrame } from '../renderFrame'
+import { Context } from '../context'
+import { renderComponent } from './renderComponent'
 
 export function renderGraph(
   root: HTMLElement,
   system: System,
+  context: Context | null,
   $graph: $Graph
 ): Unlisten {
-  // console.log('renderGraph')
-
   let unlisten: Unlisten = NOOP
 
   $graph.$getBundle({ deep: true }, async (bundle: BundleSpec) => {
@@ -40,31 +38,14 @@ export function renderGraph(
       weakMerge(system.specs, bundle.specs ?? {})
     )
 
-    const context = renderFrame(system, null, root, {})
+    component.connect($graph, true)
 
-    const frame = new Frame({}, system)
-
-    component.connect($graph)
-
-    frame.appendChild(component)
-
-    root.appendChild(frame.$element)
-
-    const removeChild = appendChild(context, frame)
-
-    mount(context)
-
-    component.focus()
-
-    const unlistenRender = () => {
-      component.disconnect()
-
-      frame.removeChild(component)
-
-      unmount(context)
-    }
-
-    unlisten = callAll([removeChild, unlistenRender])
+    unlisten = callAll([
+      () => {
+        component.disconnect(true)
+      },
+      renderComponent(system, context, root, component),
+    ])
   })
 
   return unlisten

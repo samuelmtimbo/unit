@@ -4,7 +4,7 @@ import { Unlisten } from '../../types/Unlisten'
 import { renderGraph } from './renderGraph'
 
 export function render(system: System, $graph: $Graph): Unlisten {
-  const unlisten = renderGraph(system.foreground.app, system, $graph)
+  const unlisten = renderGraph(system.foreground.app, system, null, $graph)
 
   return () => {
     unlisten()

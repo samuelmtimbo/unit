@@ -187,6 +187,7 @@ export class Component<
   public $returnIndex: number = 0
 
   public $mounted: boolean = false
+  public $detached: boolean = false
 
   private _stopPropagationSet: Set<string>
   private _stopImmediatePropagationSet: Set<string>
@@ -587,8 +588,6 @@ export class Component<
       //
     }
   }
-
-  private $detached: boolean = false
 
   private _baseAnimationAbort: Unlisten
 
@@ -1149,6 +1148,10 @@ export class Component<
   mount(_$context: Context, commit: boolean = true): void {
     // console.log(this.constructor.name, 'mount')
 
+    if (this.$detached) {
+      return
+    }
+
     if (this.$mounted) {
       throw new Error('cannot mount a mounted component')
     }
@@ -1157,10 +1160,6 @@ export class Component<
     this.$mounted = true
 
     this._forAllMountDescendent((child) => {
-      if (child.$detached) {
-        return
-      }
-
       this.mountChild(child, false)
     })
 
@@ -1175,6 +1174,10 @@ export class Component<
 
   unmount() {
     // console.log(this.constructor.name, 'unmount')
+
+    if (this.$detached) {
+      return
+    }
 
     if (!this.$mounted) {
       throw new Error('cannot unmount unmounted component')
@@ -2477,6 +2480,7 @@ export class Component<
 
   public removeChild(child: Component): number {
     // console.log('Component', 'removeChild')
+
     const at = this.$children.indexOf(child)
 
     if (at > -1) {
@@ -2874,6 +2878,10 @@ export class Component<
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
+    if (component.$detached) {
+      return
+    }
+
     this._domCommitChild__template(component, at, this._insertAt.bind(this))
   }
 
@@ -2882,6 +2890,10 @@ export class Component<
     at: number,
     callback: (parent: Component, child: Component, at: number) => void
   ) => {
+    if (component.$detached) {
+      return
+    }
+
     if (component.isParent()) {
       let i = 0
 
@@ -3395,8 +3407,10 @@ export class Component<
     at: number
   ): void {
     const slot = this.$slot[slotName]
+
     if (slot === this) {
       const _at = this.$parentChildren.indexOf(component)
+
       this.domRemoveParentChildAt(
         component,
         slotName,
@@ -3493,6 +3507,10 @@ export class Component<
   }
 
   protected domCommitRemoveChild(component: Component, at: number) {
+    if (component.$detached) {
+      return
+    }
+
     if (component.isParent()) {
       for (const root of component.$root) {
         this.domCommitRemoveChild(root, at)
@@ -3634,8 +3652,25 @@ export class Component<
 
   public setControlled(controlled: boolean): void {
     this.$controlled = controlled
+  }
 
-    if (this.$controlled) {
+  public setSystem(system: System): void {
+    this.$system = system
+
+    for (const subComponentId in this.$subComponent) {
+      const subComponent = this.$subComponent[subComponentId]
+
+      subComponent.setSystem(system)
+    }
+  }
+
+  public setDetached(detached: boolean): void {
+    this.$detached = detached
+
+    for (const subComponentId in this.$subComponent) {
+      const subComponent = this.$subComponent[subComponentId]
+
+      subComponent.setDetached(detached)
     }
   }
 

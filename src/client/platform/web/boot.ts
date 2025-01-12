@@ -57,13 +57,7 @@ export function webBoot(
     components: _components,
   }
 ): [System, Unlisten] {
-  const _root = window.document.createElement('div')
-
-  _root.style.width = '100%'
-  _root.style.height = '100%'
-  _root.style.overflow = 'hidden'
-
-  _root.attachShadow({ mode: 'open' })
+  root.attachShadow({ mode: 'open' })
 
   const http = webHTTP(window, opt)
   const file = webFile(window, opt)
@@ -75,7 +69,7 @@ export function webBoot(
   const clipboard = webClipboard(window, opt)
   const selection = webSelection(window, opt)
   const animation = webAnimation(window, opt)
-  const document = webDocument(window, _root, opt)
+  const document = webDocument(window, root, opt)
   const querystring = webQuerystring(window, opt)
   const bluetooth = webBluetooth(window, opt)
   const text = webText(window, opt)
@@ -90,7 +84,7 @@ export function webBoot(
   const _window = webWindow(window, opt)
   const navigator = webNavigator(window, opt)
   const layout = webLayout(window, opt)
-  const theme = webTheme(window, _root, opt)
+  const theme = webTheme(window, root, opt)
   const crypto = webCrypto(window, opt)
 
   const api: API = {
@@ -125,11 +119,9 @@ export function webBoot(
 
   const system = boot(null, api, opt)
 
-  root.appendChild(_root)
+  root.style.fontFamily = "'Inconsolata', monospace"
 
-  _root.style.fontFamily = "'Inconsolata', monospace"
-
-  system.root = _root
+  system.root = root
 
   attachStyle(system)
   attachApp(system)
@@ -141,9 +133,7 @@ export function webBoot(
   attachVoid(system)
   // attachFocus(system)
 
-  const unlisten = () => {
-    root.removeChild(_root)
-  }
+  const unlisten = () => {}
 
   return [system, unlisten]
 }

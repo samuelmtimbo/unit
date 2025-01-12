@@ -110,7 +110,12 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
       $$init.$color = color
     }
 
-    this.$$context = renderFrame(this.$system, null, this.$element, $$init)
+    this.$$context = renderFrame(
+      this.$system,
+      this.$context,
+      this.$element,
+      $$init
+    )
   }
 
   mountChild(child: Component, commit: boolean = true): void {

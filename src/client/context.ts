@@ -153,6 +153,13 @@ export function appendChild(
   const { $element } = component
 
   $context.$element.appendChild($element)
+
+  const base = component.getRootLeaves()
+
+  for (const leaf of base) {
+    $context.$element.appendChild(leaf.$element)
+  }
+  
   $context.$children.push(component)
 
   if ($context.$mounted) {
@@ -160,14 +167,16 @@ export function appendChild(
   }
 
   return () => {
-    const { $element } = component
-
     if ($context.$mounted) {
       component.unmount()
     }
 
-    $context.$element.removeChild($element)
+    const base = component.getRootLeaves()
 
+    for (const leaf of base) {
+      $context.$element.removeChild(leaf.$element)
+    }
+    
     remove($context.$children, component)
 
     return component

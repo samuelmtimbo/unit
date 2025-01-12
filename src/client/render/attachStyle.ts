@@ -1,4 +1,5 @@
 import { System } from '../../system'
+import { FONT_DATA_URI } from '../static/font/dataURI'
 
 export const ROOT_STYLE = `
   @font-face {
@@ -131,11 +132,57 @@ export const ROOT_STYLE = `
   }
 `
 
-export function attachStyle(system: System): void {
-  appendRootStyle(system, ROOT_STYLE)
-}
+export const HTML_STYLE = `
+  @font-face {
+    font-family: 'Inconsolata';
+    /* 
+    src: local('Inconsolata Regular'),
+      url('fonts/Inconsolata-Regular.woff2') format('woff2'),
+      url('fonts/Inconsolata-Regular.woff') format('woff');
+    */
+    src: url('${FONT_DATA_URI}');
+    font-style: normal;
+    font-weight: 400;
+    font-stretch: 100%;
+    font-display: fallback;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+      U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
+      U+2212, U+2215, U+FEFF, U+FFFD;
+  }
 
-export function appendRootStyle(system: System, css: string): void {
+  @font-face {
+    font-family: 'Inconsolata';
+    src: local('Arial');
+    unicode-range: U+60;
+  }
+  
+  * {
+    font-family: Inconsolata;
+  }
+
+  body {
+    font-family: Inconsolata;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: transparent;
+    // touch-action: none;
+    overflow: hidden;
+    -ms-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    overscroll-behavior: none;
+    -webkit-touch-callout: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
+  }
+`
+
+export function attachStyle(system: System): void {
   const {
     root,
     api: {
@@ -145,21 +192,7 @@ export function appendRootStyle(system: System, css: string): void {
 
   const style = createElement('style')
 
-  style.innerHTML = css
+  style.innerHTML = ROOT_STYLE
 
   root.shadowRoot.appendChild(style)
-}
-
-export function removeRootStyle(system: System, css: string): void {
-  const { root } = system
-
-  const style = Array.from(root.children).find(
-    (child) => child.tagName === 'STYLE' && style.innerHTML === css
-  )
-
-  if (!style) {
-    throw new Error('style not found')
-  }
-
-  root.shadowRoot.removeChild(style)
 }
