@@ -1,0 +1,187 @@
+{
+  "type": "`U`&`G`",
+  "name": "behead",
+  "units": {
+    "slice": {
+      "id": "c6bf897a-4970-4284-bea2-b4a86186f828",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -64,
+              "y": 57
+            }
+          }
+        },
+        "begin": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": 0
+          },
+          "metadata": {
+            "position": {
+              "x": -82,
+              "y": 24
+            },
+            "data": {
+              "position": {
+                "x": -112,
+                "y": 22
+              }
+            }
+          }
+        },
+        "end": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": -1
+          },
+          "metadata": {
+            "position": {
+              "x": -64,
+              "y": -8
+            },
+            "data": {
+              "position": {
+                "x": -85,
+                "y": -39
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 17,
+              "y": 24
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -32,
+          "y": 24
+        }
+      }
+    },
+    "first": {
+      "id": "0f77eb13-5c48-4611-a9bf-fe10c903dc63",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -73,
+              "y": -106
+            }
+          }
+        }
+      },
+      "output": {
+        "a[0]": {
+          "metadata": {
+            "position": {
+              "x": 24,
+              "y": -106
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -25,
+          "y": -106
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "slice",
+          "pinId": "a",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "first",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -71,
+              "y": 80
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -96,
+              "y": -106
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "slice",
+          "pinId": "a",
+          "kind": "output"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 41,
+              "y": 24
+            }
+          }
+        }
+      }
+    },
+    "head": {
+      "plug": {
+        "0": {
+          "unitId": "first",
+          "pinId": "a[0]",
+          "kind": "output"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 47,
+              "y": -106
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "axe",
+    "description": "remove the first element `head` of `a`",
+    "position": {
+      "data": {
+        "x": 75,
+        "y": -106
+      }
+    }
+  },
+  "id": "e9831075-2e62-43a4-84af-0653f7e707a9",
+  "system": true
+}
