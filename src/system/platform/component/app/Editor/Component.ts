@@ -8505,7 +8505,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const new_spec = clone(spec)
 
-    const new_unit_id = newUnitIdFromName(spec, name, new Set())
+    const blacklist = new Set(keys(this._spec.units))
+
+    const new_unit_id = newUnitIdFromName(spec, name, blacklist)
 
     const unit_data = this._get_unit_data(unit_id)
 
