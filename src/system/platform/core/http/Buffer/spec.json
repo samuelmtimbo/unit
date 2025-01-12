@@ -2,30 +2,6 @@
   "type": "`U`&`G`",
   "name": "buffer",
   "units": {
-    "write": {
-      "id": "98ab5ee1-0997-4ad2-bc77-776208b6bb25",
-      "input": {
-        "value": {},
-        "data": {}
-      },
-      "output": {
-        "data": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -250,
-              "y": 81
-            }
-          }
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": -202,
-          "y": 62
-        }
-      }
-    },
     "append": {
       "id": "cf4db91a-f8b2-454f-a763-12005d71cb9d",
       "input": {
@@ -33,8 +9,8 @@
         "a": {
           "metadata": {
             "position": {
-              "x": -436,
-              "y": -187
+              "x": -267,
+              "y": 48
             }
           }
         }
@@ -42,8 +18,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -86,
-          "y": 105
+          "x": -220,
+          "y": 36
         }
       }
     },
@@ -53,8 +29,8 @@
         "init": {
           "metadata": {
             "position": {
-              "x": -213,
-              "y": 141
+              "x": -258,
+              "y": -38
             }
           }
         },
@@ -62,8 +38,8 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": -223,
-              "y": 121
+              "x": -261,
+              "y": -13
             }
           }
         }
@@ -72,127 +48,16 @@
         "data": {
           "metadata": {
             "position": {
-              "x": -141,
-              "y": 65
+              "x": -168,
+              "y": 11
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -173,
-          "y": 115
-        }
-      }
-    },
-    "read0": {
-      "id": "c6da6b9f-a783-4e58-a252-e543aef109fb",
-      "input": {
-        "value": {},
-        "any": {}
-      },
-      "output": {
-        "data": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -162,
-          "y": 3
-        }
-      }
-    },
-    "read": {
-      "id": "c6da6b9f-a783-4e58-a252-e543aef109fb",
-      "input": {
-        "value": {},
-        "any": {
-          "metadata": {
-            "position": {
-              "x": -263,
-              "y": -82
-            }
-          }
-        }
-      },
-      "output": {
-        "data": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -97,
-          "y": 28
-        }
-      }
-    },
-    "slice": {
-      "id": "c6bf897a-4970-4284-bea2-b4a86186f828",
-      "input": {
-        "a": {},
-        "begin": {},
-        "end": {}
-      },
-      "output": {
-        "a": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -266,
-          "y": -4
-        }
-      }
-    },
-    "length": {
-      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
-      "input": {
-        "a": {}
-      },
-      "output": {
-        "length": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -176,
-          "y": -55
-        }
-      }
-    },
-    "length0": {
-      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
-      "input": {
-        "a": {}
-      },
-      "output": {
-        "length": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -270,
-          "y": -40
-        }
-      }
-    },
-    "if0": {
-      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
-      "input": {
-        "a": {},
-        "b": {}
-      },
-      "output": {
-        "a if b": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 48,
-          "y": -35
-        }
-      }
-    },
-    "plan3": {
-      "id": "0c78466f-f682-4aca-9a15-d4d2eac5e26d",
-      "metadata": {
-        "position": {
-          "x": -62,
-          "y": -63
+          "x": -212,
+          "y": -23
         }
       }
     },
@@ -207,13 +72,13 @@
           },
           "metadata": {
             "position": {
-              "x": -32,
-              "y": 67
+              "x": -108,
+              "y": 133
             },
             "data": {
               "position": {
-                "x": -46,
-                "y": 91
+                "x": -129,
+                "y": 153
               }
             }
           }
@@ -225,64 +90,22 @@
       },
       "metadata": {
         "position": {
-          "x": -1,
-          "y": 34
-        }
-      }
-    },
-    "foreach": {
-      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
-      "input": {
-        "a": {}
-      },
-      "output": {
-        "a[i]": {
-          "metadata": {
-            "position": {
-              "x": -144,
-              "y": -171
-            }
-          }
-        },
-        "a": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -49,
-              "y": -166
-            }
-          }
-        },
-        "i": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -75,
-              "y": -193
-            }
-          }
-        },
-        "test": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -151,
-              "y": -149
-            }
-          }
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": -100,
-          "y": -154
+          "x": -64,
+          "y": 111
         }
       }
     },
     "ifnot": {
       "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
       "input": {
-        "a": {},
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 100,
+              "y": 213
+            }
+          }
+        },
         "b": {}
       },
       "output": {
@@ -290,8 +113,8 @@
       },
       "metadata": {
         "position": {
-          "x": 33,
-          "y": 129
+          "x": 136,
+          "y": 183
         }
       }
     },
@@ -305,42 +128,8 @@
       },
       "metadata": {
         "position": {
-          "x": 129,
-          "y": 73
-        }
-      }
-    },
-    "lengthgreaterthan0": {
-      "id": "603ebe2e-5329-446d-b422-78f3201ddd7a",
-      "input": {
-        "a": {},
-        "b": {
-          "constant": true,
-          "data": {
-            "ref": [],
-            "data": 0
-          },
-          "metadata": {
-            "position": {
-              "x": 102,
-              "y": -102
-            },
-            "data": {
-              "position": {
-                "x": 124,
-                "y": -122
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "test": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 60,
-          "y": -76
+          "x": 124,
+          "y": 110
         }
       }
     },
@@ -363,13 +152,13 @@
           },
           "metadata": {
             "position": {
-              "x": 264,
-              "y": 80
+              "x": 256,
+              "y": 59
             },
             "data": {
               "position": {
-                "x": 303,
-                "y": 80
+                "x": 294,
+                "y": 41
               }
             }
           }
@@ -381,16 +170,16 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 256,
-              "y": 106
+              "x": 262,
+              "y": 81
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 214,
-          "y": 81
+          "x": 209,
+          "y": 75
         }
       }
     },
@@ -411,8 +200,8 @@
       },
       "metadata": {
         "position": {
-          "x": 137,
-          "y": 147
+          "x": 236,
+          "y": 159
         }
       }
     },
@@ -426,8 +215,8 @@
       },
       "metadata": {
         "position": {
-          "x": 69,
-          "y": 52
+          "x": 38,
+          "y": 140
         }
       }
     },
@@ -441,49 +230,81 @@
       },
       "metadata": {
         "position": {
-          "x": 147,
-          "y": -5
+          "x": 105,
+          "y": 43
+        }
+      }
+    },
+    "pop": {
+      "id": "dff853f8-7bb4-48dc-a792-5efdead94640",
+      "input": {
+        "a": {},
+        "any": {}
+      },
+      "output": {
+        "last": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -108,
+          "y": 23
+        }
+      }
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "0": {
+          "metadata": {
+            "position": {
+              "x": 34,
+              "y": -27
+            }
+          }
+        },
+        "1": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 4
+        }
+      }
+    },
+    "identity0": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 18,
+          "y": 73
         }
       }
     }
   },
   "merges": {
     "0": {
-      "write": {
-        "input": {
-          "value": true
-        }
-      },
       "append": {
         "input": {
           "a[]": true
         }
       },
+      "pop": {
+        "input": {
+          "a": true
+        }
+      },
       "state": {
         "output": {
           "data": true
-        }
-      },
-      "read0": {
-        "input": {
-          "value": true
-        }
-      },
-      "read": {
-        "input": {
-          "value": true
-        }
-      }
-    },
-    "1": {
-      "ifnot": {
-        "input": {
-          "a": true
-        }
-      },
-      "append": {
-        "input": {
-          "a": true
         }
       }
     },
@@ -515,132 +336,50 @@
           "a": true
         }
       },
-      "if0": {
+      "identity0": {
         "output": {
-          "a if b": true
+          "a": true
         }
       }
     },
     "4": {
-      "if0": {
-        "input": {
-          "b": true
-        }
-      },
-      "lengthgreaterthan0": {
-        "output": {
-          "test": true
-        }
-      },
       "false": {
         "input": {
           "any": true
         }
-      }
-    },
-    "6": {
-      "read": {
+      },
+      "plan": {
         "output": {
-          "data": true
+          "1": true
         }
       },
-      "plan3": {
+      "identity0": {
         "input": {
           "a": true
+        }
+      }
+    },
+    "5": {
+      "plan": {
+        "input": {
+          "a": true
+        }
+      },
+      "pop": {
+        "output": {
+          "last": true
         }
       }
     },
     "7": {
-      "read": {
-        "input": {
-          "any": true
-        }
-      },
       "debounce": {
         "output": {
           "a": true
         }
-      }
-    },
-    "9": {
-      "plan3": {
-        "output": {
-          "0": true
-        }
       },
-      "foreach": {
-        "input": {
-          "a": true
-        }
-      }
-    },
-    "11": {
-      "read0": {
+      "pop": {
         "input": {
           "any": true
-        }
-      },
-      "length": {
-        "input": {
-          "a": true
-        }
-      },
-      "plan3": {
-        "output": {
-          "1": true
-        }
-      }
-    },
-    "12": {
-      "read0": {
-        "output": {
-          "data": true
-        }
-      },
-      "slice": {
-        "input": {
-          "a": true
-        }
-      },
-      "length0": {
-        "input": {
-          "a": true
-        }
-      }
-    },
-    "13": {
-      "slice": {
-        "input": {
-          "begin": true
-        }
-      },
-      "length": {
-        "output": {
-          "length": true
-        }
-      }
-    },
-    "14": {
-      "slice": {
-        "input": {
-          "end": true
-        }
-      },
-      "length0": {
-        "output": {
-          "length": true
-        }
-      }
-    },
-    "15": {
-      "write": {
-        "input": {
-          "data": true
-        }
-      },
-      "slice": {
-        "output": {
-          "a": true
         }
       }
     },
@@ -684,39 +423,34 @@
           "any": true
         }
       }
-    },
-    "22": {
-      "if0": {
-        "input": {
-          "a": true
-        }
-      },
-      "plan3": {
-        "output": {
-          "2": true
-        }
-      },
-      "lengthgreaterthan0": {
-        "input": {
-          "a": true
-        }
-      }
     }
   },
   "inputs": {
     "a": {
       "plug": {
+        "0": {
+          "unitId": "append",
+          "pinId": "a",
+          "kind": "input"
+        },
         "1": {
-          "mergeId": "1"
+          "unitId": "ifnot",
+          "pinId": "a",
+          "kind": "input"
         }
       },
-      "ref": false,
       "metadata": {
         "position": {
+          "0": {
+            "ext": {
+              "x": -285,
+              "y": 63
+            }
+          },
           "1": {
             "ext": {
-              "x": -32,
-              "y": 150
+              "x": 92,
+              "y": 236
             }
           }
         }
@@ -735,8 +469,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": -227,
-              "y": 160
+              "x": -274,
+              "y": -55
             }
           }
         }
@@ -747,18 +481,17 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "foreach",
-          "pinId": "a[i]",
+          "unitId": "plan",
+          "pinId": "0",
           "kind": "output"
         }
       },
-      "ref": false,
       "metadata": {
         "position": {
           "0": {
             "ext": {
-              "x": -159,
-              "y": -190
+              "x": 41,
+              "y": -50
             }
           }
         }
@@ -770,33 +503,25 @@
     "description": "general purpose buffer",
     "position": {
       "merge": {
-        "1": {
-          "x": -29,
-          "y": 126
-        },
         "2": {
-          "x": 173,
-          "y": 45
+          "x": 154,
+          "y": 69
         },
         "3": {
-          "x": 43,
-          "y": 13
+          "x": -9,
+          "y": 115
         },
         "4": {
-          "x": 100,
-          "y": -39
+          "x": 49,
+          "y": 34
         },
-        "6": {
-          "x": -79,
-          "y": -18
+        "5": {
+          "x": -55,
+          "y": 7
         },
         "7": {
-          "x": -49,
-          "y": 31
-        },
-        "9": {
-          "x": -70,
-          "y": -114
+          "x": -96,
+          "y": 70
         },
         "11": {
           "x": -124,
@@ -819,16 +544,16 @@
           "y": 42
         },
         "16": {
-          "x": 185,
-          "y": 123
+          "x": 243,
+          "y": 113
         },
         "17": {
-          "x": 84,
-          "y": 150
+          "x": 190,
+          "y": 181
         },
         "19": {
-          "x": 78,
-          "y": 96
+          "x": 92,
+          "y": 150
         },
         "22": {
           "x": 3,
@@ -836,10 +561,12 @@
         }
       },
       "data": {
-        "x": -246,
-        "y": 190
+        "x": 77,
+        "y": -121
       }
-    }
+    },
+    "tags": ["platform", "core", "http"]
   },
-  "id": "84b00637-b2bf-4b99-92eb-bf54f7f88ad0"
+  "id": "84b00637-b2bf-4b99-92eb-bf54f7f88ad0",
+  "system": true
 }
