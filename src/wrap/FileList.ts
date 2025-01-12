@@ -1,4 +1,5 @@
 import { $, $_EE, $Events } from '../Class/$'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { System } from '../system'
 import { A } from '../types/interface/A'
@@ -48,7 +49,7 @@ export function wrapFileList(fileList: FileList, system: System): A<F & $> & $ {
     }
 
     async shift(): Promise<F & $<$Events<$_EE>>> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
   })(system)
 

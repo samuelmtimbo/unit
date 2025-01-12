@@ -7,6 +7,7 @@ import {
 } from '../../../../../Class/Semifunctional'
 import { CUSTOM_HEADER_X_WEBSOCKET_ID } from '../../../../../client/platform/web/api/http'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
+import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
 import { wrapWebSocket } from '../../../../../wrap/Socket'
@@ -113,7 +114,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             // TODO
           },
           onopen: function (evevnt: Event): void {
-            throw new Error('Function not implemented.')
+            throw new MethodNotImplementedError()
           },
           onmessage: function (event: MessageEvent): void {
             const { data } = event
@@ -121,10 +122,10 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             channel.emit('message', data)
           },
           onerror: function (event: Event): void {
-            throw new Error('Function not implemented.')
+            throw new MethodNotImplementedError()
           },
           onclose: function (event: CloseEvent): void {
-            throw new Error('Function not implemented.')
+            throw new MethodNotImplementedError()
           },
         }
 

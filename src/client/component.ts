@@ -3775,7 +3775,7 @@ export class Component<
     if (this[method]) {
       this[method](...data)
     } else {
-      throw 'method not implemented'
+      throw 'invalid method'
     }
   }
 
