@@ -39264,16 +39264,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
     const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
+    const anchor_node = this.get_node(anchor_node_id)
     const anchor_position = this._get_node_position(anchor_node_id)
 
     const merge_to_pin = clone(this._merge_to_pin[merge_node_id])
     const merge_to_input = clone(this._merge_to_input[merge_node_id])
 
     for (let pin_node_id in merge_to_pin) {
+      const { unitId } = segmentLinkPinNodeId(pin_node_id)
+
+      const unit_position = this._get_node_position(unitId)
+
+      const u = pointUnitVector(anchor_position, unit_position)
+
+      const new_pin_position = pointInNode(anchor_node, u, PIN_RADIUS)
+
       this._sim_remove_pin_from_merge(
         merge_node_id,
         pin_node_id,
-        anchor_position
+        new_pin_position
       )
     }
 
