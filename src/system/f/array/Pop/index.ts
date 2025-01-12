@@ -27,7 +27,9 @@ export default class Pop<T> extends Functional<I<T>, O<T>> {
   f({ a }: I<T>, done): void {
     if (a.length > 0) {
       const _a = [...a]
+
       const last = _a.pop()
+
       done({ a: _a, last })
     } else {
       done(undefined, 'cannot pop empty array')

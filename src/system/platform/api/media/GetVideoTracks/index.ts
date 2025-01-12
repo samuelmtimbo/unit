@@ -80,6 +80,14 @@ export default class GetVideoTracks extends Holder<I, O> {
       async indexOf(a: MST): Promise<number> {
         throw new MethodNotImplementedError()
       }
+
+      async pop(): Promise<MST> {
+        throw new MethodNotImplementedError()
+      }
+
+      async shift(): Promise<MST> {
+        throw new MethodNotImplementedError()
+      }
     })(this.__system)
 
     done({ tracks })

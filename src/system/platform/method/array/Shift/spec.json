@@ -1,0 +1,26 @@
+{
+  "name": "shift",
+  "inputs": {
+    "a": {
+      "type": "`A`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "first": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "remove `first` element of `a`",
+    "tags": ["platform", "method", "array"]
+  },
+  "id": "4730fbc1-dd24-4b6a-adc2-d71e2b2df22d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

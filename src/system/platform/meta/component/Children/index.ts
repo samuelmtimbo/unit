@@ -63,6 +63,14 @@ export default class Children extends Functional<I, O> {
       async indexOf(a: any): Promise<number> {
         throw new MethodNotImplementedError()
       }
+
+      async pop(): Promise<any> {
+        throw new MethodNotImplementedError()
+      }
+
+      shift(): Promise<any> {
+        throw new MethodNotImplementedError()
+      }
     })(this.__system)
 
     done({

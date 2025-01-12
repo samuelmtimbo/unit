@@ -10,7 +10,7 @@ import { V } from '../types/interface/V'
 export function wrapSharedRefArrayInterface<T extends any[]>(
   data: SharedRef<T>
 ): A<T> {
-  return {
+  const array: A<T> = {
     append(a: T): Promise<void> {
       data.current.push(a)
 
@@ -30,7 +30,15 @@ export function wrapSharedRefArrayInterface<T extends any[]>(
     indexOf(a: T): Promise<number> {
       return Promise.resolve(data.current.indexOf(a))
     },
+    pop: function (): Promise<T> {
+      return Promise.resolve(data.current.pop())
+    },
+    shift: function (): Promise<T> {
+      return Promise.resolve(data.current.shift())
+    },
   }
+
+  return array
 }
 
 export function wrapArray<T>(array: T[], system: System): A<T> & $ {
@@ -53,8 +61,24 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
       return array.length
     }
 
-    indexOf(a: T): Promise<number> {
+    async indexOf(a: T): Promise<number> {
       throw new MethodNotImplementedError()
+    }
+
+    async pop(): Promise<T> {
+      if (!array.length) {
+        throw new Error('empty array')
+      }
+
+      return array.pop()
+    }
+
+    async shift(): Promise<T> {
+      if (!array.length) {
+        throw new Error('empty array')
+      }
+
+      return array.shift()
     }
   })(system)
 
@@ -85,7 +109,7 @@ export function wrapUint8Array(
       callback()
     }
 
-    append(a: number): Promise<void> {
+    async append(a: number): Promise<void> {
       array[array.length] = a
 
       return
@@ -103,12 +127,36 @@ export function wrapUint8Array(
       return array.length
     }
 
-    indexOf(a: number): Promise<number> {
+    async indexOf(a: number): Promise<number> {
       throw new MethodNotImplementedError()
     }
 
-    set(array_: Uint8ClampedArray, offset: number): void {
+    async set(array_: Uint8ClampedArray, offset: number): Promise<void> {
       array.set(array_, offset)
+    }
+
+    async pop(): Promise<number> {
+      if (array.length === 0) {
+        throw new Error('empty array')
+      }
+
+      const last = array[array.length - 1]
+
+      array = array.subarray(0, array.length - 1)
+
+      return Promise.resolve(last)
+    }
+
+    shift(): Promise<number> {
+      if (array.length === 0) {
+        throw new Error('empty array')
+      }
+
+      const first = array[0]
+
+      array = array.subarray(1, array.length)
+
+      return Promise.resolve(first)
     }
 
     raw() {
