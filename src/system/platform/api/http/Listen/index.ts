@@ -83,6 +83,12 @@ export default class Listen0 extends Holder<I, O> {
       cache: { servers },
     } = this.__system
 
+    if (port < 1 || port > 65535) {
+      done(undefined, 'invalid out-of-range port')
+
+      return
+    }
+
     const handler = makeHandler(this.__system, (url) => {
       this._output.url.push(url)
     })

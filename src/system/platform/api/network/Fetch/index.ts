@@ -1,6 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
+import { isUnsafePort } from '../../../../../util/fetch'
 import { ID_FETCH } from '../../../../_ids'
 import { headerToObj } from '../../http/Handle'
 
@@ -43,6 +44,14 @@ export default class Fetch extends Functional<I, O> {
       },
       cache: { servers, interceptors },
     } = this.__system
+
+    const { port } = new URL(url)
+
+    if (isUnsafePort(Number.parseInt(port))) {
+      done(undefined, 'unsafe port')
+
+      return
+    }
 
     try {
       const { method = 'GET' } = opt
