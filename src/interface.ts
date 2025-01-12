@@ -44,6 +44,7 @@ export const CLASS_TYPE_CRYPTO_KEY = 'CK' // CryptoKey
 export const CLASS_TYPE_ARRAY_BUFFER = 'AB' // ArrayBuffer
 export const CLASS_TYPE_TEXT_ENCODER = 'TE' // TextEncoder
 export const CLASS_TYPE_TEXT_DECODER = 'TD' // TextDecoder
+export const CLASS_TYPE_READABLE_STREAM = 'RS' // ReadableStream
 
 export type AllTypes<T> = {
   B: T
@@ -77,6 +78,7 @@ export type AllTypes<T> = {
   WP: T
   ME: T
   IM: T
+  RS: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -111,6 +113,7 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   WP: true,
   ME: true,
   IM: true,
+  RS: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

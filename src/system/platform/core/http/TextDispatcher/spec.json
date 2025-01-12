@@ -1,0 +1,321 @@
+{
+  "type": "`U`&`G`",
+  "name": "text dispatcher",
+  "units": {
+    "dispatcher": {
+      "id": "39217208-f21a-4131-a089-13fa6f0631a4",
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": -22
+        }
+      },
+      "input": {
+        "status": {
+          "metadata": {
+            "position": {
+              "x": 3,
+              "y": 26
+            }
+          }
+        },
+        "headers": {
+          "metadata": {
+            "position": {
+              "x": -38,
+              "y": 10
+            }
+          }
+        },
+        "url": {
+          "metadata": {
+            "position": {
+              "x": -3,
+              "y": -68
+            }
+          }
+        }
+      },
+      "output": {
+        "body": {
+          "metadata": {
+            "position": {
+              "x": 55,
+              "y": -49
+            }
+          }
+        },
+        "request": {
+          "metadata": {
+            "position": {
+              "x": 41,
+              "y": 8
+            }
+          }
+        }
+      }
+    },
+    "totext": {
+      "id": "b0d71197-fad7-4fc6-87e4-97636d365de6",
+      "input": {
+        "body": {},
+        "any": {
+          "constant": false,
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 241,
+              "y": 111
+            },
+            "data": {
+              "position": {
+                "x": 112,
+                "y": 150
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "text": {
+          "metadata": {
+            "position": {
+              "x": 158,
+              "y": -39
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 108,
+          "y": -37
+        }
+      }
+    },
+    "state": {
+      "id": "c899b675-c3c4-428e-b548-b228305c0302",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -158,
+              "y": -36
+            }
+          }
+        },
+        "done": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 286,
+              "y": -124
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {
+          "metadata": {
+            "position": {
+              "x": -55,
+              "y": -47
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -108,
+          "y": -34
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "state": {
+        "output": {
+          "data": true
+        }
+      },
+      "dispatcher": {
+        "input": {
+          "body": true
+        }
+      }
+    },
+    "3": {
+      "totext": {
+        "input": {
+          "body": true
+        }
+      },
+      "dispatcher": {
+        "output": {
+          "body": true
+        }
+      }
+    },
+    "7": {
+      "totext": {
+        "input": {
+          "any": true
+        }
+      },
+      "dispatcher": {
+        "output": {
+          "url": true
+        }
+      }
+    },
+    "8": {
+      "state": {
+        "input": {
+          "done": true
+        }
+      },
+      "dispatcher": {
+        "output": {
+          "done": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "dispatcher",
+          "pinId": "url"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -4,
+              "y": -93
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "plug": {
+        "0": {
+          "unitId": "dispatcher",
+          "pinId": "status"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 4,
+              "y": 51
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "plug": {
+        "0": {
+          "unitId": "dispatcher",
+          "pinId": "headers"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -49,
+              "y": 33
+            }
+          }
+        }
+      }
+    },
+    "body": {
+      "plug": {
+        "0": {
+          "unitId": "state",
+          "pinId": "init"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -181,
+              "y": -38
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "body": {
+      "plug": {
+        "0": {
+          "unitId": "totext",
+          "pinId": "text"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 181,
+              "y": -42
+            }
+          }
+        }
+      }
+    },
+    "request": {
+      "plug": {
+        "0": {
+          "unitId": "dispatcher",
+          "pinId": "request",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 53,
+              "y": 31
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "headset",
+    "description": "text body http request handler",
+    "position": {
+      "merge": {
+        "7": {
+          "x": 59,
+          "y": -22
+        },
+        "8": {
+          "x": -59,
+          "y": -19
+        }
+      },
+      "data": {
+        "x": -68,
+        "y": 68
+      }
+    }
+  },
+  "id": "cf40cb93-65a7-42bf-aa7a-a00ec15faa08"
+}

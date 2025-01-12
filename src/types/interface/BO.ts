@@ -1,3 +1,5 @@
 export interface BO {
-  raw(): Promise<XMLHttpRequestBodyInit>
+  json(): Promise<any>
+  text(): Promise<string>
+  blob(): Promise<Blob>
 }

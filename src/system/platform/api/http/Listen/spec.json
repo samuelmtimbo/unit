@@ -1,0 +1,30 @@
+{
+  "name": "listen",
+  "inputs": {
+    "port": {
+      "type": "number"
+    },
+    "server": {
+      "type": "`SE`",
+      "ref": true
+    },
+    "close": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "url": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "door-open",
+    "description": "have http `server` listen for requests on `port`",
+    "tags": ["platform", "api", "http"]
+  },
+  "id": "7e5710aa-faf0-41c4-8936-2583ac637c72",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

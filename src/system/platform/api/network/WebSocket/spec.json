@@ -6,14 +6,15 @@
     },
     "close": {
       "type": "any",
-      "optional": true
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {
     "channel": {
       "type": "`CH`",
       "ref": true,
-      "icon": "mail"
+      "icon": "arrow-up-down"
     }
   },
   "metadata": {

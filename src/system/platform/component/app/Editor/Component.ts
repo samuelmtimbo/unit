@@ -12807,9 +12807,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _set_merge_name = (merge_node_id: string, name: string): void => {
+    // console.log('_set_merge_name', merge_node_id, name)
+
     const merge_ref_output = this._merge_to_ref_output[merge_node_id]
 
-    if (merge_ref_output) {
+    if (merge_ref_output && name) {
       this._show_link_pin_name(merge_ref_output)
 
       return
@@ -27912,9 +27914,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
 
     if (ext_node_id) {
-      const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
+      const { type, pinId: pinId_, subPinId } = segmentPlugNodeId(ext_node_id)
 
-      this._sim_plug_exposed_pin(type, pinId, subPinId, {
+      this._sim_plug_exposed_pin(type, pinId_, subPinId, {
         unitId,
         pinId,
         kind: type,
@@ -37080,7 +37082,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
-        if (this._has_link(link_id) && this._is_link_pin_visible(pin_node_id)) {
+        if (this._has_link(link_id)) {
           if (this._is_link_pin_merged(pin_node_id)) {
             this._show_link_text(link_id)
           } else {
@@ -37090,6 +37092,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       })
     }
+
+    clear()
 
     if (
       keyCount(merge_pin_name_count.input ?? {}) === 1 &&
@@ -37108,11 +37112,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._hide_link_text(link_id)
         })
-      } else {
-        clear()
       }
-    } else {
-      clear()
     }
   }
 
@@ -60708,7 +60708,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const unit_pin_spec = deepGetOrDefault(
           this._spec,
           ['units', graphUnitId, type, pinId],
-          undefined
+          {}
         )
 
         deepDelete(this._spec, ['units', graphUnitId, type, pinId])

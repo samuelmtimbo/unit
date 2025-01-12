@@ -1,8 +1,10 @@
+import { Waiter } from './Waiter'
 import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
 import { Theme } from './client/theme'
 import { Rect } from './client/util/geometry/types'
 import { Style, Tag } from './system/platform/Style'
+import { WebSocketShape } from './system/platform/api/network/WebSocket'
 import { MeasureTextFunction } from './text'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
@@ -21,20 +23,76 @@ import {
   SpeechRecognition,
   SpeechRecognitionOpt,
 } from './types/global/SpeechRecognition'
+import { SE } from './types/interface/SE'
+import { WSS } from './types/interface/WSS'
+
+export type RequestOpt = {
+  headers: Dict<string>
+  method: string
+  body: BodyInit
+  cors: boolean
+}
+
+export type ServerResponse = {
+  status: number
+  headers: Dict<string>
+  body: string | ReadableStream
+}
+
+export type ServerRequest = {
+  url: string
+  protocol: string
+  headers: Dict<string>
+  method: string
+  port: string
+  query: Dict<string>
+  path: string
+  search: string
+  hostname: string
+  origin: string
+  body: ReadableStream
+  _?: Dict<any>
+}
+
+export type ServerOpt = {}
+
+export type Server = SE
+
+export type ServerListener = {
+  opt: ServerOpt
+  handler: ServerHandler
+}
+
+export type InterceptOpt = {
+  urls: string[]
+}
+
+export type ServerInterceptor = {
+  opt: InterceptOpt
+  handler: ServerHandler
+}
+
+export type ServerSocket = {
+  send: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void
+  onmessage: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void
+}
+
+export type ServerHandler = (req: ServerRequest) => Promise<ServerResponse>
+
+export type WebSocketServer = WSS
 
 export type ImageCapture = any
 
 export type BasicHTTPResponse = {
   status: number
   headers: Dict<string>
-  body: string
 }
 
 export type BasicHTTPRequest = {
+  hostname: string
   headers: Dict<string | string[]>
   method: string
   path: string
-  body: string
   search: string
   query: Dict<string>
 }
@@ -67,13 +125,18 @@ export type API = {
     fetch: (
       url: string,
       opt: RequestInit,
-      servers?: Dict<any>
+      servers: Dict<ServerListener>,
+      interceptors: ServerInterceptor[]
     ) => Promise<Response>
-    listen: (
-      port: number,
-      handler: BasicHTTPHandler,
-      servers?: Dict<any>
-    ) => Unlisten
+    createServer: (opt: ServerOpt, servers?: Dict<any>) => Server
+    handleUpgrade: (
+      request: ServerRequest,
+      response: Waiter<ServerResponse>,
+      ws: Dict<WebSocketShape>,
+      wss: Dict<ServerSocket>,
+      sockets: Dict<any>,
+      heads: Dict<any>
+    ) => Promise<ServerSocket>
     EventSource: typeof EventSource
   }
   crypto: {

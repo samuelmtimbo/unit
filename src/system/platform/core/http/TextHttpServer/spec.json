@@ -1,0 +1,389 @@
+{
+  "type": "`U`&`G`",
+  "name": "text http server",
+  "units": {
+    "listen0": {
+      "id": "7e5710aa-faf0-41c4-8936-2583ac637c72",
+      "input": {
+        "port": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -66,
+              "y": -2
+            }
+          }
+        },
+        "server": {},
+        "close": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -77,
+              "y": -20
+            }
+          }
+        }
+      },
+      "output": {
+        "url": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -33,
+          "y": -32
+        }
+      }
+    },
+    "createserver": {
+      "id": "d52ecdec-776b-425c-b982-ce25ee8113bd",
+      "input": {
+        "opt": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -195,
+              "y": -51
+            }
+          }
+        },
+        "close": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -184,
+              "y": -78
+            }
+          }
+        }
+      },
+      "output": {
+        "server": {
+          "metadata": {
+            "position": {
+              "x": -90,
+              "y": -44
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -146,
+          "y": -49
+        }
+      }
+    },
+    "buffer": {
+      "id": "84b00637-b2bf-4b99-92eb-bf54f7f88ad0",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 1.125,
+              "y": 16.9375
+            }
+          }
+        },
+        "init": {
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": -75
+            },
+            "data": {
+              "position": {
+                "x": 107,
+                "y": -109
+              }
+            }
+          },
+          "data": {
+            "ref": [],
+            "data": []
+          }
+        }
+      },
+      "output": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -94.875,
+              "y": 35.9375
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 73,
+          "y": -37
+        }
+      }
+    },
+    "textdispatcher": {
+      "id": "cf40cb93-65a7-42bf-aa7a-a00ec15faa08",
+      "output": {
+        "body": {
+          "metadata": {
+            "position": {
+              "x": 137,
+              "y": 24
+            }
+          }
+        },
+        "request": {
+          "metadata": {
+            "position": {
+              "x": 227,
+              "y": 23
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 181,
+          "y": 2
+        }
+      },
+      "input": {
+        "status": {
+          "metadata": {
+            "position": {
+              "x": 216,
+              "y": -32
+            }
+          }
+        },
+        "headers": {
+          "metadata": {
+            "position": {
+              "x": 191,
+              "y": 47
+            }
+          }
+        },
+        "body": {
+          "metadata": {
+            "position": {
+              "x": 235,
+              "y": -6
+            }
+          }
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "listen0": {
+        "input": {
+          "server": true
+        }
+      },
+      "createserver": {
+        "output": {
+          "server": true
+        }
+      }
+    },
+    "1": {
+      "listen0": {
+        "output": {
+          "url": true
+        }
+      },
+      "buffer": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "buffer": {
+        "output": {
+          "a": true
+        }
+      },
+      "textdispatcher": {
+        "input": {
+          "url": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "headers": {
+      "plug": {
+        "0": {
+          "unitId": "textdispatcher",
+          "pinId": "headers",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 193,
+              "y": 72
+            }
+          }
+        }
+      },
+      "type": "string{}"
+    },
+    "status": {
+      "plug": {
+        "0": {
+          "unitId": "textdispatcher",
+          "pinId": "status",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 229,
+              "y": -54
+            }
+          }
+        }
+      },
+      "type": "number"
+    },
+    "body": {
+      "plug": {
+        "0": {
+          "unitId": "textdispatcher",
+          "pinId": "body",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 259,
+              "y": -12
+            }
+          }
+        }
+      },
+      "type": "any"
+    },
+    "port": {
+      "plug": {
+        "0": {
+          "unitId": "listen0",
+          "pinId": "port",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -69,
+              "y": 22
+            }
+          }
+        }
+      }
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "createserver",
+          "pinId": "opt",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -218,
+              "y": -52
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "body": {
+      "plug": {
+        "0": {
+          "kind": "output",
+          "unitId": "textdispatcher",
+          "pinId": "body"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 124,
+              "y": 45
+            }
+          }
+        }
+      },
+      "type": "string"
+    },
+    "request": {
+      "plug": {
+        "0": {
+          "unitId": "textdispatcher",
+          "pinId": "request",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 247,
+              "y": 38
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "http server for text only requests",
+    "position": {
+      "merge": {
+        "1": {
+          "x": 18,
+          "y": -35
+        },
+        "2": {
+          "x": 127,
+          "y": -19
+        },
+        "4": {
+          "x": 149,
+          "y": 32
+        },
+        "5": {
+          "x": 166,
+          "y": -10
+        }
+      },
+      "data": {
+        "x": -253,
+        "y": -53
+      }
+    }
+  },
+  "id": "a3fcb4d9-240c-4984-8c4b-fe863ae1076b"
+}

@@ -38,6 +38,8 @@ export default class FileField extends Element_<I, O> {
       value: '',
     }
 
+    this.register()
+
     listenGlobalComponent(
       system,
       this.__global_id,

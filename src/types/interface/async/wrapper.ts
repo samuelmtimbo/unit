@@ -63,4 +63,7 @@ export const ASYNC: AllTypes<(unit: any) => any> = {
   TD: AsyncTD,
   ME: AsyncME,
   IM: AsyncIM,
+  RS: function (unit: any) {
+    throw new Error('Function not implemented.')
+  },
 }

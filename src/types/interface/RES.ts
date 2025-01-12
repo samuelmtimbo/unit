@@ -1,5 +1,3 @@
-export interface RES {
-  toJson(): Promise<any>
-  toText(): Promise<string>
-  toBlob(): Promise<Blob>
-}
+import { BO } from './BO'
+
+export interface RES extends BO {}

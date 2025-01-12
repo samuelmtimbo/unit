@@ -18,7 +18,7 @@
     "channel": {
       "type": "`CH`",
       "ref": true,
-      "icon": "mail"
+      "icon": "arrow-up-down"
     }
   },
   "metadata": {

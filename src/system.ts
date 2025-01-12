@@ -1,14 +1,23 @@
-import { API } from './API'
+import {
+  API,
+  ServerInterceptor,
+  ServerListener,
+  ServerRequest,
+  ServerResponse,
+  ServerSocket,
+} from './API'
 import { Graph } from './Class/Graph'
 import { EventEmitter_ } from './EventEmitter'
 import { Object_ } from './Object'
 import { Registry } from './Registry'
+import { Waiter } from './Waiter'
 import { IOElement } from './client/IOElement'
 import { Context } from './client/context'
 import { UnitPointerEvent } from './client/event/pointer'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
 import { AllTypes } from './interface'
+import { WebSocketShape } from './system/platform/api/network/WebSocket'
 import { Classes, Specs } from './types'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
@@ -29,9 +38,15 @@ export interface System extends S, Registry {
   cache: {
     dragAndDrop: Dict<any>
     pointerCapture: Dict<any>
-    spriteSheetMap: Dict<boolean>
-    servers: Dict<any>
+    servers: Dict<ServerListener>
     events: Dict<any>
+    requests: Dict<ServerRequest>
+    responses: Dict<Waiter<ServerResponse>>
+    ws: Dict<WebSocketShape>
+    wss: Dict<ServerSocket>
+    interceptors: ServerInterceptor[]
+    sockets: Dict<any>
+    heads: Dict<any>
   }
   feature: Dict<boolean>
   foreground: {

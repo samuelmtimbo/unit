@@ -1,0 +1,299 @@
+{
+  "type": "`U`&`G`",
+  "name": "dispatcher",
+  "units": {
+    "handle": {
+      "id": "a9aaed9e-a0ca-423f-bb44-4ee0b3432471",
+      "input": {
+        "url": {
+          "metadata": {
+            "position": {
+              "x": -124,
+              "y": 11
+            }
+          }
+        },
+        "done": {
+          "metadata": {
+            "position": {
+              "x": 148,
+              "y": 30
+            }
+          }
+        }
+      },
+      "output": {
+        "url": {},
+        "request": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -106,
+              "y": -18
+            }
+          }
+        },
+        "body": {
+          "metadata": {
+            "position": {
+              "x": -118,
+              "y": 47
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -73,
+          "y": 15
+        }
+      }
+    },
+    "respond": {
+      "id": "7ef1c827-bbd4-4339-94c5-9fce05e50667",
+      "input": {
+        "url": {},
+        "body": {
+          "metadata": {
+            "position": {
+              "x": 64,
+              "y": 47
+            }
+          }
+        },
+        "status": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 64,
+              "y": -14
+            }
+          }
+        },
+        "headers": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 79,
+              "y": 16
+            }
+          }
+        }
+      },
+      "output": {
+        "done": {
+          "metadata": {
+            "position": {
+              "x": 172,
+              "y": -61
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 27,
+          "y": 16
+        }
+      }
+    }
+  },
+  "merges": {
+    "4": {
+      "respond": {
+        "input": {
+          "url": true
+        }
+      },
+      "handle": {
+        "output": {
+          "url": true
+        }
+      }
+    },
+    "5": {
+      "handle": {
+        "input": {
+          "done": true
+        }
+      },
+      "respond": {
+        "output": {
+          "done": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "handle",
+          "pinId": "url"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -148,
+              "y": 6
+            }
+          }
+        }
+      }
+    },
+    "body": {
+      "plug": {
+        "0": {
+          "unitId": "respond",
+          "pinId": "body"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 77,
+              "y": 68
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "plug": {
+        "0": {
+          "unitId": "respond",
+          "pinId": "status"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 77,
+              "y": -35
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "plug": {
+        "0": {
+          "unitId": "respond",
+          "pinId": "headers"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 104,
+              "y": 16
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "body": {
+      "plug": {
+        "0": {
+          "unitId": "handle",
+          "pinId": "body"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -136,
+              "y": 71
+            }
+          }
+        }
+      }
+    },
+    "url": {
+      "plug": {
+        "0": {
+          "mergeId": "4"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -22,
+              "y": -21
+            }
+          }
+        }
+      }
+    },
+    "done": {
+      "plug": {
+        "0": {
+          "mergeId": "5"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -23,
+              "y": 53
+            }
+          }
+        }
+      }
+    },
+    "request": {
+      "plug": {
+        "0": {
+          "unitId": "handle",
+          "pinId": "request",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -117,
+              "y": -40
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "headset",
+    "description": "http request handle + respond",
+    "position": {
+      "merge": {
+        "4": {
+          "x": -23,
+          "y": 4
+        },
+        "5": {
+          "x": -23,
+          "y": 28
+        }
+      },
+      "data": {
+        "x": 142,
+        "y": 17
+      }
+    }
+  },
+  "id": "39217208-f21a-4131-a089-13fa6f0631a4"
+}

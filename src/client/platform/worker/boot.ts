@@ -1,11 +1,19 @@
-import { API, BasicHTTPHandler } from '../../../API'
+import {
+  API,
+  Server,
+  ServerOpt,
+  ServerRequest,
+  ServerResponse,
+  ServerSocket,
+} from '../../../API'
+import { Waiter } from '../../../Waiter'
 import { APINotSupportedError } from '../../../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../../../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../../../exception/MediaDeviceAPINotSupported'
 import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
 import { Style, Tag } from '../../../system/platform/Style'
+import { WebSocketShape } from '../../../system/platform/api/network/WebSocket'
 import { Dict } from '../../../types/Dict'
-import { Unlisten } from '../../../types/Unlisten'
 import { DownloadDataOpt } from '../../../types/global/DownloadData'
 import { DownloadURLOpt } from '../../../types/global/DownloadURL'
 import { LayoutNode } from '../../LayoutNode'
@@ -129,8 +137,16 @@ export function workerApi(): API {
         throw new APINotSupportedError('Fetch')
       },
       EventSource: undefined,
-      listen: function (port: number, handler: BasicHTTPHandler): Unlisten {
-        throw new APINotSupportedError('HTTP Server')
+      createServer: function (opt: ServerOpt, servers?: Dict<any>): Server {
+        throw new APINotSupportedError('Server')
+      },
+      handleUpgrade: function (
+        request: ServerRequest,
+        response: Waiter<ServerResponse>,
+        ws: Dict<WebSocketShape>,
+        wss: Dict<ServerSocket>
+      ): Promise<ServerSocket> {
+        throw new APINotSupportedError('Server')
       },
     },
     speech: {

@@ -1,4 +1,4 @@
-import { API } from '../API'
+import { API, InterceptOpt, ServerHandler, ServerInterceptor } from '../API'
 import { Graph } from '../Class/Graph'
 import { EventEmitter_ } from '../EventEmitter'
 import { Object_ } from '../Object'
@@ -10,6 +10,7 @@ import { start } from '../start'
 import { BootOpt, System } from '../system'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
+import { Unlisten } from '../types/Unlisten'
 import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
 import { ASYNC } from '../types/interface/async/wrapper'
@@ -41,12 +42,16 @@ export function boot(
     pointers,
   }
 
-  const cache = {
+  const cache: System['cache'] = {
     dragAndDrop: {},
     pointerCapture: {},
-    spriteSheetMap: {},
     servers: {},
     events: {},
+    requests: {},
+    responses: {},
+    ws: {},
+    wss: {},
+    interceptors: [],
   }
 
   const feature = {}
@@ -165,6 +170,18 @@ export function boot(
       const components = componentRemoteToLocal[remoteGlobalId]
 
       remove(components, component)
+    },
+    intercept: function (opt: InterceptOpt, handler: ServerHandler): Unlisten {
+      const interceptor: ServerInterceptor = {
+        opt,
+        handler,
+      }
+
+      cache.interceptors.push(interceptor)
+
+      return () => {
+        remove(cache.interceptors, interceptor)
+      }
     },
   }
 

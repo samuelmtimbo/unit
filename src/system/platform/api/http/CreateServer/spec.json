@@ -1,0 +1,28 @@
+{
+  "name": "create server",
+  "inputs": {
+    "opt": {
+      "type": "{}"
+    },
+    "close": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "server": {
+      "type": "`SE`",
+      "ref": true,
+      "icon": "server"
+    }
+  },
+  "metadata": {
+    "icon": "network",
+    "description": "create http server",
+    "tags": ["platform", "api", "http"]
+  },
+  "id": "d52ecdec-776b-425c-b982-ce25ee8113bd",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

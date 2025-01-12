@@ -3,12 +3,12 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
-import { RES } from '../../../../../types/interface/RES'
+import { BO } from '../../../../../types/interface/BO'
 import { wrapBlob } from '../../../../../wrap/Blob'
-import { ID_TO_BLOB_0 } from '../../../../_ids'
+import { ID_TO_BLOB } from '../../../../_ids'
 
 export type I = {
-  res: RES & $
+  body: BO & $
   any: any
   done: any
 }
@@ -21,14 +21,14 @@ export default class ToBlob extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['res', 'any'],
+        fi: ['body', 'any'],
         fo: ['blob'],
         i: [],
         o: [],
       },
       {
         input: {
-          res: {
+          body: {
             ref: true,
           },
         },
@@ -39,15 +39,15 @@ export default class ToBlob extends Holder<I, O> {
         },
       },
       system,
-      ID_TO_BLOB_0
+      ID_TO_BLOB
     )
   }
 
-  async f({ res }: I, done: Done<O>) {
+  async f({ body }: I, done: Done<O>) {
     let blob_: Blob
 
     try {
-      blob_ = await res.toBlob()
+      blob_ = await body.blob()
     } catch (err) {
       done(undefined, err.message.toLowerCase())
 

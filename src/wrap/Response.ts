@@ -6,15 +6,15 @@ export function wrapResponse(response: Response, system: System): RES & $ {
   const $response = new (class Response_ extends $ implements RES {
     __: string[] = ['RES']
 
-    toJson(): Promise<any> {
+    json(): Promise<any> {
       return response.json()
     }
 
-    toText(): Promise<string> {
+    text(): Promise<string> {
       return response.text()
     }
 
-    toBlob(): Promise<Blob> {
+    blob(): Promise<Blob> {
       return response.blob()
     }
   })(system)

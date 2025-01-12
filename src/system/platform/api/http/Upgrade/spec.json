@@ -1,0 +1,28 @@
+{
+  "name": "upgrade",
+  "inputs": {
+    "url": {
+      "type": "string"
+    },
+    "close": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "socket": {
+      "type": "`CH`",
+      "ref": true,
+      "icon": "arrow-up-down"
+    }
+  },
+  "metadata": {
+    "icon": "circle-fading-arrow-up",
+    "description": "upgrade http request at `url`` into a web socket connection",
+    "tags": ["platform", "api", "http"]
+  },
+  "id": "8a7e3307-7e3b-4360-a59e-6e95c507ebf5",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

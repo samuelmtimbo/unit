@@ -49,6 +49,7 @@ export default class Fetch0 extends Holder<I, O> {
       api: {
         http: { fetch },
       },
+      cache: { servers, interceptors },
     } = this.__system
 
     opt.body = await body.raw()
@@ -56,7 +57,7 @@ export default class Fetch0 extends Holder<I, O> {
     let response: Response
 
     try {
-      response = await fetch(url, opt)
+      response = await fetch(url, opt, servers, interceptors)
     } catch (err) {
       if (err.message === 'Failed to fetch') {
         done(undefined, 'failed to fetch')

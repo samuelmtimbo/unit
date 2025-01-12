@@ -414,7 +414,7 @@ export function getExtNodeIdFromIntNodeId(intNodeId: string): string {
 }
 
 export function getIntNodeIdFromExtNodeId(ext_node_id: string): string {
-  const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
+  const { type, pinId: pinId, subPinId } = segmentPlugNodeId(ext_node_id)
 
   return getIntNodeId(type, pinId, subPinId)
 }

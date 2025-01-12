@@ -1,0 +1,33 @@
+{
+  "name": "handle",
+  "inputs": {
+    "url": {
+      "type": "string"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "url": {
+      "type": "string"
+    },
+    "request": {
+      "type": "object"
+    },
+    "body": {
+      "type": "`RS`",
+      "ref": true,
+      "icon": "binary"
+    }
+  },
+  "metadata": {
+    "icon": "mail-open",
+    "description": "handle http request available on internal `url`",
+    "tags": ["platform", "api", "http"]
+  },
+  "id": "a9aaed9e-a0ca-423f-bb44-4ee0b3432471",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,483 @@
+{
+  "type": "`U`&`G`",
+  "name": "is web socket request",
+  "units": {
+    "getordefault": {
+      "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "Connection"
+          },
+          "metadata": {
+            "data": {
+              "position": {
+                "x": -47,
+                "y": 122
+              }
+            },
+            "position": {
+              "x": -45,
+              "y": 87
+            }
+          }
+        },
+        "obj": {},
+        "default": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": ""
+          },
+          "metadata": {
+            "position": {
+              "x": -90,
+              "y": 64
+            },
+            "data": {
+              "position": {
+                "x": -112,
+                "y": 91
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -46,
+          "y": 43
+        }
+      }
+    },
+    "tolowercase": {
+      "id": "adde2d16-e1e6-4599-9a64-dd0968797041",
+      "input": {
+        "A": {}
+      },
+      "output": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 44,
+              "y": -36
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 58,
+          "y": 74
+        }
+      }
+    },
+    "includes": {
+      "id": "38bc7001-3543-48ba-99a5-96aeb908494b",
+      "input": {
+        "str": {},
+        "search": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "upgrade"
+          },
+          "metadata": {
+            "position": {
+              "x": 201,
+              "y": 98
+            },
+            "data": {
+              "position": {
+                "x": 226,
+                "y": 125
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "test": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 161,
+          "y": 73
+        }
+      }
+    },
+    "getordefault0": {
+      "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "Upgrade"
+          },
+          "metadata": {
+            "data": {
+              "position": {
+                "x": -7,
+                "y": -125
+              }
+            },
+            "position": {
+              "x": -17,
+              "y": -91
+            }
+          }
+        },
+        "obj": {},
+        "default": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": ""
+          },
+          "metadata": {
+            "position": {
+              "x": -80,
+              "y": -79
+            },
+            "data": {
+              "position": {
+                "x": -99,
+                "y": -109
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -40,
+          "y": -53
+        }
+      }
+    },
+    "tolowercase0": {
+      "id": "adde2d16-e1e6-4599-9a64-dd0968797041",
+      "input": {
+        "A": {}
+      },
+      "output": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 93.1875,
+              "y": 24.875
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 67,
+          "y": -75
+        }
+      }
+    },
+    "equals": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "websocket"
+          },
+          "metadata": {
+            "position": {
+              "x": 212,
+              "y": -94
+            },
+            "data": {
+              "position": {
+                "x": 239,
+                "y": -120
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "a = b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 171,
+          "y": -71
+        }
+      }
+    },
+    "and": {
+      "id": "407640f7-f1c3-4297-a5ce-baff357a6d31",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a and b": {
+          "metadata": {
+            "position": {
+              "x": 291,
+              "y": 6
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 240,
+          "y": 5
+        }
+      }
+    },
+    "getordefault1": {
+      "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "headers"
+          },
+          "metadata": {
+            "position": {
+              "x": -182,
+              "y": 18
+            },
+            "data": {
+              "position": {
+                "x": -212,
+                "y": 45
+              }
+            }
+          }
+        },
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -194,
+              "y": -11
+            }
+          }
+        },
+        "default": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {}
+          },
+          "metadata": {
+            "position": {
+              "x": -180,
+              "y": -40
+            },
+            "data": {
+              "position": {
+                "x": -204,
+                "y": -69
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -141,
+          "y": -10
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getordefault": {
+        "input": {
+          "obj": true
+        }
+      },
+      "getordefault0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "getordefault1": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "1": {
+      "tolowercase": {
+        "input": {
+          "A": true
+        }
+      },
+      "getordefault": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "2": {
+      "includes": {
+        "input": {
+          "str": true
+        }
+      },
+      "tolowercase": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "tolowercase0": {
+        "input": {
+          "A": true
+        }
+      },
+      "getordefault0": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "4": {
+      "equals": {
+        "input": {
+          "a": true
+        }
+      },
+      "tolowercase0": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "6": {
+      "and": {
+        "input": {
+          "b": true
+        }
+      },
+      "equals": {
+        "output": {
+          "a = b": true
+        }
+      }
+    },
+    "7": {
+      "and": {
+        "input": {
+          "a": true
+        }
+      },
+      "includes": {
+        "output": {
+          "test": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "request": {
+      "plug": {
+        "0": {
+          "unitId": "getordefault1",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -219,
+              "y": -12
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "test": {
+      "plug": {
+        "0": {
+          "unitId": "and",
+          "pinId": "a and b",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "boolean",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 314,
+              "y": 7
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "test whether http request is a web socket upgrade",
+    "position": {
+      "data": {
+        "x": 355,
+        "y": 9
+      },
+      "merge": {
+        "0": {
+          "x": -79,
+          "y": -7
+        },
+        "1": {
+          "x": 7,
+          "y": 61
+        },
+        "2": {
+          "x": 109,
+          "y": 78
+        },
+        "3": {
+          "x": 15,
+          "y": -64
+        },
+        "4": {
+          "x": 119,
+          "y": -77
+        },
+        "6": {
+          "x": 210,
+          "y": -36
+        },
+        "7": {
+          "x": 204,
+          "y": 42
+        }
+      }
+    }
+  },
+  "id": "fce38491-5fb7-4351-a775-ca4d474fdfe1"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "intercept",
+  "inputs": {
+    "system": {
+      "type": "`S`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{urls?:string|string[]}",
+      "metadata": {
+        "examples": ["{urls:'*'}"]
+      }
+    },
+    "stop": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "url": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "forward",
+    "description": "intercept all `system` http requests that match given \"opt\"",
+    "tags": ["platform", "api", "http"]
+  },
+  "id": "6dbf7f62-cd6c-46a8-a559-ca50aebab9c4",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -13,6 +13,10 @@ export function wrapBlob(blob: Blob, system: System): B & $ {
     async image(): Promise<any> {
       return blob
     }
+
+    raw() {
+      return blob
+    }
   })(system)
 
   return blob_

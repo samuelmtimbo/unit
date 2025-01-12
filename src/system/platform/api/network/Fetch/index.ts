@@ -2,6 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { ID_FETCH } from '../../../../_ids'
+import { headerToObj } from '../../http/Handle'
 
 export type I = {
   url: string
@@ -40,7 +41,7 @@ export default class Fetch extends Functional<I, O> {
       api: {
         http: { fetch },
       },
-      cache: { servers },
+      cache: { servers, interceptors },
     } = this.__system
 
     try {
@@ -50,8 +51,8 @@ export default class Fetch extends Functional<I, O> {
         delete opt.body
       }
 
-      fetch(url, opt, servers)
-        .then((response) => {
+      fetch(url, opt, servers, interceptors)
+        .then(async (response: Response) => {
           const {
             bodyUsed,
             headers,
@@ -60,7 +61,6 @@ export default class Fetch extends Functional<I, O> {
             status,
             statusText,
             type,
-            url,
           } = response
 
           return response.text().then((text) => {
@@ -69,7 +69,7 @@ export default class Fetch extends Functional<I, O> {
                 url,
                 status,
                 bodyUsed,
-                headers: { ...headers },
+                headers: headerToObj(headers),
                 redirected,
                 ok,
                 statusText,

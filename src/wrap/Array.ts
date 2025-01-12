@@ -17,16 +17,18 @@ export function wrapSharedRefArrayInterface<T extends any[]>(
       return
     },
     put(i: number, data: any): Promise<void> {
-      throw new MethodNotImplementedError()
+      data.current[i] = data
+
+      return Promise.resolve()
     },
     at(i: number): Promise<any> {
-      throw new MethodNotImplementedError()
+      return Promise.resolve(data.current[i])
     },
     length(): Promise<number> {
-      throw new MethodNotImplementedError()
+      return Promise.resolve(data.current.length)
     },
     indexOf(a: T): Promise<number> {
-      throw new MethodNotImplementedError()
+      return Promise.resolve(data.current.indexOf(a))
     },
   }
 }

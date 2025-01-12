@@ -2,11 +2,11 @@ import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { RES } from '../../../../../types/interface/RES'
+import { BO } from '../../../../../types/interface/BO'
 import { ID_TO_JSON } from '../../../../_ids'
 
 export type I = {
-  res: RES & $
+  body: BO & $
   any: any
 }
 
@@ -27,11 +27,11 @@ export default class ToJson extends Functional<I, O> {
     )
   }
 
-  async f({ res }: I, done: Done<O>): Promise<void> {
+  async f({ body: res }: I, done: Done<O>): Promise<void> {
     let json: any
 
     try {
-      json = await res.toJson()
+      json = await res.json()
     } catch (err) {
       done(undefined, err.message.toLowerCase())
 

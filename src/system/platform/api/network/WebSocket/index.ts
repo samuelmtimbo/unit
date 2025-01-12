@@ -5,6 +5,7 @@ import {
   Semifunctional_EE,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
+import { CUSTOM_HEADER_X_WEBSOCKET_ID } from '../../../../../client/platform/web/api/http'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
@@ -25,8 +26,18 @@ export type WebSocket_EE = { message: [any]; close: [any, any] }
 export type WebSocketEvents = SemifunctionalEvents<Semifunctional_EE> &
   WebSocket_EE
 
+export interface WebSocketShape {
+  readyState: number
+  send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void
+  close(): void
+  onopen(evevnt: Event): void
+  onmessage(event: MessageEvent): void
+  onerror(event: Event): void
+  onclose(event: CloseEvent): void
+}
+
 export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
-  private _web_socket: WebSocket | null = null
+  private _web_socket: WebSocketShape | null = null
 
   constructor(system: System) {
     super(
@@ -49,11 +60,13 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     )
   }
 
-  f({ url }: I, done: Done<O>) {
-    const {
+  async f({ url }: I, done: Done<O>) {
+    let {
       api: {
         window: { WebSocket },
+        http: { fetch },
       },
+      cache: { ws, wss, servers, interceptors },
     } = this.__system
 
     if (!WebSocket) {
@@ -62,23 +75,80 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       return
     }
 
-    if (this._web_socket) {
-      this._web_socket.close()
-    }
+    if (url.startsWith('unit://')) {
+      let response: Response
 
-    try {
-      this._web_socket = new WebSocket(url)
-    } catch (err) {
-      if (
-        err.message ===
-        "Failed to construct 'WebSocket': The URL '' is invalid."
-      ) {
-        done(undefined, 'malformed url')
-      } else {
-        done(undefined, err.message.toLowerCase())
+      try {
+        response = await fetch(
+          url,
+          {
+            method: 'UPGRADE',
+            headers: {
+              Upgrade: 'websocket',
+              Connection: 'upgrade',
+            },
+          },
+          servers,
+          interceptors
+        )
+      } catch (err) {
+        done(undefined, 'could not connect')
+
+        return
       }
 
-      return
+      if (response.ok) {
+        const internalId = response.headers.get(CUSTOM_HEADER_X_WEBSOCKET_ID)
+
+        this._web_socket = {
+          readyState: WebSocket.OPEN,
+          send: function (
+            data: string | ArrayBufferLike | Blob | ArrayBufferView
+          ): void {
+            const server = wss[internalId]
+
+            server.onmessage(data)
+          },
+          close: function (): void {
+            // TODO
+          },
+          onopen: function (evevnt: Event): void {
+            throw new Error('Function not implemented.')
+          },
+          onmessage: function (event: MessageEvent): void {
+            const { data } = event
+
+            channel.emit('message', data)
+          },
+          onerror: function (event: Event): void {
+            throw new Error('Function not implemented.')
+          },
+          onclose: function (event: CloseEvent): void {
+            throw new Error('Function not implemented.')
+          },
+        }
+
+        ws[internalId] = this._web_socket
+      } else {
+        done(undefined, 'failed to connect')
+
+        return
+      }
+    } else {
+      try {
+        this._web_socket = new WebSocket(url)
+      } catch (err) {
+        if (
+          err.message ===
+          "Failed to construct 'WebSocket': The URL '' is invalid."
+        ) {
+          done(undefined, 'malformed url')
+        } else {
+          done(undefined, err.message.toLowerCase())
+        }
+
+        return
+      }
     }
 
     const channel = wrapWebSocket(this._web_socket, this.__system)
@@ -101,6 +171,8 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     channel.addListener('error', (err) => {
       this.err(err)
     })
+
+    done({ channel })
   }
 
   d() {
