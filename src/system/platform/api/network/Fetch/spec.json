@@ -12,11 +12,20 @@
       "metadata": {
         "examples": ["{method:'GET'}"]
       }
+    },
+    "body": {
+      "type": "`BO`",
+      "metadata": {},
+      "ref": true
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {
-    "response": {
-      "type": "{status:number,body:string,url:string,bodyUsed:boolean,headers:object,redirected:boolean,ok:boolean,statusText:string,type:string}"
+    "res": {
+      "type": "`RES`",
+      "ref": true
     }
   },
   "metadata": {
@@ -25,7 +34,7 @@
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
     "tags": ["platform", "api", "network"]
   },
-  "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
+  "id": "b97c0133-6c87-4b69-af4e-354c0b590ece",
   "base": true,
   "type": "`U`",
   "system": true

@@ -1,49 +1,59 @@
-import { Functional } from '../../../../../Class/Functional'
+import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
+import { BO } from '../../../../../types/interface/BO'
+import { RES } from '../../../../../types/interface/RES'
 import { isUnsafePort } from '../../../../../util/fetch'
-import { ID_FETCH } from '../../../../_ids'
-import { headerToObj } from '../../http/Handle'
+import { wrapResponse } from '../../../../../wrap/Response'
+import { ID_FETCH_0 } from '../../../../_ids'
 
 export type I = {
   url: string
   opt: RequestInit
+  body: BO & $
+  done: any
 }
 
 export type O = {
-  response: {
-    status: number
-    body: string
-    url: string
-    bodyUsed: boolean
-    headers: object
-    redirected: boolean
-    ok: boolean
-    statusText: string
-    type: string
-  }
+  res: RES & $
 }
 
-export default class Fetch extends Functional<I, O> {
+export default class Fetch extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['url', 'opt'],
-        o: ['response'],
+        fi: ['url', 'opt', 'body'],
+        fo: ['res'],
+        i: [],
+        o: [],
       },
-      {},
+      {
+        input: {
+          body: {
+            ref: true,
+          },
+        },
+        output: {
+          res: {
+            ref: true,
+          },
+        },
+      },
       system,
-      ID_FETCH
+      ID_FETCH_0
     )
   }
 
-  async f({ url, opt }: I, done: Done<O>) {
+  async f({ url, opt, body }: I, done: Done<O>): Promise<void> {
     const {
       api: {
         http: { fetch },
       },
       cache: { servers, interceptors },
     } = this.__system
+
+    opt.body = await body.raw()
 
     const { port } = new URL(url)
 
@@ -53,42 +63,26 @@ export default class Fetch extends Functional<I, O> {
       return
     }
 
+    const { method = 'GET' } = opt
+
+    if (method === 'GET' || method === 'HEAD') {
+      delete opt.body
+    }
+
     try {
-      const { method = 'GET' } = opt
-
-      if (method === 'GET' || method === 'HEAD') {
-        delete opt.body
-      }
-
       fetch(url, opt, servers, interceptors)
-        .then(async (response: Response) => {
-          const {
-            bodyUsed,
-            headers,
-            redirected,
-            ok,
-            status,
-            statusText,
-            type,
-          } = response
+        .then((response) => {
+          const res = wrapResponse(response, this.__system)
 
-          return response.text().then((text) => {
-            done({
-              response: {
-                url,
-                status,
-                bodyUsed,
-                headers: headerToObj(headers),
-                redirected,
-                ok,
-                statusText,
-                type,
-                body: text,
-              },
-            })
-          })
+          done({ res })
         })
         .catch((err) => {
+          if (err.message === 'Failed to fetch') {
+            done(undefined, 'failed to fetch')
+
+            return
+          }
+
           if (
             err.message.toLowerCase() ===
             "failed to execute 'fetch' on 'window': request with get/head method cannot have body."
@@ -111,9 +105,9 @@ export default class Fetch extends Functional<I, O> {
           done(undefined, err.message.toLowerCase())
         })
     } catch (err) {
-      // console.log(err)
-
       done(undefined, 'malformed')
+
+      return
     }
   }
 }
