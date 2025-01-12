@@ -1,0 +1,36 @@
+{
+  "name": "blob",
+  "inputs": {
+    "parts": {
+      "type": "`A`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{ending?:'native'|'transparent',type?:string}",
+      "metadata": {
+        "examples": ["{type:'image/png'}", "{type:'text/plain'}"]
+      }
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "blob": {
+      "type": "`B`",
+      "ref": true,
+      "icon": "file"
+    }
+  },
+  "metadata": {
+    "icon": "binary",
+    "description": "get `blob` from `canvas`",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob",
+    "tags": ["platform", "api", "canvas"]
+  },
+  "id": "89d07aa2-579f-4a4b-938c-0d85a24df56f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
