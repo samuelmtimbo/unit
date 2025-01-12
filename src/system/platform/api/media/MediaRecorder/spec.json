@@ -27,7 +27,8 @@
   "outputs": {
     "blob": {
       "type": "`B`",
-      "ref": true
+      "ref": true,
+      "icon": "file"
     },
     "err": {
       "type": "string",
