@@ -24,6 +24,7 @@ import { AsyncME } from './AsyncME'
 import { AsyncMS } from './AsyncMS'
 import { AsyncNO } from './AsyncNO'
 import { AsyncPS } from './AsyncPS'
+import { AsyncRS } from './AsyncRS'
 import { AsyncS } from './AsyncS'
 import { AsyncTD } from './AsyncTD'
 import { AsyncTE } from './AsyncTE'
@@ -63,7 +64,5 @@ export const ASYNC: AllTypes<(unit: any) => any> = {
   TD: AsyncTD,
   ME: AsyncME,
   IM: AsyncIM,
-  RS: function (unit: any) {
-    throw new Error('Function not implemented.')
-  },
+  RS: AsyncRS,
 }
