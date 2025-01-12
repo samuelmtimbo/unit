@@ -45,8 +45,6 @@ export interface System extends S, Registry {
     ws: Dict<WebSocketShape>
     wss: Dict<ServerSocket>
     interceptors: ServerInterceptor[]
-    sockets: Dict<any>
-    heads: Dict<any>
   }
   feature: Dict<boolean>
   foreground: {

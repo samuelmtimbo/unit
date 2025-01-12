@@ -133,9 +133,7 @@ export type API = {
       request: ServerRequest,
       response: Waiter<ServerResponse>,
       ws: Dict<WebSocketShape>,
-      wss: Dict<ServerSocket>,
-      sockets: Dict<any>,
-      heads: Dict<any>
+      wss: Dict<ServerSocket>
     ) => Promise<ServerSocket>
     EventSource: typeof EventSource
   }
