@@ -487,6 +487,7 @@ import {
   getTree,
   getValueTree,
   isTypeMatch,
+  traverseTree,
 } from '../../../../../spec/parser'
 import {
   appendRoot,
@@ -54103,11 +54104,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   public getBundle(): BundleSpec {
+    const { classes } = this.$system
     const { specs } = this.$props
 
     const spec = this._get_full_user_spec()
 
-    const bundle = bundleSpec(spec, specs)
+    const custom = {}
+
+    for (const datum_node_id in this._unlinked_data_node) {
+      const datum_tree = this._get_datum_tree(datum_node_id)
+
+      traverseTree(datum_tree, (node, path) => {
+        if (node.type === TreeNodeType.Unit) {
+          const node_bundle = evaluateBundleStr(node.value, specs, classes)
+
+          for (const node_bundle_spec_id in node_bundle.specs) {
+            custom[node_bundle_spec_id] = node_bundle.specs[node_bundle_spec_id]
+          }
+        }
+      })
+    }
+
+    const bundle = bundleSpec(spec, specs, false, custom)
 
     this._set_spec_node_positions_rec(this, bundle.spec, specs)
 

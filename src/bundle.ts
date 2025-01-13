@@ -63,10 +63,9 @@ export function unitBundleSpecById(
 export function bundleSpec(
   spec: GraphSpec,
   specs: Specs,
-  system: boolean = false
+  system: boolean = false,
+  custom: GraphSpecs = {}
 ): BundleSpec {
-  const custom: GraphSpecs = {}
-
   const branch = new Set<string>([])
 
   _bundle(spec, specs, custom, branch, system)
