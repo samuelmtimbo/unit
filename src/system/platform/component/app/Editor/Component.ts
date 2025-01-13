@@ -3500,6 +3500,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _last_open_filename: string
+  private _first_open_filename: string
+  private _last_open_filename_on_empty_graph: string
 
   private _on_drag_over = async (event, _event: DragEvent) => {
     _event.preventDefault()
@@ -3742,6 +3744,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (file instanceof File) {
       this._last_open_filename = file.name
+
+      if (!this._first_open_filename) {
+        this._first_open_filename = file.name
+      }
+
+      if (this._node_count === 0) {
+        this._last_open_filename_on_empty_graph = file.name
+      }
 
       this._drop_bundle_file(file, position)
     }
@@ -54165,7 +54175,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const options = {
         suggestedName:
           this._last_save_filename ??
-          this._last_open_filename ??
+          this._last_open_filename_on_empty_graph ??
           `${name}.unit`,
         startIn: 'desktop',
         excludeAcceptAllOption: false,
