@@ -87,6 +87,12 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
   }
 
   focus() {
+    if (this._component) {
+      this._component.focus()
+
+      return
+    }
+
     const child = this.$element.childNodes.item(0) as HTMLElement
 
     if (child) {
