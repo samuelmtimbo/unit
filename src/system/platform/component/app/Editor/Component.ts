@@ -1098,12 +1098,14 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         }
       }),
       makeCustomListener('data_added', ({ datumId, specId, value }) => {
-        const { specs } = this._system
+        const { specs, classes } = this._system
 
         if (specs[specId] && isSystemSpecId(specs, specId)) {
           // console.log('data_added', { datumId, specId, value })
 
           const spec = clone(specs[specId]) as GraphSpec
+
+          value = evaluateDataValue(value, specs, classes)
 
           setDatum({ datumId, value }, spec)
 
