@@ -2,7 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
-import { ID_GET_0 } from '../../../../_ids'
+import { ID_GET_1 } from '../../../../_ids'
 
 export interface I<T> {
   obj: J
@@ -13,7 +13,7 @@ export interface O<T> {
   value: T
 }
 
-export default class Get<T> extends Functional<I<T>, O<T>> {
+export default class Get1<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
@@ -26,9 +26,14 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
+        output: {
+          value: {
+            ref: true,
+          },
+        },
       },
       system,
-      ID_GET_0
+      ID_GET_1
     )
   }
 
