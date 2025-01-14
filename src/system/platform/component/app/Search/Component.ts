@@ -196,7 +196,11 @@ export default class Search extends Element<HTMLDivElement, Props> {
           keydown: this._on_arrow_up_keydown,
           multiple: true,
         },
-        { combo: 'Escape', keydown: this._on_escape_keydown },
+        {
+          combo: 'Escape',
+          keydown: this._on_escape_keydown,
+          stopPropagation: true,
+        },
         {
           // combo: 'Control + p',
           combo: ['Control + ;', ';'],
