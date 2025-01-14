@@ -44,7 +44,7 @@
     }
   },
   "outputs": {
-    "offsetY": {
+    "y": {
       "plug": {
         "0": {
           "unitId": "propclientcy",
@@ -52,7 +52,7 @@
         }
       }
     },
-    "offsetX": {
+    "x": {
       "plug": {
         "0": {
           "unitId": "propoffsetx",

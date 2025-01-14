@@ -46,24 +46,26 @@ export const applyContextTransformToPointerEvent = (
 
   const { clientX, clientY, offsetX, offsetY, pageX, pageY } = event
 
-  const tx = clientX - $x
-  const ty = clientY - $y
+  const ctx = clientX - $x
+  const cty = clientY - $y
 
-  const stx = tx / $sx
-  const sty = ty / $sy
+  const cstx = ctx / $sx
+  const csty = cty / $sy
 
-  const t = { x: stx, y: sty }
+  const sox = offsetX / $sx
+  const soy = offsetY / $sy
 
-  const fp = rotateVector(t, -$rz)
+  const c = { x: cstx, y: csty }
+  const o = { x: sox, y: soy }
 
-  const clientX_ = fp.x
-  const clientY_ = fp.y
+  const rc = rotateVector(c, -$rz)
+  const ro = rotateVector(o, -$rz)
 
   return {
-    clientX: clientX_,
-    clientY: clientY_,
-    offsetX: t.x,
-    offsetY: t.y,
+    clientX: rc.x,
+    clientY: rc.y,
+    offsetX: ro.x,
+    offsetY: ro.y,
     screenX: clientX,
     screenY: clientY,
     pageX,

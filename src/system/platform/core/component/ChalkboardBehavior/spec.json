@@ -1,8 +1,8 @@
 {
   "name": "chalkboard behavior",
   "units": {
-    "propclientxclienty": {
-      "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+    "getoffsetxy": {
+      "id": "2307cacf-1363-40bc-bd6b-d58227927ae0",
       "input": {
         "obj": {}
       },
@@ -653,7 +653,7 @@
       }
     },
     "1": {
-      "propclientxclienty": {
+      "getoffsetxy": {
         "output": {
           "x": true
         }
@@ -665,7 +665,7 @@
       }
     },
     "2": {
-      "propclientxclienty": {
+      "getoffsetxy": {
         "output": {
           "y": true
         }
@@ -720,7 +720,7 @@
     "6": {
       "propoffsetXoffsetY": {
         "output": {
-          "offsetY": true
+          "y": true
         }
       },
       "addlineto": {
@@ -732,7 +732,7 @@
     "7": {
       "propoffsetXoffsetY": {
         "output": {
-          "offsetX": true
+          "x": true
         }
       },
       "addlineto": {
@@ -1005,7 +1005,7 @@
           "down": true
         }
       },
-      "propclientxclienty": {
+      "getoffsetxy": {
         "input": {
           "obj": true
         }

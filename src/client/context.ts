@@ -159,7 +159,7 @@ export function appendChild(
   for (const leaf of base) {
     $context.$element.appendChild(leaf.$element)
   }
-  
+
   $context.$children.push(component)
 
   if ($context.$mounted) {
@@ -176,7 +176,7 @@ export function appendChild(
     for (const leaf of base) {
       $context.$element.removeChild(leaf.$element)
     }
-    
+
     remove($context.$children, component)
 
     return component
