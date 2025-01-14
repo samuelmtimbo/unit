@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { ID_SCROLL_INTO_VIEW } from '../../../../_ids'
 
@@ -9,14 +9,18 @@ interface I<T> {
   opt: any
 }
 
-interface O<T> {}
+interface O<T> {
+  done: any
+}
 
-export default class ScrollIntoView<T> extends Functional<I<T>, O<T>> {
+export default class ScrollIntoView<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['component', 'opt'],
-        o: [],
+        fi: ['component', 'opt'],
+        fo: [],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -37,5 +41,9 @@ export default class ScrollIntoView<T> extends Functional<I<T>, O<T>> {
     })
 
     done()
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

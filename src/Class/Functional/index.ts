@@ -168,6 +168,8 @@ export class Functional<
 
       this._backward_all()
 
+      this.d()
+
       // without setTimeout an infinite loop will turn into a stack overflow
       // setTimeout(() => {
       this._forward_if_ready()

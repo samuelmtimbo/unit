@@ -16,14 +16,15 @@
       "metadata": {
         "examples": ["'image/png'"]
       }
-    },
-    "done": {
-      "type": "any"
     }
   },
   "outputs": {
     "url": {
       "type": "string"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

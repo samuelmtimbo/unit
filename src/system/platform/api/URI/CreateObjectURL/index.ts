@@ -1,5 +1,5 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
 import { ID_CREATE_OBJECT_URL } from '../../../../_ids'
@@ -11,14 +11,17 @@ export interface I<T> {
 
 export interface O<T> {
   url: string
+  done: any
 }
 
-export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
+export default class CreateObjectURI<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['blob', 'init'],
-        o: ['url'],
+        fi: ['blob', 'init'],
+        fo: ['url'],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -52,5 +55,9 @@ export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
     }
 
     done({ url })
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

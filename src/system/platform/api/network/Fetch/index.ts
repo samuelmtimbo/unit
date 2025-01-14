@@ -17,6 +17,7 @@ export type I = {
 
 export type O = {
   res: RES & $
+  done: any
 }
 
 export default class Fetch extends Holder<I, O> {
@@ -26,7 +27,7 @@ export default class Fetch extends Holder<I, O> {
         fi: ['url', 'opt', 'body'],
         fo: ['res'],
         i: [],
-        o: [],
+        o: ['done'],
       },
       {
         input: {
@@ -117,5 +118,9 @@ export default class Fetch extends Holder<I, O> {
 
       return
     }
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

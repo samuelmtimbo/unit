@@ -12,6 +12,10 @@
   "outputs": {
     "last": {
       "type": "any"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

@@ -1,5 +1,5 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { V } from '../../../../../types/interface/V'
 import { ID_WRITE } from '../../../../_ids'
@@ -10,15 +10,17 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  data: T
+  done: any
 }
 
-export default class Write<T> extends Functional<I<T>, O<T>> {
+export default class Write<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'data'],
-        o: ['data'],
+        fi: ['value', 'data'],
+        fo: [],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -40,7 +42,11 @@ export default class Write<T> extends Functional<I<T>, O<T>> {
         return
       }
 
-      done({ data })
+      done()
     })
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

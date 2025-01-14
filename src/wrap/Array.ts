@@ -31,6 +31,10 @@ export function wrapSharedRefArrayInterface<T extends any[]>(
       return Promise.resolve(data.current.indexOf(a))
     },
     pop: function (): Promise<T> {
+      if (!data.current.length) {
+        throw new Error('empty array')
+      }
+
       return Promise.resolve(data.current.pop())
     },
     shift: function (): Promise<T> {

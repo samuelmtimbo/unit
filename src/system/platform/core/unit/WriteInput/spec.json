@@ -13,8 +13,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": -124,
-              "y": 58
+              "x": -118,
+              "y": -33
             }
           }
         }
@@ -23,8 +23,8 @@
     "data": {
       "plug": {
         "0": {
-          "unitId": "plan",
-          "pinId": "a",
+          "unitId": "write",
+          "pinId": "data",
           "kind": "input"
         }
       },
@@ -33,8 +33,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": -110,
-              "y": -90
+              "x": 119,
+              "y": -1
             }
           }
         }
@@ -52,8 +52,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": -20,
-              "y": 90
+              "x": -119,
+              "y": 33
             }
           }
         }
@@ -61,25 +61,14 @@
     }
   },
   "outputs": {
-    "data": {
+    "done": {
       "plug": {
         "0": {
-          "unitId": "write",
-          "pinId": "data",
-          "kind": "output"
+          "unitId": "input",
+          "pinId": "done"
         }
       },
-      "defaultIgnored": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "ext": {
-              "x": 124,
-              "y": -23
-            }
-          }
-        }
-      }
+      "defaultIgnored": true
     }
   },
   "units": {
@@ -87,23 +76,24 @@
       "id": "98ab5ee1-0997-4ad2-bc77-776208b6bb25",
       "input": {
         "value": {},
-        "data": {}
-      },
-      "output": {
         "data": {
-          "ignored": false,
           "metadata": {
             "position": {
-              "x": 100,
-              "y": -22
+              "x": 96,
+              "y": 0
             }
           }
         }
       },
+      "output": {
+        "done": {
+          "ignored": false
+        }
+      },
       "metadata": {
         "position": {
-          "x": 50,
-          "y": -20
+          "x": 47,
+          "y": 1
         }
       }
     },
@@ -113,16 +103,16 @@
         "unit": {
           "metadata": {
             "position": {
-              "x": -26,
-              "y": 66
+              "x": -101,
+              "y": 18
             }
           }
         },
         "name": {
           "metadata": {
             "position": {
-              "x": -104,
-              "y": 44
+              "x": -100,
+              "y": -17
             }
           }
         },
@@ -134,39 +124,16 @@
         "pin": {
           "metadata": {
             "position": {
-              "x": 2,
-              "y": 12
+              "x": -2,
+              "y": 19
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -55,
-          "y": 30
-        }
-      }
-    },
-    "plan": {
-      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
-      "input": {
-        "a": {
-          "metadata": {
-            "position": {
-              "x": -95,
-              "y": -71
-            }
-          }
-        }
-      },
-      "output": {
-        "0": {},
-        "1": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -49,
-          "y": -51
+          "x": -54,
+          "y": 1
         }
       }
     }
@@ -185,21 +152,9 @@
       }
     },
     "1": {
-      "plan": {
-        "output": {
-          "0": true
-        }
-      },
       "write": {
-        "input": {
-          "data": true
-        }
-      }
-    },
-    "2": {
-      "plan": {
         "output": {
-          "1": true
+          "done": true
         }
       },
       "input": {
@@ -217,8 +172,8 @@
     "position": {
       "merge": {
         "1": {
-          "x": 5,
-          "y": -45
+          "x": -2,
+          "y": -11
         },
         "2": {
           "x": -80,
@@ -227,5 +182,6 @@
       }
     }
   },
-  "id": "04953fed-157a-479d-91ac-005174b9b85e"
+  "id": "04953fed-157a-479d-91ac-005174b9b85e",
+  "system": true
 }

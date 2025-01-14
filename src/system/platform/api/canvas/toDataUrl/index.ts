@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Holder } from '../../../../../Class/Holder'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
 import { ID_TO_DATA_URL } from '../../../../_ids'
@@ -13,14 +13,17 @@ export interface I<T> {
 
 export interface O<T> {
   url: string
+  done: any
 }
 
-export default class ToImageUrl<T> extends Holder<I<T>, O<T>> {
+export default class ToImageUrl<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         fi: ['canvas', 'quality', 'type'],
         fo: ['url'],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -38,10 +41,10 @@ export default class ToImageUrl<T> extends Holder<I<T>, O<T>> {
   }
 
   async f({ canvas, quality, type }: I<T>, done: Done<O<T>>): Promise<void> {
-    let _url: string
+    let url: string
 
     try {
-      _url = await canvas.toDataUrl(type, quality)
+      url = await canvas.toDataUrl(type, quality)
     } catch (err) {
       done(undefined, err.message)
 
@@ -49,7 +52,11 @@ export default class ToImageUrl<T> extends Holder<I<T>, O<T>> {
     }
 
     done({
-      url: _url,
+      url,
     })
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

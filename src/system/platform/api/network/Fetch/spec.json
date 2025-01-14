@@ -19,13 +19,18 @@
       "ref": true
     },
     "done": {
-      "type": "any"
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "outputs": {
     "res": {
       "type": "`RES`",
       "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

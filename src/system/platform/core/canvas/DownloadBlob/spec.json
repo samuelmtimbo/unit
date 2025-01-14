@@ -6,29 +6,59 @@
       "id": "c18c8f59-f3c8-49a8-9dbd-ed30fdf856e9",
       "input": {
         "url": {},
-        "name": {}
+        "name": {
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": -30
+            }
+          }
+        }
       },
       "output": {},
       "metadata": {
         "position": {
-          "x": 107,
-          "y": 0
+          "x": 49,
+          "y": -27
         }
       }
     },
     "createbloburl": {
       "id": "1d5b6bb0-f18e-4428-a350-a29d8ca3ff4a",
       "input": {
-        "blob": {},
-        "init": {}
+        "blob": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": 8
+            }
+          }
+        },
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -100,
+              "y": -27
+            }
+          }
+        }
       },
       "output": {
-        "url": {}
+        "url": {},
+        "done": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -19,
+              "y": 20
+            }
+          }
+        }
       },
       "metadata": {
         "position": {
-          "x": 6,
-          "y": 0
+          "x": -55,
+          "y": -9
         }
       }
     }
@@ -55,7 +85,17 @@
           "pinId": "name"
         }
       },
-      "ref": false
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 120,
+              "y": -33
+            }
+          }
+        }
+      }
     },
     "blob": {
       "plug": {
@@ -64,7 +104,17 @@
           "pinId": "blob"
         }
       },
-      "ref": true
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -120,
+              "y": 22
+            }
+          }
+        }
+      }
     },
     "init": {
       "plug": {
@@ -73,13 +123,55 @@
           "pinId": "init"
         }
       },
-      "ref": false
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -117,
+              "y": -43
+            }
+          }
+        }
+      }
     }
   },
-  "outputs": {},
+  "outputs": {
+    "done": {
+      "plug": {
+        "0": {
+          "unitId": "createbloburl",
+          "pinId": "done",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -14,
+              "y": 43
+            }
+          }
+        }
+      }
+    }
+  },
   "metadata": {
     "icon": "download",
-    "description": "download blob file with `name`"
+    "description": "download blob file with `name`",
+    "tags": ["platform", "core", "canvas"],
+    "position": {
+      "merge": {
+        "1": {
+          "x": -3,
+          "y": -22
+        }
+      }
+    }
   },
-  "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1"
+  "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1",
+  "system": true
 }

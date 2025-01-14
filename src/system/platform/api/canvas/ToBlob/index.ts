@@ -15,6 +15,7 @@ export interface I<T> {
 
 export interface O<T> {
   blob: B
+  done: any
 }
 
 export default class ToBlob<T> extends Holder<I<T>, O<T>> {
@@ -24,7 +25,7 @@ export default class ToBlob<T> extends Holder<I<T>, O<T>> {
         fi: ['canvas', 'quality', 'type'],
         fo: ['blob'],
         i: [],
-        o: [],
+        o: ['done'],
       },
       {
         input: {

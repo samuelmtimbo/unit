@@ -26,6 +26,10 @@
       "type": "`B`",
       "ref": true,
       "icon": "file"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

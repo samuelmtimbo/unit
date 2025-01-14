@@ -69,11 +69,21 @@
         }
       },
       "ref": true
+    },
+    "done": {
+      "plug": {
+        "0": {
+          "unitId": "pin",
+          "pinId": "done"
+        }
+      },
+      "defaultIgnored": true
     }
   },
   "metadata": {
     "icon": "circle",
     "description": "reference `unit` input `name`"
   },
-  "id": "4ae69887-a087-4d37-8743-d83ca48184d1"
+  "id": "4ae69887-a087-4d37-8743-d83ca48184d1",
+  "system": true
 }

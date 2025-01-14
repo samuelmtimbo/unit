@@ -11,6 +11,10 @@
     },
     "last": {
       "type": "<A>"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

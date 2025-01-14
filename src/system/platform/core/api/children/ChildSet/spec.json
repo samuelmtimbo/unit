@@ -16,8 +16,8 @@
             "x": -97,
             "y": 39,
             "ext": {
-              "x": -112,
-              "y": 88
+              "x": -123,
+              "y": 0
             }
           }
         }
@@ -36,8 +36,8 @@
             "x": -102,
             "y": -31,
             "ext": {
-              "x": -133,
-              "y": 30
+              "x": -95,
+              "y": -51
             }
           }
         }
@@ -58,8 +58,8 @@
             "x": 96,
             "y": 39,
             "ext": {
-              "x": 133,
-              "y": 43
+              "x": 123,
+              "y": 33
             }
           }
         }
@@ -70,8 +70,8 @@
     "data": {
       "plug": {
         "0": {
-          "unitId": "plan",
-          "pinId": "a",
+          "unitId": "writeinput",
+          "pinId": "data",
           "kind": "input"
         }
       },
@@ -81,17 +81,39 @@
             "x": 101,
             "y": -31,
             "ext": {
-              "x": -44,
-              "y": -88
+              "x": 122,
+              "y": -33
             }
           }
         }
       },
-      "ref": false,
       "functional": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "done": {
+      "plug": {
+        "0": {
+          "unitId": "child",
+          "pinId": "done",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -98,
+              "y": 51
+            }
+          }
+        }
+      }
+    }
+  },
   "units": {
     "child": {
       "id": "59afce80-30e7-4322-84e6-955767bb5106",
@@ -100,15 +122,15 @@
           "metadata": {
             "position": {
               "x": -99,
-              "y": 68
+              "y": 0
             }
           }
         },
         "at": {
           "metadata": {
             "position": {
-              "x": -109,
-              "y": 33
+              "x": -83,
+              "y": -30
             }
           }
         },
@@ -118,16 +140,25 @@
         "child": {
           "metadata": {
             "position": {
-              "x": 3,
-              "y": 45
+              "x": 5,
+              "y": 19
+            }
+          }
+        },
+        "done": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -84,
+              "y": 31
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -58,
-          "y": 40
+          "x": -47,
+          "y": 1
         }
       }
     },
@@ -137,66 +168,44 @@
         "name": {
           "metadata": {
             "position": {
-              "x": 110,
-              "y": 37
+              "x": 104,
+              "y": 18
             }
           }
         },
-        "data": {},
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 104,
+              "y": -17
+            }
+          }
+        },
         "unit": {}
       },
       "output": {
-        "data": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": 107,
-              "y": 11
-            }
-          }
+        "done": {
+          "ignored": false
         }
       },
       "metadata": {
         "position": {
-          "x": 61,
-          "y": 32
-        }
-      }
-    },
-    "plan": {
-      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
-      "input": {
-        "a": {
-          "metadata": {
-            "position": {
-              "x": -35,
-              "y": -65
-            }
-          }
-        }
-      },
-      "output": {
-        "0": {},
-        "1": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 1,
-          "y": -33
+          "x": 58,
+          "y": 1
         }
       }
     }
   },
   "merges": {
     "0": {
-      "plan": {
+      "writeinput": {
         "output": {
-          "0": true
+          "done": true
         }
       },
-      "writeinput": {
+      "child": {
         "input": {
-          "data": true
+          "done": true
         }
       }
     },
@@ -211,18 +220,6 @@
           "child": true
         }
       }
-    },
-    "2": {
-      "plan": {
-        "output": {
-          "1": true
-        }
-      },
-      "child": {
-        "input": {
-          "done": true
-        }
-      }
     }
   },
   "component": {},
@@ -232,8 +229,8 @@
     "position": {
       "merge": {
         "0": {
-          "x": 46,
-          "y": -12
+          "x": 5,
+          "y": -11
         },
         "2": {
           "x": -38,

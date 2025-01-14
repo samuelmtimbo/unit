@@ -17,6 +17,7 @@ export interface I<T> {
 
 export interface O<T> {
   pin: V & PI<any> & $
+  done: any
 }
 
 export default class Pin_<T> extends Holder<I<T>, O<T>> {
@@ -26,6 +27,7 @@ export default class Pin_<T> extends Holder<I<T>, O<T>> {
         fi: ['unit', 'name', 'type'],
         fo: ['pin'],
         i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -52,5 +54,9 @@ export default class Pin_<T> extends Holder<I<T>, O<T>> {
     } catch (err) {
       done(undefined, err.message)
     }
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

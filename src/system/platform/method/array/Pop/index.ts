@@ -1,5 +1,5 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
 import { ID_POP_0 } from '../../../../_ids'
@@ -11,14 +11,17 @@ export interface I<T> {
 
 export interface O<T> {
   last: T
+  done: any
 }
 
-export default class Pop<T> extends Functional<I<T>, O<T>> {
+export default class Pop<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['a', 'any'],
-        o: ['last'],
+        fi: ['a', 'any'],
+        fo: ['last'],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -44,5 +47,9 @@ export default class Pop<T> extends Functional<I<T>, O<T>> {
     }
 
     done({ last })
+  }
+
+  d() {
+    this._output.done.push(true)
   }
 }

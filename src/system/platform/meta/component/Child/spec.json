@@ -17,6 +17,10 @@
       "type": "`U`&`C`&`V`&`J`",
       "ref": true,
       "icon": "square"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

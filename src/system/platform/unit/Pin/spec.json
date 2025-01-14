@@ -20,6 +20,10 @@
     "pin": {
       "type": "`V`",
       "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

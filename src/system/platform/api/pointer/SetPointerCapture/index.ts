@@ -53,8 +53,6 @@ export default class SetPointerCapture extends Holder<I, O> {
     if (this._capturing) {
       const pointerId = this._pointerId
 
-      this._done()
-
       this._element.emit('call', {
         method: 'releasePointerCapture',
         data: [pointerId],

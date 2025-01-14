@@ -14,6 +14,7 @@ export interface I {
 
 export interface O {
   child: C
+  done: any
 }
 
 export default class Child extends Holder<I, O> {
@@ -25,7 +26,7 @@ export default class Child extends Holder<I, O> {
         fi: ['parent', 'at'],
         fo: ['child'],
         i: [],
-        o: [],
+        o: ['done'],
       },
       {
         input: {
@@ -77,6 +78,6 @@ export default class Child extends Holder<I, O> {
       this._unlisten = undefined
     }
 
-    this._forward_empty('child')
+    this._output.done.push(true)
   }
 }

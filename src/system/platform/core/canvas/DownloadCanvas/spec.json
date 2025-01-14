@@ -4,15 +4,32 @@
     "name": {
       "plug": {
         "0": {
-          "unitId": "plan",
-          "pinId": "a"
+          "unitId": "downloadblob",
+          "pinId": "name",
+          "kind": "input"
         },
         "1": {
           "unitId": "downloadblob",
           "pinId": "init"
         }
       },
-      "functional": true
+      "functional": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 128,
+              "y": 15
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 125,
+              "y": -49
+            }
+          }
+        }
+      }
     },
     "type": {
       "plug": {
@@ -23,7 +40,15 @@
       },
       "functional": true,
       "metadata": {
-        "examples": ["\"image/png\""]
+        "examples": ["\"image/png\""],
+        "position": {
+          "0": {
+            "ext": {
+              "x": -92,
+              "y": -61
+            }
+          }
+        }
       }
     },
     "canvas": {
@@ -33,44 +58,133 @@
           "pinId": "canvas"
         }
       },
-      "ref": true
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -105,
+              "y": 37
+            }
+          }
+        }
+      }
     }
   },
-  "outputs": {},
+  "outputs": {
+    "done": {
+      "plug": {
+        "0": {
+          "unitId": "toblob",
+          "pinId": "done",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -29,
+              "y": 61
+            }
+          }
+        }
+      }
+    }
+  },
   "units": {
     "toblob": {
       "id": "c9d64ef4-35f6-44e7-a16b-1e4173f951dc",
       "input": {
-        "canvas": {},
+        "canvas": {
+          "metadata": {
+            "position": {
+              "x": -88,
+              "y": 19
+            }
+          }
+        },
         "quality": {
           "constant": true,
-          "data": "1"
+          "data": "1",
+          "metadata": {
+            "position": {
+              "x": -98,
+              "y": -11
+            },
+            "data": {
+              "position": {
+                "x": -130,
+                "y": -15
+              }
+            }
+          }
         },
-        "type": {},
+        "type": {
+          "metadata": {
+            "position": {
+              "x": -80,
+              "y": -39
+            }
+          }
+        },
         "done": {}
       },
       "output": {
-        "blob": {}
+        "blob": {
+          "metadata": {
+            "position": {
+              "x": 7,
+              "y": -29
+            }
+          }
+        },
+        "done": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -30,
+              "y": 36
+            }
+          }
+        }
       },
       "metadata": {
         "position": {
-          "x": -115,
-          "y": -1
+          "x": -45,
+          "y": -6
         }
       }
     },
-    "plan": {
-      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
-      "input": {
-        "a": {}
-      },
-      "output": {
-        "0": {},
-        "1": {}
-      }
-    },
     "downloadblob": {
-      "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1"
+      "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1",
+      "metadata": {
+        "position": {
+          "x": 62,
+          "y": -15
+        }
+      },
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 108,
+              "y": -34
+            }
+          }
+        },
+        "name": {
+          "metadata": {
+            "position": {
+              "x": 110,
+              "y": 1
+            }
+          }
+        }
+      }
     }
   },
   "merges": {
@@ -86,27 +200,15 @@
         }
       }
     },
-    "2": {
-      "plan": {
+    "1": {
+      "downloadblob": {
         "output": {
-          "1": true
+          "done": true
         }
       },
       "toblob": {
         "input": {
           "done": true
-        }
-      }
-    },
-    "4": {
-      "plan": {
-        "output": {
-          "0": true
-        }
-      },
-      "downloadblob": {
-        "input": {
-          "name": true
         }
       }
     }
@@ -115,8 +217,17 @@
   "metadata": {
     "icon": "download",
     "description": "download full canvas as png",
-    "tags": ["platform", "core", "canvas"]
+    "tags": ["platform", "core", "canvas"],
+    "position": {
+      "merge": {
+        "1": {
+          "x": 10,
+          "y": -1
+        }
+      }
+    }
   },
   "id": "1a398694-284e-4d67-a13c-3a929c38b0fc",
+  "system": true,
   "type": "`U`&`G`"
 }

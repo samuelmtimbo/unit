@@ -12,6 +12,10 @@
   "outputs": {
     "url": {
       "type": "string"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {
