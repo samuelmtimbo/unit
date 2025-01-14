@@ -11,6 +11,6 @@ export const INHERITANCE = {
   ID: ['J'],
   SE: ['EE', 'A', 'J'],
   WSS: ['EE', 'A', 'J'],
-  RES: ['BO', 'V'],
+  RES: ['BO', 'J', 'V'],
   RS: ['BO'],
 }

@@ -60,12 +60,7 @@ export default class Upgrade extends Holder<I, O> {
     let _socket: ServerSocket
 
     try {
-      _socket = await handleUpgrade(
-        _request,
-        _response,
-        ws,
-        wss,
-      )
+      _socket = await handleUpgrade(_request, _response, ws, wss)
     } catch (err) {
       done(undefined, err.message)
 
