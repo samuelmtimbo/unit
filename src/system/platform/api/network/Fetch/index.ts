@@ -55,7 +55,15 @@ export default class Fetch extends Holder<I, O> {
 
     opt.body = await body.raw()
 
-    const { port } = new URL(url)
+    let port: string
+
+    try {
+      ;({ port } = new URL(url))
+    } catch (err) {
+      done(undefined, 'invalid url')
+
+      return
+    }
 
     if (isUnsafePort(Number.parseInt(port))) {
       done(undefined, 'unsafe port')
