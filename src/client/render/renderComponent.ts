@@ -50,8 +50,6 @@ export function renderComponent(
 
   mount(context_)
 
-  component.focus()
-
   unlisten = callAll([
     () => {
       unmount(context_)

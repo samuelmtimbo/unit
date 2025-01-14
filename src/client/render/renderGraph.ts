@@ -38,14 +38,13 @@ export function renderGraph(
       weakMerge(system.specs, bundle.specs ?? {})
     )
 
-    component.connect($graph, true)
+    const disconnect = component.connect($graph, true)
 
-    unlisten = callAll([
-      () => {
-        component.disconnect(true)
-      },
-      renderComponent(system, context, root, component),
-    ])
+    const unrender = renderComponent(system, context, root, component)
+
+    component.focus()
+
+    unlisten = callAll([disconnect, unrender])
   })
 
   return unlisten

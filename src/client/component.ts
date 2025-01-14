@@ -1973,10 +1973,10 @@ export class Component<
     unlisten()
   }
 
-  public connect($unit: U, deep: boolean = true): void {
+  public connect($unit: U, deep: boolean = true): Unlisten {
     if (this.$connected) {
       // throw new Error('component is already connected')
-      return
+      return NOOP
     }
 
     this._connect($unit, deep)
@@ -1993,6 +1993,10 @@ export class Component<
           childSubComponent.connect(subUnit)
         }
       }
+    }
+
+    return () => {
+      this.disconnect()
     }
   }
 
