@@ -92,11 +92,11 @@ export class KeyboardController {
   private _reset = () => {
     const { $system } = this
 
-    const { input: $input } = $system
-
-    const { keyboard: $keyboard } = $input
-
-    const { pressed: $pressed } = $keyboard
+    const {
+      input: {
+        keyboard: { pressed },
+      },
+    } = $system
 
     // AD HOC
     this._repeat = false
@@ -104,7 +104,7 @@ export class KeyboardController {
     // for (const key of pressed) {
     //   this._keydown(key)
     // }
-    this._pressed = [...$pressed]
+    this._pressed = [...pressed]
   }
 
   private _onFocusIn = () => {

@@ -4080,13 +4080,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!this._disabled) {
       this._disabled = true
 
-      if (this._core_component_unlocked_count > 0) {
-        for (const unit_id in this._core_component_unlocked) {
-          this._disable_core_frame(unit_id)
-        }
-      } else {
-        this._unlock_control(hide)
-      }
+      this._unlock_control(hide)
     }
   }
 
@@ -9354,6 +9348,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._set_crud_mode('none')
       }
     }
+
+    setTimeout(() => {
+      if (!this._focused) {
+        this._lose_focus()
+      }
+    }, 0)
   }
 
   private _on_node_name_blur = (node_id: string): void => {
@@ -19749,25 +19749,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { animate } = this._config()
 
     if (!this._control_lock) {
-      if (!this._disabled) {
-        // console.log('Graph', '_lock_control', this._id)
+      // if (!this._disabled) {
+      // console.log('Graph', '_lock_control', this._id)
 
-        this._control_lock = true
+      this._control_lock = true
 
-        if (this._control) {
-          this._control.dispatchEvent('lock', {}, false)
-        }
-
-        if (
-          !this._subgraph_unit_id &&
-          (!this._is_fullwindow || this._frame_out) &&
-          (this._temp_control_lock || this._core_component_unlocked_count === 0)
-        ) {
-          this._enable_input()
-
-          this._show_control(animate)
-        }
+      if (this._control) {
+        this._control.dispatchEvent('lock', {}, false)
       }
+
+      if (
+        !this._subgraph_unit_id &&
+        (!this._is_fullwindow || this._frame_out) &&
+        (this._temp_control_lock || this._core_component_unlocked_count === 0)
+      ) {
+        this._enable_input()
+
+        this._show_control(animate)
+      }
+      // }
     }
   }
 
@@ -22188,6 +22188,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // }
   }
 
+  private _focus_first_unlocked_component = () => {
+    const first = this._get_first_unlocked_component_unit_id()
+
+    this._focus_sub_component(first)
+  }
+
+  private _get_first_unlocked_component_unit_id = () => {
+    const first = getObjSingleKey(this._core_component_unlocked)
+
+    return first
+  }
+
+  private _get_first_unlocked_frame = () => {
+    if (!this._core_component_unlocked_count) {
+      return null
+    }
+
+    const first = this._get_first_unlocked_component_unit_id()
+
+    const frame = this._core_component_frame[first]
+
+    return frame
+  }
+
   private _on_focus = () => {
     // console.log('Graph', '_on_focus', this._id, this._disabled)
 
@@ -22197,11 +22221,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._subgraph_graph.focus()
     } else if (
       this._core_component_unlocked_count > 0 &&
-      !this._temp_control_lock
+      !this._temp_control_lock &&
+      !this._pointer_down_count
     ) {
-      const first = getObjSingleKey(this._core_component_unlocked)
-
-      this._focus_sub_component(first)
+      this._focus_first_unlocked_component()
     } else if (this._is_fullwindow) {
       if (this._fullwindow_component_ids.length > 0) {
         const first = this._fullwindow_component_ids[0]
@@ -22266,6 +22289,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       const { relatedTarget } = event
 
+      const unlocked_frame = this._get_first_unlocked_frame()
+
       if (relatedTarget) {
         if (
           this._zoom_comp._svg.$element.contains(relatedTarget) ||
@@ -22277,17 +22302,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           return
         }
 
-        const hide = this._temp_control_unlock || this._control_lock
-
         if (container && container.$element.contains(relatedTarget)) {
           return
         }
 
+        const hide = this._temp_control_unlock || this._control_lock
+
         this._disable(hide)
 
-        this._hide_transcend(true)
+        if (
+          !unlocked_frame ||
+          !unlocked_frame.$element.contains(relatedTarget)
+        ) {
+          this._hide_transcend(true)
+        }
       }
     }
+  }
+
+  private _lose_focus = () => {
+    const hide = this._temp_control_unlock || this._control_lock
+
+    this._disable(hide)
+
+    this._hide_transcend(true)
   }
 
   private _disable_input = (): void => {
@@ -25187,11 +25225,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._unlisten_fullwindow_escape = addListener(
         container,
-        makeKeydownListener((event) => {
+        makeKeydownListener((event, _event) => {
           const { key } = event
 
           if (key === 'Escape') {
             this._leave_all_fullwindow(_animate)
+
+            _event.stopPropagation()
           }
         })
       )
@@ -40404,6 +40444,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._enable_crud()
       this._enable_keyboard()
     }
+
+    setTimeout(() => {
+      if (!this._focused) {
+        this._lose_focus()
+      }
+    }, 0)
   }
 
   private _commit_data_value = (
@@ -42592,6 +42638,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._touch_zoom_d = d
         }
       }
+
+      this._graph.focus()
     }
   }
 
@@ -46363,6 +46411,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private __on_pointer_up = (pointerId: number, drop: boolean = true): void => {
     // console.log('Graph', '__on_pointer_up', this._id)
 
+    const { animate } = this._config()
+
     if (this._collapse_pointer_to_unit[pointerId]) {
       delete this._collapse_pointer_to_unit[pointerId]
     }
@@ -46709,15 +46759,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   this._on_zoom_end()
     // }
 
-    if (this._pointer_down_count === 0) {
-      this._zooming = false
-    }
-
     if (this._multiselect_area_ing) {
       this._on_multiselect_area_end()
     }
 
     this._translating = false
+
+    if (this._pointer_down_count === 0) {
+      this._zooming = false
+
+      if (this._core_component_unlocked_count) {
+        this._focus_first_unlocked_component()
+
+        this._graph.blur()
+      }
+    }
   }
 
   private _on_pointer_up = (event: UnitPointerEvent) => {
