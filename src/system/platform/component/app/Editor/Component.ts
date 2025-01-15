@@ -22856,8 +22856,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.__on_node_drag_end(node_id, pointerId)
 
     if (drop) {
-      if (this._is_droppable_mode()) {
-        if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
+      if (
+        this._is_droppable_mode() ||
+        (this._mode === 'multiselect' && this._selected_node_count < 2)
+      ) {
+        if (node_drag_max_distance >= MIN_DRAG_DROP_MAX_D) {
           if (node_id === this._subgraph_unit_id) {
             //
           } else {
@@ -23966,10 +23969,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _drop_node = (node_id: string): void => {
     // console.log('_drop_node', node_id)
-
-    if (this._collapse_unit_id === node_id) {
-      return
-    }
 
     this._dropped_node_id.add(node_id)
 
@@ -26546,197 +26545,186 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _all_data: boolean = false
   private _all_unit: boolean = false
 
-  private _refresh_compatible =
-    // debounce(
-    (): void => {
-      // console.log('Graph', 'refresh_compatible')
+  private _refresh_compatible = (): void => {
+    // console.log('Graph', 'refresh_compatible')
 
-      const { config } = this.$props
+    const { config } = this.$props
 
-      if (!config?.highlightCompatible) {
-        return
-      }
+    if (!config?.highlightCompatible) {
+      return
+    }
 
-      const prev_compatible_node_id = this._compatible_node_id
+    const prev_compatible_node_id = this._compatible_node_id
 
-      let display_node_id = this._get_display_node_id()
+    let display_node_id = this._get_display_node_id()
 
-      display_node_id = display_node_id.map(
-        (node_id) => this._pin_to_merge[node_id] ?? node_id
-      )
+    display_node_id = display_node_id.map(
+      (node_id) => this._pin_to_merge[node_id] ?? node_id
+    )
 
-      this._compatible_node_id = {}
-      this._compatible_node_count = 0
+    this._compatible_node_id = {}
+    this._compatible_node_count = 0
 
-      if (this._mode === 'change') {
-        return
-      }
+    if (this._mode === 'change') {
+      return
+    }
 
-      if (display_node_id.length > 0 && this._mode !== 'multiselect') {
-        const {
-          all_pin,
-          all_pin_ref,
-          all_pin_ref_unit,
-          all_plug_pin,
-          all_ext_pin,
-          all_int_pin,
-          all_data,
-          all_unit,
-        } = this._is_all_node(display_node_id)
+    if (display_node_id.length > 0) {
+      const {
+        all_pin,
+        all_pin_ref,
+        all_pin_ref_unit,
+        all_plug_pin,
+        all_ext_pin,
+        all_int_pin,
+        all_data,
+        all_unit,
+      } = this._is_all_node(display_node_id)
 
-        this._all_pin = all_pin
-        this._all_pin_ref = all_pin_ref
-        this._all_pin_ref_unit = all_pin_ref_unit
-        this._all_ext_pin = all_plug_pin
-        this._all_data = all_data
-        this._all_unit = all_unit
+      this._all_pin = all_pin
+      this._all_pin_ref = all_pin_ref
+      this._all_pin_ref_unit = all_pin_ref_unit
+      this._all_ext_pin = all_plug_pin
+      this._all_data = all_data
+      this._all_unit = all_unit
 
-        if (all_pin) {
-          if (all_pin_ref) {
-            for (const unit_id in this._unit_node) {
-              if (!all_pin_ref_unit[unit_id]) {
-                if (this._is_unit_all_pin_match(unit_id, display_node_id)) {
-                  this._set_node_compatible(unit_id)
-                }
-              }
-            }
-          } else {
-            for (const int_node_id in this._exposed_int_unplugged) {
-              if (this._is_all_pin_plug_match(int_node_id, display_node_id)) {
-                this._set_node_compatible(int_node_id)
-              }
-            }
-
-            const all_pin_selected = !display_node_id.some(
-              (pin_node_id) =>
-                !this._is_node_selected(pin_node_id) ||
-                this._is_node_dragged(pin_node_id)
-            )
-
-            if (all_pin_selected) {
-              for (const datum_node_id in this._data_node) {
-                if (
-                  this._is_datum_all_pin_pre_match(
-                    datum_node_id,
-                    display_node_id
-                  )
-                ) {
-                  this._set_node_compatible(datum_node_id)
-                }
+      if (all_pin) {
+        if (all_pin_ref) {
+          for (const unit_id in this._unit_node) {
+            if (!all_pin_ref_unit[unit_id]) {
+              if (this._is_unit_all_pin_match(unit_id, display_node_id)) {
+                this._set_node_compatible(unit_id)
               }
             }
           }
-
-          for (const pin_node_id in this._pin_node) {
-            const merge_node_id =
-              this._get_pin_merge_node_id(pin_node_id) ?? pin_node_id
-
-            if (
-              this._is_pin_all_pin_match(merge_node_id, display_node_id) &&
-              this._is_pin_visible(pin_node_id)
-            ) {
-              this._set_node_compatible(pin_node_id)
+        } else {
+          for (const int_node_id in this._exposed_int_unplugged) {
+            if (this._is_all_pin_plug_match(int_node_id, display_node_id)) {
+              this._set_node_compatible(int_node_id)
             }
           }
-        } else if (all_unit) {
-          for (const pin_node_id in this._pin_node) {
-            if (this._is_input_pin_ref(pin_node_id)) {
-              if (this._is_link_pin_node_id(pin_node_id)) {
-                const { unitId } = segmentLinkPinNodeId(pin_node_id)
 
-                if (!display_node_id.includes(unitId)) {
-                  if (
-                    this._is_pin_all_unit_match(pin_node_id, display_node_id)
-                  ) {
-                    this._set_node_compatible(pin_node_id)
-                  }
-                }
-              } else {
-                let compatible = true
+          const all_pin_selected = !display_node_id.some(
+            (pin_node_id) =>
+              !this._is_node_selected(pin_node_id) ||
+              this._is_node_dragged(pin_node_id)
+          )
 
-                const merge = this._get_merge_by_node_id(pin_node_id)
+          if (all_pin_selected) {
+            for (const datum_node_id in this._data_node) {
+              if (
+                this._is_datum_all_pin_pre_match(datum_node_id, display_node_id)
+              ) {
+                this._set_node_compatible(datum_node_id)
+              }
+            }
+          }
+        }
 
-                for (const unit_id in merge) {
-                  if (display_node_id.includes(unit_id)) {
-                    compatible = false
+        for (const pin_node_id in this._pin_node) {
+          const merge_node_id =
+            this._get_pin_merge_node_id(pin_node_id) ?? pin_node_id
 
-                    break
-                  }
-                }
+          if (
+            this._is_pin_all_pin_match(merge_node_id, display_node_id) &&
+            this._is_pin_visible(pin_node_id)
+          ) {
+            this._set_node_compatible(pin_node_id)
+          }
+        }
+      } else if (all_unit) {
+        for (const pin_node_id in this._pin_node) {
+          if (this._is_input_pin_ref(pin_node_id)) {
+            if (this._is_link_pin_node_id(pin_node_id)) {
+              const { unitId } = segmentLinkPinNodeId(pin_node_id)
 
-                if (compatible) {
+              if (!display_node_id.includes(unitId)) {
+                if (this._is_pin_all_unit_match(pin_node_id, display_node_id)) {
                   this._set_node_compatible(pin_node_id)
                 }
               }
-            }
-          }
-        } else if (all_data) {
-          if (config?.dataCompatible) {
-            for (const pin_node_id in this._pin_node) {
-              if (this._is_pin_all_datum_match(pin_node_id, display_node_id)) {
+            } else {
+              let compatible = true
+
+              const merge = this._get_merge_by_node_id(pin_node_id)
+
+              for (const unit_id in merge) {
+                if (display_node_id.includes(unit_id)) {
+                  compatible = false
+
+                  break
+                }
+              }
+
+              if (compatible) {
                 this._set_node_compatible(pin_node_id)
               }
             }
-
-            for (const ext_node_id in this._exposed_ext_node) {
-              if (this._is_ext_all_datum_match(ext_node_id, display_node_id)) {
-                this._set_node_compatible(ext_node_id)
-              }
-            }
-
-            if (display_node_id.length === 1) {
-              const datum_node_id = display_node_id[0]
-
-              for (const unit_id in this._unit_node) {
-                if (this._is_datum_unit_pre_match(datum_node_id, unit_id)) {
-                  this._set_node_compatible(unit_id)
-                }
-              }
-            }
           }
-        } else if (all_plug_pin) {
-          const ext_node_id = display_node_id[0]
-
-          const { type, pinId } = segmentPlugNodeId(ext_node_id)
-          for (const unit_id in this._unit_node) {
-            if (this._is_plug_unit_match(type, pinId, unit_id)) {
-              this._set_node_compatible(unit_id)
-            }
-          }
+        }
+      } else if (all_data) {
+        if (config?.dataCompatible) {
           for (const pin_node_id in this._pin_node) {
-            if (this._is_plug_pin_match(type, pinId, pin_node_id)) {
+            if (this._is_pin_all_datum_match(pin_node_id, display_node_id)) {
               this._set_node_compatible(pin_node_id)
             }
           }
 
-          if (all_int_pin) {
-            if (display_node_id.length === 1) {
-              const only_display_node_id = display_node_id[0]
+          for (const ext_node_id in this._exposed_ext_node) {
+            if (this._is_ext_all_datum_match(ext_node_id, display_node_id)) {
+              this._set_node_compatible(ext_node_id)
+            }
+          }
 
-              for (const int_node_id in this._exposed_int_unplugged) {
-                if (this._is_int_int_match(int_node_id, only_display_node_id)) {
-                  this._set_node_compatible(int_node_id)
-                }
+          if (display_node_id.length === 1) {
+            const datum_node_id = display_node_id[0]
+
+            for (const unit_id in this._unit_node) {
+              if (this._is_datum_unit_pre_match(datum_node_id, unit_id)) {
+                this._set_node_compatible(unit_id)
+              }
+            }
+          }
+        }
+      } else if (all_plug_pin) {
+        const ext_node_id = display_node_id[0]
+
+        const { type, pinId } = segmentPlugNodeId(ext_node_id)
+        for (const unit_id in this._unit_node) {
+          if (this._is_plug_unit_match(type, pinId, unit_id)) {
+            this._set_node_compatible(unit_id)
+          }
+        }
+        for (const pin_node_id in this._pin_node) {
+          if (this._is_plug_pin_match(type, pinId, pin_node_id)) {
+            this._set_node_compatible(pin_node_id)
+          }
+        }
+
+        if (all_int_pin) {
+          if (display_node_id.length === 1) {
+            const only_display_node_id = display_node_id[0]
+
+            for (const int_node_id in this._exposed_int_unplugged) {
+              if (this._is_int_int_match(int_node_id, only_display_node_id)) {
+                this._set_node_compatible(int_node_id)
               }
             }
           }
         }
       }
-
-      for (let node_id in prev_compatible_node_id) {
-        this._refresh_node_fixed(node_id)
-        this._refresh_node_selection(node_id)
-      }
-
-      for (let node_id in this._compatible_node_id) {
-        this._refresh_node_fixed(node_id)
-        this._refresh_node_selection(node_id)
-      }
     }
-  //   ,
-  //   100,
-  //   true
-  // )
+
+    for (let node_id in prev_compatible_node_id) {
+      this._refresh_node_fixed(node_id)
+      this._refresh_node_selection(node_id)
+    }
+
+    for (let node_id in this._compatible_node_id) {
+      this._refresh_node_fixed(node_id)
+      this._refresh_node_selection(node_id)
+    }
+  }
 
   private _refresh_all_compatible_unit = () => {
     for (let unit_id in this._unit_node) {
@@ -44760,7 +44748,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._ascend_node_dict[node_id] = true
 
     if (this._ascend_z_count === 1) {
-      this._zoom_comp_alt.$element.style.pointerEvents = 'inherit'
+      // this._zoom_comp_alt.$element.style.pointerEvents = 'inherit'
     }
 
     const node_comp = this._get_node_comp(node_id)
@@ -44799,7 +44787,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (this._ascend_z_count === 0) {
-      this._zoom_comp_alt.$element.style.pointerEvents = 'none'
+      // this._zoom_comp_alt.$element.style.pointerEvents = 'none'
     }
   }
 
@@ -46535,11 +46523,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
             }
 
-            if (!this._collapse_node_id.has(pressed_node_id)) {
-              this._on_node_drag_end_and_drop(pressed_node_id, pointerId, drop)
-            } else {
-              this.__on_node_drag_end(pressed_node_id, pointerId)
-            }
+            this._on_node_drag_end_and_drop(pressed_node_id, pointerId, drop)
 
             if (this._drag_anchor_animation[pressed_node_id]) {
               this._drag_anchor_animation[pressed_node_id]()
@@ -47382,6 +47366,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       this._force_pointer_drag_node(new_unit_id, pointer_id, clientX, clientY)
+
+      this._node_drag_max_distance[new_unit_id] = MIN_DRAG_DROP_MAX_D
     } else {
       if (init_unit_spec.system) {
         graph_spec = clone(graph_spec)
