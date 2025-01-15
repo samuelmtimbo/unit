@@ -531,6 +531,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
               if (!this._list_hidden) {
                 this._filter_list(true)
+              } else {
+                this._to_be_filtered = true
               }
             }
           } else if (type === 'delete') {
@@ -870,10 +872,19 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._hide_list()
   }
 
+  private _to_be_filtered: boolean = false
+
   private _show_list = () => {
     // console.log('Search', '_show_list')
+
     const { style = {} } = this.$props
     const { color = 'currentColor' } = style
+
+    if (this._to_be_filtered) {
+      this._filter_list()
+
+      this._to_be_filtered = false
+    }
 
     this._list_hidden = false
 
