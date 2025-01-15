@@ -23,3 +23,4 @@ parent.removeChild(B)
 assert(parent.$children.length === 2)
 
 assert.deepEqual(parent.$childSlotName, ['default', 'default'])
+
