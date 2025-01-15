@@ -77,7 +77,7 @@ export function reactToFrameSize(
 export function applyDynamicStyle(
   component: Component<any>,
   $element: any,
-  style: Dict<string> = {}
+  style: Dict<string>
 ): Unlisten {
   let { fontSize, width, height } = style
 
@@ -95,12 +95,20 @@ export function applyDynamicStyle(
     fontSize = `${fontSize}px`
   }
 
+  const set = (name: string, value: number) => {
+    const px = value + 'px'
+
+    style[name] = px
+
+    component.$element.style[name] = px
+  }
+
   if (fontSize && isVValue(fontSize)) {
     delete style.fontSize
 
     unlistenAll.push(
       reactToFrameSize(fontSize, component, (value) => {
-        style.fontSize = value + 'px'
+        set('fontSize', value)
       })
     )
   }
@@ -110,7 +118,7 @@ export function applyDynamicStyle(
 
     unlistenAll.push(
       reactToFrameSize(width, component, (value) => {
-        style.width = value + 'px'
+        set('width', value)
       })
     )
   }
@@ -120,7 +128,7 @@ export function applyDynamicStyle(
 
     unlistenAll.push(
       reactToFrameSize(height, component, (value) => {
-        style.height = value + 'px'
+        set('height', value)
       })
     )
   }
