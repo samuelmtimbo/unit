@@ -21,6 +21,5 @@
     "globals": ["MediaDevices"],
     "href": ""
   },
-  "type": "`U`",
-  "system": true
+  "type": "`U`"
 }

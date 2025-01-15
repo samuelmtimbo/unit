@@ -32,6 +32,5 @@
     "tags": ["platform", "api", "media", "image"],
     "globals": ["MediaRecorder"]
   },
-  "type": "`U`",
-  "system": true
+  "type": "`U`"
 }

@@ -21,7 +21,6 @@
   },
   "base": true,
   "type": "`U`&`C`&`V`&`J`",
-  "system": true,
   "render": true,
   "deps": [
     "6253bf76-2e85-11eb-9f59-3703abfd39c7",

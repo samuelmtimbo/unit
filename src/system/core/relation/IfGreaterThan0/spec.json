@@ -79,6 +79,5 @@
     "icon": "greater-than",
     "description": "let `a` pass if greater than 0"
   },
-  "id": "0facebfb-2449-430d-8f12-d8fdc5fc04e7",
-  "system": true
+  "id": "0facebfb-2449-430d-8f12-d8fdc5fc04e7"
 }

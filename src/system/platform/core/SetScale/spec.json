@@ -57,6 +57,5 @@
     "icon": "object-set",
     "description": "set scale `sx` and `sy` of `obj`"
   },
-  "system": true,
   "id": "33a97304-0832-40d9-b013-de0ddf0688af"
 }

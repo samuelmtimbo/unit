@@ -111,6 +111,5 @@
     "children": ["slider"]
   },
   "type": "`U`&`C`&`G`",
-  "system": true,
   "render": true
 }

@@ -25,6 +25,5 @@
     "tags": ["platform", "api", "gamepad"]
   },
   "id": "77238fd9-a968-454d-b7ce-0277bc37475d",
-  "base": true,
-  "system": true
+  "base": true
 }

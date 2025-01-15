@@ -19,6 +19,5 @@
     "tags": ["platform", "api", "media"]
   },
   "type": "`U`",
-  "base": true,
-  "system": true
+  "base": true
 }

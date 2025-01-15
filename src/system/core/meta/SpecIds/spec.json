@@ -72,6 +72,5 @@
     "description": "all system spec ids",
     "tags": ["core", "meta"]
   },
-  "type": "`U`&`G`",
-  "system": true
+  "type": "`U`&`G`"
 }

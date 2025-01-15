@@ -93,6 +93,5 @@
     "children": ["canvas"]
   },
   "type": "`U`&`C`&`G`",
-  "render": true,
-  "system": true
+  "render": true
 }

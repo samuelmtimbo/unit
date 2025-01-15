@@ -43,6 +43,5 @@
     "icon": "exponential",
     "description": "`a` to the power of 2"
   },
-  "system": true,
   "id": "8e017373-3a2b-4985-b60c-f6f0a94db200"
 }

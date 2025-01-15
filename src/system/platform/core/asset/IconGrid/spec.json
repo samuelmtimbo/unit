@@ -228,7 +228,6 @@
     "description": "grid showin"
   },
   "id": "8d3a4d38-3015-46f2-81d7-694644cec386",
-  "system": true,
   "render": true,
   "component": {
     "subComponents": {

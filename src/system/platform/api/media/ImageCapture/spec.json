@@ -26,6 +26,5 @@
     "tags": ["platform", "api", "media"],
     "globals": ["ImageCapture"]
   },
-  "type": "`U`",
-  "system": true
+  "type": "`U`"
 }

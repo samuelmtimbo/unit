@@ -30,6 +30,5 @@
     "defaultWidth": 120,
     "defaultHeight": 120
   },
-  "system": true,
   "render": true
 }

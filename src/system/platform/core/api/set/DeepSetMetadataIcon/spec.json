@@ -44,6 +44,5 @@
     "icon": "object-set",
     "description": "deep set `obj` metadata icon property"
   },
-  "id": "b97d77a2-bf51-4bf9-aa72-2956c26ce1ab",
-  "system": true
+  "id": "b97d77a2-bf51-4bf9-aa72-2956c26ce1ab"
 }

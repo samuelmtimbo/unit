@@ -125,6 +125,5 @@
     "icon": "ruler",
     "description": "hypotenuse `h` for legs `a` and `b`"
   },
-  "system": true,
   "id": "38321611-6cb6-4840-8dff-34fc69347aff"
 }

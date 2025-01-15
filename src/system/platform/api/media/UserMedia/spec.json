@@ -20,6 +20,5 @@
     "tags": ["platform", "api", "media"],
     "globals": ["MediaDevices"]
   },
-  "type": "`U`",
-  "system": true
+  "type": "`U`"
 }

@@ -106,6 +106,5 @@
     "icon": "download",
     "description": "download `graph` bundle as a json file"
   },
-  "id": "dcd6a544-e386-4e1c-9282-043da9585957",
-  "system": true
+  "id": "dcd6a544-e386-4e1c-9282-043da9585957"
 }

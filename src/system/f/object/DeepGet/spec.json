@@ -20,6 +20,5 @@
     "description": "get value of `obj` at `path`",
     "tags": ["core", "object"]
   },
-  "base": true,
-  "system": true
+  "base": true
 }

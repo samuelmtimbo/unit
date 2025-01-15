@@ -51,6 +51,5 @@
     "icon": "object-set",
     "description": "set currentTime property of `obj`"
   },
-  "id": "88553858-c62d-4970-98c9-084084528d2a",
-  "system": true
+  "id": "88553858-c62d-4970-98c9-084084528d2a"
 }

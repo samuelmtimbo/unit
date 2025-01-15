@@ -18,6 +18,5 @@
     "description": "load image",
     "tags": ["platform", "api", "media", "image"]
   },
-  "type": "`U`",
-  "system": true
+  "type": "`U`"
 }

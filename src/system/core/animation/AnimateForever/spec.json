@@ -113,6 +113,5 @@
     "icon": "timer",
     "description": "animate `element` forever"
   },
-  "id": "5dbcc486-a865-452c-9f14-e0d26e3354d7",
-  "system": true
+  "id": "5dbcc486-a865-452c-9f14-e0d26e3354d7"
 }

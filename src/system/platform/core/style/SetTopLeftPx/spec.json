@@ -182,6 +182,5 @@
     "icon": "object-set",
     "description": "set `obj` top left property to `x` `y` px"
   },
-  "id": "cc5e3d8d-1de5-4c12-9054-4c27b1a49d55",
-  "system": true
+  "id": "cc5e3d8d-1de5-4c12-9054-4c27b1a49d55"
 }
