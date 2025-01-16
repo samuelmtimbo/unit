@@ -5894,9 +5894,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._sim_collapse_merge(merge_id)
     }
 
-    forEachGraphSpecPin(spec, (type, pinId, pinSpec) => {
-      const plug_positions = {}
+    const plug_positions = {}
 
+    io((type) => {
       forEachGraphSpecPinOfType(spec, type, (pinId, pinSpec) => {
         const { plug = {} } = pinSpec
 
@@ -5913,11 +5913,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               addVector(center, sub_pin_metadata_position.ext),
           }
 
-          plug_positions[subPinId] = sub_pin_position
+          deepSet(plug_positions, [type, pinId, subPinId], sub_pin_position)
         }
       })
+    })
 
-      this._sim_add_exposed_pin_set(type, pinId, pinSpec, plug_positions)
+    forEachGraphSpecPin(spec, (type, pinId, pinSpec) => {
+      this._sim_add_exposed_pin_set(
+        type,
+        pinId,
+        pinSpec,
+        deepGetOrDefault(plug_positions, [type, pinId], {})
+      )
     })
 
     if (this._enabled()) {
