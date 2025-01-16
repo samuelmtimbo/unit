@@ -366,7 +366,11 @@ export const reflectComponentBaseTrait = (
 
       const slot = component.pathGetSubComponent(slot_path)
 
-      slot_trait = extractTrait(slot, measureText)
+      if (slot.isBase()) {
+        slot_trait = extractTrait(slot, measureText)
+      } else {
+        slot_trait = trait
+      }
     }
 
     const slot_base_trait = reflectChildrenTrait(
