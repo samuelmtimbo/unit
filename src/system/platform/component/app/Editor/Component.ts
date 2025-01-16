@@ -23405,7 +23405,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (nearest_compatible_node_id) {
       if (this._is_pin_node_id(nearest_compatible_node_id)) {
-        this._move_datum_to_pin(datum_node_id, nearest_compatible_node_id)
+        this.move_datum_to_pin(datum_node_id, nearest_compatible_node_id)
       } else if (this._is_ext_node_id(nearest_compatible_node_id)) {
         this._move_datum_to_exposed_pin(
           datum_node_id,
