@@ -7246,6 +7246,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     core_name.$element.addEventListener('dragstart', (event) => {
       event.preventDefault()
     })
+    core_name.stopPropagation('pointerdown')
 
     this._sim_setup_node_name(unit_id, core_name)
     this._core_name[unit_id] = core_name
@@ -7380,14 +7381,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_plug_name_blur = (plug_node_id: string): void => {
     // console.log('Graph', '_on_plug_name_blur', plug_node_id)
 
-    this._set_node_selection_to_node(plug_node_id)
-
     const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
     const value = this._get_node_temp_name(plug_node_id)
     const valid = this._is_valid_plug_name(plug_node_id, value)
 
     let next_pin_id = pinId
+
+    let next_plug_node_id = plug_node_id
 
     if (value !== pinId) {
       if (valid) {
@@ -7420,12 +7421,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._set_pin_name(plug_node_id, pinId)
       }
 
-      const next_ext_node_id = getExtNodeId(type, next_pin_id, subPinId)
+      next_plug_node_id = getExtNodeId(type, next_pin_id, subPinId)
 
       if (this._mode === 'info') {
-        this._enable_plug_name(next_ext_node_id)
+        this._enable_plug_name(next_plug_node_id)
       }
     }
+
+    this._deselect_node(next_plug_node_id)
+
+    if (this._edit_node_name_was_selected) {
+      this._select_node(next_plug_node_id)
+    }
+
+    this._set_node_selection_to_node(next_plug_node_id)
   }
 
   private _pod_set_unit_pin_set_id = (
@@ -9342,7 +9351,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._edit_node_name_id = null
 
     if (this._mode === 'info') {
-      if (this._q_was_pressed_before_name_focus && !this._name_to_be_focused) {
+      if (this._q_was_pressed_before_name_focus) {
         this._q_was_pressed_before_name_focus = false
 
         this._set_crud_mode('none')
@@ -9716,10 +9725,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       },
       name: pin_id,
     })
-
     pin_name.addEventListener(
-      makePointerDownListener(() => {
+      makePointerDownListener((event, _event) => {
         this._name_to_be_focused = true
+
+        _event.stopPropagation()
       })
     )
 
@@ -12625,7 +12635,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
     datum.stopPropagation('wheel')
     datum.stopPropagation('focus')
-    datum.stopPropagation('pointerdown')
+    datum.stopPropagation('pointerup')
+    datum.addEventListener(
+      makePointerDownListener((event, _event) => {
+        this._datum_to_be_focused = true
+
+        setTimeout(() => {
+          this._datum_to_be_focused = false
+        }, 0)
+
+        _event.stopPropagation()
+      })
+    )
 
     this._datum[datum_node_id] = datum
 
@@ -15871,6 +15892,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       },
       this.$system
     )
+    pin_name.stopPropagation('pointerdown')
 
     return pin_name
   }
@@ -18934,6 +18956,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_fullwindow_frame_off(_animate)
     }
 
+    if (!this._disabled) {
+      this._graph.focus()
+    }
+
     if (this._unlisten_fullwindow_escape) {
       this._unlisten_fullwindow_escape()
 
@@ -18974,10 +19000,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._transcend) {
       this._transcend.up()
-    }
-
-    if (!this._disabled) {
-      this.focus()
     }
 
     this.dispatchEvent('leave_fullwindow', {}, false)
@@ -22283,6 +22305,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._datum_to_be_focused = false
     } else if (this._name_to_be_focused) {
       //
+    } else if (this._edit_datum_node_id) {
+      //
     } else if (this._fullwindow_focusing) {
       //
     } else if (this._temp_control_unlock) {
@@ -22307,6 +22331,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           return
         }
 
+        if (
+          this._control._main.$element.contains(relatedTarget) &&
+          relatedTarget.classList.contains('data-tree-leaf')
+        ) {
+          return
+        }
+
         const hide = this._temp_control_unlock || this._control_lock
 
         this._disable(hide)
@@ -22322,11 +22353,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _lose_focus = () => {
+    const { animate } = this._config()
+
     const hide = this._temp_control_unlock || this._control_lock
 
     this._disable(hide)
 
-    this._hide_transcend(true)
+    if (!this._core_component_unlocked_count) {
+      this._hide_transcend(animate)
+    }
   }
 
   private _disable_input = (): void => {
@@ -25498,6 +25533,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     const pin_node_id = this._datum_to_pin[datum_node_id]
+    const plug_node_id = this._datum_to_plug[datum_node_id]
 
     if (pin_node_id) {
       const input_ext_node_id = this._pin_to_ext['input'][pin_node_id]
@@ -40100,6 +40136,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._datum_to_be_focused = true
 
+    setTimeout(() => {
+      this._datum_to_be_focused = false
+    }, 0)
+
     const datum_node_id = getDatumNodeId(datum_id)
     const datum = this._datum[datum_node_id]
 
@@ -46753,10 +46793,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._pointer_down_count === 0) {
       this._zooming = false
 
-      if (this._core_component_unlocked_count) {
-        this._focus_first_unlocked_component()
+      if (this._click_just_cancelled.has(pointerId)) {
+        if (this._core_component_unlocked_count) {
+          this._focus_first_unlocked_component()
 
-        this._graph.blur()
+          this._lose_focus()
+        }
       }
     }
   }
@@ -46843,6 +46885,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { pointerId } = event
 
     this._click_just_cancelled.add(pointerId)
+
+    if (this._core_component_unlocked_count) {
+      this._focus_first_unlocked_component()
+
+      this._lose_focus()
+    }
   }
 
   private _on_click = (event: UnitPointerEvent, _event: PointerEvent): void => {
@@ -46918,6 +46966,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._deselect_all_visible()
       }
     }
+
+    this._graph.focus()
   }
 
   private _deselect_all_visible = () => {
