@@ -12625,6 +12625,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
     datum.stopPropagation('wheel')
     datum.stopPropagation('focus')
+    datum.stopPropagation('pointerdown')
 
     this._datum[datum_node_id] = datum
 
