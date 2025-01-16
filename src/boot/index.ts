@@ -81,6 +81,10 @@ export function boot(
     unlockSpec,
   } = registry
 
+  for (const specId in specs) {
+    specsLock[specId] = true
+  }
+
   const emitter = parent ? parent.emitter : new EventEmitter_()
 
   const componentRemoteToLocal: Dict<Component[]> = {}
