@@ -787,6 +787,18 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     },
 
     $bulkEdit({ actions, fork = true, bubble = true }: GraphBulkEditData) {
+      const { specs, classes } = graph.__system
+
+      actions = actions.map((action) => {
+        action = clone(action)
+
+        if (action.data.data) {
+          action.data.data = evaluate(action.data.data, specs, classes)
+        }
+
+        return action
+      })
+
       call(graph, 'bulkEdit', fork, bubble, actions)
     },
 

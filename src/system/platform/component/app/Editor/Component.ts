@@ -38361,7 +38361,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-      const data = undefined
+      const data = this._get_pin_datum_value(pin_node_id)
 
       removeUnitPinData({
         unitId,
