@@ -810,7 +810,7 @@ export function _getTypeTree(
     }
   }
 
-  const genericTest = /^<[^]*>$/.exec(value)
+  const genericTest = /^<[A-Z]+>$/.exec(value)
   if (genericTest) {
     return {
       value,

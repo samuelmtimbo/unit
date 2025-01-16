@@ -213,6 +213,9 @@ assert(!isValidType('foo'))
 // assert(!isValidType("{ a: b' }"))
 assert(!isValidType('foo:true'))
 assert(!isValidType('foo:false'))
+assert(!isValidType('<T >'))
+assert(!isValidType('<a>'))
+assert(!isValidType('<*>'))
 assert(!isValidType('<T>["S",K]'))
 assert(!isValidObjKey('*'))
 
@@ -518,11 +521,11 @@ assert.deepEqual(_extractGenerics('{foo:"bar"}', '<T>'), {
 assert.deepEqual(_extractGenerics('{foo:"bar"}', '{foo:<T>}'), {
   '<T>': 'string',
 })
-assert.deepEqual(_extractGenerics('<0>[]', '<1>[]'), { '<1>': '<0>' })
-assert.deepEqual(_extractGenerics('number|string', '<0>'), {
-  '<0>': 'number|string',
+assert.deepEqual(_extractGenerics('<B>[]', '<A>[]'), { '<A>': '<B>' })
+assert.deepEqual(_extractGenerics('number|string', '<A>'), {
+  '<A>': 'number|string',
 })
-assert.deepEqual(_extractGenerics('<0>|<1>', '<2>'), { '<2>': '<0>|<1>' })
+assert.deepEqual(_extractGenerics('<A>|<B>', '<C>'), { '<C>': '<A>|<B>' })
 assert.deepEqual(_extractGenerics('`V<{value:string}>`', '`V<T>`'), {
   '<T>': '{value:string}',
 })
@@ -652,8 +655,8 @@ assert.deepEqual(
 )
 
 assert(hasGeneric('<T>'))
-assert(hasGeneric('<0>'))
-assert(hasGeneric('<0>[]'))
+assert(hasGeneric('<A>'))
+assert(hasGeneric('<A>[]'))
 assert(hasGeneric('`V<T>`'))
 assert(hasGeneric('`V`&<T>'))
 assert(hasGeneric('<T>&`V`'))
