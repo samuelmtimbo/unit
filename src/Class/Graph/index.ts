@@ -62,6 +62,7 @@ import {
   coverPinSet,
   exposePinSet,
   plugPin,
+  removeMerge,
   removePinFromMerge,
   removeUnitPinData,
   renameUnitInMerges,
@@ -543,20 +544,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     const oppositeType = opposite(type)
 
-    const exposedPin = this.getPin(type, name)
+    const pin = this.getExposedPin(type, name)
 
-    const data = exposedPin.peak()
+    const data = pin.peak()
 
-    const pin = new Pin({ data }, this.__system)
+    const oppositePin = new Pin({ data }, this.__system)
 
-    const oppositePin = this.getExposedPin(type, name)
+    const waitAll = deepGet(this._waitAll, [type])
+    const exposedMerge = deepGet(this._exposedMerge, [type, name]) as Merge
 
-    const waitAll = this._waitAll[type]
+    exposedMerge.removePin(type, name, false)
 
     waitAll.addPin(type, name, pin, {}, false)
     waitAll.setPin(oppositeType, name, oppositePin, {}, false)
 
-    this.setPin(type, name, pin, {})
+    exposedMerge.addPin(type, name, oppositePin, {}, false)
   }
 
   private _unplugFromWaitAll = <
@@ -570,12 +572,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const pin = this.getExposedInputPin(name as keyof I)
 
+    const exposedMerge = deepGet(this._exposedMerge, [type, name]) as Merge
+
     const waitAll = this._waitAll[type]
+
+    exposedMerge.removePin(type, name, false)
 
     waitAll.removePin(type, name, false)
     waitAll.removePin(oppositeType, name, false)
 
-    this.setPin(type, name, pin, {})
+    exposedMerge.addPin(type, name, pin, {}, false)
   }
 
   private _getExposedSubPinNodeId = (
@@ -1534,8 +1540,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     propagate: boolean = true
   ) {
     const { plug, ref, functional } = pinSpec
-
-    const oppositeType = opposite(type)
 
     exposedMerge.setPin(type, pinId, exposedPin)
 
@@ -4625,7 +4629,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._specRemoveAllMergePlug(mergeId)
     this._specRemoveAllMergePin(mergeId)
-    this._specRemoveAllMergeRef(mergeId)
+
+    removeMerge({ mergeId }, this._spec)
   }
 
   private _memRemoveAllMergePlug(mergeId: string) {
@@ -4651,10 +4656,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       delete this._mergeToSelfUnit[mergeId]
       delete this._selfUniToMerge[selfUnitId]
     }
-  }
-
-  private _specRemoveAllMergeRef(mergeId: string): void {
-    delete this._spec.merges[mergeId]
   }
 
   private _memRemoveAllMergePin(mergeId: string): void {
