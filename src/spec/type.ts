@@ -1,3 +1,4 @@
+import { SELF } from '../constant/SELF'
 import { DataRef } from '../DataRef'
 import { deepSet_ } from '../deepSet'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
@@ -256,11 +257,20 @@ export const _getGraphTypeInterface = (
 
           subPinType = type
         } else if (unitId && pinId) {
-          subPinType = deepGetOrDefault(
-            unitTypeMap,
-            [unitId, kind, pinId],
-            undefined
-          )
+          if (pinId === SELF) {
+            const unit = spec.units[unitId]
+
+            const unitSpec = specs[unit.id]
+
+            subPinType =
+              (unitSpec.type && getTree(unitSpec.type)) || getTree('any')
+          } else {
+            subPinType = deepGetOrDefault(
+              unitTypeMap,
+              [unitId, kind, pinId],
+              undefined
+            )
+          }
         }
 
         if (subPinType) {
