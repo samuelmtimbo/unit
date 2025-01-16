@@ -59027,8 +59027,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const prev_pin_spec = getPinSpec(spec, type, pinId)
 
-      const was_ref = isPinSpecRef(specs, spec, type, prev_pin_spec, new Set())
-      const ref = isSubPinSpecRef(specs, spec, type, subPinSpec, new Set())
+      const was_ref = isPinSpecRef(specs, spec, type, prev_pin_spec, new Set()) ?? false
+      const ref = isSubPinSpecRef(specs, spec, type, subPinSpec, new Set()) ?? false
 
       const setPinRef = () => {
         setPinSetRef({ type, pinId, ref }, next_unit_spec)
