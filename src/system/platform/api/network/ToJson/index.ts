@@ -18,7 +18,7 @@ export default class ToJson extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['res', 'any'],
+        i: ['body', 'any'],
         o: ['json'],
       },
       {},
@@ -27,11 +27,11 @@ export default class ToJson extends Functional<I, O> {
     )
   }
 
-  async f({ body: res }: I, done: Done<O>): Promise<void> {
+  async f({ body }: I, done: Done<O>): Promise<void> {
     let json: any
 
     try {
-      json = await res.json()
+      json = await body.json()
     } catch (err) {
       done(undefined, err.message.toLowerCase())
 
