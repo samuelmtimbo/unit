@@ -27,13 +27,10 @@
         }
       }
     },
-    "div": {
-      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+    "box": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
       "input": {
-        "constant": true,
-        "style": {
-          "data": "{width:\"100%\"}"
-        }
+        "style": {}
       },
       "output": {},
       "metadata": {
@@ -60,7 +57,7 @@
           "a": true
         }
       },
-      "div": {
+      "box": {
         "input": {
           "style": true
         }
@@ -73,11 +70,11 @@
       "defaultstyle": {
         "children": []
       },
-      "div": {
+      "box": {
         "children": ["defaultstyle"]
       }
     },
-    "children": ["div"],
+    "children": ["box"],
     "defaultWidth": 300,
     "defaultHeight": 180
   },
