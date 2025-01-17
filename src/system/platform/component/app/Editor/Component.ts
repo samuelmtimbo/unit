@@ -31386,6 +31386,38 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _get_class_literal_datum_bundle = (
+    datum_node_id: string
+  ): UnitBundleSpec => {
+    const { specs } = this.$props
+
+    const datum_tree = this._get_datum_tree(datum_node_id)
+
+    let bundle = evaluateBundleStr(
+      datum_tree.value,
+      specs,
+      this.$system.classes
+    )
+
+    const specs_ = weakMerge(specs, bundle.specs ?? {})
+
+    bundle = unitBundleSpec(bundle.unit, specs_)
+
+    return bundle
+  }
+
+  private _is_datum_class_literal_graph = (datum_node_id: string): boolean => {
+    const { specs } = this.$props
+
+    const bundle = this._get_class_literal_datum_bundle(datum_node_id)
+
+    const specs_ = weakMerge(specs, bundle.specs ?? {})
+
+    const base = isBaseSpecId(specs_, bundle.unit.id)
+
+    return !base
+  }
+
   private _enter_datum_class_literal = (datum_node_id: string) => {
     const {
       fork,
@@ -31421,17 +31453,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
     if (is_class_literal) {
-      let unitBundle = evaluateBundleStr(
-        datum_tree.value,
-        specs,
-        this.$system.classes
-      )
+      const unit_bundle = this._get_class_literal_datum_bundle(datum_node_id)
 
-      const specs_ = weakMerge(specs, unitBundle.specs ?? {})
+      const specs_ = weakMerge(specs, unit_bundle.specs ?? {})
 
-      unitBundle = unitBundleSpec(unitBundle.unit, specs_)
-
-      const spec = getSpec(unitBundle.unit.id) as GraphSpec
+      const spec = getSpec(unit_bundle.unit.id) as GraphSpec
 
       if (isBaseSpec(spec)) {
         return
@@ -31442,7 +31468,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const graph = start(this._system, bundle, true)
 
       const pod = proxyWrap(AsyncGraph(graph), UCGEE)
-      const component = componentFromUnitBundle(this._system, unitBundle)
+      const component = componentFromUnitBundle(this._system, unit_bundle)
 
       for (const subComponentId in component.$subComponent) {
         const sub_component = component.$subComponent[subComponentId]
@@ -34154,7 +34180,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return false
   }
 
-  private _is_datum_long_press_able = (unit_id: string): boolean => {
+  private _is_datum_long_press_able = (datum_node_id: string): boolean => {
+    if (this._is_datum_class_literal(datum_node_id)) {
+      return this._is_datum_class_literal_graph(datum_node_id)
+    }
+
     return false
   }
 
