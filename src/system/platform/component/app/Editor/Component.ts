@@ -4157,6 +4157,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._minimap_screen = minimap_screen
 
+      this._minimap_hidden = !this._cabinet.isActive('minimap')
+
       this._minimap.setChildren([minimap_screen])
 
       if (this._mode === 'add') {
