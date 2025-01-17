@@ -9,7 +9,9 @@ import {
 import { Dict } from '../../../../types/Dict'
 
 export function intercept(opt: InterceptOpt, url: string): boolean {
-  for (const pattern of opt.urls) {
+  const urls = Array.isArray(opt.urls) ? opt.urls : [opt.urls]
+
+  for (const pattern of urls) {
     const regex = pattern.replace(/\*/g, '[^ ]*')
 
     if (url.match(new RegExp(regex))) {
