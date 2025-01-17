@@ -704,6 +704,7 @@ import _dissoc from '../../../../f/object/Delete/f'
 import _keys, { keys } from '../../../../f/object/Keys/f'
 import { Style, Tag } from '../../../Style'
 import { default as Icon, default as IconButton } from '../../Icon/Component'
+import Inherit from '../../Inherit/Component'
 import Zoom_ from '../../Zoom/Component'
 import Canvas_ from '../../canvas/Canvas/Component'
 import SVGDefs from '../../svg/Defs/Component'
@@ -20495,8 +20496,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const style = rawExtractStyle(leaf_comp.$node, leaf_node, measureText)
       const leaf_style = extractStyle(leaf_comp, leaf_node, measureText)
 
+      const leaf_path = leaf_id.split('/')
+
+      const [sub_component_id, sub_sub_component_id] = leaf_path
+
+      const parent_id =
+        this._collapse_animation_next_parent[sub_sub_component_id] ??
+        this._spec_get_sub_component_parent_id(sub_component_id)
+      const slot_name =
+        this._collapse_animation_next_parent_slot[sub_sub_component_id] ??
+        this._get_sub_component_slot_name(sub_component_id)
+
+      let inherit_style = {}
+
+      if (parent_id) {
+        const parent = this._get_sub_component(parent_id)
+
+        const slot = parent.getLeafSlot(slot_name)
+
+        if (slot instanceof Inherit) {
+          inherit_style = slot.getProp('style')
+        }
+      }
+
       this._leaf_init_style[leaf_id] = style
-      this._leaf_style[leaf_id] = leaf_style
+      this._leaf_style[leaf_id] = { ...leaf_style, ...inherit_style }
 
       if (!is_text) {
         applyStyle(leaf_comp.$node as HTMLElement | SVGElement, {
@@ -30256,7 +30280,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     should_uncollapse: boolean = true,
     wait_for: Promise<void> = Promise.resolve()
   ) => {
-    // console.log('Graph', '_animate_enter', animate_config)
+    // console.log('Graph', '_animate_enter', animate_config, {
+    //   component_collapsed,
+    //   should_uncollapse,
+    // })
 
     const {
       api: {
@@ -30297,6 +30324,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         i++
       }
+
+      this._component.decompose()
 
       if (component_collapsed) {
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
@@ -32912,12 +32941,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       callback(leaf_id, ended)
     }
 
-    for (const [child_id, parent_id, target_id, slot_name] of children) {
+    for (let [child_id, parent_id, target_id, slot_name] of children) {
       const child_component = this._get_sub_component(child_id)
-      const target_component = this._get_sub_component(target_id)
-      const target_frame = this._get_sub_component_frame(target_id)
+
+      let target_component = this._get_sub_component(target_id)
+      let target_frame = this._get_sub_component_frame(target_id)
 
       const target_frame_trait = extractTrait(target_frame, measureText)
+
+      if (target_component.$wrap) {
+        const target_parent_id =
+          target_component.$parent.getSubComponentParentId(target_id)
+
+        if (
+          target_parent_id &&
+          !this._is_layout_component_layer_visible(target_parent_id)
+        ) {
+          target_component = this._get_sub_component(target_parent_id)
+          target_frame = this._get_sub_component_frame(target_parent_id)
+
+          target_id = target_parent_id
+        }
+      }
 
       const base = this._get_sub_component_root_base(child_id)
 
@@ -32957,7 +33002,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (is_frame_target) {
         child_base_slot = target_frame
       } else {
-        if (child_base_slot_lookup && !child_base_slot_lookup.$wrap) {
+        if (child_base_slot_lookup) {
           child_base_slot = child_base_slot_lookup
         } else {
           child_base_slot = target_frame
@@ -33588,8 +33633,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     child_id: string,
     slot_name: string
   ): void => {
-    // console.log('Graph', '__spec_append_sub_component_child', parent_id, child_id, slot_name)
-
     if (parent_id) {
       appendSubComponentChild(
         { parentId: parent_id, childId: child_id },
@@ -34483,6 +34526,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return new_unit_id
   }
 
+  private _collapse_animation_next_parent: Dict<string> = {}
+  private _collapse_animation_next_parent_slot: Dict<string> = {}
+
   private _on_graph_group_unit_long_press = (
     unit_id: string,
     pointerId: number,
@@ -34585,6 +34631,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               this._spec_get_sub_component_parent_id(selected_node_id)
 
             if (parent_id !== unit_id) {
+              this._collapse_animation_next_parent[selected_node_id] = unit_id
+              this._collapse_animation_next_parent_slot[selected_node_id] =
+                'default'
+
               this._state_pre_append_sub_component_child(
                 unit_id,
                 selected_node_id,

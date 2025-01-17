@@ -184,6 +184,8 @@ export const reflectComponentBaseTrait = (
   const all_leaf_trait: Dict<LayoutNode> = {}
   const all_leaf_slot_path = {}
   const all_slot_base: Dict<string[]> = {}
+  const all_slot_base_parent: Dict<string> = {}
+  const all_slot_wrap: Dict<boolean> = {}
 
   const expand_slot = (slot_id: string, path: number[]): Tag[] => {
     return expandSlot(
@@ -264,6 +266,9 @@ export const reflectComponentBaseTrait = (
     if (!is_root) {
       all_slot_base[leaf_slot_id] = all_slot_base[leaf_slot_id] || []
       all_slot_base[leaf_slot_id].push(leaf_id)
+      all_slot_wrap[leaf_slot_id] = true
+
+      all_slot_base_parent[leaf_id] = leaf_slot_id
 
       const leaf_parent_slot_style = extractStyle(
         `${prefix}${leaf_slot_id === '' ? '' : `${prefix ? '/' : ''}${leaf_slot_id}`}`,
@@ -353,7 +358,16 @@ export const reflectComponentBaseTrait = (
   for (const slot_id in all_slot_base) {
     const slot_base = all_slot_base[slot_id]
 
-    const slot_style = all_leaf_style[slot_id].style || {}
+    let slot_style = all_leaf_style[slot_id].style || {}
+
+    if (all_slot_wrap[slot_id]) {
+      const slot_parent_id = all_slot_base_parent[slot_id]
+
+      if (slot_parent_id) {
+        slot_style = all_leaf_style[slot_parent_id].style || {}
+      }
+    }
+
     const slot_all_style = slot_base.map(
       (leaf_id) => all_leaf_style[leaf_id],
       []
