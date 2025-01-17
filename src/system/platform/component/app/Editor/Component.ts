@@ -523,7 +523,6 @@ import {
   setDatum,
   setMetadata,
   setName,
-  setPinSetDataType,
   setPinSetDefaultIgnored,
   setPinSetFunctional,
   setPinSetId,
@@ -5365,10 +5364,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _is_pin_ref = (type: IO, pin_id: string) => {
-    const pin = this._get_pin(type, pin_id)
+  private _is_pin_ref = (type: IO, pinId: string) => {
+    const { specs } = this.$props
 
-    const { ref = false } = pin
+    const ref = isPinRef({ type, pinId }, this._spec, specs, new Set())
 
     return ref
   }
@@ -9009,14 +9008,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('_spec_add_exposed_pin_set', type, pinId, pinSpec)
 
     exposePinSet({ pinId, type, pinSpec }, this._spec)
-
-    this._spec_refresh_exposed_pin_set_type(type, pinId)
-  }
-
-  private _spec_refresh_exposed_pin_set_type = (type: IO, pinId: string) => {
-    const dataType = this.__get_ext_pin_type_value(type, pinId)
-
-    setPinSetDataType({ pinId, type, dataType }, this._spec)
   }
 
   private _pod_expose_pin_set = (
@@ -25719,6 +25710,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         return !input_merge && !output_merge
       }
+    } else if (plug_node_id) {
+      const { type, pinId } = segmentPlugNodeId(plug_node_id)
+
+      const ref = this._is_pin_ref(type, pinId)
+
+      if (ref) {
+        return true
+      }
+
+      return false
     } else {
       return false
     }
@@ -41768,8 +41769,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       },
       this._spec
     )
-
-    this._spec_refresh_exposed_pin_set_type(type, pinId)
   }
 
   private _get_exposed_pin_marker_path = (
@@ -42084,8 +42083,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     }
-
-    this._spec_refresh_exposed_pin_set_type(type, pinId)
   }
 
   private _state_unplug_exposed_pin = (
@@ -52212,10 +52209,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _spec_is_plug_ref = (type: IO, pinId: string): boolean => {
-    return this._spec[`${type}s`][pinId]['ref'] ?? false
-  }
-
   private _spec_graph_unit_get_unit = (
     graph_id: string,
     unit_id: string
@@ -53670,11 +53663,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const opposite_type = oppositePinType(type)
 
+        const ref = this._is_link_pin_ref(pin_node_id)
+
         exposePinSet(
           {
             pinId: opposite_pin_id,
             type: opposite_type,
-            pinSpec: { plug: { '0': {} } },
+            pinSpec: { plug: { '0': {} }, ref },
           },
           updated_graph_spec
         )
@@ -59135,10 +59130,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const prev_pin_spec = getPinSpec(spec, type, pinId)
 
-      const was_ref = isPinSpecRef(specs, spec, type, prev_pin_spec, new Set()) ?? false
-      const ref = isSubPinSpecRef(specs, spec, type, subPinSpec, new Set()) ?? false
+      const was_ref =
+        isPinSpecRef(specs, spec, type, prev_pin_spec, new Set()) ?? false
+      const ref =
+        isSubPinSpecRef(specs, spec, type, subPinSpec, new Set()) ?? false
 
-      const setPinRef = () => {
+      const commit = () => {
         setPinSetRef({ type, pinId, ref }, next_unit_spec)
         setSpec(spec.id, next_unit_spec)
       }
@@ -59150,7 +59147,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._sim_set_unit_pin_ref(
             pin_node_id,
             ref,
-            setPinRef,
+            commit,
             (mergeId: string, mergeSpec: GraphMergeSpec) => {
               this._spec_add_merge(mergeId, mergeSpec)
             },
@@ -59173,7 +59170,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._clear_graph_pin_type(unitId, type, pinId)
       } else {
-        setPinRef()
+        commit()
       }
     }
   }

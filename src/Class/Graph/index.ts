@@ -95,6 +95,7 @@ import {
   getUnitMergesSpec,
   hasMerge,
   hasMergePin,
+  isPinRef,
   isSelfPin,
   opposite,
 } from '../../spec/util/spec'
@@ -2453,6 +2454,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       deepDestroy(this._plugUnlisten, [type, pinId, subPinId])
     }
+  }
+
+  public isPinRef(type: IO, pinId: any): boolean {
+    const { specs } = this.__system
+
+    const ref = isPinRef({ type, pinId }, this._spec, specs, new Set())
+
+    return ref
   }
 
   private _simPlugEmptyPin = (
