@@ -409,6 +409,7 @@ import {
   BULK_EDIT,
   COVER_PIN_SET,
   COVER_UNIT_PIN_SET,
+  EXPOSE_PIN,
   EXPOSE_PIN_SET,
   EXPOSE_UNIT_PIN_SET,
   MOVE_SUBGRAPH_INTO,
@@ -55942,6 +55943,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         {
           this._state_cover_pin_set(data.type, data.pinId)
         }
+        break
+      case EXPOSE_PIN:
+        {
+          this._state_add_exposed_pin(
+            data.type,
+            data.pinId,
+            data.subPinId,
+            data.subPinSpec,
+            {}
+          )
+          emit &&
+            this._pod_add_exposed_pin(
+              data.type,
+              data.pinId,
+              data.subPinId,
+              data.subPinSpec
+            )
+        }
+
         break
       case PLUG_PIN:
         {
