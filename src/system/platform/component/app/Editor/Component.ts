@@ -31427,7 +31427,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this.$system.classes
       )
 
-      const specs_ = weakMerge(specs, unitBundle.specs)
+      const specs_ = weakMerge(specs, unitBundle.specs ?? {})
 
       unitBundle = unitBundleSpec(unitBundle.unit, specs_)
 
