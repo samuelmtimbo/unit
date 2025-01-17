@@ -1758,6 +1758,7 @@ export interface Props_ extends R {
   disabled?: boolean
   fullwindow?: boolean
   parent?: Editor_
+  leave?: boolean
   graph: $Graph
   component: Component
   frame?: Component<HTMLElement>
@@ -30615,20 +30616,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _can_leave = (): boolean => {
-    const { parent } = this.$props
+    const { parent, leave } = this.$props
 
     if (this._tree_layout) {
       return false
     }
 
-    // only accept "leaving" if there is a parent or there is "at least one edit"
-    return (
-      !!parent ||
-      this._unit_count > 1 ||
-      this._exposed_pin_set_count > 0 ||
-      this._link_pin_constant_count > 0 ||
-      this._link_pin_memory_count > 0
-    )
+    return !!parent || leave
   }
 
   private _get_sub_component_base_trait(sub_component_id: string): {
@@ -31487,6 +31481,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           disabled: true,
           parent: null,
           frame: this._frame,
+          leave: true,
           frameOut: false,
           container,
           fullwindow: false,
