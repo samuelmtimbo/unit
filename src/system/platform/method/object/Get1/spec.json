@@ -8,6 +8,9 @@
     "name": {
       "type": "string",
       "_init": "N"
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {

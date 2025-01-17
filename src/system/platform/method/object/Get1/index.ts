@@ -1,5 +1,5 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
 import { ID_GET_1 } from '../../../../_ids'
@@ -7,13 +7,14 @@ import { ID_GET_1 } from '../../../../_ids'
 export interface I<T> {
   obj: J
   name: string
+  done: any
 }
 
 export interface O<T> {
   value: T
 }
 
-export default class Get1<T> extends Functional<I<T>, O<T>> {
+export default class Get1<T> extends Holder<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
@@ -33,7 +34,8 @@ export default class Get1<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_GET_1
+      ID_GET_1,
+      'done'
     )
   }
 
