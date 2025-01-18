@@ -8915,6 +8915,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._sim_remove_unit_err_link(unit_id)
     this._sim_remove_unit_err_node(unit_id)
+
+    this._refresh_core_border_color(unit_id)
   }
 
   private _sim_remove_unit_err_link = (unit_id: string): void => {
