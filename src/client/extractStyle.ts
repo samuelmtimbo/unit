@@ -78,11 +78,13 @@ export function _extractFromRawStyle(
   const fitHeight = style['height'] === 'fit-content'
 
   if (element instanceof Text) {
-    const fontSize = component.getFontSize()
-
     const { textContent } = component.$element
 
-    const { width, height } = measureText(textContent, fontSize, trait.width)
+    const { width, height } = measureText(
+      textContent,
+      trait.fontSize,
+      trait.width
+    )
 
     return {
       width: `${width}px`,

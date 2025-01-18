@@ -35,7 +35,7 @@ export function measureText(
   }
   lines.push(currentLine)
 
-  const height = lineHeight * lines.length * 1.2
+  const height = lineHeight * lines.length
 
   const width = Math.max(...lines.map((line) => ctx.measureText(line).width))
 

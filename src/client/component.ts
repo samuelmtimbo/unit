@@ -1449,8 +1449,10 @@ export class Component<
     const defaultColor = () => {
       if (this.$slotParent) {
         return this.$slotParent.getColor()
-      } else {
+      } else if (this.$context) {
         return hexToRgba(this.$context.$color)
+      } else {
+        return hexToRgba(this.$system.color)
       }
     }
 

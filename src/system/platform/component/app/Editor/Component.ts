@@ -21052,7 +21052,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _extract_style = (
     trait: LayoutNode,
     leaf_id: string,
-    leaf_comp: Component
+    leaf_comp: Component,
+    leaf_parent: Component
   ) => {
     const {
       api: {
@@ -21061,7 +21062,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } = this.$system
 
     if (isTextLike(leaf_comp)) {
-      //
+      const trait_ =
+        (leaf_parent && extractTrait(leaf_parent, measureText)) || trait
+
+      return extractStyle(leaf_comp, trait_, measureText)
     } else if (this._leaf_style[leaf_id]) {
       let leaf_style = this._leaf_style[leaf_id]
 
@@ -21086,8 +21090,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       base,
       style,
       trait,
-      (leaf_id, leaf_comp) => {
-        return this._extract_style(trait, leaf_id, leaf_comp)
+      (leaf_id, leaf_comp, leaf_parent) => {
+        return this._extract_style(trait, leaf_id, leaf_comp, leaf_parent)
       },
       expand
     )
@@ -33071,9 +33075,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const leaf_id = joinPath(_leaf_path)
 
-        const leaf_style =
-          this._leaf_style[leaf_id] ||
-          extractStyle(leaf_comp, slot_leaf_trait, measureText)
+        let leaf_style = this._leaf_style[leaf_id]
+
+        if (!leaf_style || isTextLike(leaf_comp)) {
+          leaf_style = extractStyle(leaf_comp, slot_leaf_trait, measureText)
+        }
 
         if (is_root) {
           root_base[target_id] = root_base[target_id] || {}
@@ -33171,8 +33177,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             slot_id,
             slot_id === slot_base[0] ? path.slice(1) : path,
             expand,
-            (leaf_id, leaf_comp) => {
-              return this._extract_style(slot_trait, leaf_id, leaf_comp)
+            (leaf_id, leaf_comp, leaf_parent) => {
+              return this._extract_style(
+                slot_trait,
+                leaf_id,
+                leaf_comp,
+                leaf_parent
+              )
             }
           )
 

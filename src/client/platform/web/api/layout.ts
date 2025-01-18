@@ -119,6 +119,8 @@ const fitChildren = (
 
     applyStyle(childNode, style)
 
+    childNode.style.overflow = 'visible'
+
     parentNode.appendChild(childNode)
 
     i++
@@ -192,7 +194,9 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
         let color: RGBA
 
-        if (
+        if (childStyle.name === '#text') {
+          color = parentTrait.color
+        } else if (
           computedStyle.color &&
           computedStyle.color !== 'rgb(255, 255, 255)'
         ) {
