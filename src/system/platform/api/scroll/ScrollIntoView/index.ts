@@ -43,7 +43,7 @@ export default class ScrollIntoView<T> extends Semifunctional<I<T>, O<T>> {
     done()
   }
 
-  d() {
+  b() {
     this._output.done.push(true)
   }
 }

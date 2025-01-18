@@ -120,7 +120,7 @@ export default class Fetch extends Holder<I, O> {
     }
   }
 
-  d() {
+  b() {
     this._output.done.push(true)
   }
 }

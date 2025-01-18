@@ -149,6 +149,8 @@ export class Functional<
 
   d() {}
 
+  b() {}
+
   private _backward_if_ready(): void {
     const {
       api: {
@@ -169,6 +171,7 @@ export class Functional<
       this._backward_all()
 
       this.d()
+      this.b()
 
       // without setTimeout an infinite loop will turn into a stack overflow
       // setTimeout(() => {

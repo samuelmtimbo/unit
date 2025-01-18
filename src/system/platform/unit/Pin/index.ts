@@ -56,7 +56,7 @@ export default class Pin_<T> extends Holder<I<T>, O<T>> {
     }
   }
 
-  d() {
+  b() {
     this._output.done.push(true)
   }
 }

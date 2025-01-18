@@ -55,9 +55,9 @@ export default class Respond extends Semifunctional<I, O> {
     waiter.set({ status, headers, body: raw })
 
     done()
-
-    this._output.done.push(true)
   }
 
-  d() {}
+  b() {
+    this._output.done.push(true)
+  }
 }

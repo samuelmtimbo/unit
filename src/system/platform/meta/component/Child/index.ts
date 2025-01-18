@@ -77,7 +77,9 @@ export default class Child extends Holder<I, O> {
 
       this._unlisten = undefined
     }
+  }
 
+  b() {
     this._output.done.push(true)
   }
 }

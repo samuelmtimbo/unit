@@ -57,7 +57,7 @@ export default class CreateObjectURI<T> extends Semifunctional<I<T>, O<T>> {
     done({ url })
   }
 
-  d() {
+  b() {
     this._output.done.push(true)
   }
 }

@@ -46,7 +46,7 @@ export default class Read<T> extends Semifunctional<I<T>, O<T>> {
     })
   }
 
-  d() {
+  b() {
     this._output.done.push(true)
   }
 }

@@ -16,7 +16,7 @@ export interface O<T> {
   done: any
 }
 
-export default class ToImageUrl<T> extends Semifunctional<I<T>, O<T>> {
+export default class ToDataUrl<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
@@ -56,7 +56,7 @@ export default class ToImageUrl<T> extends Semifunctional<I<T>, O<T>> {
     })
   }
 
-  d() {
+  b() {
     this._output.done.push(true)
   }
 }

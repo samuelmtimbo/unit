@@ -18,8 +18,10 @@ export default class Get1<T> extends Holder<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['obj', 'name'],
-        o: ['value'],
+        fi: ['obj', 'name'],
+        fo: ['value'],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
