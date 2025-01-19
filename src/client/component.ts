@@ -2905,10 +2905,6 @@ export class Component<
     at: number,
     callback: (parent: Component, child: Component, at: number) => void
   ) => {
-    if (component.$detached) {
-      return
-    }
-
     if (component.isParent()) {
       let i = 0
 
