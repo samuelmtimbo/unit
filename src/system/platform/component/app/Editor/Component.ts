@@ -58,7 +58,7 @@ import {
   ID_EDITOR,
   ID_IMAGE,
   ID_IMAGE_1,
-  ID_SCROLL_SNAP_Y_DIV,
+  ID_SCROLL_SNAP_Y_BOX,
   ID_VIDEO,
 } from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
@@ -1296,7 +1296,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _create_fallback_frame = (): Component => {
     const { component: fallback_frame } = graphComponentFromId(
       this.$system,
-      ID_SCROLL_SNAP_Y_DIV,
+      ID_SCROLL_SNAP_Y_BOX,
       {
         style: {
           position: 'absolute',

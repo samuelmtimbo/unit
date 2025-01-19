@@ -1,5 +1,5 @@
 {
-  "name": "scroll snap y div",
+  "name": "scroll snap x box",
   "units": {
     "white-spacenowrap": {
       "id": "09072f81-7c8e-4bce-80ad-6d9a821a2897",
@@ -27,8 +27,8 @@
         }
       }
     },
-    "inheritscroll-snapy": {
-      "id": "5867c5b6-24f2-4bd7-90b3-4e44615bc42c",
+    "inheritscroll-snapx": {
+      "id": "0b5d4999-21ce-48da-907d-2891514c451d",
       "input": {
         "style": {}
       },
@@ -71,7 +71,7 @@
   "outputs": {},
   "component": {
     "slots": [["inheritscroll-snap-alignstart", "default"]],
-    "children": ["inheritscroll-snapy"],
+    "children": ["inheritscroll-snapx"],
     "subComponents": {
       "white-spacenowrap": {
         "children": ["inheritdisplayinline-block"]
@@ -79,7 +79,7 @@
       "inheritdisplayinline-block": {
         "children": ["inheritscroll-snap-alignstart"]
       },
-      "inheritscroll-snapy": {
+      "inheritscroll-snapx": {
         "children": ["white-spacenowrap"]
       },
       "inheritscroll-snap-alignstart": {
@@ -90,9 +90,11 @@
       "icon": "square",
       "description": "container with y scroll snap",
       "complexity": 109
-    }
+    },
+    "defaultWidth": 240,
+    "defaultHeight": 240
   },
-  "id": "cef90fb7-bfcb-4f9d-8828-df6e68278601",
+  "id": "44a75416-9cc9-4889-b4c5-ad9b661a8cdf",
   "type": "`U`&`C`&`G`",
   "render": true
 }
