@@ -56,11 +56,11 @@
     "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [["flexcolumn", "default"]],
+    "slots": [["flexcolumncenter", "default"]],
     "defaultWidth": 180,
     "defaultHeight": 270,
     "subComponents": {
-      "flexcolumn": {
+      "flexcolumncenter": {
         "children": []
       }
     },
