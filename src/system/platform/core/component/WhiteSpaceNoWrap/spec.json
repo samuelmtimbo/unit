@@ -1,8 +1,8 @@
 {
   "name": "white-space nowrap",
   "units": {
-    "div": {
-      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+    "box": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
       "input": {},
       "metadata": {
         "component": {
@@ -32,7 +32,7 @@
           "a": true
         }
       },
-      "div": {
+      "box": {
         "input": {
           "style": true
         }
@@ -56,15 +56,15 @@
     "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [["div", "default"]],
+    "slots": [["box", "default"]],
     "defaultWidth": 180,
     "defaultHeight": 270,
     "subComponents": {
-      "div": {
+      "box": {
         "children": []
       }
     },
-    "children": ["div"]
+    "children": ["box"]
   },
   "id": "09072f81-7c8e-4bce-80ad-6d9a821a2897",
   "type": "`U`&`G`&`C`",
