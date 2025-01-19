@@ -4077,12 +4077,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { animate } = this._config()
 
-    hide = hide ?? animate
-
     if (!this._disabled) {
       this._disabled = true
-
-      this._unlock_control(hide)
     }
   }
 
@@ -22325,6 +22321,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { container } = this.$props
 
+    const { animate } = this._config()
+
     this._focused = false
 
     if (this._search_to_be_focused_by_click) {
@@ -22373,6 +22371,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const hide = this._temp_control_unlock || this._control_lock
 
         this._disable(hide)
+        this._hide_control(animate)
 
         if (
           !unlocked_frame ||
@@ -22390,6 +22389,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const hide = this._temp_control_unlock || this._control_lock
 
     this._disable(hide)
+    this._hide_control(animate)
 
     if (!this._core_component_unlocked_count) {
       this._hide_transcend(animate)
