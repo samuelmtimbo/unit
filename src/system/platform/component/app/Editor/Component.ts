@@ -42763,7 +42763,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      this._graph.focus()
+      if (!this._resize_pointer_count) {
+        this._graph.focus()
+      }
     }
   }
 
