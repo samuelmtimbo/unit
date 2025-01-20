@@ -20571,8 +20571,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     leaf_layer.appendChild(leaf_frame)
 
-    // TODO add listener for style prop change
-
     this._leaf_frame_active[leaf_id] = true
     this._leaf_frame_layer[leaf_id] = leaf_layer
 
@@ -25107,8 +25105,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     })
   }
 
-  private _enable_node_overlay = (node_id: string): void => {}
-
   private _enable_datum_overlay = (datum_node_id: string): void => {
     // console.log('Graph', '_enable_datum_overlay', datum_node_id)
 
@@ -25117,38 +25113,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_overlay.$element.style.display = 'block'
   }
 
-  private _disable_node_overlay = (node_id: string): void => {
-    // TODO
-  }
-
   private _disable_datum_overlay = (datum_node_id: string): void => {
     // console.log('Graph', '_disable_datum_overlay', datum_node_id)
 
     const datum_overlay = this._datum_overlay[datum_node_id]
 
     datum_overlay.$element.style.display = 'none'
-  }
-
-  private _disable_all_datum_overlay = (): void => {
-    for (const datum_node_id in this._data_node) {
-      this._disable_datum_overlay(datum_node_id)
-    }
-  }
-
-  private _disable_all_selected_datum_overlay = (): void => {
-    for (const datum_node_id in this._data_node) {
-      if (this._is_node_selected(datum_node_id)) {
-        this._disable_datum_overlay(datum_node_id)
-      }
-    }
-  }
-
-  private _enable_all_selected_datum_overlay = (): void => {
-    for (const datum_node_id in this._data_node) {
-      if (this._is_node_selected(datum_node_id)) {
-        this._enable_datum_overlay(datum_node_id)
-      }
-    }
   }
 
   private _hide_control = (animate: boolean): void => {
@@ -28436,23 +28406,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_node_yellow_click = (node_id: string): void => {
-    if (this._is_pin_node_id(node_id)) {
-      this._yellow_click_pin(node_id)
-    } else if (this._is_unit_node_id(node_id)) {
-      this._yellow_click_unit(node_id)
-    } else if (this._is_datum_node_id(node_id)) {
-      this._yellow_click_datum(node_id)
-    } else if (this._is_plug_node_id(node_id)) {
-      this._yellow_click_plug(node_id)
+    if (this._is_node_selected(node_id)) {
+      this.copy_selected_nodes(true)
+    } else {
+      if (this._is_pin_node_id(node_id)) {
+        this._yellow_click_pin(node_id)
+      } else if (this._is_unit_node_id(node_id)) {
+        this._yellow_click_unit(node_id)
+      } else if (this._is_datum_node_id(node_id)) {
+        this._yellow_click_datum(node_id)
+      } else if (this._is_plug_node_id(node_id)) {
+        this._yellow_click_plug(node_id)
+      }
     }
   }
 
   private _yellow_click_datum = (datum_node_id) => {
-    // TODO deep copy
-
-    this._copy_nodes([datum_node_id], true, () => {
-      // TODO
-    })
+    this._copy_nodes([datum_node_id], true)
   }
 
   private _yellow_long_press_datum = (
@@ -28474,9 +28444,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _yellow_click_unit = (unit_id: string): void => {
     // console.log('Graph', '_yellow_click_unit', unit_id)
 
-    this._copy_nodes([unit_id], true, () => {
-      // TODO
-    })
+    this._copy_nodes([unit_id], true)
   }
 
   private _yellow_long_press_class_literal = (
@@ -43827,7 +43795,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const node_position = this._get_node_position(node_id)
 
-    const new_bundle = this._sub_graph_selection(node_ids, deep)
+    const new_bundle = this._sub_graph_selection(node_ids)
 
     const position = this._screen_center()
 
@@ -54528,10 +54496,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  public _sub_graph_selection = (
-    node_ids: string[],
-    deep: boolean
-  ): BundleSpec => {
+  public _sub_graph_selection = (node_ids: string[]): BundleSpec => {
     const { specs, newSpec, newSpecId } = this.$props
 
     const { classes } = this.$system
@@ -54752,11 +54717,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return bundle
   }
 
-  public _copy_nodes = async (
-    node_ids: string[],
-    deep: boolean,
-    callback: Callback<BundleSpec>
-  ) => {
+  public _copy_nodes = async (node_ids: string[], deep: boolean) => {
     // console.log('Graph', '_copy_nodes', node_ids, deep)
 
     const {
@@ -54769,15 +54730,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const id = newSpecId()
 
-    const bundle = this._sub_graph_selection(node_ids, deep)
+    const bundle = this._sub_graph_selection(node_ids)
 
-    try {
-      const json = JSON.stringify(bundle)
+    const copyToClipboard = async () => {
+      try {
+        const json = JSON.stringify(bundle)
 
-      await writeText(json)
-    } catch (err) {
-      this._show_err(err)
+        await writeText(json)
+      } catch (err) {
+        this._show_err(err)
+      }
     }
+
+    if (deep) {
+      let promises = []
+
+      for (const unitId in bundle.spec.units) {
+        promises.push(
+          new Promise<void>((resolve) => {
+            this._pod.$snapshotUnit({ unitId }, (memory) => {
+              bundle.spec.units[unitId].memory = memory
+
+              resolve()
+            })
+          })
+        )
+      }
+
+      await Promise.all(promises)
+    }
+
+    copyToClipboard()
   }
 
   public _show_err = (err: string): void => {
@@ -54786,9 +54769,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   public cut_nodes = (node_ids: string[]) => {
-    this._copy_nodes(node_ids, false, () => {
-      // TODO
-    })
+    this._copy_nodes(node_ids, true)
 
     this._remove_nodes(node_ids)
   }
@@ -54808,9 +54789,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   public copy_single_node = (node_id: string, deep: boolean): void => {
     const node_ids = [node_id]
 
-    this._copy_nodes(node_ids, deep, () => {
-      // TODO
-    })
+    this._copy_nodes(node_ids, deep)
   }
 
   public copy_selected_nodes = (deep: boolean) => {
@@ -54835,9 +54814,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const node_ids = keys(selected_node_id_clone)
 
-    this._copy_nodes(node_ids, deep, () => {
-      // TODO
-    })
+    this._copy_nodes(node_ids, deep)
   }
 
   private _validate_graph_spec = (data: any): boolean => {

@@ -39,6 +39,7 @@ import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
+import { ADD_UNIT } from '../../../spec/actions/G'
 import { evaluate } from '../../../spec/evaluate'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { stringify } from '../../../spec/stringify'
@@ -794,6 +795,16 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
         if (action.data.data) {
           action.data.data = evaluate(action.data.data, specs, classes)
+        }
+
+        if (action.type === ADD_UNIT) {
+          if (action.data.bundle.unit.memory) {
+            evaluateMemorySpec(
+              action.data.bundle.unit.memory,
+              specs,
+              classes
+            )
+          }
         }
 
         return action
