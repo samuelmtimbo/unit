@@ -351,7 +351,7 @@ export const reflectComponentBaseTrait = (
   for (const slot_id in all_slot_base) {
     const slot_base = all_slot_base[slot_id]
 
-    let slot_style = all_leaf_style[slot_id].style || {}
+    let slot_style = all_leaf_style[slot_id]?.style || {}
 
     let effective_slot_id = slot_id
 
