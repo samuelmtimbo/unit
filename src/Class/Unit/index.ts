@@ -314,7 +314,7 @@ export class Unit<
       return
     }
 
-    return input.ignored(ignore)
+    // return input.ignored(ignore)
   }
 
   public setOutputIgnored<K extends keyof O>(

@@ -27937,8 +27937,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (ignored) {
       if (internal_node_id) {
-        const { type, pinId, subPinId } = segmentInternalNodeId(internal_node_id)
-  
+        const { type, pinId, subPinId } =
+          segmentInternalNodeId(internal_node_id)
+
         this._sim_unplug_exposed_pin(type, pinId, subPinId)
       }
 
