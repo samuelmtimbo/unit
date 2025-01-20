@@ -27929,12 +27929,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const internal_node_id = this._pin_to_int[type][pin_node_id]
 
-    if (internal_node_id) {
-      const { type, pinId, subPinId } = segmentInternalNodeId(internal_node_id)
-
-      this._sim_unplug_exposed_pin(type, pinId, subPinId)
-    }
-
     const datum_node_id = this._pin_to_datum[pin_node_id]
 
     const pin_datum_tree = this._pin_datum_tree[pin_node_id]
@@ -27942,6 +27936,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
     if (ignored) {
+      if (internal_node_id) {
+        const { type, pinId, subPinId } = segmentInternalNodeId(internal_node_id)
+  
+        this._sim_unplug_exposed_pin(type, pinId, subPinId)
+      }
+
       this._set_node_layer(pin_node_id, LAYER_IGNORED)
       this._set_link_layer(link_id, LAYER_IGNORED)
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE_IGNORED)
