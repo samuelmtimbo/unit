@@ -44111,6 +44111,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { unitId } = segmentLinkPinNodeId(node_id)
 
       this._on_unit_red_drag_start(unitId, pointer_id, selected_node_ids)
+    } else if (this._is_plug_node_id(node_id)) {
+      this._on_plug_red_drag_start(node_id)
+    }
+  }
+
+  private _on_plug_red_drag_start = (plug_node_id: string) => {
+    const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
+
+    const ext_node_id = getExtNodeId(type, pinId, subPinId)
+    const int_node_id = getIntNodeId(type, pinId, subPinId)
+
+    const pin_node_id = this._ext_to_node[ext_node_id]
+
+    if (pin_node_id) {
+      this._unplug_exposed_pin(type, pinId, subPinId)
+
+      this._ascend_node(int_node_id)
     }
   }
 
