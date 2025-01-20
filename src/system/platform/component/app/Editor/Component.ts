@@ -20456,8 +20456,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
       const style_ = { ...style, ...temp_style }
 
-      this._leaf_init_style[leaf_id] = style
-      this._leaf_style[leaf_id] = style
+      if (!leaf_comp.$wrap) {
+        this._leaf_init_style[leaf_id] = style
+        this._leaf_style[leaf_id] = style
+
+        return style
+      }
 
       return style_
     })
@@ -20505,11 +20509,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (parent_id) {
         const parent = this._get_sub_component(parent_id)
 
-        const slot = parent.getLeafSlot(slot_name)
+        let slot = parent.getLeafSlot(slot_name)
 
-        if (slot instanceof Inherit) {
-          inherit_style = slot.getProp('style')
-        }
+        do {
+          if (slot instanceof Inherit) {
+            inherit_style = { ...inherit_style, ...slot.getProp('style') }
+          }
+
+          slot = slot.$rootParent ?? slot.$parent?.$rootParent
+        } while (slot)
       }
 
       this._leaf_init_style[leaf_id] = style
@@ -54587,10 +54595,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (this._is_unit_component(unit_id)) {
         component.children = component.children || []
         component.subComponents = component.subComponents || {}
-        component.children.push(unit_id)
-        // TODO
-        // should copy hierarchy too
-        component.subComponents[unit_id] = {}
+        component.subComponents[unit_id] =
+          component.subComponents[unit_id] ?? {}
+
+        const parent_id = this._spec_get_sub_component_parent_id(unit_id)
+
+        if (parent_id && unit_ids.includes(parent_id)) {
+          component.subComponents[parent_id] = component.subComponents[
+            parent_id
+          ] ?? { children: [] }
+          component.subComponents[parent_id].children.push(unit_id)
+        } else {
+          component.children.push(unit_id)
+        }
       }
     }
 

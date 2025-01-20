@@ -353,13 +353,17 @@ export const reflectComponentBaseTrait = (
 
     let slot_style = all_leaf_style[slot_id].style || {}
 
-    if (all_slot_wrap[slot_id]) {
-      const slot_parent_id = all_slot_base_parent[slot_id]
+    let effective_slot_id = slot_id
+
+    do {
+      const slot_parent_id = all_slot_base_parent[effective_slot_id]
 
       if (slot_parent_id) {
         slot_style = all_leaf_style[slot_parent_id].style || {}
       }
-    }
+
+      effective_slot_id = slot_parent_id
+    } while (all_slot_wrap[effective_slot_id])
 
     const slot_all_style = slot_base.map(
       (leaf_id) => all_leaf_style[leaf_id],

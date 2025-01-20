@@ -219,8 +219,10 @@ export class Component<
 
     this.$props[prop] = data
 
+    const current = this._current(prop as string)
+
     if (this.$mounted) {
-      this._onPropChanged(prop, data, prev)
+      this.onPropChanged(prop, current, prev)
     } else {
       this.$changed.add(prop as string)
     }
@@ -243,16 +245,8 @@ export class Component<
 
   onPropChanged<K extends keyof P>(prop: K, current: any, prev: any) {}
 
-  _onPropChanged<K extends keyof P>(prop: K, current: any, prev: any) {
-    const _current = (this._prop_transformer[prop] || []).reduce((acc, t) => {
-      return t(acc)
-    }, current)
-
-    this.onPropChanged(prop, _current ?? current, prev)
-  }
-
   refreshProp(prop: string) {
-    this._onPropChanged(prop, this.$props[prop], this.$props[prop])
+    this.setProp(prop, this.$props[prop])
   }
 
   onConnected($unit: U) {}
@@ -1139,12 +1133,23 @@ export class Component<
     const $changed = new Set(this.$changed)
 
     for (const name of $changed) {
-      const current = this.$props[name]
+      const current = this._current(name)
 
       this.$changed.delete(name)
 
-      this._onPropChanged(name, current, current)
+      this.onPropChanged(name, current, current)
     }
+  }
+
+  protected _current(name: string): any {
+    const data = this.$props[name]
+
+    const current =
+      (this._prop_transformer[name] || []).reduce((acc, t) => {
+        return t(acc)
+      }, data as any) ?? data
+
+    return current
   }
 
   mount(_$context: Context, commit: boolean = true): void {
@@ -2573,14 +2578,14 @@ export class Component<
         }
       } else {
         if (this.$slotParent) {
-          const index =
+          const index_ =
             this.$slotParent.$slotParentChildren['default'].indexOf(this)
 
           this.$slotParent.domAppendParentChildAt(
             component,
             'default',
-            at + index - 1,
-            index + index - 1
+            index_ + at,
+            index_ + index
           )
         } else {
           this.domCommitAppendChild(component, this.$mountRoot.length - 1)
@@ -3217,8 +3222,6 @@ export class Component<
     const slot = get(this.$slot, slotName)
 
     slot.memAppendParentChild(component, 'default', at, at)
-
-    component.$rootParent = this
   }
 
   public domAppendParentRoot(
@@ -3244,6 +3247,8 @@ export class Component<
   public memPushParentChild(component: Component, slotName: string): void {
     push(this.$parentChildren, component)
     push(this.$parentChildrenSlot, slotName)
+
+    component.$rootParent = this
   }
 
   public memInsertParentChild(
@@ -3253,6 +3258,8 @@ export class Component<
   ): void {
     insert(this.$parentChildren, component, at)
     insert(this.$parentChildrenSlot, slotName, at)
+
+    component.$rootParent = this
   }
 
   public memPullParentChild(component: Component): void {
@@ -3260,6 +3267,8 @@ export class Component<
 
     removeAt(this.$parentChildren, at)
     removeAt(this.$parentChildrenSlot, at)
+
+    component.$rootParent = null
   }
 
   public memAppendParentChild(
@@ -3643,8 +3652,6 @@ export class Component<
     const slot = this.$slot[slotName]
 
     slot.memRemoveParentChildAt(component, 'default', at, _at)
-
-    slot.$rootParent = null
   }
 
   public domRemoveParentRootAt(

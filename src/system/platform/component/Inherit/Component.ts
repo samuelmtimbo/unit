@@ -1,6 +1,6 @@
 import { Component } from '../../../../client/component'
 import { Element } from '../../../../client/element'
-import { mergeStyle } from '../../../../client/style'
+import { getStyleObj, mergeStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
 import { Style } from '../../Style'
@@ -39,11 +39,11 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
   private _unlisten: Unlisten[] = []
   private _styles: Style[] = []
 
-  private _registerChild = (child) => {
-    const { style } = this.$props
+  private _registerChild = (child: Component, at: number) => {
+    const style = this._current('style')
 
     if (child.$wrapElement) {
-      const wrap_style = { ...child.$wrapElement.style }
+      const wrap_style = getStyleObj(child.$element)
 
       this._styles.push(wrap_style)
 
@@ -53,7 +53,7 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
 
       for (const leaf of base) {
         const unlisten = leaf.interceptProp('style', (leaf_style: Style) => {
-          const { style } = this.$props
+          const style = this._current('style')
 
           const i = this._unlisten.indexOf(unlisten)
 
@@ -77,40 +77,33 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
 
   private _unregisterChild = (child: Component, at: number) => {
     if (child.$wrapElement) {
-      this._styles.splice(at, 1)
+      this._styles.splice(0, 1)
     } else {
       const base = child.getRootLeaves()
 
-      const first_leaf = base[0]
+      for (let i = 0; i < base.length; i++) {
+        const unlisten = this._unlisten[i]
 
-      if (first_leaf) {
-        const first_leaf_index = base.indexOf(first_leaf)
-
-        if (first_leaf_index > -1) {
+        if (!unlisten) {
           return
         }
 
-        for (let i = 0; i < base.length; i++) {
-          const j = at + i
+        const leaf = base[i]
 
-          const unlisten = this._unlisten[j]
-          const leaf = base[i]
+        unlisten()
 
-          unlisten()
-
-          leaf.refreshProp('style')
-        }
-
-        this._unlisten.splice(at, base.length)
-        this._styles.splice(at, base.length)
+        leaf.refreshProp('style')
       }
+
+      this._unlisten.splice(0, base.length)
+      this._styles.splice(0, base.length)
     }
   }
 
   protected _insertAt(parent: Component, child: Component, at: number) {
     super._insertAt(parent, child, at)
 
-    this._registerChild(child)
+    this._registerChild(child, at)
   }
 
   protected _removeChild(child: Component, at: number) {
