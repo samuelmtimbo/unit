@@ -1608,6 +1608,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this.registerRoot(this._root)
 
+    this._editor.focus()
     this._editor.select_node(editor_unit_id)
     this._editor.unlock_sub_component(editor_unit_id, true)
     this._editor.enter(false)
@@ -46559,6 +46560,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    const pointer_was_down = this._pointer_down[pointerId]
+
     if (this._pointer_down[pointerId]) {
       const node_id = this._pointer_id_pressed_node_id[pointerId]
 
@@ -46895,14 +46898,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._translating = false
 
-    if (this._pointer_down_count === 0) {
-      this._zooming = false
+    if (pointer_was_down) {
+      if (!this._pointer_down_count) {
+        this._zooming = false
 
-      if (this._click_just_cancelled.has(pointerId)) {
         if (this._core_component_unlocked_count) {
           this._focus_first_unlocked_component()
-
-          this._lose_focus()
         }
       }
     }
@@ -46982,20 +46983,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _click_just_cancelled: Set<number> = new Set()
-
   private _on_click_cancel = (event: UnitPointerEvent) => {
     // console.log('Graph', 'on_click_cancel')
-
-    const { pointerId } = event
-
-    this._click_just_cancelled.add(pointerId)
-
-    if (this._core_component_unlocked_count) {
-      this._focus_first_unlocked_component()
-
-      this._lose_focus()
-    }
   }
 
   private _on_click = (event: UnitPointerEvent, _event: PointerEvent): void => {

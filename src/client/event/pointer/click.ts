@@ -190,17 +190,21 @@ export function listenClick(
     pointerPosition[pointerId] = { x: clientX, y: clientY }
 
     if (pointerDown[pointerId]) {
-      pointerDownMaxDistance[pointerId] = Math.max(
+      const d = Math.max(
         pointerDownMaxDistance[pointerId],
         pointDistance(pointerDown[pointerId], pointerPosition[pointerId])
       )
 
+      pointerDownMaxDistance[pointerId] = d
+
       if (
         !longClickCancelPointerId.has(pointerId) &&
-        pointerDownMaxDistance[pointerId] >= POINTER_LONG_PRESS_MAX_DELTA
+        d >= POINTER_LONG_PRESS_MAX_DELTA
       ) {
         longClickCancelPointerId.add(pointerId)
         onLongClickCancel && onLongClickCancel(event)
+      } else if (d >= POINTER_CLICK_RADIUS) {
+        onClickCancel && onClickCancel(event)
       }
     }
   }
@@ -270,7 +274,6 @@ export function listenClick(
             onClick && onClick(event, _event)
           }
         } else {
-          onClickCancel && onClickCancel(event)
         }
       }
 

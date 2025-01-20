@@ -26,7 +26,6 @@ export default class SVGSVG extends SVGElement_<SVGSVGElement, Props> {
         stroke: 'currentcolor',
         'stroke-width': '0',
         preserveAspectRatio: 'xMidYMid meet',
-        tabindex: -1,
       },
       {
         viewBox: (viewBox: string | undefined) => {
