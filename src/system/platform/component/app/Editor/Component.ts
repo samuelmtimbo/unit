@@ -1529,6 +1529,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     const parent_pod = proxyWrap(AsyncGraph(parent_graph), UCGEE)
 
+    const editor_unit = parent_graph.getUnit(editor_unit_id)
+
+    editor_unit.push('graph', this._pod)
+
     this._pod = parent_pod
 
     const editor = new Editor_(
