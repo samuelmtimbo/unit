@@ -261,7 +261,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     let icon = (spec.metadata && spec.metadata.icon) || null
 
     if (!icon && !spec.base) {
-      if (keyCount((spec as GraphSpec).units ?? {}) === 0) {
+      if (keyCount((spec as GraphSpec).units ?? {}) > 0) {
         icon = 'question'
       }
     }
