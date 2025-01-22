@@ -54716,7 +54716,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         continue
       }
 
-      for (const path of dataRef.ref) {
+      for (const path of dataRef.ref ?? []) {
         let unit_bundle = deepGet(dataRef.data, path) as UnitBundleSpec
 
         unit_bundle = unitBundleSpec(

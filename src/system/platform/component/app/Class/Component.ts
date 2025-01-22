@@ -17,8 +17,10 @@ import { lineWrap } from '../../../../../spec/lineWrap'
 import { System } from '../../../../../system'
 import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
+import { GraphSpec } from '../../../../../types/GraphSpec'
 import { IO } from '../../../../../types/IO'
 import { ID_EMPTY } from '../../../../_ids'
+import { keyCount } from '../../../../core/object/KeyCount/f'
 import { keys } from '../../../../f/object/Keys/f'
 import Icon from '../../../component/Icon/Component'
 import SVGCircle from '../../svg/Circle/Component'
@@ -256,8 +258,13 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
       push_pin('input', index)
     })
 
-    // const icon = (spec.metadata && spec.metadata.icon) || 'question'
-    const icon = (spec.metadata && spec.metadata.icon) || null
+    let icon = (spec.metadata && spec.metadata.icon) || null
+
+    if (!icon && !spec.base) {
+      if (keyCount((spec as GraphSpec).units ?? {}) === 0) {
+        icon = 'question'
+      }
+    }
 
     let core_shape: SVGCircle | SVGRect
     if (is_component) {

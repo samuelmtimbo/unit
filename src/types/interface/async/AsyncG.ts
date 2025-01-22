@@ -799,11 +799,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
         if (action.type === ADD_UNIT) {
           if (action.data.bundle.unit.memory) {
-            evaluateMemorySpec(
-              action.data.bundle.unit.memory,
-              specs,
-              classes
-            )
+            evaluateMemorySpec(action.data.bundle.unit.memory, specs, classes)
           }
         }
 

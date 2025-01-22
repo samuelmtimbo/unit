@@ -1,0 +1,32 @@
+{
+  "name": "set pin constant",
+  "inputs": {
+    "unit": {
+      "_type": "<T:`U`>",
+      "type": "`U`"
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "name": {
+      "type": "string"
+    },
+    "constant": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "unit": {
+      "_type": "<T>",
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `type` pin `name` of `unit` to `constant`",
+    "tags": ["f", "unit"]
+  },
+  "id": "8bd5bfb5-979c-4e51-917b-75e150d9170f",
+  "base": true,
+  "type": "`U`"
+}

@@ -4,7 +4,7 @@ import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
 import { Async } from '../../../../types/interface/async/Async'
 import { IO } from '../../../../types/IO'
-import { ID_SET_UNIT_PIN_CONSTANT } from '../../../_ids'
+import { ID_SET_UNIT_PIN_CONSTANT_0 } from '../../../_ids'
 
 export interface I<T> {
   graph: $G
@@ -31,7 +31,7 @@ export default class SetUnitPinConstant<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_SET_UNIT_PIN_CONSTANT
+      ID_SET_UNIT_PIN_CONSTANT_0
     )
   }
 

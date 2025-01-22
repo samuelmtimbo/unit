@@ -1,0 +1,33 @@
+{
+  "name": "set unit pin constant",
+  "inputs": {
+    "graph": {
+      "type": "`G`"
+    },
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "pinId": {
+      "type": "string"
+    },
+    "constant": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`U`&`G`"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "set `graph` unit `id` `type` pin `pinId` `constant`",
+    "tags": ["f", "graph"]
+  },
+  "id": "cda93f82-5ffe-498c-b756-c7ff405aafa1",
+  "base": true,
+  "type": "`U`"
+}

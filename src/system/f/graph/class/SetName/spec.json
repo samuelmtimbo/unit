@@ -1,0 +1,24 @@
+{
+  "name": "set name",
+  "inputs": {
+    "graph": {
+      "type": "`G`"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`U`&`G`"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "set `graph` class `name`",
+    "tags": ["f", "graph"]
+  },
+  "id": "f3b9b75b-a84b-4070-b4f1-25e5e48664e4",
+  "base": true,
+  "type": "`U`"
+}

@@ -59,7 +59,7 @@ export function treeComplexity(
         if (data !== undefined) {
           const dataRef = evaluateDataValue(data, specs, classes)
 
-          for (const path of dataRef.ref) {
+          for (const path of dataRef.ref ?? []) {
             const bundle = deepGet(dataRef.data, path) as UnitBundleSpec
 
             c += treeComplexityById(

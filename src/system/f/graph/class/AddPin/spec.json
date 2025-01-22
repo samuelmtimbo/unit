@@ -1,0 +1,30 @@
+{
+  "name": "add pin",
+  "inputs": {
+    "graph": {
+      "type": "`G`"
+    },
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "pin": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`U`&`G`"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "add pin set of `type` and `pin` spec to `graph`",
+    "tags": ["f", "graph"]
+  },
+  "id": "054adf25-93b2-492c-ada2-f55e70d23c3d",
+  "base": true,
+  "type": "`U`"
+}

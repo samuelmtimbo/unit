@@ -1,0 +1,27 @@
+{
+  "name": "set metadata",
+  "inputs": {
+    "graph": {
+      "type": "`G`"
+    },
+    "path": {
+      "type": "string[]"
+    },
+    "value": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`U`&`G`"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "deep set `graph` class metadata `path` `value`",
+    "tags": ["f", "graph"]
+  },
+  "id": "7750a781-1aa2-4e78-aa91-67fdbf44c09d",
+  "base": true,
+  "type": "`U`"
+}

@@ -41,7 +41,7 @@ export function collectUnitIdSet(
     if (data !== undefined) {
       const dataRef = evaluateDataValue(data, _specs, _classes)
 
-      for (const path of dataRef.ref) {
+      for (const path of (dataRef.ref ?? [])) {
         const bundle = deepGet(dataRef.data, path)
 
         buildBundleIdSet(bundle)

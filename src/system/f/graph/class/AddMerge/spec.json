@@ -1,0 +1,27 @@
+{
+  "name": "add merge",
+  "inputs": {
+    "graph": {
+      "type": "`G`"
+    },
+    "id": {
+      "type": "string"
+    },
+    "merge": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`U`&`G`"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "add unit of `class` to `graph`",
+    "tags": ["f", "graph"]
+  },
+  "id": "6da131ca-d22e-49ae-92ea-0607e7f1ea06",
+  "base": true,
+  "type": "`U`"
+}
