@@ -945,6 +945,7 @@ export interface Props {
 export default class Editor extends Element<HTMLDivElement, Props> {
   public $input: Dict<string[]> = {
     graph: UCGEE,
+    frame: ['C'],
   }
 
   private _pod: $Graph
