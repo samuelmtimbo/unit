@@ -22336,7 +22336,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._focused = false
 
-    if (this._search_to_be_focused_by_click) {
+    if (this._disabled) {
+      //
+    } else if (this._search_to_be_focused_by_click) {
       //
     } else if (this._datum_to_be_focused_by_click) {
       //
