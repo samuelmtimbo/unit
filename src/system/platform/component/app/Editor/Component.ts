@@ -31411,7 +31411,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       config,
       hasSpec,
       emptySpec,
-      getSpec,
       setSpec,
       newSpec,
       deleteSpec,
@@ -31441,7 +31440,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const specs_ = weakMerge(specs, unit_bundle.specs ?? {})
 
-      const spec = getSpec(unit_bundle.unit.id) as GraphSpec
+      const spec = getSpec(specs_, unit_bundle.unit.id) as GraphSpec
 
       if (isBaseSpec(spec)) {
         return
