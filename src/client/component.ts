@@ -2578,14 +2578,11 @@ export class Component<
         }
       } else {
         if (this.$slotParent) {
-          const index_ =
-            this.$slotParent.$slotParentChildren['default'].indexOf(this)
-
           this.$slotParent.domAppendParentChildAt(
             component,
             'default',
-            index_ + at,
-            index_ + index
+            at,
+            index
           )
         } else {
           this.domCommitAppendChild(component, this.$mountRoot.length - 1)
