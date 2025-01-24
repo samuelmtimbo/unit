@@ -1396,7 +1396,7 @@ export class Component<
 
     let offset: Component = this
 
-    if (this.isSVG()) {
+    if (this.isSVG() || this.isText()) {
       return offset
     }
 

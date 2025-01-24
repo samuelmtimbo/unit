@@ -21071,7 +21071,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (isTextLike(leaf_comp)) {
       const trait_ =
-        (leaf_parent && extractTrait(leaf_parent, measureText)) || trait
+        (leaf_parent &&
+          leaf_parent.isBase() &&
+          leaf_parent !== leaf_comp &&
+          extractTrait(leaf_parent, measureText)) ||
+        trait
 
       return extractStyle(leaf_comp, trait_, measureText)
     } else if (this._leaf_style[leaf_id]) {
@@ -30479,7 +30483,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const leaf_offset = leaf_comp.getOffset()
 
-      const leaf_trait = extractTrait(leaf_comp, measureText)
+      const leaf_trait = extractTrait(leaf_offset, measureText)
 
       leaf_trait.x -= this.$context.$x
       leaf_trait.y -= this.$context.$y

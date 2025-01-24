@@ -9,7 +9,7 @@ import { parseFontSize } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
 
 export const isTextName = (tag: string) => {
-  return ['text', 'path'].includes(tag)
+  return ['text'].includes(tag)
 }
 
 export const isSVGName = (tag: string) => {
@@ -33,9 +33,12 @@ const fitChildren = (
   for (const { name, style, textContent } of children) {
     let tag = name.replace('#', '').toLocaleLowerCase()
 
-    tag = isTextName(tag) || isSVGName(tag) ? 'div' : tag
+    const isText = isTextName(tag)
+    const isSvg = isSVGName(tag)
 
-    const childNode = window.document.createElement(tag)
+    const tag_ = isText || isSvg ? 'div' : tag
+
+    const childNode = window.document.createElement(tag_)
 
     childNode.textContent = textContent
 
@@ -120,6 +123,10 @@ const fitChildren = (
     applyStyle(childNode, style)
 
     childNode.style.overflow = 'visible'
+
+    if (isText) {
+      childNode.style.display = 'inline'
+    }
 
     parentNode.appendChild(childNode)
 

@@ -125,10 +125,7 @@ export const expandSlot = (
         styles.push({
           name: leaf_comp.$element.nodeName,
           style: leaf_style,
-          textContent:
-            ((leaf_comp.$element as HTMLElement).children?.length ?? 1) > 0
-              ? ''
-              : leaf_comp.$element.textContent,
+          textContent: leaf_comp.$element.textContent,
         })
       }
     }
@@ -320,7 +317,7 @@ export const reflectComponentBaseTrait = (
       all_root_style.push({
         name: leaf_comp.$element.nodeName,
         style: leaf_style,
-        textContent: '',
+        textContent: leaf_comp.$element.textContent,
       })
       root_leaf_id.push(leaf_id)
     }
