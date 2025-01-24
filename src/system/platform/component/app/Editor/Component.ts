@@ -59532,6 +59532,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             parent_path_to_update
           )
 
+          const subgraph = this.getSubgraphAtPath(path)
+
+          const is_subgraph_animating_unit_removal =
+            subgraph && !!subgraph._animating_unit_explosion[unitId]
+
           const removed_component =
             parent_component &&
             parent_component.getSubComponent(unit_id_to_update)
@@ -59541,23 +59546,39 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             unit_id_to_update
           )
 
-          if (parent_id) {
-            if (parent_component) {
-              const sub_component_parent_root =
-                parent_component.getSubComponent(parent_id)
+          if (!is_subgraph_animating_unit_removal) {
+            if (parent_id) {
+              if (parent_component) {
+                const sub_component_parent_root =
+                  parent_component.getSubComponent(parent_id)
 
-              if (
-                sub_component_parent_root.$parentRoot.includes(
-                  removed_component
-                )
-              ) {
-                sub_component_parent_root.pullParentRoot(removed_component)
+                if (
+                  sub_component_parent_root.$parentRoot.includes(
+                    removed_component
+                  )
+                ) {
+                  sub_component_parent_root.pullParentRoot(removed_component)
+                }
+              }
+            } else {
+              if (parent_component) {
+                if (parent_component.$root.includes(removed_component)) {
+                  parent_component.pullRoot(removed_component)
+                }
               }
             }
-          } else {
+
             if (parent_component) {
-              if (parent_component.$root.includes(removed_component)) {
-                parent_component.pullRoot(removed_component)
+              if (parent_component.$subComponent[unit_id_to_update]) {
+                const subgraph = this.getSubgraphAtPath(path)
+
+                if (subgraph) {
+                  if (!subgraph._animating_unit_explosion[unitId]) {
+                    parent_component.removeSubComponent(unit_id_to_update)
+                  }
+                } else {
+                  parent_component.removeSubComponent(unit_id_to_update)
+                }
               }
             }
           }
@@ -59570,12 +59591,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             { subComponentId: unit_id_to_update },
             next_parent_spec.component
           )
-
-          if (parent_component) {
-            if (parent_component.$subComponent[unit_id_to_update]) {
-              parent_component.removeSubComponent(unit_id_to_update)
-            }
-          }
 
           setSpec(next_parent_spec.id, next_parent_spec)
         }
