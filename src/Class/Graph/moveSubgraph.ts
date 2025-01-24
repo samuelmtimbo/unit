@@ -424,29 +424,11 @@ export function moveUnit(
 
           const plugSpec = pinSpec.plug[subPinId]
 
-          if (plugSpec.unitId || plugSpec.mergeId) {
-            let i = 0
-            let newSubPinId: string
+          const alreadyHaveSamePlugConnected =
+            plugSpec.unitId === graphId &&
+            (plugSpec.pinId === pinId_(plugSpec.kind || type_)) === type_
 
-            do {
-              newSubPinId = `${i}`
-
-              i++
-            } while (pinSpec.plug[newSubPinId])
-
-            target.exposePin(
-              type_,
-              pinId_,
-              newSubPinId,
-              {
-                unitId: nextUnitId,
-                pinId,
-                kind,
-              },
-              false,
-              propagate
-            )
-          } else {
+          if (alreadyHaveSamePlugConnected) {
             target.plugPin(
               type_,
               pinId_,
@@ -462,6 +444,46 @@ export function moveUnit(
               false,
               false
             )
+          } else {
+            if (plugSpec.unitId || plugSpec.mergeId) {
+              let i = 0
+              let newSubPinId: string
+
+              do {
+                newSubPinId = `${i}`
+
+                i++
+              } while (pinSpec.plug[newSubPinId])
+
+              target.exposePin(
+                type_,
+                pinId_,
+                newSubPinId,
+                {
+                  unitId: nextUnitId,
+                  pinId,
+                  kind,
+                },
+                false,
+                propagate
+              )
+            } else {
+              target.plugPin(
+                type_,
+                pinId_,
+                subPinId,
+                {
+                  unitId: nextUnitId,
+                  pinId,
+                  kind,
+                },
+                undefined,
+                false,
+                propagate,
+                false,
+                false
+              )
+            }
           }
         } else {
           //
