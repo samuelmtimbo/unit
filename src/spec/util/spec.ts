@@ -35,6 +35,7 @@ import {
   mapObjVK,
   reduceObj,
 } from '../../util/object'
+import { getSubComponentParentId } from './component'
 
 export function isValidSpecName(name: string) {
   return !!/^[A-Za-z_ ][A-Za-z\d_ ]*$/g.exec(name)
@@ -790,6 +791,7 @@ export function isPinSpecRef(
 export function makeFullSpecCollapseMap(
   unitId: string,
   spec: GraphSpec,
+  specs: Specs,
   unitIdMap: Dict<string>,
   mergeIdMap: Dict<string>,
   plugIdMap: IOOf<Dict<Dict<string>>>,
@@ -836,6 +838,15 @@ export function makeFullSpecCollapseMap(
   const nextMergePinId: GraphMoveSubGraphData['nextMergePinId'] = {}
   const nextPlugSpec: GraphMoveSubGraphData['nextPlugSpec'] = {}
   const nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap'] = {}
+  const nextSubComponentParentMap: GraphMoveSubGraphData['nextSubComponentParentMap'] =
+    {}
+  const nextSubComponentChildrenMap: GraphMoveSubGraphData['nextSubComponentChildrenMap'] =
+    {}
+  const nextSubComponentIndexMap: GraphMoveSubGraphData['nextSubComponentIndexMap'] =
+    {}
+  const nextSubComponentSlot: GraphMoveSubGraphData['nextSubComponentSlot'] = {}
+  const nextSubComponentParentSlot: GraphMoveSubGraphData['nextSubComponentParentSlot'] =
+    {}
 
   forEachPinOnMerges(
     merges,
@@ -1097,6 +1108,31 @@ export function makeFullSpecCollapseMap(
     }
   }
 
+  for (const unitId in units) {
+    const unit = units[unitId]
+
+    const is_component = isComponentId(specs, unit.id)
+
+    if (is_component) {
+      const parent_id = getSubComponentParentId(spec, unitId)
+
+      if (parent_id) {
+        const parent_sub_component = spec.component.subComponents[parent_id]
+
+        nextSubComponentParentMap[unitId] = parent_id
+
+        nextSubComponentChildrenMap[parent_id] =
+          nextSubComponentChildrenMap[parent_id] ?? []
+        nextSubComponentChildrenMap[parent_id].push(unitId)
+
+        nextSubComponentIndexMap[unitId] =
+          parent_sub_component.children.indexOf(unitId)
+        nextSubComponentParentSlot[unitId] =
+          parent_sub_component.childSlot?.[unitId] ?? 'default'
+      }
+    }
+  }
+
   const collapseMap: GraphMoveSubGraphData = {
     nodeIds,
     nextSpecId: null,
@@ -1105,11 +1141,11 @@ export function makeFullSpecCollapseMap(
     nextMergePinId,
     nextPlugSpec,
     nextUnitPinMergeMap,
-    nextSubComponentParentMap: {},
-    nextSubComponentChildrenMap: {},
-    nextSubComponentIndexMap: {},
-    nextSubComponentSlot: {},
-    nextSubComponentParentSlot: {},
+    nextSubComponentParentMap,
+    nextSubComponentChildrenMap,
+    nextSubComponentIndexMap,
+    nextSubComponentSlot,
+    nextSubComponentParentSlot,
   }
 
   return collapseMap

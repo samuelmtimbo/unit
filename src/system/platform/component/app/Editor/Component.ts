@@ -31944,6 +31944,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _sim_pre_append_sub_component_child = (
+    parent_id: string,
+    child_id: string,
+    slot_name: string
+  ): void => {
+    // console.log(
+    //   'Graph',
+    //   '_sim_pre_append_sub_component_child',
+    //   parent_id,
+    //   child_id
+    // )
+
+    const is_child_fullwindow = this._is_sub_component_fullwindow(child_id)
+
+    if (is_child_fullwindow) {
+      this._decouple_sub_component(child_id)
+    }
+
+    this._mem_push_sub_component_child(parent_id, child_id, slot_name)
+
+    if (is_child_fullwindow) {
+      this._couple_sub_component(child_id)
+    }
+  }
+
   private _context_trait(): LayoutNode {
     const { $x, $y, $sx, $sy, $width, $height, $color } = this.$context
 
@@ -35369,9 +35394,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     map_merge_id: Dict<string>,
     map_plug_id: IOOf<Dict<Dict<string>>>
   ): GraphMoveSubGraphData => {
+    const { specs } = this.$props
+
     return makeFullSpecCollapseMap(
       unit_id,
       spec,
+      specs,
       map_unit_id,
       map_merge_id,
       map_plug_id,
@@ -48245,7 +48273,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         to: number,
         slotName: string
       ): void => {
-        throw new MethodNotImplementedError()
+        this._state_move_root(parentId, childId, to, slotName)
       },
       setPinData: (type: IO, pinId: string, data: any): void => {
         throw new MethodNotImplementedError()
@@ -48333,11 +48361,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     return graph_interface
   }
-  public get state_make_this_graph_interface() {
-    return this._state_make_this_graph_interface
+
+  private _state_move_root = (
+    parentId: string,
+    childId: string,
+    to: number,
+    slotName: string
+  ) => {
+    // console.log('_state_move_root', parentId, childId, to, slotName)
+
+    this._sim_move_root(parentId, childId, to, slotName)
+    this._spec_move_root(parentId, childId, to, slotName)
   }
-  public set state_make_this_graph_interface(value) {
-    this._state_make_this_graph_interface = value
+
+  private _sim_move_root = (
+    parentId: string,
+    childId: string,
+    to: number,
+    slotName: string
+  ) => {
+    this._sim_pre_append_sub_component_child(parentId, childId, slotName)
+  }
+
+  private _spec_move_root = (
+    parentId: string,
+    childId: string,
+    to: number,
+    slotName: string
+  ) => {
+    moveRoot({ parentId, childId, at: to, slotName }, this._spec.component)
   }
 
   private _state_get_subgraph_graph_interface = (
@@ -48539,7 +48591,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         to: number,
         slotName: string
       ): void => {
-        throw new MethodNotImplementedError()
+        this._spec_graph_unit_move_root(
+          graph_id,
+          parentId,
+          childId,
+          to,
+          slotName
+        )
       },
       setPinData: (type: IO, pinId: string, data: any): void => {
         throw new MethodNotImplementedError()
@@ -53313,6 +53371,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let next_graph_spec = clone(graph_spec)
 
     removeMerge({ mergeId }, next_graph_spec)
+
+    setSpec(graph_spec_id, next_graph_spec)
+  }
+
+  private _spec_graph_unit_move_root = (
+    graph_id: string,
+    parentId: string,
+    childId: string,
+    to: number,
+    slotName: string
+  ) => {
+    const { setSpec } = this.$props
+
+    const graph_spec_id = this._get_unit_spec_id(graph_id)
+    const graph_spec = this._get_unit_spec(graph_id) as GraphSpec
+
+    let next_graph_spec = clone(graph_spec)
+
+    moveRoot({ parentId, childId, at: to, slotName }, next_graph_spec.component)
 
     setSpec(graph_spec_id, next_graph_spec)
   }

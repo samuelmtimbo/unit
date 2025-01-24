@@ -135,8 +135,8 @@ export function moveUnit(
 
       const to = nextSubComponentChildrenMap[nextSubComponentParentId]
         ? nextSubComponentChildrenMap[nextSubComponentParentId].indexOf(
-            nextUnitId
-          )
+          nextUnitId
+        )
         : (nextSubComponentParent.children ?? []).length
 
       target.moveRoot(nextSubComponentParentId, nextUnitId, to, 'default')
