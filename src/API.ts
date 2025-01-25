@@ -3,9 +3,10 @@ import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
 import { Theme } from './client/theme'
 import { Rect } from './client/util/geometry/types'
-import { Style, Tag } from './system/platform/Style'
+import { Tag } from './system/platform/Style'
 import { WebSocketShape } from './system/platform/api/network/WebSocket'
 import { MeasureTextFunction } from './text'
+import { Tree } from './tree'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import {
@@ -217,12 +218,11 @@ export type API = {
     encodeURIComponent?: (str: string) => string
   }
   layout: {
-    reflectChildrenTrait(
+    reflectTreeTrait(
       parentTrait: LayoutNode,
-      parentStyle: Style,
-      children: Tag[],
+      tree: Tree<Tag>[],
       expandChild: (path: number[]) => Tag[]
-    ): LayoutNode[]
+    ): void
   }
   speech: {
     SpeechGrammarList: { new (opt: SpeechGrammarListOpt): SpeechGrammarList }

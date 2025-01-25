@@ -135,8 +135,8 @@ export function moveUnit(
 
       const to = nextSubComponentChildrenMap[nextSubComponentParentId]
         ? nextSubComponentChildrenMap[nextSubComponentParentId].indexOf(
-          nextUnitId
-        )
+            nextUnitId
+          )
         : (nextSubComponentParent.children ?? []).length
 
       target.moveRoot(nextSubComponentParentId, nextUnitId, to, 'default')
@@ -426,7 +426,7 @@ export function moveUnit(
 
           const alreadyHaveSamePlugConnected =
             plugSpec.unitId === graphId &&
-            (plugSpec.pinId === pinId_(plugSpec.kind || type_)) === type_
+            (plugSpec.pinId === pinId_ && (plugSpec.kind || type_)) === type_
 
           if (alreadyHaveSamePlugConnected) {
             target.plugPin(

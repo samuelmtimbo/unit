@@ -21,20 +21,22 @@ export const animateSimulate = <T extends Dict<AnimatableValue>>(
 
   let frame: number
 
-  const next = () => (frame = requestAnimationFrame(tick))
+  let cancelled = false
 
-  const tick = async () => {
-    const _n = n1()
+  const next = () => {
+    frame = requestAnimationFrame(tick)
+  }
 
-    const ended = animateSimulateTick(n, _n, ff, tf)
+  const tick = () => {
+    const n_ = n1()
+
+    const ended = animateSimulateTick(n, n_, ff, tf)
 
     if (ended) {
-      const result = await callback()
+      callback()
+    }
 
-      if (result === false) {
-        next()
-      }
-    } else {
+    if (!cancelled) {
       next()
     }
   }
@@ -44,6 +46,8 @@ export const animateSimulate = <T extends Dict<AnimatableValue>>(
   return () => {
     if (frame !== undefined) {
       cancelAnimationFrame(frame)
+
+      cancelled = true
 
       frame = undefined
     }

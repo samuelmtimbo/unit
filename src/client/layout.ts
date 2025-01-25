@@ -1,4 +1,4 @@
-import { Tree } from '../Tree'
+import { Tree } from '../tree'
 import { LayoutNode } from './LayoutNode'
 import { Component } from './component'
 

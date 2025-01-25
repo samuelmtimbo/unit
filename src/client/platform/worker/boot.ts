@@ -11,8 +11,9 @@ import { APINotSupportedError } from '../../../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../../../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../../../exception/MediaDeviceAPINotSupported'
 import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
-import { Style, Tag } from '../../../system/platform/Style'
+import { Tag } from '../../../system/platform/Style'
 import { WebSocketShape } from '../../../system/platform/api/network/WebSocket'
+import { Tree } from '../../../tree'
 import { Dict } from '../../../types/Dict'
 import { DownloadDataOpt } from '../../../types/global/DownloadData'
 import { DownloadURLOpt } from '../../../types/global/DownloadURL'
@@ -292,12 +293,11 @@ export function workerApi(): API {
       },
     },
     layout: {
-      reflectChildrenTrait: function (
+      reflectTreeTrait: function (
         parentTrait: LayoutNode,
-        parentStyle: Style,
-        children: Tag[],
-        expandChild?: (path: number[]) => Tag[]
-      ): LayoutNode[] {
+        tree: Tree<Tag>[],
+        expandChild: (path: number[]) => Tag[]
+      ): void {
         throw new MethodNotImplementedError()
       },
     },

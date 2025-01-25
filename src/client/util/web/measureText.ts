@@ -15,7 +15,7 @@ export function measureText(
   const lineHeight =
     Math.abs(fontBoundingBoxAscent) + Math.abs(fontBoundingBoxDescent)
 
-  const words = str.split(' ')
+  const words = str.trim().length === 0 ? [str] : str.split(' ')
 
   const lines: string[] = []
 

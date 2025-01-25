@@ -5,6 +5,8 @@ import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { proxyWrap } from '../proxyWrap'
 import { System } from '../system'
+import { Tag } from '../system/platform/Style'
+import { Tree } from '../tree'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
@@ -26,6 +28,7 @@ import {
   DEFAULT_TEXT_ALIGN,
 } from './DEFAULT_FONT_SIZE'
 import { IOElement } from './IOElement'
+import { LayoutNode } from './LayoutNode'
 import { Listener } from './Listener'
 import { getActiveElement } from './activeElement'
 import { addListeners } from './addListener'
@@ -600,7 +603,7 @@ export class Component<
         window: { HTMLElement },
         text: { measureText },
         document: { createElement },
-        layout: { reflectChildrenTrait },
+        layout: { reflectTreeTrait },
       },
     } = this.$system
 
@@ -622,15 +625,31 @@ export class Component<
     // delete style['transform']
     delete style['opacity']
 
-    const styles = leaves.map((leaf) => ({
-      name: (leaf.$element as Node).nodeName,
-      style: rawExtractStyle(leaf.$element, trait, measureText),
-      textContent: (leaf.$element as Node).textContent,
-    }))
+    const tree: Tree<Tag & { trait?: LayoutNode }> = {
+      value: {
+        name: 'div',
+        style: {
+          ...style,
+          width: '100%',
+          height: '100%',
+        },
+        textContent: '',
+      },
+      children: leaves.map((leaf) => ({
+        value: {
+          name: (leaf.$element as Node).nodeName,
+          style: rawExtractStyle(leaf.$element, trait, measureText),
+          textContent: (leaf.$element as Node).textContent,
+        },
+        children: [],
+      })),
+    }
 
-    let targetTraits = reflectChildrenTrait(trait, style, styles, () => {
+    reflectTreeTrait(trait, [tree], () => {
       return []
     })
+
+    let targetTraits = tree.children.map((child) => child.value.trait)
 
     let finished = 0
     let frames: HTMLDivElement[] = []
@@ -689,9 +708,11 @@ export class Component<
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
           if (j % leaves.length === 0) {
-            targetTraits = reflectChildrenTrait(trait, style, styles, () => {
+            reflectTreeTrait(trait, [tree], () => {
               return []
             })
+
+            targetTraits = tree.children.map((child) => child.value.trait)
 
             j = 0
           }
@@ -1394,11 +1415,15 @@ export class Component<
       },
     } = this.$system
 
-    let offset: Component = this
-
     if (this.isSVG() || this.isText()) {
-      return offset
+      return this
     }
+
+    if (this.$element instanceof SVGSVGElement) {
+      return this
+    }
+
+    let offset: Component = this
 
     while (
       offset &&
@@ -2565,6 +2590,8 @@ export class Component<
   public domAppendRoot(component: Component, at: number, index: number): void {
     set(component, '$slotParent', this)
 
+    this.$slotParentChildren['default'] =
+      this.$slotParentChildren['default'] ?? []
     this.$slotParentChildren['default'][at] = component
 
     if (!this.$primitive) {
@@ -3119,6 +3146,8 @@ export class Component<
     const slot = get(this.$slot, slotName)
 
     slot.memPushParentChild(component, slotName)
+
+    component.$rootParent = slot
   }
 
   public insertParentRoot(
@@ -3132,11 +3161,15 @@ export class Component<
     const slot = get(this.$slot, slotName)
 
     slot.memInsertParentChild(component, at, slotName)
+
+    component.$rootParent = slot
   }
 
   public unshiftParentRoot(component: Component, slotName: string): void {
     unshift(this.$parentRoot, component)
     unshift(this.$parentRootSlotName, slotName)
+
+    component.$rootParent = null
   }
 
   public pullParentRoot(component: Component): void {
@@ -3244,8 +3277,6 @@ export class Component<
   public memPushParentChild(component: Component, slotName: string): void {
     push(this.$parentChildren, component)
     push(this.$parentChildrenSlot, slotName)
-
-    component.$rootParent = this
   }
 
   public memInsertParentChild(
@@ -3255,8 +3286,6 @@ export class Component<
   ): void {
     insert(this.$parentChildren, component, at)
     insert(this.$parentChildrenSlot, slotName, at)
-
-    component.$rootParent = this
   }
 
   public memPullParentChild(component: Component): void {
@@ -3264,8 +3293,6 @@ export class Component<
 
     removeAt(this.$parentChildren, at)
     removeAt(this.$parentChildrenSlot, at)
-
-    component.$rootParent = null
   }
 
   public memAppendParentChild(
@@ -3285,6 +3312,8 @@ export class Component<
   ): void {
     set(component, '$slotParent', this)
 
+    this.$slotParentChildren['default'] =
+      this.$slotParentChildren['default'] ?? []
     this.$slotParentChildren['default'][at] = component
 
     if (!this.$primitive) {
@@ -3381,6 +3410,8 @@ export class Component<
   ): void {
     set(component, '$slotParent', this)
 
+    this.$slotParentChildren[slotName] =
+      this.$slotParentChildren[slotName] ?? []
     this.$slotParentChildren[slotName][at] = component
 
     if (!this.$primitive) {

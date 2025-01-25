@@ -161,13 +161,6 @@ export function _extractFromRawStyle(
     treatProp('height')
   }
 
-  if (element instanceof HTMLImageElement) {
-    const ratio = element.naturalWidth / element.naturalHeight
-    const ratio_ = ratio.toFixed(2)
-
-    style['aspect-ratio'] = `${ratio_}`
-  }
-
   if (element instanceof HTMLInputElement) {
     if (element.type === 'range') {
       style.height = '18px'
