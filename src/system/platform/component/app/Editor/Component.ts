@@ -21676,11 +21676,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const leaf_base = this._get_sub_component_root_base(sub_component_id)
         const frame = this._get_sub_component_frame(sub_component_id)
 
+        const layer_opacity = this._get_sub_compononent_layout_layer_opacity(sub_component_id)
+
         const graph_node = this._node[sub_component_id]
 
         let i = 0
 
         let all_leaf_trait
+
+        for (const [leaf_path] of leaf_base) {
+          const leaf_id = `${sub_component_id}/${leaf_path.join('/')}`
+
+          const leaf_node = this._leaf_frame_node[leaf_id]
+
+          leaf_node.opacity *= layer_opacity
+        }
 
         this._plug_sub_component_base(
           sub_component_id,
