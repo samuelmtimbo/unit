@@ -187,12 +187,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
     input.addEventListener(
       makeShortcutListener([
         {
-          combo: 'ArrowDown',
+          combo: ['ArrowDown', 'Shift + ArrowDown'],
           keydown: this._on_arrow_down_keydown,
           multiple: true,
         },
         {
-          combo: 'ArrowUp',
+          combo: ['ArrowUp', 'Shift + ArrowUp'],
           keydown: this._on_arrow_up_keydown,
           multiple: true,
         },
