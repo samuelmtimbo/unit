@@ -6,7 +6,7 @@ import { LayoutNode } from '../../../LayoutNode'
 import { colorToHex, hexToRgba, RGBA } from '../../../color'
 import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
-import { parseFontSize } from '../../../util/style/getFontSize'
+import { parseFontSizeStr } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
 
 export const isTextName = (tag: string) => {
@@ -176,7 +176,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
           let childFontSizeStr = computedStyle.fontSize
 
           let fontSize =
-            (childFontSizeStr && parseFontSize(childFontSizeStr)) ||
+            (childFontSizeStr && parseFontSizeStr(childFontSizeStr)) ||
             parentTrait.fontSize
 
           const opacity = parseOpacity(childOpacityStr)

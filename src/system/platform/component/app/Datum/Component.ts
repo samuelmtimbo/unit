@@ -1,8 +1,11 @@
+import { addListener } from '../../../../../client/addListener'
+import { Context } from '../../../../../client/context'
 import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { IOFocusEvent } from '../../../../../client/event/focus/FocusEvent'
 import { IOKeyboardEvent } from '../../../../../client/event/keyboard'
+import { makeResizeListener } from '../../../../../client/event/resize'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { parseFontSize } from '../../../../../client/util/style/getFontSize'
 import { _evaluate } from '../../../../../spec/evaluate'
@@ -20,8 +23,10 @@ import {
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { _keyUpdateTree } from '../../../../../util/keyUpdateTree'
 import isEqual from '../../../../f/comparison/Equals/f'
+import Div from '../../Div/Component'
 import DataTree from '../DataTree/Component'
 
 export interface Props {
@@ -94,12 +99,9 @@ export class Datum extends Element<HTMLDivElement, Props> {
       this._root = current
       this._data_tree.setProp('data', current)
     } else if (prop === 'style') {
-      const fontSize =
-        (current.fontSize && parseFontSize(current.fontSize)) ||
-        this.getFontSize()
-
       this._data_tree.setProp('style', current)
-      this._data_tree.setProp('fontSize', fontSize)
+
+      this._refreshFont()
     }
   }
 
@@ -359,6 +361,34 @@ export class Datum extends Element<HTMLDivElement, Props> {
     }
     this.dispatchEvent('datumchange', { data })
   }
+
+  private _refreshFont = () => {
+    const { $width, $height } = this.$context
+
+    const { style = {} } = this.$props
+
+    const fontSize =
+      (style.fontSize && parseFontSize(style.fontSize, $width, $height)) ||
+      this.getFontSize()
+
+    this._data_tree.setProp('fontSize', fontSize)
+  }
+
+  private _context_unlisten: Unlisten
+
+  onMount(): void {
+    this._refreshFont()
+
+    this._context_unlisten = addListener(
+      this.$context,
+      makeResizeListener(this._refreshFont)
+    )
+  }
+
+  onUnmount($context: Context): void {
+    this._context_unlisten()
+    this._context_unlisten = undefined
+  }
 }
 
 export default class Datum_ extends Element<HTMLDivElement, _Props> {
@@ -392,6 +422,10 @@ export default class Datum_ extends Element<HTMLDivElement, _Props> {
       })
     )
 
+    const container = new Div({}, this.$system)
+
+    container.registerParentRoot(root)
+
     this._root = root
 
     const $element = parentElement($system)
@@ -401,10 +435,11 @@ export default class Datum_ extends Element<HTMLDivElement, _Props> {
     this.$unbundled = false
 
     this.$subComponent = {
+      container,
       root,
     }
 
-    this.registerRoot(root)
+    this.registerRoot(container)
   }
 
   private _get_tree = (value: any) => {
@@ -419,8 +454,10 @@ export default class Datum_ extends Element<HTMLDivElement, _Props> {
       const data = this._get_tree(current)
 
       this._root.setProp('data', data)
+    } else if (prop === 'style') {
+      this._root.setProp('style', current)
     } else {
-      this._root.setProp(prop, current)
+      //
     }
   }
 }

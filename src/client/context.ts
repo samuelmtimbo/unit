@@ -99,8 +99,6 @@ export function unmount($context: Context): void {
 }
 
 export function resize($context: Context, width: number, height: number): void {
-  // console.log('resize', width, height)
-
   $context.$width = width
   $context.$height = height
 

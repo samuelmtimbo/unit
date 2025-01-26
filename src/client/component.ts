@@ -1512,8 +1512,10 @@ export class Component<
   }
 
   getFontSize(): number {
+    const { $width, $height } = this.$context
+
     if (this.$primitive) {
-      const fontSize = getFontSize(this.$element)
+      const fontSize = getFontSize(this.$element, $width, $height)
 
       if (fontSize) {
         return fontSize
