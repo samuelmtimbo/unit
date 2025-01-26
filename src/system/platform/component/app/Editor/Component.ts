@@ -39949,7 +39949,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         node.hx -= pointer_position.x - start_position.x
         node.hy -= pointer_position.y - start_position.y
 
-        this._drag_anchor_animation[node_id] = animateSimulate(
+        const stop = animateSimulate(
           this.$system,
           this._get_node_position(node_id),
           () => {
@@ -39970,9 +39970,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._set_node_position(node_id, { x, y })
           },
           () => {
+            stop()
+
             delete this._drag_anchor_animation[node_id]
           }
         )
+
+        this._drag_anchor_animation[node_id] = stop
 
         this._node_drag_max_distance[node_id] = MIN_DRAG_DROP_MAX_D + 1
       }
@@ -42869,7 +42873,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const n0 = this._zoom
     const n1 = zoomTransformCenteredAt(x, y, this._zoom.z, $width, $height)
 
-    this._animate_zoom_center_unlisten = animateSimulate(
+    const stop = animateSimulate(
       this.$system,
       n0,
       () => n1,
@@ -42883,9 +42887,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._set_zoom(zoom)
       },
       () => {
-        //
+        stop()
       }
     )
+
+    this._animate_zoom_center_unlisten = stop
   }
 
   private _state_reorder_sub_component = (unit_id: string, i: number): void => {
@@ -45212,7 +45218,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     let offset = 0
 
-    this._selection_rotation_unlisten[node_id] = animateSimulate(
+    const stop = animateSimulate(
       this.$system,
       { offset },
       () => {
@@ -45225,13 +45231,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       [['offset', ANIMATION_DELTA_THRESHOLD / 10]],
       ({ offset }) => {
         selection.setProp('strokeDashOffset', strokeDashOffset + offset)
-
-        return false
       },
       () => {
-        //
+        stop()
       }
     )
+
+    this._selection_rotation_unlisten[node_id] = stop
   }
 
   private _stop_selection_rotation = (node_id: string) => {
@@ -57150,7 +57156,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    this._zoom_target_abort_animation = this._animate_simulate(
+    const stop = this._animate_simulate(
       n0,
       n1,
       [
@@ -57166,6 +57172,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return false
       }
     )
+
+    this._zoom_target_abort_animation = stop
   }
 
   private _stop_zoom_target_animation = () => {
