@@ -102,6 +102,10 @@ Yellow Dragging a unit will create a deep copy of it, with the same current stat
 
 ![](/public/gif/start/24.gif)
 
+Yellow Long Press on a unit class datum will instantiate it.
+
+![](/public/gif/start/52.gif)
+
 ## Remove Mode
 
 To enter Remove Mode (Red Mode) you can either click on the "x" mode button or press key <kbd>D</kbd>.
