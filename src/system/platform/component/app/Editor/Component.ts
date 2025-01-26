@@ -2445,6 +2445,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _input_disabled: boolean = true
 
   private _focused: boolean = false
+  private _focus_visible: boolean = true
 
   private _main: Div
   private _foreground: Div
@@ -9370,7 +9371,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     setTimeout(() => {
-      if (!this._focused) {
+      if (!this._focused && this._focus_visible) {
         this._lose_focus()
       }
     }, 0)
@@ -12633,9 +12634,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._on_datum_change(datum_id, event)
         }),
         makeCustomListener('datumblur', (event) => {
+          const { relatedTarget } = event.event
+
+          this._focus_visible = !!relatedTarget
+
           this._on_datum_blur(datum_id, event)
         }),
         makeCustomListener('datumfocus', (event) => {
+          this._focus_visible = true
+
           this._on_datum_focus(datum_id, event)
         }),
         makeCustomListener('leafpointerdown', () => {
@@ -22407,6 +22414,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { animate } = this._config()
 
+    this._focus_visible = true
+
     if (this._subgraph_graph) {
       this._subgraph_graph.focus()
     } else if (
@@ -22462,7 +22471,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { animate } = this._config()
 
+    const { relatedTarget } = event
+
     this._focused = false
+
+    if (relatedTarget) {
+      this._focus_visible = true
+    } else {
+      this._focus_visible = false
+    }
 
     if (this._disabled) {
       //
@@ -22483,8 +22500,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (this._temp_control_unlock) {
       //
     } else {
-      const { relatedTarget } = event
-
       const unlocked_frame = this._get_first_unlocked_frame()
 
       if (relatedTarget) {
@@ -40635,7 +40650,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     setTimeout(() => {
-      if (!this._focused) {
+      if (!this._focused && this._focus_visible) {
         this._lose_focus()
       }
     }, 0)

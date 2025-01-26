@@ -253,7 +253,7 @@ export class Datum extends Element<HTMLDivElement, Props> {
         relatedTarget instanceof Node &&
         !this._data_tree.$element.contains(relatedTarget))
     ) {
-      this.dispatchEvent('datumblur', { data: this._root, path })
+      this.dispatchEvent('datumblur', { data: this._root, path, event: _event },)
     }
   }
 
