@@ -106,6 +106,10 @@ Yellow Long Press on a unit class datum will instantiate it.
 
 ![](/public/gif/start/52.gif)
 
+Searching while on Data Mode will switch to adding unit classes instead.
+
+![](/public/gif/start/52.gif)
+
 ## Remove Mode
 
 To enter Remove Mode (Red Mode) you can either click on the "x" mode button or press key <kbd>D</kbd>.
