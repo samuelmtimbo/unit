@@ -5,7 +5,6 @@ import {
   CONTAINER_COLUMN_RIGHT_MARGIN,
   CONTAINER_ROW_LEFT_MARGIN,
   CONTAINER_ROW_RIGHT_MARGIN,
-  getLeafHeight,
 } from '../../../../../client/component/getDatumSize'
 import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
@@ -38,17 +37,8 @@ export interface Props {
   invalid?: boolean
 }
 
-const STYLE_SEPARATOR = {
-  display: 'flex',
-  alignItems: 'center',
-  textAlign: 'center',
-  boxSizing: 'border-box',
-}
-
 const STYLE_DELIMITER = {
   display: 'flex',
-  alignItems: 'center',
-  textAlign: 'center',
   boxSizing: 'border-box',
 }
 
@@ -77,18 +67,6 @@ const STYLE_CONTAINER = (overflow: boolean) => {
     height: 'fit-content',
     width: 'fit-content',
   }
-}
-
-const STYLE_COMMA = {
-  display: 'flex',
-  textAlign: 'left',
-  boxSizing: 'border-box',
-}
-
-const STYLE_SPACE = {
-  display: 'inline-block',
-  boxSizing: 'border-box',
-  width: '2px',
 }
 
 export const DEFAULT_STYLE = {
@@ -731,7 +709,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const children: Element[] = []
     for (let i = 0; i < data.children.length; i++) {
       const element = data.children[i]
-      const or_delimiter = this._separator({}, '|')
+      const or_delimiter = this._delimiter({}, '|')
       const or_element_tree = this._child_element(
         i,
         element,
@@ -751,7 +729,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const children: Element[] = []
     for (let i = 0; i < data.children.length; i++) {
       const element = data.children[i]
-      const and_delimiter = this._separator({}, '&')
+      const and_delimiter = this._delimiter({}, '&')
       const and_element_tree = this._child_element(
         i,
         element,
@@ -764,69 +742,19 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     return { style, children }
   }
 
-  private _space = (): Div => {
-    return new Div(
-      {
-        style: {
-          ...STYLE_SPACE,
-        },
-        innerText: ' ',
-      },
-      this.$system
-    )
+  private _space = (style: Dict<string> = {}): Div => {
+    return this._delimiter(style, ' ')
   }
 
-  private _comma = (): Div => {
-    return new Div(
-      {
-        style: {
-          ...STYLE_COMMA,
-        },
-        innerText: ',',
-      },
-      this.$system
-    )
-  }
-
-  private _separator = (style: Dict<string>, innerText: string): Div => {
-    const {
-      api: {
-        text: { measureText },
-      },
-    } = this.$system
-
-    const { fontSize } = this.$props
-
-    const lineHeight = getLeafHeight('', fontSize, measureText)
-
-    const separator = new Div(
-      {
-        className: 'separator',
-        style: {
-          ...STYLE_SEPARATOR,
-          lineHeight: `${lineHeight}px`,
-          ...style,
-        },
-        innerText,
-      },
-      this.$system
-    )
-
-    this._delimiter_list.push(separator)
-
-    return separator
+  private _comma = (style: Dict<string> = {}): Div => {
+    return this._delimiter(style, ',')
   }
 
   private _delimiter = (style: Dict<string>, innerText: string): Div => {
-    const {
-      api: {
-        text: { measureText },
-      },
-    } = this.$system
-
     const { fontSize } = this.$props
 
-    const lineHeight = getLeafHeight('', fontSize, measureText)
+    const lineHeight = fontSize
+    const marginTop = (fontSize * 2) / 12
 
     const delimiter = new Div(
       {
@@ -834,6 +762,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         style: {
           ...STYLE_DELIMITER,
           lineHeight: `${lineHeight}px`,
+          marginTop: `${marginTop}px`,
           ...style,
         },
         innerText,
@@ -910,10 +839,12 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         child.setProp('fontSize', current)
       })
 
-      const lineHeight = getLeafHeight('', fontSize, measureText)
+      const lineHeight = fontSize
+      const marginTop = (fontSize * 2) / 12
 
       forEach(this._delimiter_list, (delimiter) => {
         delimiter.$element.style.lineHeight = `${lineHeight}px`
+        delimiter.$element.style.marginTop = `${marginTop}px`
       })
 
       if (this._leaf) {
