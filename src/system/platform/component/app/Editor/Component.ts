@@ -47833,7 +47833,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const should_graph_become_component =
       !(this._get_node_shape(graph_unit_id) === 'rect') &&
       this._get_unit_spec_render(graph_unit_id) === undefined &&
-      !this._is_system_unit(graph_unit_id) &&
       there_is_selected_sub_component
 
     if (should_graph_become_component) {
