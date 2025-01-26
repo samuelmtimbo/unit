@@ -55,9 +55,7 @@ export const _keyUpdateTree = (
   const moveLeft = () => {
     const parentPath = getParentPath(path)
 
-    const leftLeafPath =
-      _getNextLeafPath(root, path, -1) ||
-      (parentPath && _getNextLeafPath(root, parentPath, -1))
+    const leftLeafPath = _getNextLeafPath(root, path, -1)
 
     if (leftLeafPath) {
       preventDefault = true
@@ -68,16 +66,33 @@ export const _keyUpdateTree = (
         nextRoot = _removeNodeAt(nextRoot, path)
       }
 
+      let nextNode
+
       nextPath = leftLeafPath
+      nextNode = leftLeafNode
+
+      nextSelectionStart = leftLeafNode.value.length
+      nextSelectionEnd = nextSelectionStart
 
       if (!nextPath || !_getNodeAtPath(nextRoot, nextPath)) {
         const parentPath = getParentPath(path)
 
         nextPath = parentPath
-      }
+      } else {
+        if (
+          leftLeafNode.type === TreeNodeType.ArrayLiteral ||
+          leftLeafNode.type === TreeNodeType.ObjectLiteral
+        ) {
+          nextPath = [...nextPath, leftLeafNode.children.length]
 
-      nextSelectionStart = leftLeafNode.value.length
-      nextSelectionEnd = nextSelectionStart
+          if (!leftLeafNode.children.length) {
+            nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
+
+            nextSelectionStart = 0
+            nextSelectionEnd = nextSelectionStart
+          }
+        }
+      }
     } else {
       if (parentPath) {
         const parent = _getNodeAtPath(root, parentPath)
@@ -167,6 +182,10 @@ export const _keyUpdateTree = (
         ) {
           const grandParentPath = getParentPath(parentPath)
 
+          if (value === '') {
+            nextRoot = _removeNodeAt(nextRoot, path)
+          }
+
           if (grandParentPath) {
             const grandParent = _getNodeAtPath(root, grandParentPath)
 
@@ -176,8 +195,8 @@ export const _keyUpdateTree = (
                 grandParent.type === TreeNodeType.ObjectLiteral
               ) {
                 preventDefault = true
-                nextPath = [...grandParentPath, parentPath.length]
-                nextRoot = _insertNodeAt(root, nextPath, getTree(''))
+                nextPath = [...grandParentPath, grandParent.children.length]
+                nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
                 nextSelectionStart = 0
                 nextSelectionEnd = 0
               }

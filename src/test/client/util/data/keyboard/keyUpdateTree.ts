@@ -379,6 +379,15 @@ assert.deepEqual(keyUpdateTree('[{}]', [0, 0], '', 'ArrowLeft', 0, 0, false), [
     nextSelectionEnd: 0,
   },
 ])
+assert.deepEqual(keyUpdateTree('[[],]', [1], '', 'ArrowLeft', 0, 0, false), [
+  true,
+  {
+    nextRoot: '[[]]',
+    nextPath: [0, 0],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 0,
+  },
+])
 assert.deepEqual(keyUpdateTree('[,{}]', [0], '', 'ArrowRight', 0, 0, false), [
   true,
   {
