@@ -17535,7 +17535,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (search_unit_id) {
       this._commit_shift_search()
 
-      // commit might've removed search unit
       if (this._has_node(search_unit_id)) {
         this._refresh_node_color(search_unit_id)
 
@@ -17544,7 +17543,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         })
       }
     } else if (search_unit_datum_id) {
-      this._commit_shift_search()
+      if (this._is_shift_pressed()) {
+        this._commit_shift_data_search()
+      } else {
+        this._commit_shift_search()
+      }
+    }
+  }
+
+  private _commit_shift_data_search = () => {
+    const spec_id = this._search_unit_datum_spec_id
+    const position = this._get_node_position(this._search_unit_datum_node_id)
+
+    this._commit_search()
+
+    this._add_data_search_unit(spec_id, position)
+
+    if (this._search_unit_datum_node_id) {
+      this._refresh_node_color(this._search_unit_datum_node_id)
     }
   }
 
@@ -22866,12 +22882,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       } else if (this._search_unit_id === node_id) {
         this._commit_shift_search()
-      } else {
-        // this._hide_search()
       }
     } else if (this._search_unit_datum_node_id) {
       if (this._search_unit_datum_node_id === node_id) {
-        this._commit_shift_search()
+        this._commit_search()
       }
     } else {
       this._hide_search()
