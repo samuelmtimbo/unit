@@ -16,7 +16,7 @@
   },
   "outputs": {
     "files": {
-      "type": "`F`[]",
+      "type": "`A<`F`>`",
       "optional": true,
       "ref": true,
       "icon": "files"

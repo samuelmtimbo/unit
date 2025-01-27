@@ -13,7 +13,7 @@
   },
   "outputs": {
     "array": {
-      "type": "`V`&`A`&`TA`",
+      "type": "`V`&`A<number>`&`TA`",
       "ref": true,
       "icon": "array"
     }

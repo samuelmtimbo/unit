@@ -2,7 +2,7 @@
   "name": "read",
   "inputs": {
     "value": {
-      "type": "`V`",
+      "type": "`V<T>`",
       "ref": true
     },
     "any": {
@@ -11,7 +11,7 @@
   },
   "outputs": {
     "data": {
-      "type": "any"
+      "type": "<T>"
     },
     "done": {
       "type": "any",

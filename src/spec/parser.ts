@@ -44,6 +44,7 @@ export enum TreeNodeType {
   Unit = 'unit',
   Any = 'any',
   PropExpression = 'prop expression',
+  Placeholder = 'placeholder',
   ArithmeticExpression = 'arithmetic expression',
   Url = 'url',
 }
@@ -86,7 +87,7 @@ function _printTree(tree: TreeNode): void {
   // console.log(JSON.stringify(tree, null, 2))
   traverseTree(tree, (node: TreeNode, path: number[]) =>
     // eslint-disable-next-line no-console
-    console.log(path, node.value)
+    console.log(path, node.value, node.type)
   )
 }
 
@@ -266,6 +267,24 @@ const TYPE_TO_LITERAL: { [type: string]: TreeNodeType } = {
   [TreeNodeType.Date]: TreeNodeType.DateLiteral,
 }
 
+export function parseClassValue(tree: TreeNode): {
+  base: string
+  placeholder: TreeNode
+} {
+  const child = tree.children[0] ?? getTree('<any>')
+
+  const diamond = child.value
+
+  const placeholder =
+    child.type === TreeNodeType.Generic
+      ? child
+      : getTree(child.value.slice(1, -1))
+
+  const base = tree.value.replace(diamond, '').slice(1, -1)
+
+  return { base, placeholder }
+}
+
 export function getLiteralType(type: TreeNodeType): TreeNodeType {
   return TYPE_TO_LITERAL[type]
 }
@@ -372,12 +391,20 @@ export function _isTypeMatch(
       )
     case TreeNodeType.Class:
       if (source.type === TreeNodeType.Class) {
-        const sourceClass = source.value.slice(1, -1)
-        const targetClass = target.value.slice(1, -1)
+        const { base: sourceClass, placeholder: sourcePlaceholder } =
+          parseClassValue(source)
+        const { base: targetClass, placeholder: targetPlaceholder } =
+          parseClassValue(target)
 
         const match = checkClassInheritance(sourceClass, targetClass)
 
-        return match
+        if (match) {
+          if (_isTypeMatch(specs, sourcePlaceholder, targetPlaceholder)) {
+            return true
+          }
+        }
+
+        return false
       } else if (source.type === TreeNodeType.Unit) {
         const bundle = evaluateBundleStr(
           source.value,
@@ -816,6 +843,16 @@ export function _getTypeTree(
       value,
       type: TreeNodeType.Generic,
       children: [],
+    }
+  }
+
+  const placeholderTest = /^<(.+)>$/.exec(value)
+  if (placeholderTest) {
+    const children = [getTree(placeholderTest[1])]
+    return {
+      value,
+      type: TreeNodeType.Placeholder,
+      children,
     }
   }
 
@@ -1607,15 +1644,22 @@ export function _applyGenerics(
       }
     }
     case TreeNodeType.Class: {
-      const children = tree.children.map((child) => _applyGenerics(child, map))
+      const children = tree.children.map((child) =>
+        child.type === TreeNodeType.Generic ? _applyGenerics(child, map) : child
+      )
       const value = tree.children.reduce((acc, child, i) => {
-        const _child = children[i]
-        return acc.replace(
-          trimSides(child.value),
-          _child.type === TreeNodeType.Generic
-            ? trimSides(_child.value)
-            : _child.value
-        )
+        const child_ = children[i]
+
+        if (child.type === TreeNodeType.Generic) {
+          return acc.replace(
+            trimSides(child.value),
+            child_.type === TreeNodeType.Generic
+              ? trimSides(child_.value)
+              : child_.value
+          )
+        } else {
+          return tree.value
+        }
       }, tree.value)
       return {
         ...tree,

@@ -2,8 +2,7 @@
   "name": "state",
   "inputs": {
     "init": {
-      "_type": "<T>",
-      "type": "any"
+      "type": "<T>"
     },
     "done": {
       "type": "any",
@@ -13,8 +12,7 @@
   },
   "outputs": {
     "data": {
-      "type": "<T>&`V`",
-      "optional": true,
+      "type": "`V<T>`",
       "ref": true,
       "icon": "triangle"
     }

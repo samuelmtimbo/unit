@@ -2,14 +2,14 @@
   "name": "put",
   "inputs": {
     "a": {
-      "type": "`A`",
+      "type": "`A<T>`",
       "ref": true
     },
     "i": {
       "type": "number"
     },
     "v": {
-      "type": "any"
+      "type": "<T>"
     }
   },
   "outputs": {},

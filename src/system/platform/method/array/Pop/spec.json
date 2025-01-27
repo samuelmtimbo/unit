@@ -2,7 +2,7 @@
   "name": "pop",
   "inputs": {
     "a": {
-      "type": "`A`",
+      "type": "`A<T>`",
       "ref": true
     },
     "any": {
@@ -11,7 +11,7 @@
   },
   "outputs": {
     "last": {
-      "type": "any"
+      "type": "<T>"
     },
     "done": {
       "type": "any",

@@ -2,11 +2,11 @@
   "name": "write",
   "inputs": {
     "value": {
-      "type": "`V`",
+      "type": "`V<T>`",
       "ref": true
     },
     "data": {
-      "type": "any"
+      "type": "<T>"
     }
   },
   "outputs": {

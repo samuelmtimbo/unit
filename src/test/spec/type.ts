@@ -327,8 +327,8 @@ assert.deepEqual(
   ),
   {
     state: {
-      input: { init: 'any', done: 'any' },
-      output: { data: '<A>&`V`' },
+      input: { init: '<A>', done: 'any' },
+      output: { data: '`V<A>`' },
     },
   }
 )

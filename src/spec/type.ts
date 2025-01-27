@@ -318,14 +318,14 @@ export const createGenericTypeInterface = (
   const spec = specs[id]
   const typeInterface: TypeTreeInterface = emptyIO({}, {})
 
-  let i = 0
+  let charCode = 65
 
   const inputIds = keys(spec.inputs)
   const outputIds = keys(spec.outputs)
 
   function register(kind: IO, pinId: string): void {
-    typeInterface[kind][pinId] = getTree(`<${i}>`)
-    i++
+    typeInterface[kind][pinId] = getTree(`<${String.fromCharCode(charCode)}>`)
+    charCode++
   }
 
   inputIds.forEach((inputId) => register('input', inputId))
@@ -580,7 +580,7 @@ export const _getGraphTypeMap = (
 
   let i = 0
 
-  const create_set_equivalent = () => {
+  const create_set_equivalent = (data: boolean) => {
     let equivalence_set = new Set<string>()
 
     let merged = false
@@ -601,7 +601,7 @@ export const _getGraphTypeMap = (
           equivalence_set.add(type.value)
           equivalence_index[type.value] = i
         } else {
-          if (includeData || kind === 'input') {
+          if (!data || includeData || kind === 'input') {
             equivalence_set.add(type.value)
           }
         }
@@ -660,19 +660,19 @@ export const _getGraphTypeMap = (
   }
 
   forEachValueKey(merges, (_, mergeId: string) => {
-    const set_equivalent = create_set_equivalent()
+    const set_equivalent = create_set_equivalent(false)
 
     set_merge_equivalence(mergeId, set_equivalent)
   })
 
   forEachValueKey(inputs, (_, inputId) => {
-    const set_equivalent = create_set_equivalent()
+    const set_equivalent = create_set_equivalent(true)
 
     set_exposed_equivalence('input', inputId, set_equivalent)
   })
 
   forEachValueKey(outputs, (_, outputId) => {
-    const set_equivalent = create_set_equivalent()
+    const set_equivalent = create_set_equivalent(true)
 
     set_exposed_equivalence('output', outputId, set_equivalent)
   })

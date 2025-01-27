@@ -14,7 +14,7 @@
       }
     },
     "child": {
-      "type": "<T:`C`>",
+      "type": "`C`",
       "metadata": {
         "examples": ["${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}"],
         "position": {

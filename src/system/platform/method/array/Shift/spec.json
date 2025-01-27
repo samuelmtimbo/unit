@@ -2,7 +2,7 @@
   "name": "shift",
   "inputs": {
     "a": {
-      "type": "`A`",
+      "type": "`A<T>`",
       "ref": true
     },
     "any": {
@@ -11,7 +11,7 @@
   },
   "outputs": {
     "first": {
-      "type": "any"
+      "type": "<T>"
     }
   },
   "metadata": {

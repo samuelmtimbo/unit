@@ -2,7 +2,7 @@
   "name": "at",
   "inputs": {
     "a": {
-      "type": "`A`",
+      "type": "`A<T>`",
       "ref": true
     },
     "i": {
@@ -11,7 +11,7 @@
   },
   "outputs": {
     "a[i]": {
-      "type": "<A>"
+      "type": "<T>"
     }
   },
   "metadata": {
