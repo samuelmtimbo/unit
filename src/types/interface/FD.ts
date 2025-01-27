@@ -1,1 +1,3 @@
-export interface FD<T = any> {}
+export interface FD<T = any> {
+  append(name: string, value: any): void
+}

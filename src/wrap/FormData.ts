@@ -12,7 +12,7 @@ export function wrapFormData(
   formData: FormData,
   system: System
 ): J<Dict<any>> & FD & $ {
-  const _obj = new (class Object_ extends $ implements J<Dict<any>>, FD {
+  const _obj = new (class FormData_ extends $ implements J<Dict<any>>, FD {
     __: string[] = ['J', 'FD']
 
     async get(name: string): Promise<any> {
@@ -86,6 +86,10 @@ export function wrapFormData(
       ) => void
     ): Unlisten {
       throw new MethodNotImplementedError()
+    }
+
+    append(name: string, value: any): void {
+      formData.append(name, value)
     }
 
     raw() {

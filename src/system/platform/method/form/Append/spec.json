@@ -1,0 +1,31 @@
+{
+  "name": "append",
+  "inputs": {
+    "form": {
+      "type": "`FD`",
+      "ref": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "value": {
+      "type": "any",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+    
+  },
+  "metadata": {
+    "icon": "chevrons-left",
+    "description": "append a `value` to a form data with `name`",
+    "tags": ["platform", "method", "form"]
+  },
+  "id": "f615f030-15dc-44be-9889-c4a68092d400",
+  "base": true,
+  "type": "`U`"
+}
