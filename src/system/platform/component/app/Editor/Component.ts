@@ -47064,10 +47064,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return
     }
 
-    if (this._disabled) {
-      return
-    }
-
     _event.preventDefault()
 
     const {
