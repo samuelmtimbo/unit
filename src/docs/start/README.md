@@ -108,7 +108,7 @@ Yellow Long Press on a unit class datum will instantiate it.
 
 Searching while on Data Mode will switch to adding unit classes instead.
 
-![](/public/gif/start/52.gif)
+![](/public/gif/start/53.gif)
 
 ## Remove Mode
 
