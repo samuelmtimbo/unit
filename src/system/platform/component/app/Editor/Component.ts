@@ -22404,6 +22404,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _focus_first_unlocked_component = () => {
     const first = this._get_first_unlocked_component_unit_id()
 
+    this._focus_sub_component_frame(first)
     this._focus_sub_component(first)
   }
 
