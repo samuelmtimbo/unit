@@ -43,10 +43,12 @@ export class Field<
     $element: E,
     opt: {
       valueKey: string
+      eventKey?: string
+      emit?: boolean
       defaultStyle?: Style
       defaultValue?: any
       defaultAttr?: Dict<any>
-      processValue?: (value: string) => any
+      processValue?: (value: any) => any
       parseValue?: (value: string) => any
       propHandlers?: Dict<(value: any) => void>
       emitOnChange?: boolean
@@ -54,6 +56,8 @@ export class Field<
   ) {
     const {
       valueKey,
+      eventKey = valueKey,
+      emit = true,
       defaultStyle,
       defaultAttr,
       defaultValue = '',
@@ -76,15 +80,15 @@ export class Field<
 
     const inputEventHandler = makeFieldInputEventHandler(
       this,
-      valueKey,
+      eventKey,
       processValue
     )
 
     this.$element.addEventListener('input', (event) =>
-      inputEventHandler(event, true)
+      inputEventHandler(event, emit)
     )
     this.$element.addEventListener('change', (event) =>
-      inputEventHandler(event, emitOnChange)
+      inputEventHandler(event, emit && emitOnChange)
     )
 
     this.$propHandler = {

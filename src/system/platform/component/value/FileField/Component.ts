@@ -14,10 +14,29 @@ export default class FileField extends Field<HTMLInputElement, Props> {
 
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
+      eventKey: 'files',
+      emit: false,
       defaultStyle,
       defaultValue: '',
       defaultAttr: {
         type: 'file',
+        multiple: 'true',
+      },
+      processValue: (files: FileList) => {
+        const names: {
+          lastModified: number
+          name: string
+          size: number
+          type: string
+        }[] = []
+
+        for (const file of files) {
+          const { lastModified, name, size, type } = file
+
+          names.push({ lastModified, name, size, type })
+        }
+
+        return names
       },
     })
   }
