@@ -204,3 +204,43 @@ export function isNotSymbol(key: string): boolean {
 export function isChar(key: string): boolean {
   return CHARACTER.includes(key.toLowerCase())
 }
+
+export const CONTROL_KEYS = [
+  'Control',
+  'Shift',
+  'Alt',
+  'Meta',
+  'Escape',
+  'Enter',
+  ' ',
+  'Backspace',
+  'Delete',
+  'Tab',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'Insert',
+  'F1',
+  'F2',
+  'F3',
+  'F4',
+  'F5',
+  'F6',
+  'F7',
+  'F8',
+  'F9',
+  'F10',
+  'F11',
+  'F12',
+  'CapsLock',
+  'NumLock',
+  'ScrollLock',
+  'Pause',
+]
+
+const CONTROL_KEY_SET = new Set(CONTROL_KEYS)
+
+export function isControlKey(key: string): boolean {
+  return CONTROL_KEY_SET.has(key)
+}

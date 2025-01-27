@@ -1,7 +1,11 @@
 import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { keyToIcon } from '../../../../../client/event/keyboard'
-import { isChar, keyToCode } from '../../../../../client/event/keyboard/key'
+import {
+  isChar,
+  isControlKey,
+  keyToCode,
+} from '../../../../../client/event/keyboard/key'
 import { emitKeyboardEvent } from '../../../../../client/event/keyboard/write'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
@@ -302,16 +306,18 @@ export function emitPhoneKey(
     bubbles: true,
   })
 
-  // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
-  emitKeyboardEvent(system, 'keypress', {
-    key,
-    code,
-    shiftKey,
-    altKey,
-    ctrlKey: false,
-    metaKey: false,
-    bubbles: true,
-  })
+  if (!isControlKey(key)) {
+    emitKeyboardEvent(system, 'keypress', {
+      key,
+      code,
+      shiftKey,
+      altKey,
+      ctrlKey: false,
+      metaKey: false,
+      bubbles: true,
+    })
+  }
+
   emitKeyboardEvent(system, 'keyup', {
     key,
     code,
