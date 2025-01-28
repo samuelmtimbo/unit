@@ -592,14 +592,18 @@ export default class GUI extends Element<HTMLDivElement, Props> {
   }
 
   private _refresh_background = () => {
-    this.$context.$element.style.backgroundColor = this._background_color()
+    this._container.$element.style.backgroundColor = this._background_color()
   }
 
   onPropChanged(prop: string, current: any): void {
     // console.log('GUI', 'onPropChanged', prop, current)
 
     if (prop === 'style') {
-      this._container.setProp('style', { ...DEFAULT_STYLE, ...current })
+      this._container.setProp('style', {
+        ...DEFAULT_STYLE,
+        backgroundColor: this._background_color(),
+        ...current,
+      })
 
       this._refresh_pointer_events()
       this._refresh_color()
@@ -661,7 +665,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       makeCustomListener('colorchanged', this._on_context_color_changed),
     ])
 
-    this.$context.$element.style.backgroundColor = this._background_color()
+    this._container.$element.style.backgroundColor = this._background_color()
 
     this._refresh_color()
   }
@@ -679,7 +683,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     setTheme(this.$context, $theme)
 
-    this.$context.$element.style.backgroundColor = this._background_color()
+    this._container.$element.style.backgroundColor = this._background_color()
 
     if (!this._manually_changed_color) {
       const default_theme_color = defaultThemeColor($theme)

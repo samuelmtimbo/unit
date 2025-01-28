@@ -105,28 +105,11 @@ export function resize($context: Context, width: number, height: number): void {
   dispatchContextEvent($context, 'resize', { width, height })
 }
 
-export function setWidth($context: Context, width: number): void {
-  // console.log('setWidth', width)
-  const { $height } = $context
-  resize($context, width, $height)
-}
-
-export function setHeight($context: Context, height: number): void {
-  // console.log('setHeight', height)
-  const { $width } = $context
-  resize($context, $width, height)
-}
-
 export function setTheme($context: Context, $theme: Theme): void {
   if ($context.$theme === $theme) {
     return
   }
   $context.$theme = $theme
-  // if ($theme === 'light') {
-  //   $context.$element.style.filter = 'auto'
-  // } else {
-  //   $context.$element.style.filter = 'invert'
-  // }
   dispatchContextEvent($context, 'themechanged', {})
 }
 
