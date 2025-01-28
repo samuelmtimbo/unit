@@ -208,7 +208,8 @@ export interface G<
   moveSubComponentRoot(
     subComponentId: string | null,
     children: string[],
-    slotMap: Dict<string>
+    slotMap: Dict<string>,
+    index: number
   ): void
   moveSubgraphInto(...args: G_MoveSubgraphIntoArgs): void
   moveSubgraphOutOf(...args: G_MoveSubgraphIntoArgs): void
@@ -286,6 +287,7 @@ export type G_EE = {
     string | null,
     Dict<string>,
     string[],
+    number,
     Dict<string>,
     Dict<string>,
     string[],

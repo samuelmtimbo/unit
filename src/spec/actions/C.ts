@@ -17,6 +17,7 @@ export const makeMoveSubComponentRootAction = (
   parentId: string | null,
   prevParentIdMap: Dict<string | null>,
   children: string[],
+  index: number,
   slotMap: Dict<string>,
   prevSlotMap: Dict<string>
 ) => {
@@ -24,6 +25,7 @@ export const makeMoveSubComponentRootAction = (
     parentId,
     prevParentIdMap,
     children,
+    index,
     slotMap,
     prevSlotMap,
   })

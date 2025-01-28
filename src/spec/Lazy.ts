@@ -366,13 +366,15 @@ export function lazyFromSpec(
     moveSubComponentRoot(
       subComponentId: string,
       children: string[],
-      slotMap: Dict<string>
+      slotMap: Dict<string>,
+      index: number
     ): void {
       this._ensure()
       return this.__graph.moveSubComponentRoot(
         subComponentId,
         children,
-        slotMap
+        slotMap,
+        index
       )
     }
 

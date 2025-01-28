@@ -695,6 +695,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       parentId,
       children,
       slotMap,
+      index,
       fork = true,
       bubble = true,
     }: GraphMoveSubComponentRootData): void {
@@ -705,6 +706,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         bubble,
         parentId,
         children,
+        index,
         slotMap
       )
     },

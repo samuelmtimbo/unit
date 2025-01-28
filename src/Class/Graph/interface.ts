@@ -357,6 +357,7 @@ export type GraphMoveSubComponentRootData = {
   parentId: string | null
   children: string[]
   slotMap: Dict<string>
+  index: number
   fork?: boolean
   bubble?: boolean
 }

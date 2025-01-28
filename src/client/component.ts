@@ -868,7 +868,7 @@ export class Component<
       for (let i = 0; i < all.length; i++) {
         const leaf = all[i]
 
-        hostSlot.domAppendChild(leaf, 'default', i)
+        hostSlot.domInsertChild(leaf, 'default', i)
       }
 
       if (activeElementInside) {
@@ -1801,6 +1801,20 @@ export class Component<
     return at
   }
 
+  insertChild(
+    child: Component,
+    slotName: string = 'default',
+    at: number
+  ): number {
+    // console.log('Component', 'insertChild', slotName, at)
+
+    this.memInsertChild(child, slotName, at)
+    this.domInsertChild(child, slotName, at)
+    this.postInsertChild(child, slotName, at)
+
+    return at
+  }
+
   public appendChildren(children: Component[], slotName: string): void {
     this.memAppendChildren(children, slotName)
     this.domAppendChildren(children, slotName)
@@ -1808,14 +1822,18 @@ export class Component<
   }
 
   public memAppendChildren(children: Component[], slotName: string): void {
+    this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
+
     for (const child of children) {
-      this.memAppendChild(child, slotName, this.$children.length)
+      this.memInsertChild(child, slotName, this.$slotChildren[slotName].length)
     }
   }
 
   public postAppendChildren(children: Component[], slotName: string): void {
+    this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
+
     for (const child of children) {
-      this.postAppendChild(child, slotName, this.$children.length)
+      this.postAppendChild(child, slotName, this.$slotChildren[slotName].length)
     }
   }
 
@@ -1831,6 +1849,23 @@ export class Component<
     const slot = this.$slot[slotName]
 
     slot.memAppendParentChild(child, slotName, at, at)
+  }
+
+  public memInsertChild(child: Component, slotName: string, at: number): void {
+    // console.log('Component', 'memInsertChild', slotName, at)
+
+    this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
+
+    insert(this.$slotChildren[slotName], child, at)
+
+    const i = this.$children.length
+
+    this.$children.push(child)
+    this.$childSlotName[i] = slotName
+
+    const slot = this.$slot[slotName]
+
+    slot.memInsertParentChild(child, at, slotName)
   }
 
   public domAppendChildren(children: Component[], slotName: string) {
@@ -1863,30 +1898,54 @@ export class Component<
 
   private _domAppendChild(
     child: Component,
-    slotName: string = 'default',
-    at?: number,
-    slot?: Component
+    slotName: string = 'default'
   ): void {
     // console.log('Component', '_domAppendChild')
 
-    slot = slot ?? this.getLeafSlot(slotName)
+    const at = this.$children.length - 1
 
-    at = at ?? this.$children.length
+    this._domInsertChild(child, slotName, at)
+  }
 
-    slot.domAppendParentChildAt(child, slotName, at, at)
+  private _domInsertChild(
+    child: Component,
+    slotName: string = 'default',
+    at: number
+  ): void {
+    // console.log('Component', '_domAppendChild')
+
+    const slot = this.getLeafSlot(slotName)
+
+    slot.domInsertParentChildAt(child, slotName, at)
   }
 
   public domAppendChild(
     child: Component,
     slotName: string = 'default',
-    at?: number
+    at: number
   ): void {
     // console.log('Component', 'domAppendChild')
 
-    this._domAppendChild(child, slotName, at)
+    this._domAppendChild(child, slotName)
+  }
+
+  public domInsertChild(
+    child: Component,
+    slotName: string = 'default',
+    at: number
+  ): void {
+    // console.log('Component', 'domInsertChild', slotName, at)
+
+    this._domInsertChild(child, slotName, at)
   }
 
   public postAppendChild(child: Component, slotName: string, at: number): void {
+    const slot = this.$slot[slotName]
+
+    slot.postAppendParentChild(child, slotName, at)
+  }
+
+  public postInsertChild(child: Component, slotName: string, at: number): void {
     const slot = this.$slot[slotName]
 
     slot.postAppendParentChild(child, slotName, at)
@@ -2542,11 +2601,11 @@ export class Component<
   }
 
   public pushRoot(component: Component): void {
-    if (this.$root.indexOf(component) > -1) {
-      throw new Error('component is already a root')
-    }
+    push(this.$root, component)
+  }
 
-    this.$root.push(component)
+  public placeRootAt(component: Component, at: number): void {
+    insert(this.$root, component, at)
   }
 
   public pullRoot(component: Component): void {
@@ -2976,21 +3035,21 @@ export class Component<
     this.postAppendRoot(component)
   }
 
-  public insertRootAt(component: Component, _at: number): void {
-    this.memInsertRootAt(component, _at)
-    this.domInsertRootAt(component, _at)
-    this.postInsertRootAt(component, _at)
+  public insertRootAt(component: Component, at: number): void {
+    this.memInsertRootAt(component, at)
+    this.domInsertRootAt(component, at)
+    this.postInsertRootAt(component, at)
   }
 
-  public postInsertRootAt(component: Component, _at: number): void {
+  public postInsertRootAt(component: Component, at: number): void {
     this.$mounted && this.mountChild(component)
   }
 
-  public memInsertRootAt(component: Component, _at: number): void {
+  public memInsertRootAt(component: Component, at: number): void {
     if (this.$mountRoot.indexOf(component) > -1) {
       throw new Error('root is already mounted')
     }
-    insert(this.$mountRoot, component, _at)
+    insert(this.$mountRoot, component, at)
   }
 
   public domInsertRootAt(component: Component, at: number): void {
@@ -3152,7 +3211,7 @@ export class Component<
     component.$rootParent = slot
   }
 
-  public insertParentRoot(
+  public placeParentRoot(
     component: Component,
     at: number,
     slotName: string
@@ -3359,6 +3418,14 @@ export class Component<
   }
 
   public postAppendParentChild(
+    component: Component,
+    slotName: string,
+    at: number
+  ): void {
+    this.postInsertParentChildAt(component, slotName, at)
+  }
+
+  public postInsertParentChild(
     component: Component,
     slotName: string,
     at: number

@@ -922,6 +922,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.nextParentId,
         data.parentId,
         data.children,
+        data.index,
         data.nextSlotMap,
         data.slotMap
       )

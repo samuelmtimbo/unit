@@ -5563,10 +5563,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subComponentId: string | null,
     children: string[],
     slotMap: Dict<string>,
+    index: number,
     emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ): void {
+    // console.log('moveSubComponentRoot', subComponentId, children, slotMap, index)
+
     const prevParentMap = this.getSubComponentsParentMap(children)
     const prevSlotMap = this.getSubComponentsParentMap(children)
 
@@ -5578,7 +5581,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       this._moveSubComponentRoot(
         subComponentId,
         childId,
-        i,
+        index + i,
         slotName,
         fork,
         bubble
@@ -5591,6 +5594,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         subComponentId,
         prevParentMap,
         children,
+        index,
         slotMap,
         prevSlotMap,
         []
@@ -6505,7 +6509,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             this._removeMergeData(mergeId)
           },
           moveSubComponentRoot: (data: GraphMoveSubComponentRootData) => {
-            const { parentId, children, slotMap } = data
+            const { parentId, children, slotMap, index } = data
 
             for (let i = 0; i < children.length; i++) {
               const childId = children[i]
@@ -6515,7 +6519,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               this._moveSubComponentRoot(
                 parentId,
                 childId,
-                i,
+                index + i,
                 slotName,
                 fork,
                 bubble

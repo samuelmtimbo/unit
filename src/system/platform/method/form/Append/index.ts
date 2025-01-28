@@ -41,7 +41,7 @@ export default class Append<T> extends Semifunctional<I<T>, O<T>> {
   async f({ form, name, value }: I<T>, done: Done<O<T>>): Promise<void> {
     try {
       const data = await value.raw()
-      
+
       form.append(name, data)
     } catch (err) {
       done(undefined, err.message.toString())
