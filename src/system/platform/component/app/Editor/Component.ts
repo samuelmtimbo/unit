@@ -21473,6 +21473,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             map,
             (node: Tree<Tag & { trait: LayoutNode }>) => node.value.trait
           )
+
+          const { $x, $y } = this.$context
+
+          all_trait = mapObjVK(all_trait, (leaf_trait, leaf_id) => {
+            if (leaf_trait) {
+              const leaf_trait_ = {
+                x: (-$x + leaf_trait.x) / leaf_trait.sx,
+                y: (-$y + leaf_trait.y) / leaf_trait.sy,
+                width: leaf_trait.width / Math.abs(leaf_trait.sx),
+                height: leaf_trait.height / Math.abs(leaf_trait.sy),
+                sx: leaf_trait.sx,
+                sy: leaf_trait.sy,
+                opacity: leaf_trait.opacity * leaf_layer_opacity,
+                fontSize: leaf_trait.fontSize,
+                color: leaf_trait.color,
+              }
+
+              this._leaf_target_trait[leaf_id] = leaf_trait_
+
+              return leaf_trait_
+            }
+          })
         }
 
         let i = 0
@@ -21492,8 +21514,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
 
               const trait_ = all_trait[leaf_id]
-
-              trait_.opacity *= leaf_layer_opacity
 
               i = (i + 1) % base.length
 
