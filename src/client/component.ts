@@ -3812,6 +3812,17 @@ export class Component<
     forEachObjKV(component_map, this.setSubComponent.bind(this))
   }
 
+  public decoupleSubComponent(id: string): void {
+    const subComponent = this.getSubComponent(id)
+    const parent = this.getSubComponentParent(id)
+
+    if (parent) {
+      parent.removeParentRoot(subComponent)
+    } else {
+      this.removeRoot(subComponent)
+    }
+  }
+
   public removeSubComponent(id: string): Component {
     const component = this.$subComponent[id]
 

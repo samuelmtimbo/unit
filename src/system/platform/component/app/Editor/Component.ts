@@ -8116,8 +8116,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _search_adding_unit: boolean = false
-
   private _sim_add_sub_component = (
     unit_id: string,
     sub_component_map: Dict<Component> = {},
@@ -8163,8 +8161,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._sub_component_index[sub_component_id] = i
   }
 
-  private _sub_component: Dict<Component> = {}
-
   private _mem_add_unit_component = (
     unit_id: string,
     sub_component_map: Dict<Component>,
@@ -8182,40 +8178,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { specs } = this.$props
 
-    this._search_adding_unit = true
-
     let sub_component = this._component.$subComponent[unit_id]
 
     if (sub_component) {
       //
     } else {
-      if (this._subgraph_unit_id === unit_id) {
-        sub_component = this._subgraph_graph._component
-      } else {
-        const spec_id = this._get_unit_spec_id(unit_id)
+      const spec_id = this._get_unit_spec_id(unit_id)
 
-        const Class = componentClassFromSpecId(
-          components,
-          specs,
-          spec_id,
-          {},
-          sub_component_map,
-          element
-        )
+      const Class = componentClassFromSpecId(
+        components,
+        specs,
+        spec_id,
+        {},
+        sub_component_map,
+        element
+      )
 
-        sub_component = new Class({}, this.$system)
-      }
-
-      this._component.setSubComponent(unit_id, sub_component)
+      sub_component = new Class({}, this.$system)
     }
 
-    this._sub_component[unit_id] = sub_component
+    this.__mem_add_unit_component(unit_id, sub_component)
+  }
+
+  private __mem_add_unit_component = (
+    unit_id: string,
+    sub_component: Component
+  ) => {
+    this._component.setSubComponent(unit_id, sub_component)
 
     const index = this._get_sub_component_tree_index(unit_id)
 
     this._set_tree_sub_component_index(unit_id, index)
-
-    this._search_adding_unit = false
   }
 
   private _set_sub_component_controlled = (
@@ -18056,42 +18049,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _abort_search_unit = () => {
     const { specs } = this.$props
 
-    const search_adding_unit = this._search_adding_unit
     const search_unit_id = this._search_unit_id
     const search_start_unit_id = this._search_start_unit_id
     const search_start_spec_id = this._search_start_spec_id
     const search_unit_start_data = this._search_start_unit_data
     const search_unit_datum_node_id = this._search_unit_datum_node_id
-    const search_unit_spec_id = this._search_unit_spec_id
     const search_unit_spec_id_changed = this._search_unit_spec_id_changed
 
-    if (!search_adding_unit) {
-      if (search_unit_id) {
-        if (
-          this._mode === 'add' ||
-          this._mode === 'multiselect' ||
-          this._mode === 'none' ||
-          this._mode === 'remove'
-        ) {
-          this._state_remove_unit(search_unit_id, false)
-        } else if (this._mode === 'change') {
-          this._state_swap_search_unit(
-            search_start_spec_id,
-            search_start_unit_id
-          )
+    if (search_unit_id) {
+      if (
+        this._mode === 'add' ||
+        this._mode === 'multiselect' ||
+        this._mode === 'none' ||
+        this._mode === 'remove'
+      ) {
+        this._state_remove_unit(search_unit_id, false)
+      } else if (this._mode === 'change') {
+        this._state_swap_search_unit(search_start_spec_id, search_start_unit_id)
 
-          if (search_unit_spec_id_changed) {
-            if (isComponentId(specs, search_start_spec_id)) {
-              this._sim_add_sub_component(search_start_unit_id, {})
-              this._connect_sub_component(search_start_unit_id)
-            }
-
-            forIOObjKV(search_unit_start_data, (type, pin_id, data) => {
-              const pin_node_id = getPinNodeId(search_unit_id, type, pin_id)
-
-              this._graph_debug_set_pin_data_tree(pin_node_id, data)
-            })
+        if (search_unit_spec_id_changed) {
+          if (isComponentId(specs, search_start_spec_id)) {
+            this._sim_add_sub_component(search_start_unit_id, {})
+            this._connect_sub_component(search_start_unit_id)
           }
+
+          forIOObjKV(search_unit_start_data, (type, pin_id, data) => {
+            const pin_node_id = getPinNodeId(search_unit_id, type, pin_id)
+
+            this._graph_debug_set_pin_data_tree(pin_node_id, data)
+          })
         }
       }
 
@@ -36084,6 +36070,43 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       unit_merge_selected
     )
 
+    const sub_sub_component_map: Dict<Component> = {}
+
+    if (this._is_unit_component(unit_id)) {
+      const sub_component = this._get_sub_component(unit_id)
+
+      for (const sub_sub_component_id in sub_component.$subComponent) {
+        const sub_sub_component =
+          sub_component.$subComponent[sub_sub_component_id]
+
+        sub_sub_component_map[sub_sub_component_id] = sub_sub_component
+
+        sub_component.decoupleSubComponent(sub_sub_component_id)
+      }
+
+      for (const sub_sub_component_id in sub_component.$subComponent) {
+        sub_component.removeSubComponent(sub_sub_component_id)
+      }
+    }
+
+    for (const unit_id in map_unit_id) {
+      const next_unit_id = map_unit_id[unit_id]
+
+      if (this._is_unit_component(next_unit_id)) {
+        const next_sub_component = sub_sub_component_map[unit_id]
+
+        this.__mem_add_unit_component(next_unit_id, next_sub_component)
+      }
+    }
+
+    for (const unit_id in map_unit_id) {
+      const next_unit_id = map_unit_id[unit_id]
+
+      if (this._is_unit_component(next_unit_id)) {
+        this._sim_add_sub_component_to_parent(next_unit_id)
+      }
+    }
+
     const visible_selected_node_ids = selected_node_ids.filter((n_id) =>
       this._is_node_visible(n_id)
     )
@@ -36608,10 +36631,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { fork, bubble } = this.$props
 
-    if (this._is_unit_component(unit_id)) {
-      this._disconnect_sub_component(unit_id)
-    }
-
     const unit_pod = this._pod.$refUnit({
       unitId: unit_id,
       _: UCGEE,
@@ -36639,32 +36658,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._process_graph_active_merge_data(_mergeData)
 
       this._pod.$bulkEdit({ actions, fork, bubble })
-
-      for (const _unit_id in map_unit_id) {
-        const _next_unit_id = map_unit_id[_unit_id]
-
-        if (this._is_unit_component(_next_unit_id)) {
-          if (!this._component.$subComponent[_next_unit_id]) {
-            this._mem_add_unit_component(_next_unit_id, {})
-          }
-        }
-      }
-
-      for (const _unit_id in map_unit_id) {
-        const _next_unit_id = map_unit_id[_unit_id]
-
-        if (this._is_unit_component(_next_unit_id)) {
-          this._sim_add_sub_component_to_parent(_next_unit_id)
-        }
-      }
-
-      for (const _unit_id in map_unit_id) {
-        const _next_unit_id = map_unit_id[_unit_id]
-
-        if (this._is_unit_component(_next_unit_id)) {
-          this._connect_sub_component(_next_unit_id)
-        }
-      }
     })
   }
 
@@ -41490,8 +41483,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     delete this._core_component_frame[unit_id]
 
     delete this._resize_component_start_size[unit_id]
-
-    delete this._sub_component[unit_id]
   }
 
   private _sim_remove_sub_component_roots = (unit_id: string) => {
