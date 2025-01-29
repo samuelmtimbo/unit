@@ -846,7 +846,7 @@ export function _getTypeTree(
     }
   }
 
-  const placeholderTest = /^<(.+)>$/.exec(value)
+  const placeholderTest = /^<([^ <>]+)>$/.exec(value)
   if (placeholderTest) {
     const children = [getTree(placeholderTest[1])]
     return {

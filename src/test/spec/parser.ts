@@ -65,6 +65,7 @@ assert.deepEqual(getTreeNodeType('"a:b"'), TreeNodeType.StringLiteral)
 // assert.deepEqual(getTreeNodeType('"\\""'), TreeNodeType.StringLiteral)
 assert.deepEqual(getTreeNodeType('"\\""'), TreeNodeType.StringLiteral)
 assert.deepEqual(getTreeNodeType('"\r"'), TreeNodeType.StringLiteral)
+assert.deepEqual(getTreeNodeType('<A>|<B>'), TreeNodeType.Or)
 assert.deepEqual(
   getTreeNodeType(
     `"v=0\r\no=- 7652727450078372599 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 61198 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 201.26.26.115\r\na=candidate:2612718301 1 udp 2122262783 2804:431:e7c2:b2f3:c94:df00:ed4f:6843 54465 typ host generation 0 network-id 2 network-cost 10\r\na=candidate:1333116113 1 udp 2122194687 192.168.15.5 61198 typ host generation 0 network-id 1 network-cost 10\r\na=candidate:3110454533 1 udp 1685987071 201.26.26.115 61198 typ srflx raddr 192.168.15.5 rport 61198 generation 0 network-id 1 network-cost 10\r\na=candidate:3577288237 1 tcp 1518283007 2804:431:e7c2:b2f3:c94:df00:ed4f:6843 9 typ host tcptype active generation 0 network-id 2 network-cost 10\r\na=candidate:32915489 1 tcp 1518214911 192.168.15.5 9 typ host tcptype active generation 0 network-id 1 network-cost 10\r\na=ice-ufrag:YRMo\r\na=ice-pwd:Fwnv2ZDO0wzeeuDeWu+MVisV\r\na=fingerprint:sha-256 08:85:1D:A9:71:D2:CA:22:DD:76:E0:1D:59:CA:0E:E2:CA:93:3A:24:3B:09:28:F5:42:E5:D5:E7:79:C6:2B:E5\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"`
