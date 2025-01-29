@@ -311,8 +311,8 @@ export class PositionObserver_ implements PositionObserver {
     const update_parent = () => {
       const { offsetParent, parentElement } = element
 
-      // const targetParent = parentElement
-      const targetParent = offsetParent
+      const targetParent = parentElement
+      // const targetParent = offsetParent
 
       if (targetParent) {
         const scrollParentUnlisten: Unlisten[] = []
