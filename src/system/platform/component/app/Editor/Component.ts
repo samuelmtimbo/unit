@@ -408,6 +408,7 @@ import {
   ADD_PIN_TO_MERGE,
   ADD_UNIT,
   BULK_EDIT,
+  COVER_PIN,
   COVER_PIN_SET,
   COVER_UNIT_PIN_SET,
   EXPOSE_PIN,
@@ -3830,6 +3831,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           position,
           {},
           center_of_screen,
+          null,
           null
         )
 
@@ -3891,7 +3893,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const center_of_screen = position ?? this._jiggle_world_screen_center()
 
-    this._add_unit(new_unit_id, bundle, position, {}, center_of_screen, null)
+    this._add_unit(
+      new_unit_id,
+      bundle,
+      position,
+      {},
+      center_of_screen,
+      null,
+      null
+    )
 
     this._sim_add_sub_component(new_unit_id, {}, undefined, undefined)
 
@@ -3961,7 +3971,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const center_of_screen = position ?? this._jiggle_world_screen_center()
 
-      this._add_unit(new_unit_id, bundle, position, {}, center_of_screen, null)
+      this._add_unit(
+        new_unit_id,
+        bundle,
+        position,
+        {},
+        center_of_screen,
+        null,
+        null
+      )
 
       this._sim_add_sub_component(
         new_unit_id,
@@ -6101,6 +6119,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     },
     layout_position: Position,
     parent_id: string | null,
+    parent_index: number | null,
     emit: boolean = true
   ): void {
     // console.trace('Graph', '_add_unit')
@@ -6114,7 +6133,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       {},
       pin_position,
       layout_position,
-      parent_id
+      parent_id,
+      parent_index
     )
 
     emit && this._pod_add_unit(unit_id, bundle)
@@ -6131,7 +6151,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     },
     sub_component_layout_position: Position,
     sub_component_parent_id: string | null,
-    sub_component_index?: number,
+    sub_component_index: number | null,
     register: boolean = true,
     deep: boolean = true
   ): void {
@@ -6189,23 +6209,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   public add_unit(
     unit_id: string,
     bundle: UnitBundleSpec,
+    parent_id: string | null,
     position: Position,
     pin_position: UnitPinPosition = {
       input: {},
       output: {},
     },
-    layout_position: Position,
-    parent_id: string | null
+    layout_position: Position
   ): void {
+    const parent_index = parent_id
+      ? this._get_component_children_count(unit_id)
+      : this._spec_get_component_children_count()
+
     this._dispatch_action(
       makeAddUnitAction(
         unit_id,
         clone(bundle),
+        null,
+        null,
+        parent_id,
+        parent_index,
+        null,
+        null,
         position,
         pin_position,
-        layout_position,
-        parent_id,
-        {}
+        layout_position
       )
     )
 
@@ -6215,7 +6243,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       position,
       pin_position,
       layout_position,
-      parent_id
+      parent_id,
+      null
     )
   }
 
@@ -6226,11 +6255,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const position = this._get_node_position(unit_id)
     const pin_position = this._get_unit_pin_position(unit_id)
     const is_component = this._is_unit_component(unit_id)
+
     const layout_position = is_component
       ? this._get_layout_node_screen_position(unit_id)
       : this._screen_center()
     const layout_parent_id = is_component
       ? this._spec_get_sub_component_parent_id(unit_id)
+      : null
+    const layout_index = is_component
+      ? this._get_sub_component_index(unit_id)
+      : null
+    const layout_children = is_component
+      ? this._spec_get_sub_component_children(unit_id)
+      : null
+    const layout_children_slot = is_component
+      ? this._get_sub_component_children_slot(unit_id)
       : null
 
     const bundle = clone({ unit })
@@ -6239,11 +6278,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       makeAddUnitAction(
         unit_id,
         bundle,
+        {},
+        {},
+        layout_parent_id,
+        layout_index,
+        layout_children,
+        layout_children_slot,
         position,
         pin_position,
-        layout_position,
-        layout_parent_id,
-        {}
+        layout_position
       )
     )
   }
@@ -6255,12 +6298,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unit_plugs: GraphUnitPlugs,
     unit_parent_id: string | null,
     unit_index: number | null,
+    unit_children: string[],
+    unit_children_slot: Dict<string>,
     new_unit_id: string,
     new_unit_bundle: UnitBundleSpec,
     new_unit_merges: GraphUnitMerges,
     new_unit_plugs: GraphUnitPlugs,
     new_unit_parent_id: string | null,
-    new_unit_index: number | null
+    new_unit_index: number | null,
+    new_unit_children: string[],
+    new_unit_children_slot: Dict<string>
   ) => {
     const action = this._make_swap_unit_action(
       unit_id,
@@ -6269,12 +6316,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       unit_plugs,
       unit_parent_id,
       unit_index,
+      unit_children,
+      unit_children_slot,
       new_unit_id,
       new_unit_bundle,
       new_unit_merges,
       new_unit_plugs,
       new_unit_parent_id,
-      new_unit_index
+      new_unit_index,
+      new_unit_children,
+      new_unit_children_slot
     )
 
     this._dispatch_action(action)
@@ -6287,32 +6338,42 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unit_plugs: GraphUnitPlugs,
     unit_parent_id: string | null,
     unit_index: number | null,
+    unit_children: string[],
+    unit_children_slot: Dict<string>,
     new_unit_id: string,
     new_unit_bundle: UnitBundleSpec,
     new_unit_merges: GraphUnitMerges,
     new_unit_plugs: GraphUnitPlugs,
     new_unit_parent_id: string | null,
-    new_unit_index: number | null
+    new_unit_index: number | null,
+    new_unit_children: string[],
+    new_unit_children_slot: Dict<string>
   ) => {
     const remove_unit_actions = makeRemoveUnitAction(
       unit_id,
       unit_bundle,
-      undefined,
-      undefined,
-      undefined,
-      unit_parent_id,
       unit_merges,
-      unit_plugs
+      unit_plugs,
+      unit_parent_id,
+      unit_index,
+      unit_children,
+      unit_children_slot,
+      null,
+      null,
+      null
     )
     const add_unit_action = makeAddUnitAction(
       new_unit_id,
       new_unit_bundle,
-      undefined,
-      undefined,
-      undefined,
-      new_unit_parent_id,
       new_unit_merges,
-      new_unit_plugs
+      new_unit_plugs,
+      new_unit_parent_id,
+      new_unit_index,
+      new_unit_children,
+      new_unit_children_slot,
+      undefined,
+      undefined,
+      undefined
     )
 
     const actions: Action[] = [remove_unit_actions, add_unit_action]
@@ -6345,29 +6406,44 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { specs } = this.$props
 
     const unit = this._get_unit(unit_id)
+
     bundle = bundle ?? unitBundleSpec(unit, specs)
+
     const position = this._get_node_position(unit_id)
     const pin_position = this._get_unit_pin_position(unit_id)
     const is_component = this._is_unit_component(unit_id)
+    const merges = this._get_unit_merges(unit_id)
+    const plugs = this._get_unit_plugs(unit_id)
+
     const layout_position = is_component
       ? this._get_layout_node_screen_position(unit_id)
       : this._screen_center()
     const layout_parent_id = is_component
       ? this._spec_get_sub_component_parent_id(unit_id)
       : null
-    const merges = this._get_unit_merges(unit_id)
-    const plugs = this._get_unit_plugs(unit_id)
+    const layout_index = is_component
+      ? this._get_sub_component_index(unit_id)
+      : null
+    const layout_children = is_component
+      ? this._spec_get_sub_component_children(unit_id)
+      : null
+    const layout_children_slot = is_component
+      ? this._get_sub_component_children_slot(unit_id)
+      : null
 
     return clone(
       makeRemoveUnitAction(
         unit_id,
         bundle,
+        includeMerges ? merges : undefined,
+        includePlugs ? plugs : undefined,
+        layout_parent_id,
+        layout_index,
+        layout_children,
+        layout_children_slot,
         position,
         pin_position,
-        layout_position,
-        layout_parent_id,
-        includeMerges ? merges : undefined,
-        includePlugs ? plugs : undefined
+        layout_position
       )
     )
   }
@@ -17654,10 +17730,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             makeAddUnitAction(
               search_unit_id,
               search_unit_bundle,
-              undefined,
-              undefined,
-              undefined,
-              parent_id
+              null,
+              null,
+              parent_id,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
             ),
           ]
 
@@ -17693,12 +17774,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               search_start_unit_plugs,
               search_start_unit_parent_id,
               search_start_unit_index,
+              null,
+              null,
               search_unit_id,
               search_unit_bundle,
               search_unit_merges,
               search_unit_plugs,
               search_start_unit_parent_id,
-              search_start_unit_index
+              search_start_unit_index,
+              null,
+              null
             )
 
             if (did_spec_id_change) {
@@ -22122,23 +22207,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _get_layout_node_screen_position = (
     sub_component_id: string
   ): Position => {
-    const { $width, $height } = this.$context
+    const layout_node = this._layout_node[sub_component_id]
 
-    const graph_node = this._node[sub_component_id]
-
-    const { x: _x, y: _y, width: _width, height: _height } = graph_node
-
-    const position = this._world_to_screen(_x, _y)
-
-    const { x: __x, y: __y } = position
-
-    const parent_layout_layer =
-      this._ensure_parent_layout_layer(sub_component_id)
-
-    const { scrollTop = 0 } = parent_layout_layer.content.$element
-
-    const x = __x - $width / 2
-    const y = __y - $height / 2
+    const { x, y } = layout_node
 
     return { x, y }
   }
@@ -27750,8 +27821,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _action_buffer_cursor: number = -1
 
   private _dispatch_action = (action: Action): void => {
-    // console.log('Graph', '_dispatch_action', action)
-
     this._flush_debugger()
 
     if (this._action_buffer_cursor < this._action_buffer.length - 1) {
@@ -27815,6 +27884,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec_remove_exposed_sub_pin = (exposed_node_id: string): void => {
     const { pinId, type, subPinId } = segmentPlugNodeId(exposed_node_id)
 
+    this.__spec_remove_exposed_sub_pin(type, pinId, subPinId)
+  }
+
+  private __state_cover_pin = (type: IO, pinId: string, subPinId: string) => {
+    this.__state_remove_exposed_sub_pin(type, pinId, subPinId)
     this.__spec_remove_exposed_sub_pin(type, pinId, subPinId)
   }
 
@@ -28695,6 +28769,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       position,
       pin_position,
       layout_position,
+      null,
       null
     )
 
@@ -31377,6 +31452,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           sub_component_id,
           slot_children,
           slot_name,
+          true,
           () => NULL_VECTOR,
           () => true,
           () => {
@@ -31810,7 +31886,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.move_sub_component_root(parent_id, children, slot_name, at)
   }
 
-  private _get_sub_components_slot_map = (sub_component_ids): Dict<string> => {
+  private _get_sub_components_slot_map = (
+    sub_component_ids: string[]
+  ): Dict<string> => {
     const slot_map = {}
 
     for (const sub_component_id of sub_component_ids) {
@@ -31866,8 +31944,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     children: string[],
     slot_name: string = 'default',
     emit: boolean = true,
-    animate?: boolean
-  ): void => {
+    animate?: boolean,
+    callback?: Callback
+  ): Unlisten => {
     // console.log(
     //   'Graph',
     //   '_move_sub_component_root',
@@ -31883,6 +31962,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // this._cancel_tree_layout_animation()
 
     this._ensure_layout_layer(parent_id)
+
+    let finish: Unlisten
 
     const current_layer_id = this._get_current_layout_layer_id()
 
@@ -31957,9 +32038,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const maybe_finish = () => {
         if (parent_finished && children_finished) {
-          stop_parent_animation()
-          stop_children_animation()
-
           finish()
 
           return true
@@ -31993,6 +32071,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         parent_id,
         all_children,
         slot_name,
+        false,
         () => NULL_VECTOR,
         () => true,
         () => {
@@ -32002,7 +32081,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       )
 
-      const finish = () => {
+      finish = () => {
+        stop_parent_animation()
+        stop_children_animation()
+
         this._unplug_sub_component_root_base_frame(parent_id)
         this._append_sub_component_root_base(parent_id)
         this._enter_sub_component_frame(parent_id)
@@ -32022,6 +32104,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._layout_sub_components_commit_base(all_children)
         this._animate_all_current_layout_layer_node()
+
+        callback && callback()
       }
 
       let i = slot_children.length
@@ -32049,6 +32133,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (animate) {
       //
     } else {
+      finish = () => {
+        callback && callback()
+      }
+
       const parent_current_children =
         this._spec_get_sub_component_children(parent_id)
 
@@ -32085,6 +32173,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._refresh_layout_node_target_position(parent_id)
       this._force_layout_node_traits(parent_id)
     }
+
+    return finish
   }
 
   private _mem_append_sub_component_child = (
@@ -32870,6 +32960,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_component_id: string,
     children: string[],
     slot_name: string,
+    anticipate: boolean,
     offset: () => Point,
     include_scroll: () => boolean,
     callback: Callback
@@ -32911,6 +33002,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       children,
       pack,
       true,
+      anticipate,
       offset,
       include_scroll,
       callback
@@ -32923,6 +33015,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     children: string[],
     pack: [string, string, string, string][],
     expand: boolean,
+    anticipate: boolean,
     offset: () => Point,
     include_scroll: () => boolean,
     callback: Callback
@@ -32939,6 +33032,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         slot_name,
         pack,
         expand,
+        anticipate,
         offset,
         include_scroll
       )
@@ -33027,6 +33121,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       children,
       pack,
       expand,
+      true,
       () => ({ x: 0, y: 0 }),
       () => true,
       callback
@@ -33151,6 +33246,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _tick_animate_layout_move_children = (
     children: [string, string, string, string][],
     expand: boolean = true,
+    anticipate: boolean,
     setup: (leaf_id: string, parent_id: string, slot_name: string) => void,
     callback: (leaf_id: string, ended: boolean) => void,
     offset: () => Point,
@@ -33315,7 +33411,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         let target_trait: LayoutNode
 
         if (this._tree_layout) {
-          target_trait = clone(this._layout_target_node[target_id])
+          target_trait = anticipate
+            ? clone(this._layout_target_node[target_id])
+            : clone(this._layout_node[target_id])
 
           const { $width, $height } = this.$context
 
@@ -33384,12 +33482,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     slot_name: string,
     pack: [string, string, string, string][],
     expand: boolean,
+    anticipate: boolean,
     offset: () => Point,
     include_scroll: () => boolean
   ) => {
     return this._tick_animate_layout_move_children(
       pack,
       expand,
+      anticipate,
       (leaf_id, parent_id, slot_name) => {
         if (
           this._layout_transfer_parent_leaf_end_set[parent_id]?.[
@@ -33968,6 +34068,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { component: { children = [] } = {} } = this._spec
 
     return children
+  }
+
+  private _spec_get_component_children_count = (): number => {
+    const children = this._spec_get_component_children()
+
+    const count = children.length
+
+    return count
   }
 
   private _get_sub_component_spec_layer = (unit_id: string): string[] => {
@@ -34852,10 +34960,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.add_unit(
       new_unit_id,
       bundle,
+      null,
       position,
       pin_position,
-      layout_position,
-      null
+      layout_position
     )
 
     const { render } = partial_spec
@@ -37291,6 +37399,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     )
+
+    return finish
   }
 
   private __pod_add_pin_to_merge(
@@ -41760,8 +41870,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       removed_merge.add(merge_node_id)
 
       actions.push(this._make_remove_merge_action(merge_node_id))
-
-      this._dispatch_action_remove_merge(merge_node_id)
     }
 
     for (const unit_id of unit_ids) {
@@ -41779,8 +41887,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         if (is_component) {
           this._disconnect_sub_component(unit_id)
         }
-
-        this._dispatch_action_remove_unit(unit_id)
       }
     }
 
@@ -41854,6 +41960,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    this._execute_actions(actions, false)
+
     this._pod.$bulkEdit({ actions, fork, bubble })
 
     for (const datum_node_id of datum_node_ids) {
@@ -41872,10 +41980,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           datum_pin_node_id &&
           !link_pin_node_ids.includes(datum_pin_node_id)
         ) {
-          this._spec_remove_pin_data(datum_pin_node_id)
         }
-
-        this._sim_remove_datum(datum_node_id)
       }
     }
 
@@ -41888,7 +41993,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
         if (pin_count === 1 || pin_count === 0) {
           removed_exposed_pin_id[type].add(pinId)
-          this._sim_cover_pin_set(type, pinId)
         } else {
           if (
             !removed_exposed_sub_pin_id[type][pinId] ||
@@ -41897,7 +42001,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             removed_exposed_sub_pin_id[type][pinId] =
               removed_exposed_sub_pin_id[type][pinId] || new Set()
             removed_exposed_sub_pin_id[type][pinId].add(subPinId)
-            this.__sim_remove_exposed_sub_pin(type, pinId, subPinId)
           }
         }
       }
@@ -41915,7 +42018,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     for (const merge_node_id of merge_node_ids) {
-      this._sim_remove_merge(merge_node_id)
     }
 
     for (const unit_id of unit_ids) {
@@ -41923,11 +42025,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       if (merge_node_id) {
         const self_pin_node_id = getSelfPinNodeId(unit_id)
-
-        this._sim_remove_pin_or_merge(self_pin_node_id)
       }
-
-      this._state_remove_unit(unit_id)
     }
 
     for (const datum_node_id of datum_node_ids) {
@@ -41958,8 +42056,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         if (pin_count === 1 || pin_count === 0) {
           removed_exposed_pin_id[type].add(pinId)
-
-          this._spec_cover_pin_set(type, pinId)
         } else {
           if (
             !removed_exposed_sub_pin_id[type][pinId] ||
@@ -41968,8 +42064,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             removed_exposed_sub_pin_id[type][pinId] =
               removed_exposed_sub_pin_id[type][pinId] || new Set()
             removed_exposed_sub_pin_id[type][pinId].add(subPinId)
-
-            this.__spec_remove_exposed_sub_pin(type, pinId, subPinId)
           }
         }
       }
@@ -42055,6 +42149,27 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       type,
       pinId,
       pinSpec,
+      fork,
+      bubble,
+    })
+  }
+
+  private _pod_cover_pin = (
+    type: IO,
+    pinId: string,
+    subPinId: string
+  ): void => {
+    // console.log('Graph', '_pod_cover_pin', type, pinId, subPinId)
+
+    const { fork, bubble } = this.$props
+
+    const subPinSpec = this._spec_get_sub_pin_spec(type, pinId, subPinId)
+
+    this._pod.$coverPin({
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
       fork,
       bubble,
     })
@@ -46587,6 +46702,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         position,
         pin_position,
         layout_position,
+        null,
         null
       )
 
@@ -47994,10 +48110,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         makeAddUnitAction(
           graph_id,
           clone(new_bundle),
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
           position,
-          undefined,
-          undefined,
-          lowest_common_ancestor
+          null,
+          null
         )
       )
     }
@@ -48015,30 +48136,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     })
 
     return started
-  }
-
-  private _pod_move_unit_into = (
-    graph_id: string,
-    new_bundle,
-    collapse_map: GraphMoveSubGraphIntoData
-  ) => {
-    const { fork, bubble } = this.$props
-
-    const actions = []
-
-    if (!this._collapse_unit_id) {
-      actions.push(makeAddUnitAction(graph_id, new_bundle))
-    }
-
-    actions.push(wrapMoveSubgraphIntoData(collapse_map))
-
-    const action = makeBulkEditAction(actions)
-
-    this._pod.$bulkEdit({
-      actions,
-      fork,
-      bubble,
-    })
   }
 
   private _state_move_subgraph_into = (
@@ -51357,6 +51454,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       position,
       emptyIO({}, {}),
       layout_position,
+      null,
       null
     )
 
@@ -56047,7 +56145,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         bulk_actions.push(makeCloneUnitAction(source_unit_id, unit_id))
       } else {
-        bulk_actions.push(makeAddUnitAction(unit_id, bundle))
+        bulk_actions.push(
+          makeAddUnitAction(
+            unit_id,
+            bundle,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          )
+        )
       }
     }
 
@@ -56272,8 +56384,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _execute_action = (action: Action, emit: boolean): void => {
-    // console.log('Editor', '_execute_action', action)
-
     const { fork, bubble, getSpec, injectSpecs } = this.$props
 
     const { type, data } = clone(action)
@@ -56288,13 +56398,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             data.pinPosition,
             data.layoutPosition,
             data.parentId,
+            data.parentIndex,
             emit
           )
 
           if (this._is_unit_component(data.unitId)) {
             if (this._in_component_control) {
               this._sim_add_sub_component(data.unitId)
-
               this._connect_sub_component(data.unitId)
 
               if (this._tree_layout) {
@@ -56302,6 +56412,41 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 this._move_all_current_layout_node_target_position()
                 this._layout_scroll_search_unit_into_view()
                 this._refresh_search_list_height_offset()
+              }
+
+              const children = data.children ?? []
+
+              if (this._tree_layout) {
+                const animate = children.length > 0
+
+                const finish = this._move_sub_component_root(
+                  data.unitId,
+                  children,
+                  'default',
+                  false,
+                  animate,
+                  () => {
+                    this._animate_all_current_layout_layer_node()
+
+                    this._force_finish_last_action = undefined
+                  }
+                )
+
+                this._refresh_current_layout_node_target_position()
+                this._animate_all_current_layout_layer_node()
+
+                this._force_finish_last_action = () => {
+                  finish()
+
+                  this._force_finish_last_action = undefined
+
+                  this._refresh_current_layout_node_target_position()
+                  this._animate_all_current_layout_layer_node()
+                }
+              } else {
+                for (const child_id of children) {
+                  this._insert_sub_component_child(data.unitId, child_id)
+                }
               }
             }
           }
@@ -56456,6 +56601,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               data.subPinId,
               data.subPinSpec
             )
+        }
+        break
+      case COVER_PIN:
+        {
+          {
+            this.__state_cover_pin(data.type, data.pinId, data.subPinId)
+            emit && this._pod_cover_pin(data.type, data.pinId, data.subPinId)
+          }
         }
         break
       case EXPOSE_UNIT_PIN_SET:
@@ -57036,6 +57189,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._search) {
       this._search.stop_microphone()
     }
+  }
+
+  private _get_sub_component_children_slot = (sub_component_id: string) => {
+    const children = this._spec_get_sub_component_children(sub_component_id)
+
+    const children_slot_map = {}
+
+    for (const child_id of children) {
+      children_slot_map[child_id] = this._get_sub_component_slot_name(child_id)
+    }
+
+    return children_slot_map
   }
 
   private _get_sub_component_slot_name = (sub_component_id: string): string => {

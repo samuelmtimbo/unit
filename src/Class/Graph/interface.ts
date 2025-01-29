@@ -91,6 +91,9 @@ export type GraphAddUnitData = {
   pinPosition?: IOOf<Dict<Position>> | undefined
   layoutPosition?: Position | undefined
   parentId?: string | null | undefined
+  parentIndex?: number
+  children?: string[]
+  childrenSlot?: Dict<string>
   merges?: GraphUnitMerges | undefined
   plugs?: GraphUnitPlugs | undefined
   subComponent?: GraphSubComponentSpec
@@ -149,6 +152,9 @@ export type GraphRemoveUnitData = {
   pinPosition?: IOOf<Dict<Position>>
   layoutPosition?: Position
   parentId?: string | null
+  parentIndex?: number
+  children?: string[]
+  childrenSlot?: Dict<string>
   merges?: GraphMergesSpec
   plugs?: GraphUnitPlugs
   fork?: boolean

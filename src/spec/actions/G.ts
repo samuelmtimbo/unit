@@ -38,7 +38,6 @@ import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
-import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
@@ -66,10 +65,8 @@ import {
 } from './D'
 
 export const ADD_UNIT = 'addUnitSpec'
-export const ADD_UNITS = 'addUnits'
 export const REMOVE_UNIT = 'removeUnit'
 export const TAKE_UNIT_ERR = 'takeUnitErr'
-export const REMOVE_UNITS = 'removeUnits'
 export const ADD_MERGE = 'addMerge'
 export const ADD_MERGES = 'addMerges'
 export const ADD_PIN_TO_MERGE = 'addPinToMerge'
@@ -130,12 +127,15 @@ export const makeCloneUnitAction = (unitId: string, newUnitId: string) => {
 export const makeAddUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
-  position?: Position | undefined,
-  pinPosition?: IOOf<Dict<Position>> | undefined,
-  layoutPosition?: Position | undefined,
-  parentId?: string | null | undefined,
-  merges?: GraphUnitMerges | undefined,
-  plugs?: GraphUnitPlugs | undefined
+  merges: GraphUnitMerges | null,
+  plugs: GraphUnitPlugs | null,
+  parentId: string | null | null,
+  parentIndex: number | null,
+  children: string[] | null,
+  childrenSlot: Dict<string> | null,
+  position: Position | null,
+  pinPosition: IOOf<Dict<Position>> | null,
+  layoutPosition: Position | null
 ) => {
   return wrapAddUnitAction({
     unitId,
@@ -144,6 +144,9 @@ export const makeAddUnitAction = (
     pinPosition,
     layoutPosition,
     parentId,
+    parentIndex,
+    children,
+    childrenSlot,
     merges,
     plugs,
   })
@@ -282,15 +285,6 @@ export const makeMoveSubgraphOutOfAction = (
   })
 }
 
-export const makeAddUnitsAction = (units: GraphUnitsSpec) => {
-  return {
-    type: ADD_UNITS,
-    data: {
-      units,
-    },
-  }
-}
-
 export const wrapMakeRemoveUnitAction = (data: GraphRemoveUnitData) => {
   return {
     type: REMOVE_UNIT,
@@ -308,12 +302,15 @@ export const wrapMakeTakeUnitErrAction = (data: GraphTakeUnitErrData) => {
 export const makeRemoveUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
+  merges?: GraphMergesSpec,
+  plugs?: GraphUnitPlugs,
+  parentId?: string | null,
+  parentIndex?: number,
+  children?: string[],
+  childrenSlot?: Dict<string>,
   position?: Position,
   pinPosition?: IOOf<Dict<Position>>,
-  layoutPosition?: Position,
-  parentId?: string | null,
-  merges?: GraphMergesSpec,
-  plugs?: GraphUnitPlugs
+  layoutPosition?: Position
 ) => {
   return wrapMakeRemoveUnitAction({
     unitId,
@@ -322,6 +319,9 @@ export const makeRemoveUnitAction = (
     pinPosition,
     layoutPosition,
     parentId,
+    parentIndex,
+    children,
+    childrenSlot,
     merges,
     plugs,
   })
@@ -331,13 +331,6 @@ export const makeTakeUnitErrAction = (unitId: string) => {
   return wrapMakeTakeUnitErrAction({
     unitId,
   })
-}
-
-export const makeRemoveUnitsAction = (ids: string[]) => {
-  return {
-    type: REMOVE_UNITS,
-    data: { ids },
-  }
 }
 
 export const wrapExposePinAction = (data: GraphExposePinData) => {
@@ -803,32 +796,29 @@ export const reverseAction = ({ type, data }: Action): Action => {
       return makeRemoveUnitAction(
         data.unitId,
         data.bundle,
+        data.merges,
+        data.plugs,
+        data.parentId,
+        data.parentIndex,
+        data.children,
+        data.childrenSlot,
         data.position,
         data.pinPosition,
-        data.layoutPosition,
-        data.parentId,
-        data.merges,
-        data.plugs
+        data.layoutPosition
       )
-    case ADD_UNITS:
-      return makeRemoveUnitsAction(keys(data.units))
     case REMOVE_UNIT:
       return makeAddUnitAction(
         data.unitId,
         data.bundle,
+        data.merges,
+        data.plugs,
+        data.parentId,
+        data.parentIndex,
+        data.children,
+        data.childrenSlot,
         data.position,
         data.pinPosition,
-        data.layoutPosition,
-        data.parentId,
-        data.merges,
-        data.plugs
-      )
-    case REMOVE_UNITS:
-      return makeAddUnitsAction(
-        data.ids.reduce((acc, id) => {
-          acc[id] = data.units[id]
-          return acc
-        }, {})
+        data.layoutPosition
       )
     case REMOVE_UNIT_MERGES:
       return makeAddMergesAction(data.merges)
