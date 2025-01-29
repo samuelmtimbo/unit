@@ -20590,7 +20590,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       this._leaf_init_style[leaf_id] = style
-      this._leaf_style[leaf_id] = { ...leaf_style, ...inherit_style }
+      this._leaf_style[leaf_id] = { ...inherit_style, ...leaf_style }
 
       if (!is_text) {
         applyStyle(leaf_comp.$node as HTMLElement | SVGElement, {
