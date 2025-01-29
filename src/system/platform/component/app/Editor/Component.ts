@@ -20527,10 +20527,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const sub_component_collapse_next_slot_name =
         this._collapse_animation_next_parent_slot[sub_sub_component_id]
 
-      const sub_component_parent_id = this._tree_layout
-        ? this._spec_get_sub_component_parent_id(sub_component_id)
-        : null
-
       let parent_id = null
       let parent = null
       let slot_name = null
@@ -20540,11 +20536,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         slot_name = sub_component_collapse_next_slot_name
 
         parent = this._get_sub_component(parent_id)
-      } else if (sub_component_parent_id) {
-        parent_id = sub_component_parent_id
+      } else if (this._tree_layout) {
+        parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
 
         slot_name = this._get_sub_component_slot_name(sub_component_id)
         parent = this._get_sub_component(parent_id)
+      } else if (this._is_fullwindow) {
+        parent = this._frame
+
+        slot_name = 'default'
       } else if (sub_sub_component_id) {
         parent_id = sub_component.getSubComponentParentId(sub_sub_component_id)
 
@@ -20560,7 +20560,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       let inherit_style = {}
 
-      if (parent_id && !(leaf_comp instanceof Inherit)) {
+      if (parent && !(leaf_comp instanceof Inherit)) {
         let slot = parent.getLeafSlot(slot_name)
 
         do {
