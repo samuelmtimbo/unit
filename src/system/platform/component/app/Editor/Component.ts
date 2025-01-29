@@ -20542,9 +20542,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         slot_name = this._get_sub_component_slot_name(sub_component_id)
         parent = this._get_sub_component(parent_id)
       } else if (this._is_fullwindow) {
-        parent = this._frame
+        const [sub_component_id] = leaf_path
 
-        slot_name = 'default'
+        let p = this._spec_get_sub_component_parent_id(sub_component_id)
+        let root = false
+
+        do {
+          if (!p || !this._fullwindow_component_ids.includes(p)) {
+            root = true
+
+            break
+          }
+
+          p = this._spec_get_sub_component_parent_id(p)
+        } while (p)
+
+        if (root) {
+          parent = this._frame
+
+          slot_name = 'default'
+        }
       } else if (sub_sub_component_id) {
         parent_id = sub_component.getSubComponentParentId(sub_sub_component_id)
 
