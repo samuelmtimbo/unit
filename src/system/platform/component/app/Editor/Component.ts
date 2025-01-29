@@ -55708,11 +55708,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._spec_insert_component(parent_id, unit_id, at)
       } else {
-        const children = getSubComponentChildren(graph, parent_id)
+        const children = graph.component?.children ?? []
 
-        at = this._spec.component?.children?.length ?? 0
+        at = children.indexOf(unit_id)
 
-        this._spec_insert_component(parent_id, unit_id, at)
+        this._spec_insert_component(null, unit_id, at)
       }
     }
 
