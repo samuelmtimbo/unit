@@ -4784,7 +4784,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec_has_merge = (merge_node_id: string): boolean => {
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
-    return !!this._spec_get_merge(mergeId)
+    return this.__spec_has_merge(mergeId)
+  }
+
+  private __spec_has_merge = (merge_id: string): boolean => {
+    return !!this._spec_get_merge(merge_id)
   }
 
   private _spec_has_merge_pin = (
@@ -4798,10 +4802,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _spec_has_unit = (unit_id: string): boolean => {
     return !!this._get_unit(unit_id)
-  }
-
-  private __spec_has_merge = (merge_id: string): boolean => {
-    return !!this._spec_get_merge(merge_id)
   }
 
   private _spec_get_merge = (merge_id: string): GraphMergeSpec => {
@@ -10539,7 +10539,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const position = merge_position[merge_id]
 
-      // const has_merge = this.__spec_has_merge(merge_id)
       const has_merge = this._has_node(merge_node_id)
 
       if (!has_merge) {
@@ -56304,7 +56303,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const merge_id in merges) {
       const merge = merges[merge_id]
 
-      if (this._spec_has_merge(merge_id)) {
+      if (this.__spec_has_merge(merge_id)) {
         const merge_node_id = getMergeNodeId(merge_id)
 
         const merge_unit = merge[unit_id]
