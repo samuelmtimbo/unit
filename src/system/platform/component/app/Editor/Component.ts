@@ -22631,7 +22631,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
 
         if (
-          this._control._main.$element.contains(relatedTarget) &&
+          this._control?._main.$element.contains(relatedTarget) &&
           relatedTarget.classList.contains('data-tree-leaf')
         ) {
           return
