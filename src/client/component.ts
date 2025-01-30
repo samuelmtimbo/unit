@@ -607,8 +607,6 @@ export class Component<
       },
     } = this.$system
 
-    const allAbort = []
-
     let target = slot
 
     while (
@@ -651,8 +649,10 @@ export class Component<
 
     let targetTraits = tree.children.map((child) => child.value.trait)
 
-    let finished = 0
+    let finished = new Set<number>()
     let frames: HTMLDivElement[] = []
+
+    const allStop = []
 
     let j = 0
 
@@ -697,7 +697,7 @@ export class Component<
         target._$context.$element
       )
 
-      const abortAnimation = animateSimulate(
+      const stop = animateSimulate(
         this.$system,
         leafTrait,
         () => {
@@ -746,9 +746,15 @@ export class Component<
           frame.style.fontSize = `${fontSize}px`
         },
         () => {
-          finished++
+          if (finished.has(i)) {
+            return
+          }
 
-          if (finished === leaves.length) {
+          finished.add(i)
+
+          if (finished.size === leaves.length) {
+            stopAll()
+
             for (let i = 0; i < leaves.length; i++) {
               const frame = frames[i]
               const leaf = leaves[i]
@@ -763,10 +769,12 @@ export class Component<
         }
       )
 
-      allAbort.push(abortAnimation)
+      allStop.push(stop)
     }
 
-    return callAll(allAbort)
+    const stopAll = callAll(allStop)
+
+    return stopAll
   }
 
   register(remoteId: string) {
@@ -2983,10 +2991,6 @@ export class Component<
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
-    if (component.$detached) {
-      return
-    }
-
     this._domCommitChild__template(component, at, this._insertAt.bind(this))
   }
 
@@ -3635,10 +3639,6 @@ export class Component<
   }
 
   protected domCommitRemoveChild(component: Component, at: number) {
-    if (component.$detached) {
-      return
-    }
-
     if (component.isParent()) {
       for (const root of component.$root) {
         this.domCommitRemoveChild(root, at)
