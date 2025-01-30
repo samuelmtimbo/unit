@@ -27797,25 +27797,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _pod_remove_node = (node_id: string): void => {
-    if (this._is_unit_node_id(node_id)) {
-      const is_component = this._is_unit_component(node_id)
-
-      this._pod_remove_unit(node_id, is_component)
-    } else if (this._is_link_pin_node_id(node_id)) {
-      this._pod_set_unit_pin_ignored(node_id, true)
-    } else if (this._is_merge_node_id(node_id)) {
-      this._pod_remove_merge(node_id)
-    } else if (this._is_datum_node_id(node_id)) {
-      const { datum_pin_node_id, datum_plug_node_id } =
-        this._get_datum_connected(node_id)
-
-      this._pod_remove_datum(node_id, datum_pin_node_id, datum_plug_node_id)
-    } else if (this._is_plug_node_id(node_id)) {
-      this._pod_remove_exposed_sub_pin(node_id)
-    }
-  }
-
   private _action_buffer: Action[] = []
   private _action_buffer_cursor: number = -1
 
@@ -41842,6 +41823,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const pin = this._get_pin(type, pinId)
 
           actions.push(makeCoverPinSetAction(type, pinId, pin))
+
+          this._state_cover_pin_set(type, pinId)
         } else {
           if (
             !removed_exposed_sub_pin_id[type][pinId] ||
@@ -41860,6 +41843,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             actions.push(
               makeCoverPinAction(type, pinId, subPinId, sub_pin_spec)
             )
+
+            this.__state_cover_pin(type, pinId, subPinId)
           }
         }
       }
@@ -41869,6 +41854,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       removed_merge.add(merge_node_id)
 
       actions.push(this._make_remove_merge_action(merge_node_id))
+
+      this._state_remove_merge(merge_node_id)
     }
 
     for (const unit_id of unit_ids) {
@@ -41882,6 +41869,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const is_component = this._is_unit_component(unit_id)
 
         actions.push(this._make_remove_unit_action(unit_id))
+
+        this._state_remove_unit(unit_id)
 
         if (is_component) {
           this._disconnect_sub_component(unit_id)
@@ -41959,8 +41948,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    this._execute_actions(actions, false)
-
     this._pod.$bulkEdit({ actions, fork, bubble })
 
     for (const datum_node_id of datum_node_ids) {
@@ -41986,28 +41973,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    removed_exposed_sub_pin_id = emptyIO({}, {})
-    removed_exposed_pin_id = { input: new Set(), output: new Set() }
-
-    for (const exposed_pin_node_id of exposed_node_ids) {
-      const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
-      if (!removed_exposed_pin_id[type].has(pinId)) {
-        const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
-        if (pin_count === 1 || pin_count === 0) {
-          removed_exposed_pin_id[type].add(pinId)
-        } else {
-          if (
-            !removed_exposed_sub_pin_id[type][pinId] ||
-            !removed_exposed_sub_pin_id[type][pinId].has(subPinId)
-          ) {
-            removed_exposed_sub_pin_id[type][pinId] =
-              removed_exposed_sub_pin_id[type][pinId] || new Set()
-            removed_exposed_sub_pin_id[type][pinId].add(subPinId)
-          }
-        }
-      }
-    }
-
     for (const err_id of err_node_ids) {
       const { unitId } = segmentErrNodeId(err_id)
 
@@ -42025,18 +41990,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     this._dispatch_action(makeBulkEditAction(actions))
-  }
-
-  private _spec_remove_nodes = (node_ids: string[]) => {
-    for (const node_id of node_ids) {
-      this._spec_remove_node(node_id)
-    }
-  }
-
-  private _pod_remove_nodes = (node_ids: string[]) => {
-    for (const node_id of node_ids) {
-      this._pod_remove_node(node_id)
-    }
   }
 
   private _sim_cover_pin_set = (type: IO, pin_id: string): void => {
@@ -48787,7 +48740,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._on_graph_unit_remove_unit_moment({
           unitId,
           bundle,
-          destroy,
           path: [graph_id],
         })
       },
@@ -56333,6 +56285,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _execute_action = (action: Action, emit: boolean): void => {
+    // console.log('_execute_action', action, emit)
+
     const { fork, bubble, getSpec, injectSpecs } = this.$props
 
     const { type, data } = clone(action)
@@ -56340,6 +56294,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     switch (type) {
       case ADD_UNIT:
         {
+          const actions = []
+
           this._add_unit(
             data.unitId,
             data.bundle,
@@ -56348,7 +56304,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             data.layoutPosition,
             data.parentId,
             data.parentIndex,
-            emit
+            false
+          )
+
+          actions.push(
+            makeAddUnitAction(
+              data.unitId,
+              data.bundle,
+              null,
+              null,
+              data.parentId,
+              data.parentIndex,
+              null,
+              null,
+              null,
+              null,
+              null
+            )
           )
 
           if (this._is_unit_component(data.unitId)) {
@@ -56364,6 +56336,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
 
               const children = data.children ?? []
+              const childrenSlot = data.childrenSlot ?? {}
 
               if (this._tree_layout) {
                 const animate = children.length > 0
@@ -56381,6 +56354,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                   }
                 )
 
+                actions.push(
+                  makeMoveSubComponentRootAction(
+                    data.unitId,
+                    {},
+                    children,
+                    0,
+                    data.childrenSlot,
+                    {}
+                  )
+                )
+
                 this._refresh_current_layout_node_target_position()
                 this._animate_all_current_layout_layer_node()
 
@@ -56393,15 +56377,54 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                   this._animate_all_current_layout_layer_node()
                 }
               } else {
+                let i = 0
+
                 for (const child_id of children) {
-                  this._insert_sub_component_child(data.unitId, child_id)
+                  const slot_name = childrenSlot[child_id] ?? 'default'
+
+                  this._mem_place_parent_root(
+                    data.unitId,
+                    child_id,
+                    slot_name,
+                    i
+                  )
                 }
+
+                i++
               }
             }
           }
 
-          this._add_unit_merges(data.unitId, data.merges ?? {}, emit)
-          this._add_unit_plugs(data.unitId, data.plugs ?? {}, emit)
+          const merges = data.merges ?? {}
+          const plugs = data.plugs ?? {}
+
+          this._add_unit_merges(data.unitId, merges, false)
+          this._add_unit_plugs(data.unitId, plugs, false)
+
+          for (const merge_id in merges) {
+            const merge = merges[merge_id]
+
+            actions.push(makeAddMergeAction(merge_id, merge))
+          }
+
+          forIOObjKV(
+            plugs,
+            (type, unitPinId, { pinId, kind = type, subPinId }) => {
+              actions.push(
+                makePlugPinAction(type, pinId, subPinId, {
+                  unitId: data.unitId,
+                  kind,
+                  pinId: unitPinId,
+                })
+              )
+            }
+          )
+
+          if (emit) {
+            const { fork, bubble } = this.$props
+
+            this._pod.$bulkEdit({ actions, fork, bubble })
+          }
         }
         break
       case REMOVE_UNIT:
@@ -56690,9 +56713,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         break
       case BULK_EDIT:
         {
+          this._plunk_pod()
+
           emit && this._pod.$bulkEdit(clone(data))
 
           this._execute_actions(data.actions, false)
+
+          this._listen_pod(this._pod)
         }
         break
       case SET_UNIT_SIZE:
@@ -59402,7 +59429,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { setSpec, getSpec, specs, parent } = this.$props
 
-    const { unitId, bundle, path, parentId } = data
+    let {
+      path,
+      unitId,
+      bundle,
+      merges = {},
+      plugs = {},
+      parentId,
+      parentIndex,
+      children = [],
+      childrenSlot = {},
+    } = data
+
+    merges = merges ?? {}
+    plugs = plugs ?? {}
+    children = children ?? []
+    childrenSlot = childrenSlot ?? {}
 
     const added_unit_spec_id = bundle.unit.id
 
@@ -59446,13 +59488,32 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         setSubComponent({ unitId, subComponent: {} }, next_spec.component)
 
         if (parentId) {
-          appendSubComponentChild(
-            { parentId, childId: unitId },
-            next_spec.component
-          )
+          if (parentIndex === null || parentIndex === undefined) {
+            appendSubComponentChild(
+              { parentId, childId: unitId },
+              next_spec.component
+            )
+          } else {
+            insertSubComponentChild(
+              { parentId, childId: unitId, at: parentIndex },
+              next_spec.component
+            )
+          }
         } else {
-          appendRoot({ childId: unitId }, next_spec.component)
+          if (parentIndex === null || parentIndex === undefined) {
+            appendRoot({ childId: unitId }, next_spec.component)
+          } else {
+            insertRoot(
+              { childId: unitId, at: parentIndex },
+              next_spec.component
+            )
+          }
         }
+
+        moveSubComponentRoot(
+          { parentId: unitId, children, slotMap: childrenSlot, index: 0 },
+          next_spec.component
+        )
 
         const { component: added_component_spec } = added_unit_spec
 
@@ -59465,6 +59526,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         next_spec.type = `\`U\`&\`G\`&\`C\``
       }
+
+      for (const mergeId in merges) {
+        const mergeSpec = merges[mergeId]
+
+        addMerge({ mergeId, mergeSpec }, next_spec)
+      }
+
+      forIOObjKV(plugs, (type, unitPinId, { pinId, kind = type, subPinId }) => {
+        plugPin(
+          {
+            type,
+            pinId,
+            subPinId,
+            subPinSpec: { unitId, kind, pinId: unitPinId },
+          },
+          next_spec
+        )
+      })
 
       setSpec(next_spec.id, next_spec)
 
@@ -59986,7 +60065,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { setSpec, specs, parent, unregisterUnit } = this.$props
 
-    const { bundle, path, unitId, destroy = true } = data
+    const { bundle, path, unitId } = data
 
     const _specs = weakMerge(bundle.specs ?? {}, specs)
 
@@ -61887,6 +61966,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
           setUnitSize: (data) => {
             this._on_graph_unit_set_unit_size({ ...data, path })
+          },
+          setUnitPinData: (data) => {
+            this._on_graph_unit_set_unit_pin_data({ ...data, path })
           },
           setComponentSize: (data) => {
             this._on_graph_unit_set_component_size(data)

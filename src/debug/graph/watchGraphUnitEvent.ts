@@ -1,14 +1,11 @@
 import { Graph } from '../../Class/Graph'
+import { GraphAddUnitData } from '../../Class/Graph/interface'
 import { Unit } from '../../Class/Unit'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Moment } from './../Moment'
 
-export interface GraphAddUnitMomentData {
-  unitId: string
-  bundle: UnitBundleSpec
+export interface GraphAddUnitMomentData extends GraphAddUnitData {
   path: string[]
-  destroy?: boolean
-  parentId?: string
 }
 
 export interface GraphAddUnitMoment extends Moment<GraphAddUnitMomentData> {}

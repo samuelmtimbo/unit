@@ -27,7 +27,6 @@ import {
   GraphUnplugPinData,
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry/types'
-import { keys } from '../../system/f/object/Keys/f'
 import { GraphSubPinSpec } from '../../types'
 import { Action } from '../../types/Action'
 import { AllKeys } from '../../types/AllKeys'
@@ -68,7 +67,6 @@ export const ADD_UNIT = 'addUnitSpec'
 export const REMOVE_UNIT = 'removeUnit'
 export const TAKE_UNIT_ERR = 'takeUnitErr'
 export const ADD_MERGE = 'addMerge'
-export const ADD_MERGES = 'addMerges'
 export const ADD_PIN_TO_MERGE = 'addPinToMerge'
 export const REMOVE_PIN_FROM_MERGE = 'removePinFromMerge'
 export const REMOVE_MERGE = 'removeMerge'
@@ -93,7 +91,6 @@ export const SET_PIN_SET_REF = 'setPinSetRef'
 export const SET_METADATA = 'setMetadata'
 export const SET_UNIT_METADATA = 'setUnitMetadata'
 export const BULK_EDIT = 'bulkEdit'
-export const REMOVE_UNIT_MERGES = 'removeUnitMerges'
 export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
 export const MOVE_SUBGRAPH_INTO = 'moveSubgraphInto'
@@ -706,15 +703,6 @@ export const wrapRemoveMergeDataAction = (data: GraphRemoveMergeDataData) => {
   }
 }
 
-export const makeAddMergesAction = (merges: GraphMergesSpec): Action => {
-  return {
-    type: ADD_MERGES,
-    data: {
-      merges,
-    },
-  }
-}
-
 export const makeRemoveMergesAction = (ids: string[]): Action => {
   return {
     type: REMOVE_MERGES,
@@ -768,15 +756,6 @@ export const makeRemovePinFromMergeAction = (
   })
 }
 
-export const makeRemoveUnitMergesAction = (id: string): Action => {
-  return {
-    type: REMOVE_UNIT_MERGES,
-    data: {
-      id,
-    },
-  }
-}
-
 export const wrapBulkEditData = (data: GraphBulkEditData) => {
   return {
     type: BULK_EDIT,
@@ -820,12 +799,8 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinPosition,
         data.layoutPosition
       )
-    case REMOVE_UNIT_MERGES:
-      return makeAddMergesAction(data.merges)
     case ADD_MERGE:
       return makeRemoveMergeAction(data.mergeId, data.mergeSpec, data.position)
-    case ADD_MERGES:
-      return makeRemoveMergesAction(keys(data.merges))
     case ADD_PIN_TO_MERGE:
       return makeRemovePinFromMergeAction(
         data.mergeId,
@@ -850,6 +825,13 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinId,
         data.pinSpec,
         data.data
+      )
+    case COVER_PIN:
+      return makeExposePinAction(
+        data.type,
+        data.pinId,
+        data.subPinId,
+        data.subPinSpec
       )
     case PLUG_PIN:
       return makeUnplugPinAction(
