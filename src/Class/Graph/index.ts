@@ -3120,7 +3120,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     emit && this.edit('add_unit', unitId, bundle, unit, [])
 
     if (this._transacting) {
-      this._transaction.push(makeAddUnitAction(unitId, bundle))
+      this._transaction.push(
+        makeAddUnitAction(
+          unitId,
+          bundle,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        )
+      )
     }
   }
 
