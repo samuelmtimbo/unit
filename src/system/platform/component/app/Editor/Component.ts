@@ -41979,7 +41979,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           datum_pin_node_id &&
           !link_pin_node_ids.includes(datum_pin_node_id)
         ) {
+          this._spec_remove_pin_data(datum_pin_node_id)
         }
+
+        this._sim_remove_datum(datum_node_id)
       }
     }
 
@@ -42009,6 +42012,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { unitId } = segmentErrNodeId(err_id)
 
       this._sim_remove_unit_err(unitId)
+
       this._refresh_node_color(unitId)
 
       if (!unit_ids.includes(unitId)) {
@@ -42016,62 +42020,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    for (const merge_node_id of merge_node_ids) {
-    }
-
-    for (const unit_id of unit_ids) {
-      const merge_node_id = this._ref_unit_to_merge[unit_id]
-
-      if (merge_node_id) {
-        const self_pin_node_id = getSelfPinNodeId(unit_id)
-      }
-    }
-
     for (const datum_node_id of datum_node_ids) {
       this._spec_remove_datum(datum_node_id)
-    }
-
-    removed_exposed_sub_pin_id = emptyIO({}, {})
-    removed_exposed_pin_id = { input: new Set(), output: new Set() }
-
-    const referenced_exposed_pin_count: IOOf<Dict<number>> = {
-      input: {},
-      output: {},
-    }
-
-    for (const exposed_pin_node_id of exposed_node_ids) {
-      const { type, pinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-      const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
-
-      deepSet(referenced_exposed_pin_count, [type, pinId], pin_count)
-    }
-
-    for (const exposed_pin_node_id of exposed_node_ids) {
-      const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-      if (!removed_exposed_pin_id[type].has(pinId)) {
-        const pin_count = deepGet(referenced_exposed_pin_count, [type, pinId])
-
-        if (pin_count === 1 || pin_count === 0) {
-          removed_exposed_pin_id[type].add(pinId)
-        } else {
-          if (
-            !removed_exposed_sub_pin_id[type][pinId] ||
-            !removed_exposed_sub_pin_id[type][pinId].has(subPinId)
-          ) {
-            removed_exposed_sub_pin_id[type][pinId] =
-              removed_exposed_sub_pin_id[type][pinId] || new Set()
-            removed_exposed_sub_pin_id[type][pinId].add(subPinId)
-          }
-        }
-      }
-    }
-
-    for (const merge_node_id of merge_node_ids) {
-      const { mergeId } = segmentMergeNodeId(merge_node_id)
-
-      this._spec_remove_merge(mergeId)
     }
 
     this._dispatch_action(makeBulkEditAction(actions))
