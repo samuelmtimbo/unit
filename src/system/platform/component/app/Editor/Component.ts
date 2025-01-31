@@ -52914,7 +52914,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       isPinRef: (type: IO, pinId: string): boolean => {
         const { specs } = this.$props
 
-        return isPinRef({ type, pinId }, spec, specs, new Set())
+        return isPinRef({ type, pinId }, unit_spec, specs, new Set())
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
