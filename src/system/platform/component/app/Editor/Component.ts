@@ -41022,7 +41022,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const datum_node_id = getDatumNodeId(datum_id)
 
     if (this._dispatch_add_datum_on_commit) {
-      this._dispatch_action(makeAddDatumAction(datum_id, tree.value))
+      if (tree.value) {
+        this._dispatch_action(makeAddDatumAction(datum_id, tree.value))
+      }
     }
 
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
