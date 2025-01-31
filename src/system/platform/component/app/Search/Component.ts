@@ -1074,7 +1074,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     0
   )
 
-  private _filter_list = (preserve_selected: boolean = false) => {
+  private _filter_list = (preserve_selected: boolean = true) => {
     // console.log('Search', '_filter_list')
 
     const { specs } = this._registry

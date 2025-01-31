@@ -29276,10 +29276,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     )
 
-    this._set_search_text('')
-    this._set_search_filter(filter)
-    this._set_search_selected(spec_id)
-    this._show_search()
+    setTimeout(() => {
+      this._set_search_text('')
+      this._set_search_selected(spec_id)
+      this._set_search_filter(filter)
+      this._show_search()
+    }, 1)
   }
 
   private _make_compatible_search_filter = (
