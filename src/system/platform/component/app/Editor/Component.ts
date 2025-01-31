@@ -56166,6 +56166,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     })
 
+    for (const datum_id in data) {
+      const value = data[datum_id]
+
+      bulk_actions.push(makeAddDatumAction(datum_id, value))
+    }
+
     return bulk_actions
   }
 
