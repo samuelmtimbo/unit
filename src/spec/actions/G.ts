@@ -204,64 +204,17 @@ export const makeMoveSubgraphOutOfAction = (
   graphBundle: UnitBundleSpec,
   graphSpec: GraphSpec,
   nextSpecId: string,
-  nodeIds: {
-    merge: string[]
-    link: {
-      unitId: string
-      type: IO
-      pinId: string
-    }[]
-    unit: string[]
-    plug: {
-      type: IO
-      pinId: string
-      subPinId: string
-    }[]
-  },
-  nextIdMap: {
-    merge: Dict<string>
-    link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-    plug: IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
-    unit: Dict<string>
-  },
-  nextUnitPinMergeMap: Dict<IOOf<Dict<string>>>,
-  nextPinIdMap: Dict<{
-    input: Dict<{
-      pinId: string
-      subPinId: string
-      ref?: boolean
-      defaultIgnored?: boolean
-    }>
-    output: Dict<{
-      pinId: string
-      subPinId: string
-      ref?: boolean
-      defaultIgnored?: boolean
-    }>
-  }>,
-  nextMergePinId: Dict<{
-    input: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-      ref?: boolean
-    }
-    output: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-      ref?: boolean
-    }
-  }>,
-  nextPlugSpec: {
-    input: Dict<Dict<GraphSubPinSpec>>
-    output: Dict<Dict<GraphSubPinSpec>>
-  },
-  nextSubComponentParentMap: Dict<string | null>,
-  nextSubComponentChildrenMap: Dict<string[]>,
-  nextSubComponentIndexMap: Dict<number>,
-  nextSubComponentSlot: GraphMoveSubGraphIntoData['nextSubComponentSlot'],
-  nextSubComponentParentSlot: GraphMoveSubGraphIntoData['nextSubComponentParentSlot']
+  nodeIds: GraphMoveSubGraphOutOfData['nodeIds'],
+  nextIdMap: GraphMoveSubGraphOutOfData['nextIdMap'],
+  nextUnitPinMergeMap: GraphMoveSubGraphOutOfData['nextUnitPinMergeMap'],
+  nextPinIdMap: GraphMoveSubGraphOutOfData['nextPinIdMap'],
+  nextMergePinId: GraphMoveSubGraphOutOfData['nextMergePinId'],
+  nextPlugSpec: GraphMoveSubGraphOutOfData['nextPlugSpec'],
+  nextSubComponentParentMap: GraphMoveSubGraphOutOfData['nextSubComponentParentMap'],
+  nextSubComponentChildrenMap: GraphMoveSubGraphOutOfData['nextSubComponentChildrenMap'],
+  nextSubComponentIndexMap: GraphMoveSubGraphOutOfData['nextSubComponentIndexMap'],
+  nextSubComponentSlot: GraphMoveSubGraphOutOfData['nextSubComponentSlot'],
+  nextSubComponentParentSlot: GraphMoveSubGraphOutOfData['nextSubComponentParentSlot']
 ) => {
   return wrapMoveSubgraphOutOfData({
     graphId,
@@ -909,38 +862,66 @@ export const reverseAction = ({ type, data }: Action): Action => {
       const data_ = data as GraphMoveSubGraphIntoData
 
       const nextNodeIds_ = {
-        ...data.nodeIds,
-        unit: data.nodeIds.unit.map(
-          (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
+        ...data_.nodeIds,
+        unit: data_.nodeIds.unit.map(
+          (unitId: string) => data_.nextIdMap.unit[unitId] ?? unitId
         ),
-        link: data.nodeIds.link.filter(({ unitId, type, pinId }) => {
-          if (!data.nodeIds.unit.includes(unitId)) {
+        link: data_.nodeIds.link.filter(({ unitId, type, pinId }) => {
+          if (!data_.nodeIds.unit.includes(unitId)) {
             return false
           }
 
           return true
         }),
-        plug: data.nodeIds.plug.concat(
-          data.nodeIds.link
-            .filter(({ unitId, type, pinId }) => {
-              if (!data.nodeIds.unit.includes(unitId)) {
-                return true
+        plug: data_.nodeIds.plug
+          .concat(
+            data_.nodeIds.link
+              .filter(({ unitId, type, pinId }) => {
+                if (!data_.nodeIds.unit.includes(unitId)) {
+                  return true
+                }
+
+                return false
+              })
+              .map(({ unitId, type, pinId }) => {
+                return {
+                  type: opposite(type),
+                  pinId,
+                  subPinId: '0',
+                }
+              })
+          )
+          .concat(
+            (() => {
+              const mergePlugsOut = []
+
+              for (const mergeId of data_.nodeIds.merge) {
+                const nextMergePinSpec = data_.nextMergePinId[mergeId]
+
+                if (nextMergePinSpec.input && nextMergePinSpec.input.pinId) {
+                  mergePlugsOut.push({
+                    type: 'input',
+                    pinId: nextMergePinSpec.input.pinId,
+                    subPinId: '0',
+                  })
+                }
+
+                if (nextMergePinSpec.output && nextMergePinSpec.output.pinId) {
+                  mergePlugsOut.push({
+                    type: 'output',
+                    pinId: nextMergePinSpec.output.pinId,
+                    subPinId: '0',
+                  })
+                }
               }
 
-              return false
-            })
-            .map(({ unitId, type, pinId }) => {
-              return {
-                type: opposite(type),
-                pinId,
-                subPinId: '0',
-              }
-            })
-        ),
+              return mergePlugsOut
+            })()
+          ),
       }
 
       const nextIdMap_ = {
-        ...data.nextIdMap,
+        ...data_.nextIdMap,
         unit: revertObj(data.nextIdMap.unit ?? {}),
         merge: revertObj(data.nextIdMap.merge ?? {}),
       }
@@ -988,8 +969,6 @@ export const reverseAction = ({ type, data }: Action): Action => {
       forEachPinOnMerges(
         data_.graphSpec.merges ?? {},
         (mergeId, unitId, type, pinId) => {
-          const nextUnitId = nextIdMap_.unit[unitId] ?? unitId
-
           deepSet(nextUnitPinMergeMap_, [unitId, type, pinId], mergeId)
         }
       )

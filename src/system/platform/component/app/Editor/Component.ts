@@ -49873,9 +49873,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const next_merge_set = new Set<string>()
 
-    const opposite_merge_id_blacklist = new Set<string>(
-      keys(this._spec.merges ?? {})
-    )
+    const opposite_merge_id_blacklist = new Set<string>()
 
     const new_pin_id = (type: IO, pin_id: string): string => {
       let next_pin_id = pin_id
@@ -50335,7 +50333,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             start_merge_anchor_pin_id = start_merge_anchor.unit_id
           }
 
-          const next_pin_id =
+          const next_opposite_pin_id =
             deepGetOrDefault(
               next_merge_pin_id,
               [mergeId, opposite_type_, 'pinId'],
@@ -50350,16 +50348,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               graph_spec_pin_id_set[opposite_type_]
             )
 
-          graph_spec_pin_id_set[opposite_type_].add(next_pin_id)
+          graph_spec_pin_id_set[opposite_type_].add(next_opposite_pin_id)
 
-          merge_to_exposed_pin_id[opposite_type_][merge_node_id] = next_pin_id
+          merge_to_exposed_pin_id[opposite_type_][merge_node_id] =
+            next_opposite_pin_id
 
-          let next_merge_id = newMergeIdInSpec(
+          let next_opposite_merge_id: string = newMergeIdInSpec(
             next_spec,
             opposite_merge_id_blacklist
           )
 
-          let next_merge_sub_pin_spec: GraphSubPinSpec = {}
+          let next_opposite_merge_sub_pin_spec: GraphSubPinSpec = {}
 
           if (merge_collapse_unit_inside_pin_count[opposite_type_] === 0) {
             if (
@@ -50370,11 +50369,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             ) {
               const _next_merge_id = next_id_map.merge[mergeId] ?? mergeId
 
-              next_merge_sub_pin_spec = {
+              next_opposite_merge_sub_pin_spec = {
                 mergeId: _next_merge_id,
               }
             } else {
-              next_merge_sub_pin_spec = {}
+              next_opposite_merge_sub_pin_spec = {}
             }
           } else if (
             merge_collapse_unit_inside_pin_count[opposite_type_] +
@@ -50384,7 +50383,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           ) {
             const _next_merge_id = next_id_map.merge[mergeId] ?? mergeId
 
-            next_merge_sub_pin_spec = {
+            next_opposite_merge_sub_pin_spec = {
               mergeId: _next_merge_id,
             }
           } else if (
@@ -50394,21 +50393,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               merge_collapse_unit_inside_pin[opposite_type_][0]
 
             if (unit_id !== graph_unit_id) {
-              next_merge_sub_pin_spec = {
+              next_opposite_merge_sub_pin_spec = {
                 unitId: unit_id,
                 pinId: pin_id,
                 kind: opposite_type_,
               }
             } else {
-              next_merge_id = mergeId
+              next_opposite_merge_id = mergeId
             }
           } else {
             //
           }
 
-          opposite_merge_id_blacklist.add(next_merge_id)
+          opposite_merge_id_blacklist.add(next_opposite_merge_id)
 
-          next_merge_set.add(next_merge_id)
+          next_merge_set.add(next_opposite_merge_id)
 
           const opposite_merge = {}
 
@@ -50419,9 +50418,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           })
 
           deepSet(next_merge_pin_id, [mergeId, opposite_type_], {
-            mergeId: next_merge_id,
-            pinId: next_pin_id,
-            subPinSpec: next_merge_sub_pin_spec,
+            mergeId: next_opposite_merge_id,
+            pinId: next_opposite_pin_id,
+            subPinSpec: next_opposite_merge_sub_pin_spec,
             oppositeMerge: opposite_merge,
             ref,
           })
@@ -50699,7 +50698,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             opposite_merge_id = mergeId
           } else {
-            opposite_merge_id = this._new_merge_id(opposite_merge_id_blacklist)
+            opposite_merge_id = this._new_merge_id(
+              new Set([
+                ...opposite_merge_id_blacklist,
+                ...keys(this._spec.merges ?? {}),
+              ])
+            )
           }
 
           opposite_merge_id_blacklist.add(opposite_merge_id)

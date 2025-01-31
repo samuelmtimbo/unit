@@ -4,6 +4,7 @@ import {
   getMergePinCount,
   getMergeTypePinCount,
   getMergeUnitPinCount,
+  getUnitMergesSpec,
   isEmptyMerge,
   isSelfPin,
   opposite,
@@ -185,7 +186,15 @@ export function moveUnit(
         mergeId && (!ignoredMerge.has(mergeId) || reverse)
 
       if (reverse) {
-        //
+        if (nextPinId && nextSubPinId) {
+          const count = source.getPinPlugCount(type, nextPinId)
+
+          if (count === 1) {
+            source.coverPinSet(type, nextPinId, false, false, false)
+          } else {
+            source.coverPin(type, nextPinId, nextSubPinId, false, false, false)
+          }
+        }
       } else {
         if (target.hasPinNamed(type, nextPinId)) {
           //
@@ -809,7 +818,11 @@ export function moveMerge(
     if (mergePinCount === 0 || pinIntoCount > 1) {
       const propagate = mergeIsRef
 
-      target.addMerge(nextMerge, nextMergeId, false, propagate, false, false)
+      const nextMergePinCount = getMergePinCount(nextMerge)
+
+      if (nextMergePinCount) {
+        target.addMerge(nextMerge, nextMergeId, false, propagate, false, false)
+      }
     }
   } else {
     if (
@@ -849,7 +862,7 @@ export function moveMerge(
     if (pinId && subPinSpec) {
       if (reverse) {
         if (target.hasMergePin(_mergeId, graphId, type, pinId)) {
-          target.removeMerge(_mergeId, false, false)
+          target.removePinOrMerge(_mergeId, graphId, type, pinId, false, false)
         }
 
         for (const graphMergeId in graphMerges) {
@@ -1260,6 +1273,34 @@ export function movePlug(
   }
 
   if (!nextSubPinSpec) {
+    if (source.hasPinNamed(type, pinId)) {
+      const spec = target.getSpec() as GraphMergeSpec
+
+      const graphMerges = getUnitMergesSpec(spec, graphId)
+
+      const plugCount = source.getPinPlugCount(type, pinId)
+
+      if (plugCount === 1) {
+        for (const mergeId in graphMerges) {
+          const merge = graphMerges[mergeId]
+
+          if (deepGetOrDefault(merge, [graphId, type, pinId], undefined)) {
+            target.removePinOrMerge(
+              mergeId,
+              graphId,
+              type,
+              pinId,
+              false,
+              false,
+              false
+            )
+          }
+        }
+
+        source.coverPinSet(type, pinId, false, false, false)
+      }
+    }
+
     return
   }
 
