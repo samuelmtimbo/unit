@@ -885,7 +885,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
               })
               .map(({ unitId, type, pinId }) => {
                 return {
-                  type: opposite(type),
+                  type: unitId === data_.graphId ? type : opposite(type),
                   pinId,
                   subPinId: '0',
                 }
