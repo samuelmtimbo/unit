@@ -67,6 +67,10 @@ export default class Selection extends Element<HTMLDivElement, Props> {
     this.$unbundled = false
     this.$slot = selection.$slot
 
+    this.$subComponent = {
+      selection,
+    }
+
     this.registerRoot(selection)
   }
 

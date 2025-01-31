@@ -352,7 +352,8 @@ export function lazyFromSpec(
 
     reorderParentRoot(
       component: Component_<ComponentEvents>,
-      to: number
+      to: number,
+      emit: boolean
     ): void {
       this._ensure()
       return this.__graph.reorderParentRoot(component, to)

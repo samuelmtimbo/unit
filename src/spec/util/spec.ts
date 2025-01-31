@@ -676,12 +676,18 @@ export const findSpecAtPath = (
   } else {
     const [unitId, ...rest] = path
 
-    const unit = (spec as GraphSpec).units[unitId]
-
-    const unitSpec = getSpec(specs, unit.id)
+    const unitSpec = getUnitSpec(specs, spec, unitId)
 
     return findSpecAtPath(specs, unitSpec, rest)
   }
+}
+
+export const getUnitSpec = (specs: Specs, spec: Spec, unitId: string): Spec => {
+  const unit = (spec as GraphSpec).units[unitId]
+
+  const unitSpec = getSpec(specs, unit.id)
+
+  return unitSpec
 }
 
 export const findUnitAtPath = (

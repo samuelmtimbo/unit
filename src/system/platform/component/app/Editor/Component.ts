@@ -580,6 +580,7 @@ import {
   getSubPinSpec,
   getUnitExposedPins,
   getUnitMergesSpec,
+  getUnitSpec,
   hasMerge,
   hasMergePin,
   hasPinNamed,
@@ -41469,10 +41470,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           (parent_id) => {
             const parent = this._get_sub_component(parent_id)
 
-            parent.pullParentRoot(sub_component)
+            if (parent.hasParentRoot(sub_component)) {
+              parent.pullParentRoot(sub_component)
+            }
           },
           () => {
-            this._component.pullRoot(sub_component)
+            if (this._component.hasRoot(sub_component)) {
+              this._component.pullRoot(sub_component)
+            }
           }
         )
       }
@@ -60085,8 +60090,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const spec = findSpecAtPath(specs, this._spec, path)
 
-    let next_spec = spec
-
     const is_removed_unit_component = isComponentId(
       weakMerge(specs, bundle.specs ?? {}),
       removed_unit_spec_id
@@ -60095,38 +60098,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const spec_sub_component_count = keyCount(
       spec.component?.subComponents ?? {}
     )
-
-    if (this._is_spec_updater(path)) {
-      next_spec = clone(spec)
-
-      removeUnit({ unitId }, next_spec)
-
-      next_spec.metadata = next_spec.metadata || {}
-
-      delete next_spec.metadata.complexity
-
-      if (is_removed_unit_component) {
-        removeSubComponent({ unitId }, next_spec.component)
-        removeSubComponentFromParent(
-          { subComponentId: unitId },
-          next_spec.component
-        )
-      }
-
-      setSpec(spec.id, next_spec)
-
-      const subgraph = this.getSubgraphAtPath(path)
-
-      ;(async () => {
-        if (subgraph) {
-          if (subgraph._animating_unit_explosion[unitId]) {
-            await subgraph._animating_unit_explosion[unitId]
-          }
-
-          this._unregister_unit(bundle.unit.id)
-        }
-      })()
-    }
 
     let all_ancestors_are_component = true
 
@@ -60143,81 +60114,89 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const graph_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
 
-    const next_graph_spec = path.length === 1 ? next_spec : clone(graph_spec)
-
     const possibly_turned_circle_unit_id = path[1] ?? unitId
 
-    let parent_path_to_update = path
-    let unit_id_to_update = unitId
+    let parent_path_to_update: string[] = path
+    let unit_id_to_update: string = unitId
+    let unit_to_update_spec: Spec = spec
+    let parent_spec = findSpecAtPath(
+      specs,
+      this._spec,
+      parent_path_to_update
+    ) as GraphSpec
 
     const subgraph_path = this.getSubgraphPath()
 
     while (parent_path_to_update.length >= 0) {
-      const parent_spec = findSpecAtPath(
-        specs,
-        this._spec,
-        parent_path_to_update
-      ) as GraphSpec
-
       const next_parent_spec = clone(parent_spec)
 
       if (is_removed_unit_component && all_ancestors_are_component) {
-        if ((parent_spec.component?.children?.length ?? 0) === 0) {
-          const parent_sub_component_count = keyCount(
-            deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
-          )
+        const parent_sub_component_count = keyCount(
+          deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
+        )
 
-          const parent_component = this._component.pathGetSubComponent(
-            parent_path_to_update
-          )
+        const parent_component = this._component.pathGetSubComponent(
+          parent_path_to_update
+        )
 
-          const subgraph = this.getSubgraphAtPath(path)
+        const subgraph = this.getSubgraphAtPath(path)
 
-          const is_subgraph_animating_unit_removal =
-            subgraph && !!subgraph._animating_unit_explosion[unitId]
+        const is_subgraph_animating_unit_removal =
+          subgraph && !!subgraph._animating_unit_explosion[unitId]
 
-          const removed_component =
-            parent_component &&
-            parent_component.getSubComponent(unit_id_to_update)
+        const removed_component =
+          parent_component &&
+          parent_component.getSubComponent(unit_id_to_update)
 
-          const parent_id = getSubComponentParentId(
-            next_parent_spec,
-            unit_id_to_update
-          )
+        const parent_id = getSubComponentParentId(
+          next_parent_spec,
+          unit_id_to_update
+        )
 
-          if (!is_subgraph_animating_unit_removal) {
-            if (parent_id) {
-              if (parent_component) {
-                const sub_component_parent_root =
-                  parent_component.getSubComponent(parent_id)
+        if (!is_subgraph_animating_unit_removal) {
+          if (parent_id) {
+            if (parent_component) {
+              const sub_component_parent_root =
+                parent_component.getSubComponent(parent_id)
 
+              if (
+                sub_component_parent_root.$parentRoot.includes(
+                  removed_component
+                )
+              ) {
                 if (
-                  sub_component_parent_root.$parentRoot.includes(
+                  sub_component_parent_root.$mountParentRoot.includes(
                     removed_component
                   )
                 ) {
-                  sub_component_parent_root.pullParentRoot(removed_component)
+                  sub_component_parent_root.removeParentRoot(removed_component)
                 }
-              }
-            } else {
-              if (parent_component) {
-                if (parent_component.$root.includes(removed_component)) {
-                  parent_component.pullRoot(removed_component)
-                }
+
+                sub_component_parent_root.pullParentRoot(removed_component)
               }
             }
-
+          } else {
             if (parent_component) {
-              if (parent_component.$subComponent[unit_id_to_update]) {
-                const subgraph = this.getSubgraphAtPath(path)
+              if (parent_component.$root.includes(removed_component)) {
+                if (parent_component.$mountRoot.includes(removed_component)) {
+                  parent_component.removeRoot(removed_component)
+                }
 
-                if (subgraph) {
-                  if (!subgraph._animating_unit_explosion[unitId]) {
-                    parent_component.removeSubComponent(unit_id_to_update)
-                  }
-                } else {
+                parent_component.pullRoot(removed_component)
+              }
+            }
+          }
+
+          if (parent_component) {
+            if (parent_component.$subComponent[unit_id_to_update]) {
+              const subgraph = this.getSubgraphAtPath(path)
+
+              if (subgraph) {
+                if (!subgraph._animating_unit_explosion[unit_id_to_update]) {
                   parent_component.removeSubComponent(unit_id_to_update)
                 }
+              } else {
+                parent_component.removeSubComponent(unit_id_to_update)
               }
             }
           }
@@ -60238,11 +60217,41 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           break
         }
 
+        if (parent_spec.render === true) {
+          break
+        }
+
         unit_id_to_update = last(parent_path_to_update)
         parent_path_to_update = parent_path_to_update.slice(0, -1)
+        parent_spec = findSpecAtPath(specs, this._spec, parent_path_to_update)
+        unit_to_update_spec = getUnitSpec(specs, parent_spec, unit_id_to_update)
       } else {
         break
       }
+    }
+
+    if (this._is_spec_updater(path)) {
+      const next_spec = clone(findSpecAtPath(specs, this._spec, path))
+
+      removeUnit({ unitId }, next_spec)
+
+      next_spec.metadata = next_spec.metadata || {}
+
+      delete next_spec.metadata.complexity
+
+      setSpec(spec.id, next_spec)
+
+      const subgraph = this.getSubgraphAtPath(path)
+
+      ;(async () => {
+        if (subgraph) {
+          if (subgraph._animating_unit_explosion[unitId]) {
+            await subgraph._animating_unit_explosion[unitId]
+          }
+
+          this._unregister_unit(bundle.unit.id)
+        }
+      })()
     }
 
     const graph_unit_is_component = this._is_unit_component(graph_unit_id)

@@ -42,17 +42,21 @@ export type ComponentSetup = {
 export interface C {
   registerRoot(component: Component_, ...extra: any[]): void
   unregisterRoot(component: Component_, ...extra: any[]): void
-  reorderRoot(component: Component_, to: number): void
+  reorderRoot(component: Component_, to: number, ...extra: any[]): void
   registerParentRoot(
     component: Component_,
     slotName: string,
     at?: number,
     ...extra: any[]
   ): void
-  unregisterParentRoot(component: Component_): void
-  reorderParentRoot(component: Component_, to: number): void
-  appendParentChild(component: Component_, slotName: string): void
-  removeParentChild(component: Component_): void
+  unregisterParentRoot(component: Component_, ...extra: any[]): void
+  reorderParentRoot(component: Component_, to: number, ...extra: any[]): void
+  appendParentChild(
+    component: Component_,
+    slotName: string,
+    ...extra: any[]
+  ): void
+  removeParentChild(component: Component_, ...extra: any[]): void
   appendChild(Class: UnitBundle): number
   appendChildren(Classes: UnitBundle[]): number
   insertChild(Class: UnitBundle, at: number): void

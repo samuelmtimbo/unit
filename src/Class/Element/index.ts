@@ -130,15 +130,15 @@ export class Element_<
   }
 
   registerRoot(component: Component_): void {
-    return registerRoot(this, this._root, component)
+    return registerRoot(this, this._root, component, true)
   }
 
   unregisterRoot(component: Component_): void {
-    return unregisterRoot(this, this._root, component)
+    return unregisterRoot(this, this._root, component, true)
   }
 
   reorderRoot(component: Component_<ComponentEvents>, to: number): void {
-    return reorderRoot(this, this._root, component, to)
+    return reorderRoot(this, this._root, component, to, true)
   }
 
   registerParentRoot(
@@ -158,19 +158,25 @@ export class Element_<
   }
 
   unregisterParentRoot(component: Component_): void {
-    return unregisterParentRoot(this, this._parent_root, component)
+    return unregisterParentRoot(this, this._parent_root, component, true)
   }
 
   reorderParentRoot(component: Component_<ComponentEvents>, to: number): void {
-    return reorderParentRoot(this, this._parent_root, component, to)
+    return reorderParentRoot(this, this._parent_root, component, to, true)
   }
 
   appendParentChild(component: Component_, slotName: string): void {
-    return appendParentChild(this, this._parent_children, component, slotName)
+    return appendParentChild(
+      this,
+      this._parent_children,
+      component,
+      slotName,
+      true
+    )
   }
 
   removeParentChild(component: Component_): void {
-    return removeParentChild(this, this._parent_children, component)
+    return removeParentChild(this, this._parent_children, component, true)
   }
 
   appendChild(bundle: UnitBundle): number {

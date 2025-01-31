@@ -3113,7 +3113,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ): void => {
-    this._addUnit(unitId, unit, bundle, parentId, fork, bubble)
+    this._addUnit(unitId, unit, bundle, parentId, emit, fork, bubble)
 
     bundle = bundle ?? unit.getUnitBundleSpec({})
 
@@ -3175,7 +3175,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     )
 
     this._memAddUnit(unitId, _unit, bundle)
-    this._simAddUnit(unitId, { unit }, _unit, null, false)
+    this._simAddUnit(unitId, { unit }, _unit, null, false, false)
   }
 
   private _initAddUnits(units: GraphUnitsSpec, push: boolean): void {
@@ -3189,6 +3189,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unit: Unit,
     bundle: UnitBundleSpec = null,
     parentId: string | null,
+    emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ) => {
@@ -3208,7 +3209,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._specAddUnit(unitId, unit, bundle, parentId)
     this._memAddUnit(unitId, unit, bundle)
-    this._simAddUnit(unitId, bundle, unit, parentId)
+    this._simAddUnit(unitId, bundle, unit, parentId, emit)
 
     return unit
   }
@@ -3521,7 +3522,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       this._branch
     )
 
-    this._addUnit(unitId, unit, bundle, parentId, fork, bubble)
+    this._addUnit(unitId, unit, bundle, parentId, true, fork, bubble)
 
     return unit
   }
@@ -3913,6 +3914,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     bundle: UnitBundleSpec,
     unit: Unit,
     parentId: string | null,
+    emit: boolean,
     registerRoot: boolean = true
   ): void {
     if (unit.isElement()) {
@@ -3924,7 +3926,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
           parentComponent.registerParentRoot(unit as Component_, 'default')
         } else {
-          this.registerRoot(unit as Component_, true)
+          this.registerRoot(unit as Component_, emit)
         }
       }
 
@@ -6069,7 +6071,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ): void {
-    this._reorderSubComponent(parentId, childId, to, fork, bubble)
+    this._reorderSubComponent(parentId, childId, to, emit, fork, bubble)
 
     emit && this.edit('reorder_sub_component', parentId, childId, to, [])
   }
@@ -6078,19 +6080,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     parentId: string | null,
     childId: string,
     to: number,
+    emit: boolean,
     fork: boolean,
     bubble: boolean
   ): void {
     fork && this._fork(undefined, true, bubble)
 
-    this._simReorderSubComponent(parentId, childId, to)
+    this._simReorderSubComponent(parentId, childId, to, emit)
     this._specReorderSubComponent(parentId, childId, to)
   }
 
   private _simReorderSubComponent(
     parentId: string | null,
     childId: string,
-    to: number
+    to: number,
+    emit: boolean
   ): void {
     const subComponent = this.getUnit(childId) as Component_
 
@@ -6099,7 +6103,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       parentComponent.reorderParentRoot(subComponent, to)
     } else {
-      this.reorderRoot(subComponent, to)
+      this.reorderRoot(subComponent, to, emit)
     }
   }
 
@@ -6197,19 +6201,29 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _parent_children: Component_[] = []
   private _slot: Dict<string> = {}
 
-  appendParentChild(component: Component_, slotName: string): void {
-    return appendParentChild(this, this._parent_children, component, slotName)
+  appendParentChild(
+    component: Component_,
+    slotName: string,
+    emit: boolean = true
+  ): void {
+    return appendParentChild(
+      this,
+      this._parent_children,
+      component,
+      slotName,
+      emit
+    )
   }
 
-  removeParentChild(component: Component_): void {
-    return removeParentChild(this, this._parent_children, component)
+  removeParentChild(component: Component_, emit: boolean = true): void {
+    return removeParentChild(this, this._parent_children, component, emit)
   }
 
-  registerRoot(component: Component_, emit: boolean): void {
+  registerRoot(component: Component_, emit: boolean = true): void {
     return registerRoot(this, this._root, component, emit)
   }
 
-  unregisterRoot(component: Component_, emit: boolean): void {
+  unregisterRoot(component: Component_, emit: boolean = true): void {
     return unregisterRoot(this, this._root, component, emit)
   }
 
@@ -6229,16 +6243,24 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     )
   }
 
-  unregisterParentRoot(component: Component_): void {
-    return unregisterParentRoot(this, this._parent_root, component)
+  unregisterParentRoot(component: Component_, emit: boolean = true): void {
+    return unregisterParentRoot(this, this._parent_root, component, emit)
   }
 
-  reorderRoot(component: Component_<ComponentEvents>, to: number): void {
-    return reorderRoot(this, this._root, component, to)
+  reorderRoot(
+    component: Component_<ComponentEvents>,
+    to: number,
+    emit: boolean = true
+  ): void {
+    return reorderRoot(this, this._root, component, to, emit)
   }
 
-  reorderParentRoot(component: Component_<ComponentEvents>, to: number): void {
-    return reorderParentRoot(this, this._parent_root, component, to)
+  reorderParentRoot(
+    component: Component_<ComponentEvents>,
+    to: number,
+    emit: boolean = true
+  ): void {
+    return reorderParentRoot(this, this._parent_root, component, to, emit)
   }
 
   insertChild(Bundle: UnitBundle, at: number): void {
@@ -6618,7 +6640,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           reorderSubComponent: (data: GraphReorderSubComponentData) => {
             const { parentId, childId, to } = data
 
-            this._reorderSubComponent(parentId, childId, to, fork, bubble)
+            this._reorderSubComponent(
+              parentId,
+              childId,
+              to,
+              false,
+              fork,
+              bubble
+            )
           },
           removePinData: (data: UnitRemovePinDataData) => {
             const { type, pinId } = data

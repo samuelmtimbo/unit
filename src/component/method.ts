@@ -212,20 +212,22 @@ export function registerParentRoot(
 export function unregisterParentRoot(
   component: Component_,
   parentRoot: Component_[],
-  child: Component_
+  child: Component_,
+  emit: boolean
 ): void {
   const at = parentRoot.indexOf(child)
 
   parentRoot.splice(at, 1)
 
-  component.emit('unregister_parent_root', component)
+  emit && component.emit('unregister_parent_root', component)
 }
 
 export function reorderRoot(
   component: Component_,
   root: Component_[],
   child: Component_,
-  to: number
+  to: number,
+  emit: boolean
 ): void {
   const currentIndex = root.indexOf(child)
 
@@ -237,14 +239,15 @@ export function reorderRoot(
 
   insert(root, child, to)
 
-  component.emit('reorder_root', component, to)
+  emit && component.emit('reorder_root', component, to)
 }
 
 export function reorderParentRoot(
   component: Component_,
   parentRoot: Component_[],
   child: Component_,
-  to: number
+  to: number,
+  emit: boolean
 ): void {
   const currentIndex = parentRoot.indexOf(child)
 
@@ -256,14 +259,14 @@ export function reorderParentRoot(
 
   insert(parentRoot, child, to)
 
-  component.emit('reorder_parent_root', component, to)
+  emit && component.emit('reorder_parent_root', component, to)
 }
 
 export function unregisterRoot(
   component: Component_,
   root: Component_[],
   child: Component_,
-  emit: boolean = true
+  emit: boolean
 ): void {
   const at = root.indexOf(child)
 
@@ -276,7 +279,7 @@ export function registerRoot(
   component: Component_,
   root: Component_[],
   child: Component_,
-  emit: boolean = true
+  emit: boolean
 ): void {
   root.push(child)
 
@@ -287,29 +290,31 @@ export function appendParentChild(
   component: Component_,
   parentChild: Component_[],
   child: Component_,
-  slotName: string
+  slotName: string,
+  emit: boolean
 ): void {
   const slot = component.refSlot(slotName)
 
   if (component === slot) {
     parentChild.push(child)
 
-    component.emit('append_parent_child', component, slotName)
+    emit && component.emit('append_parent_child', component, slotName)
   } else {
-    slot.appendParentChild(child, 'default')
+    slot.appendParentChild(child, 'default', emit)
   }
 }
 
 export function removeParentChild(
   component: Component_,
   parentRoot: Component_[],
-  child: Component_
+  child: Component_,
+  emit: boolean
 ): void {
   const at = parentRoot.indexOf(child)
 
   parentRoot.splice(at, 1)
 
-  component.emit('remove_parent_child', component)
+  emit && component.emit('remove_parent_child', component)
 }
 
 export function animate(
