@@ -55796,6 +55796,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const start_node_count = this._node_count
 
+    const component_unit_ids = []
+
     for (const unit_id in units) {
       const unit = units[unit_id]
 
@@ -55809,6 +55811,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._spec_add_unit(unit_id, unit, register)
       this._sim_add_unit_core(unit_id, unit, p)
+
+      if (this._is_unit_component(unit_id)) {
+        component_unit_ids.push(unit_id)
+      }
     }
 
     for (const merge_id in merges) {
@@ -55938,10 +55944,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     })
 
-    const { subComponents = {} } = component
+    component.children = component.children ?? []
+    component.subComponents = component.subComponents ?? {}
+
+    const { subComponents, children } = component
 
     const fallback_parent_id: string | null =
       this._get_sub_component_target_parent_id()
+
+    for (const component_unit_id of component_unit_ids) {
+      if (!subComponents[component_unit_id]) {
+        subComponents[component_unit_id] = {}
+      }
+    }
 
     const parent_map = {}
 
@@ -55952,6 +55967,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       for (const child_id of children) {
         parent_map[child_id] = unit_id
+      }
+    }
+
+    for (const component_unit_id of component_unit_ids) {
+      if (
+        !parent_map[component_unit_id] &&
+        !children.includes(component_unit_id)
+      ) {
+        children.push(component_unit_id)
       }
     }
 
