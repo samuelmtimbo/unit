@@ -95,6 +95,7 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
         attr: {
           width: `${width}`,
           height: `${height}`,
+          tabindex: `${-1}`,
         },
         style: {
           ...DEFAULT_STYLE,
