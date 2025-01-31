@@ -8193,6 +8193,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _search_adding_unit: boolean = false
+
   private _sim_add_sub_component = (
     unit_id: string,
     sub_component_map: Dict<Component> = {},
@@ -8255,26 +8257,36 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { specs } = this.$props
 
+    this._search_adding_unit = true
+
     let sub_component = this._component.$subComponent[unit_id]
 
     if (sub_component) {
       //
     } else {
-      const spec_id = this._get_unit_spec_id(unit_id)
+      if (this._subgraph_unit_id === unit_id) {
+        sub_component = this._subgraph_graph._component
+      } else {
+        const spec_id = this._get_unit_spec_id(unit_id)
 
-      const Class = componentClassFromSpecId(
-        components,
-        specs,
-        spec_id,
-        {},
-        sub_component_map,
-        element
-      )
+        const Class = componentClassFromSpecId(
+          components,
+          specs,
+          spec_id,
+          {},
+          sub_component_map,
+          element
+        )
 
-      sub_component = new Class({}, this.$system)
+        sub_component = new Class({}, this.$system)
+      }
+
+      this._component.setSubComponent(unit_id, sub_component)
     }
 
     this.__mem_add_unit_component(unit_id, sub_component)
+
+    this._search_adding_unit = false
   }
 
   private __mem_add_unit_component = (
@@ -18134,6 +18146,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _abort_search_unit = () => {
     const { specs } = this.$props
 
+    const search_adding_unit = this._search_adding_unit
     const search_unit_id = this._search_unit_id
     const search_start_unit_id = this._search_start_unit_id
     const search_start_spec_id = this._search_start_spec_id
@@ -18141,28 +18154,33 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const search_unit_datum_node_id = this._search_unit_datum_node_id
     const search_unit_spec_id_changed = this._search_unit_spec_id_changed
 
-    if (search_unit_id) {
-      if (
-        this._mode === 'add' ||
-        this._mode === 'multiselect' ||
-        this._mode === 'none' ||
-        this._mode === 'remove'
-      ) {
-        this._state_remove_unit(search_unit_id, false)
-      } else if (this._mode === 'change') {
-        this._state_swap_search_unit(search_start_spec_id, search_start_unit_id)
+    if (!search_adding_unit) {
+      if (search_unit_id) {
+        if (
+          this._mode === 'add' ||
+          this._mode === 'multiselect' ||
+          this._mode === 'none' ||
+          this._mode === 'remove'
+        ) {
+          this._state_remove_unit(search_unit_id, false)
+        } else if (this._mode === 'change') {
+          this._state_swap_search_unit(
+            search_start_spec_id,
+            search_start_unit_id
+          )
 
-        if (search_unit_spec_id_changed) {
-          if (isComponentId(specs, search_start_spec_id)) {
-            this._sim_add_sub_component(search_start_unit_id, {})
-            this._connect_sub_component(search_start_unit_id)
+          if (search_unit_spec_id_changed) {
+            if (isComponentId(specs, search_start_spec_id)) {
+              this._sim_add_sub_component(search_start_unit_id, {})
+              this._connect_sub_component(search_start_unit_id)
+            }
+
+            forIOObjKV(search_unit_start_data, (type, pin_id, data) => {
+              const pin_node_id = getPinNodeId(search_unit_id, type, pin_id)
+
+              this._graph_debug_set_pin_data_tree(pin_node_id, data)
+            })
           }
-
-          forIOObjKV(search_unit_start_data, (type, pin_id, data) => {
-            const pin_node_id = getPinNodeId(search_unit_id, type, pin_id)
-
-            this._graph_debug_set_pin_data_tree(pin_node_id, data)
-          })
         }
       }
 
