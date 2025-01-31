@@ -17680,7 +17680,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _commit_search = () => {
     // console.log('Graph', '_commit_search_unit')
 
-    const { fork } = this.$props
+    const { parent, fork } = this.$props
 
     const { specs, bubble } = this.$props
 
@@ -17815,8 +17815,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         if (this._mode === 'change') {
           if (did_spec_id_change) {
-            this._unregister_spec(this._search_start_spec_id, true, [])
-            this._register_spec(this._search_unit_spec_id, true)
+            if (!parent) {
+              this._unregister_spec(this._search_start_spec_id, true, [])
+              this._register_spec(this._search_unit_spec_id, true)
+            }
           }
         } else if (this._mode === 'add') {
           this._register_spec(this._search_unit_spec_id, true)
