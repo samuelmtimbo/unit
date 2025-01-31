@@ -111,7 +111,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
 
   onPropChanged(prop: string, current: any): void {
     if (prop === 'id') {
-      this._render(current)
+      this._render(current ?? ID_EMPTY)
       this._refresh_style()
       this._refresh_view_box()
     } else if (prop === 'style') {
