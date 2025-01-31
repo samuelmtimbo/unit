@@ -104,7 +104,7 @@ export class KeyboardController {
     // for (const key of pressed) {
     //   this._keydown(key)
     // }
-    this._pressed = [...pressed]
+    this._pressed = [...pressed.map((key) => key.toLowerCase())]
   }
 
   private _onFocusIn = () => {
@@ -199,6 +199,8 @@ export class KeyboardController {
   }
 
   private _keydown = (key: string): Shortcut[] => {
+    key = key.toLowerCase()
+
     const index: number = this._pressed.indexOf(key)
 
     if (index === -1) {
@@ -230,6 +232,8 @@ export class KeyboardController {
   }
 
   private _keyup = (key: string) => {
+    key = key.toLowerCase()
+
     const index: number = this._pressed.indexOf(key)
 
     if (index > -1) {
