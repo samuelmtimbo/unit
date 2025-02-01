@@ -1738,7 +1738,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     this._specExposePin(type, pinId, subPinId, subPinSpec)
     this._memExposePin(type, pinId, subPinId, subPinSpec)
-    this._simExposePin(type, pinId, subPinId, subPinSpec, propagate)
+    this._simExposePin(type, pinId, subPinId, subPinSpec, undefined, propagate)
   }
 
   private _specExposePin = (
