@@ -18360,8 +18360,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
 
           const node_ids = [
-            pressed_node_id,
-            ...(this._drag_along_node[pressed_node_id] ?? []),
+            ...new Set([
+              pressed_node_id,
+              ...(this._drag_along_node[pressed_node_id] ?? []),
+              ...(this._is_node_selected(pressed_node_id)
+                ? keys(this._selected_node_id)
+                : []),
+            ]),
           ]
 
           this._on_node_clone_drag_start(
@@ -44437,6 +44442,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._set_node_position(next_int_node_id, int_pin_node_position)
         }
+      }
+
+      if (this._is_node_selected(selected_node_id)) {
+        this._deselect_node(selected_node_id)
+        this._select_node(next_node_id)
       }
 
       if (selected_node_id !== node_id) {
