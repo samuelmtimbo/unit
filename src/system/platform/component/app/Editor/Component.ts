@@ -2448,6 +2448,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _focused: boolean = false
   private _focus_visible: boolean = true
+  private _focus_within: boolean = true
 
   private _main: Div
   private _foreground: Div
@@ -9453,7 +9454,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     setTimeout(() => {
-      if (!this._focused && this._focus_visible) {
+      if (!this._focused && this._focus_visible && !this._focus_within) {
         this._lose_focus()
       }
     }, 0)
@@ -12550,6 +12551,33 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this.__sim_add_datum_node(datum_id, tree, position, emit)
   }
 
+  private _is_related_target_visible = (relatedTarget: HTMLElement) => {
+    const { container } = this.$props
+
+    if (
+      this._zoom_comp._svg.$element.contains(relatedTarget) ||
+      (this._control &&
+        this._control._control.$element.contains(relatedTarget) &&
+        !this._control._main.$element.contains(relatedTarget)) ||
+      this._subgraph_unit_id
+    ) {
+      return true
+    }
+
+    if (container && container.$element.contains(relatedTarget)) {
+      return true
+    }
+
+    if (
+      this._control?._main.$element.contains(relatedTarget) &&
+      relatedTarget.classList.contains('data-tree-leaf')
+    ) {
+      return true
+    }
+
+    return false
+  }
+
   private __sim_add_datum_node = (
     datum_id: string,
     tree: TreeNode,
@@ -12720,6 +12748,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const { relatedTarget } = event.event
 
           this._focus_visible = !!relatedTarget
+          this._focus_within = this._is_related_target_visible(relatedTarget)
 
           this._on_datum_blur(datum_id, event)
         }),
@@ -22638,6 +22667,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const unlocked_frame = this._get_first_unlocked_frame()
 
       if (relatedTarget) {
+        if (this._is_related_target_visible(relatedTarget)) {
+          return
+        }
+
         if (
           this._zoom_comp._svg.$element.contains(relatedTarget) ||
           (this._control &&
@@ -41016,7 +41049,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const prevent = this._should_prevent_datum_commit()
 
-      this._lock_datum(datum_node_id)
+      if (!this._datum_to_be_focused) {
+        this._lock_datum(datum_node_id)
+      }
 
       const [tree] = _filterEmptyNodes(data, getTree__cached)
 
@@ -41051,7 +41086,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     setTimeout(() => {
-      if (!this._focused && this._focus_visible) {
+      if (!this._focused && this._focus_visible && !this._focus_within) {
         this._lose_focus()
       }
     }, 0)
