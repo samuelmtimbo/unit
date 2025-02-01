@@ -46979,7 +46979,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       mode === 'data' ||
       mode === 'add' ||
       mode === 'remove' ||
-      mode === 'change' ||
+      // mode === 'change' ||
       mode === 'multiselect'
     )
   }
