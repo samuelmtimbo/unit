@@ -64,17 +64,21 @@ Drag and Drop a datum to a compatible input pin to activate it.
 
 To enter Add Mode (also Green Mode) you can either click on the "plus sign" mode button or press key <kbd>S</kbd>.
 
-In Add Mode, it is possible to copy a unit (or the currently Selected Subgraph).
+In Add Mode:
 
-A unit can be shallow cloned with a Green Drag and Drop:
+Green Click on a unit or the currently selected subgraph will copy it to clipboard.
 
-![](/public/gif/start/9.gif)
+Green Double Click on the background will paste whatever is on the Clipboard.
 
 ![](/public/gif/start/18.gif)
 
-Green Click on a unit will Copy To Clipboard. Then Green Double Click on the background will paste whatever is on the Clipboard.
-
 ![](/public/gif/start/11.gif)
+
+Green Drag and Drop will create a shallow clone of the selected subgraph:
+
+![](/public/gif/start/54.gif)
+
+![](/public/gif/start/9.gif)
 
 ## Info Mode
 
