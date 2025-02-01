@@ -14199,6 +14199,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           mode_text_color,
           mode_pin_icon_color
         )
+
         if (mode === 'remove') {
           const datum_node_id = this._pin_to_datum[node_id]
 
@@ -27124,7 +27125,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _refresh_node_fixed = (node_id: string): void => {
-    // console.log('_refresh_node_fixed', node_id)
     let fixed = false
     if (
       this._drag_node_id[node_id] ||
@@ -27135,6 +27135,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     ) {
       fixed = true
     }
+
     this._set_node_fixed(node_id, fixed)
   }
 
@@ -44256,6 +44257,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { specs } = this.$props
 
+    this._set_all_node_fixed(true)
+
     let new_node_id: string | null = null
     let new_node_ids: string[] = []
     let new_node_id_map: Dict<string> = {}
@@ -44600,6 +44603,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._ascend_node(node_id)
 
+    this._set_all_node_fixed(true)
+
     if (this._is_unit_node_id(node_id)) {
       this._on_unit_red_drag_start(node_id, pointer_id, selected_node_ids)
     } else if (this._is_link_pin_node_id(node_id)) {
@@ -44645,6 +44650,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_unit_red_drag_end = (unit_id: string): void => {
     this._descend_node(unit_id)
+
+    this._refresh_all_node_fixed()
   }
 
   private _on_unit_red_drag_start = (
@@ -44758,6 +44765,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     node_id: string,
     pointer_id: number
   ): void => {
+    this._set_all_node_fixed(true)
+
     if (this._is_unit_node_id(node_id)) {
       this._on_unit_blue_drag_start(node_id, pointer_id)
     } else if (this._is_datum_node_id(node_id)) {
@@ -44844,8 +44853,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _abort_blue_drag_hover = () => {
     this._blue_drag_hover_return()
-
-    this._refresh_unit_fixed(this._blue_drag_init_id)
 
     this._for_each_unit_output(this._blue_drag_init_id, (output_node_id) => {
       this._set_output_reduced(output_node_id, false)
@@ -44937,18 +44944,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._blue_drag_hover_position =
           this._get_unit_pin_node_position(nearest_unit_id)
 
-        this._set_all_unit_node_fixed(true)
-
-        this._refresh_unit_fixed(unit_id)
-
-        this._refresh_unit_fixed(nearest_unit_id)
         this._negate_unit_layer(nearest_unit_id)
 
         const blue_drag_init_unit_position =
           this._blue_drag_init_start_position[this._blue_drag_init_id]
 
         this._set_node_position(nearest_unit_id, blue_drag_init_unit_position)
-        this._set_node_fixed(nearest_unit_id, true)
+
+        const blue_drag_hover_unit_position_delta = subtractVector(
+          blue_drag_init_unit_position,
+          this._blue_drag_hover_position[nearest_unit_id]
+        )
 
         let remaining_init_merge_anchor = clone(
           this._blue_drag_init_pin_to_anchor
@@ -44989,8 +44995,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                     this._set_output_reduced(pin_node_id, true)
                   }
 
-                  this._set_node_fixed(pin_node_id, true)
-
                   remaining_init_merge_anchor = _dissoc(
                     remaining_init_merge_anchor,
                     init_pin_node_id
@@ -45002,9 +45006,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 }
               }
             }
+          }
+        )
 
-            if (!matched) {
-              // TODO
+        this._for_each_unit_pin(
+          this._blue_drag_hover_unit_id,
+          (pin_node_id: string) => {
+            if (!this._blue_drag_hover_merge_swap[pin_node_id]) {
+              const pin_position = this._get_node_position(pin_node_id)
+
+              const next_pin_position = addVector(
+                pin_position,
+                blue_drag_hover_unit_position_delta
+              )
+
+              this._set_node_position(pin_node_id, next_pin_position)
             }
           }
         )
@@ -46998,7 +47014,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const unit_id = this._blue_drag_hover_unit_id
 
       this._refresh_unit_layer(unit_id)
-      this._refresh_unit_fixed(unit_id)
 
       for (const node_id in this._blue_drag_hover_position) {
         const position = this._blue_drag_hover_position[node_id]
@@ -47018,7 +47033,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._has_node(pin_node_id) &&
           this._has_node(merge_anchor_pin_node_id)
         ) {
-          this._merge_pin_pin(pin_node_id, merge_anchor_pin_node_id)
+          const merge_node_id = this._merge_pin_pin(pin_node_id, merge_anchor_pin_node_id)
+
+          if (this._has_node(merge_node_id)) {
+            this._refresh_node_fixed(merge_node_id)
+          }
         }
       }
 
@@ -47116,7 +47135,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
             }
 
-            if (this._is_link_pin_node_id(pressed_node_id)) {
+            if (this._is_unit_node_id(pressed_node_id)) {
+              this._on_unit_red_drag_end(pressed_node_id)
+            } else if (this._is_link_pin_node_id(pressed_node_id)) {
               if (this._mode === 'remove') {
                 const { unitId } = segmentLinkPinNodeId(pressed_node_id)
 
