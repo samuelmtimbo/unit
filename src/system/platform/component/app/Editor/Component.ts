@@ -5956,7 +5956,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
     })
 
-    if (this._enabled()) {
+    if (this._control_lock) {
       if (this._tree_layout) {
         //
       } else {
