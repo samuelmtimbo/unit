@@ -1,3 +1,4 @@
+import { UPPER_ALPHABET } from '../client/event/keyboard/key'
 import { SELF } from '../constant/SELF'
 import { DataRef } from '../DataRef'
 import { deepSet_ } from '../deepSet'
@@ -310,6 +311,26 @@ export const _getGraphTypeInterface = (
   return typeInterface
 }
 
+export function* genericGenerator() {
+  const letters = UPPER_ALPHABET
+
+  let prefixIndex = -1
+  let mainIndex = 0
+
+  while (true) {
+    let prefix = prefixIndex >= 0 ? letters[prefixIndex] : ''
+    let main = letters[mainIndex]
+
+    yield prefix + main
+
+    mainIndex++
+    if (mainIndex >= letters.length) {
+      mainIndex = 0
+      prefixIndex++
+    }
+  }
+}
+
 export const createGenericTypeInterface = (
   id: string,
   specs: Specs
@@ -318,14 +339,13 @@ export const createGenericTypeInterface = (
   const spec = specs[id]
   const typeInterface: TypeTreeInterface = emptyIO({}, {})
 
-  let charCode = 65
-
   const inputIds = keys(spec.inputs)
   const outputIds = keys(spec.outputs)
 
+  const charGenerator = genericGenerator()
+
   function register(kind: IO, pinId: string): void {
-    typeInterface[kind][pinId] = getTree(`<${String.fromCharCode(charCode)}>`)
-    charCode++
+    typeInterface[kind][pinId] = getTree(`<${charGenerator.next().value}>`)
   }
 
   inputIds.forEach((inputId) => register('input', inputId))
@@ -464,7 +484,7 @@ export const _getGraphTypeMap = (
 
   const { units = {}, merges = {}, outputs = {}, inputs = {} } = clone(spec)
 
-  let charCode = 65
+  let charGenerator = genericGenerator()
 
   const genericReplacement: Dict<Dict<string>> = {}
   const dataReplacement: Dict<Dict<string>> = {}
@@ -496,9 +516,8 @@ export const _getGraphTypeMap = (
         const generics = _findGenerics(type)
         for (const generic of generics) {
           if (!genericReplacement[unitId][generic]) {
-            genericReplacement[unitId][generic] = `<${String.fromCharCode(
-              charCode++
-            )}>`
+            genericReplacement[unitId][generic] =
+              `<${charGenerator.next().value}>`
           }
         }
         unitTypeInterface[kind][pinId] = _applyGenerics(
@@ -736,7 +755,8 @@ export const _getGraphTypeMap = (
     }
   })
 
-  charCode = 65
+  charGenerator = genericGenerator()
+
   forEachValueKey(genericToSubstitute, (value, key) => {
     globalGenericTosubstitute[key] = value
 
@@ -744,8 +764,7 @@ export const _getGraphTypeMap = (
 
     for (const generic of generics) {
       if (!globalSubstituteReplacement[generic]) {
-        globalSubstituteReplacement[generic] =
-          `<${String.fromCharCode(charCode++)}>`
+        globalSubstituteReplacement[generic] = `<${charGenerator.next().value}>`
       }
       globalGenericTosubstitute[key] = applyGenerics(
         value,
@@ -770,7 +789,7 @@ export const _getGraphTypeMap = (
     })
   })
 
-  charCode = 65
+  charGenerator = genericGenerator()
 
   forEachValueKey(units, (_, unitId: string) => {
     const unitTypeInterface: TypeTreeInterface = typeMap[unitId]
@@ -781,9 +800,8 @@ export const _getGraphTypeMap = (
 
         for (const generic of generics) {
           if (!globalGenericReplacement[generic]) {
-            globalGenericReplacement[generic] = `<${String.fromCharCode(
-              charCode++
-            )}>`
+            globalGenericReplacement[generic] =
+              `<${charGenerator.next().value}>`
           }
         }
         unitTypeInterface[kind][pinId] = _applyGenerics(

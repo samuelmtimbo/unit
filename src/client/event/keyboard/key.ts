@@ -178,6 +178,7 @@ export const keyToCode = JSON.parse(`{
 }`)
 
 export const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
+export const UPPER_ALPHABET = ALPHABET.toUpperCase()
 export const DIGIT = '0123456789'
 export const SYMBOL = `\`~|\\^{}+×÷=/_<>≤≥[]!@#$%&*()-'":;,.?`
 
