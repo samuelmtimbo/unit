@@ -44338,21 +44338,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return
       }
 
-      const selected_node_position =
-        this._get_anchor_node_position(selected_node_id)
+      const anchor_node_id = this._get_node_anchor_node_id(selected_node_id)
 
-      const relative_position = subtractVector(
-        selected_node_position,
-        node_position
-      )
+      const selected_node_position = this._get_node_position(anchor_node_id)
+
+      let next_position = selected_node_position
+
+      if (
+        this._is_link_pin_node_id(next_node_id) &&
+        this._is_unit_node_id(anchor_node_id)
+      ) {
+        const node = this.get_node(node_id)
+        const anchor_node = this.get_node(anchor_node_id)
+
+        const u = unitVector(node.x, node.y, anchor_node.x, anchor_node.y)
+
+        next_position = pointInNode(node, u, -LINK_DISTANCE - PIN_RADIUS - 4)
+      }
+
+      const relative_position = subtractVector(next_position, node_position)
 
       deepSet(
         this._drag_along_relative_position,
         [new_node_id, next_node_id],
         relative_position
       )
-
-      const next_position = selected_node_position
 
       this._set_node_position(next_node_id, next_position)
 
