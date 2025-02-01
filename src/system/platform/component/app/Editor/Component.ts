@@ -18405,11 +18405,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       if (prev_mode !== 'data' && this._mode === 'data') {
-        this._set_all_visible_output_pin_opacity(0.5)
+        // this._set_all_visible_output_pin_opacity(0.5)
 
         clone_drag_pressed_node_id(true)
       } else if (prev_mode === 'data' && this._mode !== 'data') {
-        this._set_all_visible_output_pin_opacity(1)
+        // this._set_all_visible_output_pin_opacity(1)
 
         if (this._clone_drag) {
           this._on_node_clone_drag_end(this._clone_drag_clone_id)
