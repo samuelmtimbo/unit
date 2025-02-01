@@ -31722,6 +31722,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           graph: pod,
           style: {
             transition: ifLinearTransition(animate, 'opacity'),
+            opacity: '0',
           },
           disabled: true,
           parent: null,
@@ -31820,6 +31821,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._unclear_main(animate)
 
+          mergePropStyle(editor, {
+            transition: ifLinearTransition(animate, 'opacity'),
+            opacity: '0',
+          })
+
           if (animate) {
             setTimeout(() => {
               this._foreground.removeChild(editor)
@@ -31848,6 +31854,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       editor.setProp('disabled', false)
       editor.focus()
       editor.enter(animate, {}, false, false)
+
+      mergePropStyle(editor, { opacity: '1' })
     }
   }
 
