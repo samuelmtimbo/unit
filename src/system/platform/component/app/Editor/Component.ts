@@ -11518,6 +11518,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const pin_node_content = this._node_content[pin_node_id]
 
     const opacity = ignored ? (this._should_hide_ignored() ? '0.5' : `0`) : `1`
+    const pointerEvents = ignored ? 'none' : 'inherit'
 
     const pin_border_color =
       ref && input ? COLOR_NONE : active ? this._theme.data : this._theme.node
@@ -11536,6 +11537,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         borderColor: pin_border_color,
         backgroundColor: pin_background_color,
         opacity,
+        pointerEvents,
       },
       shape,
     })
@@ -23674,8 +23676,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _show_unit_ignored_pins(unit_id: string) {
     this._for_each_unit_pin(unit_id, (pin_node_id: string) => {
       if (this._spec_is_link_pin_ignored(pin_node_id)) {
-        this._set_link_pin_opacity(pin_node_id, 0.5)
-        this._set_link_pin_pointer_events(pin_node_id, 'inherit')
+        this._dom_set_link_pin_ignored(pin_node_id, false, 0.5)
       }
     })
   }
@@ -23683,8 +23684,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _hide_unit_ignored_pins(unit_id: string) {
     this._for_each_unit_pin(unit_id, (pin_node_id: string) => {
       if (this._spec_is_link_pin_ignored(pin_node_id)) {
-        this._set_link_pin_opacity(pin_node_id, 0)
-        this._set_link_pin_pointer_events(pin_node_id, 'none')
+        this._dom_set_link_pin_ignored(pin_node_id, true)
       }
     })
   }
@@ -28200,8 +28200,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_node_layer(pin_node_id, LAYER_IGNORED)
       this._set_link_layer(link_id, LAYER_IGNORED)
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE_IGNORED)
-      this._set_link_pin_opacity(pin_node_id, 0)
-      this._set_link_pin_pointer_events(pin_node_id, 'none')
+
+      this._dom_set_link_pin_ignored(pin_node_id, true)
 
       if (pin_datum_tree) {
         this._dec_unit_pin_active(unitId)
@@ -28210,8 +28210,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_node_layer(pin_node_id, LAYER_NORMAL)
       this._set_link_layer(link_id, LAYER_NORMAL)
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE)
-      this._set_link_pin_opacity(pin_node_id, 1)
-      this._set_link_pin_pointer_events(pin_node_id, 'inherit')
+
+      this._dom_set_link_pin_ignored(pin_node_id, false)
 
       if (pin_datum_tree) {
         this._inc_unit_pin_active(unitId)
@@ -28225,6 +28225,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_node_color(pin_node_id)
 
     this._start_graph_simulation(LAYER_NONE)
+  }
+
+  private _dom_set_link_pin_ignored = (
+    pin_node_id: string,
+    ignored: boolean,
+    opacity?: number
+  ) => {
+    opacity = opacity ?? ignored ? 0 : 1
+
+    this._set_link_pin_opacity(pin_node_id, opacity)
+
+    if (ignored) {
+      this._set_link_pin_pointer_events(pin_node_id, 'none')
+    } else {
+      this._set_link_pin_pointer_events(pin_node_id, 'inherit')
+    }
   }
 
   private _sim_set_unit_pin_ref = (
