@@ -1,0 +1,21 @@
+{
+  "name": "bulk edit",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "actions": {
+      "type": "object[]"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "add `subgraph` spec with `id` unit `type` `name` pin `data`",
+    "tags": ["f", "graph"]
+  },
+  "id": "2fcdd937-62b4-4601-b972-196144d3ab33",
+  "base": true,
+  "type": "`U`"
+}
