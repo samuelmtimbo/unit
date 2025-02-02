@@ -28271,7 +28271,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     ignored: boolean,
     opacity?: number
   ) => {
-    opacity = opacity ?? ignored ? 0 : 1
+    if (opacity === undefined) {
+      opacity = ignored ? 0 : 1
+    }
 
     this._set_link_pin_opacity(pin_node_id, opacity)
 
