@@ -40,6 +40,10 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
+      if (!id) {
+        throw new Error('invalid unit id')
+      }
+
       const { __bundle } = Class
       const { id: __id, input: __inputs = {} } = __bundle.unit
 

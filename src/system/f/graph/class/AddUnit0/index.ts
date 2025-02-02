@@ -45,6 +45,10 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
       const { unit: __unit } = __bundle
       const { id: __id } = __unit
 
+      if (!id) {
+        throw new Error('invalid unit id')
+      }
+
       const specs = weakMerge(
         graph.__bundle.specs ?? {},
         weakMerge(__bundle.specs ?? {}, this.__system.specs)

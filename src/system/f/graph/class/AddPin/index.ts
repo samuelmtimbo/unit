@@ -41,6 +41,10 @@ export default class AddPin<T> extends Functional<I<T>, O<T>> {
     let new_graph: GraphBundle
 
     try {
+      if (!id) {
+        throw new Error('invalid pin id')
+      }
+
       const specs = weakMerge(graph.__bundle.specs ?? {}, this.__system.specs)
 
       const new_spec_id = newSpecId(specs)

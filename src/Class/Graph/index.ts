@@ -3114,7 +3114,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     bubble: boolean = true
   ): void => {
     if (!unitId) {
-      throw new Error('invalid empty id')
+      throw new Error('invalid unit id')
     }
 
     this._addUnit(unitId, unit, bundle, parentId, emit, fork, bubble)
