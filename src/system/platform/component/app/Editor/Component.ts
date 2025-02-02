@@ -56018,11 +56018,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             )
 
             if (data) {
-              this._sim_add_plug_datum(type, pin_id, sub_pin_id, data)
+              if (!this._is_pin_ref(type, pin_id)) {
+                this._sim_add_plug_datum(type, pin_id, sub_pin_id, data)
 
-              const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
+                const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
 
-              this._refresh_node_color(ext_node_id)
+                this._refresh_node_color(ext_node_id)
+              }
             }
           }
         } else {
