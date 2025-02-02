@@ -44579,6 +44579,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._clone_drag_actions = []
     this._clone_node_ids = []
 
+    this._refresh_all_node_fixed()
+
     this._dispatch_action(bulk_action)
   }
 
