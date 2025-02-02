@@ -27,6 +27,7 @@ import { evaluateDataValue } from '../evaluateDataValue'
 import { getSubComponentParentId } from '../util/component'
 import {
   findUnitPlugs,
+  forEachGraphSpecPinPlug,
   forEachPinOnMerges,
   getMergePinCount,
   getUnitMergesSpec,
@@ -811,16 +812,14 @@ export const renameUnitPin = (
 ) => {
   const { units = {}, merges = {} } = spec
 
-  for (const unitId in units) {
-    const unit = units[unitId]
+  const unit = units[unitId]
 
-    const pin = unit[type]?.[pinId]
+  const pin = unit[type]?.[pinId]
 
-    if (pin) {
-      delete unit[type]?.[pinId]
+  if (pin) {
+    delete unit[type]?.[pinId]
 
-      deepSet_(unit, [type, newPinId], pin)
-    }
+    deepSet_(unit, [type, newPinId], pin)
   }
 
   forEachPinOnMerges(clone(merges), (mergeId, _unitId, _type, _pinId) => {
@@ -829,6 +828,19 @@ export const renameUnitPin = (
       deepSet_(spec, ['merges', mergeId, unitId, type, newPinId], true)
     }
   })
+
+  forEachGraphSpecPinPlug(
+    clone(spec),
+    (type_, pinId_, pinSpec, subPinId, subPinSpec) => {
+      if (
+        subPinSpec.unitId === unitId &&
+        subPinSpec.pinId === pinId &&
+        (subPinSpec.kind ?? type_) === type
+      ) {
+        deepSet_(spec, [`${type_}s`, pinId_, 'plug', subPinId, 'pinId'], newPinId)
+      }
+    }
+  )
 }
 
 export const renameUnitInMerges = (

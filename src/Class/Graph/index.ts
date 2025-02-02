@@ -3701,12 +3701,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
           delete this._pipedFrom[pinNodeId]
         }
-
-        renameUnitPin(
-          { unitId, type, pinId: name, newPinId: newName },
-          this._spec
-        )
       }
+
+      renameUnitPin(
+        { unitId, type, pinId: name, newPinId: newName },
+        this._spec
+      )
 
       this._pin[nextPinNodeId] = this._pin[pinNodeId]
 
