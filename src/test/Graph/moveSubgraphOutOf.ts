@@ -829,6 +829,7 @@ assert.equal(composition5.getMergeCount(), 1)
 assert.deepEqual(composition5.getPlugSpec('input', 'a', '0'), {
   unitId: 'empty',
   pinId: 'a',
+  kind: 'input',
 })
 
 const empty5 = composition5.getGraph(UNIT_ID_EMPTY)

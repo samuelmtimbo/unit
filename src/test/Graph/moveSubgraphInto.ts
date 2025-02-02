@@ -400,6 +400,7 @@ assert.deepEqual(composition3.getExposedPinSpec('input', 'a'), {
     0: {
       unitId: UNIT_ID_EMPTY,
       pinId: 'a',
+      kind: 'input',
     },
   },
 })

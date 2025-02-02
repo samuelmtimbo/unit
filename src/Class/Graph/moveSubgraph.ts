@@ -9,7 +9,6 @@ import {
   isSelfPin,
   opposite,
 } from '../../spec/util/spec'
-import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
 import { GraphPlugOuterSpec, GraphSubPinSpec } from '../../types'
 import { Dict } from '../../types/Dict'
@@ -19,7 +18,7 @@ import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitConnect } from '../../types/GraphUnitConnect'
 import { IO } from '../../types/IO'
-import { IOOf, forIO, forIOObjKV, io } from '../../types/IOOf'
+import { IOOf, forIO, forIOObjKV, forIOObjVK, io } from '../../types/IOOf'
 import { UCG } from '../../types/interface/UCG'
 import { clone } from '../../util/clone'
 import {
@@ -311,25 +310,27 @@ export function moveUnit(
               false
             )
 
-            forEachValueKey(pinSpecs[type] || {}, ({ plug }, id) => {
+            forIOObjVK(pinSpecs || {}, (type_, { plug, ref }, pinId_) => {
               for (const subPinId in plug) {
                 const subPinSpec = plug[subPinId]
 
                 if (
                   subPinSpec.unitId === unitId &&
-                  subPinSpec.pinId === pinId
+                  subPinSpec.pinId === pinId &&
+                  (subPinSpec.kind ?? type_) === type
                 ) {
                   source.plugPin(
-                    type,
-                    id,
+                    type_,
+                    pinId_,
                     subPinId,
                     {
                       unitId: graphId,
+                      kind: type,
                       pinId: nextPinId,
                     },
                     undefined,
                     false,
-                    propagate
+                    propagate || ref
                   )
 
                   break

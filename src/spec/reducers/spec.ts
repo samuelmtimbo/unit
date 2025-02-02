@@ -837,7 +837,11 @@ export const renameUnitPin = (
         subPinSpec.pinId === pinId &&
         (subPinSpec.kind ?? type_) === type
       ) {
-        deepSet_(spec, [`${type_}s`, pinId_, 'plug', subPinId, 'pinId'], newPinId)
+        deepSet_(
+          spec,
+          [`${type_}s`, pinId_, 'plug', subPinId, 'pinId'],
+          newPinId
+        )
       }
     }
   )
