@@ -23563,6 +23563,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _is_unit_pin_pre_match = (unit_id: string, pin_node_id: string) => {
+    if (this._collapsing && this._collapse_next_unit_id === unit_id) {
+      const { unitId } = segmentLinkPinNodeId(pin_node_id)
+
+      if (
+        this._collapse_node_id.has(pin_node_id) ||
+        this._collapse_node_id.has(unitId)
+      ) {
+        return false
+      }
+    }
+
     return (
       ((this._is_link_pin_node_id(pin_node_id) &&
         !this._spec_is_link_pin_ignored(pin_node_id)) ||
@@ -48151,6 +48162,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       )
     }
+
+    this._refresh_compatible()
 
     actions.push(wrapMoveSubgraphIntoData(data))
 
