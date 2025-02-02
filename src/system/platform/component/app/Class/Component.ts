@@ -3,7 +3,7 @@ import { getSpecRadius } from '../../../../../client/complexity'
 import { Component } from '../../../../../client/component'
 import { Element } from '../../../../../client/element'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
-import { isComponentId } from '../../../../../client/spec'
+import { isComponentId } from '../../../../../spec/util'
 import {
   pointInCircle,
   pointInRectangle,

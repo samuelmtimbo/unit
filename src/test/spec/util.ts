@@ -1,4 +1,4 @@
-import { sameSpec } from '../../client/spec'
+import { sameSpec } from '../../spec/util'
 import { ID_IDENTITY } from '../../system/_ids'
 import { assert } from '../../util/assert'
 

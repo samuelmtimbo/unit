@@ -1,4 +1,4 @@
-import { getSpec, isSystemSpecId } from './client/spec'
+import { getSpec, isSystemSpecId } from './spec/util'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'

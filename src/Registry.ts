@@ -1,5 +1,5 @@
 import { Object_ } from './Object'
-import { emptySpec, isSystemSpecId, sameSpec } from './client/spec'
+import { emptySpec, isSystemSpecId, sameSpec } from './spec/util'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { remapSpec } from './spec/remapSpec'
 import { Spec, Specs } from './types'

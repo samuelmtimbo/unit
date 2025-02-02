@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { getSpec } from '../../../../../client/spec'
+import { getSpec } from '../../../../../spec/util'
 import { cloneUnitBundle } from '../../../../../cloneUnitClass'
 import { System } from '../../../../../system'
 import { IO } from '../../../../../types/IO'

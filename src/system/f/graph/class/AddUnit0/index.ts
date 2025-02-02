@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { bundleSpec } from '../../../../../bundle'
-import { getSpec, newSpecId } from '../../../../../client/spec'
+import { getSpec, newSpecId } from '../../../../../spec/util'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { applyUnitDefaultIgnored } from '../../../../../spec/fromSpec'
 import { addUnit } from '../../../../../spec/reducers/spec'

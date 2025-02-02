@@ -9,7 +9,7 @@ import { IOElement } from './IOElement'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
 import { isBaseSpec } from './id'
-import { getSpec } from './spec'
+import { getSpec } from '../spec/util'
 
 export function componentClassFromSpecId<T = any>(
   components: ComponentClasses,

@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { getSpec } from '../../../../../client/spec'
+import { getSpec } from '../../../../../spec/util'
 import { System } from '../../../../../system'
 import { UnitBundle } from '../../../../../types/UnitBundle'
 import { weakMerge } from '../../../../../weakMerge'

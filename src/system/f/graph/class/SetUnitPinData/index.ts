@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { bundleSpec } from '../../../../../bundle'
-import { getSpec, newSpecId } from '../../../../../client/spec'
+import { getSpec, newSpecId } from '../../../../../spec/util'
 import { evaluateData } from '../../../../../spec/evaluateDataValue'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { setUnitPinData } from '../../../../../spec/reducers/spec'

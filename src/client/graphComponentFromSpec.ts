@@ -7,7 +7,7 @@ import { AsyncGraph } from '../types/interface/async/AsyncGraph'
 import { Component } from './component'
 import { componentFromSpec } from './componentFromSpec'
 import { Client } from './render/Client'
-import { getSpec } from './spec'
+import { getSpec } from '../spec/util'
 
 export function graphComponentFromSpec(
   system: System,

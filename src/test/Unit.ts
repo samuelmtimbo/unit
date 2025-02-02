@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 import { Unit } from '../Class/Unit'
-import { newSpecId } from '../client/spec'
+import { newSpecId } from '../spec/util'
 import { system } from './util/system'
 
 const RANDOM_ID = newSpecId(system.specs)

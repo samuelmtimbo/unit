@@ -1,6 +1,4 @@
 import { UNTITLED } from '../constant/STRING'
-import { emptyGraphSpec } from '../spec/emptySpec'
-import { getMergePinCount } from '../spec/util/spec'
 import { keyCount } from '../system/core/object/KeyCount/f'
 import isEqual from '../system/f/comparison/Equals/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
@@ -19,6 +17,8 @@ import { clone } from '../util/clone'
 import { uuidNotIn } from '../util/id'
 import { deepGetOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
+import { emptyGraphSpec } from './emptySpec'
+import { getMergePinCount } from './util/spec'
 
 export function getSpec(specs: Specs, id: string): Spec {
   const spec = specs[id]

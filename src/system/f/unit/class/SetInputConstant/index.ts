@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { getSpec } from '../../../../../client/spec'
+import { getSpec } from '../../../../../spec/util'
 import { deepSet_ } from '../../../../../deepSet'
 import { fromUnitBundle } from '../../../../../spec/fromUnitBundle'
 import { System } from '../../../../../system'

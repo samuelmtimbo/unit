@@ -32,7 +32,7 @@ import {
   getSpec,
   isComponentId,
   isSystemSpec,
-} from '../../../../../client/spec'
+} from '../../../../../spec/util'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { throttle } from '../../../../../client/throttle'
 import { Shape } from '../../../../../client/util/geometry'

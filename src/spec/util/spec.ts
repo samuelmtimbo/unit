@@ -1,5 +1,5 @@
 import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
-import { getSpec, isComponentId } from '../../client/spec'
+import { getSpec, isComponentId } from '../util'
 import { SELF } from '../../constant/SELF'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'

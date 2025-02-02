@@ -34,7 +34,7 @@ import {
   newSpecId,
   newUnitId,
   newUnitIdFromName,
-} from '../../../../../client/spec'
+} from '../../../../../spec/util'
 import {
   ZOOM_IDENTITY,
   Zoom,
