@@ -1,0 +1,35 @@
+{
+  "name": "remote share graph",
+  "inputs": {
+    "graph": {
+      "type": "`U`&`G`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}",
+      "metadata": {
+        "examples": ["{}"]
+      }
+    },
+    "message": {
+      "type": "object"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "message": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "protocol for one-to-one remote graph sync",
+    "tags": ["platform", "f", "meta"]
+  },
+  "id": "727133c9-3e87-4219-a91e-a257c9b2669b",
+  "base": true,
+  "type": "`U`"
+}

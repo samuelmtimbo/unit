@@ -3,7 +3,7 @@ import { RemoteRef } from '../../../client/RemoteRef'
 import { makeRemoteObjectAPI } from '../../../client/makeRemoteUnitAPI'
 import { INIT } from '../../../constant/STRING'
 import { ID_IDENTITY, ID_RANDOM_COLOR_BOX } from '../../../system/_ids'
-import Remote from '../../../system/f/meta/RemoteGraph'
+import RemoteGraph from '../../../system/f/meta/RemoteGraph'
 import { $Graph } from '../../../types/interface/async/$Graph'
 import { system } from '../../util/system'
 
@@ -19,7 +19,7 @@ const ref = new RemoteRef(api, post)
 
 graph.play()
 
-const remote = new Remote(system)
+const remote = new RemoteGraph(system)
 
 remote.push('opt', {})
 

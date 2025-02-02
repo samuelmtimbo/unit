@@ -22,7 +22,7 @@ export interface O {
   message: any
 }
 
-export default class Remote extends Holder<I, O> {
+export default class RemoteGraph extends Holder<I, O> {
   private _remote_port: RemotePort
   private _port: Port
 
