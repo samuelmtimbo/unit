@@ -3113,6 +3113,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ): void => {
+    if (!unitId) {
+      throw new Error('invalid empty id')
+    }
+
     this._addUnit(unitId, unit, bundle, parentId, emit, fork, bubble)
 
     bundle = bundle ?? unit.getUnitBundleSpec({})
