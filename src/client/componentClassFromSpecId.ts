@@ -1,4 +1,5 @@
 import { Memory } from '../Class/Unit/Memory'
+import { getSpec } from '../spec/util'
 import { ComponentClass, ComponentClasses } from '../system'
 import merge from '../system/f/object/Merge/f'
 import { Specs } from '../types'
@@ -9,7 +10,6 @@ import { IOElement } from './IOElement'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
 import { isBaseSpec } from './id'
-import { getSpec } from '../spec/util'
 
 export function componentClassFromSpecId<T = any>(
   components: ComponentClasses,

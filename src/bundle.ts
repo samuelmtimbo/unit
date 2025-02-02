@@ -1,5 +1,5 @@
-import { getSpec, isSystemSpecId } from './spec/util'
 import { evaluateDataValue } from './spec/evaluateDataValue'
+import { getSpec, isSystemSpecId } from './spec/util'
 import { Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { GraphSpec } from './types/GraphSpec'

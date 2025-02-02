@@ -3,7 +3,6 @@ import { getSpecRadius } from '../../../../../client/complexity'
 import { Component } from '../../../../../client/component'
 import { Element } from '../../../../../client/element'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
-import { isComponentId } from '../../../../../spec/util'
 import {
   pointInCircle,
   pointInRectangle,
@@ -14,6 +13,7 @@ import { getUnitPinPosition } from '../../../../../client/util/geometry/unit/get
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
 import { lineWrap } from '../../../../../spec/lineWrap'
+import { getSpec, isComponentId } from '../../../../../spec/util'
 import { System } from '../../../../../system'
 import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
@@ -157,7 +157,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
   private _render = (id: string): void => {
     const { specs = this.$system.specs } = this.$props
 
-    const spec = specs[id]
+    const spec = getSpec(specs, id)
 
     const { name = '' } = spec
 

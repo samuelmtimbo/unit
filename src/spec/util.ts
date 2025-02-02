@@ -18,10 +18,16 @@ import { uuidNotIn } from '../util/id'
 import { deepGetOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
 import { emptyGraphSpec } from './emptySpec'
+import { SpecNotFoundError } from './SpecNotFoundError'
 import { getMergePinCount } from './util/spec'
 
 export function getSpec(specs: Specs, id: string): Spec {
   const spec = specs[id]
+
+  if (!spec) {
+    throw new SpecNotFoundError()
+  }
+
   return spec
 }
 
@@ -35,7 +41,8 @@ export function getSpecs(specs: Specs): Specs {
 }
 
 export function hasSpec(specs: Specs, id: string): boolean {
-  const spec = specs[id]
+  const spec = getSpec(specs, id)
+
   return !!spec
 }
 
@@ -122,8 +129,10 @@ export function emptyShell(
 }
 
 export function getSpecName(specs: Specs, id: string): string {
-  const spec = specs[id]
+  const spec = getSpec(specs, id)
+
   const { name } = spec
+
   return name
 }
 

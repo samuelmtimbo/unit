@@ -14,6 +14,15 @@ import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import {
+  ZOOM_IDENTITY,
+  Zoom,
+  translate,
+  zoomInvert,
+  zoomTransformCenteredAt,
+} from '../../../../../client/zoom'
+import { Moment } from '../../../../../debug/Moment'
+import { mirror } from '../../../../../mirror'
+import {
   emptySpec,
   findInputDataExamples,
   getComponentSpec,
@@ -35,15 +44,6 @@ import {
   newUnitId,
   newUnitIdFromName,
 } from '../../../../../spec/util'
-import {
-  ZOOM_IDENTITY,
-  Zoom,
-  translate,
-  zoomInvert,
-  zoomTransformCenteredAt,
-} from '../../../../../client/zoom'
-import { Moment } from '../../../../../debug/Moment'
-import { mirror } from '../../../../../mirror'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Dict } from '../../../../../types/Dict'

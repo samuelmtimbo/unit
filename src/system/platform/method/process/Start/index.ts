@@ -1,6 +1,7 @@
 import { bundleSpec } from '../../../../../bundle'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
+import { getSpec } from '../../../../../spec/util'
 import { System } from '../../../../../system'
 import { GraphBundle } from '../../../../../types/GraphClass'
 import { GraphSpec } from '../../../../../types/GraphSpec'
@@ -58,13 +59,11 @@ export default class Start extends Holder<I, O> {
 
     const id = __bundle.unit.id
 
-    const spec = (this.__system.getSpec(id) ?? __bundle.specs[id]) as GraphSpec
+    const specs_ = weakMerge(__bundle.specs, this.__system.specs)
 
-    const bundle = bundleSpec(
-      spec,
-      weakMerge(__bundle.specs, this.__system.specs),
-      false
-    )
+    const spec = getSpec(specs_, id) as GraphSpec
+
+    const bundle = bundleSpec(spec, specs_, false)
 
     const $graph = system.$start({ bundle, _: UCGEE })
 

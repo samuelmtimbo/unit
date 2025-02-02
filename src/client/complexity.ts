@@ -1,7 +1,7 @@
 import { treeComplexityById } from '../spec/complexity'
+import { getSpec } from '../spec/util'
 import { Classes, Specs } from '../types'
 import { Dict } from '../types/Dict'
-import { getSpec } from '../spec/util'
 
 export const UNIT_MIN_RADIUS: number = 14
 

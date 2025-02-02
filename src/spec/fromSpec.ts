@@ -10,6 +10,7 @@ import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { io } from '../types/IOOf'
 import { weakMerge } from '../weakMerge'
 import { bundleClass } from './bundleClass'
+import { getSpec } from './util'
 
 export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   spec: GraphSpec,
@@ -41,7 +42,7 @@ export function applyUnitDefaultIgnored(
 
   const { id } = unitSpec
 
-  const spec = specs[id]
+  const spec = getSpec(specs, id)
 
   function setIgnored(unitPinSpec: GraphUnitPinSpec, pinSpec: PinSpec): void {
     const { ignored } = unitPinSpec

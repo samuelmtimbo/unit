@@ -1,4 +1,5 @@
 import { SELF } from '../../constant/SELF'
+import { getSpec } from '../../spec/util'
 import { Spec, Specs } from '../../types'
 import { IO } from '../../types/IO'
 import { upperCaseFirstLetter } from '../../util/string'
@@ -487,7 +488,7 @@ export const harmonicArray = (n: number): number[] => {
 }
 
 export function isBaseSpecId(specs: Specs, id: string): boolean {
-  const spec = specs[id]
+  const spec = getSpec(specs, id)
 
   return isBaseSpec(spec)
 }

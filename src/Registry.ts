@@ -1,7 +1,7 @@
 import { Object_ } from './Object'
-import { emptySpec, isSystemSpecId, sameSpec } from './spec/util'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { remapSpec } from './spec/remapSpec'
+import { emptySpec, isSystemSpecId, sameSpec } from './spec/util'
 import { Spec, Specs } from './types'
 import { Dict } from './types/Dict'
 import { GraphSpec } from './types/GraphSpec'

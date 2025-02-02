@@ -9,6 +9,7 @@ import { lazyFromSpec } from './Lazy'
 import { SpecNotFoundError } from './SpecNotFoundError'
 import { bundleClass } from './bundleClass'
 import { classFromSpec, fromSpec, graphFromSpec } from './fromSpec'
+import { getSpec } from './util'
 
 export function bundleFromId<T extends Unit>(
   id: string,
@@ -16,12 +17,6 @@ export function bundleFromId<T extends Unit>(
   classes: Classes,
   branch: Dict<true> = {}
 ): UnitBundle<T> {
-  let spec: Spec = specs[id]
-
-  if (!spec) {
-    throw new SpecNotFoundError()
-  }
-
   const Class: UnitClass = classFromId(id, specs, classes, branch)
 
   const bundle = { unit: { id }, specs: {} }
@@ -69,11 +64,7 @@ export function unitFromId<I, O>(
   branch: Dict<true>,
   push: boolean
 ): Unit<I, O> {
-  let spec: Spec = specs[id]
-
-  if (!spec) {
-    throw new SpecNotFoundError()
-  }
+  let spec: Spec = getSpec(specs, id)
 
   let unit: Unit<I, O>
 

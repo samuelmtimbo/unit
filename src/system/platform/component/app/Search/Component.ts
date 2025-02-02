@@ -28,16 +28,12 @@ import { isContentEditable } from '../../../../../client/isContentEditable'
 import { isTextField } from '../../../../../client/isTextField'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
-import {
-  getSpec,
-  isComponentId,
-  isSystemSpec,
-} from '../../../../../spec/util'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { throttle } from '../../../../../client/throttle'
 import { Shape } from '../../../../../client/util/geometry'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { UNTITLED } from '../../../../../constant/STRING'
+import { getSpec, isComponentId, isSystemSpec } from '../../../../../spec/util'
 import { System } from '../../../../../system'
 import { Spec } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'

@@ -2,7 +2,6 @@ import { Graph } from '../Class/Graph'
 import Merge from '../Class/Merge'
 import { Unit, UnitEvents } from '../Class/Unit'
 import { Pin } from '../Pin'
-import { isComponentSpec } from './util'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
@@ -26,6 +25,7 @@ import { Unlisten } from '../types/Unlisten'
 import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
+import { isComponentSpec } from './util'
 
 export function lazyFromSpec(
   spec: GraphSpec,

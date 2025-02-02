@@ -1,6 +1,6 @@
+import { getSpec } from '../spec/util'
 import { Classes, Specs } from '../types'
 import { getSpecComplexity } from './complexity'
-import { getSpec } from '../spec/util'
 
 const NUMERAL = '0123456789'
 

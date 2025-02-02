@@ -1,5 +1,4 @@
 import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
-import { getSpec, isComponentId } from '../util'
 import { SELF } from '../../constant/SELF'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
@@ -35,6 +34,7 @@ import {
   mapObjVK,
   reduceObj,
 } from '../../util/object'
+import { getSpec, isComponentId } from '../util'
 import { getSubComponentParentId } from './component'
 
 export function isValidSpecName(name: string) {
