@@ -175,9 +175,9 @@ export const AsyncURef = (unit: Unit): $U_R => {
 
       const $ = getGlobalRef(system, globalId)
 
-      const $obj = Async($, __ ?? $.__, system.async)
+      const $obj = Async($, __, system.async)
 
-      return proxyWrap($obj, $.__)
+      return proxyWrap($obj, __)
     },
   }
 }

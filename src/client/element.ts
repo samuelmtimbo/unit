@@ -48,9 +48,9 @@ export class Element<
             const _data = evaluate(data, specs, classes, (url) => {
               const globalId = url.slice(7)
 
-              const _ = this.$input[name] ?? []
+              const __ = this.$input[name] ?? []
 
-              return this.$unit.$refGlobalObj({ globalId, _ })
+              return this.$unit.$refGlobalObj({ globalId, __ })
             })
 
             this.setProp(name, _data)
@@ -88,9 +88,9 @@ export class Element<
           if (url) {
             const globalId = url.slice(7)
 
-            const _ = this.$input[name]
+            const __ = this.$input[name]
 
-            state[name] = this.$unit.$refGlobalObj({ globalId, _ })
+            state[name] = this.$unit.$refGlobalObj({ globalId, __ })
           }
         }
 
