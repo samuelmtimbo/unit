@@ -28831,15 +28831,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       null
     )
 
-    if (this._mode === 'data') {
-      this._for_each_visible_unit_output(new_unit_id, (pin_node_id) =>
-        this._set_link_pin_opacity(pin_node_id, 0.5)
-      )
-      this._for_each_unit_ref_input(new_unit_id, (pin_node_id) =>
-        this._set_link_pin_opacity(pin_node_id, 0.5)
-      )
-    }
-
     this.temp_fixate_node(new_unit_id)
 
     if (this._is_unit_component(new_unit_id)) {
