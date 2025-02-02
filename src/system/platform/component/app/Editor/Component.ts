@@ -62265,7 +62265,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { type, pinId } = moment
 
-    this._sim_remove_pin_data(type, pinId)
+    if (this._has_exposed_pin_named(type, pinId)) {
+      this._sim_remove_pin_data(type, pinId)
+    }
   }
 
   private _set_link_pin_invalid = (pin_node_id: string) => {
