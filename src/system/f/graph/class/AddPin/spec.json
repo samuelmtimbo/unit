@@ -5,7 +5,10 @@
       "type": "`G`"
     },
     "id": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "examples": ["'a'", "'b'", "'c'", "'d'"]
+      }
     },
     "type": {
       "type": "'input'|'output'"

@@ -5,7 +5,10 @@
       "type": "`G`"
     },
     "id": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "examples": ["'0'", "'1'", "'2'", "'3'"]
+      }
     },
     "merge": {
       "type": "object"

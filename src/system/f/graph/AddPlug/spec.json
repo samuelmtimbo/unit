@@ -9,7 +9,10 @@
       "type": "'input'|'output'"
     },
     "pinId": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "examples": ["'a'", "'b'", "'c'", "'d'"]
+      }
     },
     "subPinId": {
       "type": "string"

@@ -47035,7 +47035,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._has_node(pin_node_id) &&
           this._has_node(merge_anchor_pin_node_id)
         ) {
-          const merge_node_id = this._merge_pin_pin(pin_node_id, merge_anchor_pin_node_id)
+          const merge_node_id = this._merge_pin_pin(
+            pin_node_id,
+            merge_anchor_pin_node_id
+          )
 
           if (this._has_node(merge_node_id)) {
             this._refresh_node_fixed(merge_node_id)
