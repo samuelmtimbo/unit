@@ -37886,7 +37886,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    if (datum_node_id) {
+    if (this._is_pin_active(pin_node_id)) {
       if (input) {
         this._inc_merge_input_active(merge_node_id)
       } else {
