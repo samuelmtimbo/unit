@@ -61776,7 +61776,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._spec_get_pin_node_plug_spec(opposite_type, pin_node_id)
         }
 
-        datum_value = this._get_pin_datum_value(pin_node_id)
+        datum_value = (
+          this._pin_datum_tree[pin_node_id] ?? { value: undefined }
+        ).value
 
         this._state_graph_unit_remove_pin(pin_node_id, graphUnitId, type, pinId)
 
