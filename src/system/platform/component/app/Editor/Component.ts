@@ -24265,8 +24265,98 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._move_datum_to_empty_unit(node_id, target_node_id)
 
         this._remove_node_target(node_id)
+      } else if (this._is_datum_node_id(target_node_id)) {
+        this._remove_node_target(node_id)
+
+        this._merge_datum_target_datum(node_id, target_node_id)
       }
     }
+  }
+
+  private _merge_datum_target_datum = (
+    datum_node_id: string,
+    target_datum_node_id: string
+  ): void => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
+    const datum_tree = this._get_datum_tree(datum_node_id)
+
+    const datum_eval = _evaluate(datum_tree, specs, classes)
+
+    const last_target_datum_value = this._get_datum_value(target_datum_node_id)
+
+    let next_target_eval: any
+
+    if (
+      typeof this._target_datum_eval === 'number' &&
+      typeof datum_eval === 'number'
+    ) {
+      next_target_eval = this._target_datum_eval + datum_eval
+    } else if (
+      typeof this._target_datum_eval === 'string' &&
+      typeof datum_eval === 'string'
+    ) {
+      next_target_eval = this._target_datum_eval + '\n' + datum_eval
+    } else if (
+      typeof this._target_datum_eval === 'object' &&
+      typeof datum_eval === 'object' &&
+      this._target_datum_eval !== null &&
+      datum_eval !== null
+    ) {
+      if (Array.isArray(this._target_datum_eval) && Array.isArray(datum_eval)) {
+        next_target_eval = this._target_datum_eval.concat(datum_eval)
+      } else {
+        next_target_eval = deepMerge(this._target_datum_eval, datum_eval)
+      }
+    }
+
+    if (next_target_eval !== undefined) {
+      const next_target_value = stringify(next_target_eval)
+
+      this._target_datum_eval = next_target_eval
+
+      const { datumId: datum_id } = segmentDatumNodeId(datum_node_id)
+
+      const anchor_node_id =
+        this._get_datum_anchor_node_id(target_datum_node_id)
+
+      this._sim_set_datum_value(
+        datum_id,
+        target_datum_node_id,
+        anchor_node_id,
+        next_target_value
+      )
+      this._pod_set_datum_value(
+        target_datum_node_id,
+        next_target_value,
+        last_target_datum_value
+      )
+
+      this._remove_datum(datum_node_id)
+    }
+  }
+
+  private _pod_set_datum_value = (
+    datum_node_id: string,
+    value: string,
+    last_value: string
+  ) => {
+    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+    if (datum_pin_node_id) {
+      return this._pod_set_pin_data(datum_pin_node_id, value, last_value)
+    }
+  }
+
+  private _get_datum_anchor_node_id = (datum_node_id: string): string => {
+    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+    if (datum_pin_node_id) {
+      return this._get_node_anchor_node_id(datum_pin_node_id)
+    }
+
+    return null
   }
 
   private _on_pin_pin_target_end = (
@@ -24371,7 +24461,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       throw new Error('invalid plug drop target')
     }
   }
-
+  ''
   private _drop_node = (node_id: string): void => {
     // console.log('_drop_node', node_id)
 
@@ -28744,12 +28834,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _yellow_click_datum = (datum_node_id) => {
+  private _yellow_click_datum = (datum_node_id: string) => {
     this._copy_nodes([datum_node_id], true)
   }
 
   private _yellow_long_press_datum = (
-    datum_node_id,
+    datum_node_id: string,
     pointerId: number,
     clientX: number,
     clientY: number
@@ -28761,6 +28851,56 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         clientX,
         clientY
       )
+    }
+  }
+
+  private _target_datum_eval: any
+
+  private _group_long_press_datum = (
+    datum_node_id: string,
+    pointerId: number,
+    clientX: number,
+    clientY: number,
+    screenX: number,
+    screenY: number
+  ) => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
+    const selected_datum_node_ids = []
+
+    for (const selected_node_id in this._selected_node_id) {
+      if (this._is_datum_node_id(selected_node_id)) {
+        selected_datum_node_ids.push(selected_node_id)
+      }
+    }
+
+    if (this._selected_node_count !== selected_datum_node_ids.length) {
+      return
+    }
+
+    const target_datum_tree = this._get_datum_tree(datum_node_id)
+    const target_datum_type = _getValueType(specs, target_datum_tree)
+
+    const valid_selected_node_ids = []
+
+    for (const selected_datum_node_id of selected_datum_node_ids) {
+      const selected_datum_tree = this._get_datum_tree(selected_datum_node_id)
+      const selected_datum_tree_type = _getValueType(specs, selected_datum_tree)
+
+      if (selected_datum_tree_type.type === target_datum_type.type) {
+        valid_selected_node_ids.push(selected_datum_node_id)
+      }
+    }
+
+    if (valid_selected_node_ids.length > 0) {
+      this._target_datum_eval = _evaluate(target_datum_tree, specs, classes)
+
+      this._animate_pulse(screenX, screenY, 'in')
+
+      for (const valid_selected_datum_node_id of valid_selected_node_ids) {
+        this._set_node_target(valid_selected_datum_node_id, datum_node_id)
+      }
     }
   }
 
@@ -34840,7 +34980,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (this._is_link_pin_node_id(node_id)) {
       this._on_link_pin_long_press(node_id)
     } else if (this._is_datum_node_id(node_id)) {
-      this._on_graph_datum_long_press(node_id, pointerId, clientX, clientY)
+      this._on_graph_datum_long_press(
+        node_id,
+        pointerId,
+        clientX,
+        clientY,
+        screenX,
+        screenY
+      )
     } else if (this._is_ext_node_id(node_id)) {
       this._on_plug_long_press(node_id)
     }
@@ -34958,36 +35105,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_node_id: string,
     pointerId: number,
     clientX: number,
-    clientY: number
-  ): void => {
-    if (this._mode === 'data') {
-      this._yellow_long_press_datum(datum_node_id, pointerId, clientX, clientY)
-    }
-  }
-
-  private _on_graph_group_node_long_press = (
-    node_id: string,
-    pointerId: number,
-    clientX: number,
     clientY: number,
     screenX: number,
     screenY: number
   ): void => {
-    if (this._is_unit_node_id(node_id)) {
-      this._on_graph_group_unit_long_press(
-        node_id,
+    if (this._mode === 'data') {
+      this._yellow_long_press_datum(datum_node_id, pointerId, clientX, clientY)
+    } else if (this._mode === 'multiselect') {
+      this._group_long_press_datum(
+        datum_node_id,
         pointerId,
         clientX,
         clientY,
         screenX,
         screenY
-      )
-    } else if (this._is_datum_node_id(node_id)) {
-      this._on_graph_group_datum_node_long_press(
-        node_id,
-        pointerId,
-        clientX,
-        clientY
       )
     }
   }
@@ -35807,47 +35938,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
 
     this._refresh_compatible()
-  }
-
-  private _on_graph_group_datum_node_long_press = (
-    datum_node_id: string,
-    pointerId: number,
-    clientX: number,
-    clientY: number
-  ): void => {
-    const { datumId } = segmentDatumNodeId(datum_node_id)
-
-    const array_tree = this._datum_tree[datumId]
-
-    const { type: array_type } = array_tree
-
-    const is_array = array_type === TreeNodeType.ArrayLiteral
-
-    if (is_array) {
-      const screen_position = this._get_node_screen_position(datum_node_id)
-
-      const datum_node = this._node[datum_node_id]
-
-      screen_position.x += datum_node.width * this._zoom.z
-      screen_position.y += (datum_node.height * this._zoom.z) / 2
-
-      const all_selected_node_ids = keys(this._selected_node_id)
-
-      this._start_long_press_collapse(
-        pointerId,
-        datum_node_id,
-        all_selected_node_ids,
-        screen_position
-      )
-      this._set_node_layer(datum_node_id, LAYER_COLLAPSE)
-
-      if (!this._drag_node_id[datum_node_id]) {
-        this.__drag_start(datum_node_id, pointerId, clientX, clientY)
-      }
-
-      this._cancel_long_click = true
-      this._cancel_long_press = true
-    }
   }
 
   private _explode_unit = (
@@ -38066,7 +38156,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._pod_remove_pin_datum(datum_pin_node_id)
     }
 
-    this._pod_set_pin_data(pin_node_id, value, oldValue, override)
+    this._pod_set_pin_data(pin_node_id, value, oldValue)
   }
 
   private _sim_move_datum_to_pin = (
@@ -38233,8 +38323,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_set_pin_data = (
     pin_node_id: string,
     data: string,
-    lastData: string,
-    override: boolean
+    lastData: string
   ): void => {
     // console.log('Graph', '_pod_set_pin_data', pin_node_id, data, lastData)
 
@@ -56854,8 +56943,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             this._state_set_unit_pin_data(pin_node_id, data.data)
 
-            emit &&
-              this._pod_set_pin_data(pin_node_id, data.data, oldValue, true)
+            emit && this._pod_set_pin_data(pin_node_id, data.data, oldValue)
           }
         }
 
