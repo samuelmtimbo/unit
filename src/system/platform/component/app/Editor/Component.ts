@@ -28899,6 +28899,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._animate_pulse(screenX, screenY, 'in')
 
       for (const valid_selected_datum_node_id of valid_selected_node_ids) {
+        const valid_selected_datum_pin_node_id =
+          this._datum_to_pin[valid_selected_datum_node_id]
+
+        if (valid_selected_datum_pin_node_id) {
+          this._remove_pin_datum_link(valid_selected_datum_node_id)
+        }
+
         this._set_node_target(valid_selected_datum_node_id, datum_node_id)
       }
     }
