@@ -998,11 +998,19 @@ export function moveMerge(
             if (isEmptyObject(subPinSpec)) {
               //
             } else {
+              let subPinSpec_ = subPinSpec
+              if (
+                (subPinSpec.unitId && !target.hasUnit(subPinSpec.unitId)) ||
+                (subPinSpec.mergeId && !target.hasMerge(subPinSpec.mergeId))
+              ) {
+                subPinSpec_ = {}
+              }
+
               target.plugPin(
                 type,
                 pinId,
                 '0',
-                subPinSpec,
+                subPinSpec_,
                 data,
                 false,
                 false,
