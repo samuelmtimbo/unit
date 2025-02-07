@@ -1160,6 +1160,12 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$slot = {
       default: this._editor.$slot['default'],
     }
+    this.$slotId = {
+      default: 'editor',
+    }
+    this.$slotTarget = {
+      default: 'default',
+    }
     this.$unbundled = false
     this.$primitive = true
 
@@ -3500,6 +3506,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.$slot = graph.$slot
     this.$unbundled = false
     this.$primitive = true
+    this.$slotId = {
+      default: 'graph',
+    }
+    this.$slotTarget = {
+      default: 'default',
+    }
 
     this.setSubComponents({
       graph,
