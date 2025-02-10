@@ -196,3 +196,24 @@ export function shuffle(array) {
 
   return shuffledArray
 }
+
+export function* permutations<T>(arr: T[]): Generator<T[]> {
+  const a = arr.slice()
+
+  function* generate(n: number, array: T[]): Generator<T[]> {
+    if (n <= 1) {
+      yield array.slice()
+    } else {
+      for (let i = 0; i < n - 1; i++) {
+        yield* generate(n - 1, array)
+
+        const swapIndex = n % 2 === 0 ? i : 0
+
+        ;[array[swapIndex], array[n - 1]] = [array[n - 1], array[swapIndex]]
+      }
+      yield* generate(n - 1, array)
+    }
+  }
+
+  yield* generate(a.length, a)
+}

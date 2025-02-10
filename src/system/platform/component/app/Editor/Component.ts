@@ -664,6 +664,7 @@ import {
   forEach,
   insert,
   last,
+  permutations,
   pull,
   push,
   remove,
@@ -26739,6 +26740,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const empty = this._is_unit_empty(unit_id)
 
     if (empty) {
+      const unit_input_names = keys(unit_spec.inputs ?? {})
+      const unit_output_names = keys(unit_spec.outputs ?? {})
+
       const input_count = keyCount(unit_spec.inputs)
       const output_count = keyCount(unit_spec.outputs)
 
@@ -26757,7 +26761,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         _evaluate__cached
       )
 
-      const class_spec = weakMerge(specs, bundle.specs ?? {})[class_spec_id]
+      const specs_ = weakMerge(specs, bundle.specs ?? {})
+
+      const class_spec = specs_[class_spec_id]
+
+      const class_pin_names = {
+        input: keys(class_spec.inputs ?? {}),
+        output: keys(class_spec.outputs ?? {}),
+      }
 
       const class_input_count = keyCount(class_spec.inputs ?? {})
       const class_output_count = keyCount(class_spec.outputs ?? {})
@@ -26766,7 +26777,61 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         input_count === class_input_count &&
         output_count === class_output_count
       ) {
-        return true
+        const class_type_interface = _getSpecTypeInterfaceById(
+          class_spec_id,
+          specs_
+        )
+
+        const unit_permutations = {
+          input: permutations(unit_input_names),
+          output: permutations(unit_output_names),
+        }
+
+        let valid_permutation: IOOf<string[]> = { input: null, output: null }
+
+        io((type) => {
+          for (const unit_type_permutation of unit_permutations[type]) {
+            let match = true
+
+            for (let i = 0; i < unit_type_permutation.length; i++) {
+              const unit_pin_name = unit_type_permutation[i]
+              const class_pin_name = class_pin_names[type][i]
+
+              let unit_pin_type: TreeNode = ANY_TREE
+
+              const pin_node_id = getPinNodeId(unit_id, type, unit_pin_name)
+              const merge_node_id = this._pin_to_merge[pin_node_id]
+
+              if (merge_node_id) {
+                unit_pin_type = this._get_merge_pin_type(
+                  merge_node_id,
+                  opposite(type)
+                )
+              }
+
+              const class_pin_type = deepGet(class_type_interface, [
+                type,
+                class_pin_name,
+              ]) as TreeNode
+
+              if (!_isTypeMatch(specs_, class_pin_type, unit_pin_type)) {
+                match = false
+              }
+            }
+
+            if (match) {
+              valid_permutation[type] = unit_type_permutation
+
+              break
+            }
+          }
+        })
+
+        if (valid_permutation.input && valid_permutation.output) {
+          return true
+        }
+
+        return false
       } else {
         return false
       }
