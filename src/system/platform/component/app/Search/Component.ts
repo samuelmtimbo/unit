@@ -9,6 +9,7 @@ import { makeFocusOutListener } from '../../../../../client/event/focus/focusout
 import { makeInputListener } from '../../../../../client/event/input'
 import {
   IOKeyboardEvent,
+  isKeyPressed,
   makeKeydownListener,
   makeKeyupListener,
   makeShortcutListener,
@@ -183,14 +184,20 @@ export default class Search extends Element<HTMLDivElement, Props> {
     input.addEventListener(
       makeShortcutListener([
         {
-          combo: ['ArrowDown', 'Shift + ArrowDown'],
+          combo: [
+            'ArrowDown',
+            'Shift + ArrowDown',
+            'Shift + Enter + ArrowDown',
+          ],
           keydown: this._on_arrow_down_keydown,
           multiple: true,
+          strict: false,
         },
         {
-          combo: ['ArrowUp', 'Shift + ArrowUp'],
+          combo: ['ArrowUp', 'Shift + ArrowUp', 'Shift + Enter + ArrowUp'],
           keydown: this._on_arrow_up_keydown,
           multiple: true,
+          strict: false,
         },
         {
           combo: 'Escape',
@@ -1207,6 +1214,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
         const next_selected_id = this._filtered_id_list[next_selected_id_index]
 
         this.set_selected_item_id(next_selected_id)
+
+        if (isKeyPressed(this.$system, 'Enter')) {
+          this._dispatch_item_pick(next_selected_id)
+        }
       }
     }
   }
@@ -1219,7 +1230,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
       if (selected_id_index > 0) {
         const next_selected_id_index = selected_id_index - 1
         const next_selected_id = this._filtered_id_list[next_selected_id_index]
+
         this.set_selected_item_id(next_selected_id)
+
+        if (isKeyPressed(this.$system, 'Enter')) {
+          this._dispatch_item_pick(next_selected_id)
+        }
       }
     }
   }
