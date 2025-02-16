@@ -7,6 +7,7 @@ import {
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { $Component } from '../../../../types/interface/async/$Component'
+import { UCGEE } from '../../../../types/interface/UCGEE'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface Props {
@@ -27,7 +28,7 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
   private _component: Component
 
   public $input = {
-    component: ['C'],
+    component: UCGEE,
   }
 
   constructor($props: Props, $system: System) {
