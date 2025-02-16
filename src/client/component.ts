@@ -2134,7 +2134,10 @@ export class Component<
       unit: (moment: UnitMoment) => {
         const { event: event_event, data: event_data } = moment
 
-        if (event_event === 'append_child') {
+        if (event_event === 'restore') {
+          this._disconnect()
+          this._connect($unit)
+        } else if (event_event === 'append_child') {
           const bundle = event_data
 
           const at = this.$children.length
@@ -2207,6 +2210,7 @@ export class Component<
       'unregister',
       'play',
       'pause',
+      'restore',
     ]
 
     const unit_unlisten = this.$unit.$watch({ events }, unit_listener)
@@ -2618,6 +2622,7 @@ export class Component<
 
   public pullRoot(component: Component): void {
     const index = this.$root.indexOf(component)
+
     if (index > -1) {
       this.$root.splice(index, 1)
     } else {
@@ -2629,9 +2634,11 @@ export class Component<
     this.$root.splice(at, 0, component)
   }
 
-  public registerRoot(component: Component): void {
-    this.pushRoot(component)
-    this.appendRoot(component)
+  public registerRoot(component: Component, at?: number): void {
+    at = at ?? this.$root.length
+
+    this.placeRootAt(component, at)
+    this.insertRootAt(component, at)
   }
 
   public registerRootAt(component: Component, at: number): void {
@@ -3267,10 +3274,13 @@ export class Component<
 
   public registerParentRoot(
     component: Component,
-    slotName: string = 'default'
+    slotName: string = 'default',
+    at?: number
   ): void {
-    this.pushParentRoot(component, slotName)
-    this.appendParentRoot(component, slotName)
+    at = at ?? this.$parentRoot.length
+
+    this.placeParentRoot(component, at, slotName)
+    this.insertParentRootAt(component, at, slotName)
   }
 
   public unregisterParentRoot(component: Component): void {
@@ -3829,6 +3839,10 @@ export class Component<
       parent.removeParentRoot(subComponent)
     } else {
       this.removeRoot(subComponent)
+    }
+
+    for (const subSubComponentId in subComponent.$subComponent) {
+      subComponent.decoupleSubComponent(subSubComponentId)
     }
   }
 

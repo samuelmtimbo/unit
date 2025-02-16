@@ -20,13 +20,14 @@ function _appendChild(
 export function appendChild(
   component: Component_,
   children: Component_[],
-  Class: UnitBundle<Component_>
+  Class: UnitBundle<Component_>,
+  emit: boolean = true
 ): number {
   const [i, child] = _appendChild(component, children, Class)
 
   const { __bundle } = Class
 
-  component.emit('append_child', __bundle, child, [])
+  emit && component.emit('append_child', __bundle, child, [])
 
   return i
 }
@@ -141,12 +142,13 @@ export function pullChild(
 export function removeChild(
   element: Component_,
   children: Component_[],
-  at: number
+  at: number,
+  emit?: boolean
 ): Component_ {
   const child = pullChild(element, children, at)
 
-  element.emit('remove_child', at, [])
-  element.emit(`remove_child_at_${at}`, at)
+  emit && element.emit('remove_child', at, [])
+  emit && element.emit(`remove_child_at_${at}`, at)
 
   return child
 }

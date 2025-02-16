@@ -2,6 +2,7 @@ import { DataRef } from '../DataRef'
 import { Position } from '../client/util/geometry/types'
 import { BaseSpec } from './BaseSpec'
 import { Dict } from './Dict'
+import { GraphMergeSpec } from './GraphMergeSpec'
 import { GraphPinSpec } from './GraphPinSpec'
 import { GraphSpec } from './GraphSpec'
 import { IO } from './IO'
@@ -151,13 +152,14 @@ export type GraphUnitPinOuterSpec = {
 export type GraphPlugOuterSpec = {
   type: IO
   pinId: string
-  kind?: IO
   subPinId: string
-}
-
-export type GraphPlugSpec = GraphPlugOuterSpec & {
   pinSpec: GraphPinSpec
   subPinSpec: GraphSubPinSpec
+}
+
+export type GraphOuterMergeSpec = {
+  mergeId: string
+  mergeSpec: GraphMergeSpec
 }
 
 export type GraphUnitOuterSpec = {

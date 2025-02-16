@@ -3,13 +3,17 @@ import { BundleOpt, Unit } from '../../../Class/Unit'
 import {
   UnitDestroyData,
   UnitGetPinDataData,
+  UnitRestoreData,
 } from '../../../Class/Unit/interface'
+import { Memory } from '../../../Class/Unit/Memory'
 import { Moment } from '../../../debug/Moment'
 import { watchUnit } from '../../../debug/watchUnit'
 import { getGlobalRef } from '../../../global'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
+import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { stringify } from '../../../spec/stringify'
+import { stringifyMemorySpecData } from '../../../spec/stringifySpec'
 import { clone } from '../../../util/clone'
 import { mapObjVK } from '../../../util/object'
 import { Callback } from '../../Callback'
@@ -36,8 +40,12 @@ export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
       callback(paused)
     },
 
-    $reset(data: {}): void {
-      unit.reset()
+    async $snapshot(data: {}, callback: (state: Memory) => void) {
+      const memory = unit.snapshot()
+
+      stringifyMemorySpecData(memory)
+
+      callback(memory)
     },
 
     $getPinData(
@@ -148,6 +156,13 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       const input = unit.getInput(pinId)
 
       input.pull()
+    },
+    $restore: function (data: UnitRestoreData): void {
+      const { memory } = data
+
+      evaluateMemorySpec(memory, unit.__system.specs, unit.__system.classes)
+
+      unit.restore(memory)
     },
     $destroy: function (data: UnitDestroyData): void {
       unit.destroy()

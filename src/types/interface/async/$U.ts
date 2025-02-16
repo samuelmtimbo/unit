@@ -12,10 +12,12 @@ import {
   UnitPushData,
   UnitRemovePinDataData,
   UnitResetData,
+  UnitRestoreData,
   UnitSetPinDataData,
   UnitTakeErrData,
   UnitTakeInputData,
 } from '../../../Class/Unit/interface'
+import { Memory } from '../../../Class/Unit/Memory'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GlobalRefSpec } from '../../GlobalRefSpec'
@@ -33,6 +35,7 @@ export const U_METHOD_GET = [
   'getRefInputData',
   'setPinData',
   'removePinData',
+  'snapshot',
 ]
 export const U_METHOD_CALL = [
   'call',
@@ -44,6 +47,7 @@ export const U_METHOD_CALL = [
   'takeErr',
   'renamePin',
   'destroy',
+  'reset',
 ]
 export const U_METHOD_WATCH = ['watch']
 export const U_METHOD_REF = ['refGlobalObj']
@@ -68,7 +72,7 @@ export interface $U_G {
     {}: UnitGetUnitBundleSpecData,
     callback: (data: UnitBundleSpec) => void
   ): void
-  $reset(data: UnitResetData): void
+  $snapshot(data: {}, callback: (state: Memory) => void): void
 }
 
 export interface $U_C {
@@ -81,6 +85,7 @@ export interface $U_C {
   $setPinData(data: UnitSetPinDataData): void
   $removePinData(data: UnitRemovePinDataData): void
   $reset(data: UnitResetData): void
+  $restore(data: UnitRestoreData): void
   $destroy(data: UnitDestroyData): void
 }
 

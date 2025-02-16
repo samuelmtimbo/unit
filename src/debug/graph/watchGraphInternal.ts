@@ -26,10 +26,7 @@ import { watchGraphSetUnitPinConstant } from './watchGraphSetUnitPinConstantEven
 import { watchGraphSetUnitPinData } from './watchGraphSetUnitPinDataEvent'
 import { watchGraphSetUnitPinIgnored } from './watchGraphSetUnitPinIgnoredEvent'
 import { watchGraphSetUnitPinSetId } from './watchGraphSetUnitPinSetIdEvent'
-import {
-  watchGraphCloneUnitEvent,
-  watchGraphUnitEvent,
-} from './watchGraphUnitEvent'
+import { watchGraphUnitEvent } from './watchGraphUnitEvent'
 import { watchGraphUnitMoveEvent as watchGraphMoveUnitEvent } from './watchGraphUnitMoveEvent'
 
 export const GRAPH_EVENT_TO_WATCHER: Dict<
@@ -39,7 +36,6 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   set_name: watchGraphSetNameEvent,
   add_unit: watchGraphUnitEvent,
   remove_unit: watchGraphUnitEvent,
-  clone_unit: watchGraphCloneUnitEvent,
   move_unit: watchGraphMoveUnitEvent,
   add_merge: watchGraphMergeEvent,
   remove_merge: watchGraphMergeEvent,

@@ -1,11 +1,10 @@
+import { Classes, Specs } from '../..'
 import { Graph } from '../../../Class/Graph'
 import {
   GraphAddMergeData,
   GraphAddPinToMergeData,
   GraphAddUnitData,
-  GraphAddUnitGhostData,
   GraphBulkEditData,
-  GraphCloneUnitData,
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
@@ -13,18 +12,19 @@ import {
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
   GraphMoveSubComponentRootData,
+  GraphMoveSubGraphData,
   GraphMoveSubGraphIntoData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
   GraphRemovePinFromMergeData,
   GraphRemoveUnitData,
-  GraphRemoveUnitGhostData,
   GraphRemoveUnitPinDataData,
   GraphSetMergeDataData,
   GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
+  GraphSetPlugDataData,
   GraphSetUnitIdData,
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
@@ -34,19 +34,20 @@ import {
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
 import { BundleOpt, Unit } from '../../../Class/Unit'
-import { Memory } from '../../../Class/Unit/Memory'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
-import { ADD_UNIT } from '../../../spec/actions/G'
+import {
+  ADD_UNIT,
+  MOVE_SUBGRAPH_INTO,
+  MOVE_SUBGRAPH_OUT_OF,
+  SET_UNIT_PIN_DATA,
+} from '../../../spec/actions/G'
 import { evaluate } from '../../../spec/evaluate'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { stringify } from '../../../spec/stringify'
-import {
-  stringifyGraphSpecData,
-  stringifyMemorySpecData,
-} from '../../../spec/stringifySpec'
+import { stringifyGraphSpecData } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone } from '../../../util/clone'
 import { weakMerge } from '../../../weakMerge'
@@ -55,7 +56,6 @@ import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { IO } from '../../IO'
 import { Key } from '../../Key'
-import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { $Component } from './$Component'
@@ -127,58 +127,40 @@ export const AsyncGGet = (graph: Graph): $G_G => {
       data: {},
       callback: Callback<{
         children: Dict<any>
-        pinData: Dict<any>
+        pin: Dict<any>
         err: Dict<string | null>
-        mergeData: Dict<any>
+        merge: Dict<any>
       }>
     ): void {
       const children = graph.getGraphChildren()
       const err = graph.getGraphErr()
       const units = graph.getUnits()
 
-      const pinData = {}
+      const pin = {}
 
       forEachValueKey(units, (unit: Unit, unitId: Key) => {
         const unitPinData = unit.getPinsData()
 
         const _unitPinData = stringifyPinData(unitPinData)
 
-        pinData[unitId] = _unitPinData
+        pin[unitId] = _unitPinData
       })
 
-      const _mergeData = graph.getGraphMergeInputData()
+      const merge_ = graph.getGraphMergeInputData()
 
-      const mergeData = {}
+      const merge = {}
 
-      for (const mergeId in _mergeData) {
-        const data = _mergeData[mergeId]
+      for (const mergeId in merge_) {
+        const data = merge_[mergeId]
         Performance
         if (data === undefined) {
-          mergeData[mergeId] = undefined
+          merge[mergeId] = undefined
         } else {
-          mergeData[mergeId] = stringify(data)
+          merge[mergeId] = stringify(data)
         }
       }
 
-      callback({ children, err, pinData, mergeData })
-    },
-
-    async $snapshot(data: {}, callback: (state: Memory) => void) {
-      const memory = graph.snapshot()
-      callback(memory)
-    },
-
-    $snapshotUnit(
-      { unitId }: { unitId: string },
-      callback: (state: Memory) => void
-    ) {
-      const unit = graph.getUnit(unitId)
-
-      const memory = unit.snapshot()
-
-      stringifyMemorySpecData(memory)
-
-      callback(memory)
+      callback({ children, err, pin, merge })
     },
 
     $getGraphChildren({}: {}, callback: (state: Dict<any>) => void) {
@@ -297,15 +279,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         parentId,
         undefined
       )
-    },
-
-    $cloneUnit({
-      unitId,
-      newUnitId,
-      fork = true,
-      bubble = true,
-    }: GraphCloneUnitData): void {
-      call(graph, 'cloneUnit', fork, bubble, unitId, newUnitId)
     },
 
     $removeUnit({
@@ -532,6 +505,17 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
+    $setPlugData({
+      type,
+      pinId,
+      subPinId,
+      data,
+      fork = true,
+      bubble = true,
+    }: GraphSetPlugDataData) {
+      call(graph, 'setPlugData', fork, bubble, type, pinId, subPinId, data)
+    },
+
     $addMerge({
       mergeId,
       mergeSpec,
@@ -604,63 +588,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
-    $removeUnitGhost(
-      {
-        unitId,
-        nextUnitId,
-        nextUnitSpec,
-        fork = true,
-        bubble = true,
-      }: GraphRemoveUnitGhostData,
-      callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
-    ): void {
-      const ghost = call(
-        graph,
-        'removeUnitGhost',
-        fork,
-        bubble,
-        unitId,
-        nextUnitId,
-        nextUnitSpec
-      )
-
-      const ghost_ = clone(ghost)
-
-      stringifyMemorySpecData(ghost_.bundle.unit.memory)
-
-      callback(ghost_)
-    },
-
-    $addUnitGhost({
-      unitId,
-      nextUnitId,
-      nextUnitBundle,
-      nextUnitPinMap,
-      fork = true,
-      bubble = true,
-    }: GraphAddUnitGhostData): void {
-      nextUnitBundle = clone(nextUnitBundle)
-
-      if (nextUnitBundle.unit?.memory) {
-        evaluateMemorySpec(
-          nextUnitBundle.unit?.memory,
-          graph.__system.specs,
-          graph.__system.classes
-        )
-      }
-
-      call(
-        graph,
-        'addUnitGhost',
-        fork,
-        bubble,
-        unitId,
-        nextUnitId,
-        nextUnitBundle,
-        nextUnitPinMap
-      )
-    },
-
     $setMetadata({
       path,
       data,
@@ -711,104 +638,66 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
-    $moveSubgraphInto({
-      graphId,
-      nextSpecId,
-      nodeIds,
-      nextIdMap,
-      nextPinIdMap,
-      nextMergePinId,
-      nextPlugSpec,
-      nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-      nextSubComponentParentSlot,
-      nextSubComponentSlot,
-      fork = true,
-      bubble = true,
-    }: GraphMoveSubGraphIntoData): void {
-      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
-      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
+    $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void {
+      const { specs, classes } = graph.__system
+
+      evalMoveSubgraph(specs, classes, data)
+
+      const {
+        graphId,
+        selection,
+        moves,
+        mapping,
+        fork = true,
+        bubble = true,
+      } = data
 
       call(
         graph,
         'moveSubgraphInto',
         fork,
         bubble,
+        selection,
         graphId,
-        graphBundle,
-        graphSpec,
-        nextSpecId,
-        nodeIds,
-        nextIdMap,
-        nextPinIdMap,
-        nextMergePinId,
-        nextPlugSpec,
-        nextSubComponentParentMap,
-        nextSubComponentChildrenMap,
-        nextSubComponentParentSlot,
-        nextSubComponentSlot
+        moves,
+        mapping
       )
     },
 
-    $moveSubgraphOutOf({
-      graphId,
-      nextSpecId,
-      nodeIds,
-      nextIdMap,
-      nextPinIdMap,
-      nextMergePinId,
-      nextPlugSpec,
-      nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-      nextSubComponentParentSlot,
-      nextSubComponentSlot,
-      fork = true,
-      bubble = true,
-    }: GraphMoveSubGraphIntoData): void {
-      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
-      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
+    $moveSubgraphOutOf(data: GraphMoveSubGraphIntoData): void {
+      const { specs, classes } = graph.__system
+
+      evalMoveSubgraph(specs, classes, data)
+
+      const {
+        graphId,
+        selection,
+        moves,
+        mapping,
+        fork = true,
+        bubble = true,
+      } = data
 
       call(
         graph,
         'moveSubgraphOutOf',
         fork,
         bubble,
+        selection,
         graphId,
-        graphBundle,
-        graphSpec,
-        nextSpecId,
-        nodeIds,
-        nextIdMap,
-        nextPinIdMap,
-        nextMergePinId,
-        nextPlugSpec,
-        nextSubComponentParentMap,
-        nextSubComponentChildrenMap,
-        nextSubComponentParentSlot,
-        nextSubComponentSlot
+        moves,
+        mapping
       )
     },
 
-    $bulkEdit({ actions, fork = true, bubble = true }: GraphBulkEditData) {
+    $bulkEdit(data: GraphBulkEditData) {
       const { specs, classes } = graph.__system
 
-      actions = actions.map((action) => {
-        action = clone(action)
+      evalBulkEdit(specs, classes, data)
 
-        if (action.data.data) {
-          action.data.data = evaluate(action.data.data, specs, classes)
-        }
+      const { actions, fork = true, bubble = true } = data
 
-        if (action.type === ADD_UNIT) {
-          if (action.data.bundle.unit.memory) {
-            evaluateMemorySpec(action.data.bundle.unit.memory, specs, classes)
-          }
-        }
-
-        return action
-      })
-
-      call(graph, 'bulkEdit', fork, bubble, actions)
+      call(graph, 'bulkEdit', fork, bubble, actions, undefined)
     },
 
     $setMergeData({
@@ -940,4 +829,45 @@ export const AsyncG = (graph: Graph): $G => {
     ...AsyncGCall(graph),
     ...AsyncGRef(graph),
   }
+}
+
+export function evalBulkEdit(
+  specs: Specs,
+  classes: Classes,
+  data: GraphBulkEditData
+) {
+  data.actions = data.actions.map((action) => {
+    action = clone(action)
+
+    if (action.data.data) {
+      action.data.data = evaluate(action.data.data, specs, classes)
+    }
+
+    if (action.type === ADD_UNIT) {
+      if (action.data.bundle.unit.memory) {
+        evaluateMemorySpec(action.data.bundle.unit.memory, specs, classes)
+      }
+    } else if (
+      action.type === MOVE_SUBGRAPH_INTO ||
+      action.type === MOVE_SUBGRAPH_OUT_OF
+    ) {
+      evalMoveSubgraph(specs, classes, action.data)
+    }
+
+    return action
+  })
+}
+
+export function evalMoveSubgraph(
+  specs: Specs,
+  classes: Classes,
+  data: GraphMoveSubGraphData
+) {
+  data.moves = data.moves.map((move) => {
+    if (move.action.type === SET_UNIT_PIN_DATA) {
+      move.action.data.data = evaluate(move.action.data.data, specs, classes)
+    }
+
+    return move
+  })
 }

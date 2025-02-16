@@ -1,4 +1,5 @@
 import { IO } from '../../types/IO'
+import { Memory } from './Memory'
 
 export type UnitGetGlobalIdData = {}
 
@@ -56,3 +57,5 @@ export type UnitGetUnitBundleSpecData = {
 }
 
 export type UnitResetData = {}
+
+export type UnitRestoreData = { memory: Memory }

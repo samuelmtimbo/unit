@@ -2,9 +2,7 @@ import {
   GraphAddMergeData,
   GraphAddPinToMergeData,
   GraphAddUnitData,
-  GraphAddUnitGhostData,
   GraphBulkEditData,
-  GraphCloneUnitData,
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
@@ -18,7 +16,6 @@ import {
   GraphRemoveMergeDataData,
   GraphRemovePinFromMergeData,
   GraphRemoveUnitData,
-  GraphRemoveUnitGhostData,
   GraphRemoveUnitPinDataData,
   GraphReorderSubComponentData,
   GraphSetMergeDataData,
@@ -26,6 +23,7 @@ import {
   GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
+  GraphSetPlugDataData,
   GraphSetUnitIdData,
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
@@ -34,11 +32,9 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
-import { Memory } from '../../../Class/Unit/Memory'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
-import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { $Component } from './$Component'
 import { $U } from './$U'
@@ -62,7 +58,6 @@ export const G_METHOD_CALL = [
   'addUnit',
   'addUnits',
   'removeUnit',
-  'cloneUnit',
   'moveUnit',
   'exposePinSet',
   'coverPinSet',
@@ -116,20 +111,13 @@ export interface $G_G {
     data: {},
     callback: (data: { input: Dict<any>; output: Dict<any> }) => void
   ): void
-  $snapshot(data: {}, callback: (state: Memory) => void): void
-  $snapshotUnit(
-    data: {
-      unitId: string
-    },
-    callback: (state: Memory) => void
-  ): void
   $getGraphData(
     data: {},
     callback: Callback<{
       children: Dict<any>
-      pinData: Dict<any>
+      pin: Dict<any>
       err: Dict<string | null>
-      mergeData: Dict<any>
+      merge: Dict<any>
     }>
   ): void
   $getGraphChildren(data: {}, callback: (state: Dict<any>) => void)
@@ -151,7 +139,6 @@ export interface $G_C {
   $setUnitId(data: GraphSetUnitIdData): void
   $removeUnitPinData(data: GraphRemoveUnitPinDataData): void
   $addUnit(data: GraphAddUnitData): void
-  $cloneUnit(data: GraphCloneUnitData): void
   $removeUnit(data: GraphRemoveUnitData): void
   $exposePinSet(data: GraphExposePinSetData): void
   $coverPinSet(data: GraphCoverPinSetData): void
@@ -159,6 +146,7 @@ export interface $G_C {
   $coverPin(data: GraphCoverPinData): void
   $plugPin(data: GraphPlugPinData): void
   $unplugPin(data: GraphUnplugPinData): void
+  $setPlugData(data: GraphSetPlugDataData): void
   $exposeUnitPinSet(data: GraphExposeUnitPinSetData): void
   $coverUnitPinSet(data: GraphCoverUnitPinSetData): void
   $setPinSetId(data: GraphSetPinSetIdData): void
@@ -174,11 +162,6 @@ export interface $G_C {
   $addPinToMerge(data: GraphAddPinToMergeData): void
   $removePinFromMerge(data: GraphRemovePinFromMergeData): void
   $takeUnitErr(data: GraphTakeUnitErrData): void
-  $removeUnitGhost(
-    data: GraphRemoveUnitGhostData,
-    callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
-  ): void
-  $addUnitGhost(data: GraphAddUnitGhostData): void
   $setMetadata(data: GraphSetMetadataData): void
   $reorderSubComponent(data: GraphReorderSubComponentData): void
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void

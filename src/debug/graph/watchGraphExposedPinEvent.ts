@@ -1,13 +1,10 @@
 import { Graph } from '../../Class/Graph'
+import { GraphExposePinData } from '../../Class/Graph/interface'
 import { GraphSubPinSpec } from '../../types'
 import { IO } from '../../types/IO'
 import { Moment } from './../Moment'
 
-export interface GraphExposePinEventData {
-  type: IO
-  pinId: string
-  subPinId: string
-  subPinSpec: GraphSubPinSpec
+export interface GraphExposePinEventData extends GraphExposePinData {
   path: string[]
 }
 

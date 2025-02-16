@@ -1,4 +1,7 @@
-import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
+import {
+  GraphMoveSubComponentRootData,
+  GraphSetSubComponentSizeData,
+} from '../../Class/Graph/interface'
 import { deepSet_ } from '../../deepSet'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
@@ -93,28 +96,28 @@ export const setChildren = (
 }
 
 export const setSubComponentSize = (
-  { id, width, height }: { id: string; width: number; height: number },
+  { unitId, width, height }: GraphSetSubComponentSizeData,
   component: GraphComponentSpec
 ): void => {
   deepSet_(
     component,
-    ['subComponents', id],
-    merge(component.subComponents[id], { width, height })
+    ['subComponents', unitId],
+    merge(component.subComponents[unitId], { width, height })
   )
 }
 
 export const setSubComponentChildren = (
-  { id, children }: { id: string; children: string[] },
+  { parentId, children }: { parentId: string; children: string[] },
   component: GraphComponentSpec
 ): void => {
-  deepSet_(component, ['subComponents', id, 'children'], children)
+  deepSet_(component, ['subComponents', parentId, 'children'], children)
 }
 
 export const removeSubComponentChild = (
-  { subComponentId, childId }: { subComponentId: string; childId: string },
+  { parentId, childId }: { parentId: string; childId: string },
   component: GraphComponentSpec
 ): void => {
-  const subComponent = deepGet(component, ['subComponents', subComponentId])
+  const subComponent = deepGet(component, ['subComponents', parentId])
 
   const { children = [], childSlot = {} } = subComponent
 
@@ -190,10 +193,7 @@ export const moveSubComponentRoot = (
     const currentParentId = getComponentSubComponentParentId(state, childId)
 
     if (currentParentId) {
-      removeSubComponentChild(
-        { subComponentId: currentParentId, childId },
-        state
-      )
+      removeSubComponentChild({ parentId: currentParentId, childId }, state)
     } else {
       removeRoot({ childId }, state)
     }
@@ -218,7 +218,7 @@ export const removeSubComponentFromParent = (
   if (currentParentId) {
     removeSubComponentChild(
       {
-        subComponentId: currentParentId,
+        parentId: currentParentId,
         childId: subComponentId,
       },
       component

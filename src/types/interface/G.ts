@@ -1,5 +1,6 @@
 import { GraphPinsSpec, GraphSubPinSpec } from '..'
-import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
+import { MoveMapping } from '../../Class/Graph/buildMoveMap'
+import { Moves } from '../../Class/Graph/buildMoves'
 import Merge from '../../Class/Merge'
 import { SnapshotOpt, Unit } from '../../Class/Unit'
 import { Pin } from '../../Pin'
@@ -29,8 +30,14 @@ export type GraphSelection = {
     type: IO
     pinId: string
     subPinId: string
+    template?: boolean
   }[]
   data?: string[]
+}
+
+export type GraphSelectionData = {
+  pin?: Dict<IOOf<Dict<string>>>
+  plug?: Dict<IOOf<Dict<string>>>
 }
 
 export type GraphSelectionSpec = {
@@ -42,20 +49,11 @@ export type GraphSelectionSpec = {
 
 export type G_MoveSubgraphIntoArgs = [
   string,
-  UnitBundleSpec,
   GraphSpec,
-  string,
   GraphSelection,
-  GraphMoveSubGraphData['nextIdMap'],
-  GraphMoveSubGraphData['nextPinIdMap'],
-  GraphMoveSubGraphData['nextMergePinId'],
-  GraphMoveSubGraphData['nextPlugSpec'],
-  GraphMoveSubGraphData['nextSubComponentParentMap'],
-  GraphMoveSubGraphData['nextSubComponentChildrenMap'],
-  GraphMoveSubGraphData['nextSubComponentIndexMap'],
-  GraphMoveSubGraphData['nextUnitPinMergeMap'],
-  GraphMoveSubGraphData['nextSubComponentSlot'],
-  GraphMoveSubGraphData['nextSubComponentParentSlot'],
+  MoveMapping,
+  Moves,
+  ...any[],
 ]
 
 export interface G<
@@ -122,7 +120,6 @@ export interface G<
     bundle?: UnitBundleSpec,
     ...extra: any[]
   ): void
-  cloneUnit(unitId: string, newUnitId: string, ...extra: any[]): void
   removeUnit(unitId: string, destroy: boolean, ...extra: any[]): void
   removeRoot(subComponentId: string): void
   removeMerge(mergeId: string, ...extra: any[]): void
@@ -132,18 +129,6 @@ export interface G<
     type: IO,
     pinId: string,
     ...extra: any[]
-  ): void
-  removeUnitGhost(
-    unitId: string,
-    nextUnitId: string,
-    spec: GraphSpec,
-    ...extra: any[]
-  ): { specId: string; bundle: UnitBundleSpec }
-  addUnitGhost(
-    unitId: string,
-    nextUnitId: string,
-    nextUnitBundle: UnitBundleSpec,
-    nextUnitPinMap: IOOf<Dict<string>>
   ): void
   addMerge(mergeSpec: GraphMergeSpec, mergeId: string, ...extra: any[]): void
   addPinToMerge(
@@ -187,6 +172,7 @@ export interface G<
     data: any,
     ...extra: any[]
   ): void
+  setMergeData(mergeId: string, data: any, ...extra: any[]): void
   getUnitPinData(unitId: string, type: IO, pinId: string): any
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean
   isUnitPinConstant(unitId: string, type: IO, pinId: string): boolean
@@ -221,10 +207,6 @@ export interface G<
   hasUnit(unitId: string): boolean
   hasMerge(mergeId: string): boolean
   hasMergePin(mergeId: string, unitId: string, type: IO, pinId: string): boolean
-  isExposedInput(pin: GraphSubPinSpec): boolean
-  isExposedOutput(pin: GraphSubPinSpec): boolean
-  isExposedInputPinId(pinId: string): boolean
-  isExposedOutputPinId(pinId: string): boolean
   isElement(): boolean
   getUnits(): Dict<U_>
   getUnit(unitId: string): U_
@@ -240,6 +222,7 @@ export interface G<
     slotName: string
   ): void
   hasPlug(type: IO, pinId: string, subPinId: string): boolean
+  setPlugData(type: IO, pinId: string, subPinId: string, data: any): void
   removePinOrMerge(
     mergeId: string,
     unitId: string,
@@ -272,7 +255,6 @@ export type G_EE = {
   before_remove_unit: [string, Unit, string[]]
   before_add_unit: [string, Unit, string[]]
   add_unit: [string, UnitBundleSpec, Unit, string[]]
-  clone_unit: [string, string, Unit, string[]]
   remove_unit: [string, UnitBundleSpec, Unit, string[]]
   move_unit: [string, string, string, string[]]
   remove_unit_from_merge: [string, string, string[]]
@@ -300,6 +282,7 @@ export type G_EE = {
   set_unit_pin_ignored: [string, IO, string, boolean, string[]]
   set_unit_pin_data: [string, IO, string, any, string[]]
   set_unit_pin_set_id: [string, IO, string, string, string[]]
+  set_plug_pin_data: [IO, string, string, string[]]
   remove_unit_pin_data: [string, IO, string, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
   set_metadata: [{ path: string[]; data: any }, string[]]
@@ -307,8 +290,6 @@ export type G_EE = {
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]
   set_unit_id: [string, string, string, string[]]
-  add_unit_ghost: [string, string, BundleSpec, string[]]
-  remove_unit_ghost: [string, string, BundleSpec, string[]]
-  bulk_edit: [Action[], boolean, string[]]
+  bulk_edit: [Action[], string[]]
   edit: any[]
 }

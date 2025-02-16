@@ -130,14 +130,12 @@ export function watchGraph<T extends Graph>(
   forEachValueKey(merges, _watchMerge)
 
   graph.addListener('before_add_unit', addUnitListener)
-  graph.addListener('clone_unit', cloneUnitListener)
   graph.addListener('before_add_merge', addMergeListener)
   graph.addListener('before_remove_unit', removeUnitListener)
   graph.addListener('before_remove_merge', removeMergeListener)
 
   return () => {
     graph.removeListener('before_add_unit', addUnitListener)
-    graph.removeListener('clone_unit', cloneUnitListener)
     graph.removeListener('before_add_merge', addMergeListener)
     graph.removeListener('before_remove_unit', removeUnitListener)
     graph.removeListener('before_remove_merge', removeMergeListener)

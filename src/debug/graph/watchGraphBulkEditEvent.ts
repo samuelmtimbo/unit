@@ -4,7 +4,6 @@ import { Moment } from '../Moment'
 
 export interface GraphBulkEditMomentData {
   actions: Action[]
-  transaction: boolean
   path: string[]
 }
 
@@ -15,17 +14,12 @@ export function watchGraphBulkEditEvent(
   graph: Graph,
   callback: (moment) => void
 ): () => void {
-  const listener = (
-    actions: Action[],
-    transaction: boolean,
-    path: string[]
-  ) => {
+  const listener = (actions: Action[], path: string[]) => {
     callback({
       type: 'graph',
       event,
       data: {
         actions,
-        transaction,
         path,
       },
     })

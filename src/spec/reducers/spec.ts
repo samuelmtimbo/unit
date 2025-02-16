@@ -1,15 +1,18 @@
+import {
+  GraphAddUnitData,
+  GraphExposePinData,
+  GraphExposePinSetData,
+} from '../../Class/Graph/interface'
 import { deepSet_ } from '../../deepSet'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
+import { keyCount } from '../../system/core/object/KeyCount/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
-import merge from '../../system/f/object/Merge/f'
-import _set from '../../system/f/object/Set/f'
 import { Classes, DatumSpec, GraphSubPinSpec, Specs } from '../../types'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitSpec } from '../../types/GraphUnitSpec'
-import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { forIOObjKV, io } from '../../types/IOOf'
 import { forEach } from '../../util/array'
@@ -17,6 +20,7 @@ import { clone } from '../../util/clone'
 import {
   deepDeepMerge,
   deepDelete,
+  deepDestroy,
   deepGet,
   deepGetOrDefault,
   getObjSingleKey,
@@ -26,11 +30,11 @@ import {
 import { evaluateDataValue } from '../evaluateDataValue'
 import { getSubComponentParentId } from '../util/component'
 import {
+  findUnitMerges,
   findUnitPlugs,
   forEachGraphSpecPinPlug,
   forEachPinOnMerges,
   getMergePinCount,
-  getUnitMergesSpec,
 } from '../util/spec'
 import {
   insertRoot,
@@ -52,6 +56,13 @@ export const addUnit = (
   deepSet_(spec, ['units', unitId], unit)
 }
 
+export const addUnitSpec = (
+  { unitId, bundle }: GraphAddUnitData,
+  spec: GraphSpec
+): void => {
+  deepSet_(spec, ['units', unitId], bundle.unit)
+}
+
 export const removeDatum = (
   { datumId }: { datumId: string },
   spec: GraphSpec
@@ -64,22 +75,6 @@ export const setDatum = (
   spec: GraphSpec
 ): void => {
   deepSet_(spec, ['data', datumId], value)
-}
-
-export const removeUnits = (
-  { ids }: { ids: string[] },
-  spec: GraphSpec
-): void => {
-  forEach(ids, (id) => {
-    removeUnit({ unitId: id }, spec)
-  })
-}
-
-export const mergeUnits = (
-  { units }: { units: GraphUnitsSpec },
-  spec: GraphSpec
-): void => {
-  _set(spec, 'units', merge(spec.units, units)) as GraphSpec
 }
 
 export const removeUnitExposedTypePins = (
@@ -123,8 +118,8 @@ export const removeUnitMerges = (
     if (merge[unitId]) {
       deepDelete(spec, ['merges', mergeId, unitId])
 
-      if (getMergePinCount(spec.merges![mergeId]) < 2) {
-        deepDelete(spec, ['merges', mergeId])
+      if (getMergePinCount(spec.merges[mergeId]) < 2) {
+        deepDestroy(spec, ['merges', mergeId])
 
         removedMergeIdSet.add(mergeId)
       }
@@ -187,6 +182,10 @@ export const removeUnit = (
   removeUnitExposedPins({ unitId }, spec)
 
   delete spec['units'][unitId]
+
+  if (!keyCount(spec.units ?? {})) {
+    delete spec.units
+  }
 }
 
 export const addMerge = (
@@ -256,6 +255,10 @@ export const removeMerge = (
   { mergeId }: { mergeId: string },
   spec: GraphSpec
 ): void => {
+  if (!spec.merges || !spec.merges[mergeId]) {
+    return
+  }
+
   delete spec.merges[mergeId]
 
   spec.inputs = mapObjVK(spec.inputs, (input: GraphPinSpec) => ({
@@ -265,6 +268,10 @@ export const removeMerge = (
     }),
   }))
 
+  if (!keyCount(spec.inputs)) {
+    delete spec.inputs
+  }
+
   spec.outputs = mapObjVK(spec.outputs, (output: GraphPinSpec) => ({
     ...output,
     plug: mapObjVK(output.plug, (plug) => {
@@ -272,8 +279,16 @@ export const removeMerge = (
     }),
   }))
 
+  if (!keyCount(spec.outputs)) {
+    delete spec.outputs
+  }
+
   if (spec.metadata && spec.metadata.position && spec.metadata.position.merge) {
     delete spec.metadata.position.merge[mergeId]
+  }
+
+  if (!keyCount(spec.merges ?? {})) {
+    delete spec.merges
   }
 }
 
@@ -322,36 +337,21 @@ export const removePinFromMerge = (
   _removePinFromMerge({ mergeId, unitId, type, pinId }, spec)
 }
 
-export const isPinMerged = (
-  spec: GraphSpec,
-  id,
-  unitId: string,
-  type: IO,
-  pinId: string
-): boolean => {
-  return !!(
-    spec.merges![id] &&
-    spec.merges![id][unitId] &&
-    spec.merges![id][unitId][type] &&
-    spec.merges![id][unitId][type]![pinId]
-  )
-}
-
 export const coverPinSet = (
   { pinId, type }: { pinId: string; type: IO },
   spec: GraphSpec
 ): void => {
-  return deepDelete(spec, [`${type}s`, pinId])
+  return deepDestroy(spec, [`${type}s`, pinId])
 }
 
 export const coverPin = (
   {
-    pinId,
     type,
+    pinId,
     subPinId,
   }: {
-    pinId: string
     type: IO
+    pinId: string
     subPinId: string
   },
   spec: GraphSpec
@@ -360,7 +360,7 @@ export const coverPin = (
 }
 
 export const exposePinSet = (
-  { type, pinId, pinSpec }: { pinId: string; type: IO; pinSpec: GraphPinSpec },
+  { type, pinId, pinSpec }: GraphExposePinSetData,
   spec: GraphSpec
 ): void => {
   return deepSet_(spec, [`${type}s`, pinId], pinSpec)
@@ -382,7 +382,7 @@ export const setUnitId = (
   const specClone = clone(spec)
 
   const unitPlugs = findUnitPlugs(specClone, unitId)
-  const unitMerges = getUnitMergesSpec(specClone, unitId)
+  const unitMerges = findUnitMerges(specClone, unitId)
 
   removeUnit({ unitId }, spec)
   addUnit({ unitId: newUnitId, unit }, spec)
@@ -395,7 +395,7 @@ export const setUnitId = (
       const at = spec.component.subComponents[parentId].children.indexOf(unitId)
 
       removeSubComponentChild(
-        { subComponentId: parentId, childId: unitId },
+        { parentId: parentId, childId: unitId },
         spec.component
       )
       insertSubComponentChild(
@@ -424,9 +424,8 @@ export const setUnitId = (
     addMerge({ mergeId, mergeSpec }, spec)
   }
 
-  forIOObjKV(
-    unitPlugs,
-    (type, pinId, { type: _type, pinId: _pinId, subPinId: _subPinId }) => {
+  forIOObjKV(unitPlugs, (type, pinId, plugs) => {
+    forEach(plugs, ({ type: _type, pinId: _pinId, subPinId: _subPinId }) => {
       const subPinSpec = deepGet(specClone, [
         `${_type ?? type}s`,
         _pinId,
@@ -443,41 +442,15 @@ export const setUnitId = (
         [`${_type ?? type}s`, _pinId, 'plug', _subPinId],
         subPinSpec
       )
-    }
-  )
+    })
+  })
 }
 
 export const exposePin = (
-  {
-    pinId,
-    type,
-    subPinId,
-    subPinSpec,
-  }: {
-    pinId: string
-    type: IO
-    subPinId: string
-    subPinSpec: GraphSubPinSpec
-  },
+  { pinId, type, subPinId, subPinSpec, pinSpec }: GraphExposePinData,
   spec: GraphSpec
 ): void => {
   return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
-}
-
-export const exposeInputSet = (
-  { pinId, input }: { pinId: string; input: GraphPinSpec },
-  spec: GraphSpec
-): void => exposePinSet({ pinId, pinSpec: input, type: 'input' }, spec)
-
-export const exposeInput = (
-  {
-    pinId,
-    subPinId,
-    input,
-  }: { pinId: string; subPinId: string; input: GraphSubPinSpec },
-  spec: GraphSpec
-): void => {
-  return exposePin({ pinId, subPinId, subPinSpec: input, type: 'input' }, spec)
 }
 
 export const plugPin = (

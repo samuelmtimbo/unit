@@ -1,4 +1,3 @@
-import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_RANGE } from '../../system/_ids'
@@ -33,14 +32,3 @@ composition0.addUnitSpec(UNIT_ID_RANGE, {
 
 composition0.setUnitPinData(UNIT_ID_RANGE, 'input', 'a', 0)
 composition0.setUnitPinData(UNIT_ID_RANGE, 'input', 'b', 3)
-
-composition0.cloneUnit(UNIT_ID_RANGE, UNIT_ID_RANGE_CLONE)
-
-const clonedRange = composition0.getUnit(UNIT_ID_RANGE_CLONE) as Graph
-
-assert(!clonedRange.paused())
-
-assert.deepEqual(clonedRange.takeOutput('i'), 0)
-assert.deepEqual(clonedRange.takeOutput('i'), 1)
-assert.deepEqual(clonedRange.takeOutput('i'), 2)
-assert.deepEqual(clonedRange.takeOutput('i'), undefined)

@@ -22,7 +22,8 @@ export function watchUnitEvent(
     | 'register'
     | 'unregister'
     | 'play'
-    | 'pause',
+    | 'pause'
+    | 'restore',
   unit: Unit,
   callback: (moment: UnitMoment) => void
 ): () => void {

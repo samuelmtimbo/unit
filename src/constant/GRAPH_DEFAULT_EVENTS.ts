@@ -10,7 +10,6 @@ export const GRAPH_DEFAULT_EVENTS: (keyof G_EE | keyof C_EE | keyof U_EE)[] = [
   'remove_child',
   'insert_child',
   'add_unit',
-  'clone_unit',
   'remove_unit',
   'move_unit',
   'add_merge',

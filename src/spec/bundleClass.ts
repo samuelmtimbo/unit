@@ -31,7 +31,7 @@ export function bundleClass<T extends Unit = any>(
         remapSpecs(bundle, map)
       }
 
-      super(system, id, push)
+      super(system, id, !memory)
 
       if (memory) {
         this.restore(memory)

@@ -767,15 +767,13 @@ export class Primitive<
     this._backwarding = _backwarding
     this._forwarding_empty = _forwarding_empty
 
-    this._i = {}
-
     for (let name in this._input) {
       const input = this._input[name]
       const data = input.peak()
 
-      this._i[name] = data
-
       if (data !== undefined) {
+        this._i[name] = data
+
         this._i_active.add(name)
         this._i_start.add(name)
 

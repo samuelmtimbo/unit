@@ -74,7 +74,9 @@ export function unitFromBundleSpec<I, O>(
 
         const data_ = resolveDataRef(dataRef, specs, classes)
 
-        input.push(data_)
+        if (!memory) {
+          input.push(data_)
+        }
       }
     })
   }

@@ -966,17 +966,26 @@ export class Unit<
     return keys(this._output)
   }
 
-  public setPinData(type: IO, pinId: string, data: any): void {
+  public setPinData(
+    type: IO,
+    pinId: string,
+    data: any,
+    propagate: boolean = true
+  ): void {
     const pin = this.getPin(type, pinId)
-    pin.push(data)
+    pin.push(data, false, propagate)
 
     this.emit('set_pin_data', type, pinId, data)
   }
 
-  public removePinData(type: IO, pinId: string): void {
+  public removePinData(
+    type: IO,
+    pinId: string,
+    propagate: boolean = true
+  ): void {
     const pin = this.getPin(type, pinId)
 
-    pin.take()
+    pin.take(propagate)
   }
 
   public setInputConstant(pinId: string, constant: boolean): void {
@@ -1369,15 +1378,13 @@ export class Unit<
     this.getOutput(pinId).restore(state)
   }
 
-  public restore(state: {
-    input?: Dict<any>
-    output?: Dict<any>
-    memory?: Dict<any>
-  }): void {
+  public restore(state: Memory): void {
     const { input, output, memory } = state
 
     this.restoreInputs(input)
     this.restoreOutputs(output)
     this.restoreSelf(memory ?? {})
+
+    this.emit('restore')
   }
 }

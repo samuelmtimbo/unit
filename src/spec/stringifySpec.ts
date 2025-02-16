@@ -5,8 +5,8 @@ import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { stringifyDataObj } from '../types/stringifyPinData'
 
-export const stringifyBundleSpec = (spec: UnitBundleSpec): void => {
-  const { unit, specs } = spec
+export const stringifyBundleSpec = (bundle: UnitBundleSpec): void => {
+  const { unit, specs } = bundle
 
   stringifyGraphUnitSpecData(unit)
 }
@@ -17,8 +17,8 @@ export function stringifyBundleSpecData(bundle: BundleSpec): void {
   stringifyGraphSpecData(spec)
 }
 
-export function stringifyUnitBundleSpecData(unitBundle: UnitBundleSpec): void {
-  stringifyGraphUnitSpecData(unitBundle.unit)
+export function stringifyUnitBundleSpecData(bundle: UnitBundleSpec): void {
+  stringifyGraphUnitSpecData(bundle.unit)
 }
 
 export function stringifyGraphSpecData(spec: GraphSpec): void {

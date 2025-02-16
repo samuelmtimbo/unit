@@ -1,3 +1,4 @@
+import { deepDefault_ } from '../deepDefault'
 import deepMerge from '../system/f/object/DeepMerge/f'
 import { keys } from '../system/f/object/Keys/f'
 import { Dict } from '../types/Dict'
@@ -277,7 +278,7 @@ export function deepDeepMerge(obj: object, path: Key[], value: any): void {
 }
 
 export function deepGetOrDefault(obj: object, path: Key[], d: any): any {
-  let o = obj
+  let o = obj ?? {}
 
   for (let i = 0; i < path.length; i++) {
     const p = path[i]
@@ -366,6 +367,14 @@ export function deepIncFrom(obj: object, path: string[], from: number): any {
 
 export function deepInc(obj: object, path: string[]): any {
   return deepIncFrom(obj, path, 0)
+}
+
+export function deepPush(obj: object, path: string[], value: any): any {
+  deepDefault_(obj, path, [])
+
+  const array = deepGetOrDefault(obj, path, undefined) as any[]
+
+  array.push(value)
 }
 
 export function deepDecFrom(obj: object, path: string[], from: number): any {

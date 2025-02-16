@@ -54,7 +54,9 @@ export class Registry implements R {
 
     spec.id = specId
 
-    this.specs_.set(specId, spec)
+    delete spec.system
+
+    this.setSpec(specId, spec)
 
     return spec
   }

@@ -73,7 +73,7 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     this._ref = ref || false
   }
 
-  public take(): T | undefined {
+  public take(propagate: boolean = true): T | undefined {
     const data = this._register
 
     if (this._register !== undefined) {
@@ -81,7 +81,9 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
       this._register = undefined
 
-      this.emit('drop', data)
+      if (propagate) {
+        this.emit('drop', data)
+      }
     }
 
     this.end()
@@ -186,7 +188,11 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     return data
   }
 
-  public push(data: any, backpropagation: boolean = false): void {
+  public push(
+    data: any,
+    backpropagation: boolean = false,
+    propagate: boolean = true
+  ): void {
     this.invalidate()
 
     this._invalid = false
@@ -197,7 +203,9 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
     this._register = data
 
-    this.emit('data', data, backpropagation)
+    if (propagate) {
+      this.emit('data', data, backpropagation)
+    }
 
     if (this._ref) {
       //

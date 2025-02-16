@@ -5,8 +5,8 @@ import { IOOf } from './IOOf'
 
 export type GraphUnitPlugs = IOOf<
   Dict<
-    GraphPlugOuterSpec & {
+    (GraphPlugOuterSpec & {
       position?: Position
-    }
+    })[]
   >
 >

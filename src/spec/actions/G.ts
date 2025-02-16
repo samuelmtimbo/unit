@@ -1,24 +1,30 @@
+import { MoveMapping } from '../../Class/Graph/buildMoveMap'
+import { Moves } from '../../Class/Graph/buildMoves'
 import {
+  Flags,
   GraphAddMergeData,
   GraphAddPinToMergeData,
   GraphAddUnitData,
   GraphBulkEditData,
-  GraphCloneUnitData,
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
   GraphExposePinData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
+  GraphMoveSubComponentRootData,
   GraphMoveSubGraphIntoData,
   GraphMoveSubGraphOutOfData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
   GraphRemovePinFromMergeData,
+  GraphRemovePlugDataData,
   GraphRemoveUnitData,
   GraphRemoveUnitPinDataData,
   GraphSetComponentSizeData,
+  GraphSetMergeDataData,
+  GraphSetPlugDataData,
   GraphSetSubComponentSizeData,
   GraphSetUnitMetadataData,
   GraphSetUnitPinDataData,
@@ -27,6 +33,7 @@ import {
   GraphUnplugPinData,
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry/types'
+import { deepSet_ } from '../../deepSet'
 import { GraphSubPinSpec } from '../../types'
 import { Action } from '../../types/Action'
 import { AllKeys } from '../../types/AllKeys'
@@ -40,28 +47,33 @@ import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
-import { G } from '../../types/interface/G'
+import { G, GraphSelection } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
-import { deepSet, mapObjKeyKV, mapObjVK, revertObj } from '../../util/object'
-import { forEachPinOnMerges, opposite } from '../util/spec'
+import { clone } from '../../util/clone'
+import { deepGetOrDefault } from '../../util/object'
 import {
-  MOVE_SUB_COMPONENT_ROOT,
-  REORDER_SUB_COMPONENT,
-  makeMoveSubComponentRootAction,
-  makeReorderSubComponentAction,
-} from './C'
+  moveSubComponentRoot,
+  setSubComponentSize,
+} from '../reducers/component'
 import {
-  ADD_DATUM,
-  ADD_DATUM_LINK,
-  REMOVE_DATUM,
-  REMOVE_DATUM_LINK,
-  SET_DATUM,
-  makeAddDatumAction,
-  makeAddDatumLinkAction,
-  makeRemoveDatumAction,
-  makeRemoveDatumLinkAction,
-  makeSetDatumAction,
-} from './D'
+  addMerge,
+  addPinToMerge,
+  addUnitSpec,
+  coverPin,
+  coverPinSet,
+  exposePin,
+  exposePinSet,
+  plugPin,
+  removeMerge,
+  removePinFromMerge,
+  removeUnit,
+  removeUnitPinData,
+  setComponentSize,
+  setUnitPinData,
+  setUnitSize,
+  unplugPin,
+} from '../reducers/spec'
+import { getPinSpec, getPlugCount, getSubPinSpec } from '../util/spec'
 
 export const ADD_UNIT = 'addUnitSpec'
 export const REMOVE_UNIT = 'removeUnit'
@@ -70,6 +82,7 @@ export const ADD_MERGE = 'addMerge'
 export const ADD_PIN_TO_MERGE = 'addPinToMerge'
 export const REMOVE_PIN_FROM_MERGE = 'removePinFromMerge'
 export const REMOVE_MERGE = 'removeMerge'
+export const SET_MERGE_DATA = 'setMergeData'
 export const REMOVE_MERGE_DATA = 'removeMergeData'
 export const REMOVE_MERGES = 'removeMerges'
 export const EXPOSE_PIN = 'exposePin'
@@ -78,6 +91,8 @@ export const COVER_PIN_SET = 'coverPinSet'
 export const COVER_PIN = 'coverPin'
 export const UNPLUG_PIN = 'unplugPin'
 export const PLUG_PIN = 'plugPin'
+export const SET_PLUG_DATA = 'setPlugData'
+export const REMOVE_PLUG_DATA = 'removePlugData'
 export const SET_UNIT_PIN_DATA = 'setUnitPinData'
 export const REMOVE_UNIT_PIN_DATA = 'removeUnitPinData'
 export const SET_UNIT_PIN_CONSTANT = 'setUnitPinConstant'
@@ -98,7 +113,6 @@ export const MOVE_SUBGRAPH_OUT_OF = 'moveSubgraphOutOf'
 export const SET_UNIT_SIZE = 'setUnitSize'
 export const SET_COMPONENT_SIZE = 'setComponentSize'
 export const SET_SUB_COMPONENT_SIZE = 'setSubComponentSize'
-export const CLONE_UNIT = 'cloneUnit'
 
 export const wrapAddUnitAction = (data: GraphAddUnitData) => {
   return {
@@ -107,32 +121,18 @@ export const wrapAddUnitAction = (data: GraphAddUnitData) => {
   }
 }
 
-export const wrapCloneUnitAction = (data: GraphCloneUnitData) => {
-  return {
-    type: CLONE_UNIT,
-    data,
-  }
-}
-
-export const makeCloneUnitAction = (unitId: string, newUnitId: string) => {
-  return wrapCloneUnitAction({
-    unitId,
-    newUnitId,
-  })
-}
-
 export const makeAddUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
-  merges: GraphUnitMerges | null,
-  plugs: GraphUnitPlugs | null,
-  parentId: string | null | null,
-  parentIndex: number | null,
-  children: string[] | null,
-  childrenSlot: Dict<string> | null,
-  position: Position | null,
-  pinPosition: IOOf<Dict<Position>> | null,
-  layoutPosition: Position | null
+  merges?: GraphUnitMerges | null,
+  plugs?: GraphUnitPlugs | null,
+  parentId?: string | null | null,
+  parentIndex?: number | null,
+  children?: string[] | null,
+  childrenSlot?: Dict<string> | null,
+  position?: Position | null,
+  pinPosition?: IOOf<Dict<Position>> | null,
+  layoutPosition?: Position | null
 ) => {
   return wrapAddUnitAction({
     unitId,
@@ -165,73 +165,33 @@ export const wrapMoveSubgraphOutOfData = (data: GraphMoveSubGraphOutOfData) => {
 
 export const makeMoveSubgraphIntoAction = (
   graphId: string,
-  graphBundle: UnitBundleSpec,
-  graphSpec: GraphSpec,
-  nextSpecId: string,
-  nodeIds: GraphMoveSubGraphIntoData['nodeIds'],
-  nextIdMap: GraphMoveSubGraphIntoData['nextIdMap'],
-  nextUnitPinMergeMap: GraphMoveSubGraphIntoData['nextUnitPinMergeMap'],
-  nextPinIdMap: GraphMoveSubGraphIntoData['nextPinIdMap'],
-  nextMergePinId: GraphMoveSubGraphIntoData['nextMergePinId'],
-  nextPlugSpec: GraphMoveSubGraphIntoData['nextPlugSpec'],
-  nextSubComponentParentMap: GraphMoveSubGraphIntoData['nextSubComponentParentMap'],
-  nextSubComponentChildrenMap: GraphMoveSubGraphIntoData['nextSubComponentChildrenMap'],
-  nextSubComponentIndexMap: GraphMoveSubGraphIntoData['nextSubComponentIndexMap'],
-  nextSubComponentSlot: GraphMoveSubGraphIntoData['nextSubComponentSlot'],
-  nextSubComponentParentSlot: GraphMoveSubGraphIntoData['nextSubComponentParentSlot']
+  spec: GraphSpec,
+  selection: GraphSelection,
+  mapping: MoveMapping,
+  moves: Moves
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
-    graphBundle,
-    graphSpec,
-    nextSpecId,
-    nodeIds,
-    nextIdMap,
-    nextPinIdMap,
-    nextMergePinId,
-    nextPlugSpec,
-    nextUnitPinMergeMap,
-    nextSubComponentParentMap,
-    nextSubComponentChildrenMap,
-    nextSubComponentIndexMap,
-    nextSubComponentSlot,
-    nextSubComponentParentSlot,
+    spec,
+    selection,
+    moves,
+    mapping,
   })
 }
 
 export const makeMoveSubgraphOutOfAction = (
   graphId: string,
-  graphBundle: UnitBundleSpec,
-  graphSpec: GraphSpec,
-  nextSpecId: string,
-  nodeIds: GraphMoveSubGraphOutOfData['nodeIds'],
-  nextIdMap: GraphMoveSubGraphOutOfData['nextIdMap'],
-  nextUnitPinMergeMap: GraphMoveSubGraphOutOfData['nextUnitPinMergeMap'],
-  nextPinIdMap: GraphMoveSubGraphOutOfData['nextPinIdMap'],
-  nextMergePinId: GraphMoveSubGraphOutOfData['nextMergePinId'],
-  nextPlugSpec: GraphMoveSubGraphOutOfData['nextPlugSpec'],
-  nextSubComponentParentMap: GraphMoveSubGraphOutOfData['nextSubComponentParentMap'],
-  nextSubComponentChildrenMap: GraphMoveSubGraphOutOfData['nextSubComponentChildrenMap'],
-  nextSubComponentIndexMap: GraphMoveSubGraphOutOfData['nextSubComponentIndexMap'],
-  nextSubComponentSlot: GraphMoveSubGraphOutOfData['nextSubComponentSlot'],
-  nextSubComponentParentSlot: GraphMoveSubGraphOutOfData['nextSubComponentParentSlot']
+  spec: GraphSpec,
+  selection: GraphSelection,
+  mapping: MoveMapping,
+  moves: Moves
 ) => {
   return wrapMoveSubgraphOutOfData({
     graphId,
-    graphBundle,
-    graphSpec,
-    nextSpecId,
-    nodeIds,
-    nextIdMap,
-    nextPinIdMap,
-    nextMergePinId,
-    nextPlugSpec,
-    nextSubComponentParentMap,
-    nextSubComponentChildrenMap,
-    nextSubComponentIndexMap,
-    nextUnitPinMergeMap,
-    nextSubComponentParentSlot,
-    nextSubComponentSlot,
+    spec,
+    selection,
+    moves,
+    mapping,
   })
 }
 
@@ -294,7 +254,8 @@ export const makeExposePinAction = (
   type: IO,
   pinId: string,
   subPinId: string,
-  subPinSpec: GraphSubPinSpec
+  subPinSpec: GraphSubPinSpec,
+  pinSpec?: GraphPinSpec
 ) => {
   return wrapExposePinAction({ type, pinId, subPinId, subPinSpec })
 }
@@ -366,9 +327,9 @@ export const makeExposePinSetAction = (
   type: IO,
   pinId: string,
   pinSpec: GraphPinSpec,
-  data: any
+  flags?: Flags
 ) => {
-  return wrapExposePinSetAction({ type, pinId, pinSpec, data })
+  return wrapExposePinSetAction({ type, pinId, pinSpec, ...flags })
 }
 
 export const wrapCoverPinSetAction = (data: GraphCoverPinSetData) => {
@@ -413,7 +374,7 @@ export const makeUnplugPinAction = (
   type: IO,
   pinId: string,
   subPinId: string,
-  subPinSpec: GraphPinSpec,
+  subPinSpec: GraphSubPinSpec,
   take?: boolean
 ) => {
   return wrapUnplugPinAction({ type, pinId, subPinId, subPinSpec, take })
@@ -430,9 +391,71 @@ export const makeCoverPinAction = (
   type: IO,
   pinId: string,
   subPinId: string,
-  subPinSpec: GraphSubPinSpec
+  subPinSpec: GraphSubPinSpec,
+  pinSpec?: GraphPinSpec
 ) => {
-  return wrapCoverPinAction({ type, pinId, subPinId, subPinSpec })
+  return wrapCoverPinAction({ type, pinId, subPinId, subPinSpec, pinSpec })
+}
+
+export const makeCoverPinOrSetAction = (
+  spec: GraphSpec,
+  type: IO,
+  pinId: string,
+  subPinId: string
+) => {
+  const pin = getPinSpec(spec, type, pinId)
+  const subPin = getSubPinSpec(spec, type, pinId, subPinId)
+  const subPinCount = getPlugCount(spec, type, pinId)
+
+  if (subPinCount > 1) {
+    return makeCoverPinAction(type, pinId, subPinId, subPin)
+  } else {
+    return makeCoverPinSetAction(type, pinId, pin)
+  }
+}
+
+export const makeSetPlugDataAction = (
+  type: IO,
+  pinId: string,
+  subPinId: string,
+  data: string,
+  lastData: string
+) => {
+  return wrapSetPlugDataAction({
+    type,
+    pinId,
+    subPinId,
+    data,
+    lastData,
+  })
+}
+
+export const wrapSetPlugDataAction = (data: GraphSetPlugDataData) => {
+  return {
+    type: SET_PLUG_DATA,
+    data,
+  }
+}
+
+export const makeRemovePlugDataAction = (
+  type: IO,
+  pinId: string,
+  subPinId: string,
+  data: any
+) => {
+  return wrapSetPlugDataAction({
+    type,
+    pinId,
+    subPinId,
+    data,
+  })
+}
+
+export const wrapRemovePlugDataAction = (data: GraphRemovePlugDataData) => {
+  return {
+    type: REMOVE_PLUG_DATA,
+    data,
+  }
 }
 
 export const wrapSetUnitPinDataAction = (data: GraphSetUnitPinDataData) => {
@@ -649,19 +672,31 @@ export const makeRemoveMergeAction = (
   })
 }
 
-export const wrapRemoveMergeDataAction = (data: GraphRemoveMergeDataData) => {
+export const makeSetMergeDataAction = (mergeId: string, data: string) => {
+  return wrapSetMergeDataAction({
+    mergeId,
+    data,
+  })
+}
+
+export const wrapSetMergeDataAction = (data: GraphSetMergeDataData) => {
   return {
-    type: REMOVE_MERGE_DATA,
+    type: SET_MERGE_DATA,
     data,
   }
 }
 
-export const makeRemoveMergesAction = (ids: string[]): Action => {
+export const makeRemoveMergeDataAction = (mergeId: string, data: string) => {
+  return wrapRemoveMergeDataAction({
+    mergeId,
+    data,
+  })
+}
+
+export const wrapRemoveMergeDataAction = (data: GraphRemoveMergeDataData) => {
   return {
-    type: REMOVE_MERGES,
-    data: {
-      ids,
-    },
+    type: REMOVE_MERGE_DATA,
+    data,
   }
 }
 
@@ -674,8 +709,8 @@ export const wrapAddPinToMergeData = (data: GraphAddPinToMergeData) => {
 
 export const makeAddPinToMergeAction = (
   mergeId: string,
-  type: IO,
   unitId: string,
+  type: IO,
   pinId: string
 ): Action => {
   return wrapAddPinToMergeData({
@@ -697,8 +732,8 @@ export const wrapRemovePinFromMergeData = (
 
 export const makeRemovePinFromMergeAction = (
   mergeId: string,
-  type: IO,
   unitId: string,
+  type: IO,
   pinId: string
 ): Action => {
   return wrapRemovePinFromMergeData({
@@ -722,383 +757,6 @@ export const makeBulkEditAction = (actions: Action[]): Action => {
   })
 }
 
-export const reverseAction = ({ type, data }: Action): Action => {
-  switch (type) {
-    case ADD_UNIT:
-      return makeRemoveUnitAction(
-        data.unitId,
-        data.bundle,
-        data.merges,
-        data.plugs,
-        data.parentId,
-        data.parentIndex,
-        data.children,
-        data.childrenSlot,
-        data.position,
-        data.pinPosition,
-        data.layoutPosition
-      )
-    case REMOVE_UNIT:
-      return makeAddUnitAction(
-        data.unitId,
-        data.bundle,
-        data.merges,
-        data.plugs,
-        data.parentId,
-        data.parentIndex,
-        data.children,
-        data.childrenSlot,
-        data.position,
-        data.pinPosition,
-        data.layoutPosition
-      )
-    case ADD_MERGE:
-      return makeRemoveMergeAction(data.mergeId, data.mergeSpec, data.position)
-    case ADD_PIN_TO_MERGE:
-      return makeRemovePinFromMergeAction(
-        data.mergeId,
-        data.type,
-        data.unitId,
-        data.pinId
-      )
-    case REMOVE_MERGE:
-      return makeAddMergeAction(data.mergeId, data.mergeSpec, data.position)
-    case REMOVE_PIN_FROM_MERGE:
-      return makeAddPinToMergeAction(
-        data.mergeId,
-        data.type,
-        data.unitId,
-        data.pinId
-      )
-    case EXPOSE_PIN_SET:
-      return makeCoverPinSetAction(data.type, data.pinId, data.pinSpec)
-    case COVER_PIN_SET:
-      return makeExposePinSetAction(
-        data.type,
-        data.pinId,
-        data.pinSpec,
-        data.data
-      )
-    case COVER_PIN:
-      return makeExposePinAction(
-        data.type,
-        data.pinId,
-        data.subPinId,
-        data.subPinSpec
-      )
-    case PLUG_PIN:
-      return makeUnplugPinAction(
-        data.type,
-        data.pinId,
-        data.subPinId,
-        data.subPinSpec
-      )
-    case UNPLUG_PIN:
-      return makePlugPinAction(
-        data.type,
-        data.pinId,
-        data.subPinId,
-        data.subPinSpec
-      )
-    case SET_UNIT_PIN_CONSTANT:
-      return makeSetUnitPinConstantAction(
-        data.unitId,
-        data.type,
-        data.pinId,
-        !data.constant
-      )
-    case SET_UNIT_PIN_DATA:
-      return makeSetUnitPinDataAction(
-        data.unitId,
-        data.type,
-        data.pinId,
-        undefined
-      )
-    case REMOVE_UNIT_PIN_DATA:
-      return makeSetUnitPinDataAction(
-        data.unitId,
-        data.type,
-        data.pinId,
-        data.data
-      )
-    case SET_UNIT_PIN_IGNORED:
-      return makeSetUnitPinIgnoredAction(
-        data.unitId,
-        data.type,
-        data.pinId,
-        !data.ignored
-      )
-    case EXPOSE_UNIT_PIN_SET:
-      return makeCoverUnitPinSetAction(
-        data.unitId,
-        data.type,
-        data.pinId,
-        data.pinSpec
-      )
-    case COVER_UNIT_PIN_SET:
-      return makeExposeUnitPinSetAction(
-        data.unitId,
-        data.type,
-        data.pinId,
-        data.pinSpec
-      )
-    case MOVE_SUB_COMPONENT_ROOT:
-      return makeMoveSubComponentRootAction(
-        data.nextParentId,
-        data.parentId,
-        data.children,
-        data.index,
-        data.nextSlotMap,
-        data.slotMap
-      )
-    case REORDER_SUB_COMPONENT:
-      return makeReorderSubComponentAction(
-        data.parentId,
-        data.childId,
-        data.to,
-        data.from
-      )
-    case MOVE_SUBGRAPH_INTO: {
-      const data_ = data as GraphMoveSubGraphIntoData
-
-      const nextNodeIds_ = {
-        ...data_.nodeIds,
-        unit: data_.nodeIds.unit.map(
-          (unitId: string) => data_.nextIdMap.unit[unitId] ?? unitId
-        ),
-        link: data_.nodeIds.link.filter(({ unitId, type, pinId }) => {
-          if (!data_.nodeIds.unit.includes(unitId)) {
-            return false
-          }
-
-          return true
-        }),
-        plug: data_.nodeIds.plug
-          .concat(
-            data_.nodeIds.link
-              .filter(({ unitId, type, pinId }) => {
-                if (!data_.nodeIds.unit.includes(unitId)) {
-                  return true
-                }
-
-                return false
-              })
-              .map(({ unitId, type, pinId }) => {
-                return {
-                  type: unitId === data_.graphId ? type : opposite(type),
-                  pinId,
-                  subPinId: '0',
-                }
-              })
-          )
-          .concat(
-            (() => {
-              const mergePlugsOut = []
-
-              for (const mergeId of data_.nodeIds.merge) {
-                const nextMergePinSpec = data_.nextMergePinId[mergeId]
-
-                if (nextMergePinSpec.input && nextMergePinSpec.input.pinId) {
-                  mergePlugsOut.push({
-                    type: 'input',
-                    pinId: nextMergePinSpec.input.pinId,
-                    subPinId: '0',
-                  })
-                }
-
-                if (nextMergePinSpec.output && nextMergePinSpec.output.pinId) {
-                  mergePlugsOut.push({
-                    type: 'output',
-                    pinId: nextMergePinSpec.output.pinId,
-                    subPinId: '0',
-                  })
-                }
-              }
-
-              return mergePlugsOut
-            })()
-          ),
-      }
-
-      const nextIdMap_ = {
-        ...data_.nextIdMap,
-        unit: revertObj(data.nextIdMap.unit ?? {}),
-        merge: revertObj(data.nextIdMap.merge ?? {}),
-      }
-
-      return makeMoveSubgraphOutOfAction(
-        data.graphId,
-        data.graphBundle,
-        data.graphSpec,
-        data.nextSpecId,
-        nextNodeIds_,
-        nextIdMap_,
-        data.nextUnitPinMergeMap,
-        data.nextPinIdMap,
-        data.nextMergePinId,
-        data.nextPlugSpec,
-        data.nextSubComponentParentMap,
-        data.nextSubComponentChildrenMap,
-        data.nextSubComponentIndexMap,
-        {},
-        {}
-      )
-    }
-
-    case MOVE_SUBGRAPH_OUT_OF: {
-      const data_ = data as GraphMoveSubGraphIntoData
-
-      const nextIdMap_ = {
-        ...data_.nextIdMap,
-        unit: revertObj(data_.nextIdMap.unit ?? {}),
-        merge: revertObj(data_.nextIdMap.merge ?? {}),
-      }
-
-      const nextNodeIds_ = {
-        ...data_.nodeIds,
-        unit: data_.nodeIds.unit.map(
-          (unitId: string) => data_.nextIdMap.unit[unitId] ?? unitId
-        ),
-        merge: data_.nodeIds.merge.map(
-          (mergeId: string) => data_.nextIdMap.merge[mergeId] ?? mergeId
-        ),
-      }
-
-      const nextUnitPinMergeMap_ = {}
-
-      forEachPinOnMerges(
-        data_.graphSpec.merges ?? {},
-        (mergeId, unitId, type, pinId) => {
-          deepSet(nextUnitPinMergeMap_, [unitId, type, pinId], mergeId)
-        }
-      )
-
-      const nextPinIdMap_ = mapObjVK(
-        mapObjKeyKV(data_.nextPinIdMap, (unitId) => {
-          return data_.nextIdMap.unit[unitId] ?? unitId
-        }),
-        (pinIdMap) => {
-          return {
-            input: mapObjVK(pinIdMap.input, (pin) => {
-              return {
-                ...pin,
-                merge: mapObjKeyKV(pin.merge, (unitId) => {
-                  return nextIdMap_.unit[unitId] ?? unitId
-                }),
-              }
-            }),
-            output: mapObjVK(pinIdMap.output, (pin) => {
-              return {
-                ...pin,
-                merge: mapObjKeyKV(pin.merge, (unitId) => {
-                  return nextIdMap_.unit[unitId] ?? unitId
-                }),
-              }
-            }),
-          }
-        }
-      )
-
-      const nextPlugSpec_: IOOf<Dict<Dict<GraphSubPinSpec>>> = {
-        input: mapObjVK(data_.nextPlugSpec.input, (pinSpec) => {
-          return mapObjVK(pinSpec, (subPinSpec) => {
-            const { mergeId, unitId } = subPinSpec
-
-            if (mergeId) {
-              return {
-                ...subPinSpec,
-                mergeId: nextIdMap_.merge[mergeId] ?? mergeId,
-              }
-            } else if (unitId) {
-              return {
-                ...subPinSpec,
-                unitId: nextIdMap_.unit[unitId] ?? unitId,
-              }
-            }
-
-            return subPinSpec
-          }) as Dict<GraphSubPinSpec>
-        }),
-        output: mapObjVK(data_.nextPlugSpec.output, (nextPlug) => {
-          return mapObjVK(nextPlug, (subPinSpec) => {
-            const { mergeId, unitId } = subPinSpec
-
-            if (mergeId) {
-              return {
-                ...subPinSpec,
-                mergeId: nextIdMap_.merge[mergeId] ?? mergeId,
-              }
-            } else if (unitId) {
-              return {
-                ...subPinSpec,
-                unitId: nextIdMap_.unit[unitId] ?? unitId,
-              }
-            }
-
-            return subPinSpec
-          }) as Dict<GraphSubPinSpec>
-        }),
-      }
-
-      return makeMoveSubgraphIntoAction(
-        data_.graphId,
-        data_.graphBundle,
-        data_.graphSpec,
-        data_.nextSpecId,
-        nextNodeIds_,
-        nextIdMap_,
-        nextUnitPinMergeMap_,
-        nextPinIdMap_,
-        data_.nextMergePinId,
-        nextPlugSpec_,
-        data_.nextSubComponentParentMap,
-        data_.nextSubComponentChildrenMap,
-        data_.nextSubComponentIndexMap,
-        {},
-        {}
-      )
-    }
-
-    case BULK_EDIT:
-      return makeBulkEditAction([...data.actions].reverse().map(reverseAction))
-    case SET_COMPONENT_SIZE:
-      return makeSetComponentSizeAction(
-        data.prevWidth,
-        data.prevHeight,
-        data.width,
-        data.height
-      )
-    case SET_SUB_COMPONENT_SIZE:
-      return makeSetSubComponentSizeAction(
-        data.unitId,
-        data.prevWidth,
-        data.prevHeight,
-        data.width,
-        data.height
-      )
-    case SET_UNIT_SIZE:
-      return makeSetUnitSizeAction(
-        data.unitId,
-        data.prevWidth,
-        data.prevHeight,
-        data.width,
-        data.height
-      )
-    case ADD_DATUM:
-      return makeRemoveDatumAction(data.id, data.value)
-    case SET_DATUM:
-      return makeSetDatumAction(data.id, data.value, data.prevValue)
-    case REMOVE_DATUM:
-      return makeAddDatumAction(data.id, data.value)
-    case ADD_DATUM_LINK:
-      return makeRemoveDatumLinkAction(data.id, data.value, data.pinSpec)
-    case REMOVE_DATUM_LINK:
-      return makeAddDatumLinkAction(data.id, data.value, data.pinSpec)
-    default:
-      throw new Error('irreversible')
-  }
-}
-
 export const processAction = (
   action: Action,
   method: Partial<AllKeys<G & U, Function>>,
@@ -1113,10 +771,210 @@ export const processAction = (
   ;(method[type] ?? fallback)(data)
 }
 
+export const act = (spec, type, data) => {
+  ;({
+    coverPinSet: (data: GraphCoverPinSetData) => {
+      coverPinSet(data, spec)
+    },
+    exposePinSet: (data: GraphExposePinSetData) => {
+      exposePinSet(data, spec)
+    },
+    addUnitSpec: (data: GraphAddUnitData) => {
+      addUnitSpec(data, spec)
+    },
+    removeUnit: (data: GraphRemoveUnitData) => {
+      removeUnit(data, spec)
+    },
+    addMerge: (data: GraphAddMergeData) => {
+      addMerge(data, spec)
+    },
+    removeMerge: (data: GraphRemoveMergeData) => {
+      removeMerge(data, spec)
+    },
+    removeUnitPinData: (data: GraphRemoveUnitPinDataData) => {
+      removeUnitPinData(data, spec)
+    },
+    addPinToMerge: (data: GraphAddPinToMergeData) => {
+      addPinToMerge(data, spec)
+    },
+    coverPin: (data: GraphCoverPinData) => {
+      coverPin(data, spec)
+    },
+    exposePin: (data: GraphExposePinData) => {
+      exposePin(data, spec)
+    },
+    unplugPin: (data: GraphUnplugPinData) => {
+      unplugPin(data, spec)
+    },
+    plugPin: (data: GraphPlugPinData) => {
+      plugPin(data, spec)
+    },
+    setSubComponentSize: (data: GraphSetSubComponentSizeData) => {
+      setSubComponentSize(data, spec.component)
+    },
+    setUnitSize: (data: GraphSetUnitSizeData) => {
+      setUnitSize(data, spec)
+    },
+    setUnitPinData: (data: GraphSetUnitPinDataData) => {
+      setUnitPinData(data, spec, {}, {})
+    },
+    setComponentSize: (data: GraphSetComponentSizeData) => {
+      setComponentSize(data, spec)
+    },
+    moveSubComponentRoot: (data: GraphMoveSubComponentRootData) => {
+      moveSubComponentRoot(data, spec.component)
+    },
+    removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
+      removePinFromMerge(data, spec)
+    },
+  })[type](data)
+}
+
 export const processActions = (
   actions: Action[],
   method: Partial<AllKeys<G, Function>>,
   fallback?: (data: any) => void
 ): void => {
   actions.forEach((action) => processAction(action, method, fallback))
+}
+
+export const bulkEdit = (spec_: GraphSpec, actions: Action[]): GraphSpec => {
+  const spec = clone(spec_)
+
+  bulkEdit(spec, actions)
+
+  return spec
+}
+
+export const bulkEdit_ = (spec: GraphSpec, actions: Action[]): void => {
+  for (const action of actions) {
+    act(spec, action.type, clone(action.data))
+  }
+}
+
+export const reverseSelection = (
+  selection: GraphSelection,
+  mapping: MoveMapping
+): { selection: GraphSelection; mapping: MoveMapping } => {
+  const selection_: GraphSelection = {
+    unit: [],
+    link: [],
+    plug: [],
+    merge: [],
+  }
+
+  const mapping_: MoveMapping = {
+    unit: {},
+    merge: {},
+    link: {},
+    plug: {},
+  }
+
+  for (const unitId of selection.unit ?? []) {
+    const nextUnitId = deepGetOrDefault(
+      mapping,
+      ['unit', unitId, 'in', 'unit', 'unitId'],
+      unitId
+    )
+
+    if (nextUnitId) {
+      selection_.unit.push(nextUnitId)
+
+      deepSet_(mapping_, ['unit', nextUnitId, 'in', 'unit'], { unitId })
+    }
+  }
+
+  for (const mergeId of selection.merge ?? []) {
+    const nextMergeId = deepGetOrDefault(
+      mapping,
+      ['merge', mergeId, 'in', 'merge', 'mergeId'],
+      undefined
+    )
+
+    if (nextMergeId) {
+      selection_.merge.push(nextMergeId)
+
+      deepSet_(
+        mapping_,
+        ['merge', nextMergeId, 'in', 'merge', 'mergeId'],
+        mergeId
+      )
+    }
+  }
+
+  for (const { unitId, type, pinId } of selection.link ?? []) {
+    const nextUnitId = deepGetOrDefault(
+      mapping,
+      ['unit', unitId, 'in', 'unit', 'unitId'],
+      unitId
+    )
+
+    const nextMergeId = deepGetOrDefault(
+      mapping,
+      ['link', unitId, type, pinId, 'in', 'merge', 'mergeId'],
+      undefined
+    )
+
+    const template = deepGetOrDefault(
+      mapping,
+      ['link', unitId, type, pinId, 'in', 'link', 'template'],
+      false
+    )
+
+    if (nextMergeId || template) {
+      //
+    } else {
+      selection_.link.push({ unitId: nextUnitId, type, pinId })
+    }
+  }
+
+  for (const { type, pinId, subPinId } of selection.plug ?? []) {
+    const nextPlug = deepGetOrDefault(
+      mapping,
+      ['plug', type, pinId, subPinId, 'in', 'plug', type],
+      undefined
+    )
+
+    const pin = deepGetOrDefault(
+      mapping,
+      ['plug', type, pinId, subPinId, 'in', 'link'],
+      undefined
+    )
+
+    const mergeId = deepGetOrDefault(
+      mapping,
+      ['plug', type, pinId, subPinId, 'in', 'merge', 'mergeId'],
+      undefined
+    )
+
+    if (nextPlug) {
+      selection_.plug.push(nextPlug)
+
+      deepSet_(
+        mapping_,
+        [
+          'plug',
+          nextPlug.type,
+          nextPlug.pinId,
+          nextPlug.subPinId,
+          'in',
+          'plug',
+          nextPlug.type,
+        ],
+        { type, pinId, subPinId }
+      )
+    }
+
+    if (pin) {
+      selection_.link.push(pin)
+    }
+
+    if (mergeId) {
+      if (!selection_.merge.includes(mergeId)) {
+        selection_.merge.push(mergeId)
+      }
+    }
+  }
+
+  return { selection: selection_, mapping: mapping_ }
 }

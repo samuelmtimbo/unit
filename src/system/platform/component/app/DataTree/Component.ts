@@ -743,7 +743,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
   }
 
   private _space = (style: Dict<string> = {}): Div => {
-    return this._delimiter(style, ' ')
+    return this._delimiter({ ...style, width: '3px' }, ' ')
   }
 
   private _comma = (style: Dict<string> = {}): Div => {

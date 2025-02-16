@@ -20,10 +20,9 @@ export interface O {}
 
 export interface CanvasJ {}
 export interface CanvasEE extends ElementEE<{}> {}
-export interface CanvasC extends Canvas_ {}
 
 export default class Canvas
-  extends Element_<I, O, CanvasJ, CanvasEE, CanvasC>
+  extends Element_<I, O, CanvasJ, CanvasEE>
   implements CA
 {
   __ = ['U', 'C', 'V', 'J', 'CA', 'EE']

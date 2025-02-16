@@ -1,6 +1,5 @@
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../ObjectUpdateType'
-import { Primitive, PrimitiveEvents } from '../Primitive'
 import { System } from '../system'
 import isEqual from '../system/f/comparison/Equals/f'
 import { Callback } from '../types/Callback'
@@ -9,13 +8,14 @@ import { J } from '../types/interface/J'
 import { V } from '../types/interface/V'
 import { Unlisten } from '../types/Unlisten'
 import { $ } from './$'
+import { Component__, ComponentEE } from './Component'
 import { ION, Opt } from './Unit'
 
 export type Stateful_EE<I extends Dict<any> = any> = {
   set: [keyof I, I[keyof I]]
 }
 
-export type StatefulEvents<_EE extends Dict<any[]>> = PrimitiveEvents<
+export type StatefulEvents<_EE extends Dict<any[]>> = ComponentEE<
   _EE & Stateful_EE
 > &
   Stateful_EE
@@ -26,7 +26,7 @@ export class Stateful<
     _J extends Dict<any> = {},
     _EE extends StatefulEvents<_EE> = StatefulEvents<Stateful_EE>,
   >
-  extends Primitive<I, O, _EE>
+  extends Component__<I, O, _EE>
   implements J<I>, V
 {
   __ = ['U', 'J', 'V']
