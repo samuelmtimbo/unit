@@ -1455,6 +1455,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const exposeMerge = new Merge(this.__system)
 
+    exposeMerge.play()
+
     fork && this._fork(undefined, true, bubble)
 
     this._specExposePinSet(type, pinId, pinSpec)
@@ -1483,6 +1485,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const exposedPin = new Pin({ ref }, this.__system)
 
     const exposedMerge = new Merge(this.__system)
+
+    exposedMerge.play()
 
     this._memExposePinSet(type, pinId, pinSpec, exposedPin, exposedMerge)
     this._simExposePinSet(
@@ -4445,17 +4449,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _createMerge = (mergeId: string): Merge => {
     const merge = new Merge(this.__system)
 
-    // merge.pause()
-
     const mergeInputPinId = getMergePinNodeId(mergeId, 'input')
 
     const mergeInputPin = new Pin({}, this.__system)
 
     merge.addInput(mergeInputPinId, mergeInputPin)
 
-    // if (!this._paused) {
-    //   merge.play()
-    // }
+    if (!this._paused) {
+      merge.play()
+    }
 
     return merge
   }

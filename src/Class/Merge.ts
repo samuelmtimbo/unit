@@ -23,8 +23,6 @@ export default class Merge<
     super({}, {}, system, ID_SYSTEM_MERGE)
 
     this.addListener('reset', this._reset)
-
-    this.play()
   }
 
   onInputRemoved<K extends keyof I>(
