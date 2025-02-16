@@ -2718,7 +2718,7 @@ export class Component<
 
     child.$domParent = parent
 
-    const target = this._wrapElement(parent, child, at)
+    const target = this._wrapElement(parent, child)
 
     insertAt(parent.$element, target, at)
   }
@@ -2729,8 +2729,7 @@ export class Component<
 
   private _wrapElement = (
     parent: Component,
-    child: Component<HTMLElement | SVGElement>,
-    at: number
+    child: Component<HTMLElement | SVGElement>
   ) => {
     const { $element: element } = child
 
@@ -2931,12 +2930,12 @@ export class Component<
       element.addEventListener('animationstart', onTransitionStart)
       element.addEventListener('animationstend', onTransitionEnd)
 
-      this._svg_wrapper[at] = target as SVGSVGElement
-      this._svg_wrapper_unlisten[at] = () => {
+      this._svg_wrapper.push(target as SVGSVGElement)
+      this._svg_wrapper_unlisten.push(() => {
         observer.disconnect()
 
         stop()
-      }
+      })
 
       target.appendChild(element)
 
@@ -2952,7 +2951,7 @@ export class Component<
 
       child.$wrapElement = target
 
-      this._html_wrapper[at] = target as SVGForeignObjectElement
+      this._html_wrapper.push(target as SVGForeignObjectElement)
 
       target.appendChild(element)
     }
@@ -2960,27 +2959,37 @@ export class Component<
     return target
   }
 
-  private _unwrapElement = (parent: Node, element: Node, at: number) => {
-    let target: Node = element
+  private _unwrapElement = (parent: Node, child: Component) => {
+    const { $element, $wrapElement } = child
 
-    if (isHTML(this.$system, parent) && isSVG(this.$system, element)) {
+    let target: Node = $element
+
+    if (isHTML(this.$system, parent) && isSVG(this.$system, $element)) {
+      const at = this._svg_wrapper.findIndex(
+        (wrapper) => wrapper === $wrapElement
+      )
+
       target = this._svg_wrapper[at]
 
-      this._svg_wrapper[at] = undefined
+      this._svg_wrapper.splice(at, 1)
 
       this._svg_wrapper_unlisten[at]()
-      this._svg_wrapper_unlisten[at] = undefined
+      this._svg_wrapper_unlisten.splice(at, 1)
 
-      target.removeChild(element)
+      target.removeChild($element)
     } else if (
       (isSVG(this.$system, parent) || isSVGSVG(this.$system, parent)) &&
-      isHTML(this.$system, element)
+      isHTML(this.$system, $element)
     ) {
+      const at = this._svg_wrapper.findIndex(
+        (wrapper) => wrapper === $wrapElement
+      )
+
       target = this._html_wrapper[at]
 
-      this._html_wrapper[at] = undefined
+      this._html_wrapper.splice(at, 1)
 
-      target.removeChild(element)
+      target.removeChild($element)
     }
 
     return target
@@ -3651,20 +3660,20 @@ export class Component<
       if (this.$slotParent) {
         this.$slotParent.domCommitRemoveChild(component, at)
       } else {
-        this._removeChild(component, at)
+        this._removeChild(component)
       }
     } else {
-      this._removeChild(component, at)
+      this._removeChild(component)
     }
   }
 
-  protected _removeChild(child: Component, at: number) {
+  protected _removeChild(child: Component) {
     remove(this.$domChildren, child)
 
     child.$domParent = null
 
     if (this.$element.contains(child.$element)) {
-      const target = this._unwrapElement(this.$element, child.$element, at)
+      const target = this._unwrapElement(this.$element, child)
 
       removeChild(this.$element, target)
     }

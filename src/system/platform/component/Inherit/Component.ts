@@ -75,7 +75,7 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _unregisterChild = (child: Component, at: number) => {
+  private _unregisterChild = (child: Component) => {
     if (child.$wrapElement) {
       this._styles.splice(0, 1)
     } else {
@@ -106,10 +106,10 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
     this._registerChild(child, at)
   }
 
-  protected _removeChild(child: Component, at: number) {
-    this._unregisterChild(child, at)
+  protected _removeChild(child: Component) {
+    this._unregisterChild(child)
 
-    super._removeChild(child, at)
+    super._removeChild(child)
   }
 
   onPropChanged(name: string, style: Style) {
