@@ -58,7 +58,8 @@
           "unitId": "div",
           "pinId": "attr"
         }
-      }
+      },
+      "defaultIgnored": true
     }
   },
   "outputs": {},
