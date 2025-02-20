@@ -746,12 +746,6 @@ export function buildMoveMap(
               pinId,
             }
 
-            const pinSpec: GraphPinSpec = {
-              plug: {
-                [nextSubPinId]: subPinSpec,
-              },
-            }
-
             const outerPlugSelected = outerPlugs.filter((outerPlug) =>
               isPlugSelected(
                 outerPlug.type,

@@ -3446,9 +3446,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     bundle = bundle ?? unit.getUnitBundleSpec({})
 
-    const { unit: unitSpec } = bundle
-
-    deepSet(this._spec, ['units', unitId], unitSpec)
+    deepSet(this._spec, ['units', unitId], bundle.unit)
 
     if (unit.isElement()) {
       this._specInjectSubComponent(unitId)
