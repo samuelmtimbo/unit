@@ -92,7 +92,8 @@
               "x": 259,
               "y": 89
             }
-          }
+          },
+          "ignored": false
         }
       },
       "output": {},
