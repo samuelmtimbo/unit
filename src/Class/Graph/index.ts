@@ -2036,11 +2036,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
 
     if (mergeId) {
-      propagate = propagate || this.isRefMerge(mergeId)
+      if (this.isRefMerge(mergeId)) {
+        propagate = true
+      }
 
       this._simPlugPinToMerge(type, pinId, subPinId, mergeId, data, propagate)
     } else {
-      propagate = propagate || this.isUnitPinRef(unitId, kind, _pinId)
+      if (this.isUnitPinRef(unitId, kind, _pinId) === true) {
+        propagate = true
+      }
 
       this._simPlugPinToUnitPin(
         type,
