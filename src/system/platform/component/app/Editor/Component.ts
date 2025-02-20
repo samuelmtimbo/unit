@@ -43921,10 +43921,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._tick_closest_compatible_selection(node_id)
 
-    if (this._selected_node_id[node_id]) {
-      for (const selected_node_id in this._selected_node_id) {
-        if (selected_node_id !== node_id) {
-          this._set_node_drag_along(node_id, selected_node_id)
+    if (this._mode === 'none' || this._mode === 'multiselect') {
+      if (this._selected_node_id[node_id]) {
+        for (const selected_node_id in this._selected_node_id) {
+          if (selected_node_id !== node_id) {
+            this._set_node_drag_along(node_id, selected_node_id)
+          }
         }
       }
     }
@@ -44554,6 +44556,32 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const datum_node_ids = node_ids.filter((node_id) => {
       return this._is_datum_node_id(node_id)
     })
+
+    const merge_node_ids = node_ids.filter((node_id) => {
+      return this._is_merge_node_id(node_id)
+    })
+
+    for (const merge_node_id of merge_node_ids) {
+      if (!new_node_id_map[merge_node_id]) {
+        const merge = this._get_merge(merge_node_id)
+
+        let selected_unit_new_pin_node_id: string
+
+        forEachPinOnMerge(merge, (unit_id, type, pin_id) => {
+          if (this._is_node_selected(unit_id)) {
+            const new_unit_id = new_node_id_map[unit_id]
+
+            const new_pin_node_id = getPinNodeId(new_unit_id, type, pin_id)
+
+            selected_unit_new_pin_node_id = new_pin_node_id
+          }
+        })
+
+        if (selected_unit_new_pin_node_id) {
+          new_node_id_map[merge_node_id] = selected_unit_new_pin_node_id
+        }
+      }
+    }
 
     for (const datum_node_id of datum_node_ids) {
       const { datumId } = segmentDatumNodeId(datum_node_id)
