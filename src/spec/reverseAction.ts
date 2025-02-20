@@ -45,10 +45,12 @@ import {
   makeRemoveMergeAction,
   makeRemoveMergeDataAction,
   makeRemovePinFromMergeAction,
+  makeRemovePlugDataAction,
   makeRemoveUnitAction,
   makeRemoveUnitPinDataAction,
   makeSetComponentSizeAction,
   makeSetMergeDataAction,
+  makeSetPlugDataAction,
   makeSetSubComponentSizeAction,
   makeSetUnitPinConstantAction,
   makeSetUnitPinDataAction,
@@ -61,11 +63,13 @@ import {
   REMOVE_MERGE,
   REMOVE_MERGE_DATA,
   REMOVE_PIN_FROM_MERGE,
+  REMOVE_PLUG_DATA,
   REMOVE_UNIT,
   REMOVE_UNIT_PIN_DATA,
   reverseSelection,
   SET_COMPONENT_SIZE,
   SET_MERGE_DATA,
+  SET_PLUG_DATA,
   SET_SUB_COMPONENT_SIZE,
   SET_UNIT_PIN_CONSTANT,
   SET_UNIT_PIN_DATA,
@@ -294,6 +298,21 @@ export const reverseAction = ({ type, data }: Action): Action => {
       return makeRemoveMergeDataAction(data.mergeId, data.data)
     case REMOVE_MERGE_DATA:
       return makeSetMergeDataAction(data.mergeId, data.data)
+    case SET_PLUG_DATA:
+      return makeRemovePlugDataAction(
+        data.type,
+        data.pinId,
+        data.subPinId,
+        data.data
+      )
+    case REMOVE_PLUG_DATA:
+      return makeSetPlugDataAction(
+        data.type,
+        data.pinId,
+        data.subPinId,
+        data.data,
+        undefined
+      )
     default:
       throw new Error('irreversible')
   }
