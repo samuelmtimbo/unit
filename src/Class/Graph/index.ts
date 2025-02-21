@@ -822,6 +822,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     const subPin = this.getUnitPin(unitId, kind, pinId)
 
+    if (kind === 'input') {
+      if (this.isUnitPinRef(unitId, kind, pinId)) {
+        propagate = true
+      }
+    }
+
     if (type === 'input' && kind === 'input') {
       const pin = this.getPin(type, name)
 

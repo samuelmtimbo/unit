@@ -41946,6 +41946,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    const ref = this._is_pin_ref(type, pin_id)
+
+    if (ref) {
+      if (sub_pin_spec.unitId) {
+        const type_ = sub_pin_spec.kind ?? type
+
+        if (type_ === 'input') {
+          const pin_node_id = getPinNodeId(
+            sub_pin_spec.unitId,
+            type_,
+            sub_pin_spec.pinId
+          )
+
+          this._sim_set_pin_data_value(pin_node_id, 'null')
+        }
+      } else if (sub_pin_spec.mergeId) {
+        this._for_each_merge_pin(
+          sub_pin_spec.mergeId,
+          (unit_id, type, pin_id) => {
+            if (type === 'input') {
+              const pin_node_id = getPinNodeId(unit_id, type, pin_id)
+
+              this._sim_set_pin_data_value(pin_node_id, 'null')
+            }
+          }
+        )
+      }
+    }
+
     this._start_graph_simulation(LAYER_EXPOSED)
   }
 
@@ -56601,6 +56630,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // )
 
     const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+    if (!this._has_node(pin_node_id)) {
+      return
+    }
 
     this._graph_debug_set_pin_value(pin_node_id, data)
   }
