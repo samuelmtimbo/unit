@@ -53763,7 +53763,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const a_max_link_heap = this._node_max_link_length_heap[a_id]
 
         const a_shrink = clamp(
-          a_max_link_heap?.value.l / a_max_link_heap?.value.t ?? 1,
+          (a_max_link_heap?.value.l ?? 1) / (a_max_link_heap?.value.t ?? 1),
           1,
           Infinity
         )
