@@ -56262,6 +56262,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           for (const move of moves) {
             if (move.in) {
               act(next_spec, move.action.type, move.action.data)
+
+              setSpec(next_spec.id, next_spec)
             } else {
               this._on_graph_unit_bulk_edit({
                 actions: [move.action],
@@ -56271,10 +56273,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         } else {
           applyMoves_(next_parent_spec, next_spec, moves)
-        }
 
-        setSpec(next_spec.id, next_spec)
-        setSpec(next_parent_spec.id, next_parent_spec)
+          setSpec(next_parent_spec.id, next_parent_spec)
+        }
       }
 
       if (isEqual(subgraph_path, path)) {
@@ -56329,14 +56330,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               })
             } else {
               act(next_spec, move.action.type, move.action.data)
+
+              setSpec(next_spec.id, next_spec)
             }
           }
         } else {
           applyMoves_(next_parent_spec, next_spec, moves)
-        }
 
-        setSpec(next_spec.id, next_spec)
-        setSpec(next_parent_spec.id, next_parent_spec)
+          setSpec(next_parent_spec.id, next_parent_spec)
+        }
       }
 
       if (isEqual(subgraph_path, path)) {
