@@ -773,7 +773,7 @@ export function buildMoveMap(
               exposePinSetTask = newTask([
                 {
                   in: true,
-                  action: makeExposePinSetAction(type, nextPinId, {}),
+                  action: makeExposePinSetAction(type, nextPinId, { ref }),
                 },
               ])
 
@@ -1113,6 +1113,7 @@ export function buildMoveMap(
                 in: false,
                 action: makeExposePinSetAction(type, nextPinId, {
                   plug: { '0': subPinSpec },
+                  ref,
                 }),
               },
             ])
@@ -1658,7 +1659,8 @@ export function buildMoveMap(
                         mergeId: nextInsideMergeId,
                       },
                     },
-                  }
+                    ref,
+                  },
                 ),
               },
             ])
