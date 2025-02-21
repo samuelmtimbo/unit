@@ -1,22 +1,11 @@
 import {
   UnitRemovePinDataData,
-  UnitTakeInputData,
+  UnitSetPinDataData,
 } from '../../Class/Unit/interface'
 import { IO } from '../../types/IO'
 
-export const TAKE_INPUT = 'takeInput'
+export const SET_PIN_DATA = 'setPinData'
 export const REMOVE_PIN_DATA = 'removePinData'
-
-export const wrapTakeInputAction = (data: UnitTakeInputData) => {
-  return {
-    type: TAKE_INPUT,
-    data,
-  }
-}
-
-export const makeTakeInputAction = (pinId: string) => {
-  return wrapTakeInputAction({ pinId })
-}
 
 export const wrapRemovePinDataAction = (data: UnitRemovePinDataData) => {
   return {
@@ -25,6 +14,25 @@ export const wrapRemovePinDataAction = (data: UnitRemovePinDataData) => {
   }
 }
 
-export const makeRemovePinDataAction = (type: IO, pinId: string) => {
-  return wrapRemovePinDataAction({ type, pinId })
+export const makeRemovePinDataAction = (
+  type: IO,
+  pinId: string,
+  data: string
+) => {
+  return wrapRemovePinDataAction({ type, pinId, data })
+}
+
+export const makeSetPinDataAction = (type: IO, pinId: string, data: any) => {
+  return wrapSetPinDataAction({
+    type,
+    pinId,
+    data,
+  })
+}
+
+export const wrapSetPinDataAction = (data: UnitSetPinDataData) => {
+  return {
+    type: SET_PIN_DATA,
+    data,
+  }
 }

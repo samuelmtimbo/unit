@@ -418,6 +418,7 @@ import {
   makeSetPinSetDefaultIgnoredAction,
   makeSetPinSetFunctionalAction,
   makeSetPinSetIdAction,
+  makeSetPlugDataAction,
   makeSetSubComponentSizeAction,
   makeSetUnitIdAction,
   makeSetUnitPinConstantAction,
@@ -433,8 +434,8 @@ import {
   wrapRemoveUnitPinDataAction,
 } from '../../../../../spec/actions/G'
 import {
+  makeSetPinDataAction,
   wrapRemovePinDataAction,
-  wrapTakeInputAction,
 } from '../../../../../spec/actions/U'
 import { emptyIO } from '../../../../../spec/emptyIO'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
@@ -22195,7 +22196,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._graph_debug_set_pin_value(node_id, value)
 
-        this.set_pin_data(node_id, value)
+        this.set_graph_pin_data(node_id, value)
       }
     } else if (this._is_unit_node_id(node_id)) {
       //
@@ -24025,7 +24026,77 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this.__sim_set_pin_set_data(type, pinId, value)
     }
 
-    this._pod_set_plug_data(ext_node_id, value)
+    const { type, pinId } = segmentPlugNodeId(ext_node_id)
+
+    this._pod_set_pin_set_data(type, pinId, value)
+  }
+
+  private set_plug_data = (
+    type: IO,
+    pinId: string,
+    subPinId: string,
+    data: string
+  ) => {
+    const current_plug_data = this.__get_plug_datum_value(type, pinId, subPinId)
+
+    this._dispatch_action(
+      makeSetPlugDataAction(type, pinId, subPinId, data, current_plug_data)
+    )
+
+    this.__state_set_plug_data(type, pinId, subPinId, data)
+    this.__pod_set_plug_data(type, pinId, subPinId, data)
+  }
+
+  private __set_plug_data = (
+    type: IO,
+    pinId: string,
+    subPinId: string,
+    data: string
+  ) => {}
+
+  private __state_set_plug_data = (
+    type: IO,
+    pinId: string,
+    subPinId: string,
+    data: string
+  ) => {
+    this.__spec_set_plug_data(type, pinId, subPinId, data)
+    this.__sim_set_plug_data(type, pinId, subPinId, data)
+  }
+
+  private __spec_set_plug_data = (
+    type: IO,
+    pinId: string,
+    subPinId: string,
+    data: string
+  ) => {}
+
+  private set_pin_set_data = (type: IO, pinId: string, data: string) => {
+    this._dispatch_action(makeSetPinDataAction(type, pinId, data))
+
+    this._set_pin_set_data(type, pinId, data)
+  }
+
+  private _set_pin_set_data = (type: IO, pinId: string, data: string) => {
+    this._state_set_pin_set_data(type, pinId, data)
+    this._pod_set_pin_set_data(type, pinId, data)
+  }
+
+  private _state_set_pin_set_data = (type: IO, pinId: string, data: string) => {
+    this.__spec_set_pin_set_data(type, pinId, data)
+    this.__sim_set_pin_set_data(type, pinId, data)
+  }
+
+  private _pod_set_pin_set_data = (type: IO, pinId: string, data: string) => {
+    this._pod.$setPinData({
+      type,
+      pinId,
+      data,
+    })
+  }
+
+  private __spec_set_pin_set_data = (type: IO, pinId: string, data: string) => {
+    //
   }
 
   private _is_plug_node_match = (
@@ -25310,7 +25381,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ) => {
     // console.log('Graph', '_pod_remove_exposed_pin_datum__template', type, pinId)
 
-    removePinData({ type, pinId })
+    const data = deepGetOrDefault(this._unit_datum, [type, pinId], undefined)
+
+    removePinData({ type, pinId, data })
   }
 
   private _enable_plug_name = (ext_node_id: string): void => {
@@ -27985,7 +28058,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       removeUnitPinData,
       removePinData,
     }: {
-      takeInput: (data: UnitTakeInputData) => void
+      takeInput: (data: UnitRemovePinDataData) => void
       removeMergeData(data: GraphRemoveMergeDataData): void
       removeUnitPinData(data: GraphRemoveUnitPinDataData): void
       removePinData(data: UnitRemovePinDataData): void
@@ -28986,12 +29059,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _yellow_click_plug = (plug_node_id: string): void => {
     const { specs } = this.$props
 
-    const type = this._get_plug_type(plug_node_id, true)
+    const type_ = this._get_plug_type(plug_node_id, true)
 
-    const data = randomTreeOfType(specs, type)
+    const data = randomTreeOfType(specs, type_)
 
     if (data) {
-      this._sim_set_pin_set_data(plug_node_id, data.value)
+      const { type, pinId } = segmentPlugNodeId(plug_node_id)
+
+      this.set_pin_set_data(type, pinId, data.value)
     }
   }
 
@@ -37568,25 +37643,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _pod_push_data = (type: IO, pinId: string, data: string): void => {
-    this._pod.$push({ pinId, data })
-  }
-
-  private _pod_take_input = (id: string): void => {
-    this._pod_take_input__template(id, {
-      takeInput: this._pod.$takeInput.bind(this._pod),
-    })
-  }
-
-  private _pod_take_input__template = (
-    pinId: string,
-    { takeInput }: { takeInput(data: UnitTakeInputData): void }
-  ): void => {
-    takeInput({ pinId })
-  }
-
-  public set_pin_data = (pin_node_id: string, data: string): void => {
-    // console.log('Graph', 'set_pin_data', pin_node_id, data)
+  public set_graph_pin_data = (pin_node_id: string, data: string): void => {
+    // console.log('Graph', 'set_graph_pin_data', pin_node_id, data)
 
     if (this._is_link_pin_node_id(pin_node_id)) {
       this.set_unit_pin_data(pin_node_id, data)
@@ -40634,7 +40692,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         if (_isValidTree(tree) && _isTypeMatch__cached(specs, tree, pin_type)) {
           if (!prevent) {
-            this.set_pin_data(datum_pin_node_id, tree.value)
+            this.set_graph_pin_data(datum_pin_node_id, tree.value)
           } else {
             if (!this._is_pin_active(datum_pin_node_id)) {
               this._sim_remove_datum(datum_node_id)
@@ -41501,7 +41559,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         datum_plug_node_id,
         {
           takeInput(data) {
-            actions.push(wrapTakeInputAction(data))
+            actions.push(wrapRemovePinDataAction(data))
           },
           removeMergeData(data) {
             actions.push(wrapRemoveMergeDataAction(data))
@@ -47480,14 +47538,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const ext_pin_node_id = getExtNodeIdFromIntNodeId(selected_node_id)
 
-        if (
-          isInternalNodeId(selected_node_id) &&
-          !selected_node_ids.includes(ext_pin_node_id)
-        ) {
-          template = true
-        }
+        if (isInternalNodeId(selected_node_id)) {
+          if (selected_node_ids.includes(ext_pin_node_id)) {
+            //
+          } else {
+            template = true
 
-        selection.plug.push({ type, pinId, subPinId, template })
+            selection.plug.push({ type, pinId, subPinId, template })
+          }
+        } else {
+          selection.plug.push({ type, pinId, subPinId, template })
+        }
       }
     }
 
@@ -47590,6 +47651,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           } else {
             this._start_node_long_press_collapse(ext_node_id)
           }
+        }
+      } else if (this._is_int_node_id(selected_node_id)) {
+        const ext_node_id = getExtNodeIdFromIntNodeId(selected_node_id)
+
+        if (selected_node_set.has(ext_node_id)) {
+          //
+        } else {
+          this._start_node_long_press_collapse(selected_node_id)
         }
       } else {
         this._start_node_long_press_collapse(selected_node_id)
@@ -56899,7 +56968,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     tree?: TreeNode,
     data_position: Dict<Position> = {}
   ): void => {
-    // console.log('Graph', '_unit_debug_set_pin_data', type, pinId, value)
+    // console.log('Graph', '__sim_set_pin_set_data', type, pinId, value)
 
     this._unit_datum[type][pinId] = value
 

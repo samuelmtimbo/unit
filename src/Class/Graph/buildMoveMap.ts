@@ -235,6 +235,8 @@ export function buildMoveMap(
 
   const sourceRemoveMergeTasks: Dict<MoveTask> = {}
   const sourceRemoveUnitTasks = {}
+  const sourceCoverPinSetTasks: IOOf<Dict<MoveTask>> = {}
+  const sourceCoverPinTasks: IOOf<Dict<Dict<MoveTask>>> = {}
 
   const targetAddUnitTasks = {}
   const targetAddMergeTasks = {}
@@ -969,9 +971,6 @@ export function buildMoveMap(
     }
   }
 
-  const sourceCoverPinSetTasks: IOOf<Dict<MoveTask>> = {}
-  const sourceCoverPinTasks: IOOf<Dict<Dict<MoveTask>>> = {}
-
   const sourceSelectedPinPlugCountMap: IOOf<Dict<number>> = {}
 
   for (const { type, pinId } of selection.plug ?? []) {
@@ -1612,19 +1611,33 @@ export function buildMoveMap(
                 sourceCoverPinSetTask
               )
             } else {
-              const sourceCoverPinTask = newTask([
-                {
-                  in: false,
-                  action: makeCoverPinAction(
-                    plug.type,
-                    plug.pinId,
-                    plug.subPinId,
-                    plug.subPinSpec
-                  ),
-                },
-              ])
+              if (
+                !deepGetOrDefault(
+                  sourceCoverPinTasks,
+                  [plug.type, plug.pinId, plug.subPinId],
+                  undefined
+                )
+              ) {
+                const sourceCoverPinTask = newTask([
+                  {
+                    in: false,
+                    action: makeCoverPinAction(
+                      plug.type,
+                      plug.pinId,
+                      plug.subPinId,
+                      plug.subPinSpec
+                    ),
+                  },
+                ])
 
-              addDependency(sourceCoverPinTask, moveMergeTask)
+                addDependency(sourceCoverPinTask, moveMergeTask)
+
+                deepSet_(
+                  sourceCoverPinTasks,
+                  [plug.type, plug.pinId, plug.subPinId],
+                  sourceCoverPinTask
+                )
+              }
             }
           } else {
             const unselectedPlugOutsideUnplugTask = newTask([
@@ -2056,17 +2069,27 @@ export function buildMoveMap(
           addDependency(unplugSubPinTask, movePlugTask)
         }
 
-        const coverPlugTask = newTask([
-          {
-            in: false,
-            action: makeCoverPinAction(type, pinId, subPinId, {}),
-          },
-        ])
+        let coverPlugTask = deepGetOrDefault(
+          sourceCoverPinTasks,
+          [type, pinId, subPinId],
+          undefined
+        )
 
-        addDependency(coverPlugTask, movePlugTask)
+        if (!coverPlugTask) {
+          coverPlugTask = newTask([
+            {
+              in: false,
+              action: makeCoverPinAction(type, pinId, subPinId, {}),
+            },
+          ])
 
-        if (unplugSubPinTask) {
-          addDependency(coverPlugTask, unplugSubPinTask)
+          addDependency(coverPlugTask, movePlugTask)
+
+          if (unplugSubPinTask) {
+            addDependency(coverPlugTask, unplugSubPinTask)
+          }
+
+          deepSet_(sourceCoverPinTasks, [type, pinId, subPinId], coverPlugTask)
         }
 
         if (shouldCoverPinSet) {
@@ -2438,15 +2461,17 @@ export function buildMoveMap(
           undefined
         )
 
-        if (!subPinSpec.unitId || !isUnitSelected(subPinSpec.unitId)) {
-          const sourceUnplugPinTask = newTask([
-            {
-              in: false,
-              action: makeUnplugPinAction(type, pinId, subPinId, subPinSpec),
-            },
-          ])
+        if (subPinSpec.unitId || subPinSpec.mergeId) {
+          if (!subPinSpec.unitId || !isUnitSelected(subPinSpec.unitId)) {
+            const sourceUnplugPinTask = newTask([
+              {
+                in: false,
+                action: makeUnplugPinAction(type, pinId, subPinId, subPinSpec),
+              },
+            ])
 
-          addDependency(sourceUnplugPinTask, movePlugTask)
+            addDependency(sourceUnplugPinTask, movePlugTask)
+          }
         }
 
         const shouldCover = deepGetOrDefault(
@@ -2455,20 +2480,34 @@ export function buildMoveMap(
           false
         )
 
-        const sourceCoverPinTask = newTask([
-          {
-            in: false,
-            action: makeCoverPinAction(type, pinId, subPinId, {}),
-          },
-        ])
-
-        deepSet_(
+        let sourceCoverPinTask = deepGetOrDefault(
           sourceCoverPinTasks,
           [type, pinId, subPinId],
-          sourceCoverPinTask
+          undefined
         )
 
-        addDependency(sourceCoverPinTask, movePlugTask)
+        if (!sourceCoverPinTask) {
+          sourceCoverPinTask = newTask([
+            {
+              in: false,
+              action: makeCoverPinAction(type, pinId, subPinId, {}),
+            },
+          ])
+
+          deepSet_(
+            sourceCoverPinTasks,
+            [type, pinId, subPinId],
+            sourceCoverPinTask
+          )
+
+          addDependency(sourceCoverPinTask, movePlugTask)
+
+          deepSet_(
+            sourceCoverPinTasks,
+            [type, pinId, subPinId],
+            sourceCoverPinTask
+          )
+        }
 
         if (shouldCover) {
           if (!coverPinSetTask) {
@@ -3155,12 +3194,7 @@ export function buildMoveMap(
           const exposePinTask = newTask([
             {
               in: true,
-              action: makeExposePinAction(
-                type,
-                nextPinId,
-                nextSubPinId,
-                {},
-              ),
+              action: makeExposePinAction(type, nextPinId, nextSubPinId, {}),
             },
           ])
 
@@ -3173,10 +3207,19 @@ export function buildMoveMap(
           )
 
           if (datum) {
-            movePlugTask.moves.push({
-              in: false,
-              action: makeSetUnitPinDataAction(graphId, type, nextPinId, datum),
-            })
+            const setUnitPinDataTask = newTask([
+              {
+                in: false,
+                action: makeSetUnitPinDataAction(
+                  graphId,
+                  type,
+                  nextPinId,
+                  datum
+                ),
+              },
+            ])
+
+            addDependency(setUnitPinDataTask, exposePinTask)
           }
         }
       }

@@ -519,7 +519,7 @@ export const makeSetUnitPinSetIdAction = (
   unitId: string,
   type: IO,
   pinId: string,
-  nextPinId: string,
+  nextPinId: string
 ) => {
   return wrapSetUnitPinSetIdAction({
     unitId,

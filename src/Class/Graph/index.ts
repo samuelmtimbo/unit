@@ -2930,7 +2930,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const exposedMerge = deepGet(this._exposedMerge, [type, pinId])
 
-    const plug = exposedMerge.getPin(oppositeType, subPinId)
+    const type_ = deepGetOrDefault(
+      this._exposedEmptySubPin,
+      [type, pinId, subPinId],
+      undefined
+    )
+      ? oppositeType
+      : type
+
+    const plug = exposedMerge.getPin(type_, subPinId)
 
     return plug
   }

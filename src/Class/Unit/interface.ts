@@ -39,6 +39,7 @@ export type UnitSetPinDataData = {
 export type UnitRemovePinDataData = {
   type: IO
   pinId: string
+  data: string
 }
 
 export type UnitGetPinDataData = {

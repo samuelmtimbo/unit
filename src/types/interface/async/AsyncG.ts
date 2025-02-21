@@ -513,7 +513,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphSetPlugDataData) {
-      call(graph, 'setPlugData', fork, bubble, type, pinId, subPinId, data)
+      const { specs, classes } = graph.__system
+
+      const _data = evaluate(data, specs, classes)
+
+      call(graph, 'setPlugData', fork, bubble, type, pinId, subPinId, _data)
     },
 
     $addMerge({
