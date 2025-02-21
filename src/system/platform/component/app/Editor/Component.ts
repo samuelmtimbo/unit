@@ -6806,9 +6806,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const merged = this._is_link_pin_merged(pin_node_id)
 
-    position = jigglePoint(
-      this._init_unit_pin_position(unit_id, type, pin_id, 0, 1)
-    )
+    position =
+      position ??
+      jigglePoint(this._init_unit_pin_position(unit_id, type, pin_id, 0, 1))
 
     if (!merged) {
       this._sim_add_link_pin_node(unit_id, type, pin_id, position)
