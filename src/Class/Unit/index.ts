@@ -201,10 +201,16 @@ export class Unit<
     return ref
   }
 
-  public setParent(parent: Unit | null) {
+  public setParent(parent: Unit | null, ...extra: any[]) {
     this._parent = parent
 
     this.emit('parent', this._parent)
+  }
+
+  public removeParent() {
+    this._parent = null
+
+    this.emit('parent', null)
   }
 
   public setPinIgnored<

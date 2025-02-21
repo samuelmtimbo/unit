@@ -38,7 +38,7 @@ export interface U<
   I extends Dict<any> = Dict<any>,
   O extends Dict<any> = Dict<any>,
 > {
-  setParent(parent: Unit<any, any> | null)
+  setParent(parent: Unit<any, any> | null, ...extra: any[])
   setInputs(inputs: Pins<I>, opts: PinOpts): void
   setPin<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
     type: T,

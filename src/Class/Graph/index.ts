@@ -5,7 +5,6 @@ import { PinOpt } from '../../PinOpt'
 import { Pins } from '../../Pins'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
 import { refSlot, reorderParentRoot, reorderRoot } from '../../component/method'
-import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
 import { deepSet_ } from '../../deepSet'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
@@ -2023,10 +2022,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return isRef
   }
 
-  edit(event: string, ...args: any[]): void {
-    // @ts-ignore
+  edit(event: keyof G_EE, ...args: any[]): void {
     super.emit(event, ...args)
     super.emit('edit', [event, ...args])
+
+    this._bubble && this._bubble(event, ...args)
   }
 
   private _simPlugPin = (
@@ -3038,7 +3038,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       this.__system.registerUnit(id)
 
-      emit && this.emit('fork', prevSpecId, clone(spec), bubble, [])
+      emit && this.edit('fork', prevSpecId, clone(spec), bubble, [])
     }
   }
 
@@ -3477,6 +3477,33 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this.setUnitPin(unitId, 'output', pinId)
   }
 
+  private _bubble: (event: keyof G_EE, ...data: any[]) => void = null
+
+  private _unitBubble = (unitId: string, event: keyof G_EE, ...data: any[]) => {
+    const data_ = data
+      .slice(0, -1)
+      .concat([[unitId, ...(data[data.length - 1] ?? [])]])
+
+    this.emit(event, ...data_)
+
+    this._bubble && this._bubble(event, ...data_)
+  }
+
+  public setParent(
+    parent: Unit | null,
+    bubble: (event: keyof G_EE, ...data: any[]) => void
+  ) {
+    super.setParent(parent)
+
+    this._bubble = bubble
+  }
+
+  public removeParent() {
+    super.removeParent()
+
+    this._bubble = null
+  }
+
   private _memAddUnit(
     unitId: string,
     unit: Unit,
@@ -3490,7 +3517,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const all_unlisten: Unlisten[] = []
 
-    unit.setParent(this as any)
+    unit.setParent(this as any, this._unitBubble.bind(this, unitId))
 
     this._unit[unitId] = unit
 
@@ -3737,20 +3764,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     all_unlisten.push(unit.prependListener('catch_err', on_unit_err_removed))
 
     if (unit instanceof Graph) {
-      for (const DEFAULT_EVENT of GRAPH_DEFAULT_EVENTS) {
-        all_unlisten.push(
-          unit.addListener(DEFAULT_EVENT as keyof G_EE, (...args) => {
-            this.emit(
-              DEFAULT_EVENT,
-              // @ts-ignore
-              ...args
-                .slice(0, -1)
-                .concat([[unitId, ...(args[args.length - 1] ?? [])]])
-            )
-          })
-        )
-      }
-
       all_unlisten.push(
         unit.prependListener(
           'fork',
