@@ -47764,9 +47764,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       (graph_render || should_graph_become_component) &&
       (!init_unit_id || !init_unit_is_render)
 
-    this._flush_debugger()
-    this._pause_debugger()
-
     const stop = this._state_move_subgraph_into(
       graph_id,
       selection,
@@ -48325,8 +48322,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (graph_id && this._is_unit_component(graph_id)) {
       this._set_sub_component_controlled(graph_id, false)
     }
-
-    this._start_debugger()
 
     this._collapse_init_node_id_set = new Set()
     this._collapse_unit_spec = {}
@@ -54482,6 +54477,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._unlisten_pod()
     this._pause_debugger()
     this._clear_debugger()
+
+    this._pod_started = false
   }
 
   private _unlisten_pod = (): void => {
@@ -54535,12 +54532,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _debug_stop: boolean = false
-
   private _stop_debugger = (): void => {
     // console.log('Graph', '_stop_debugger', this._id)
-
-    this._debug_stop = true
 
     this._pause_debugger()
   }
