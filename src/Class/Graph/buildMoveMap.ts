@@ -1660,7 +1660,7 @@ export function buildMoveMap(
                       },
                     },
                     ref,
-                  },
+                  }
                 ),
               },
             ])

@@ -643,6 +643,7 @@ import {
 import { R } from '../../../../../types/interface/R'
 import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { $Component } from '../../../../../types/interface/async/$Component'
+import { $G } from '../../../../../types/interface/async/$G'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $U } from '../../../../../types/interface/async/$U'
 import { AsyncGraph } from '../../../../../types/interface/async/AsyncGraph'
@@ -7420,8 +7421,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const { fork, bubble } = this.$props
 
-    this._pod.$setUnitPinSetId({
+    const $unit = this._pod.$refUnit({
       unitId,
+      _: ['G'],
+      detached: true,
+    }) as $G
+
+    $unit.$setPinSetId({
       type,
       pinId,
       nextPinId,
@@ -7444,13 +7450,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (value !== pinId) {
       if (valid) {
-        this._on_graph_unit_set_pin_set_id({
-          type,
-          pinId,
-          nextPinId: value,
-          path: [unitId],
-        })
-
         const subgraph = this._subgraph_cache[unitId]
 
         if (subgraph) {
@@ -7470,10 +7469,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      const next_pin_node_id = getPinNodeId(unitId, type, next_pin_id)
-
       if (this._mode === 'info') {
-        this._enable_pin_name(next_pin_node_id)
+        this._enable_pin_name(pin_node_id)
       }
     }
   }
@@ -54098,7 +54095,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       pod.$watchGraph(
         {
           events: [
-            'fork',
+            // 'fork',
             'append_child',
             'remove_child',
             'insert_child',
@@ -54901,6 +54898,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } = this.$props
 
     let { specId, spec: forked_unit_spec, path, unitId, bubble = true } = data
+
+    if (!unitId) {
+      ;[unitId, ...path] = path
+    }
 
     if (!unitId) {
       return
@@ -57137,8 +57138,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const spec = this._get_unit_spec(graphUnitId) as GraphSpec
 
-    const pin_node_id = getPinNodeId(graphUnitId, type, pinId)
-
     let mergeId
     let merge
 
@@ -57158,6 +57157,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       let datum_value: string
 
       if (path.length === 1) {
+        const pin_node_id = getPinNodeId(graphUnitId, type, pinId)
+
         pin_position = this._get_anchor_node_position(pin_node_id)
 
         merge_node_id = this._pin_to_merge[pin_node_id]

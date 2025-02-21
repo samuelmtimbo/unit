@@ -5035,11 +5035,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     type: IO,
     pinId: string,
     newPinId: string,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     const unit = this.getUnit(unitId) as Graph
 
-    unit.setPinSetId(type, pinId, newPinId, false)
+    unit.setPinSetId(type, pinId, newPinId, fork, bubble)
 
     emit && this.edit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
   }
