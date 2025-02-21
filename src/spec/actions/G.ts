@@ -24,10 +24,15 @@ import {
   GraphRemoveUnitPinDataData,
   GraphSetComponentSizeData,
   GraphSetMergeDataData,
+  GraphSetPinSetDefaultIgnoredData,
+  GraphSetPinSetFunctionalData,
+  GraphSetPinSetIdData,
   GraphSetPlugDataData,
   GraphSetSubComponentSizeData,
+  GraphSetUnitIdData,
   GraphSetUnitMetadataData,
   GraphSetUnitPinDataData,
+  GraphSetUnitPinSetIdData,
   GraphSetUnitSizeData,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
@@ -94,14 +99,17 @@ export const PLUG_PIN = 'plugPin'
 export const SET_PLUG_DATA = 'setPlugData'
 export const REMOVE_PLUG_DATA = 'removePlugData'
 export const SET_UNIT_PIN_DATA = 'setUnitPinData'
+export const SET_UNIT_PIN_SET_ID = 'setUnitPinSetId'
 export const REMOVE_UNIT_PIN_DATA = 'removeUnitPinData'
 export const SET_UNIT_PIN_CONSTANT = 'setUnitPinConstant'
 export const SET_UNIT_PIN_IGNORED = 'setUnitPinIgnored'
 export const EXPOSE_UNIT_PIN_SET = 'exposeUnitPinSet'
 export const COVER_UNIT_PIN_SET = 'coverUnitPinSet'
 export const SET_UNIT_ERR = 'setUnitErr'
-export const SET_PIN_SET_NAME = 'setPinSetName'
+export const SET_UNIT_ID = 'setUnitId'
+export const SET_PIN_SET_ID = 'setPinSetId'
 export const SET_PIN_SET_FUNCTIONAL = 'setPinSetFunctional'
+export const SET_PIN_SET_DEFAULT_IGNORED = 'setPinSetDefaultIgnored'
 export const SET_PIN_SET_REF = 'setPinSetRef'
 export const SET_METADATA = 'setMetadata'
 export const SET_UNIT_METADATA = 'setUnitMetadata'
@@ -254,31 +262,73 @@ export const makeExposePinAction = (
   type: IO,
   pinId: string,
   subPinId: string,
-  subPinSpec: GraphSubPinSpec,
-  pinSpec?: GraphPinSpec
+  subPinSpec: GraphSubPinSpec
 ) => {
   return wrapExposePinAction({ type, pinId, subPinId, subPinSpec })
 }
 
-export const makeSetPinSetNameAction = (
+export const makeSetPinSetIdAction = (
   type: IO,
-  id: string,
-  functional: boolean
+  pinId: string,
+  nextPinId: string
 ) => {
+  return wrapSetPinSetIdAction({ type, pinId, nextPinId })
+}
+
+export const wrapSetPinSetIdAction = (data: GraphSetPinSetIdData) => {
   return {
-    type: SET_PIN_SET_NAME,
-    data: { type, id, functional },
+    type: SET_PIN_SET_ID,
+    data,
   }
 }
 
 export const makeSetPinSetFunctionalAction = (
   type: IO,
-  id: string,
+  pinId: string,
   functional: boolean
 ) => {
+  return wrapSetPinSetFunctionalAction({ type, pinId, functional })
+}
+
+export const makeSetUnitIdAction = (
+  unitId: string,
+  newUnitId: string,
+  name: string,
+  lastName: string
+) => {
+  return wrapSetUnitIdAction({ unitId, newUnitId, name, lastName })
+}
+
+export const wrapSetUnitIdAction = (data: GraphSetUnitIdData) => {
   return {
-    type: SET_PIN_SET_FUNCTIONAL,
-    data: { type, id, functional },
+    type: SET_UNIT_ID,
+    data,
+  }
+}
+
+export const wrapSetPinSetFunctionalAction = (
+  data: GraphSetPinSetFunctionalData
+) => {
+  return {
+    type: SET_PIN_SET_DEFAULT_IGNORED,
+    data,
+  }
+}
+
+export const makeSetPinSetDefaultIgnoredAction = (
+  type: IO,
+  pinId: string,
+  defaultIgnored: boolean
+) => {
+  return wrapSetPinSetDefaultIgnoredAction({ type, pinId, defaultIgnored })
+}
+
+export const wrapSetPinSetDefaultIgnoredAction = (
+  data: GraphSetPinSetDefaultIgnoredData
+) => {
+  return {
+    type: SET_PIN_SET_DEFAULT_IGNORED,
+    data,
   }
 }
 
@@ -461,6 +511,27 @@ export const wrapRemovePlugDataAction = (data: GraphRemovePlugDataData) => {
 export const wrapSetUnitPinDataAction = (data: GraphSetUnitPinDataData) => {
   return {
     type: SET_UNIT_PIN_DATA,
+    data,
+  }
+}
+
+export const makeSetUnitPinSetIdAction = (
+  unitId: string,
+  type: IO,
+  pinId: string,
+  nextPinId: string,
+) => {
+  return wrapSetUnitPinSetIdAction({
+    unitId,
+    type,
+    pinId,
+    nextPinId,
+  })
+}
+
+export const wrapSetUnitPinSetIdAction = (data: GraphSetUnitPinSetIdData) => {
+  return {
+    type: SET_UNIT_PIN_SET_ID,
     data,
   }
 }

@@ -3160,7 +3160,6 @@ export function buildMoveMap(
                 nextPinId,
                 nextSubPinId,
                 {},
-                { ref }
               ),
             },
           ])

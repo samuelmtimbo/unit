@@ -1,9 +1,9 @@
 import { Graph } from '../../Class/Graph'
-import { GraphSetUnitPinSetId } from '../../Class/Graph/interface'
+import { GraphSetUnitPinSetIdData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
 import { Moment } from '../Moment'
 
-export interface GraphSetUnitPinSetIdMomentData extends GraphSetUnitPinSetId {
+export interface GraphSetUnitPinSetIdMomentData extends GraphSetUnitPinSetIdData {
   path: string[]
 }
 

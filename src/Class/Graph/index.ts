@@ -151,7 +151,7 @@ import {
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
   GraphSetUnitIdData,
-  GraphSetUnitPinConstant,
+  GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
   GraphSetUnitSizeData,
@@ -5929,7 +5929,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
           this._setPinSetFunctional(type, pinId, functional, fork, bubble)
         },
-        setUnitPinConstant: (data: GraphSetUnitPinConstant) => {
+        setUnitPinConstant: (data: GraphSetUnitPinConstantData) => {
           const { unitId, type, pinId, constant } = data
 
           this._setUnitPinConstant(unitId, type, pinId, constant, fork, bubble)

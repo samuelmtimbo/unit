@@ -80,6 +80,7 @@ export type GraphSetUnitIdData = {
   unitId: string
   newUnitId: string
   name: string
+  lastName: string
   fork?: boolean
   bubble?: boolean
 } & Flags
@@ -188,14 +189,14 @@ export type GraphSetPinSetFunctionalData = {
   functional: boolean
 } & Flags
 
-export type GraphSetUnitPinSetId = {
+export type GraphSetUnitPinSetIdData = {
   unitId: string
   type: IO
   pinId: string
   nextPinId: string
 } & Flags
 
-export type GraphSetUnitPinConstant = {
+export type GraphSetUnitPinConstantData = {
   unitId: string
   type: IO
   pinId: string

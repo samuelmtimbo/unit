@@ -50,8 +50,11 @@ import {
   makeRemoveUnitPinDataAction,
   makeSetComponentSizeAction,
   makeSetMergeDataAction,
+  makeSetPinSetFunctionalAction,
+  makeSetPinSetIdAction,
   makeSetPlugDataAction,
   makeSetSubComponentSizeAction,
+  makeSetUnitIdAction,
   makeSetUnitPinConstantAction,
   makeSetUnitPinDataAction,
   makeSetUnitPinIgnoredAction,
@@ -69,8 +72,12 @@ import {
   reverseSelection,
   SET_COMPONENT_SIZE,
   SET_MERGE_DATA,
+  SET_PIN_SET_DEFAULT_IGNORED,
+  SET_PIN_SET_FUNCTIONAL,
+  SET_PIN_SET_ID,
   SET_PLUG_DATA,
   SET_SUB_COMPONENT_SIZE,
+  SET_UNIT_ID,
   SET_UNIT_PIN_CONSTANT,
   SET_UNIT_PIN_DATA,
   SET_UNIT_PIN_IGNORED,
@@ -312,6 +319,27 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.subPinId,
         data.data,
         undefined
+      )
+    case SET_PIN_SET_ID:
+      return makeSetPinSetIdAction(data.type, data.nextPinId, data.pinId)
+    case SET_PIN_SET_FUNCTIONAL:
+      return makeSetPinSetFunctionalAction(
+        data.type,
+        data.pinId,
+        !data.functional
+      )
+    case SET_PIN_SET_DEFAULT_IGNORED:
+      return makeSetPinSetFunctionalAction(
+        data.type,
+        data.pinId,
+        !data.defaultIgnored
+      )
+    case SET_UNIT_ID:
+      return makeSetUnitIdAction(
+        data.newUnitId,
+        data.unitId,
+        data.lastName,
+        data.name
       )
     default:
       throw new Error('irreversible')

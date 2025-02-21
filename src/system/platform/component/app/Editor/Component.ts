@@ -23,8 +23,11 @@ import {
   GraphSetComponentSizeData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
+  GraphSetPinSetDefaultIgnoredData,
+  GraphSetPinSetIdData,
   GraphSetPlugDataData,
   GraphSetSubComponentSizeData,
+  GraphSetUnitIdData,
   GraphSetUnitSizeData,
 } from '../../../../../Class/Graph/interface'
 import { moveLink } from '../../../../../Class/Graph/moveLink'
@@ -382,9 +385,12 @@ import {
   REMOVE_UNIT_PIN_DATA,
   SET_COMPONENT_SIZE,
   SET_MERGE_DATA,
+  SET_PIN_SET_DEFAULT_IGNORED,
   SET_PIN_SET_FUNCTIONAL,
+  SET_PIN_SET_ID,
   SET_PLUG_DATA,
   SET_SUB_COMPONENT_SIZE,
+  SET_UNIT_ID,
   SET_UNIT_PIN_CONSTANT,
   SET_UNIT_PIN_DATA,
   SET_UNIT_PIN_IGNORED,
@@ -409,11 +415,15 @@ import {
   makeRemoveUnitAction,
   makeSetComponentSizeAction,
   makeSetMergeDataAction,
+  makeSetPinSetDefaultIgnoredAction,
   makeSetPinSetFunctionalAction,
+  makeSetPinSetIdAction,
   makeSetSubComponentSizeAction,
+  makeSetUnitIdAction,
   makeSetUnitPinConstantAction,
   makeSetUnitPinDataAction,
   makeSetUnitPinIgnoredAction,
+  makeSetUnitPinSetIdAction,
   makeSetUnitSizeAction,
   makeUnplugPinAction,
   processActions,
@@ -4895,7 +4905,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return getExposedPinSpecs(this._spec)
   }
 
-  private _get_exposed_sub_pin_spec = (
+  private _get_sub_pin_spec = (
     type: IO,
     pin_id: string,
     sub_pin_id: string
@@ -7356,6 +7366,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_plug_name_blur = (plug_node_id: string): void => {
     // console.log('Graph', '_on_plug_name_blur', plug_node_id)
 
+    const { fork, bubble } = this.$props
+
     const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
     const value = this._get_node_temp_name(plug_node_id)
@@ -7375,20 +7387,48 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const ext_position = this._get_anchor_node_position(plug_node_id)
           const int_position = this._get_anchor_node_position(int_node_id)
 
-          this._remove_exposed_sub_pin_or_set(plug_node_id)
+          const pin_count = this._get_exposed_pin_set_count(plug_node_id)
 
-          this._add_exposed_pin(
+          const pin_spec = this._get_pin_spec(type, pinId)
+
+          const sub_pin_spec = this._get_sub_pin_spec(type, pinId, subPinId)
+
+          const actions = []
+
+          if (pin_count === 1 || pin_count === 0) {
+            actions.push(makeCoverPinSetAction(type, pinId, pin_spec))
+
+            this._state_cover_pin_set(type, pinId)
+          } else {
+            actions.push(
+              makeCoverPinAction(type, pinId, subPinId, sub_pin_spec)
+            )
+
+            this.__sim_remove_exposed_sub_pin(type, pinId, subPinId)
+            this.__spec_remove_exposed_sub_pin(type, pinId, subPinId)
+          }
+
+          actions.push(
+            makeExposePinAction(type, value, new_sub_pin_id, sub_pin_spec)
+          )
+
+          this._state_expose_pin(
             type,
             value,
             new_sub_pin_id,
-            {},
+            sub_pin_spec,
+            pin_spec,
             {
               int: int_position,
               ext: ext_position,
             }
           )
+
+          this._dispatch_action(makeBulkEditAction(actions))
+
+          this._pod.$bulkEdit({ actions, fork, bubble })
         } else {
-          this._set_pin_name(plug_node_id, value)
+          this.set_pin_set_id(type, pinId, value)
         }
 
         next_pin_id = value
@@ -7450,11 +7490,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (value !== pinId) {
       if (valid) {
-        const subgraph = this._subgraph_cache[unitId]
-
-        if (subgraph) {
-          subgraph._state_set_exposed_pin_name(type, pinId, value)
-        }
+        this._dispatch_action(
+          makeSetUnitPinSetIdAction(unitId, type, pinId, value)
+        )
 
         this._pod_set_unit_pin_set_id(unitId, type, pinId, value)
 
@@ -7517,23 +7555,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
   }
 
-  private _set_node_selection_to_node = (unit_id: string): void => {
+  private _set_node_selection_to_node = (node_id: string): void => {
     const {
       width: node_width,
       height: node_height,
       shape: node_shape,
-    } = this._node[unit_id]
+    } = this._node[node_id]
 
-    const selection = this._node_selection[unit_id]
+    const selection = this._node_selection[node_id]
 
     selection.setProp('y', 0)
     selection.setProp('shape', node_shape)
 
-    if (this._is_node_selected(unit_id)) {
-      this._enable_core_resize(unit_id)
+    if (this._is_node_selected(node_id)) {
+      this._enable_core_resize(node_id)
     }
 
-    this._resize_selection(unit_id, node_width, node_height)
+    this._resize_selection(node_id, node_width, node_height)
   }
 
   private _set_node_selection_to_name = (
@@ -8470,14 +8508,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_plug_selection_to_name(ext_node_id)
   }
 
-  private _set_unit_name = (unit_id: string, name: string): string => {
+  private set_unit_name = (unit_id: string, name: string): string => {
+    // console.log('Graph', 'set_unit_name', unit_id, name)
+
+    const current_name = this._get_unit_name(unit_id)
+
+    const new_unit_id = this._set_unit_name(unit_id, name, current_name)
+
+    this._dispatch_action(
+      makeSetUnitIdAction(unit_id, new_unit_id, name, current_name)
+    )
+
+    return new_unit_id
+  }
+
+  private _set_unit_name = (
+    unit_id: string,
+    name: string,
+    current_name: string
+  ): string => {
     // console.log('Graph', '_set_unit_name', unit_id, name)
 
-    // this._spec_set_unit_spec_name(unit_id, name)
+    const spec = this._get_unit_spec(unit_id) as GraphSpec
 
-    const new_unit_id = this._state_set_unit_name(unit_id, name)
+    const blacklist = new Set(keys(this._spec.units))
 
-    this._pod_set_unit_name(unit_id, new_unit_id, name)
+    const new_unit_id = newUnitIdFromName(spec, name, blacklist)
+
+    this._state_set_unit_name(unit_id, new_unit_id, name)
+    this._pod_set_unit_name(unit_id, new_unit_id, name, current_name)
 
     if (this._is_unit_component(new_unit_id)) {
       this._connect_sub_component(new_unit_id)
@@ -8486,30 +8545,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return new_unit_id
   }
 
-  private _spec_set_unit_spec_name = (unit_id: string, name: string): void => {
-    // console.log('Graph', '_spec_set_unit_name', unit_id, name)
-
-    const { setSpec } = this.$props
-
-    const spec = this._get_unit_spec(unit_id) as GraphSpec
-
-    const next_spec = clone(spec)
-
-    deepSet(next_spec, ['name'], name)
-
-    setSpec(next_spec.id, next_spec)
-  }
-
-  private _state_set_unit_name = (unit_id: string, name: string): string => {
-    const { forkSpec } = this.$props
+  private _state_set_unit_name = (
+    unit_id: string,
+    new_unit_id: string,
+    name: string
+  ): void => {
+    const { newSpec } = this.$props
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
 
     const new_spec = clone(spec)
 
-    const blacklist = new Set(keys(this._spec.units))
+    new_spec.name = name
 
-    const new_unit_id = newUnitIdFromName(spec, name, blacklist)
+    newSpec(new_spec)
 
     const unit_data = this._get_unit_data(unit_id)
 
@@ -8537,21 +8586,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._graph_debug_set_pin_data_tree(pin_node_id, pin_data)
     })
-
-    return new_unit_id
   }
 
   private _pod_set_unit_name = (
-    unit_id: string,
-    new_unit_id: string,
-    name: string
+    unitId: string,
+    newUnitId: string,
+    name: string,
+    lastName: string
   ): void => {
     const { fork, bubble } = this.$props
 
     this._pod.$setUnitId({
-      unitId: unit_id,
-      newUnitId: new_unit_id,
+      unitId,
+      newUnitId,
       name,
+      lastName,
       fork,
       bubble,
     })
@@ -8588,14 +8637,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_pin_selection_to_name(pin_node_id)
   }
 
-  private _set_pin_name = (exposed_pin_node_id: string, name: string): void => {
-    const { type, pinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-    this._state_set_exposed_pin_name(type, pinId, name)
-    this._pod_set_pin_set_id(type, pinId, name)
+  private _set_pin_set_id = (
+    type: IO,
+    pinId: string,
+    nextPinId: string
+  ): void => {
+    this._state_set_pin_set_id(type, pinId, nextPinId)
+    this._pod_set_pin_set_id(type, pinId, nextPinId)
   }
 
-  private _state_set_exposed_pin_name = (
+  public set_pin_set_id = (type: IO, pinId: string, nextPinId: string) => {
+    this._dispatch_action(makeSetPinSetIdAction(type, pinId, nextPinId))
+
+    this._set_pin_set_id(type, pinId, nextPinId)
+  }
+
+  private _state_set_pin_set_id = (
     type: IO,
     pinId: string,
     nextPinId: string
@@ -9224,7 +9281,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_unit_temp_description(unit_id, '...')
     }
 
-    this._set_node_selection_to_node(unit_id)
+    if (this._edit_node_name_was_selected) {
+      this._set_node_selection_to_node(unit_id)
+    }
   }
 
   private _set_unit_description = (unit_id: string, description: string) => {
@@ -9402,7 +9461,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         name = temp_name.trim()
 
         if (name !== current_name) {
-          next_unit_id = this._set_unit_name(unit_id, temp_name)
+          next_unit_id = this.set_unit_name(unit_id, temp_name)
         }
       } else {
         name = this._get_unit_name(unit_id)
@@ -9424,9 +9483,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._refresh_core_name_size(next_unit_id)
     }
 
-    if (this._edit_node_name_was_selected) {
-      this._select_node(next_unit_id)
-    }
+    this._deselect_node(next_unit_id)
 
     this._set_node_selection_to_node(next_unit_id)
   }
@@ -10662,7 +10719,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pinId: string,
     subPinId: string
   ): Position | null => {
-    const plug_spec = this._get_exposed_sub_pin_spec(type, pinId, subPinId)
+    const plug_spec = this._get_sub_pin_spec(type, pinId, subPinId)
 
     if (plug_spec.unitId && plug_spec.pinId) {
       const pin_node_id = getPinNodeId(plug_spec.unitId, type, plug_spec.pinId)
@@ -27653,8 +27710,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._change_datum(datum_node_id)
   }
 
-  private _on_exposed_blue_click = (exp_node_id: string): void => {
-    this._toggle_exposed_pin_functional(exp_node_id)
+  private _on_exposed_blue_click = (plug_node_id: string): void => {
+    const { type, pinId } = segmentPlugNodeId(plug_node_id)
+
+    this._toggle_exposed_pin_functional(type, pinId)
   }
 
   private _clicked_node_already_selected = false
@@ -27975,7 +28034,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const { pinId, type, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
 
-    const sub_pin_spec = this._get_exposed_sub_pin_spec(type, pinId, subPinId)
+    const sub_pin_spec = this._get_sub_pin_spec(type, pinId, subPinId)
 
     this._dispatch_action(
       makeCoverPinAction(type, pinId, subPinId, sub_pin_spec)
@@ -27992,6 +28051,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { pinId, type, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
 
     const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
+
     if (pin_count === 1 || pin_count === 0) {
       this._cover_pin_set(type, pinId)
     } else {
@@ -28171,7 +28231,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const { fork, bubble } = this.$props
 
-    const subPinSpec = this._get_exposed_sub_pin_spec(type, pinId, subPinId)
+    const subPinSpec = this._get_sub_pin_spec(type, pinId, subPinId)
 
     this._pod.$coverPin({
       type,
@@ -29783,60 +29843,69 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return !!functional
   }
 
-  private _toggle_exposed_pin_functional = (exposed_node_id: string): void => {
-    const { type } = segmentPlugNodeId(exposed_node_id)
-
+  private _toggle_exposed_pin_functional = (type: IO, pinId: string): void => {
     if (type === 'output') {
       return
     }
 
-    const functional = this._is_exposed_pin_functional(exposed_node_id)
+    const functional = this.__is_exposed_pin_functional(type, pinId)
 
-    this._set_exposed_pin_functional(exposed_node_id, !functional)
+    this.set_pin_set_functional(type, pinId, !functional)
   }
 
-  public set_exposed_pin_functional = (
-    exposed_node_id: string,
+  public set_pin_set_functional = (
+    type: IO,
+    pinId: string,
     functional: boolean
   ) => {
-    const { type, pinId } = segmentPlugNodeId(exposed_node_id)
-
     this._dispatch_action(
       makeSetPinSetFunctionalAction(type, pinId, functional)
     )
 
-    this._set_exposed_pin_functional(exposed_node_id, functional)
+    this._set_pin_set_functional(type, pinId, functional)
   }
 
-  private _set_exposed_pin_functional = (
-    exposed_node_id: string,
+  private _set_pin_set_functional = (
+    type: IO,
+    pinId: string,
     functional: boolean,
     emit: boolean = true
   ): void => {
-    this._spec_set_exposed_pin_functional(exposed_node_id, functional)
-    this._sim_set_exposed_pin_functional(exposed_node_id, functional)
-    emit && this._pod_set_exposed_pin_functional(exposed_node_id, functional)
+    this._state_set_pin_set_functional(type, pinId, functional)
+    emit && this._pod_set_pin_set_functional(type, pinId, functional)
   }
 
-  private _spec_set_exposed_pin_functional = (
-    exposed_node_id: string,
+  private _state_set_pin_set_functional = (
+    type: IO,
+    pinId: string,
     functional: boolean
   ): void => {
-    const { type, pinId } = segmentPlugNodeId(exposed_node_id)
+    this._spec_set_pin_set_functional(type, pinId, functional)
+    this._sim_set_set_functional(type, pinId, functional)
+  }
 
+  private _spec_set_pin_set_functional = (
+    type: IO,
+    pinId: string,
+    functional: boolean
+  ): void => {
     setPinSetFunctional({ type, pinId, functional }, this._spec)
   }
 
-  private _sim_set_exposed_pin_functional = (
-    exposed_node_id: string,
+  private _sim_set_set_functional = (
+    type: IO,
+    pinId: string,
     functional: boolean
   ): void => {
-    const { type, pinId } = segmentPlugNodeId(exposed_node_id)
     const pin_spec = this._get_pin_spec(type, pinId)
+
     const { plug = {} } = pin_spec
+
     for (let subPinId in plug) {
       const ext_node_id = getExtNodeId(type, pinId, subPinId)
+
       const end_marker = this._exposed_link_end_marker[ext_node_id]
+
       if (type === 'input') {
         end_marker.setProp(
           'd',
@@ -29848,15 +29917,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _pod_set_exposed_pin_functional = (
-    exposed_node_id: string,
+  private _pod_set_pin_set_functional = (
+    type: IO,
+    pinId: string,
     functional: boolean
   ): void => {
-    // console.log('_pod_set_exposed_pin_functional', exposed_node_id, functional)
+    // console.log('__pod_set_exposed_pin_functional', exposed_node_id, functional)
 
     const { fork, bubble } = this.$props
-
-    const { type, pinId } = segmentPlugNodeId(exposed_node_id)
 
     this._pod.$setPinSetFunctional({
       type,
@@ -35008,11 +35076,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._mode === 'remove') {
       if (!default_ignored) {
-        this._set_pin_set_default_ignored(type, pinId, true)
+        this.set_pin_set_default_ignored(type, pinId, true)
       }
     } else if (this._mode === 'add') {
       if (default_ignored) {
-        this._set_pin_set_default_ignored(type, pinId, false)
+        this.set_pin_set_default_ignored(type, pinId, false)
       }
     }
   }
@@ -35027,14 +35095,34 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return default_ignored
   }
 
+  private set_pin_set_default_ignored = (
+    type: IO,
+    pinId: string,
+    defaultIgnored: boolean
+  ): void => {
+    this._dispatch_action(
+      makeSetPinSetDefaultIgnoredAction(type, pinId, defaultIgnored)
+    )
+
+    this._set_pin_set_default_ignored(type, pinId, defaultIgnored)
+  }
+
   private _set_pin_set_default_ignored = (
+    type: IO,
+    pinId: string,
+    defaultIgnored: boolean
+  ): void => {
+    this._state_set_pin_set_default_ignored(type, pinId, defaultIgnored)
+    this._pod_set_pin_set_default_ignored(type, pinId, defaultIgnored)
+  }
+
+  private _state_set_pin_set_default_ignored = (
     type: IO,
     pinId: string,
     defaultIgnored: boolean
   ): void => {
     this._spec_set_pin_set_default_ignored(type, pinId, defaultIgnored)
     this._sim_set_pin_set_default_ignored(type, pinId, defaultIgnored)
-    this._pod_set_pin_set_default_ignored(type, pinId, defaultIgnored)
   }
 
   private _sim_set_pin_set_default_ignored = (
@@ -37821,11 +37909,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pin_id: string,
     sub_pin_id: string
   ): string | null => {
-    const sub_pin_spec = this._get_exposed_sub_pin_spec(
-      type,
-      pin_id,
-      sub_pin_id
-    )
+    const sub_pin_spec = this._get_sub_pin_spec(type, pin_id, sub_pin_id)
 
     return (
       this._get_exposed_pin_spec_internal_node_id(type, sub_pin_spec) ||
@@ -39048,11 +39132,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           if (int_node_id) {
             const { pinId, type, subPinId } = segmentPlugNodeId(int_node_id)
 
-            const subPinSpec = this._get_exposed_sub_pin_spec(
-              type,
-              pinId,
-              subPinId
-            )
+            const subPinSpec = this._get_sub_pin_spec(type, pinId, subPinId)
 
             actions.push(
               makeUnplugPinAction(type, pinId, subPinId, subPinSpec, false)
@@ -41370,11 +41450,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               removed_exposed_sub_pin_id[type][pinId] || new Set()
             removed_exposed_sub_pin_id[type][pinId].add(subPinId)
 
-            const sub_pin_spec = this._get_exposed_sub_pin_spec(
-              type,
-              pinId,
-              subPinId
-            )
+            const sub_pin_spec = this._get_sub_pin_spec(type, pinId, subPinId)
 
             actions.push(
               makeCoverPinAction(type, pinId, subPinId, sub_pin_spec)
@@ -42000,11 +42076,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pin_id: string,
     sub_pin_id: string
   ): void => {
-    const sub_pin_spec = this._get_exposed_sub_pin_spec(
-      type,
-      pin_id,
-      sub_pin_id
-    )
+    const sub_pin_spec = this._get_sub_pin_spec(type, pin_id, sub_pin_id)
 
     this._dispatch_action(
       makeUnplugPinAction(type, pin_id, sub_pin_id, sub_pin_spec)
@@ -42031,7 +42103,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_spec_unplug_sub_pin', type, pinId, subPinId)
 
-    const sub_pin_spec = this._get_exposed_sub_pin_spec(type, pinId, subPinId)
+    const sub_pin_spec = this._get_sub_pin_spec(type, pinId, subPinId)
 
     unplugPin({ type, pinId, subPinId }, this._spec)
 
@@ -42075,11 +42147,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_sim_unplug_exposed_pin', type, pin_id, sub_pin_id)
 
-    const sub_pin_spec = this._get_exposed_sub_pin_spec(
-      type,
-      pin_id,
-      sub_pin_id
-    )
+    const sub_pin_spec = this._get_sub_pin_spec(type, pin_id, sub_pin_id)
 
     if (isEmptyObject(sub_pin_spec ?? {})) {
       return
@@ -50348,9 +50416,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const exposed_node_id of exposed_node_ids) {
       const { pinId, type, subPinId } = segmentPlugNodeId(exposed_node_id)
 
-      const sub_pin_spec = clone(
-        this._get_exposed_sub_pin_spec(type, pinId, subPinId)
-      )
+      const sub_pin_spec = clone(this._get_sub_pin_spec(type, pinId, subPinId))
 
       const { unitId, pinId: _pinId, mergeId } = sub_pin_spec
 
@@ -51924,7 +51990,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         {
           const pin_node_id = getPinNodeId(data.unitId, data.type, data.pinId)
 
-          this._set_exposed_pin_functional(pin_node_id, data.constant, emit)
+          this._state_set_pin_set_functional(
+            data.type,
+            data.pinId,
+            data.functional
+          )
+          emit &&
+            this._pod_set_pin_set_functional(
+              data.type,
+              data.pinId,
+              data.functional
+            )
         }
         break
       case REORDER_SUB_COMPONENT:
@@ -52379,6 +52455,46 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
 
           this._remove_datum(datum_node_id, emit)
+        }
+        break
+      case SET_PIN_SET_ID:
+        {
+          const data_ = data as GraphSetPinSetIdData
+
+          this._state_set_pin_set_id(data_.type, data_.pinId, data_.nextPinId)
+          emit &&
+            this._pod_set_pin_set_id(data_.type, data_.pinId, data_.nextPinId)
+        }
+        break
+      case SET_PIN_SET_DEFAULT_IGNORED:
+        {
+          const data_ = data as GraphSetPinSetDefaultIgnoredData
+
+          this._state_set_pin_set_default_ignored(
+            data_.type,
+            data_.pinId,
+            data_.defaultIgnored
+          )
+          emit &&
+            this._pod_set_pin_set_default_ignored(
+              data_.type,
+              data_.pinId,
+              data_.defaultIgnored
+            )
+        }
+        break
+      case SET_UNIT_ID:
+        {
+          const data_ = data as GraphSetUnitIdData
+
+          this._state_set_unit_name(data_.unitId, data_.newUnitId, data_.name)
+          emit &&
+            this._pod_set_unit_name(
+              data_.unitId,
+              data_.newUnitId,
+              data_.name,
+              data_.lastName
+            )
         }
         break
       case TAKE_UNIT_ERR:
@@ -54752,6 +54868,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     data: GraphSetPinSetFunctionalMomentData
   ): void => {
     // console.log('Grapb', '_on_set_pin_set_functional', data)
+  }
+
+  private _on_set_pin_set_id = (data: GraphSetPinSetIdMomentData) => {
+    const { type, pinId, nextPinId } = data
+
+    this._state_set_pin_set_id(type, pinId, nextPinId)
   }
 
   private _on_set_pin_set_default_ignored = (
@@ -57779,6 +57901,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       set_unit_pin_ignored: this._on_set_unit_pin_ignored,
       set_unit_pin_data: this._on_set_unit_pin_data,
       set_metadata: this._on_set_metadata,
+      set_pin_set_id: this._on_set_pin_set_id,
       bulk_edit: this._on_bulk_edit,
     },
   }

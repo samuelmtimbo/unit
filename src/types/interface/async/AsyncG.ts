@@ -26,10 +26,10 @@ import {
   GraphSetPinSetIdData,
   GraphSetPlugDataData,
   GraphSetUnitIdData,
-  GraphSetUnitPinConstant,
+  GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
-  GraphSetUnitPinSetId,
+  GraphSetUnitPinSetIdData,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
@@ -451,7 +451,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       constant,
       fork = true,
       bubble = true,
-    }: GraphSetUnitPinConstant): void {
+    }: GraphSetUnitPinConstantData): void {
       call(
         graph,
         'setUnitPinConstant',
@@ -492,7 +492,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextPinId,
       fork = true,
       bubble = true,
-    }: GraphSetUnitPinSetId): void {
+    }: GraphSetUnitPinSetIdData): void {
       call(
         graph,
         'setUnitPinSetId',

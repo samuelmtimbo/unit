@@ -25,10 +25,10 @@ import {
   GraphSetPinSetIdData,
   GraphSetPlugDataData,
   GraphSetUnitIdData,
-  GraphSetUnitPinConstant,
+  GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
-  GraphSetUnitPinSetId,
+  GraphSetUnitPinSetIdData,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
@@ -154,8 +154,8 @@ export interface $G_C {
   $setPinSetFunctional(data: GraphSetPinSetFunctionalData): void
   $addMerge(data: GraphAddMergeData): void
   $removeMerge(data: GraphRemoveMergeData): void
-  $setUnitPinSetId(data: GraphSetUnitPinSetId): void
-  $setUnitPinConstant(data: GraphSetUnitPinConstant): void
+  $setUnitPinSetId(data: GraphSetUnitPinSetIdData): void
+  $setUnitPinConstant(data: GraphSetUnitPinConstantData): void
   $setUnitPinIgnored(data: GraphSetUnitPinIgnoredData): void
   $setMergeData(data: GraphSetMergeDataData): void
   $removeMergeData(data: GraphRemoveMergeDataData): void
