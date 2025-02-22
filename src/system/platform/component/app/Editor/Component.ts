@@ -47523,10 +47523,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const selected_node_id of selected_node_ids) {
       if (this._is_unit_node_id(selected_node_id)) {
         selection.unit.push(selected_node_id)
+
+        const ref_merge_node_id = this._ref_unit_to_merge[selected_node_id]
+
+        if (ref_merge_node_id) {
+          const { mergeId } = segmentMergeNodeId(ref_merge_node_id)
+
+          selection.merge.push(mergeId)
+        }
       } else if (this._is_link_pin_node_id(selected_node_id)) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(selected_node_id)
 
         selection.link.push({ unitId, type, pinId })
+
+        const merge_node_id = this._pin_to_merge[selected_node_id]
+
+        if (merge_node_id) {
+          if (
+            this._is_pin_node_ref(selected_node_id) &&
+            this._is_output_pin_node_id(selected_node_id)
+          ) {
+            const { mergeId } = segmentMergeNodeId(merge_node_id)
+
+            selection.merge.push(mergeId)
+          }
+        }
       } else if (this._is_merge_node_id(selected_node_id)) {
         const { mergeId } = segmentMergeNodeId(selected_node_id)
 
@@ -47659,6 +47680,27 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           //
         } else {
           this._start_node_long_press_collapse(selected_node_id)
+        }
+      } else if (this._is_unit_node_id(selected_node_id)) {
+        this._start_node_long_press_collapse(selected_node_id)
+
+        const ref_merge_node_id = this._ref_unit_to_merge[selected_node_id]
+
+        if (ref_merge_node_id) {
+          this._collapse_anchor_node_id[selected_node_id] = ref_merge_node_id
+        }
+      } else if (this._is_link_pin_node_id(selected_node_id)) {
+        this._start_node_long_press_collapse(selected_node_id)
+
+        const merge_node_id = this._pin_to_merge[selected_node_id]
+
+        if (merge_node_id) {
+          if (
+            this._is_pin_node_ref(selected_node_id) &&
+            this._is_output_pin_node_id(selected_node_id)
+          ) {
+            this._collapse_anchor_node_id[selected_node_id] = merge_node_id
+          }
         }
       } else {
         this._start_node_long_press_collapse(selected_node_id)
@@ -49661,26 +49703,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const merge_node_id = getMergeNodeId(merge_id)
 
-    this._stop_node_long_press_collapse(merge_node_id)
-    this._deselect_node(merge_node_id)
-    this._refresh_node_layer(merge_node_id)
+    if (this._has_node(merge_node_id)) {
+      this._stop_node_long_press_collapse(merge_node_id)
+      this._deselect_node(merge_node_id)
+      this._refresh_node_layer(merge_node_id)
 
-    const merge_position = this._get_node_position(merge_node_id)
+      const merge_position = this._get_node_position(merge_node_id)
 
-    io((type) => {
-      const next_pin = deepGetOrDefault(
-        map,
-        ['mapping', 'merge', merge_id, 'in', 'plug', type],
-        undefined
-      ) as PlugNodeSpec
+      io((type) => {
+        const next_pin = deepGetOrDefault(
+          map,
+          ['mapping', 'merge', merge_id, 'in', 'plug', type],
+          undefined
+        ) as PlugNodeSpec
 
-      if (next_pin) {
-        const graph_pin_node_id = getPinNodeId(graph_id, type, next_pin.pinId)
+        if (next_pin) {
+          const graph_pin_node_id = getPinNodeId(graph_id, type, next_pin.pinId)
 
-        this._next_node_position[graph_pin_node_id] =
-          jigglePoint(merge_position)
-      }
-    })
+          this._next_node_position[graph_pin_node_id] =
+            jigglePoint(merge_position)
+        }
+      })
+    }
 
     const moves = moveMerge(map, merge_id) ?? []
 
