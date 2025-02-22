@@ -239,8 +239,6 @@ export function buildMoveMap(
   const sourceCoverPinTasks: IOOf<Dict<Dict<MoveTask>>> = {}
 
   const targetAddUnitTasks = {}
-  const targetAddMergeTasks = {}
-  const targetCollapseMerges = new Set()
   const targetUnplugFromGraphPinTasks: IOOf<Dict<MoveTask>> = {}
   const targetNextMerges: Dict<GraphMergeSpec> = {}
   const targetPinNextMerges: Dict<IOOf<Dict<string>>> = {}
@@ -249,6 +247,7 @@ export function buildMoveMap(
   const targetRemoveMergeTasks: Dict<MoveTask> = {}
   const targetRemovePinFromMergeTasks: Dict<Dict<IOOf<Dict<MoveTask>>>> = {}
   const targetExposePinSetTasks: Dict<MoveTask> = {}
+  const targetExposePinTasks: Dict<MoveTask> = {}
 
   const nextUnitIdMap: Dict<string> = {}
   const prevUnitIdMap = {}
@@ -1071,8 +1070,6 @@ export function buildMoveMap(
     }
 
     if (reverse) {
-      let reverseMergeInsideId: string
-
       const plugsMap = findMergePlugs(source, mergeId)
 
       const outsideMergeId: IOOf<string> = { input: null, output: null }
@@ -1153,8 +1150,6 @@ export function buildMoveMap(
               addDependency(unplugPinTask, moveMergeTask)
 
               unplugPinTasks[plug.type] = unplugPinTask
-
-              reverseMergeInsideId = insideMergeId
 
               const pinInsideMerge_ = clone(pinInsideMerge)
 
@@ -2389,21 +2384,35 @@ export function buildMoveMap(
                 } else {
                   const nextSubPinId = newTargetSubPinId(type, pinId)
 
-                  const exposePinOutsideTask = newTask([
-                    {
-                      in: true,
-                      action: makeExposePinAction(
-                        oppositeType,
-                        pinId,
-                        nextSubPinId,
-                        {
-                          unitId: pin.unitId,
-                          kind: pin.type,
-                          pinId: pin.pinId,
-                        }
-                      ),
-                    },
-                  ])
+                  let targetExposePinTask = deepGetOrDefault(
+                    targetExposePinTasks,
+                    [oppositeType, pinId, nextSubPinId],
+                    undefined
+                  )
+
+                  if (!targetExposePinTask) {
+                    targetExposePinTask = newTask([
+                      {
+                        in: true,
+                        action: makeExposePinAction(
+                          oppositeType,
+                          pinId,
+                          nextSubPinId,
+                          {
+                            unitId: pin.unitId,
+                            kind: pin.type,
+                            pinId: pin.pinId,
+                          }
+                        ),
+                      },
+                    ])
+
+                    deepSet_(
+                      targetExposePinTasks,
+                      [oppositeType, pinId, nextSubPinId],
+                      targetExposePinTask
+                    )
+                  }
 
                   const data_ = reverse
                     ? deepGetOrDefault(
@@ -2431,7 +2440,7 @@ export function buildMoveMap(
                       },
                     ])
 
-                    addDependency(setPinOutsideDataTask, exposePinOutsideTask)
+                    addDependency(setPinOutsideDataTask, targetExposePinTask)
                   }
 
                   deepSet_(
@@ -2444,7 +2453,7 @@ export function buildMoveMap(
                     }
                   )
 
-                  addDependency(exposePinOutsideTask, removeInsideMergeTask)
+                  addDependency(targetExposePinTask, removeInsideMergeTask)
                 }
               }
             }
@@ -2589,22 +2598,36 @@ export function buildMoveMap(
               }
             }
 
-            const exposePinTask = newTask([
-              {
-                in: true,
-                action: makeExposePinAction(
-                  nextPinType,
-                  nextPinId,
-                  nextSubPinId,
-                  {}
-                ),
-              },
-            ])
+            let targetExposePinTask = deepGetOrDefault(
+              targetExposePinSetTasks,
+              [nextPinType, nextPinId, nextSubPinId],
+              undefined
+            )
 
-            addDependency(exposePinTask, movePlugTask)
+            if (!targetExposePinTask) {
+              targetExposePinTask = newTask([
+                {
+                  in: true,
+                  action: makeExposePinAction(
+                    nextPinType,
+                    nextPinId,
+                    nextSubPinId,
+                    {}
+                  ),
+                },
+              ])
+
+              deepSet_(
+                targetExposePinTasks,
+                [nextPinType, nextPinId, nextSubPinId],
+                targetExposePinTask
+              )
+            }
+
+            addDependency(targetExposePinTask, movePlugTask)
 
             if (exposePinSetTask) {
-              addDependency(exposePinTask, exposePinSetTask)
+              addDependency(targetExposePinTask, exposePinSetTask)
             }
 
             deepSet_(
@@ -2636,7 +2659,7 @@ export function buildMoveMap(
 
               const addUnitTask = targetAddUnitTasks[subPinSpec.unitId]
 
-              addDependency(plugPinToUnitTask, exposePinTask)
+              addDependency(plugPinToUnitTask, targetExposePinTask)
               addDependency(plugPinToUnitTask, addUnitTask)
             }
           }
@@ -2739,14 +2762,14 @@ export function buildMoveMap(
 
               deepSet_(
                 targetExposePinSetTasks,
-                [nextPinId, nextPinType],
+                [nextPinType, nextPinId],
                 exposePinSetTask
               )
 
               addDependency(exposePinSetTask, movePlugTask)
             }
 
-            const exposePinTask = newTask([
+            const targetExposePinTask = newTask([
               {
                 in: true,
                 action: makeExposePinAction(
@@ -2758,8 +2781,8 @@ export function buildMoveMap(
               },
             ])
 
-            addDependency(exposePinTask, exposePinSetTask)
-            addDependency(exposePinTask, movePlugTask)
+            addDependency(targetExposePinTask, exposePinSetTask)
+            addDependency(targetExposePinTask, movePlugTask)
 
             const nextUnitId =
               mapping.unit?.[subPinSpec.unitId]?.in?.unit.unitId ??
@@ -2783,7 +2806,7 @@ export function buildMoveMap(
 
             const addUnitTask = targetAddUnitTasks[subPinSpec.unitId]
 
-            addDependency(plugPinTask, exposePinTask)
+            addDependency(plugPinTask, targetExposePinTask)
             addDependency(plugPinTask, addUnitTask)
           } else {
             const nextPinType = oppositeType
