@@ -528,7 +528,6 @@ import {
   emptySpec,
   findInputDataExamples,
   getComponentSpec,
-  getGraphSpec,
   getSpec,
   getSpecInputs,
   getSpecOutputs,
@@ -3063,8 +3062,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _datum_to_be_focused_by_click: boolean = false
   private _name_to_be_focused: boolean = false
 
-  private _spec_id_map = {}
-
   public _prevent_next_reset: boolean = false
 
   private _refresh_theme = (): void => {
@@ -4537,16 +4534,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _register_unit = (
     spec_id: string,
+    specs: Specs,
     deep: boolean = true,
     branch: string[] = []
   ) => {
     // console.log('Graph', '_register_unit', spec_id, deep)
 
-    this._register_spec(spec_id, deep, branch)
+    this._register_spec(spec_id, specs, deep, branch)
   }
 
   private _register_spec = (
     spec_id: string,
+    specs: Specs,
     deep: boolean = true,
     branch: string[] = []
   ) => {
@@ -4561,7 +4560,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!isBaseSpec(spec)) {
       registerUnit(spec_id)
 
-      this._mirror_spec(spec_id)
+      this._mirror_spec(spec_id, specs)
 
       if (deep) {
         const { units = {} } = spec as GraphSpec
@@ -4569,7 +4568,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (const unitId in units) {
           const unit = units[unitId]
 
-          this._register_spec(unit.id, deep, [...branch, spec_id])
+          this._register_spec(unit.id, specs, deep, [...branch, spec_id])
         }
       }
     }
@@ -5749,7 +5748,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._sim_add_unit_core(unit_id, unit, p)
 
       if (!parent) {
-        this._register_unit(unit.id, true)
+        this._register_unit(unit.id, specs, true)
       }
 
       if (this._is_unit_component(unit_id)) {
@@ -6056,17 +6055,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void {
     // console.trace('Graph', '_add_unit')
 
-    const { injectSpecs } = this.$props
+    const { specs, injectSpecs } = this.$props
 
-    const { unit, specs = {} } = bundle
-
-    const id_map = injectSpecs(specs)
+    const id_map = injectSpecs(bundle.specs ?? {})
 
     this._spec_id_map = { ...this._spec_id_map, ...id_map }
 
     remapUnitBundle(bundle, this._spec_id_map)
 
-    this._spec_add_unit(unit_id, unit, register, deep)
+    const { unit } = bundle
+
+    this._spec_add_unit(unit_id, unit, specs, register, deep)
 
     const is_component = this._is_unit_component(unit_id)
 
@@ -6423,6 +6422,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec_add_unit = (
     unitId: string,
     unit: GraphUnitSpec,
+    specs: Specs,
     register: boolean = true,
     deep: boolean = true
   ) => {
@@ -6433,15 +6433,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (!parent) {
       if (register) {
-        this._register_unit(unit.id, deep)
+        this._register_unit(unit.id, specs, deep)
       }
     }
   }
 
-  private _mirror_spec = (specId: string) => {
-    const { getSpec, setSpec } = this.$props
+  private _mirror_spec = (specId: string, specs: Specs) => {
+    const { setSpec } = this.$props
 
-    const spec = getSpec(specId) as GraphSpec
+    const spec = getSpec(specs, specId) as GraphSpec
 
     const mirrored_spec = clone(spec)
 
@@ -17087,7 +17087,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       output,
     }
 
-    this._spec_add_unit(unit_id, unit_spec, false)
+    this._spec_add_unit(unit_id, unit_spec, specs, false)
 
     let parent_id: string | null = null
 
@@ -17851,11 +17851,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           if (did_spec_id_change) {
             if (!parent) {
               this._unregister_spec(this._search_start_spec_id, true, [])
-              this._register_spec(this._search_unit_spec_id, true)
+              this._register_spec(this._search_unit_spec_id, specs, true)
             }
           }
         } else if (this._mode === 'add') {
-          this._register_spec(this._search_unit_spec_id, true)
+          this._register_spec(this._search_unit_spec_id, specs, true)
         }
 
         if (did_spec_id_change) {
@@ -28750,6 +28750,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): string => {
     // console.log('Graph', '_state_duplicate_unit', unit_id)
 
+    const { specs } = this.$props
+
     const unit = this._get_unit(unit_id)
 
     const { id } = unit
@@ -28762,7 +28764,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const unit_pin_position = this._get_unit_pin_position(unit_id)
     const unit_layout_position = NULL_VECTOR
 
-    this._spec_add_unit(new_unit_id, new_unit)
+    this._spec_add_unit(new_unit_id, new_unit, specs)
 
     let parent_id: string | null = null
 
@@ -29104,7 +29106,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const new_unit_id = this._new_unit_id(spec_id)
 
     if (parent) {
-      this._register_unit(unit.id, true)
+      this._register_unit(unit.id, specs, true)
     }
 
     this._add_unit(
@@ -36116,7 +36118,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const spec = this._get_unit_spec(unit_id) as GraphSpec
     const unit = this._get_unit(unit_id)
 
-    const new_spec = newSpec(spec)
+    const new_spec = newSpec(clone(spec))
 
     this._spec_set_unit_spec_id(unit_id, new_spec.id)
 
@@ -46460,7 +46462,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         animate
       )
 
-      const new_spec = newSpec(graph_spec)
+      const new_spec = newSpec(clone(graph_spec))
 
       const data: GraphMoveSubGraphIntoData = {
         graphId: new_unit_id,
@@ -47810,8 +47812,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       (node_id) =>
         this._is_unit_node_id(node_id) && this._is_unit_component(node_id)
     )
-
-    let next_parent_component_id = null
 
     const should_graph_become_component =
       graph_render === undefined &&
@@ -51237,7 +51237,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const p = addVector(position, unit_position)
 
-      this._spec_add_unit(unit_id, unit, register)
+      this._spec_add_unit(unit_id, unit, specs, register)
       this._sim_add_unit_core(unit_id, unit, p)
 
       if (this._is_unit_component(unit_id)) {
@@ -52239,14 +52239,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const graph_spec = this._get_unit_spec(data_.graphId) as GraphSpec
 
-          const spec_id = this._spec_id_map[data_.spec.id] ?? data_.spec.id
-
-          if (!hasSpec(spec_id)) {
-            newSpec(clone(graph_spec), data_.spec.id)
-          }
-
-          this._spec_set_unit_spec_id(data_.graphId, spec_id)
-
           this._set_node_fixed(data_.graphId, true)
 
           const stop = this._start_move_subgraph_into(data_.graphId, data)
@@ -52277,12 +52269,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const data_ = data as GraphMoveSubGraphOutOfData
 
           const graph_spec = this._get_unit_spec(data_.graphId) as GraphSpec
-
-          if (!hasSpec(data_.spec.id)) {
-            newSpec(clone(graph_spec), data_.spec.id)
-          }
-
-          this._spec_set_unit_spec_id(data_.graphId, data_.spec.id)
 
           const graph_position = this._get_node_position(data_.graphId)
 
@@ -55081,6 +55067,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_add_unit_moment = (data: GraphAddUnitMomentData): void => {
     // console.log('Graph', '_on_add_unit_moment', data)
 
+    const { specs } = this.$props
+
     const { unitId, bundle, path } = data
 
     if (path.length === 0) {
@@ -55088,7 +55076,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const { unit } = bundle
 
-      this._spec_add_unit(unitId, unit)
+      const specs_ = weakMerge(specs, bundle.specs ?? {})
+
+      this._spec_add_unit(unitId, unit, specs_)
 
       if (this._is_unit_component(unitId)) {
         this._spec_append_component(null, unitId)
@@ -55171,7 +55161,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const subgraph_at_path = this.getSubgraphAtPath(path)
 
       if (!subgraph_at_path) {
-        this._register_spec(forked_unit_spec.id, false)
+        this._register_spec(forked_unit_spec.id, specs, false)
       }
     }
   }
@@ -55217,7 +55207,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     setSpec(next_spec_id, unit_spec)
 
-    this._register_spec(next_spec_id, false)
+    this._register_spec(next_spec_id, specs, false)
     this._unregister_spec(unit_spec_id, false)
   }
 
@@ -55237,7 +55227,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unitId: string,
     unit: GraphUnitSpec
   ) => {
-    // console.log('Graph', graph_id, unitId, unit)
+    // console.log('Graph', '_spec_graph_unit_add_unit', graph_id, unitId, unit)
 
     const { setSpec } = this.$props
 
@@ -55250,6 +55240,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     setSpec(graph_spec_id, next_graph_spec)
   }
+
+  private _spec_id_map: Dict<string> = {}
 
   private _on_graph_unit_add_unit_moment = (
     data: GraphAddUnitMomentData
@@ -55275,14 +55267,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     children = children ?? []
     childrenSlot = childrenSlot ?? {}
 
-    const id_map = injectSpecs(bundle.specs ?? {})
-
-    this._spec_id_map = { ...this._spec_id_map, ...id_map }
-
     const specs_ = weakMerge(bundle.specs ?? {}, specs)
 
-    const added_unit_spec_id =
-      this._spec_id_map[bundle.unit.id] ?? bundle.unit.id
+    const id_map = injectSpecs(bundle.specs ?? {})
+
+    this._spec_id_map = { ...id_map, ...this._spec_id_map }
+
+    remapUnitBundle(bundle, this._spec_id_map)
+
+    const added_unit_spec_id = bundle.unit.id
 
     const added_unit_spec = getSpec(added_unit_spec_id) as GraphSpec
     const added_unit_spec_render = added_unit_spec.render
@@ -55391,7 +55384,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       setSpec(next_spec.id, next_spec)
 
-      this._register_unit(bundle.unit.id)
+      this._register_unit(bundle.unit.id, specs)
     }
 
     const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
@@ -55877,29 +55870,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._state_remove_unit(id)
   }
 
-  private _ensure_fork_spec(init_spec_id: string): {
-    spec_id: string
-    spec: GraphSpec
-    forked: boolean
-  } {
-    // console.log('Graph', '_ensure_fork_spec')
-
-    const { specs } = this.$props
-
-    const init_spec = getGraphSpec(specs, init_spec_id)
-
-    const forked_spec_id = newSpecId(specs)
-    const forked_spec = clone(init_spec)
-
-    forked_spec.id = forked_spec_id
-
-    return {
-      spec_id: forked_spec_id,
-      spec: forked_spec,
-      forked: true,
-    }
-  }
-
   private _on_graph_unit_remove_unit_moment = (
     data: GraphAddUnitMomentData
   ): void => {
@@ -56107,6 +56077,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec_set_unit_spec_id = (unit_id: string, spec_id: string): void => {
     // console.log('Graph', '_spec_set_unit_spec_id', unit_id, spec_id)
 
+    const { specs } = this.$props
+
     const old_spec_id = this._get_unit_spec_id(unit_id)
 
     if (spec_id === old_spec_id) {
@@ -56116,7 +56088,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._spec.units[unit_id].id = spec_id
 
     this._unregister_unit(old_spec_id)
-    this._register_unit(spec_id)
+    this._register_unit(spec_id, specs)
   }
 
   private _is_node_visible = (node_id: string): boolean => {
@@ -57752,9 +57724,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._on_graph_unit_add_pin_to_merge_moment({ ...data, path })
           },
           removePinData: (data) => {
-            //
-          },
-          takeInput: (data) => {
             //
           },
           moveSubgraphInto: (data) => {

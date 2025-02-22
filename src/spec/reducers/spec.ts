@@ -181,11 +181,7 @@ export const removeUnit = (
   removeUnitMerges({ unitId }, spec)
   removeUnitExposedPins({ unitId }, spec)
 
-  delete spec['units'][unitId]
-
-  if (!keyCount(spec.units ?? {})) {
-    delete spec.units
-  }
+  deepDestroy(spec, ['units', unitId])
 }
 
 export const addMerge = (
