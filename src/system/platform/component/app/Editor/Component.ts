@@ -41477,6 +41477,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       output: new Set(),
     }
 
+    for (const err_id of err_node_ids) {
+      const { unitId } = segmentErrNodeId(err_id)
+
+      this._sim_remove_unit_err(unitId)
+
+      this._refresh_node_color(unitId)
+
+      if (!unit_ids.includes(unitId)) {
+        this._pod_take_unit_err(unitId)
+      }
+    }
+
     const actions = []
 
     const removed_unit = new Set<string>()
@@ -41640,18 +41652,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
 
         this._sim_remove_datum(datum_node_id)
-      }
-    }
-
-    for (const err_id of err_node_ids) {
-      const { unitId } = segmentErrNodeId(err_id)
-
-      this._sim_remove_unit_err(unitId)
-
-      this._refresh_node_color(unitId)
-
-      if (!unit_ids.includes(unitId)) {
-        this._pod_take_unit_err(unitId)
       }
     }
 
