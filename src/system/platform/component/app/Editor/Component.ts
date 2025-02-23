@@ -33862,12 +33862,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         let target_trait: LayoutNode
 
+        const { $x, $y, $width, $height } = this.$context
+
         if (this._tree_layout) {
           target_trait = anticipate
             ? clone(this._layout_target_node[target_id])
             : clone(this._layout_node[target_id])
-
-          const { $width, $height } = this.$context
 
           target_trait.x += $width / 2 - target_trait.width / 2
           target_trait.y += $height / 2 - target_trait.height / 2
@@ -33876,6 +33876,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const target_frame_trait = extractTrait(target_frame, measureText)
 
           target_trait = target_frame_trait
+
+          target_trait.x += -$x
+          target_trait.y += -$y
         }
 
         const slot_path = target_component.getSlotPath(slot_name)
