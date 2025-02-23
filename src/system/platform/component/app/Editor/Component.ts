@@ -432,6 +432,7 @@ import {
   makeUnplugPinAction,
   processActions,
   reverseSelection,
+  wrapMoveSubgraphIntoData,
   wrapMoveSubgraphOutOfData,
   wrapRemoveMergeDataAction,
   wrapRemoveUnitPinDataAction,
@@ -35385,7 +35386,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const new_spec_id = newSpecId(specs)
 
-    this._add_empty_spec(new_spec_id, partial_spec)
+    this._spec_add_empty_spec(new_spec_id, partial_spec)
 
     const new_unit_id = this._new_unit_id(new_spec_id)
 
@@ -46464,6 +46465,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             this._resize_core_height(new_unit_id, height)
             this._resize_node_height(new_unit_id, height)
+
+            this._refresh_core_icon_size(new_unit_id)
           },
           () => {
             //
@@ -46498,7 +46501,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._mode === 'none') {
       const id = newSpecId(specs)
 
-      this._add_empty_spec(id, {
+      this._spec_add_empty_spec(id, {
         render: true,
         component: {
           defaultWidth: width,
@@ -46638,7 +46641,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       // console.log(data)
 
-      this._pod.$moveSubgraphInto(data)
+      const actions = []
+
+      actions.push(wrapMoveSubgraphIntoData(data))
+
+      this._pod.$bulkEdit({ actions, fork, bubble })
     }
   }
 
@@ -47546,7 +47553,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._add_random_datum(datum_id, position)
   }
 
-  private _add_empty_spec = (
+  private _spec_add_empty_spec = (
     id: string,
     partial: Partial<GraphSpec> = {}
   ): GraphSpec => {
@@ -48998,7 +49005,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       },
     })
 
-    this._add_empty_spec(new_spec_id, new_spec)
+    this._spec_add_empty_spec(new_spec_id, new_spec)
 
     const new_unit_id = this._new_unit_id(new_spec_id)
 
