@@ -1,3 +1,8 @@
+import {
+  LinkNodeSpec,
+  MergeNodeSpec,
+  PlugNodeSpec,
+} from '../Class/Graph/buildMoveMap'
 import { DataRef } from '../DataRef'
 import { Position } from '../client/util/geometry/types'
 import { BaseSpec } from './BaseSpec'
@@ -63,6 +68,8 @@ export type GraphSubPinSpec =
   | GraphExposedMergeSpec
   | GraphExposedLinkPinSpec
   | GraphExposedEmptyPinSpec
+
+export type GraphNodeSpec = LinkNodeSpec | MergeNodeSpec | PlugNodeSpec
 
 export type GraphPinsSpec = Dict<GraphPinSpec>
 

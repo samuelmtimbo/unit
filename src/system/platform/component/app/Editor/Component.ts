@@ -1,5 +1,7 @@
 import { Graph } from '../../../../../Class/Graph'
 import {
+  LinkNodeSpec,
+  MergeNodeSpec,
   MoveMap,
   MoveMapping,
   PlugNodeSpec,
@@ -37,6 +39,7 @@ import { moveUnit } from '../../../../../Class/Graph/moveUnit'
 import { Memory } from '../../../../../Class/Unit/Memory'
 import {
   UnitRemovePinDataData,
+  UnitSetPinDataData,
   UnitTakeInputData,
 } from '../../../../../Class/Unit/interface'
 import { DataRef } from '../../../../../DataRef'
@@ -434,6 +437,7 @@ import {
   wrapRemoveUnitPinDataAction,
 } from '../../../../../spec/actions/G'
 import {
+  SET_PIN_DATA,
   makeSetPinDataAction,
   wrapRemovePinDataAction,
 } from '../../../../../spec/actions/U'
@@ -611,6 +615,7 @@ import {
   DatumSpec,
   GraphComponentSpec,
   GraphDataSpec,
+  GraphNodeSpec,
   GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphSubComponentSpec,
@@ -22857,15 +22862,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     })
   }
 
-  private _sub_pin_spec_to_node_id = (sub_pin_spec: GraphSubPinSpec) => {
-    if (sub_pin_spec.unitId) {
-      return getPinNodeId(
-        sub_pin_spec.unitId,
-        sub_pin_spec.kind,
-        sub_pin_spec.pinId
-      )
-    } else {
-      return getMergeNodeId(sub_pin_spec.mergeId)
+  private _node_spec_to_node_id = (node_spec: GraphNodeSpec) => {
+    if ((node_spec as LinkNodeSpec).unitId) {
+      const { unitId, type, pinId } = node_spec as LinkNodeSpec
+
+      return getPinNodeId(unitId, type, pinId)
+    } else if ((node_spec as MergeNodeSpec).mergeId) {
+      const { mergeId } = node_spec as MergeNodeSpec
+
+      return getMergeNodeId(mergeId)
+    } else if ((node_spec as PlugNodeSpec).subPinId) {
+      const { type, pinId, subPinId } = node_spec as PlugNodeSpec
+
+      return getExtNodeId(type, pinId, subPinId)
     }
   }
 
@@ -23794,10 +23803,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (this._is_pin_node_id(nearest_compatible_node_id)) {
         this.move_datum_to_pin(datum_node_id, nearest_compatible_node_id)
       } else if (this._is_ext_node_id(nearest_compatible_node_id)) {
-        this._move_datum_to_exposed_pin(
-          datum_node_id,
-          nearest_compatible_node_id
-        )
+        this.move_datum_to_plug(datum_node_id, nearest_compatible_node_id)
       } else if (this._is_unit_node_id(nearest_compatible_node_id)) {
         const unit_id = nearest_compatible_node_id
 
@@ -23999,9 +24005,47 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _move_datum_to_exposed_pin = (
+  public move_datum_to_plug = (datum_node_id: string, plug_node_id: string) => {
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    const value = this._get_datum_value(datum_node_id)
+    const node_spec = this._node_id_to_node_spec(plug_node_id)
+
+    this._dispatch_action(makeAddDatumLinkAction(datumId, value, node_spec))
+
+    this._move_datum_to_plug(datum_node_id, plug_node_id)
+  }
+
+  private _move_datum_to_plug = (
     datum_node_id: string,
-    ext_node_id: string
+    plug_node_id: string
+  ): void => {
+    this._state_move_datum_to_plug(datum_node_id, plug_node_id)
+    this._pod_move_datum_to_plug(datum_node_id, plug_node_id)
+  }
+
+  private _state_move_datum_to_plug = (
+    datum_node_id: string,
+    plug_node_id: string
+  ): void => {
+    this._spec_move_datum_to_plug(datum_node_id, plug_node_id)
+    this._sim_move_datum_to_plug(datum_node_id, plug_node_id)
+  }
+
+  private _pod_move_datum_to_plug = (
+    datum_node_id: string,
+    plug_node_id: string
+  ): void => {
+    const value = this._get_datum_value(datum_node_id)
+
+    const { type, pinId } = segmentPlugNodeId(plug_node_id)
+
+    this._pod_set_pin_set_data(type, pinId, value)
+  }
+
+  private _sim_move_datum_to_plug = (
+    datum_node_id: string,
+    plug_node_id: string
   ): void => {
     const value = this._get_datum_value(datum_node_id)
 
@@ -24013,22 +24057,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (datum_plug_node_id) {
-      if (datum_plug_node_id === ext_node_id) {
+      if (datum_plug_node_id === plug_node_id) {
         //
       } else {
-        this._sim_add_plug_datum_link(ext_node_id, datum_node_id)
+        this._sim_add_plug_datum_link(plug_node_id, datum_node_id)
       }
     } else {
-      const { type, pinId } = segmentPlugNodeId(ext_node_id)
+      this._sim_add_plug_datum_link(plug_node_id, datum_node_id)
+      // const { type, pinId } = segmentPlugNodeId(plug_node_id)
 
-      this._remove_datum(datum_node_id)
+      // this._remove_datum(datum_node_id)
 
-      this.__sim_set_pin_set_data(type, pinId, value)
+      // this.__sim_set_pin_set_data(type, pinId, value)
     }
+  }
 
-    const { type, pinId } = segmentPlugNodeId(ext_node_id)
-
-    this._pod_set_pin_set_data(type, pinId, value)
+  private _spec_move_datum_to_plug = (
+    datum_node_id: string,
+    plug_node_id: string
+  ): void => {
+    //
   }
 
   private set_plug_data = (
@@ -24072,7 +24120,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ) => {}
 
   private set_pin_set_data = (type: IO, pinId: string, data: string) => {
-    this._dispatch_action(makeSetPinDataAction(type, pinId, data))
+    const last_data = deepGetOrDefault(
+      this._unit_datum,
+      [type, pinId],
+      undefined
+    )
+
+    this._dispatch_action(makeSetPinDataAction(type, pinId, data, last_data))
 
     this._set_pin_set_data(type, pinId, data)
   }
@@ -24088,10 +24142,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _pod_set_pin_set_data = (type: IO, pinId: string, data: string) => {
+    const lastData = deepGetOrDefault(
+      this._unit_datum,
+      [type, pinId],
+      undefined
+    )
+
     this._pod.$setPinData({
       type,
       pinId,
       data,
+      lastData,
     })
   }
 
@@ -25360,14 +25421,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_node_id: string,
     ext_node_id: string
   ): void => {
-    // console.log('Graph', '_sim_remove_datum_plug_link', type, pinId, subPinId)
+    // console.log(
+    //   'Graph',
+    //   '_sim_remove_datum_plug_link',
+    //   datum_node_id,
+    //   ext_node_id
+    // )
 
     delete this._datum_to_plug[datum_node_id]
     delete this._plug_to_datum[ext_node_id]
   }
 
-  private _pod_remove_exposed_pin_datum = (type: IO, pinId: string) => {
-    // console.log('Graph', '_pod_remove_exposed_pin_datum', type, pinId)
+  private _pod_remove_pin_set_data = (type: IO, pinId: string) => {
+    // console.log('Graph', '_pod_remove_pin_data', type, pinId)
 
     this._pod_remove_exposed_pin_datum__template(type, pinId, {
       removePinData: this._pod.$removePinData.bind(this._pod),
@@ -27554,14 +27620,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._move_datum_to_pin(clone_datum_node_id, pin_node_ids[i])
 
-      const sub_pin_spec = this._node_id_to_sub_pin_spec(pin_node_ids[i])
+      const sub_pin_spec = this._node_id_to_node_spec(pin_node_ids[i])
 
       actions.push(makeAddDatumLinkAction(datumId, value, sub_pin_spec))
     }
 
-    const sub_pin_spec = this._node_id_to_sub_pin_spec(pin_node_ids[0])
+    const node_spec = this._node_id_to_node_spec(pin_node_ids[0])
 
-    actions.push(makeAddDatumLinkAction(datumId, value, sub_pin_spec))
+    actions.push(makeAddDatumLinkAction(datumId, value, node_spec))
 
     const bulk_action = makeBulkEditAction(actions)
 
@@ -27584,7 +27650,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         makeAddDatumLinkAction(
           datumId,
           value,
-          this._node_id_to_sub_pin_spec(pin_node_id)
+          this._node_id_to_node_spec(pin_node_id)
         )
       )
     }
@@ -28035,6 +28101,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_pin_node_id: string | null,
     datum_plug_node_id: string | null
   ) => {
+    // console.log('_pod_remove_datum', datum_node_id)
+
     this._pod_remove_datum__template(
       datum_node_id,
       datum_pin_node_id,
@@ -37540,6 +37608,36 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._get_datum_value(datum_node_id)
   }
 
+  public _move_datum_to_node = (datum_node_id: string, node_id: string) => {
+    if (this._is_plug_node_id(node_id)) {
+      this._move_datum_to_plug(datum_node_id, node_id)
+    } else {
+      this._move_datum_to_pin(datum_node_id, node_id)
+    }
+  }
+
+  private _state_move_datum_to_node = (
+    datum_node_id: string,
+    node_id: string
+  ) => {
+    if (this._is_plug_node_id(node_id)) {
+      this._state_move_datum_to_plug(datum_node_id, node_id)
+    } else {
+      this._state_move_datum_to_pin(datum_node_id, node_id)
+    }
+  }
+
+  private _pod_move_datum_to_node = (
+    datum_node_id: string,
+    node_id: string
+  ) => {
+    if (this._is_plug_node_id(node_id)) {
+      this._pod_move_datum_to_plug(datum_node_id, node_id)
+    } else {
+      this._pod_move_datum_to_pin(datum_node_id, node_id)
+    }
+  }
+
   public move_datum_to_pin = (
     datum_node_id: string,
     pin_node_id: string
@@ -37550,7 +37648,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const value = this._get_datum_value(datum_node_id)
 
-    const sub_pin_spec = this._node_id_to_sub_pin_spec(pin_node_id)
+    const sub_pin_spec = this._node_id_to_node_spec(pin_node_id)
 
     this._dispatch_action(makeAddDatumLinkAction(datumId, value, sub_pin_spec))
 
@@ -37563,42 +37661,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_move_datum_to_pin', datum_node_id, pin_node_id)
 
-    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+    this._state_move_datum_to_pin(datum_node_id, pin_node_id)
+    this._pod_move_datum_to_pin(datum_node_id, pin_node_id)
+  }
+
+  private _state_move_datum_to_pin = (
+    datum_node_id: string,
+    pin_node_id: string
+  ): void => {
+    // console.log('Graph', '_state_move_datum_to_pin', datum_node_id, pin_node_id)
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
 
     const value = this._get_datum_value(datum_node_id)
-    const oldValue = this._get_pin_datum_value(pin_node_id)
 
     this._spec_move_datum_to_pin(datum_node_id, pin_node_id, value)
     this._sim_move_datum_to_pin(datum_node_id, pin_node_id)
 
     this._mem_set_pin_datum(pin_node_id, datumId)
-
-    this._pod_move_datum_to_pin(
-      datum_pin_node_id,
-      pin_node_id,
-      value,
-      oldValue,
-      false
-    )
-  }
-
-  private _move_datum_to_plug = (
-    datum_node_id: string,
-    pin_node_id: string
-  ): void => {
-    // console.log('Graph', '_move_datum_to_plug', datum_node_id, pin_node_id)
-    // TODO
   }
 
   private _pod_move_datum_to_pin = (
-    datum_pin_node_id: string | null,
-    pin_node_id: string,
-    value: string,
-    oldValue: string,
-    override: boolean
+    datum_node_id: string | null,
+    pin_node_id: string
   ) => {
+    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+    const value = this._get_datum_value(datum_node_id)
+    const oldValue = this._get_pin_datum_value(pin_node_id)
+
     if (datum_pin_node_id && datum_pin_node_id !== pin_node_id) {
       this._pod_remove_pin_datum(datum_pin_node_id)
     }
@@ -38339,7 +38430,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (this._is_merge_node_id(node_id)) {
       this._remove_pin_datum_link(datum_node_id)
     } else if (this._is_ext_node_id(node_id)) {
-      this._remove_plug_set_datum_link(node_id)
+      this._remove_plug_datum_link(node_id)
     }
   }
 
@@ -38356,22 +38447,63 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _remove_plug_set_datum_link = (plug_node_id: string): void => {
+  private remove_plug_datum_link = (plug_node_id: string): void => {
     const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
-    this._sim_remove_plug_set_datum_link(plug_node_id)
-    this._pod_remove_exposed_pin_datum(type, pinId)
+    const datum_node_id = this._plug_to_datum[plug_node_id]
+
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    const plug_node_spec = this._node_id_to_node_spec(plug_node_id)
+
+    const value = deepGetOrDefault(this._unit_datum, [type, pinId], undefined)
+
+    this._dispatch_action(
+      makeRemoveDatumLinkAction(datumId, value, plug_node_spec)
+    )
+
+    this._remove_plug_datum_link(plug_node_id)
+  }
+
+  private _remove_plug_datum_link = (plug_node_id: string): void => {
+    const { type, pinId } = segmentPlugNodeId(plug_node_id)
+
+    this._state_remove_plug_datum_link(plug_node_id)
+    this._pod_remove_plug_datum_link(plug_node_id)
+  }
+
+  private _pod_remove_plug_datum_link = (plug_node_id: string): void => {
+    const { type, pinId } = segmentPlugNodeId(plug_node_id)
+
+    this._pod_remove_pin_set_data(type, pinId)
+  }
+
+  private _state_remove_plug_datum_link = (plug_node_id: string): void => {
+    const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
+
+    this._sim_remove_pin_set_datum_link(plug_node_id)
+    this._spec_remove_plug_set_datum_link(type, pinId)
+  }
+
+  private _spec_remove_plug_set_datum_link = (
+    type: IO,
+    pinId: string
+  ): void => {
+    //
   }
 
   public remove_plug_set_datum_link = (plug_node_id: string): void => {
-    this._remove_plug_set_datum_link(plug_node_id)
+    this.remove_plug_datum_link(plug_node_id)
   }
 
-  private _sim_remove_plug_set_datum_link = (plug_node_id: string): void => {
+  private _sim_remove_pin_set_datum_link = (plug_node_id: string): void => {
     const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
     this._sim_remove_plug_datum_link(type, pinId, subPinId)
+    this._sim_remove_pin_data(type, pinId)
+  }
 
+  private _sim_remove_pin_set_data = (type: IO, pinId: string) => {
     this._for_each_plug(type, pinId, (subPinId) => {
       const ext_node_id = getExtNodeId(type, pinId, subPinId)
 
@@ -38383,21 +38515,40 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     })
   }
 
-  private _node_id_to_sub_pin_spec = (pin_node_id: string): GraphSubPinSpec => {
+  private _spec_remove_pin_set_data = (type: IO, pinId: string) => {
+    //
+  }
+
+  private _state_remove_pin_set_data = (type: IO, pinId: string) => {
+    this._spec_remove_pin_set_data(type, pinId)
+    this._sim_remove_pin_set_data(type, pinId)
+  }
+
+  private _node_id_to_node_spec = (pin_node_id: string): GraphNodeSpec => {
     if (this._is_merge_node_id(pin_node_id)) {
       const { mergeId } = segmentMergeNodeId(pin_node_id)
 
       return {
         mergeId,
       }
-    } else {
+    } else if (this._is_link_pin_node_id(pin_node_id)) {
       const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
       return {
         unitId,
-        kind: type,
+        type,
         pinId,
       }
+    } else if (this._is_plug_node_id(pin_node_id)) {
+      const { type, pinId, subPinId } = segmentPlugNodeId(pin_node_id)
+
+      return {
+        type,
+        pinId,
+        subPinId,
+      }
+    } else {
+      throw new InvalidStateError()
     }
   }
 
@@ -38408,7 +38559,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const value = this._get_datum_value(datum_node_id)
 
-    const pin_spec: GraphSubPinSpec = this._node_id_to_sub_pin_spec(pin_node_id)
+    const pin_node_spec: GraphNodeSpec = this._node_id_to_node_spec(pin_node_id)
 
     if (this._is_link_pin_node_id(pin_node_id)) {
       const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
@@ -38418,7 +38569,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
 
-    this._dispatch_action(makeRemoveDatumLinkAction(datumId, value, pin_spec))
+    this._dispatch_action(
+      makeRemoveDatumLinkAction(datumId, value, pin_node_spec)
+    )
 
     this._remove_pin_datum_link(datum_node_id)
   }
@@ -38433,6 +38586,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _remove_pin_datum_link = (datum_node_id: string): void => {
     // console.log('Graph', '_remove_pin_datum_link', datum_node_id)
+
+    const pin_node_id = this._datum_to_pin[datum_node_id]
+
+    this._state_remove_datum_pin_link(datum_node_id)
+    this._pod_remove_pin_datum(pin_node_id)
+  }
+
+  private _state_remove_datum_pin_link = (datum_node_id: string): void => {
+    // console.log('Graph', '_state_remove_pin_datum_link', datum_node_id)
 
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
@@ -40714,7 +40876,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._set_plug_data(datum_plug_node_id, tree.value)
         }
       } else {
-        this._remove_plug_set_datum_link(datum_plug_node_id)
+        this.remove_plug_datum_link(datum_plug_node_id)
       }
     }
   }
@@ -47910,7 +48072,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           if (selected_node_ids.includes(datum_plug_node_id)) {
             continue
           } else {
-            this._remove_plug_set_datum_link(datum_plug_node_id)
+            this.remove_plug_datum_link(datum_plug_node_id)
           }
         }
       }
@@ -52525,19 +52687,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             return
           }
 
-          const pin_node_id = this._sub_pin_spec_to_node_id(data.pinSpec)
+          const node_id = this._node_spec_to_node_id(data.nodeSpec)
 
-          this._move_datum_to_pin(datum_node_id, pin_node_id)
+          this._state_move_datum_to_node(datum_node_id, node_id)
+          emit && this._pod_move_datum_to_node(datum_node_id, node_id)
         }
         break
       case REMOVE_DATUM_LINK:
         {
           const datum_node_id = getDatumNodeId(data.id)
 
-          const pin_node_id = this._datum_to_pin[datum_node_id]
+          const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+          const datum_plug_node_id = this._datum_to_plug[datum_node_id]
 
-          if (pin_node_id) {
-            this._remove_pin_datum_link(datum_node_id)
+          if (datum_pin_node_id) {
+            this._state_remove_datum_pin_link(datum_node_id)
+            emit && this._pod_remove_pin_datum(datum_pin_node_id)
+          }
+          if (datum_plug_node_id) {
+            this._state_remove_plug_datum_link(datum_plug_node_id)
+            emit && this._pod_remove_plug_datum_link(datum_plug_node_id)
           }
         }
         break
@@ -52594,6 +52763,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               data_.name,
               data_.lastName
             )
+        }
+        break
+      case SET_PIN_DATA:
+        {
+          const data_ = data as UnitSetPinDataData
+
+          if (data_.data) {
+            this._state_set_pin_set_data(data_.type, data_.pinId, data_.data)
+            emit &&
+              this._pod_set_pin_set_data(data_.type, data_.pinId, data_.data)
+          } else {
+            this._state_remove_pin_set_data(data_.type, data_.pinId)
+            emit && this._pod_remove_pin_set_data(data_.type, data_.pinId)
+          }
         }
         break
       case TAKE_UNIT_ERR:

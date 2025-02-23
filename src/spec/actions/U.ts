@@ -22,11 +22,17 @@ export const makeRemovePinDataAction = (
   return wrapRemovePinDataAction({ type, pinId, data })
 }
 
-export const makeSetPinDataAction = (type: IO, pinId: string, data: any) => {
+export const makeSetPinDataAction = (
+  type: IO,
+  pinId: string,
+  data: string,
+  lastData: string
+) => {
   return wrapSetPinDataAction({
     type,
     pinId,
     data,
+    lastData,
   })
 }
 

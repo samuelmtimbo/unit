@@ -84,6 +84,7 @@ import {
   SET_UNIT_SIZE,
   UNPLUG_PIN,
 } from './actions/G'
+import { makeSetPinDataAction, SET_PIN_DATA } from './actions/U'
 
 export const reverseAction = ({ type, data }: Action): Action => {
   switch (type) {
@@ -298,9 +299,9 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case REMOVE_DATUM:
       return makeAddDatumAction(data.id, data.value)
     case ADD_DATUM_LINK:
-      return makeRemoveDatumLinkAction(data.id, data.value, data.pinSpec)
+      return makeRemoveDatumLinkAction(data.id, data.value, data.nodeSpec)
     case REMOVE_DATUM_LINK:
-      return makeAddDatumLinkAction(data.id, data.value, data.pinSpec)
+      return makeAddDatumLinkAction(data.id, data.value, data.nodeSpec)
     case SET_MERGE_DATA:
       return makeRemoveMergeDataAction(data.mergeId, data.data)
     case REMOVE_MERGE_DATA:
@@ -340,6 +341,13 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.unitId,
         data.lastName,
         data.name
+      )
+    case SET_PIN_DATA:
+      return makeSetPinDataAction(
+        data.type,
+        data.pinId,
+        data.lastData,
+        data.data
       )
     default:
       throw new Error('irreversible')

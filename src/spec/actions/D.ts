@@ -1,4 +1,4 @@
-import { GraphSubPinSpec } from '../../types'
+import { GraphNodeSpec } from '../../types'
 
 export const ADD_DATUM = 'addDatum'
 export const SET_DATUM = 'setDatum'
@@ -30,14 +30,14 @@ export const makeAddDatumAction = (id: string, value: any) => {
 export const makeAddDatumLinkAction = (
   id: string,
   value: any,
-  pinSpec: GraphSubPinSpec
+  nodeSpec: GraphNodeSpec
 ) => {
   return {
     type: ADD_DATUM_LINK,
     data: {
       id,
       value,
-      pinSpec,
+      nodeSpec,
     },
   }
 }
@@ -55,14 +55,14 @@ export const makeRemoveDatumAction = (id: string, value: any) => {
 export const makeRemoveDatumLinkAction = (
   id: string,
   value: any,
-  pinSpec: GraphSubPinSpec
+  nodeSpec: GraphNodeSpec
 ) => {
   return {
     type: REMOVE_DATUM_LINK,
     data: {
       id,
       value,
-      pinSpec,
+      nodeSpec,
     },
   }
 }

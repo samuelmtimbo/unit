@@ -34,6 +34,7 @@ export type UnitSetPinDataData = {
   pinId: string
   type: IO
   data: string
+  lastData: string
 }
 
 export type UnitRemovePinDataData = {
