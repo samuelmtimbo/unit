@@ -34640,7 +34640,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const children = clone(this._spec_get_sub_component_children(parent_id))
 
-    this._remove_sub_component_children(
+    this.remove_sub_component_children(
       parent_id,
       slot_name,
       next_parent_id,
@@ -34649,12 +34649,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
   }
 
-  private _remove_sub_component_children = (
+  private remove_sub_component_children = (
     parent_id: string,
     slot_name: string,
     next_parent_id: string | null,
     next_slot_name: string,
-    children: string[]
+    children: string[],
+    emit: boolean = true
   ): void => {
     let { animate } = this._config()
 
@@ -34729,6 +34730,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         next_parent_id,
         i
       )
+
+      const children = [child_id]
+
+      const prev_parent_id_map = this._get_sub_components_parent_map(children)
+      const prev_parent_slot_map = this._get_sub_components_slot_map(children)
+
+      emit &&
+        this._pod_move_sub_component_root(
+          next_parent_id,
+          children,
+          {},
+          i,
+          prev_parent_id_map,
+          prev_parent_slot_map
+        )
 
       i++
     }
@@ -34828,20 +34844,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       next_parent_id,
       'default',
       next_index
-    )
-
-    const children = [child_id]
-
-    const prev_parent_id_map = this._get_sub_components_parent_map(children)
-    const prev_parent_slot_map = this._get_sub_components_slot_map(children)
-
-    this._pod_move_sub_component_root(
-      next_parent_id,
-      children,
-      {},
-      next_index,
-      prev_parent_id_map,
-      prev_parent_slot_map
     )
 
     if (is_child_fullwindow) {
@@ -50063,7 +50065,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       if (parent_id) {
         if (selected_children) {
-          this._remove_sub_component_children(
+          this.remove_sub_component_children(
             parent_id,
             slot_name,
             next_parent_id,
@@ -52215,68 +52217,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
       case MOVE_SUB_COMPONENT_ROOT:
         {
-          const data_ = data as GraphMoveSubComponentRootData
-          if (data_.parentId) {
-            if (this._tree_layout) {
-              this._move_sub_component_root(
-                data_.parentId,
-                data_.children,
-                // data_.slotMap,
-                'default',
-                emit,
-                false
-              )
-            } else {
-              let i = 0
-
-              for (const child_id of data.children) {
-                const slot_name = data_.slotMap?.[child_id] ?? 'default'
-                const prev_parent_id = data_.prevParentIdMap?.[child_id] ?? null
-
-                this._state_pre_append_sub_component_child(
-                  data_.parentId,
-                  child_id,
-                  slot_name
-                )
-                this._layout_layer_move_sub_component_child(
-                  prev_parent_id,
-                  data_.parentId,
-                  child_id,
-                  data_.index
-                )
-              }
-
-              i++
-            }
-          } else {
-            for (const child_id of data.children) {
-              this._measure_sub_component_base(child_id)
-            }
-
-            this._remove_sub_component_children(
-              data.prevParentIdMap,
-              'default',
-              null,
-              'default',
-              data.children
-            )
-          }
-
-          emit &&
-            this._pod.$moveSubComponentRoot({
-              prevParentIdMap: data_.prevParentIdMap,
-              prevSlotMap: data_.prevSlotMap,
-              parentId: data_.parentId,
-              children: data_.children,
-              slotMap: data_.slotMap ?? {},
-              index: data_.index,
-              fork,
-              bubble,
-            })
-
-          this._refresh_layout_node_target_position(null)
-
-          this._animate_all_current_layout_layer_node()
+          this._on_move_sub_component_root(data, emit)
         }
         break
       case SET_UNIT_PIN_CONSTANT:
@@ -56521,9 +56462,77 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_move_sub_component_root = (
-    data: GraphMoveSubComponentRootData
+    data: GraphMoveSubComponentRootData,
+    emit: boolean = true
   ) => {
-    // console.log('Graph', '_on_move_sub_component_root', data)
+    // console.log('Graph', '_on_move_sub_component_root', this._id, data, emit)
+
+    const { fork, bubble } = this.$props
+
+    if (data.parentId) {
+      if (this._tree_layout) {
+        this._move_sub_component_root(
+          data.parentId,
+          data.children,
+          // data.slotMap,
+          'default',
+          emit,
+          false
+        )
+      } else {
+        let i = 0
+
+        for (const child_id of data.children) {
+          const slot_name = data.slotMap?.[child_id] ?? 'default'
+          const prev_parent_id = data.prevParentIdMap?.[child_id] ?? null
+
+          this._state_pre_append_sub_component_child(
+            data.parentId,
+            child_id,
+            slot_name
+          )
+          this._layout_layer_move_sub_component_child(
+            prev_parent_id,
+            data.parentId,
+            child_id,
+            data.index
+          )
+        }
+
+        i++
+      }
+    } else {
+      for (const child_id of data.children) {
+        this._measure_sub_component_base(child_id)
+
+        const prevParentId = data.prevParentIdMap[child_id] ?? null
+
+        this.remove_sub_component_children(
+          prevParentId,
+          'default',
+          null,
+          'default',
+          [child_id],
+          emit
+        )
+      }
+    }
+
+    emit &&
+      this._pod.$moveSubComponentRoot({
+        prevParentIdMap: data.prevParentIdMap,
+        prevSlotMap: data.prevSlotMap,
+        parentId: data.parentId,
+        children: data.children,
+        slotMap: data.slotMap ?? {},
+        index: data.index,
+        fork,
+        bubble,
+      })
+
+    this._refresh_layout_node_target_position(null)
+
+    this._animate_all_current_layout_layer_node()
   }
 
   private _on_set_unit_pin_constant = (
@@ -58214,7 +58223,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (moment.data?.path && moment.data?.path.length > 0) {
       this._on_graph_moment(moment)
     } else {
-      this._unit_moment_handler[type][event](data)
+      this._unit_moment_handler[type][event](data, false)
     }
   }
 
