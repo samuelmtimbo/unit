@@ -35747,10 +35747,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     clientX: number,
     clientY: number
   ): void => {
-    this._remove_unit_ghost(unit_id, pointerId, clientX, clientY)
+    this.remove_unit_ghost(unit_id, pointerId, clientX, clientY)
   }
 
-  private _remove_unit_ghost = (
+  private remove_unit_ghost = (
     unit_id: string,
     pointerId: number,
     clientX: number,
@@ -35788,7 +35788,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         merge[next_unit_id] = unit
 
-        merges[mergeId] = merge
+        merges_[mergeId] = merge
       }
 
       const actions = []
