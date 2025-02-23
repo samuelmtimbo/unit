@@ -10204,12 +10204,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const filterObjRef = (
       type: IO,
       obj: Dict<{ ref?: boolean }>,
-      _ref: boolean
+      ref_: boolean
     ) => {
       return filterObj(obj, ({}, pinId: string) => {
         const ref = isPinRef(specs, new_unit_spec, type, pinId, new Set())
 
-        return !!ref === _ref
+        return !!ref === ref_
       })
     }
 
@@ -10306,9 +10306,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     set_merge_swap('output', false)
     set_merge_swap('output', true)
 
+    const tagged_pin_bag = {
+      input: {
+        data: filterObjRef('input', clone(pin_bag.input), false),
+        ref: filterObjRef('input', clone(pin_bag.input), true),
+      },
+      output: {
+        data: filterObjRef('output', clone(pin_bag.output), false),
+        ref: filterObjRef('output', clone(pin_bag.output), true),
+      },
+    }
+
     function set_bag_swap(search_type: IO, swap_type: IO, tag: 'ref' | 'data') {
-      for (const pin_id in pin_bag[search_type]) {
-        const swap_pin_id = getObjSingleKey(swap_pin_bag[swap_type][tag])
+      for (const pin_id of Object.keys(
+        tagged_pin_bag[search_type][tag]
+      ).sort()) {
+        const swap_pin_id = Object.keys(swap_pin_bag[swap_type][tag]).sort()[0]
 
         if (swap_pin_id) {
           new_unit_pin_position[swap_type][swap_pin_id] =
@@ -35963,8 +35976,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _generate_identity_matches = (unit_id: string) => {
     const unit_spec = this._get_unit_spec(unit_id)
 
-    const input_names = keys(unit_spec.inputs ?? {})
-    const output_names = keys(unit_spec.outputs ?? {})
+    const input_names = keys(unit_spec.inputs ?? {}).sort()
+    const output_names = keys(unit_spec.outputs ?? {}).sort()
 
     const data_input_names = input_names.filter(
       (pin_id) => !this.__is_link_pin_ref(unit_id, 'input', pin_id)
