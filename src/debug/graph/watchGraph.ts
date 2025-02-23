@@ -86,12 +86,6 @@ export function watchGraph<T extends Graph>(
     }
   }
 
-  const cloneUnitListener = (id, newUnitId, newUnit, path) => {
-    if (path.length === 0) {
-      _watchUnit(newUnit, newUnitId)
-    }
-  }
-
   const addMergeListener = (id, mergeSpec, merge, path) => {
     if (path.length === 0) {
       _watchMerge(merge, id)

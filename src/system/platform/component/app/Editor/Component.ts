@@ -41795,8 +41795,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    this._pod.$bulkEdit({ actions, fork, bubble })
-
     for (const datum_node_id of datum_node_ids) {
       if (this._search_unit_datum_node_id === datum_node_id) {
         this._search_unit_datum_node_id = null
@@ -41825,6 +41823,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     this._dispatch_action(makeBulkEditAction(actions))
+
+    this._pod.$bulkEdit({ actions, fork, bubble })
   }
 
   private _sim_cover_pin_set = (type: IO, pin_id: string): void => {
@@ -57020,10 +57020,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   data
     // )
 
+    if (!this._spec_has_unit(unitId)) {
+      return
+    }
+
     const pin_node_id = getPinNodeId(unitId, type, pinId)
 
     if (!this._has_node(pin_node_id)) {
-      return
+      const anchor_node_id = this._get_node_anchor_node_id(pin_node_id)
+
+      if (!this._has_node(anchor_node_id)) {
+        return
+      }
     }
 
     this._graph_debug_set_pin_value(pin_node_id, data)
