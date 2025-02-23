@@ -1,0 +1,409 @@
+{
+  "type": "`U`&`G`",
+  "name": "peer graph",
+  "units": {
+    "parsejson": {
+      "id": "563e92be-ad5e-4a61-a718-9249c3eac51d",
+      "input": {
+        "string": {}
+      },
+      "output": {
+        "json": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 166,
+          "y": 27
+        }
+      }
+    },
+    "onmessage": {
+      "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
+      "input": {
+        "emitter": {
+          "metadata": {
+            "position": {
+              "x": 253,
+              "y": -28
+            }
+          }
+        }
+      },
+      "output": {
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 64,
+          "y": 8
+        }
+      }
+    },
+    "send": {
+      "id": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",
+      "input": {
+        "channel": {
+          "metadata": {
+            "position": {
+              "x": -253,
+              "y": -76
+            }
+          }
+        },
+        "data": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 61,
+          "y": -63
+        }
+      }
+    },
+    "stringify": {
+      "id": "2b24877a-3221-4288-9f59-efbf29964368",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 161,
+          "y": -87
+        }
+      }
+    },
+    "peerreceiver": {
+      "id": "f079a38e-fb4f-496e-8e5f-d5e03a590cda",
+      "input": {
+        "offer": {
+          "metadata": {
+            "position": {
+              "x": -19,
+              "y": 10
+            }
+          }
+        },
+        "close": {
+          "metadata": {
+            "position": {
+              "x": -84,
+              "y": 13
+            }
+          }
+        },
+        "opt": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": -14
+            }
+          }
+        }
+      },
+      "output": {
+        "stream": {
+          "metadata": {
+            "position": {
+              "x": -102,
+              "y": -48
+            }
+          }
+        },
+        "answer": {
+          "metadata": {
+            "position": {
+              "x": -45,
+              "y": -66
+            }
+          }
+        },
+        "channel": {
+          "metadata": {
+            "position": {
+              "x": 15,
+              "y": -27
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": -22
+        }
+      }
+    },
+    "remotegraph": {
+      "id": "57bcdd88-a4f4-49ab-92d4-ed1969895520",
+      "input": {
+        "opt": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {}
+          },
+          "metadata": {
+            "position": {
+              "x": 206,
+              "y": -32
+            },
+            "data": {
+              "position": {
+                "x": 175,
+                "y": -31
+              }
+            }
+          }
+        },
+        "close": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 289,
+              "y": -60
+            }
+          }
+        },
+        "message": {}
+      },
+      "output": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 306,
+              "y": -32
+            }
+          }
+        },
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 250,
+          "y": -32
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "parsejson": {
+        "input": {
+          "string": true
+        }
+      },
+      "onmessage": {
+        "output": {
+          "message": true
+        }
+      }
+    },
+    "1": {
+      "remotegraph": {
+        "output": {
+          "message": true
+        }
+      },
+      "stringify": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "send": {
+        "input": {
+          "data": true
+        }
+      },
+      "stringify": {
+        "output": {
+          "str": true
+        }
+      }
+    },
+    "3": {
+      "remotegraph": {
+        "input": {
+          "message": true
+        }
+      },
+      "parsejson": {
+        "output": {
+          "json": true
+        }
+      }
+    },
+    "4": {
+      "send": {
+        "input": {
+          "channel": true
+        }
+      },
+      "onmessage": {
+        "input": {
+          "emitter": true
+        }
+      }
+    },
+    "5": {
+      "peerreceiver": {
+        "output": {
+          "channel": true
+        }
+      },
+      "send": {
+        "input": {
+          "channel": true
+        }
+      },
+      "onmessage": {
+        "input": {
+          "emitter": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "peerreceiver",
+          "pinId": "opt",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -125,
+              "y": -6
+            }
+          }
+        }
+      },
+      "functional": true
+    },
+    "close": {
+      "plug": {
+        "0": {
+          "unitId": "peerreceiver",
+          "pinId": "close",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -96,
+              "y": 35
+            }
+          }
+        }
+      },
+      "defaultIgnored": true
+    },
+    "offer": {
+      "plug": {
+        "0": {
+          "unitId": "peerreceiver",
+          "pinId": "offer",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -16,
+              "y": 35
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "remote peer graph",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 113,
+          "y": 27
+        },
+        "1": {
+          "x": 212,
+          "y": -69
+        },
+        "2": {
+          "x": 108,
+          "y": -84
+        },
+        "3": {
+          "x": 215,
+          "y": 7
+        },
+        "4": {
+          "x": 128,
+          "y": -29
+        }
+      },
+      "data": {
+        "x": -248,
+        "y": 26
+      }
+    }
+  },
+  "id": "d4ec46ab-d065-4d1c-9357-fa8b95be0c36",
+  "outputs": {
+    "answer": {
+      "plug": {
+        "0": {
+          "unitId": "peerreceiver",
+          "pinId": "answer",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -46,
+              "y": -90
+            }
+          }
+        }
+      }
+    },
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "remotegraph",
+          "pinId": "graph",
+          "kind": "output"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 336,
+              "y": -33
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -174,14 +174,8 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
   onDataInputDrop(name: string) {
     // console.log('PeerTransmitter', 'onDataInputDrop', name)
 
-    if (name === 'answer') {
-      if (this._flag_err_answer_without_offer) {
-        this.takeErr()
-      }
-
-      if (this._connected) {
-        this._disconnect()
-      }
+    if (name === 'opt') {
+      this._forward_all_empty()
     }
   }
 
@@ -278,14 +272,40 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
       this._disconnect()
     }
 
+    const message_listener = (message: string) => {
+      // console.log('Transmitter', 'Peer', 'message', message)
+
+      if (this._output.channel.active()) {
+        // @ts-ignore
+        this._output.channel.peak().emit('message', message)
+      }
+    }
+
+    const start_listener = (stream: MediaStream) => {
+      // console.log('Transmitter', 'Peer', 'start', stream)
+      // const _stream = wrapMediaStream(stream, this.__system)
+      // this._output.stream.push(_stream)
+    }
+
+    const stop_listener = () => {
+      // console.log('Transmitter', 'Peer', 'stop')
+      // this._output.stream.pull()
+    }
+
     this._peer.addListener('connect', connect_listener)
     this._peer.addListener('error', error_listener)
     this._peer.addListener('close', close_listener)
+    this._peer.addListener('message', message_listener)
+    this._peer.addListener('start', start_listener)
+    this._peer.addListener('stop', stop_listener)
 
     return () => {
       this._peer.removeListener('connect', connect_listener)
       this._peer.removeListener('error', error_listener)
       this._peer.removeListener('close', close_listener)
+      this._peer.removeListener('message', message_listener)
+      this._peer.removeListener('start', start_listener)
+      this._peer.removeListener('stop', stop_listener)
     }
   }
 

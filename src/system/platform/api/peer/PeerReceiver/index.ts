@@ -111,6 +111,12 @@ export default class PeerReceiver extends Holder<I, O> {
     this._output.answer.push(answer)
   }
 
+  async onDataInputDrop<K extends keyof I | 'done'>(name: K, data: any) {
+    if (name === 'opt') {
+      this._forward_all_empty()
+    }
+  }
+
   async onIterDataInputData(name: keyof I, data: any): Promise<void> {
     super.onIterDataInputData(name, data)
 
