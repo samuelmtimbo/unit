@@ -252,7 +252,7 @@
             }
           }
         },
-        "emitter": {}
+        "channel": {}
       },
       "metadata": {
         "position": {
@@ -286,7 +286,7 @@
       },
       "receiver": {
         "output": {
-          "emitter": true
+          "channel": true
         }
       }
     },

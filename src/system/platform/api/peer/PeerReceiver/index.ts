@@ -1,11 +1,11 @@
 import { Peer } from '../../../../../api/peer/Peer'
+import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
-import { EE } from '../../../../../types/interface/EE'
+import { CH } from '../../../../../types/interface/CH'
 import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
-import { wrapEventEmitter } from '../../../../../wrap/EventEmitter'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 import { ID_PEER_RECEIVER } from '../../../../_ids'
 
@@ -18,7 +18,7 @@ export interface I {
 export interface O {
   stream: MS
   answer: string
-  emitter: EE<any>
+  channel: CH
 }
 
 export default class PeerReceiver extends Holder<I, O> {
@@ -36,12 +36,12 @@ export default class PeerReceiver extends Holder<I, O> {
         fi: ['opt'],
         fo: [],
         i: ['offer'],
-        o: ['stream', 'emitter', 'answer'],
+        o: ['stream', 'channel', 'answer'],
       },
       {
         input: {},
         output: {
-          emitter: {
+          channel: {
             ref: true,
           },
           stream: {
@@ -132,7 +132,7 @@ export default class PeerReceiver extends Holder<I, O> {
         return
       }
 
-      this._forward_empty('emitter')
+      this._forward_empty('channel')
       this._forward_empty('stream')
       this._forward_empty('answer')
     }
@@ -150,9 +150,19 @@ export default class PeerReceiver extends Holder<I, O> {
 
       this._connected = true
 
-      const emitter = wrapEventEmitter(this.__system)
+      const peer = this._peer
 
-      this._output.emitter.push(emitter)
+      const channel = new (class Channel extends $ implements CH {
+        __: string[] = ['CH']
+
+        async send(data: string): Promise<void> {
+          peer.send(data)
+
+          return
+        }
+      })(this.__system)
+
+      this._output.channel.push(channel)
     }
 
     const error_listener = (err) => {
@@ -170,9 +180,9 @@ export default class PeerReceiver extends Holder<I, O> {
     const message_listener = (message: string) => {
       // console.log('Receiver', 'Peer', 'message', message)
 
-      if (this._output.emitter.active()) {
+      if (this._output.channel.active()) {
         // @ts-ignore
-        this._output.emitter.peak().emit('message', message)
+        this._output.channel.peak().emit('message', message)
       }
     }
 

@@ -23,8 +23,8 @@
     "answer": {
       "type": "string"
     },
-    "emitter": {
-      "type": "`EE`",
+    "channel": {
+      "type": "`CH`",
       "ref": true
     }
   },
