@@ -3522,6 +3522,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const item = items[i]
 
           this._drop_data_transfer_item(item, drop_position, screen_position)
+
+          break
         }
       } else {
         for (let i = 0; i < files.length; i++) {
