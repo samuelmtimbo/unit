@@ -54963,16 +54963,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const spec = clone(findSpecAtPath(specs, this._spec, path))
 
-      // if (path.length === 1) {
-      //   const [unitId] = path
-
-      //   if (getPlugCount(spec, type, pinId) === 1) {
-      //     this._sim_graph_remove_unit_pin(unitId, type, pinId)
-
-      //     this._spec_remove_unit_pin(unitId, type, pinId)
-      //   }
-      // }
-
       coverPin({ pinId, type, subPinId }, spec)
 
       setSpec(spec.id, spec)

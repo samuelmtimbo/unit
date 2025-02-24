@@ -34,7 +34,9 @@ import {
   findUnitPlugs,
   forEachGraphSpecPinPlug,
   forEachPinOnMerges,
+  getMerge,
   getMergePinCount,
+  getPinSpec,
 } from '../util/spec'
 import {
   insertRoot,
@@ -337,7 +339,29 @@ export const coverPinSet = (
   { pinId, type }: { pinId: string; type: IO },
   spec: GraphSpec
 ): void => {
-  return deepDestroy(spec, [`${type}s`, pinId])
+  const pinSpec = getPinSpec(spec, type, pinId)
+
+  const { plug = {} } = pinSpec
+
+  const mergesToCheck = new Set<string>()
+
+  for (const subPinId in plug) {
+    const subPinSpec = plug[subPinId]
+
+    if (subPinSpec.mergeId) {
+      mergesToCheck.add(subPinSpec.mergeId)
+    }
+  }
+
+  deepDestroy(spec, [`${type}s`, pinId])
+
+  for (const mergeId of mergesToCheck) {
+    const merge = getMerge(spec, mergeId)
+
+    if (getMergePinCount(merge) === 0) {
+      removeMerge({ mergeId }, spec)
+    }
+  }
 }
 
 export const coverPin = (
