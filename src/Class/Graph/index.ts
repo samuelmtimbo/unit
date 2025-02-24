@@ -5510,7 +5510,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     fork && graph.fork(spec.id, true, bubble)
 
-    moveSubgraph(this, graph, map, moves)
+    moveSubgraph(this, graph, map, moves, false)
   }
 
   public getUnitMergesSpec(unitId: string): GraphMergesSpec {
@@ -5589,7 +5589,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     fork && graph.fork(spec.id, true, bubble)
 
-    moveSubgraph(graph, this, map, moves)
+    moveSubgraph(graph, this, map, moves, true)
   }
 
   public getGraphUnitBundleSpec(graphId: string): BundleSpec {

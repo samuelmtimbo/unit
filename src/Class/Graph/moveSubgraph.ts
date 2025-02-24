@@ -3,6 +3,7 @@ import { ADD_UNIT, REMOVE_UNIT } from '../../spec/actions/G'
 import { Dict } from '../../types/Dict'
 import { GraphUnitSpec } from '../../types/GraphUnitSpec'
 import { UCG } from '../../types/interface/UCG'
+import { clone } from '../../util/clone'
 import { deepGetOrDefault } from '../../util/object'
 import { Unit } from '../Unit'
 import { MoveMapping } from './buildMoveMap'
@@ -12,13 +13,20 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
   source: Graph<T>,
   target: Graph<T>,
   map: MoveMapping,
-  moves: Moves
+  moves: Moves,
+  reverse: boolean
 ) {
   let units_: Dict<Unit> = {}
   let units: Dict<GraphUnitSpec> = {}
 
+  const actions = []
+
   for (const move of moves) {
     if (move.in) {
+      if (!reverse) {
+        actions.push(clone(move.action))
+      }
+
       if (move.action.type === ADD_UNIT) {
         const { unitId } = move.action.data
 
@@ -30,6 +38,10 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
         target.act(move.action, false, false, false)
       }
     } else {
+      if (reverse) {
+        actions.push(clone(move.action))
+      }
+
       if (move.action.type === REMOVE_UNIT) {
         const { unitId } = move.action.data
 
@@ -56,5 +68,11 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
         source.act(move.action, false, false, false)
       }
     }
+  }
+
+  if (reverse) {
+    source.emit('bulk_edit', actions, [])
+  } else {
+    target.emit('bulk_edit', actions, [])
   }
 }
