@@ -53620,7 +53620,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const dx = a.x - cx
         const dy = a.y - cy
 
-        const r = Math.sqrt(dx * dx + dy * dy)
+        const r = Math.max(Math.sqrt(dx * dx + dy * dy), 1)
 
         const k = (0.1 * z * ((RE - r) * alpha)) / r
 
@@ -53641,6 +53641,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const dx = ax - cx
           const dy = ay - cy
           const r = Math.sqrt(dx * dx + dy * dy)
+
           if (r > 0) {
             const s = 0.1
             const k = s * alpha
@@ -53737,7 +53738,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const dx = _x - cx - this._search_dock_offset_x / this._zoom.z / 2
       const dy = _y - cy + this._search_dock_offset_y / this._zoom.z / 2
 
-      const r = Math.sqrt(dx * dx + dy * dy)
+      const r = Math.max(Math.sqrt(dx * dx + dy * dy), 1)
 
       if (r > 0.1) {
         const k = alpha / 6
@@ -53907,7 +53908,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const dx = a_x - cx
           const dy = a_y - cy
 
-          const r = Math.sqrt(dx * dx + dy * dy)
+          const r = Math.max(Math.sqrt(dx * dx + dy * dy), 1)
 
           const k = (0.1 * z * ((RE - r) * alpha)) / r
 
@@ -54376,8 +54377,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._pod_started) {
       return
     }
-
-    // console.trace('Graph', '_setup_pod')
 
     this._listen_pod(pod)
     this._start_debugger()
