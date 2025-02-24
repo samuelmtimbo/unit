@@ -69,7 +69,6 @@ import {
   REMOVE_PLUG_DATA,
   REMOVE_UNIT,
   REMOVE_UNIT_PIN_DATA,
-  reverseSelection,
   SET_COMPONENT_SIZE,
   SET_MERGE_DATA,
   SET_PIN_SET_DEFAULT_IGNORED,
@@ -85,6 +84,7 @@ import {
   UNPLUG_PIN,
 } from './actions/G'
 import { makeSetPinDataAction, SET_PIN_DATA } from './actions/U'
+import { reverseSelection } from './reverseSelection'
 
 export const reverseAction = ({ type, data }: Action): Action => {
   switch (type) {

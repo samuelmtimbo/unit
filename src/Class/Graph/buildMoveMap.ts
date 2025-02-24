@@ -2382,7 +2382,7 @@ export function buildMoveMap(
                     pin
                   )
                 } else {
-                  const nextSubPinId = newTargetSubPinId(type, pinId)
+                  const nextSubPinId = newTargetSubPinId(oppositeType, pinId)
 
                   let targetExposePinTask = deepGetOrDefault(
                     targetExposePinTasks,

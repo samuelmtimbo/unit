@@ -5103,3 +5103,87 @@ assert.deepEqual(applyMoves(source, target, moves), {
     },
   },
 })
+
+source = {
+  units: {},
+  inputs: {
+    a0: {
+      plug: {
+        '0': {},
+      },
+      ref: false,
+    },
+  },
+  outputs: {
+    a0: {
+      plug: {
+        '0': {},
+      },
+      ref: false,
+    },
+  },
+}
+
+target = {
+  units: {
+    identity: {
+      id: ID_IDENTITY,
+    },
+    untitled: {
+      id: ID_EMPTY,
+    },
+  },
+  merges: {
+    '0': {
+      untitled: {
+        output: {
+          a0: true,
+        },
+      },
+      identity: {
+        input: {
+          a: true,
+        },
+      },
+    },
+  },
+}
+
+selection = {
+  plug: [
+    { type: 'output', pinId: 'a0', subPinId: '0' },
+    { type: 'input', pinId: 'a0', subPinId: '0' },
+  ],
+}
+
+map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
+
+moves = buildMoves(selection, map)
+
+assert.deepEqual(applyMoves(source, target, moves), {
+  source: {
+    units: {},
+  },
+  target: {
+    units: {
+      identity: {
+        id: ID_IDENTITY,
+      },
+      untitled: {
+        id: ID_EMPTY,
+      },
+    },
+    inputs: {
+      a0: {
+        plug: {
+          '0': {
+            unitId: 'identity',
+            kind: 'input',
+            pinId: 'a',
+          },
+          '1': {},
+        },
+      },
+    },
+  },
+})

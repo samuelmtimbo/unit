@@ -431,7 +431,6 @@ import {
   makeSetUnitSizeAction,
   makeUnplugPinAction,
   processActions,
-  reverseSelection,
   wrapMoveSubgraphIntoData,
   wrapMoveSubgraphOutOfData,
   wrapRemoveMergeDataAction,
@@ -519,6 +518,7 @@ import {
 import { remapBundle } from '../../../../../spec/remapBundle'
 import { remapUnitBundle } from '../../../../../spec/remapUnitBundle'
 import { reverseAction } from '../../../../../spec/reverseAction'
+import { reverseSelection } from '../../../../../spec/reverseSelection'
 import { stringify } from '../../../../../spec/stringify'
 import { stringifyDataValue } from '../../../../../spec/stringifyDataValue'
 import { stringifyBundleSpec } from '../../../../../spec/stringifySpec'
