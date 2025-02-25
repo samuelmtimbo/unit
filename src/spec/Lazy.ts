@@ -284,7 +284,7 @@ export function lazyFromSpec(
       unitId: string,
       unit: UnitBundleSpec,
       parentId?: string | null,
-      emit?: boolean
+      emit: boolean = true
     ): Unit {
       this._ensure()
       return this.__graph.addUnitSpec(unitId, unit, parentId, emit)

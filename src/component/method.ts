@@ -143,7 +143,7 @@ export function removeChild(
   element: Component_,
   children: Component_[],
   at: number,
-  emit?: boolean
+  emit: boolean = true
 ): Component_ {
   const child = pullChild(element, children, at)
 

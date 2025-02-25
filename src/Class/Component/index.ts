@@ -110,7 +110,7 @@ export class Component__<
     component: Component_,
     slotName: string,
     at?: number,
-    emit?: boolean
+    emit: boolean = true
   ): void {
     return registerParentRoot(
       this,

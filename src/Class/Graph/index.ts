@@ -3119,7 +3119,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unitId: string,
     unitSpec: GraphUnitSpec,
     unit: Component_,
-    emit?: boolean
+    emit: boolean = true
   ): void => {
     this._specInjectSubComponent(unitId)
     this._simInjectSubComponent(unitId, unitSpec, unit)
@@ -3247,7 +3247,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     childId: string,
     at: number,
     slot: string,
-    emit?: boolean
+    emit: boolean = true
   ): void => {
     // console.log('Graph', '_insertSubComponentChild', subComponentId, childId, at, slot)
 
