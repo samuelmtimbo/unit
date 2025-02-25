@@ -36306,10 +36306,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const actions_ = [
       ...actions,
-      this._make_remove_unit_action(unit_id, {
-        unit,
-        specs: { [unit.id]: this._gut_graph_spec(spec) },
-      }),
+      this._make_remove_unit_action(
+        unit_id,
+        {
+          unit,
+          specs: { [unit.id]: this._gut_graph_spec(spec) },
+        },
+        false,
+        false
+      ),
     ]
 
     this._pod_explode_unit(actions_)
