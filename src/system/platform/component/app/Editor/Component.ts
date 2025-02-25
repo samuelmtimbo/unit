@@ -40,7 +40,6 @@ import { Memory } from '../../../../../Class/Unit/Memory'
 import {
   UnitRemovePinDataData,
   UnitSetPinDataData,
-  UnitTakeInputData,
 } from '../../../../../Class/Unit/interface'
 import { DataRef } from '../../../../../DataRef'
 import {
@@ -28124,10 +28123,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       datum_pin_node_id,
       datum_plug_node_id,
       {
-        takeInput: this._pod.$takeInput.bind(this._pod),
         removeMergeData: this._pod.$removeMergeData.bind(this._pod),
         removeUnitPinData: this._pod.$removeUnitPinData.bind(this._pod),
         removePinData: this._pod.$removePinData.bind(this._pod),
+        removeData() {
+          //
+        },
       }
     )
   }
@@ -28137,23 +28138,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_pin_node_id: string | null,
     datum_plug_node_id: string | null,
     {
-      takeInput,
       removeMergeData,
       removeUnitPinData,
       removePinData,
+      removeData,
     }: {
-      takeInput: (data: UnitRemovePinDataData) => void
       removeMergeData(data: GraphRemoveMergeDataData): void
       removeUnitPinData(data: GraphRemoveUnitPinDataData): void
       removePinData(data: UnitRemovePinDataData): void
+      removeData(data: { datumId: string; value: string }): void
     }
   ) => {
     if (datum_pin_node_id) {
       this._pod_remove_pin_datum__template(datum_pin_node_id, {
-        takeInput,
         removeMergeData,
         removeUnitPinData,
       })
+
+      return
     }
 
     if (datum_plug_node_id) {
@@ -28162,7 +28164,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._pod_remove_exposed_pin_datum__template(type, pinId, {
         removePinData,
       })
+
+      return
     }
+
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    const value = this._get_datum_value(datum_node_id)
+
+    removeData({ datumId, value })
   }
 
   private _action_buffer: Action[] = []
@@ -38421,13 +38431,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { datum_pin_node_id, datum_plug_node_id } =
       this._get_datum_connected(datum_node_id)
 
-    this._state_remove_datum(datum_node_id)
     emit &&
       this._pod_remove_datum(
         datum_node_id,
         datum_pin_node_id,
         datum_plug_node_id
       )
+    this._state_remove_datum(datum_node_id)
   }
 
   private _state_remove_datum = (datum_node_id: string) => {
@@ -38735,7 +38745,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_pod_remove_pin_datum', pin_node_id)
 
     this._pod_remove_pin_datum__template(pin_node_id, {
-      takeInput: (data) => this._pod.$takeInput(data),
       removeMergeData: (data) => this._pod.$removeMergeData(data),
       removeUnitPinData: (data) => this._pod.$removeUnitPinData(data),
     })
@@ -38744,11 +38753,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_remove_pin_datum__template = (
     pin_node_id: string,
     {
-      takeInput,
       removeMergeData,
       removeUnitPinData,
     }: {
-      takeInput: (data: UnitTakeInputData) => void
       removeMergeData(data: GraphRemoveMergeDataData): void
       removeUnitPinData(data: GraphRemoveUnitPinDataData): void
     }
@@ -41755,9 +41762,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         datum_pin_node_id,
         datum_plug_node_id,
         {
-          takeInput(data) {
-            actions.push(wrapRemovePinDataAction(data))
-          },
           removeMergeData(data) {
             actions.push(wrapRemoveMergeDataAction(data))
           },
@@ -41766,6 +41770,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
           removePinData(data) {
             actions.push(wrapRemovePinDataAction(data))
+          },
+          removeData(data) {
+            actions.push(makeRemoveDatumAction(data.datumId, data.value))
           },
         }
       )
@@ -51697,6 +51704,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   map_unit_id
     // )
 
+    const { classes } = this.$system
+
     const { specs, getSpec } = this.$props
 
     const {
@@ -51809,9 +51818,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     })
 
     for (const datum_id in data) {
-      const value = data[datum_id]
+      const { value } = data[datum_id]
 
-      bulk_actions.push(makeAddDatumAction(datum_id, value))
+      const value_ = stringifyDataValue(value, specs, classes)
+
+      bulk_actions.push(makeAddDatumAction(datum_id, value_))
     }
 
     return bulk_actions
