@@ -36,7 +36,6 @@ export async function html(opt: WebTemplate): Promise<string> {
 >
   <head>
     <title>${title}</title>
-    <base href="${pathname}/" />
     <meta charset="utf-8" />
     <meta
       name="viewport"
