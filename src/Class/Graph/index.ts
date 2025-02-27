@@ -5220,10 +5220,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unit.setPinIgnored(type, pinId, ignored)
   }
 
-  public setUnitId(unitId: string, newUnitId: string, name: string): void {
-    this._setUnitId(unitId, newUnitId, name)
+  public setUnitId(
+    unitId: string,
+    newUnitId: string,
+    name: string,
+    specId: string
+  ): void {
+    this._setUnitId(unitId, newUnitId, name, specId)
 
-    this.edit('set_unit_id', unitId, newUnitId, name, [])
+    this.edit('set_unit_id', unitId, newUnitId, name, specId, [])
+
+    const unit = this.getUnit(newUnitId) as Graph
+
+    unit.setName(name, true, false)
   }
 
   public setName(name: string, emit: boolean = true, fork: boolean = true) {
@@ -5242,21 +5251,26 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._spec.name = name
   }
 
-  public _setUnitId(unitId: string, newUnitId: string, name: string): void {
+  public _setUnitId(
+    unitId: string,
+    newUnitId: string,
+    name: string,
+    specId: string
+  ): void {
+    const unit = this.getUnit(unitId) as Graph
+
+    unit.fork(specId, false, false)
+
     const newUnitMerges = clone(this.getUnitMergesSpec(unitId))
     const newUnitPlugs = clone(this.getUnitPlugsSpec(unitId))
 
     renameUnitInMerges(unitId, newUnitMerges, newUnitId)
-
-    const unit = this.getUnit(unitId) as Graph
 
     this._removeUnit(unitId, false) as Graph
 
     this._addUnit(newUnitId, unit, null, null)
     this._addUnitMerges(newUnitMerges, false)
     this._addUnitPlugs(newUnitId, newUnitPlugs, false)
-
-    unit.setName(name)
   }
 
   private _addUnitPlugs(
@@ -5966,9 +5980,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           this._setMergeData(mergeId, data)
         },
         setUnitId: (data: GraphSetUnitIdData) => {
-          const { unitId, newUnitId, name } = data
+          const { unitId, newUnitId, name, specId } = data
 
-          this._setUnitId(unitId, newUnitId, name)
+          this._setUnitId(unitId, newUnitId, name, specId)
         },
         removeUnitPinData: (data: GraphRemoveUnitPinDataData) => {
           const { unitId, type, pinId } = data

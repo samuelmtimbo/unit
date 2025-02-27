@@ -79,6 +79,8 @@ export type GraphRemoveMergeDataData = {
 export type GraphSetUnitIdData = {
   unitId: string
   newUnitId: string
+  specId: string
+  lastSpecId: string
   name: string
   lastName: string
   fork?: boolean

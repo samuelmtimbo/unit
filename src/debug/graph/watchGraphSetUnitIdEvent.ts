@@ -1,11 +1,8 @@
 import { Graph } from '../../Class/Graph'
+import { GraphSetUnitIdData } from '../../Class/Graph/interface'
 import { Moment } from '../Moment'
 
-export interface GraphSetUnitIdMomentData {
-  unitId: string
-  newUnitId: string
-  name: string
-  specId: string
+export interface GraphSetUnitIdMomentData extends GraphSetUnitIdData {
   path: string[]
 }
 
@@ -21,6 +18,7 @@ export function watchGraphSetUnitIdEvent(
     unitId: string,
     newUnitId: string,
     name: string,
+    specId: string,
     path: string[]
   ) => {
     callback({
@@ -30,6 +28,7 @@ export function watchGraphSetUnitIdEvent(
         unitId,
         newUnitId,
         name,
+        specId,
         path,
       },
     })

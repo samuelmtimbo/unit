@@ -289,7 +289,7 @@ export type G_EE = {
   component_append: [string, GraphUnitSpec, string[]]
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]
-  set_unit_id: [string, string, string, string[]]
+  set_unit_id: [string, string, string, string, string[]]
   set_unit_size: [string, number, number, string[]]
   set_sub_component_size: [string, number, number, string[]]
   set_component_size: [number, number, string[]]

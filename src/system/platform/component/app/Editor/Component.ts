@@ -582,6 +582,7 @@ import {
   getPlugSpecs,
   getSpecPinIcon,
   getSubPinSpec,
+  getUnit,
   getUnitSpec,
   hasMerge,
   hasMergePin,
@@ -8519,12 +8520,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private set_unit_name = (unit_id: string, name: string): string => {
     // console.log('Graph', 'set_unit_name', unit_id, name)
 
+    const { newSpecId } = this.$props
+
     const current_name = this._get_unit_name(unit_id)
 
-    const new_unit_id = this._set_unit_name(unit_id, name, current_name)
+    const new_spec_id = newSpecId()
+    const current_spec_id = this._get_unit_spec_id(unit_id)
+
+    const new_unit_id = this._set_unit_name(
+      unit_id,
+      name,
+      current_name,
+      new_spec_id
+    )
 
     this._dispatch_action(
-      makeSetUnitIdAction(unit_id, new_unit_id, name, current_name)
+      makeSetUnitIdAction(
+        unit_id,
+        new_unit_id,
+        name,
+        current_name,
+        new_spec_id,
+        current_spec_id
+      )
     )
 
     return new_unit_id
@@ -8533,7 +8551,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _set_unit_name = (
     unit_id: string,
     name: string,
-    current_name: string
+    current_name: string,
+    new_spec_id: string
   ): string => {
     // console.log('Graph', '_set_unit_name', unit_id, name)
 
@@ -8543,8 +8562,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const new_unit_id = newUnitIdFromName(spec, name, blacklist)
 
-    this._state_set_unit_name(unit_id, new_unit_id, name)
-    this._pod_set_unit_name(unit_id, new_unit_id, name, current_name)
+    this._state_set_unit_name(unit_id, new_unit_id, name, new_spec_id)
+    this._pod_set_unit_name(
+      unit_id,
+      new_unit_id,
+      name,
+      current_name,
+      new_spec_id,
+      spec.id
+    )
 
     if (this._is_unit_component(new_unit_id)) {
       this._connect_sub_component(new_unit_id)
@@ -8556,7 +8582,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _state_set_unit_name = (
     unit_id: string,
     new_unit_id: string,
-    name: string
+    name: string,
+    new_spec_id: string
   ): void => {
     const { newSpec } = this.$props
 
@@ -8566,7 +8593,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     new_spec.name = name
 
-    newSpec(new_spec)
+    newSpec(new_spec, new_spec_id)
 
     const unit_data = this._get_unit_data(unit_id)
 
@@ -8600,7 +8627,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unitId: string,
     newUnitId: string,
     name: string,
-    lastName: string
+    lastName: string,
+    specId: string,
+    lastSpecId: string
   ): void => {
     const { fork, bubble } = this.$props
 
@@ -8609,6 +8638,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       newUnitId,
       name,
       lastName,
+      specId,
+      lastSpecId,
       fork,
       bubble,
     })
@@ -9462,7 +9493,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     let next_unit_id = unit_id
 
-    if (temp_name === unit_id) {
+    if (temp_name === current_name) {
       //
     } else {
       if (valid) {
@@ -52737,13 +52768,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         {
           const data_ = data as GraphSetUnitIdData
 
-          this._state_set_unit_name(data_.unitId, data_.newUnitId, data_.name)
+          this._state_set_unit_name(
+            data_.unitId,
+            data_.newUnitId,
+            data_.name,
+            data_.specId
+          )
           emit &&
             this._pod_set_unit_name(
               data_.unitId,
               data_.newUnitId,
               data_.name,
-              data_.lastName
+              data_.lastName,
+              data_.specId,
+              data_.lastSpecId
             )
         }
         break
@@ -55042,14 +55080,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_graph_unit_set_unit_id = (data: GraphSetUnitIdMomentData) => {
     // console.log('Graph', '_on_graph_unit_set_unit_id', data)
 
-    const { setSpec, specs, parent } = this.$props
+    const { setSpec, getSpec, hasSpec, newSpec, specs, parent } = this.$props
 
-    const { unitId, newUnitId, path } = data
+    const { unitId, newUnitId, name, specId, path } = data
 
     if (this._is_spec_updater(path)) {
       const spec = clone(findSpecAtPath(specs, this._spec, path))
 
+      const prev_spec_id = getUnit(spec, unitId).id
+
       setUnitId({ unitId, newUnitId }, spec)
+
+      if (!hasSpec(specId)) {
+        const prev_spec = clone(getSpec(prev_spec_id)) as GraphSpec
+
+        prev_spec.name = name
+
+        newSpec(clone(prev_spec), specId)
+      }
+
+      this._register_spec(specId, specs, false)
+      this._unregister_spec(prev_spec_id, false)
+
+      deepSet_(spec, ['units', newUnitId, 'id'], specId)
 
       setSpec(spec.id, spec)
 

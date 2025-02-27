@@ -292,9 +292,18 @@ export const makeSetUnitIdAction = (
   unitId: string,
   newUnitId: string,
   name: string,
-  lastName: string
+  lastName: string,
+  specId: string,
+  lastSpecId: string
 ) => {
-  return wrapSetUnitIdAction({ unitId, newUnitId, name, lastName })
+  return wrapSetUnitIdAction({
+    unitId,
+    newUnitId,
+    name,
+    lastName,
+    specId,
+    lastSpecId,
+  })
 }
 
 export const wrapSetUnitIdAction = (data: GraphSetUnitIdData) => {

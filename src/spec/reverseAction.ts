@@ -340,7 +340,9 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.newUnitId,
         data.unitId,
         data.lastName,
-        data.name
+        data.name,
+        data.lastSpecId,
+        data.specId
       )
     case SET_PIN_DATA:
       return makeSetPinDataAction(

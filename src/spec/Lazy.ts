@@ -295,9 +295,14 @@ export function lazyFromSpec(
       return this.__graph.bulkEdit(actions)
     }
 
-    setUnitId(unitId: string, newUnitId: string, name: string): void {
+    setUnitId(
+      unitId: string,
+      newUnitId: string,
+      name: string,
+      specId: string
+    ): void {
       this._ensure()
-      return this.__graph.setUnitId(unitId, newUnitId, name)
+      return this.__graph.setUnitId(unitId, newUnitId, name, specId)
     }
 
     isElement(): boolean {
