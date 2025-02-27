@@ -56837,33 +56837,39 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       moveSubComponentRoot(data, unit_spec.component)
 
-      const component = this._component.pathGetSubComponent(path)
+      const subgraph_at_path = this.getSubgraphAtPath(path)
 
-      const parent = component.getSubComponent(parentId)
+      if (subgraph_at_path) {
+        //
+      } else {
+        const component = this._component.pathGetSubComponent(path)
 
-      let i = 0
+        const parent = component.getSubComponent(parentId)
 
-      for (const child_id of children) {
-        const child = component.getSubComponent(child_id)
+        let i = 0
 
-        const currentParentId = component.getSubComponentParentId(child_id)
+        for (const child_id of children) {
+          const child = component.getSubComponent(child_id)
 
-        const slotName = slotMap?.[child_id] ?? 'default'
+          const currentParentId = component.getSubComponentParentId(child_id)
 
-        if (currentParentId) {
-          const currentParent = component.getSubComponent(currentParentId)
+          const slotName = slotMap?.[child_id] ?? 'default'
 
-          if (child.$mounted) {
-            currentParent.unregisterParentRoot(child)
-          } else {
-            currentParent.pullParentRoot(child)
+          if (currentParentId) {
+            const currentParent = component.getSubComponent(currentParentId)
+
+            if (child.$mounted) {
+              currentParent.unregisterParentRoot(child)
+            } else {
+              currentParent.pullParentRoot(child)
+            }
           }
-        }
 
-        if (parent) {
-          parent.registerParentRoot(child, slotName, index + i)
-        } else {
-          component.registerRoot(child)
+          if (parent) {
+            parent.registerParentRoot(child, slotName, index + i)
+          } else {
+            component.registerRoot(child)
+          }
         }
       }
 
