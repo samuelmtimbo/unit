@@ -1189,7 +1189,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$unbundled = false
     this.$primitive = true
 
-    applyAttr(this._root.$element, attr ?? {}, {}, new Set())
+    applyAttr(this._root.$element, attr ?? {}, {})
     applyDynamicStyle(this, this._root.$element, { ...DEFAULT_STYLE, ...style })
 
     this.setSubComponents({
@@ -1679,12 +1679,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     } else if (prop === 'attr') {
       const attr = current ?? {}
 
-      applyAttr(
-        this._root.$element,
-        attr,
-        this.getProp('attr') ?? {},
-        new Set()
-      )
+      applyAttr(this._root.$element, attr, this.getProp('attr') ?? {})
     } else if (prop === 'disabled') {
       this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {

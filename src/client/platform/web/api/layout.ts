@@ -3,7 +3,10 @@ import { BootOpt } from '../../../../system'
 import { Style, Tag } from '../../../../system/platform/Style'
 import { traverseTree, Tree } from '../../../../tree'
 import { LayoutNode } from '../../../LayoutNode'
+import { mergeAttr } from '../../../attr'
 import { colorToHex, hexToRgba, RGBA } from '../../../color'
+import { namespaceURI } from '../../../component/namespaceURI'
+import { parseLayoutValue } from '../../../parseLayoutValue'
 import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
@@ -35,9 +38,11 @@ const shouldExpandStyle = (style: Style) => {
 }
 
 const maybeExpand = (
-  tag: Tag & { trait?: LayoutNode; element?: HTMLElement },
+  tag: Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement },
   path: number[],
-  expandChild: (path: number[]) => (Tag & { element?: HTMLElement })[]
+  expandChild: (
+    path: number[]
+  ) => (Tag & { element?: HTMLElement | SVGElement })[]
 ) => {
   const shouldExpand = shouldExpandStyle(tag.style)
 
@@ -47,20 +52,22 @@ const maybeExpand = (
 }
 
 const expand = (
-  tag: Tag & { trait?: LayoutNode; element?: HTMLElement },
+  tag: Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement },
   path: number[],
-  expandChild: (path: number[]) => (Tag & { element?: HTMLElement })[]
+  expandChild: (
+    path: number[]
+  ) => (Tag & { element?: HTMLElement | SVGElement })[]
 ) => {
   const childrenTags = expandChild(path)
 
   let i = 0
 
   for (const childTag of childrenTags) {
-    const childElement = tagToElement(childTag)
+    const { container, element } = tagToElement(childTag, 'div')
 
-    childTag.element = childElement
+    childTag.element = element
 
-    tag.element.appendChild(childElement)
+    tag.element.appendChild(container)
 
     maybeExpand(childTag, [...path, i], expandChild)
 
@@ -69,8 +76,10 @@ const expand = (
 }
 
 const fitTreeChildren = (
-  parentNode: HTMLElement,
-  tree: Tree<Tag & { trait?: LayoutNode; element?: HTMLElement }>[],
+  parentNode: HTMLElement | SVGElement,
+  tree: Tree<
+    Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement }
+  >[],
   path: number[],
   expandChild: (path: number[]) => Tag[]
 ) => {
@@ -81,11 +90,14 @@ const fitTreeChildren = (
 
     const tag = node.value
 
-    const element = tagToElement(tag)
+    const { container, element } = tagToElement(
+      tag,
+      parentNode.tagName.toLowerCase()
+    )
 
     node.value.element = element
 
-    parentNode.appendChild(element)
+    parentNode.appendChild(container)
 
     if (!node.children.length) {
       maybeExpand(tag, childPath, expandChild)
@@ -97,29 +109,69 @@ const fitTreeChildren = (
   }
 }
 
-const tagToElement = (child: Tag) => {
-  const { name, style, textContent } = child
+const tagToElement = (child: Tag, parentTagName: string) => {
+  const { name, attr, style, textContent } = child
 
   let tag = name.replace('#', '').toLocaleLowerCase()
 
   const isText = isTextName(tag)
   const isSvg = isSVGName(tag)
 
-  const tag_ = isText || isSvg ? 'div' : tag
+  const tag_ = isText ? 'div' : tag
 
-  const childNode = window.document.createElement(tag_)
+  let container: HTMLElement | SVGElement
+  let element: HTMLElement | SVGElement
 
-  if (isText) {
-    childNode.textContent = textContent
+  if (isSvg || tag === 'svg') {
+    element = window.document.createElementNS(namespaceURI, tag)
+
+    if (isSvg && parentTagName !== 'svg') {
+      const viewBox = attr['data-viewbox'] ?? '0 0 100 100'
+
+      container = window.document.createElementNS(namespaceURI, 'svg')
+      container.style.display = 'block'
+      container.style.width = '100%'
+      container.style.height = '100%'
+
+      const parsedViewBox = viewBox.split(' ').map(Number.parseFloat)
+
+      const strokeWidth =
+        parseLayoutValue(
+          style.strokeWidth ?? attr['stroke-width'] ?? '3px'
+        )[0] + 3
+
+      const newParsedViewBox = [
+        parsedViewBox[0] + strokeWidth,
+        parsedViewBox[1] + strokeWidth,
+        parsedViewBox[2] - 2 * strokeWidth,
+        parsedViewBox[3] - 2 * strokeWidth,
+      ]
+
+      const newViewBox = newParsedViewBox.join(' ')
+
+      container.setAttribute('viewBox', newViewBox)
+
+      container.appendChild(element)
+    } else {
+      container = element
+    }
+  } else {
+    container = window.document.createElement(tag_)
+    element = container
   }
 
-  applyStyle(childNode, style)
+  mergeAttr(element, attr)
+  applyStyle(element, style)
 
   if (isText) {
-    childNode.style.display = 'inline'
+    container.textContent = textContent
   }
 
-  return childNode
+  if (isText) {
+    container.style.display = 'inline'
+  }
+
+  return { element, container }
 }
 
 export function webLayout(window: Window, opt: BootOpt): API['layout'] {
@@ -146,13 +198,25 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
       window.document.body.appendChild(parentNode)
 
       for (const root of tree) {
-        traverseTree(root, (node) => {
-          const { name, style, element } = node.value
+        traverseTree(root, null, (node, parent) => {
+          const { name, attr, style, element } = node.value
 
           const computedStyle = window.getComputedStyle(element)
           const rect = element.getBoundingClientRect()
 
-          const { x, y, width, height } = rect
+          let { x, y, width, height } = rect
+
+          if (isSVGName(name) && parent && parent.value.name === 'svg') {
+            const strokeWidth =
+              parseLayoutValue(
+                style.strokeWidth ?? attr['stroke-width'] ?? '3px'
+              )[0] + 3
+
+            x -= strokeWidth
+            y -= strokeWidth
+            width += 2 * strokeWidth
+            height += 2 * strokeWidth
+          }
 
           let {
             opacity: childOpacityStr = '1',

@@ -5,19 +5,20 @@ export type Tree<T> = {
 
 export function traverseTree<T>(
   root: Tree<T>,
-  callback: (node: Tree<T>, path: number[]) => void,
+  parent: Tree<T>,
+  callback: (node: Tree<T>, parent: Tree<T>, path: number[]) => void,
   path: number[] = []
 ): void {
-  callback(root, path)
+  callback(root, parent, path)
 
   root.children.forEach((child: Tree<T>, index: number) =>
-    traverseTree(child, callback, [...path, index])
+    traverseTree(child, root, callback, [...path, index])
   )
 }
 
 function _printTree<T>(tree: Tree<T>): void {
-  traverseTree(tree, (node: Tree<T>, path: number[]) =>
+  traverseTree(tree, null, (node: Tree<T>, parent, path: number[]) =>
     // eslint-disable-next-line no-console
-    console.log(path, node.value)
+    console.log(path, parent, node.value)
   )
 }

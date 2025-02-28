@@ -1,5 +1,4 @@
 import { System } from '../system'
-import { keys } from '../system/f/object/Keys/f'
 import { Dict } from '../types/Dict'
 import { applyAttr } from './attr'
 import { Element } from './element'
@@ -32,19 +31,11 @@ export default class HTMLElement_<
       this.$element.className = className
     }
 
-    const $controlled = new Set([...keys($propHandlers), 'style'])
-
-    applyAttr(this.$element, { ...$defaultAttr, ...attr }, {}, $controlled)
+    applyAttr(this.$element, { ...$defaultAttr, ...attr }, {})
     applyDynamicStyle(this, this.$element, { ...$defaultStyle, ...style })
 
     this.$propHandler = {
-      ...htmlPropHandler(
-        this,
-        this.$element,
-        $defaultStyle,
-        $defaultAttr,
-        $controlled
-      ),
+      ...htmlPropHandler(this, this.$element, $defaultStyle, $defaultAttr),
       ...$propHandlers,
     }
   }

@@ -13,6 +13,10 @@ export const extractTrait = (
 
   let { $node } = leafComp
 
+  if (leafComp.$wrapElement && leafComp.$wrapElement.isConnected) {
+    $node = leafComp.$wrapElement
+  }
+
   if ($node instanceof HTMLElement || $node instanceof SVGElement) {
     let { width, height } = getSize($node)
 

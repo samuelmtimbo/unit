@@ -1,10 +1,24 @@
 import { Dict } from '../types/Dict'
+import { IOElement } from './IOElement'
+
+export function extractAttr(element: IOElement): Dict<string> {
+  if (element instanceof Text) {
+    return {}
+  }
+
+  const attr = {}
+
+  for (let attribute of element.attributes) {
+    attr[attribute.name] = attribute.value
+  }
+
+  return attr
+}
 
 export function applyAttr(
   element: Element,
   attr: Dict<string>,
-  current: Dict<string>,
-  override: Set<string>
+  current: Dict<string>
 ) {
   for (const name in current) {
     const value = attr[name]

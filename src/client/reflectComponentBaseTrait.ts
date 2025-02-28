@@ -3,6 +3,7 @@ import { Tree } from '../tree'
 import { Dict } from '../types/Dict'
 import { mapObjVK } from '../util/object'
 import { LayoutNode } from './LayoutNode'
+import { extractAttr } from './attr'
 import { Component } from './component'
 import { joinPath } from './component/app/graph/joinLeafPath'
 import { LayoutBase } from './layout'
@@ -40,9 +41,12 @@ export function buildTree(
       leaf_slot_parent
     )
 
+    const leaf_attr = extractAttr(leaf_comp.$element)
+
     const tag = {
       name: leaf_comp.$element.nodeName,
       style: leaf_style,
+      attr: leaf_attr,
       textContent: leaf_comp.$element.textContent,
     }
 
@@ -307,9 +311,11 @@ export const expandSlot = (
 
         const leaf_id = joinPath(leaf_path)
         const leaf_style = extractStyle(leaf_id, leaf_comp, parent)
+        const leaf_attr = extractAttr(leaf_comp.$element)
 
         styles.push({
           name: leaf_comp.$element.nodeName,
+          attr: leaf_attr,
           style: leaf_style,
           textContent: leaf_comp.$element.textContent,
         })
@@ -320,6 +326,7 @@ export const expandSlot = (
 
   for (const child of parent.$domChildren) {
     if (!leaves.includes(child)) {
+      const attr = extractAttr(child.$element)
       const style = rawExtractStyle(
         child.$element,
         trait,
@@ -328,6 +335,7 @@ export const expandSlot = (
 
       styles.push({
         name: child.$element.nodeName,
+        attr,
         style,
         textContent: child.$element.textContent,
       })

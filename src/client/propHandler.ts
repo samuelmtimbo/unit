@@ -26,17 +26,10 @@ export function elementPropHandler<T extends HTMLElement | SVGElement>(
   component: Component<T>,
   element: T,
   DEFAULT_STYLE: Style,
-  DEFAULT_ATTR: Dict<any>,
-  CONTROLLED_ATTR_SET: Set<string>
+  DEFAULT_ATTR: Dict<any>
 ): PropHandler {
   return {
-    ...basePropHandler(
-      component,
-      element,
-      DEFAULT_STYLE,
-      DEFAULT_ATTR,
-      CONTROLLED_ATTR_SET
-    ),
+    ...basePropHandler(component, element, DEFAULT_STYLE, DEFAULT_ATTR),
     ...stylePropHandler(component, element, DEFAULT_STYLE),
   }
 }
@@ -45,17 +38,10 @@ export function htmlPropHandler<T extends HTMLElement>(
   component: Component<T>,
   element: T,
   DEFAULT_STYLE: Style,
-  DEFAULT_ATTR: Dict<any>,
-  CONTROLLED_ATTR_SET: Set<string>
+  DEFAULT_ATTR: Dict<any>
 ): PropHandler {
   return {
-    ...elementPropHandler(
-      component,
-      element,
-      DEFAULT_STYLE,
-      DEFAULT_ATTR,
-      CONTROLLED_ATTR_SET
-    ),
+    ...elementPropHandler(component, element, DEFAULT_STYLE, DEFAULT_ATTR),
     innerText: (innerText: string | undefined) => {
       element.innerText = innerText || ''
     },
@@ -66,17 +52,10 @@ export function svgPropHandler<P extends Dict<any> = any>(
   component: Component<SVGElement, P>,
   element: SVGElement,
   DEFAULT_STYLE: Style,
-  DEFAULT_ATTR: Dict<any>,
-  CONTROLLED_ATTR_SET: Set<string>
+  DEFAULT_ATTR: Dict<any>
 ): PropHandler {
   return {
-    ...basePropHandler(
-      component,
-      element,
-      DEFAULT_STYLE,
-      DEFAULT_ATTR,
-      CONTROLLED_ATTR_SET
-    ),
+    ...basePropHandler(component, element, DEFAULT_STYLE, DEFAULT_ATTR),
     ...stylePropHandler(component, element, DEFAULT_STYLE),
   }
 }
@@ -85,17 +64,11 @@ export function basePropHandler(
   component: Component,
   element: HTMLElement | SVGElement,
   DEFAULT_STYLE: Style,
-  DEFAULT_ATTR: Dict<any>,
-  CONTROLLED_ATTR_SET: Set<string>
+  DEFAULT_ATTR: Dict<any>
 ): PropHandler {
   return {
     attr: (attr, prev) => {
-      applyAttr(
-        element,
-        { ...DEFAULT_ATTR, ...attr },
-        prev,
-        CONTROLLED_ATTR_SET
-      )
+      applyAttr(element, { ...DEFAULT_ATTR, ...attr }, prev)
     },
     style: (style: Dict<string> | undefined = {}) => {
       applyStyle(element, { ...DEFAULT_STYLE, ...style })
