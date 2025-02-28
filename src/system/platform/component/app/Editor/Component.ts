@@ -48177,9 +48177,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const data = this._build_graph_selection_data(selection)
 
+    const spec_ = clone(this._spec)
+
+    this._set_spec_nodes_position(spec_)
+
+    console.log(spec_)
+
     const map: MoveMap = buildMoveMap(
       specs,
-      this._spec,
+      spec_,
       graph_spec,
       graph_id,
       selection,
