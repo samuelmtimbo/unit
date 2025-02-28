@@ -48181,8 +48181,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._set_spec_nodes_position(spec_)
 
-    console.log(spec_)
-
     const map: MoveMap = buildMoveMap(
       specs,
       spec_,
@@ -50821,8 +50819,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     })
 
+    const nodes: Dict<Rect> = {}
+
     if (!isEmptyObject(units)) {
       graph.units = units
+
+      for (const unitId in units) {
+        nodes[unitId] = this.get_node(unitId)
+      }
     }
 
     if (!isEmptyObject(component)) {
@@ -50831,19 +50835,78 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (!isEmptyObject(merges)) {
       graph.merges = merges
+
+      for (const mergeId in merges) {
+        const merge_node_id = getMergeNodeId(mergeId)
+
+        nodes[merge_node_id] = this.get_node(merge_node_id)
+      }
     }
 
     if (!isEmptyObject(inputs)) {
       graph.inputs = inputs
+
+      for (const pin_id in inputs) {
+        const pin = inputs[pin_id]
+
+        const { plug = {} } = pin
+
+        for (const sub_pin_id in plug) {
+          const sub_pin_spec = plug[sub_pin_id]
+
+          const ext_node_id = getExtNodeId('input', pin_id, sub_pin_id)
+          const int_node_id = getIntNodeId('input', pin_id, sub_pin_id)
+
+          nodes[ext_node_id] = this.get_node(ext_node_id)
+
+          if (this._has_node(int_node_id)) {
+            nodes[int_node_id] = this.get_node(int_node_id)
+          }
+        }
+      }
     }
 
     if (!isEmptyObject(outputs)) {
       graph.outputs = outputs
+
+      for (const pin_id in outputs) {
+        const pin = outputs[pin_id]
+
+        const { plug = {} } = pin
+
+        for (const sub_pin_id in plug) {
+          const sub_pin_spec = plug[sub_pin_id]
+
+          const ext_node_id = getExtNodeId('output', pin_id, sub_pin_id)
+          const int_node_id = getIntNodeId('output', pin_id, sub_pin_id)
+
+          nodes[ext_node_id] = this.get_node(ext_node_id)
+
+          if (this._has_node(int_node_id)) {
+            nodes[int_node_id] = this.get_node(int_node_id)
+          }
+        }
+      }
     }
 
     if (!isEmptyObject(data)) {
       graph.data = data
+
+      for (const datum_id in data) {
+        const datum_node_id = getDatumNodeId(datum_id)
+
+        nodes[datum_node_id] = this.get_node(datum_node_id)
+      }
     }
+
+    const center = this.get_nodes_bounding_rect_center(nodes)
+
+    const nodes_position = this.get_nodes_center_relative_positions_to(
+      nodes,
+      center
+    )
+
+    this._set_spec_node_positions(graph, this, nodes_position)
 
     const bundle = bundleSpec(graph, specs)
 
