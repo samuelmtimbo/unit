@@ -53078,10 +53078,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let ordered_subgraphs = []
 
     const filter = (node_id: string) => {
-      return (
-        this._is_node_visible(node_id) &&
-        this._node_layer[node_id] === LAYER_NORMAL
-      )
+      return this._is_node_visible(node_id)
     }
 
     switch (key) {
@@ -53107,7 +53104,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return
     }
 
-    const nearest_node_id = this._find_nearest_unit_id_to_center()
+    const center = this._world_screen_center()
+
+    const nearest_node_id = this._find_nearest_node_id_to(
+      center,
+      () => true,
+      this._node
+    )
 
     const closest_subraph_id = this._node_to_subgraph[nearest_node_id]
 
