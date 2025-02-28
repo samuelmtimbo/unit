@@ -1,4 +1,7 @@
-import { GraphMoveSubGraphIntoData } from '../Class/Graph/interface'
+import {
+  GraphMoveSubComponentRootData,
+  GraphMoveSubGraphIntoData,
+} from '../Class/Graph/interface'
 import { Action } from '../types/Action'
 import {
   makeMoveSubComponentRootAction,
@@ -209,15 +212,30 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinId,
         data.pinSpec
       )
-    case MOVE_SUB_COMPONENT_ROOT:
+    case MOVE_SUB_COMPONENT_ROOT: {
+      const data_ = data as GraphMoveSubComponentRootData
+
+      const parentId = data_.prevParentIdMap[data_.children[0]] ?? null
+      const prevParentIdMap = {}
+      const slotMap = data_.prevSlotMap
+      const prevSlotMap = data_.slotMap
+      const index = data_.index
+      const children = data_.children
+
+      for (const childId of data.children) {
+        prevParentIdMap[childId] = data_.parentId
+      }
+
       return makeMoveSubComponentRootAction(
-        data.nextParentId,
-        data.parentId,
-        data.children,
-        data.index,
-        data.nextSlotMap,
-        data.slotMap
+        parentId,
+        prevParentIdMap,
+        children,
+        index,
+        slotMap,
+        prevSlotMap
       )
+    }
+
     case REORDER_SUB_COMPONENT:
       return makeReorderSubComponentAction(
         data.parentId,
