@@ -9,9 +9,10 @@ import _specs from '../../system/_specs'
 
 assert.deepEqual(stringify(1), '1')
 assert.deepEqual(stringify(Infinity), 'Infinity')
-// assert.deepEqual(stringify('\n'), `"\\n"`)
-// assert.deepEqual(stringify('"\n"'), `"\\"\\n\\""`)
+assert.deepEqual(stringify('"\n"'), `"\\"\n\\""`)
+assert.deepEqual(stringify("'\\'"), `"'\\\\'"`)
 assert.deepEqual(stringify("'\n'"), `"'\n'"`)
+assert.deepEqual(stringify("'\\n'"), `"'\\\\n'"`)
 assert.deepEqual(stringify('foo'), `"foo"`)
 assert.deepEqual(stringify('"foo"'), `"\\"foo\\""`)
 assert.deepEqual(stringify("'foo'"), `"'foo'"`)
@@ -83,13 +84,13 @@ assert.deepEqual(
   `\${"unit":{"id":"fa94b179-00e3-4ed1-814e-7938324a833f"},"specs":{}}`
 )
 
-assert.deepEqual(evaluate(stringify('"\\n"'), _specs, _classes), '"\\\\n"')
+assert.deepEqual(evaluate(stringify('"\\n"'), _specs, _classes), '"\\n"')
 
 assert.deepEqual(
   JSON.parse(evaluate(stringify('"\\n"'), _specs, _classes)),
-  '\\n'
+  '\n'
 )
 assert.deepEqual(
   JSON.parse(evaluate(stringify(JSON.stringify('\r')), _specs, _classes)),
-  '\\r'
+  '\r'
 )

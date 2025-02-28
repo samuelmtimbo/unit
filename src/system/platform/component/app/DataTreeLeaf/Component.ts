@@ -157,8 +157,6 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     // })
     this._input.$element.style.width = `${width}px`
 
-    value = value.replace(/\\n/g, '\n')
-
     this.dispatchEvent('leafinput', {
       value,
       path,
