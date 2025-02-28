@@ -6,6 +6,7 @@ import { addGlobalBlurListener } from '../../addGlobalBlurListener'
 import { IOElement } from '../../IOElement'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
+import { isControlKey } from './key'
 
 export function sameSetArray(a: string[], b: string[]): boolean {
   const _ = (a: string, b: string) => {
@@ -104,7 +105,15 @@ export class KeyboardController {
     // for (const key of pressed) {
     //   this._keydown(key)
     // }
-    this._pressed = [...pressed.map((key) => key.toLowerCase())]
+    this._pressed = [...pressed.map(this._lowerCaseAlpha)]
+  }
+
+  private _lowerCaseAlpha = (key: string) => {
+    if (isControlKey(key)) {
+      return key
+    } else {
+      return key.toLowerCase()
+    }
   }
 
   private _onFocusIn = () => {
@@ -199,7 +208,7 @@ export class KeyboardController {
   }
 
   private _keydown = (key: string): Shortcut[] => {
-    key = key.toLowerCase()
+    key = this._lowerCaseAlpha(key)
 
     const index: number = this._pressed.indexOf(key)
 
@@ -232,7 +241,7 @@ export class KeyboardController {
   }
 
   private _keyup = (key: string) => {
-    key = key.toLowerCase()
+    key = this._lowerCaseAlpha(key)
 
     const index: number = this._pressed.indexOf(key)
 
