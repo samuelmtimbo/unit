@@ -29084,6 +29084,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_node_yellow_click = (node_id: string): void => {
     if (this._is_node_selected(node_id)) {
+      const { link_pin_node_ids, merge_node_ids, exposed_node_ids } =
+        this._decant_node_ids(keys(this._selected_node_id))
+
+      const only_pins_selected =
+        this._selected_node_count ===
+        link_pin_node_ids.length +
+          merge_node_ids.length +
+          exposed_node_ids.length
+
+      if (only_pins_selected) {
+        for (const selected_node_id in this._selected_node_id) {
+          this._yellow_click_node(selected_node_id)
+        }
+
+        return
+      }
+
+      this.copy_selected_nodes(true)
+    } else {
+      this._yellow_click_node(node_id)
+    }
+  }
+
+  private _yellow_click_node = (node_id: string): void => {
+    let should_copy = this._is_node_selected(node_id)
+
+    const { link_pin_node_ids, merge_node_ids } = this._decant_node_ids(
+      keys(this._selected_node_id)
+    )
+
+    if (this._is_node_selected(node_id)) {
       this.copy_selected_nodes(true)
     } else {
       if (this._is_pin_node_id(node_id)) {
