@@ -1,6 +1,5 @@
 import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
-import { getActiveElement } from '../../../../../client/activeElement'
 import { classnames } from '../../../../../client/classnames'
 import { debounce } from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
@@ -14,10 +13,6 @@ import {
   makeKeyupListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
-import {
-  writeToContentEditable,
-  writeToTextField,
-} from '../../../../../client/event/keyboard/write'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
@@ -25,12 +20,9 @@ import {
   IOScrollEvent,
   makeScrollListener,
 } from '../../../../../client/event/scroll'
-import { isContentEditable } from '../../../../../client/isContentEditable'
-import { isTextField } from '../../../../../client/isTextField'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
 import { COLOR_NONE } from '../../../../../client/theme'
-import { throttle } from '../../../../../client/throttle'
 import { Shape } from '../../../../../client/util/geometry'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { UNTITLED } from '../../../../../constant/STRING'
@@ -257,9 +249,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    // microphone.addEventListener(
-    //   makeCustomListener('text', this._on_microphone_transcript)
-    // )
     microphone.preventDefault('mousedown')
     microphone.preventDefault('touchdown')
     this._microphone = microphone
@@ -752,46 +741,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._input._input.blur()
   }
 
-  private _on_microphone_transcript = throttle(
-    this.$system,
-    (transcript: string) => {
-      const value = transcript.toLowerCase().substr(0, 30)
-
-      const activeElement = getActiveElement(this.$system)
-
-      const writeToSearch = () => {
-        this._input.setProp('value', value)
-
-        this._input_value = value
-
-        this._filter_list()
-
-        this._input.focus()
-      }
-
-      if (activeElement) {
-        if (isTextField(activeElement as HTMLInputElement)) {
-          writeToTextField(
-            this.$system,
-            activeElement as HTMLInputElement,
-            value
-          )
-        } else if (isContentEditable(activeElement as HTMLDivElement)) {
-          writeToContentEditable(
-            this.$system,
-            activeElement as HTMLInputElement,
-            value
-          )
-        } else {
-          writeToSearch()
-        }
-      } else {
-        writeToSearch()
-      }
-    },
-    100
-  )
-
   public start_microphone = () => {
     this._start_microphone()
   }
@@ -1200,7 +1149,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
 
     this._input_value = value
-    this._filter_list()
+    this._filter_list(false)
   }
 
   private _on_arrow_down_keydown = (): void => {
