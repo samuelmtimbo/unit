@@ -19294,6 +19294,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     root_callback: () => void
   ): void => {
     const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
+
     if (parent_id) {
       parent_root_callback(parent_id)
     } else {
@@ -20543,8 +20544,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const children = this._spec_get_sub_component_children(sub_component_id)
 
-      const parent_visible = !parent_id || this._layout_path.includes(parent_id)
-
       if (!visible && children.length > 0) {
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
           for (const child_id of children) {
@@ -20553,11 +20552,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      if (parent_visible) {
-        this._measure_sub_component_base(sub_component_id)
-      }
-
       if (!animating_sub_component_set.has(sub_component_id)) {
+        this._measure_sub_component_base(sub_component_id)
+
         this._leave_sub_component_frame(sub_component_id)
 
         const sub_component_base =
@@ -34326,7 +34323,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const sub_component = this._get_sub_component(sub_component_id)
     const sub_component_child = this._get_sub_component(child_id)
 
-    sub_component.removeParentRoot(sub_component_child)
+    if (sub_component.$mountParentRoot.includes(sub_component_child)) {
+      sub_component.removeParentRoot(sub_component_child)
+    }
   }
 
   private _remove_sub_component_from_root = (
@@ -34336,7 +34335,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const sub_component = this._get_sub_component(sub_component_id)
 
-    this._component.removeRoot(sub_component)
+    if (this.$mountRoot.includes(sub_component)) {
+      this._component.removeRoot(sub_component)
+    }
   }
 
   private _layout_collapse_sub_component = (
@@ -36393,13 +36394,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let sub_component_map: Dict<Component> = {}
 
     if (this._is_unit_component(unit_id)) {
+      const sub_component = this._get_sub_component(unit_id)
+
       this._decompose_sub_component(unit_id)
       this._displace_sub_component(unit_id)
       this._decouple_sub_component(unit_id)
-
-      const sub_component = this._get_sub_component(unit_id)
-
-      this._component.removeSubComponent(unit_id)
+      this._pull_sub_component(unit_id)
+      this._remove_sub_component(unit_id)
 
       for (const sub_sub_component_id in sub_component.$subComponent) {
         const sub_sub_component =
@@ -36407,9 +36408,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const next_sub_sub_component_id = deepGetOrDefault(
           map,
-          ['mappaing', 'unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
+          ['mapping', 'unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
           sub_sub_component_id
         )
+
+        const sub_sub_component_parent =
+          sub_component.getSubComponentParent(sub_sub_component_id)
+
+        if (sub_sub_component_parent) {
+          sub_sub_component_parent.pullParentRoot(sub_sub_component)
+        }
 
         sub_component_map[next_sub_sub_component_id] = sub_sub_component
       }
@@ -41454,7 +41462,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._sim_move_out_sub_component_children(unit_id, parent_id)
       }
 
-      this._sim_remove_sub_component_roots(unit_id)
+      const sub_component = this._get_sub_component(unit_id)
+
+      if (sub_component) {
+        this._pull_sub_component(unit_id)
+        this._remove_sub_component(unit_id)
+      }
     }
 
     this._sim_remove_layout_core(unit_id)
@@ -41504,7 +41517,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     delete this._resize_component_start_size[unit_id]
   }
 
-  private _sim_remove_sub_component_roots = (unit_id: string) => {
+  private _pull_sub_component = (unit_id: string) => {
     const sub_component = this._get_sub_component(unit_id)
 
     if (sub_component) {
@@ -41533,11 +41546,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._component.pullRoot(sub_component)
         }
       }
-
-      this._component.removeSubComponent(unit_id)
-
-      sub_component.destroy()
     }
+  }
+
+  private _remove_sub_component = (unit_id: string) => {
+    this._component.removeSubComponent(unit_id)
   }
 
   private _sim_remove_layout_core = (unit_id: string): void => {
@@ -56629,6 +56642,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (const child_id of data.children) {
           const slot_name = data.slotMap?.[child_id] ?? 'default'
           const prev_parent_id = data.prevParentIdMap?.[child_id] ?? null
+
+          this._pull_sub_component(child_id)
 
           this._state_pre_append_sub_component_child(
             data.parentId,

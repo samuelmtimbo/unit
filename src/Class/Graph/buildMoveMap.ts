@@ -934,14 +934,24 @@ export function buildMoveMap(
 
       addDependency(moveSubComponentTask, parentAddUnitTask)
     } else {
-      const defaultSlotSubComponentId = getDefaultSlotSubComponentId(target)
+      if (reverse) {
+        const graphParentId = getSubComponentParentId(target, graphId)
 
-      if (defaultSlotSubComponentId) {
-        nextParentId = defaultSlotSubComponentId
+        nextParentId = graphParentId
         nextParentIndex = parentIndex
         nextParentSlot = 'default'
 
         addMoveToParentTask()
+      } else {
+        const defaultSlotSubComponentId = getDefaultSlotSubComponentId(target)
+
+        if (defaultSlotSubComponentId) {
+          nextParentId = defaultSlotSubComponentId
+          nextParentIndex = parentIndex
+          nextParentSlot = 'default'
+
+          addMoveToParentTask()
+        }
       }
     }
 
