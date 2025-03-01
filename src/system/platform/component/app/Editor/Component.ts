@@ -28207,9 +28207,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
 
-    const value = this._get_datum_value(datum_node_id)
+    if (this._has_node(datum_node_id)) {
+      const value = this._get_datum_value(datum_node_id)
 
-    removeData({ datumId, value })
+      removeData({ datumId, value })
+    }
   }
 
   private _action_buffer: Action[] = []
