@@ -20561,7 +20561,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._leave_sub_component_frame(sub_component_id)
 
         const sub_component_base =
-          this._get_sub_component_base(sub_component_id)
+          this._get_sub_component_root_base(sub_component_id)
 
         const parent_id =
           this._spec_get_sub_component_parent_id(sub_component_id)
