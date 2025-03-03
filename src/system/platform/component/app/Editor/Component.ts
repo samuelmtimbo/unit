@@ -2544,6 +2544,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _layout_transfer_parent_leaf_end_count: Dict<Dict<number>> = {}
   private _layout_transfer_parent_leaf_end_set: Dict<Dict<Set<string>>> = {}
   private _layout_transfer_parent_remaining_child: Dict<Dict<Set<string>>> = {}
+  private _layout_transfer_parent_pack: Dict<
+    Dict<[string, string, string, string][]>
+  > = {}
 
   private _zoom_comp: Zoom_
   private _zoom_comp_alt: Zoom_
@@ -3047,7 +3050,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _animating_enter_fullwindow = false
   private _animating_sub_component_fullwindow: Set<string> = new Set()
 
-  private _animating_sub_component_transfer: Set<string> = new Set()
+  private _animating_sub_component_transfer: Dict<[string, string]> = {}
 
   private _abort_sub_component_enter_base_animation: Dict<Unlisten> = {}
   private _abort_sub_component_leave_base_animation: Dict<Unlisten> = {}
@@ -22372,7 +22375,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return true
     }
 
-    if (this._animating_sub_component_transfer.has(sub_component_id)) {
+    if (this._animating_sub_component_transfer[sub_component_id]) {
       return true
     }
 
@@ -33535,7 +33538,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._reset_layout_transfer_parent_children(parent_id, slot_name, children)
 
     for (const child_id of children) {
-      this._animating_sub_component_transfer.add(child_id)
+      this._animating_sub_component_transfer[child_id] = [parent_id, slot_name]
     }
 
     const parent_child_leaf_style = []
@@ -33674,7 +33677,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _cancel_layout_child_transfer_animation = (
     child_id: string
   ): void => {
-    this._animating_sub_component_transfer.delete(child_id)
+    if (this._animating_sub_component_transfer[child_id]) {
+      const [parent_id, slot_name] =
+        this._animating_sub_component_transfer[child_id]
+
+      const pack = this._layout_transfer_parent_pack[parent_id][slot_name]
+
+      this._layout_transfer_parent_pack[parent_id][slot_name] = pack.filter(
+        ([child_id_]) => child_id_ !== child_id
+      )
+
+      delete this._animating_sub_component_transfer[child_id]
+    }
   }
 
   private _start_layout_children_animation = (
@@ -33732,6 +33746,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       pack.push([child_id, sub_component_id, sub_component_id, slot_name])
     }
 
+    deepSet_(
+      this._layout_transfer_parent_pack,
+      [sub_component_id, slot_name],
+      pack
+    )
+
     const parent_component = this._get_sub_component(sub_component_id)
 
     target[sub_component_id] = parent_component
@@ -33740,7 +33760,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       sub_component_id,
       slot_name,
       children,
-      pack,
       true,
       anticipate,
       offset,
@@ -33753,7 +33772,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     parent_id: string,
     slot_name: string,
     children: string[],
-    pack: [string, string, string, string][],
     expand: boolean,
     anticipate: boolean,
     offset: () => Point,
@@ -33761,6 +33779,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     callback: Callback
   ): Unlisten => {
     const frame = () => {
+      const pack = this._layout_transfer_parent_pack[parent_id][slot_name]
+
       this._tick_animate_layout_transfer_children(
         parent_id,
         slot_name,
@@ -33842,11 +33862,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       pack.push([child_id, parent_id, child_id, slot_name])
     }
 
+    deepSet_(this._layout_transfer_parent_pack, [parent_id, slot_name], pack)
+
     return this._play_layout_sub_component_transfer_children_animation(
       parent_id,
       slot_name,
       children,
-      pack,
       expand,
       true,
       () => ({ x: 0, y: 0 }),
