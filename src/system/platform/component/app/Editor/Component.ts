@@ -18050,7 +18050,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           slotMap: search_start_unit_children_slot_map,
           index: 0,
         },
-        true,
+        false,
         () => {}
       )
 
