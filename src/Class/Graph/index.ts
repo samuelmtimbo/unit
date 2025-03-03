@@ -3331,10 +3331,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subComponentId: string,
     childId: string,
     at: number,
-    slot: string
+    slotName: string
   ) => {
     insertSubComponentChild(
-      { parentId: subComponentId, childId, at },
+      { parentId: subComponentId, childId, slotName, at },
       this._spec.component
     )
   }

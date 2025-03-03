@@ -413,13 +413,16 @@ export const setUnitId = (
 
     if (parentId) {
       const at = spec.component.subComponents[parentId].children.indexOf(unitId)
+      const slotName =
+        spec.component.subComponents?.[parentId]?.childSlot?.[unitId] ??
+        'default'
 
       removeSubComponentChild(
         { parentId: parentId, childId: unitId },
         spec.component
       )
       insertSubComponentChild(
-        { parentId, childId: newUnitId, at },
+        { parentId, childId: newUnitId, slotName, at },
         spec.component
       )
     } else {

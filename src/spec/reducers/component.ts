@@ -12,6 +12,7 @@ import {
   deepGet,
   deepGetOrDefault,
   deepSet,
+  set,
 } from '../../util/object'
 import { getComponentSubComponentParentId } from '../util/component'
 
@@ -71,7 +72,10 @@ export const removeSubComponent = (
 
   for (const childId of children) {
     if (parentId) {
-      appendSubComponentChild({ parentId, childId }, component)
+      appendSubComponentChild(
+        { parentId, childId, slotName: 'default' },
+        component
+      )
     } else {
       appendRoot({ childId }, component)
     }
@@ -127,7 +131,11 @@ export const removeSubComponentChild = (
 }
 
 export const appendSubComponentChild = (
-  { parentId, childId }: { parentId: string; childId: string },
+  {
+    parentId,
+    childId,
+    slotName,
+  }: { parentId: string; childId: string; slotName: string },
   state: GraphComponentSpec
 ): void => {
   const { subComponents } = state
@@ -137,14 +145,21 @@ export const appendSubComponentChild = (
   const subComponent = subComponents[parentId]
 
   subComponent.children = subComponent.children || []
+  subComponent.childSlot = subComponent.childSlot || {}
 
-  const { children } = subComponent
+  const { children, childSlot } = subComponent
 
   push(children, childId)
+  set(childSlot, childId, slotName)
 }
 
 export const insertSubComponentChild = (
-  { parentId, childId, at }: { parentId: string; childId: string; at: number },
+  {
+    parentId,
+    childId,
+    slotName = 'default',
+    at,
+  }: { parentId: string; childId: string; slotName: string; at: number },
   state: GraphComponentSpec
 ): void => {
   const { subComponents } = state
@@ -154,10 +169,12 @@ export const insertSubComponentChild = (
   const subComponent = subComponents[parentId]
 
   subComponent.children = subComponent.children ?? []
+  subComponent.childSlot = subComponent.childSlot ?? {}
 
-  const { children } = subComponent
+  const { children, childSlot } = subComponent
 
   insert(children, childId, at)
+  set(childSlot, childId, slotName)
 }
 
 export const reorderSubComponent = (
@@ -176,9 +193,11 @@ export const _removeSubComponentFromParent = (
   state: GraphComponentSpec
 ) => {
   for (const childId of children) {
+    const slotName = slotMap[childId] ?? 'default'
+
     if (parentId) {
       removeRoot({ childId }, state)
-      appendSubComponentChild({ parentId, childId }, state)
+      appendSubComponentChild({ parentId, childId, slotName }, state)
     } else {
       appendRoot({ childId }, state)
     }
@@ -190,6 +209,8 @@ export const moveSubComponentRoot = (
   state: GraphComponentSpec
 ) => {
   for (const childId of children) {
+    const slotName = slotMap[childId]
+
     const currentParentId = getComponentSubComponentParentId(state, childId)
 
     if (currentParentId) {
@@ -199,7 +220,7 @@ export const moveSubComponentRoot = (
     }
 
     if (parentId) {
-      appendSubComponentChild({ parentId, childId }, state)
+      appendSubComponentChild({ parentId, childId, slotName }, state)
     } else {
       appendRoot({ childId }, state)
     }
@@ -240,7 +261,7 @@ export const moveRoot = (
   removeSubComponentFromParent({ subComponentId: childId }, component)
 
   if (parentId) {
-    insertSubComponentChild({ parentId, childId, at }, component)
+    insertSubComponentChild({ parentId, childId, slotName, at }, component)
   } else {
     insertRoot({ childId, at }, component)
   }

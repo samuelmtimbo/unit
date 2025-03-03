@@ -469,11 +469,13 @@ export function buildMoveMap(
 
     let parentId = null
     let parentIndex = null
+    let parentSlot = null
     let children = []
     let childrenSlot = {}
 
     if (isComponentSpec(spec)) {
       parentId = getSubComponentParentId(source, unitId)
+      parentSlot = getSubComponentParentSlotName(source, unitId)
       parentIndex = getSubComponentParentIndex(source, unitId)
       children = getSubComponentChildren(source, unitId)
       childrenSlot = getSubComponentChildrenSlot(source, unitId)
@@ -497,6 +499,7 @@ export function buildMoveMap(
           {},
           parentId,
           parentIndex,
+          parentSlot,
           children,
           childrenSlot
         ),

@@ -40,6 +40,7 @@ export type GraphAddUnitData = {
   pinPosition?: IOOf<Dict<Position>> | undefined
   layoutPosition?: Position | undefined
   parentId?: string | null | undefined
+  parentSlot?: string | null | undefined
   parentIndex?: number
   children?: string[]
   childrenSlot?: Dict<string>
@@ -105,6 +106,7 @@ export type GraphRemoveUnitData = {
   pinPosition?: IOOf<Dict<Position>>
   layoutPosition?: Position
   parentId?: string | null
+  parentSlot?: string | null
   parentIndex?: number
   children?: string[]
   childrenSlot?: Dict<string>
