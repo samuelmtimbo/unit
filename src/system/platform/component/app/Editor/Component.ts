@@ -3047,7 +3047,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _blue_drag_hover_merge_swap: Dict<string> = {}
 
   private _animating_enter_fullwindow = false
-  private _animating_sub_component_fullwindow: Set<string> = new Set()
 
   private _animating_sub_component_transfer: Dict<[string, string]> = {}
 
@@ -18970,20 +18969,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     let visible_component_ids = all_component_ids
 
-    if (this._tree_layout) {
-      const current_layer_id = this._get_current_layout_layer_id()
-
-      visible_component_ids = all_component_ids.filter((c_id) => {
-        const parent_id = this._spec_get_sub_component_parent_id(c_id)
-
-        if (parent_id === current_layer_id) {
-          return true
-        } else {
-          return false
-        }
-      })
-    }
-
     const visible_selected_component_ids = visible_component_ids.filter(
       this._is_node_selected
     )
@@ -19140,20 +19125,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._tree_layout) {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
 
-      const current_layer_id = this._get_current_layout_layer_id()
-
-      if (parent_id === current_layer_id) {
-        if (this._tree_layout) {
-          if (this._is_layout_component_layer_visible(current_layer_id)) {
-            this._enter_sub_component_frame(sub_component_id)
-          } else {
-            this._enter_sub_component_frame(sub_component_id)
-          }
-        } else {
+      if (parent_id) {
+        if (this._is_layout_component_layer_visible(parent_id)) {
           this._enter_sub_component_frame(sub_component_id)
+        } else {
+          this._append_sub_component_parent_root(parent_id, sub_component_id)
         }
       } else {
-        this._append_sub_component_parent_root(parent_id, sub_component_id)
+        this._enter_sub_component_frame(sub_component_id)
       }
     } else {
       this._enter_sub_component_frame(sub_component_id)
@@ -19233,9 +19212,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (_animate) {
         this._abort_fullwindow_animation = this._animate_leave_fullwindow(
           sub_component_ids,
-          (sub_component_id) => {},
           () => {
             this._end_leave_fullwindow_animation(sub_component_ids)
+
+            for (const sub_component_id of sub_component_ids) {
+              this._cancel_sub_component_base_animation(sub_component_id)
+            }
 
             if (this._enabled()) {
               this.focus()
@@ -20586,8 +20568,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { width, height } =
         this._get_unit_component_layout_size(sub_component_id)
 
-      // PERF
       this._sim_layout_resize_sub_component(sub_component_id, width, height)
+    }
+
+    for (const sub_component_id in this._component.$subComponent) {
+      this._measure_sub_component_base(sub_component_id)
     }
 
     for (const sub_component_id in this._component.$subComponent) {
@@ -20595,36 +20580,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const children = this._spec_get_sub_component_children(sub_component_id)
 
-      if (!visible && children.length > 0) {
-        if (!this._is_sub_component_animating(sub_component_id)) {
-          for (const child_id of children) {
-            this._measure_sub_component_base(child_id)
-          }
-        }
-      }
+      const parent_layer = this._ensure_layout_layer(parent_id)
 
-      if (!animating_sub_component_set.has(sub_component_id)) {
-        this._measure_sub_component_base(sub_component_id)
-
-        this._leave_sub_component_frame(sub_component_id)
-
-        const sub_component_base =
-          this._get_sub_component_root_base(sub_component_id)
-
-        const parent_id =
-          this._spec_get_sub_component_parent_id(sub_component_id)
-
-        const parent_layout_layer = this._ensure_layout_layer(parent_id)
-
-        this._remove_sub_component_root_base(sub_component_id)
-
-        this._plug_sub_component_base(
-          sub_component_id,
-          sub_component_base,
-          [],
-          parent_layout_layer.foreground
-        )
-      }
+      this._plug_sub_component(
+        sub_component_id,
+        parent_layer.foreground,
+        !animating_sub_component_set.has(sub_component_id)
+      )
     }
 
     if (animate) {
@@ -21735,8 +21697,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _animate_parent_component = (
     sub_component_id: string,
-    dont_leave_frame: boolean,
-    dont_plug_base: boolean,
     leaf_traits: LayoutNode[],
     leaf_layer: Component<HTMLElement>,
     leaf_layer_opacity: number,
@@ -21756,22 +21716,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let trait: LayoutNode
     let all_leaf_trait: Dict<LayoutNode>
 
-    if (!dont_leave_frame) {
-      this._leave_sub_component_frame(sub_component_id)
-    }
-
-    this._remove_sub_component_root_base(sub_component_id)
-
     let i = 0
-
-    if (!dont_plug_base) {
-      this._plug_sub_component_base(
-        sub_component_id,
-        leaf_base,
-        leaf_traits,
-        leaf_layer
-      )
-    }
 
     const stop = this._animate_sub_component_base(
       sub_component_id,
@@ -23824,14 +23769,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     for (const sub_component_id of ordered_sub_component_ids) {
       this._unplug_sub_component_root_base_frame(sub_component_id)
+
       this._append_sub_component_all_missing_root(sub_component_id)
       this._append_sub_component_root_base(sub_component_id)
     }
 
     for (const sub_component_id of ordered_sub_component_ids) {
       this._finish_sub_component(sub_component_id)
-
-      this._animating_sub_component_fullwindow.delete(sub_component_id)
     }
 
     this._finish_component()
@@ -25918,6 +25862,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   this._id
     // )
 
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
     const { container, enterFullwindow } = this.$props
 
     const { animate } = this._config()
@@ -25937,6 +25887,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     }
+
+    const animating_sub_component_set =
+      this._build_animating_sub_component_set()
 
     const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
@@ -25988,8 +25941,71 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           last_sub_component.focus()
 
+          let all_base = []
+
+          const layer = this._get_fullwindow_foreground()
+
+          let layer_trait = extractTrait(layer, measureText)
+
+          for (const sub_component_id of sub_component_ids) {
+            const { base } =
+              this._get_sub_component_base_trait(sub_component_id)
+
+            const root_base =
+              this._get_sub_component_root_base(sub_component_id)
+
+            this._measure_sub_component_base(
+              sub_component_id,
+              root_base,
+              layer_trait
+            )
+
+            all_base = [...all_base, ...base]
+          }
+
+          for (const sub_component_id of sub_component_ids) {
+            const parent_id =
+              this._spec_get_sub_component_parent_id(sub_component_id)
+
+            if (!animating_sub_component_set.has(sub_component_id)) {
+              if (this._tree_layout) {
+                if (parent_id) {
+                  if (this._is_layout_component_layer_visible(parent_id)) {
+                    this._leave_sub_component_frame(sub_component_id)
+                  } else {
+                    this._remove_sub_component_parent_root(
+                      parent_id,
+                      sub_component_id
+                    )
+                  }
+                } else {
+                  this._leave_sub_component_frame(sub_component_id)
+                }
+              } else {
+                this._leave_sub_component_frame(sub_component_id)
+              }
+            }
+          }
+
+          for (const sub_component_id of sub_component_ids) {
+            if (!animating_sub_component_set.has(sub_component_id)) {
+              this._remove_sub_component_root_base(sub_component_id)
+            }
+
+            const leaf_base =
+              this._get_sub_component_root_base(sub_component_id)
+
+            this._plug_sub_component_base(
+              sub_component_id,
+              leaf_base,
+              [],
+              layer
+            )
+          }
+
           this._abort_fullwindow_animation = this._animate_enter_fullwindow(
             this._fullwindow_component_ids,
+            all_base,
             () => {
               for (const sub_component_id of this._fullwindow_component_ids) {
                 this._unplug_sub_component_root_base_frame(sub_component_id)
@@ -30918,15 +30934,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (is_component) {
       this._set_sub_component_controlled(unit_id, true)
 
+      this._cancel_fullwindow_animation()
       this._cancel_enter_sub_component_animation(unit_id)
       this._cancel_leave_sub_component_animation(unit_id)
-
-      if (this._animating_sub_component_fullwindow.has(unit_id)) {
-        this._cancel_fullwindow_animation()
-        this._end_leave_fullwindow_animation([unit_id])
-
-        this._cancel_sub_component_base_animation(unit_id)
-      }
+      this._cancel_sub_component_base_animation(unit_id)
 
       if (this._is_sub_component_fullwindow(unit_id)) {
         fullwindow = true
@@ -31872,6 +31883,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { animate } = this._config()
 
+    const animating_sub_component_set =
+      this._build_animating_sub_component_set()
+
+    this._cancel_sub_component_base_animation(sub_component_id)
+
     const prev_layout_layer = this._ensure_parent_layout_layer(sub_component_id)
 
     this._layout_path.push(sub_component_id)
@@ -31883,6 +31899,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_layout_node_target_position(sub_component_id)
 
     if (animate) {
+      this._plug_sub_component(
+        sub_component_id,
+        prev_layout_layer.children,
+        !animating_sub_component_set.has(sub_component_id)
+      )
+
+      for (const child_id of children) {
+        this._measure_sub_component_base(child_id)
+      }
+
+      for (const child_id of children) {
+        if (!animating_sub_component_set.has(child_id)) {
+          this._remove_sub_component_parent_root(sub_component_id, child_id)
+          this._remove_sub_component_root_base(child_id)
+
+          const child = this._get_sub_component(child_id)
+
+          if (child.$mounted) {
+            child.unmount()
+          }
+        }
+      }
+
       this._animate_layout_enter_sub_component(sub_component_id, children)
     } else {
       // TODO
@@ -31926,6 +31965,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       leaf_node.x += offset_x
       leaf_node.y += offset_y
     }
+  }
+
+  private _plug_sub_component = (
+    sub_component_id: string,
+    layer: Component,
+    dismount: boolean
+  ) => {
+    if (dismount) {
+      this._measure_sub_component_base(sub_component_id)
+
+      this._leave_sub_component_frame(sub_component_id)
+
+      this._remove_sub_component_root_base(sub_component_id)
+    }
+
+    const leaf_base = this._get_sub_component_root_base(sub_component_id)
+
+    this._plug_sub_component_base(sub_component_id, leaf_base, [], layer)
   }
 
   private _layout_leave_sub_component = (animate: boolean = true) => {
@@ -32040,13 +32097,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       let parent_animation_finished = false
       let children_animation_finished = slot_count === 0
-
       let slot_animation_finished_count = 0
+
+      this._plug_sub_component(
+        sub_component_id,
+        parent_layer.children,
+        !animating_sub_component_set.has(sub_component_id)
+      )
 
       const stop = this._animate_parent_component(
         sub_component_id,
-        false,
-        false,
         [],
         parent_layer.foreground,
         1,
@@ -32682,8 +32742,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       }
 
-      const parent_animating = this._is_sub_component_animating(parent_id)
-
       const parent_leaf_traits = []
 
       const parent_layer = this._get_sub_component_layout_layer(parent_id)
@@ -32701,10 +32759,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return false
       }
 
+      this._plug_sub_component(
+        parent_id,
+        parent_layer.foreground,
+        !animating_sub_component_set.has(parent_id)
+      )
+
       const stop_parent_animation = this._animate_parent_component(
         parent_id,
-        parent_animating,
-        parent_animating,
         parent_leaf_traits,
         parent_layer.foreground,
         1,
@@ -32986,6 +33048,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _animate_enter_fullwindow = (
     sub_component_ids: string[],
+    all_base: LayoutBase,
     callback: () => void | boolean
   ): Unlisten => {
     // console.log('Graph', '_animate_enter_fullwindow', sub_component_ids)
@@ -32998,23 +33061,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._animating_enter_fullwindow = true
 
-    let all_base = []
-
     const layer = this._get_fullwindow_foreground()
-
-    let layer_trait = extractTrait(layer, measureText)
-
-    for (const sub_component_id of sub_component_ids) {
-      const { base } = this._get_sub_component_base_trait(sub_component_id)
-
-      if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
-        const base = this._get_sub_component_root_base(sub_component_id)
-
-        this._measure_sub_component_base(sub_component_id, base, layer_trait)
-      }
-
-      all_base = [...all_base, ...base]
-    }
 
     const fontSize = this._component.getFontSize()
     const k = 1
@@ -33038,44 +33085,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._leaf_layer_offset_y = 0
 
     for (const sub_component_id of sub_component_ids) {
-      const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
-
-      if (
-        !this._is_sub_component_animating(sub_component_id) &&
-        !this._animating_sub_component_fullwindow.has(sub_component_id)
-      ) {
-        if (this._tree_layout) {
-          if (parent_id) {
-            const current_layer_id = this._get_current_layout_layer_id()
-
-            if (parent_id === current_layer_id) {
-              this._leave_sub_component_frame(sub_component_id)
-            } else {
-              this._remove_sub_component_parent_root(
-                parent_id,
-                sub_component_id
-              )
-            }
-          } else {
-            this._leave_sub_component_frame(sub_component_id)
-          }
-        } else {
-          this._leave_sub_component_frame(sub_component_id)
-        }
-      }
-    }
-
-    for (const sub_component_id of sub_component_ids) {
       const sub_component = this._get_sub_component(sub_component_id)
       const base = this._get_sub_component_root_base(sub_component_id)
-
-      if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
-        this._remove_sub_component_root_base(sub_component_id)
-
-        this._plug_sub_component_base(sub_component_id, base, [], layer)
-      }
-
-      this._animating_sub_component_fullwindow.add(sub_component_id)
 
       const stop = this._animate_sub_component_base(
         sub_component_id,
@@ -33154,10 +33165,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           sub_component_end_count++
 
           if (sub_component_end_count === sub_component_total) {
-            for (const sub_component_id of sub_component_ids) {
-              this._animating_sub_component_fullwindow.delete(sub_component_id)
-            }
-
             this._animating_enter_fullwindow = false
 
             callback()
@@ -33173,7 +33180,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _animate_leave_fullwindow = (
     sub_component_ids: string[],
-    callback: Callback<string>,
     end: Callback
   ): Unlisten => {
     // console.log('Graph', '_animate_leave_fullwindow', sub_component_ids)
@@ -33181,6 +33187,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const {
       api: {
         text: { measureText },
+        layout: { reflectTreeTrait },
       },
     } = this.$system
 
@@ -33190,10 +33197,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     let sub_component_end_leaf_count = 0
 
-    const all_parent_id: Dict<string> = {}
-    const all_parent_children: Dict<string[]> = {}
-
-    const all_parent_base: Dict<Dict<LayoutBase>> = {}
     const all_root_base: Dict<LayoutBase> = {}
 
     const parent_frame_style = {}
@@ -33203,14 +33206,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const layer_trait = extractTrait(layer, measureText)
 
+    const all_target_layer: Dict<Div> = {}
+
     for (const sub_component_id of sub_component_ids) {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const base = this._get_sub_component_root_base(sub_component_id)
+      const base_ = base.map(([leaf_path, leaf_comp]) => [
+        [sub_component_id, ...leaf_path],
+        leaf_comp,
+      ]) as LayoutBase
       const frame = this._get_sub_component_frame(sub_component_id)
 
-      if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
-        this._measure_sub_component_base(sub_component_id, base, layer_trait)
-      }
+      this._measure_sub_component_base(sub_component_id, base, layer_trait)
 
       const frame_trait = extractTrait(frame, measureText)
       const frame_style = extractStyle(frame, frame_trait, measureText)
@@ -33219,48 +33226,47 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       parent_frame_trait[sub_component_id] = frame_trait
 
       if (this._tree_layout) {
-        const parent_visible =
-          this._is_layout_component_layer_visible(parent_id)
+        if (parent_id) {
+          const parent_visible =
+            this._is_layout_component_layer_visible(parent_id)
 
-        if (parent_id && !parent_visible) {
+          const parent_layer = this._get_layout_layer(parent_id)
+          const grandparent_layer =
+            this._get_sub_component_parent_layer(parent_id)
+
           if (parent_visible) {
             all_root_base[sub_component_id] =
               all_root_base[sub_component_id] || []
             all_root_base[sub_component_id] = [
               ...all_root_base[sub_component_id],
-              ...base,
+              ...base_,
             ]
+
+            all_target_layer[sub_component_id] = parent_layer.children
           } else {
-            const slot_name =
-              this._spec_get_sub_component_slot_name(sub_component_id)
+            all_root_base[parent_id] = all_root_base[parent_id] || []
+            all_root_base[parent_id] = [...all_root_base[parent_id], ...base_]
 
-            all_parent_base[parent_id] = all_parent_base[parent_id] || {}
-            all_parent_base[parent_id][slot_name] =
-              all_parent_base[parent_id][slot_name] || []
-            all_parent_base[parent_id][slot_name] = [
-              ...all_parent_base[parent_id][slot_name],
-              ...base,
-            ]
-            all_parent_id[sub_component_id] = parent_id
-
-            all_parent_children[parent_id] =
-              all_parent_children[parent_id] || []
-            all_parent_children[parent_id].push(sub_component_id)
+            all_target_layer[sub_component_id] = grandparent_layer.children
           }
         } else {
           all_root_base[sub_component_id] =
             all_root_base[sub_component_id] || []
           all_root_base[sub_component_id] = [
             ...all_root_base[sub_component_id],
-            ...base,
+            ...base_,
           ]
+
+          all_target_layer[sub_component_id] = this._layout_root.children
         }
       } else {
         all_root_base[sub_component_id] = all_root_base[sub_component_id] || []
         all_root_base[sub_component_id] = [
           ...all_root_base[sub_component_id],
-          ...base,
+          ...base_,
         ]
+
+        all_target_layer[sub_component_id] = this._main
       }
     }
 
@@ -33274,17 +33280,44 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const trait = extractTrait(frame, measureText)
 
-        const parent_base_trait = this._reflect_sub_component_base_trait(
-          sub_component_id,
+        const { tree, map } = buildTree(
+          '',
+          this._component,
           base,
-          trait,
-          false
+          (leaf_id, leaf_comp, leaf_parent) => {
+            return this._extract_style(trait, leaf_id, leaf_comp, leaf_parent)
+          }
+        )
+
+        reflectTreeTrait(trait, tree, (path): Tag[] => {
+          return expandSlot(
+            this._component,
+            trait,
+            sub_component_id,
+            path,
+            false,
+            (leaf_id, leaf_comp, leaf_parent) => {
+              return this._extract_style(trait, leaf_id, leaf_comp, leaf_parent)
+            }
+          )
+        })
+
+        const all_traits = filterObj(
+          mapObjVK(
+            map,
+            (node: Tree<Tag & { trait: LayoutNode }>) => node.value.trait
+          ),
+          (v) => !!v
         )
 
         const layer_trait = extractTrait(layer, measureText)
 
-        for (const leaf_id in parent_base_trait) {
-          const leaf_trait = parent_base_trait[leaf_id]
+        const target_layer = all_target_layer[sub_component_id]
+
+        const target_layer_trait = extractTrait(target_layer, measureText)
+
+        for (const leaf_id in all_traits) {
+          const leaf_trait = all_traits[leaf_id]
 
           all_trait[leaf_id] = {
             x: (leaf_trait.x - layer_trait.x) / layer_trait.sx,
@@ -33293,7 +33326,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             height: leaf_trait.height / layer_trait.sy,
             sx: leaf_trait.sx,
             sy: leaf_trait.sy,
-            opacity: leaf_trait.opacity,
+            opacity: leaf_trait.opacity * target_layer_trait.opacity,
             fontSize: leaf_trait.fontSize,
             color: leaf_trait.color,
           }
@@ -33301,29 +33334,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    for (const sub_component_id of sub_component_ids) {
+      this._decouple_sub_component(sub_component_id)
+    }
+
     if (!this._animating_enter_fullwindow) {
       this._component.decompose()
     }
 
     for (const sub_component_id of sub_component_ids) {
-      if (
-        !this._is_sub_component_animating(sub_component_id) &&
-        !this._animating_sub_component_fullwindow.has(sub_component_id)
-      ) {
+      if (!this._is_sub_component_animating(sub_component_id)) {
         this._remove_sub_component_root_base(sub_component_id)
         this._remove_sub_component_all_root(sub_component_id)
       }
     }
 
     for (const sub_component_id of sub_component_ids) {
-      if (this._tree_layout) {
-        this._collapse_sub_component(sub_component_id)
-      }
-
       const base = this._get_sub_component_root_base(sub_component_id)
       const layer = this._get_fullwindow_foreground()
-
-      this._animating_sub_component_fullwindow.add(sub_component_id)
 
       let i = 0
 
@@ -33349,15 +33377,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         () => {
           stop()
 
-          callback(sub_component_id)
-
           sub_component_end_leaf_count++
 
           if (sub_component_end_leaf_count === sub_component_total) {
-            for (const sub_component_id of sub_component_ids) {
-              this._animating_sub_component_fullwindow.delete(sub_component_id)
-            }
-
             end()
           }
         }
@@ -34890,7 +34912,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
   }
 
-  private _remove_sub_component_children = (
+  private _state_remove_sub_component_children = (
     parent_id: string,
     slot_name: string,
     next_parent_id: string | null,
@@ -34913,11 +34935,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const parent_index = this._spec_get_sub_component_index(parent_id)
 
+    const animating_sub_component_set =
+      this._build_animating_sub_component_set()
+
     for (const child_id of children) {
       this._cancel_sub_component_base_animation(child_id)
+      this._cancel_layout_child_transfer_animation(child_id)
     }
 
     this._cancel_layout_parent_children_animation(parent_id, slot_name)
+    this._cancel_parent_animation(parent_id)
 
     this._measure_sub_component_base(parent_id)
 
@@ -35025,21 +35052,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         i
       )
 
-      const children = [child_id]
-
-      const prev_parent_id_map = this._get_sub_components_parent_map(children)
-      const prev_parent_slot_map = this._get_sub_components_slot_map(children)
-
-      emit &&
-        this._pod_move_sub_component_root(
-          next_parent_id,
-          children,
-          {},
-          i,
-          prev_parent_id_map,
-          prev_parent_slot_map
-        )
-
       i++
     }
 
@@ -35048,16 +35060,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._tree_layout) {
       if (animate) {
-        const parent_animating = this._is_sub_component_animating(parent_id)
         const parent_layer = this._get_sub_component_layout_layer(parent_id)
 
-        const parent_leaf_traits = []
+        this._plug_sub_component(
+          parent_id,
+          parent_layer.foreground,
+          !animating_sub_component_set.has(parent_id)
+        )
 
         const stop_parent_animation = this._animate_parent_component(
           parent_id,
-          parent_animating,
-          parent_animating,
-          parent_leaf_traits,
+          [],
           parent_layer.foreground,
           1,
           false,
@@ -35106,6 +35119,73 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!animate) {
       callback()
     }
+
+    return finish
+  }
+
+  private _pod_remove_sub_component_children = (
+    parent_id: string,
+    slot_name: string,
+    next_parent_id: string | null,
+    next_slot_name: string,
+    children: string[]
+  ) => {
+    let { animate } = this._config()
+
+    const parent_visible = this._is_layout_component_layer_visible(parent_id)
+
+    animate = animate && !parent_visible
+
+    const parent_index = this._spec_get_sub_component_index(parent_id)
+
+    i = parent_index + 1
+
+    for (const child_id of children) {
+      const children = [child_id]
+
+      const prev_parent_id_map = this._get_sub_components_parent_map(children)
+      const prev_parent_slot_map = this._get_sub_components_slot_map(children)
+
+      this._pod_move_sub_component_root(
+        next_parent_id,
+        children,
+        {},
+        i,
+        prev_parent_id_map,
+        prev_parent_slot_map
+      )
+
+      i++
+    }
+  }
+
+  private _remove_sub_component_children = (
+    parent_id: string,
+    slot_name: string,
+    next_parent_id: string | null,
+    next_slot_name: string,
+    children: string[],
+    emit: boolean = true,
+    callback: Callback
+  ): Unlisten => {
+    const finish = this._state_remove_sub_component_children(
+      parent_id,
+      slot_name,
+      next_parent_id,
+      next_slot_name,
+      children,
+      emit,
+      callback
+    )
+
+    emit &&
+      this._pod_remove_sub_component_children(
+        parent_id,
+        slot_name,
+        next_parent_id,
+        next_slot_name,
+        children
+      )
 
     return finish
   }
@@ -37374,17 +37454,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let parent_finished = false
     let children_finished = false
 
-    for (const child_id of children) {
-      this._measure_sub_component_base(child_id)
-    }
-
-    for (const child_id of children) {
-      if (!this._is_sub_component_animating(child_id)) {
-        this._remove_sub_component_parent_root(sub_component_id, child_id)
-        this._remove_sub_component_root_base(child_id)
-      }
-    }
-
     this._animate_all_current_layout_layer_node()
 
     const stop_children_animation =
@@ -37414,8 +37483,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const stop_parent_animation = this._animate_parent_component(
       sub_component_id,
-      false,
-      false,
       [],
       parent_layer.children,
       1,
