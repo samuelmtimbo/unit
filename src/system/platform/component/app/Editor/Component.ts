@@ -6102,7 +6102,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._mem_insert_sub_component_child(
           sub_component_parent_id,
           unit_id,
-          'default',
+          sub_component_parent_slot_name,
           sub_component_parent_index
         )
       }

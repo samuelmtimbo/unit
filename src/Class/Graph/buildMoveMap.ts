@@ -939,10 +939,12 @@ export function buildMoveMap(
     } else {
       if (reverse) {
         const graphParentId = getSubComponentParentId(target, graphId)
+        const graphParentIndex = getSubComponentParentIndex(target, graphId)
+        const graphParentSlot = getSubComponentParentSlotName(target, graphId)
 
         nextParentId = graphParentId
-        nextParentIndex = parentIndex
-        nextParentSlot = 'default'
+        nextParentIndex = graphParentIndex + parentIndex
+        nextParentSlot = graphParentSlot
 
         addMoveToParentTask()
       } else {

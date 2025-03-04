@@ -2995,7 +2995,7 @@ export class Component<
       (isSVG(this.$system, parent) || isSVGSVG(this.$system, parent)) &&
       isHTML(this.$system, $element)
     ) {
-      const at = this._svg_wrapper.findIndex(
+      const at = this._html_wrapper.findIndex(
         (wrapper) => wrapper === $wrapElement
       )
 
@@ -3319,11 +3319,6 @@ export class Component<
   }
 
   public appendParentRoot(component: Component, slotName: string): void {
-    // console.log(
-    //   this.constructor.name,
-    //   'appendParentRoot',
-    //   component.constructor.name
-    // )
     const at = this.$parentRoot.indexOf(component)
 
     this.memAppendParentRoot(component, slotName, at)
@@ -3826,6 +3821,20 @@ export class Component<
   }
 
   public setSubComponent(id: string, component: Component): void {
+    // if (id === 'box') {
+    //   component = new Proxy(component, {
+    //     set(target, p, newValue, receiver) {
+    //       // if (p === '$mounted') {
+    //       //   debugger
+    //       // }
+
+    //       target[p] = newValue
+
+    //       return true
+    //     },
+    //   })
+    // }
+
     set(component, '$parent', this)
 
     this.$subComponent[id] = component
