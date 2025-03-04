@@ -58518,6 +58518,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           removePinFromMerge: (data) => {
             this._on_graph_unit_remove_pin_from_merge_moment({ ...data, path })
           },
+          bulkEdit: (data) => {
+            this._on_graph_unit_bulk_edit({ ...data, path })
+          },
           addDatum: (data) => {
             //
           },
