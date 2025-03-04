@@ -415,7 +415,6 @@ import {
   makeRemoveMergeAction,
   makeRemovePinFromMergeAction,
   makeRemoveUnitAction,
-  makeSetComponentSizeAction,
   makeSetMergeDataAction,
   makeSetPinSetDefaultIgnoredAction,
   makeSetPinSetFunctionalAction,
@@ -43033,13 +43032,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     node.fx = undefined
     node.fy = undefined
 
-    const defaultWidth =
-      this._core_component_max_width[this._core_component_max_width.length - 1]
-    const defaultHeight =
-      this._core_component_max_height[
-        this._core_component_max_height.length - 1
-      ]
-
     const actions = []
 
     const start_size = this._resize_component_start_size[unit_id]
@@ -43069,14 +43061,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       )
     }
-    actions.push(
-      makeSetComponentSizeAction(
-        defaultWidth,
-        defaultHeight,
-        start_size.width,
-        start_size.height
-      )
-    )
 
     const bulk_edit_action = makeBulkEditAction(actions)
 
