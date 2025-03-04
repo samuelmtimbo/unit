@@ -56905,7 +56905,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_move_sub_component_root = (
     data: GraphMoveSubComponentRootData,
     emit: boolean = true,
-    callback: Callback
+    callback: Callback = NOOP
   ): Unlisten => {
     const { fork, bubble } = this.$props
 
