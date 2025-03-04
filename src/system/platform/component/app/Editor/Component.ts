@@ -17929,52 +17929,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._register_spec(this._search_unit_spec_id, specs, true)
         }
 
-        if (did_spec_id_change) {
-          for (const merge_id in this._search_unit_merges) {
-            const merge_node_id = getMergeNodeId(merge_id)
-
-            const merge = this._search_unit_merges[merge_id]
-            const merge_pin_count = this._merge_pin_count[merge_id]
-
-            if (merge_pin_count > 2) {
-              let type: IO
-              let pin_id: string
-
-              const merge_unit = merge[search_unit_id]
-
-              if (merge_unit['input'] && keyCount(merge_unit['input']) > 0) {
-                type = 'input'
-
-                pin_id = getObjSingleKey(merge_unit.input || {})
-              } else {
-                type = 'output'
-
-                pin_id = getObjSingleKey(merge_unit.output || {})
-              }
-
-              actions.push(
-                makeAddPinToMergeAction(merge_id, search_unit_id, type, pin_id)
-              )
-            } else {
-              actions.push(makeAddMergeAction(merge_id, merge))
-            }
-
-            if (!this._is_merge_ref(merge_node_id)) {
-              this._refresh_merge_pin_pin_color(merge_node_id, 'input')
-              this._refresh_merge_pin_pin_color(merge_node_id, 'output')
-            }
-          }
-
-          if (this._search_unit_ref_merge_id) {
-            actions.push(
-              makeAddMergeAction(
-                this._search_unit_ref_merge_id,
-                this._search_unit_ref_merge
-              )
-            )
-          }
-        }
-
         const bulk_action = makeBulkEditAction(actions)
 
         this._dispatch_action(bulk_action)
