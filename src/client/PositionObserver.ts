@@ -385,12 +385,18 @@ export class PositionObserver_ implements PositionObserver {
 
         const parentConfig = {
           childList: true,
-          subtree: false,
+          subtree: true,
           attributes: true,
           attributeFilter: ['style'],
         }
 
         function parentMutationCallback() {
+          if (element.offsetParent !== offsetParent) {
+            unlisten_parent()
+
+            unlisten_parent = update_parent()
+          }
+
           update_local()
         }
 
@@ -470,7 +476,7 @@ export class PositionObserver_ implements PositionObserver {
       }
     }
 
-    const unlisten_parent = update_parent()
+    let unlisten_parent = update_parent()
 
     function unlisten() {
       unlisten_self()
