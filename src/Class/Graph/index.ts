@@ -3861,7 +3861,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public removeUnit(
     unitId: string,
     emit: boolean = true,
-    propagate: boolean = true,
+    propagate: boolean = false,
     destroy: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
@@ -3938,8 +3938,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _removeUnit(
     unitId: string,
-    propagate: boolean = true,
-    destroy: boolean = false,
+    propagate: boolean = false,
+    destroy: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ): Unit {
@@ -4682,7 +4682,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public removeMerge(
     mergeId: string,
     emit: boolean = true,
-    propagate: boolean = true,
+    propagate: boolean = false,
     fork: boolean = true,
     bubble: boolean = true
   ) {
@@ -4869,7 +4869,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unitId: string,
     type: IO,
     pinId: string,
-    propagate: boolean = true,
+    propagate: boolean = false,
     fork: boolean = true,
     bubble: boolean = true
   ) {
