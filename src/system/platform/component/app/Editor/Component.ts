@@ -21467,8 +21467,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       for (const sub_component_id of ordered_sub_component_ids) {
         this._cancel_layout_child_transfer_animation(sub_component_id)
         this._cancel_sub_component_base_animation(sub_component_id)
+
         this._unplug_sub_component_root_base_frame(sub_component_id)
 
+        this._append_sub_component_all_missing_root(sub_component_id)
         this._append_sub_component_root_base(sub_component_id)
       }
 
@@ -34539,8 +34541,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           if (sub_component.$mountParentRoot.includes(sub_child_component)) {
             sub_component.removeParentRoot(sub_child_component)
-
-            // this._enter_sub_component_frame(sub_child_id)
           }
         }
 
