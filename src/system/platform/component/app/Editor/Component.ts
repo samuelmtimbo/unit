@@ -123,6 +123,7 @@ import {
   Shortcut,
   isKeyPressed,
   makeKeydownListener,
+  makeKeyupListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
 import { writeToTextField } from '../../../../../client/event/keyboard/write'
@@ -25910,8 +25911,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!this._frame_out) {
       container.focus()
 
-      this._unlisten_fullwindow_escape = addListener(
-        container,
+      this._unlisten_fullwindow_escape = addListeners(container, [
         makeKeydownListener((event, _event) => {
           const { key } = event
 
@@ -25920,8 +25920,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             _event.stopPropagation()
           }
-        })
-      )
+        }),
+        makeKeyupListener((event, _event) => {
+          const { key } = event
+
+          if (key === '`') {
+            this._leave_all_fullwindow(_animate)
+
+            _event.stopPropagation()
+          }
+        }),
+      ])
     }
 
     const was_focused = this._focused

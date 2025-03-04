@@ -39,7 +39,7 @@
 | <kbd>Shift</kbd> + <kbd>Arrow Left</kbd>          | Next Subgraph Left  |
 | <kbd>Shift</kbd> + <kbd>Arrow Right</kbd>         | Next Subgraph Right |
 | <kbd>Space</kbd>                                  | Center Graph        |
-| <kbd>`</kbd>                                      | Enter Fullwindow    |
+| <kbd>`</kbd>                                      | Toggle Fullwindow   |
 
 \* <kbd>Ctrl</kbd> is optional, but required when the editor is not focused (e.g. typing on Search).
 

@@ -441,7 +441,7 @@ export function listenKeyup(
 }
 
 export function makeKeyupListener(
-  listener: (data: IOKeyboardEvent) => void
+  listener: (data: IOKeyboardEvent, _event: KeyboardEvent) => void
 ): Listener {
   return (component) => {
     return listenKeyup(component, listener)
