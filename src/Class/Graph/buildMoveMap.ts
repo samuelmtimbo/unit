@@ -942,11 +942,13 @@ export function buildMoveMap(
         const graphParentIndex = getSubComponentParentIndex(target, graphId)
         const graphParentSlot = getSubComponentParentSlotName(target, graphId)
 
-        nextParentId = graphParentId
-        nextParentIndex = graphParentIndex + parentIndex
-        nextParentSlot = graphParentSlot
+        if (graphParentId) {
+          nextParentId = graphParentId
+          nextParentIndex = graphParentIndex + parentIndex
+          nextParentSlot = graphParentSlot
 
-        addMoveToParentTask()
+          addMoveToParentTask()
+        }
       } else {
         const defaultSlotSubComponentId = getDefaultSlotSubComponentId(target)
 

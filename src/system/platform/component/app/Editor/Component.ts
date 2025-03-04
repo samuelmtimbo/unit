@@ -56994,6 +56994,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           child_id,
           slot_name
         )
+
         this._layout_layer_move_sub_component_child(
           prev_parent_id,
           data.parentId,
