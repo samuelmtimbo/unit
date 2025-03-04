@@ -248,7 +248,9 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
               )) ||
             parentTrait.fontSize
 
-          const opacity = parseOpacity(childOpacityStr)
+          let opacity = parseOpacity(childOpacityStr)
+
+          opacity *= ((parent && parent.value.trait.opacity) || 1) ?? 1
 
           const fontSizeUnit = childFontSizeStr?.match(
             /(px|em|rem|pt|vw|vh|%)$/
