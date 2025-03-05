@@ -1,7 +1,7 @@
 import { System } from '../system'
 import { PositionObserver } from '../types/global/PositionObserver'
 import { Unlisten } from '../types/Unlisten'
-import { last, remove } from '../util/array'
+import { remove } from '../util/array'
 import { Component } from './component'
 import { IOElement } from './IOElement'
 import { Listenable } from './Listenable'
@@ -162,29 +162,4 @@ export function appendChild(
 
     return component
   }
-}
-
-export function enableContext($context: Context): void {
-  // console.log('enableContext')
-  $context.$disabled = false
-  dispatchContextEvent($context, 'enabled', {})
-}
-
-export function disableContext($context: Context): void {
-  // console.log('disableContext')
-  $context.$disabled = true
-  dispatchContextEvent($context, 'disabled', {})
-}
-
-export function focusContext($context: Context): void {
-  // console.log('focusContext')
-  const { $children } = $context
-  if ($children.length > 0) {
-    const component = last($children)
-    component.focus()
-  }
-}
-
-export function blurContext($context: Context): void {
-  $context.$element.blur()
 }

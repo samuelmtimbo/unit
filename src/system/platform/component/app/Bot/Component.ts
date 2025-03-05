@@ -1095,7 +1095,6 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
     this._context_unlisten = addListeners(this.$context, [
       makeResizeListener(this._onContextResize),
-      makeCustomListener('enabled', this._onContextEnabled),
       makeCustomListener('themechanged', () => {
         // console.log('Bot', '_on_context_theme_changed')
         this._tick_color()

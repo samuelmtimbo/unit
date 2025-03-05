@@ -2,8 +2,6 @@ import { addListeners } from '../../../../client/addListener'
 import { Component, defaultFocusLookup } from '../../../../client/component'
 import {
   Context,
-  disableContext,
-  enableContext,
   mount,
   setColor,
   setParent,
@@ -48,9 +46,6 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
       DEFAULT_STYLE,
       {},
       {
-        disabled: (disabled: boolean) => {
-          this._refresh_sub_context_disabled()
-        },
         theme: (theme: Theme) => {
           this._refresh_sub_context_color()
         },
@@ -132,13 +127,9 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
     mount(this.$$context)
 
     this._context_unlisten = addListeners(this.$context, [
-      makeCustomListener('enabled', this._on_context_enabled),
-      makeCustomListener('disabled', this._on_context_disabled),
       makeCustomListener('themechanged', this._on_context_theme_changed),
       makeCustomListener('colorchanged', this._on_context_color_changed),
     ])
-
-    this._refresh_sub_context_disabled()
 
     this._refresh_sub_context_color()
     this._refresh_sub_context_theme()
@@ -151,22 +142,6 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
     const _theme = theme ?? $theme ?? 'dark'
 
     setTheme(this.$$context, _theme)
-  }
-
-  private _refresh_sub_context_disabled = () => {
-    const { disabled } = this.$props
-    if (disabled === undefined) {
-      const { $disabled } = this.$context ?? {}
-      if ($disabled) {
-        disableContext(this.$$context)
-      } else {
-        enableContext(this.$$context)
-      }
-    } else if (disabled) {
-      disableContext(this.$$context)
-    } else {
-      enableContext(this.$$context)
-    }
   }
 
   private _get_color = (): string => {
@@ -203,18 +178,6 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
     const { $theme } = this.$context
 
     setTheme(this.$$context, $theme)
-  }
-
-  private _on_context_enabled = (): void => {
-    // console.log('Frame', '_on_context_enabled')
-
-    this._refresh_sub_context_disabled()
-  }
-
-  private _on_context_disabled = (): void => {
-    // console.log('Frame', '_on_context_disabled')
-
-    this._refresh_sub_context_disabled()
   }
 
   onUnmount() {

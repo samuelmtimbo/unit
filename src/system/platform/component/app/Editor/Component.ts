@@ -22558,44 +22558,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._maybe_refresh_simulation_by_drag()
   }
 
-  private _on_context_enabled = (): void => {
-    // console.log('Graph', '_on_context_enabled')
-
-    if (this._focused || this._is_fullwindow) {
-      this._refresh_enabled()
-    }
-  }
-
-  private _on_context_disabled = (): void => {
-    // console.log('Graph', '_on_context_disabled')
-
-    if (this._focused) {
-      this._refresh_enabled()
-    }
-  }
-
   private _on_context_theme_changed = (): void => {
     // const { $theme } = this.$context
 
     this._refresh_color()
-
-    // for (let component_id in this._core_component_frame) {
-    //   const frame = this._core_component_frame[component_id]
-    //   frame.setProp('theme', $theme)
-    // }
   }
 
   private _on_context_color_changed = (): void => {
     // const { $color } = this.$context
 
     this._refresh_color()
-
-    // const color = this._get_color()
-
-    // for (let component_id in this._core_component_context) {
-    //   const frame = this._core_component_frame[component_id]
-    //   frame.setProp('color', color)
-    // }
   }
 
   private _focus_first_unlocked_component = () => {
