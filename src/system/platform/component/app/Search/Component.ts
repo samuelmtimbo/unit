@@ -1278,7 +1278,11 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
       this._shape_button.setProp('icon', SHAPE_TO_ICON[shape])
 
-      this._filter_list()
+      if (this._list_hidden) {
+        this._to_be_filtered = true
+      } else {
+        this._filter_list()
+      }
     }
   }
 
