@@ -4109,9 +4109,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._core_component_unlocked_count > 0 &&
           this._pointer_down_count === 0
         ) {
-          for (const unit_id in this._core_component_unlocked) {
-            this._enable_core_frame(unit_id)
-          }
+          //
         } else {
           if (!this._is_fullwindow || this._frame_out) {
             if (this._control_lock) {
@@ -24850,7 +24848,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._refresh_selection_dasharray(unit_id)
         this._refresh_selection_dashoffset(unit_id)
 
-        this._enable_core_frame(unit_id)
         this._hide_core_overlay(unit_id)
 
         if (focus) {
@@ -24964,8 +24961,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     delete this._core_component_unlocked[unit_id]
 
     this._core_component_unlocked_count--
-
-    this._disable_core_frame(unit_id)
 
     if (this._core_component_unlocked_count === 0) {
       if (!unlocking) {
@@ -25286,21 +25281,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
     }
-  }
-
-  private _enable_core_frame = (unit_id: string) => {
-    // console.log('Graph', '_enable_core_frame', unit_id)
-
-    const frame = this._core_component_frame[unit_id]
-    frame.setProp('disabled', false)
-  }
-
-  private _disable_core_frame = (unit_id: string) => {
-    // console.log('Graph', '_disable_core_frame', unit_id)
-
-    const frame = this._core_component_frame[unit_id]
-
-    frame.setProp('disabled', true)
   }
 
   private _enable_core_resize = (unit_id: string): void => {

@@ -363,9 +363,6 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
           this._startSimulation()
         }
 
-        const frame = this._component_frame[drawerId]
-        frame.setProp('disabled', false)
-
         this.dispatchEvent('draweractive', { drawerId })
       })
     )
