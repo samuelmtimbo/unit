@@ -5266,7 +5266,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     renameUnitInMerges(unitId, newUnitMerges, newUnitId)
 
-    this._removeUnit(unitId, false) as Graph
+    this._removeUnit(unitId, false, false) as Graph
 
     this._addUnit(newUnitId, unit, null, null)
     this._addUnitMerges(newUnitMerges, false)
