@@ -283,6 +283,8 @@ export default class Canvas_
 
     this._ctx = context
 
+    this._ctx.setTransform(1, 0, 0, 1, 0, 0)
+
     this._ctx.strokeStyle = color
     this._ctx.fillStyle = color
     this._ctx.lineJoin = 'round'
