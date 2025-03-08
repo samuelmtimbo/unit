@@ -1,4 +1,3 @@
-import { isFrameRelativeValue } from '../isFrameRelative'
 import { Style } from '../system/platform/Style'
 import { MeasureTextFunction } from '../text'
 import { Component } from './component'
@@ -119,35 +118,6 @@ export function _extractFromRawStyle(
       width: '100%',
       height: '100%',
     }
-  }
-
-  if (element instanceof HTMLCanvasElement) {
-    const treatProp = (name: 'width' | 'height') => {
-      const prop = component.getProp(name)
-
-      style[name] = '100%'
-
-      if (prop !== undefined) {
-        if (typeof prop === 'string') {
-          if (isFrameRelativeValue(prop)) {
-            const prop_num = prop.substring(0, prop.length - 2)
-
-            style[`max-${name}`] = `${prop_num}%`
-          } else {
-            //
-          }
-        } else {
-          style[`max-${name}`] = `${prop}px`
-        }
-      } else {
-        style[`max-${name}`] = `${element[name]}px`
-      }
-    }
-
-    style['aspect-ratio'] = '1 / 1'
-
-    treatProp('width')
-    treatProp('height')
   }
 
   if (element instanceof SVGElement) {
