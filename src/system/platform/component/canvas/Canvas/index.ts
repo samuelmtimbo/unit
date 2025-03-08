@@ -74,7 +74,7 @@ export default class Canvas
       clearCanvas(this._ctx)
     }
 
-    this.set('d', [])
+    this._state['d'] = []
 
     this.emit('call', { method: 'clear', data: undefined })
 
