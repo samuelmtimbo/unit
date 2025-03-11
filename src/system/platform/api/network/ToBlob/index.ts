@@ -15,6 +15,7 @@ export type I = {
 
 export type O = {
   blob: B & $
+  done: any
 }
 
 export default class ToBlob extends Holder<I, O> {
@@ -24,7 +25,7 @@ export default class ToBlob extends Holder<I, O> {
         fi: ['body', 'any'],
         fo: ['blob'],
         i: [],
-        o: [],
+        o: ['done'],
       },
       {
         input: {
@@ -57,5 +58,9 @@ export default class ToBlob extends Holder<I, O> {
     const blob = wrapBlob(blob_, this.__system)
 
     done({ blob })
+  }
+
+  b() {
+    this._output.done.push(true)
   }
 }
