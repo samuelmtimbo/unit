@@ -1,4 +1,5 @@
 import { act } from '../../spec/actions/G'
+import { Specs } from '../../types'
 import { Action } from '../../types/Action'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphSelection } from '../../types/interface/G'
@@ -17,6 +18,7 @@ export type Move = {
 }
 
 export const applyMoves = (
+  specs: Specs,
   source: GraphSpec,
   target: GraphSpec,
   moves: Moves
@@ -26,9 +28,9 @@ export const applyMoves = (
 
   for (const move of moves) {
     if (move.in) {
-      act(target_, move.action.type, move.action.data)
+      act(specs, target_, move.action.type, move.action.data)
     } else {
-      act(source_, move.action.type, move.action.data)
+      act(specs, source_, move.action.type, move.action.data)
     }
   }
 
@@ -36,15 +38,16 @@ export const applyMoves = (
 }
 
 export const applyMoves_ = (
+  specs: Specs,
   source: GraphSpec,
   target: GraphSpec,
   moves: Moves
 ): void => {
   for (const move of moves) {
     if (move.in) {
-      act(target, move.action.type, move.action.data)
+      act(specs, target, move.action.type, move.action.data)
     } else {
-      act(source, move.action.type, move.action.data)
+      act(specs, source, move.action.type, move.action.data)
     }
   }
 }

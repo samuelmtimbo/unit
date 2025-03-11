@@ -57391,7 +57391,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         } else if (path.length === 1) {
           for (const move of moves) {
             if (move.in) {
-              act(next_spec, move.action.type, move.action.data)
+              act(specs, next_spec, move.action.type, move.action.data)
 
               setSpec(next_spec.id, next_spec)
             } else {
@@ -57402,7 +57402,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             }
           }
         } else {
-          applyMoves_(next_parent_spec, next_spec, moves)
+          applyMoves_(specs, next_parent_spec, next_spec, moves)
 
           setSpec(next_parent_spec.id, next_parent_spec)
         }
@@ -57459,13 +57459,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 path,
               })
             } else {
-              act(next_spec, move.action.type, move.action.data)
+              act(specs, next_spec, move.action.type, move.action.data)
 
               setSpec(next_spec.id, next_spec)
             }
           }
         } else {
-          applyMoves_(next_parent_spec, next_spec, moves)
+          applyMoves_(specs, next_parent_spec, next_spec, moves)
 
           setSpec(next_parent_spec.id, next_parent_spec)
         }

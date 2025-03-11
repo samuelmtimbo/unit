@@ -13,6 +13,8 @@ import { GraphSelection } from '../../types/interface/G'
 import { assert } from '../../util/assert'
 import { system } from '../util/system'
 
+const { specs } = system
+
 let moves: Moves
 let source: GraphSpec
 let target: GraphSpec
@@ -41,7 +43,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   target: {
     units: {
       identity: {
@@ -91,7 +93,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   target: {
     units: {
       identity: {
@@ -129,7 +131,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -191,7 +193,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -284,7 +286,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -384,7 +386,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity0: {
@@ -470,7 +472,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -565,7 +567,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity0: {
@@ -694,7 +696,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity0: {
@@ -785,7 +787,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -934,7 +936,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1088,7 +1090,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1186,7 +1188,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1284,7 +1286,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1375,7 +1377,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1502,7 +1504,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1578,7 +1580,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1652,7 +1654,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -1705,7 +1707,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1782,7 +1784,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -1864,7 +1866,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = moveMerge(map, '0')
 
-applyMoves_(source, target, moves)
+applyMoves_(specs, source, target, moves)
 
 assert.deepEqual(
   { source, target },
@@ -1888,7 +1890,7 @@ assert.deepEqual(
 
 moves = moveUnit(map, 'identity')
 
-applyMoves_(source, target, moves)
+applyMoves_(specs, source, target, moves)
 
 assert.deepEqual(
   { source, target },
@@ -1926,7 +1928,7 @@ assert.deepEqual(
 
 moves = moveUnit(map, 'identity0')
 
-applyMoves_(source, target, moves)
+applyMoves_(specs, source, target, moves)
 
 assert.deepEqual(
   { source, target },
@@ -2028,7 +2030,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -2156,7 +2158,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2271,7 +2273,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2362,7 +2364,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2428,7 +2430,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, false)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2534,7 +2536,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2621,7 +2623,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, false)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2687,7 +2689,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2735,7 +2737,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2792,7 +2794,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -2861,7 +2863,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -2953,7 +2955,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity: {
@@ -3022,7 +3024,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -3137,7 +3139,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -3254,7 +3256,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -3363,7 +3365,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -3445,7 +3447,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -3538,7 +3540,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -3614,7 +3616,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -3750,7 +3752,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -3933,7 +3935,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4050,7 +4052,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, false)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -4159,7 +4161,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4258,7 +4260,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4360,7 +4362,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       identity0: {
@@ -4488,7 +4490,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4597,7 +4599,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4685,7 +4687,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4757,7 +4759,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, false)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {
       untitled: {
@@ -4871,7 +4873,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -4956,7 +4958,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -5065,7 +5067,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {},
   target: {
     units: {
@@ -5160,7 +5162,7 @@ map = buildMoveMap(system.specs, source, target, graphId, selection, {}, true)
 
 moves = buildMoves(selection, map)
 
-assert.deepEqual(applyMoves(source, target, moves), {
+assert.deepEqual(applyMoves(specs, source, target, moves), {
   source: {
     units: {},
   },

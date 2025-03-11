@@ -38,7 +38,7 @@ import {
   GraphUnplugPinData,
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry/types'
-import { GraphSubPinSpec } from '../../types'
+import { GraphSubPinSpec, Specs } from '../../types'
 import { Action } from '../../types/Action'
 import { AllKeys } from '../../types/AllKeys'
 import { Dict } from '../../types/Dict'
@@ -54,8 +54,11 @@ import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { G, GraphSelection } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
 import { clone } from '../../util/clone'
+import { weakMerge } from '../../weakMerge'
 import {
+  appendRoot,
   moveSubComponentRoot,
+  setSubComponent,
   setSubComponentSize,
 } from '../reducers/component'
 import {
@@ -76,6 +79,7 @@ import {
   setUnitSize,
   unplugPin,
 } from '../reducers/spec'
+import { getSpec, isComponentSpec } from '../util'
 import { getPinSpec, getPlugCount, getSubPinSpec } from '../util/spec'
 
 export const ADD_UNIT = 'addUnitSpec'
@@ -853,7 +857,12 @@ export const processAction = (
   ;(method[type] ?? fallback)(data)
 }
 
-export const act = (spec, type, data) => {
+export const act = (
+  specs: Specs,
+  spec: GraphSpec,
+  type: string,
+  data: object
+) => {
   ;({
     coverPinSet: (data: GraphCoverPinSetData) => {
       coverPinSet(data, spec)
@@ -863,6 +872,17 @@ export const act = (spec, type, data) => {
     },
     addUnitSpec: (data: GraphAddUnitData) => {
       addUnitSpec(data, spec)
+
+      const { unitId } = data
+
+      const specs_ = weakMerge(specs, data.bundle.specs ?? {})
+
+      const unitSpec = getSpec(specs_, data.bundle.unit.id)
+
+      if (isComponentSpec(unitSpec)) {
+        setSubComponent({ unitId, subComponent: {} }, spec.component)
+        appendRoot({ childId: unitId }, spec.component)
+      }
     },
     removeUnit: (data: GraphRemoveUnitData) => {
       removeUnit(data, spec)
@@ -928,8 +948,12 @@ export const bulkEdit = (spec_: GraphSpec, actions: Action[]): GraphSpec => {
   return spec
 }
 
-export const bulkEdit_ = (spec: GraphSpec, actions: Action[]): void => {
+export const bulkEdit_ = (
+  specs: Specs,
+  spec: GraphSpec,
+  actions: Action[]
+): void => {
   for (const action of actions) {
-    act(spec, action.type, clone(action.data))
+    act(specs, spec, action.type, clone(action.data))
   }
 }
