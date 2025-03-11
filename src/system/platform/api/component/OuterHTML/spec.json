@@ -1,0 +1,29 @@
+{
+  "name": "outer html",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "html": {
+      "type": "string"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "code-2",
+    "description": "get `component`'s inner html",
+    "tags": ["platform", "api", "component"]
+  },
+  "id": "b6a5a63f-07b2-4cbe-8718-377c245c502e",
+  "base": true,
+  "type": "`U`"
+}
