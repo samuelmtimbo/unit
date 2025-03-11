@@ -48470,7 +48470,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    let lowest_common_ancestor = null
+    let lowest_common_ancestor_component = null
     let traversed_parent_count: Dict<number> = {}
 
     for (const selected_component_id of selected_sub_component_ids) {
@@ -48487,7 +48487,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           traversed_parent_count[parent_id] ===
           selected_sub_component_ids.length
         ) {
-          lowest_common_ancestor = parent_id
+          lowest_common_ancestor_component = parent_id
 
           break
         }
@@ -48580,7 +48580,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._state_add_unit(
         new_unit_id,
         new_unit_bundle,
-        lowest_common_ancestor,
+        lowest_common_ancestor_component,
         undefined,
         undefined,
         { x, y },
@@ -48697,7 +48697,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           clone(new_bundle),
           undefined,
           undefined,
-          undefined,
+          lowest_common_ancestor_component,
           undefined,
           undefined,
           undefined,
