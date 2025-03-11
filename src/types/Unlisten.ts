@@ -1,1 +1,1 @@
-export type Unlisten = () => void
+export type Unlisten<T extends any[] = any> = (...args: T) => void
