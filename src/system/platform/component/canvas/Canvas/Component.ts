@@ -128,6 +128,16 @@ export default class Canvas_
         lineWidth: (lineWidth: number | undefined = 3) => {
           this._ctx.lineWidth = lineWidth
         },
+        x: (x) => {
+          const { a, b, c, d, e, f } = this._ctx.getTransform()
+
+          this._ctx.setTransform(a, b, c, d, x ?? 0, f)
+        },
+        y: (y) => {
+          const { a, b, c, d, e, f } = this._ctx.getTransform()
+
+          this._ctx.setTransform(a, b, c, d, e, y ?? 0)
+        },
         sx: (sx) => {
           const { a, b, c, d, e, f } = this._ctx.getTransform()
 
