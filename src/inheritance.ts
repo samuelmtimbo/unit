@@ -2,7 +2,7 @@ export const INHERITANCE = {
   U: ['EE', 'J'],
   G: ['U', 'C'],
   C: ['U'],
-  V: ['EE'],
+  V: ['EE', 'BO'],
   CH: ['EE'],
   IB: ['I'],
   W: ['EE', 'CH'],
