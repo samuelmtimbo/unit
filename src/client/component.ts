@@ -3331,8 +3331,6 @@ export class Component<
     slotName: string,
     at: number
   ): void {
-    // console.log(this.constructor.name, 'memAppendParentRoot', component.constructor.name, slotName, at)
-
     push(this.$mountParentRoot, component)
 
     const slot = get(this.$slot, slotName)

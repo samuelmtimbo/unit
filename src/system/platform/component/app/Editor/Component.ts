@@ -5796,7 +5796,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._fullwindow_component_set.add(unit_id)
 
           if (this._in_component_control) {
-            this._couple_sub_component(unit_id)
+            const at = this._spec_get_sub_component_index(unit_id)
+
+            this._couple_sub_component(unit_id, at)
           }
         } else {
           if (this._in_component_control) {
@@ -6074,6 +6076,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._spec_add_unit(unit_id, unit, specs, register, deep)
 
     const is_component = this._is_unit_component(unit_id)
+
+    sub_component_parent_index =
+      sub_component_parent_index ??
+      this._spec_get_sub_component_children_count(sub_component_parent_id)
+    sub_component_parent_slot_name = sub_component_parent_slot_name ?? 'default'
 
     if (is_component) {
       if (sub_component_parent_index === undefined) {
@@ -8223,23 +8230,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _mem_add_unit_component_parent = (unit_id: string): void => {
-    // console.log('Graph', '_mem_add_unit_component_parent', unit_id)
-
     const sub_component = this._get_sub_component(unit_id)
 
     const parent_id = this._spec_get_sub_component_parent_id(unit_id)
 
+    const parent = this._get_sub_component(parent_id)
+    const index = this._spec_get_sub_component_index(unit_id)
+    const slot_name = this._spec_get_sub_component_slot_name(unit_id)
+
     if (parent_id) {
-      const parent = this._get_sub_component(parent_id)
-
       if (!parent.$parentRoot.includes(sub_component)) {
-        parent.pushParentRoot(sub_component, 'default')
+        parent.placeParentRoot(sub_component, index, slot_name)
 
-        this._mem_layout_push_parent_root(parent_id, unit_id, 'default')
+        this._mem_layout_insert_parent_root(
+          parent_id,
+          unit_id,
+          slot_name,
+          index
+        )
       }
     } else {
       if (!this._component.$root.includes(sub_component)) {
-        this._component.pushRoot(sub_component)
+        this._component.placeRootAt(sub_component, index)
       }
     }
   }
@@ -19273,35 +19285,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _couple_all_fullwindow_component = (): void => {
     for (const sub_component_id of this._fullwindow_component_ids) {
-      this._couple_sub_component(sub_component_id)
+      const at = this._spec_get_sub_component_index(sub_component_id)
+
+      this._couple_sub_component(sub_component_id, at)
     }
   }
 
   private _couple_sub_component = (
     sub_component_id: string,
-    at?: number
+    at: number
   ): void => {
     // console.log('Graph', '_couple_sub_component', sub_component_id, at)
 
-    if (at === undefined) {
-      this.__move_sub_component(
-        sub_component_id,
-        (parent_id) => {
-          this._append_sub_component_parent_root(parent_id, sub_component_id)
-        },
-        () => {
-          this._append_sub_component_to_root(sub_component_id)
-        }
-      )
-    } else {
-      this._couple_sub_component_at(sub_component_id, at)
-    }
-  }
-
-  private _couple_sub_component_at = (
-    sub_component_id: string,
-    at: number
-  ): void => {
     this.__move_sub_component(
       sub_component_id,
       (parent_id) => {
@@ -26018,12 +26013,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               for (const sub_component_id of this._fullwindow_component_ids) {
                 const parent_id =
                   this._spec_get_sub_component_parent_id(sub_component_id)
+                const at = this._spec_get_sub_component_index(sub_component_id)
 
                 if (!parent_id) {
-                  this._couple_sub_component(sub_component_id)
+                  this._couple_sub_component(sub_component_id, at)
                 } else {
                   if (this._fullwindow_component_ids.includes(parent_id)) {
-                    this._couple_sub_component(sub_component_id)
+                    this._couple_sub_component(sub_component_id, at)
                   } else {
                     this._append_sub_component_to_root(sub_component_id)
                   }
@@ -33015,7 +33011,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._spec_append_sub_component_child(parent_id, child_id, slot_name)
 
     if (is_child_fullwindow) {
-      this._couple_sub_component(child_id)
+      this._couple_sub_component(child_id, at)
     }
   }
 
@@ -33042,7 +33038,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._mem_insert_sub_component_child(parent_id, child_id, slot_name, index)
 
     if (is_child_fullwindow) {
-      this._couple_sub_component(child_id)
+      const at = this._spec_get_sub_component_index(child_id)
+
+      this._couple_sub_component(child_id, at)
     }
   }
 
@@ -35327,7 +35325,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
 
     if (is_child_fullwindow) {
-      this._couple_sub_component(child_id)
+      const at = this._spec_get_sub_component_index(child_id)
+
+      this._couple_sub_component(child_id, at)
     }
   }
 
