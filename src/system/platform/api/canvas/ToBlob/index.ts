@@ -61,4 +61,8 @@ export default class ToBlob<T> extends Holder<I<T>, O<T>> {
       blob,
     })
   }
+
+  b() {
+    this._output.done.push(true)
+  }
 }
