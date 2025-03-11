@@ -12,6 +12,9 @@
   "outputs": {
     "rect": {
       "type": "{x:number,y:number,width:number,height:number}"
+    },
+    "done": {
+      "type": "any"
     }
   },
   "metadata": {

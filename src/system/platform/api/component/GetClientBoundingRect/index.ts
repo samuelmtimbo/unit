@@ -1,5 +1,5 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Component } from '../../../../../client/component'
 import { Rect } from '../../../../../client/util/geometry/types'
 import { System } from '../../../../../system'
@@ -14,16 +14,17 @@ export type I = {
 
 export type O = {
   rect: Rect
+  done: any
 }
 
-export default class GetClientBoundingRect extends Functional<I, O> {
-  private _observer: ResizeObserver
-
+export default class GetClientBoundingRect extends Semifunctional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['component', 'any'],
-        o: ['rect'],
+        fi: ['component', 'any'],
+        fo: ['rect'],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -54,5 +55,9 @@ export default class GetClientBoundingRect extends Functional<I, O> {
     const rect = component_.getBoundingClientRect()
 
     done({ rect })
+  }
+
+  b() {
+    this._output.done.push(true)
   }
 }
