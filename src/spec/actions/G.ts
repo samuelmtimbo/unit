@@ -31,6 +31,7 @@ import {
   GraphSetSubComponentSizeData,
   GraphSetUnitIdData,
   GraphSetUnitMetadataData,
+  GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinSetIdData,
   GraphSetUnitSizeData,
@@ -75,6 +76,7 @@ import {
   removeUnit,
   removeUnitPinData,
   setComponentSize,
+  setUnitPinConstant,
   setUnitPinData,
   setUnitSize,
   unplugPin,
@@ -928,6 +930,9 @@ export const act = (
     },
     removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
       removePinFromMerge(data, spec)
+    },
+    setUnitPinConstant: (data: GraphSetUnitPinConstantData) => {
+      setUnitPinConstant(data, spec)
     },
   })[type](data)
 }
