@@ -12,4 +12,6 @@ export type WebTemplate = {
   system?: boolean
   csp?: string
   script?: boolean
+  manifest?: string
+  sw?: string
 }

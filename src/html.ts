@@ -16,6 +16,8 @@ export async function html(opt: WebTemplate): Promise<string> {
     background = true,
     csp = DEFAULT_CONTENT_SECURITY_POLICY,
     script = true,
+    manifest = '/manifest.json',
+    sw = '/sw.js',
   } = opt
 
   /* html */
@@ -50,7 +52,7 @@ export async function html(opt: WebTemplate): Promise<string> {
       content="${description}"
     />
     <meta name="theme-color" content="#ffffff" />
-    ${pwa ? `<link rel="manifest" href="/manifest.json" />` : ''}
+    ${pwa ? `<link rel="manifest" href="${manifest}" />` : ''}
     <link rel="shortcut icon" href="favicon.svg" />
 
     <style>
@@ -118,11 +120,20 @@ export async function html(opt: WebTemplate): Promise<string> {
       "
     >
       ${baseHtml || ''}
-    </div>
-    ${
+    </div>${
       script
         ? `<script type="text/javascript" src="${pathname}/index.js"></script>`
         : ``
+    }${
+      pwa
+        ? `<script type="text/javascript">
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('${sw}')
+        })
+      }
+    </script>`
+        : ''
     }
   </body>
 </html>
