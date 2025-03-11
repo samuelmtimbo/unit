@@ -143,10 +143,10 @@ export default class Canvas_
 
           this._ctx.setTransform(sx ?? 1, b, c, d, e, f)
         },
-        sy: (xy) => {
+        sy: (sy) => {
           const { a, b, c, d, e, f } = this._ctx.getTransform()
 
-          this._ctx.setTransform(a, b, c, xy ?? 1, e, f)
+          this._ctx.setTransform(a, b, c, sy ?? 1, e, f)
         },
       }
     )
