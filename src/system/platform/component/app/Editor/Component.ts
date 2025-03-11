@@ -55735,7 +55735,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           unplugPin(pin_plug, parent_spec)
         }
 
-        setSpec(parent_spec.id, parent_spec)
+        if (path.length > 1) {
+          setSpec(parent_spec.id, parent_spec)
+        }
       }
     }
   }
