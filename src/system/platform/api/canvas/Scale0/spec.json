@@ -1,0 +1,28 @@
+{
+  "name": "scale",
+  "inputs": {
+    "d": {
+      "type": "(number|string|boolean)[][]"
+    },
+    "sx": {
+      "type": "number"
+    },
+    "sy": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string|boolean)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "add a scale to the current transformation matrix",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/translate",
+    "tags": ["platform", "api", "canvas"]
+  },
+  "id": "af361c4c-0c46-4947-8692-1ddb308e5218",
+  "base": true,
+  "type": "`U`"
+}
