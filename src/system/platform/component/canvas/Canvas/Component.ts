@@ -14,15 +14,12 @@ import { CA } from '../../../../../types/interface/CA'
 export function clearCanvas(
   context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D
 ) {
-  const transform = context.getTransform()
-
   context.setTransform(1, 0, 0, 1, 0, 0)
 
   const width = context.canvas.width
   const height = context.canvas.height
 
   context.clearRect(0, 0, width, height)
-  context.setTransform(transform)
   context.beginPath()
 }
 
