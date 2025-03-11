@@ -39,12 +39,6 @@ export default class GetClientBoundingRect extends Semifunctional<I, O> {
   }
 
   async f({ component, any: opt }: I, done: Done<O>) {
-    const {
-      api: {
-        document: { ResizeObserver },
-      },
-    } = this.__system
-
     const globalId = component.getGlobalId()
 
     const component_ = (await firstGlobalComponentPromise(
@@ -52,7 +46,9 @@ export default class GetClientBoundingRect extends Semifunctional<I, O> {
       globalId
     )) as Component
 
-    const rect = component_.getBoundingClientRect()
+    const leaf = component_.getFirstRootLeaf()
+
+    const rect = leaf.getBoundingClientRect()
 
     done({ rect })
   }
