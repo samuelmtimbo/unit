@@ -798,11 +798,11 @@ export class Component<
       return
     }
 
-    this.$remoteId = undefined
-
     const { unregisterLocalComponent } = this.$system
 
     unregisterLocalComponent(this, this.$remoteId)
+
+    this.$remoteId = undefined
   }
 
   isFocusInside(): boolean {

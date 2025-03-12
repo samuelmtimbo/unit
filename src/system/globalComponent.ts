@@ -27,7 +27,14 @@ export function firstGlobalComponentPromise(
 ): Promise<Component> {
   const { emitter } = system
 
-  const component = system.getLocalComponents(id)[0]
+  let component: Component
+  let system_: System = system
+
+  while (system_ && !component) {
+    component = system_.getLocalComponents(id)[0]
+
+    system_ = system_.parent
+  }
 
   if (component) {
     return Promise.resolve(component)

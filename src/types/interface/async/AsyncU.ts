@@ -29,6 +29,8 @@ import { Async } from './Async'
 export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
   return {
     $getGlobalId(data: {}, callback: Callback<string>): void {
+      unit.register()
+
       const __globalId = unit.getGlobalId()
 
       callback(__globalId)
