@@ -14,4 +14,5 @@ export type GraphSpec = GraphSpecBase & {
   render?: boolean
   component?: GraphComponentSpec
   id?: string
+  deps?: string[]
 }

@@ -64,5 +64,14 @@
     "defaultHeight": 360
   },
   "type": "`U`&`C`&`V`&`J`",
-  "render": true
+  "render": true,
+  "deps": [
+    "06823924-b659-4a22-8ed4-b3243121b55d",
+    "e80c912e-7508-11ea-966b-436805345ff0",
+    "fecc2df2-ce36-4401-8eed-63d65fb67e6d",
+    "059579bb-184f-435b-ace0-64ec95c9f125",
+    "059579bb-184f-435b-ace0-64ec95c9f125",
+    "cef90fb7-bfcb-4f9d-8828-df6e68278601",
+    "7a8921eb-c1ad-400b-94fc-6c6cead8163d"
+  ]
 }
