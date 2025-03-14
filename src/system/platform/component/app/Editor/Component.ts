@@ -21622,7 +21622,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             ? `${sub_component_id}/${slot_path.join('/')}`
             : sub_component_id
 
-          reflectTreeTrait(trait, tree, (path): Tag[] => {
+          reflectTreeTrait(this.$system, trait, tree, (path): Tag[] => {
             return expandSlot(
               this._component,
               trait,
@@ -33306,7 +33306,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         )
 
-        reflectTreeTrait(trait, tree, (path): Tag[] => {
+        reflectTreeTrait(this.$system, trait, tree, (path): Tag[] => {
           return expandSlot(
             this._component,
             trait,
@@ -34252,25 +34252,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             ? `${target_id}/${slot_path.join('/')}`
             : target_id
 
-        reflectTreeTrait(target_trait, target_tree, (path): Tag[] => {
-          const children_style = expandSlot(
-            this._component,
-            target_trait,
-            slot_id,
-            slot_path.length ? path.slice(1) : path,
-            expand,
-            (leaf_id, leaf_comp, leaf_parent) => {
-              return this._extract_style(
-                target_trait,
-                leaf_id,
-                leaf_comp,
-                leaf_parent
-              )
-            }
-          )
+        reflectTreeTrait(
+          this.$system,
+          target_trait,
+          target_tree,
+          (path): Tag[] => {
+            const children_style = expandSlot(
+              this._component,
+              target_trait,
+              slot_id,
+              slot_path.length ? path.slice(1) : path,
+              expand,
+              (leaf_id, leaf_comp, leaf_parent) => {
+                return this._extract_style(
+                  target_trait,
+                  leaf_id,
+                  leaf_comp,
+                  leaf_parent
+                )
+              }
+            )
 
-          return children_style
-        })
+            return children_style
+          }
+        )
 
         const traits = mapObjVK(leaf_to_node, (node) => node.value.trait)
 

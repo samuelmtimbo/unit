@@ -647,7 +647,7 @@ export class Component<
       })),
     }
 
-    reflectTreeTrait(trait, [tree], () => {
+    reflectTreeTrait(this.$system, trait, [tree], () => {
       return []
     })
 
@@ -712,7 +712,7 @@ export class Component<
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
           if (j % leaves.length === 0) {
-            reflectTreeTrait(trait, [tree], () => {
+            reflectTreeTrait(this.$system, trait, [tree], () => {
               return []
             })
 

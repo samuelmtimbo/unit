@@ -379,7 +379,7 @@ export const reflectComponentBaseTrait = (
     root: root_,
   } = buildTree(prefix, component, base, extractStyle)
 
-  reflectTreeTrait(trait, tree, (path) => {
+  reflectTreeTrait(root.$system, trait, tree, (path) => {
     const [head, ...tail] = path
 
     const slot_id = root_[head]

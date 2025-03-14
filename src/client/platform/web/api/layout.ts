@@ -1,5 +1,5 @@
 import { API } from '../../../../API'
-import { BootOpt } from '../../../../system'
+import { BootOpt, System } from '../../../../system'
 import { Style, Tag } from '../../../../system/platform/Style'
 import { traverseTree, Tree } from '../../../../tree'
 import { LayoutNode } from '../../../LayoutNode'
@@ -175,13 +175,14 @@ const tagToElement = (child: Tag, parentTagName: string) => {
 }
 
 export function webLayout(window: Window, opt: BootOpt): API['layout'] {
-  const animation = {
+  const layout = {
     reflectTreeTrait: function (
+      system: System,
       parentTrait: LayoutNode,
       tree: Tree<Tag & { trait?: LayoutNode; element?: HTMLElement }>[],
       expandChild: (path: number[]) => Tag[]
     ): void {
-      const parentNode = window.document.createElement('div')
+      const parentNode = system.api.document.createElement('div')
 
       parentNode.style.position = 'absolute'
       parentNode.style.left = `${parentTrait.x}px`
@@ -195,7 +196,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
       fitTreeChildren(parentNode, tree, [], expandChild)
 
-      window.document.body.appendChild(parentNode)
+      system.foreground.layout.appendChild(parentNode)
 
       for (const root of tree) {
         traverseTree(root, null, (node, parent) => {
@@ -291,9 +292,9 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
         })
       }
 
-      window.document.body.removeChild(parentNode)
+      system.foreground.layout.removeChild(parentNode)
     },
   }
 
-  return animation
+  return layout
 }

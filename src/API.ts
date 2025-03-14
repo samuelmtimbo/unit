@@ -3,6 +3,7 @@ import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
 import { Theme } from './client/theme'
 import { Rect } from './client/util/geometry/types'
+import { System } from './system'
 import { Tag } from './system/platform/Style'
 import { WebSocketShape } from './system/platform/api/network/WebSocket'
 import { MeasureTextFunction } from './text'
@@ -219,6 +220,7 @@ export type API = {
   }
   layout: {
     reflectTreeTrait(
+      system: System,
       parentTrait: LayoutNode,
       tree: Tree<Tag>[],
       expandChild: (path: number[]) => Tag[]

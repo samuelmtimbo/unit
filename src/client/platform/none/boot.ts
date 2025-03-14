@@ -11,6 +11,7 @@ import { APINotSupportedError } from '../../../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../../../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../../../exception/MediaDeviceAPINotSupported'
 import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
+import { System } from '../../../system'
 import { Tag } from '../../../system/platform/Style'
 import { WebSocketShape } from '../../../system/platform/api/network/WebSocket'
 import { Tree } from '../../../tree'
@@ -294,6 +295,7 @@ export function noneApi(): API {
     },
     layout: {
       reflectTreeTrait: function (
+        system: System,
         parentTrait: LayoutNode,
         tree: Tree<Tag>[],
         expandChild: (path: number[]) => Tag[]
