@@ -281,9 +281,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     system.registerUnit(id)
   }
-  removeRoot(subComponentId: string): void {
-    throw new Error('Method not implemented.')
-  }
 
   async get<K extends string>(name: K): Promise<any> {
     const unitId = name
@@ -5640,6 +5637,22 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._simRemoveSubComponentFromParent(subComponentId, emit)
     this._specRemoveSubComponentFromParent(subComponentId)
+  }
+
+  public removeRoot(
+    subComponentId: string,
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
+  ): void {
+    fork && this._fork(undefined, true, bubble)
+
+    this._removeRoot(subComponentId, emit)
+  }
+
+  private _removeRoot(subComponentId: string, emit: boolean): void {
+    this._simRemoveRoot(subComponentId, emit)
+    this._specRemoveRoot(subComponentId)
   }
 
   public reorderSubComponent(

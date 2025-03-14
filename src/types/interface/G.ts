@@ -275,6 +275,7 @@ export type G_EE = {
     string[],
   ]
   reorder_sub_component: [string | null, string, number, string[]]
+  remove_root: [string, string[]]
   move_subgraph_into: [...G_MoveSubgraphIntoArgs, string[]]
   move_subgraph_out_of: [...G_MoveSubgraphIntoArgs, string[]]
   explode_unit: [string, Dict<string>, Dict<string>, string[]]
