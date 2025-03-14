@@ -1,6 +1,5 @@
 import { deepDefault_ } from '../deepDefault'
 import deepMerge from '../system/f/object/DeepMerge/f'
-import { keys } from '../system/f/object/Keys/f'
 import { Dict } from '../types/Dict'
 import { Key } from '../types/Key'
 
@@ -439,4 +438,8 @@ export function revertObj(obj: Dict<string>) {
 
 export function hasKey(obj: Dict<any>, key: string): boolean {
   return obj[key] !== undefined
+}
+
+export function keys(obj: Dict<any>): string[] {
+  return Object.keys(obj)
 }
