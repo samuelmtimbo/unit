@@ -83,6 +83,14 @@ export function collectIdSetFromSpec(
     collectIdSetFromSpec(dep_spec, specs, set)
   })
 
+  if (spec.deps) {
+    for (const specId of spec.deps) {
+      const spec = _specs[specId]
+
+      collectIdSetFromSpec(spec, specs, set)
+    }
+  }
+
   return set
 }
 
