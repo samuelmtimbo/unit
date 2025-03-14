@@ -4436,9 +4436,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const node_positions: Dict<Position> = {}
 
     for (const node_id in nodes) {
-      const node = this.get_node(node_id)
+      const anchor_node_id = this._get_node_anchor_node_id(node_id)
+      const anchor = this.get_node(anchor_node_id)
 
-      const node_relative_position = pointVector(center, node)
+      const node_relative_position = pointVector(center, anchor)
 
       node_positions[node_id] = node_relative_position
     }
@@ -5084,6 +5085,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _get_merge_anchor_node_id = (merge_node_id: string): string => {
     const merge_unit_id = this._merge_to_ref_unit[merge_node_id]
     const merge_ref_output_id = this._merge_to_ref_output[merge_node_id]
+
     if (merge_unit_id) {
       return merge_unit_id
     } else if (merge_ref_output_id) {
@@ -51324,7 +51326,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       for (const mergeId in merges) {
         const merge_node_id = getMergeNodeId(mergeId)
 
-        nodes[merge_node_id] = this.get_node(merge_node_id)
+        nodes[merge_node_id] = this._get_anchor_node(merge_node_id)
       }
     }
 
@@ -51506,7 +51508,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const unit_ref_merge_node_id = this._ref_unit_to_merge[node_id]
 
         if (unit_ref_merge_node_id) {
-          // node_ids.push(unit_ref_merge_node_id)
           selected_node_id_clone[unit_ref_merge_node_id] = true
         }
       } else if (this._is_datum_node_id(node_id)) {
