@@ -58141,6 +58141,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._datum_tree[datum_id] = tree
 
+      this._mem_set_pin_datum(pin_node_id, datum_id)
+
       if (
         this._is_pin_node_id(anchor_node_id) &&
         (!this._is_pin_node_ref(anchor_node_id) || is_class_literal)
@@ -58163,10 +58165,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           if (this._has_node(anchor_node_id)) {
             this._refresh_merge_pin_color(anchor_node_id)
           }
+
+          if (this._has_node(pin_node_id)) {
+            this._refresh_pin_color(pin_node_id)
+          }
         }
       }
-
-      this._mem_set_pin_datum(pin_node_id, datum_id)
     }
 
     this._spec_set_pin_data(pin_node_id, tree.value)
