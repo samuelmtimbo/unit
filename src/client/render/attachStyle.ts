@@ -185,6 +185,7 @@ export const HTML_STYLE = `
 export function attachStyle(system: System): void {
   const {
     root,
+    color,
     api: {
       document: { createElement },
     },
@@ -193,6 +194,12 @@ export function attachStyle(system: System): void {
   const style = createElement('style')
 
   style.innerHTML = ROOT_STYLE
+
+  style.innerHTML += `
+
+  __SYSTEM__APP__ {
+    color: ${color};
+  }`
 
   root.shadowRoot.appendChild(style)
 }
