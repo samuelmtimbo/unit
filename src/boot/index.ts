@@ -192,10 +192,7 @@ export function boot(
         remove(cache.interceptors, interceptor)
       }
     },
-    addListener: function(
-      event: any,
-      listener: Listener<any>
-    ): Unlisten {
+    addListener: function (event: any, listener: Listener<any>): Unlisten {
       if (SYSTEM_USER_VISIBLE_EVENTS.includes('hashchange')) {
         return emitter.addListener(event, listener)
       }
