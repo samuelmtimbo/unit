@@ -18969,7 +18969,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _enter_all_fullwindow = (
     animate: boolean,
-    hide: boolean = true
+    hide: boolean = true,
+    focus: boolean = true
   ): void => {
     // console.log('Graph', '_enter_all_fullwindow')
 
@@ -18993,7 +18994,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       visible_component_ids
     )
 
-    this._enter_fullwindow(animate, ordered_all_component_ids, hide)
+    this._enter_fullwindow(animate, ordered_all_component_ids, hide, focus)
   }
 
   private _enter_all_selected_fullwindow = (animate: boolean) => {
@@ -25844,7 +25845,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _enter_fullwindow = (
     _animate: boolean,
     sub_component_ids: string[],
-    hide: boolean = true
+    hide: boolean = true,
+    focus: boolean = true
   ) => {
     // console.log(
     //   'Graph',
@@ -25901,7 +25903,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (!this._frame_out) {
-      container.focus()
+      if (focus) {
+        container.focus()
+      }
 
       this._unlisten_fullwindow_escape = addListeners(container, [
         makeKeydownListener((event, _event) => {
@@ -25940,7 +25944,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             last_sub_component_id
           )
 
-          last_sub_component.focus()
+          if (focus) {
+            last_sub_component.focus()
+          }
 
           let all_base = []
 
@@ -26036,9 +26042,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
                   if (is_last_sub_component) {
                     if (this._enabled()) {
-                      this._frame.focus()
+                      if (focus) {
+                        this._frame.focus()
 
-                      last_sub_component.focus()
+                        last_sub_component.focus()
+                      }
                     }
                   }
                 }
@@ -59115,7 +59123,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const { animate } = this._config()
 
         if (current === true && !this._is_fullwindow) {
-          this._enter_all_fullwindow(animate)
+          this._enter_all_fullwindow(animate, this._focused, this._focused)
         } else if (current === false && this._is_fullwindow) {
           this._leave_all_fullwindow(animate)
         }
