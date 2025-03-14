@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { evaluateBundleSpec } from '../../../../../spec/evaluate/evaluateBundleSpec'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { validateBundleSpec } from '../../../../../spec/validate'
 import { System } from '../../../../../system'
@@ -31,7 +32,11 @@ export default class FromBundle extends Functional<I, O> {
   }
 
   f({ bundle }: I, done: Done<O>): void {
+    const { specs, classes } = this.__system
+
     let graph: GraphBundle
+
+    evaluateBundleSpec(bundle, specs, classes)
 
     if (!validateBundleSpec(bundle)) {
       done(undefined, 'invalid bundle spec')

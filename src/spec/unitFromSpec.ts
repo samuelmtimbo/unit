@@ -20,7 +20,7 @@ export function unitFromBundleSpec<I, O>(
   specs: Specs,
   push: boolean,
   branch: Dict<true>
-): Unit<I, O> {
+): Unit {
   const specs_ = weakMerge(specs, bundle.specs ?? {})
 
   applyUnitDefaultIgnored(bundle.unit, specs_)

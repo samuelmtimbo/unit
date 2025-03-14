@@ -31,7 +31,7 @@ export function classFromId<T extends Unit>(
   specs: Specs,
   classes: Classes,
   branch: Dict<true> = {}
-): UnitClass<T> {
+): UnitClass {
   let spec: Spec = specs[id]
 
   if (!spec) {
@@ -63,10 +63,10 @@ export function unitFromId<I, O>(
   classes: Classes,
   branch: Dict<true>,
   push: boolean
-): Unit<I, O> {
+): Unit {
   let spec: Spec = getSpec(specs, id)
 
-  let unit: Unit<I, O>
+  let unit: Unit
 
   let Class: UnitClass = classes[id]
 

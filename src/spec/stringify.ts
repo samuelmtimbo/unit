@@ -1,6 +1,8 @@
 import { $ } from '../Class/$'
+import { clone } from '../util/clone'
 import { escape } from './escape'
 import { globalUrl } from './globalUrl'
+import { stringifyUnitBundleSpecData } from './stringifySpec'
 
 export function stringify(value: any, deref: boolean = false): string | null {
   const t = typeof value
@@ -38,7 +40,13 @@ export function stringify(value: any, deref: boolean = false): string | null {
       break
     case 'function':
       if (value.__bundle) {
-        return `$${stringify(value.__bundle, deref)}`
+        const { __bundle } = value
+
+        const bundle = clone(__bundle)
+
+        stringifyUnitBundleSpecData(bundle)
+
+        return `$${stringify(bundle, deref)}`
       } else {
         // throw new Error('invalid unit class')
         return 'null'

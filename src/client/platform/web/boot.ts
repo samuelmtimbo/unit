@@ -119,6 +119,22 @@ export function webBoot(
 
   const system = boot(null, api, opt)
 
+  system.emitter.addListener('listen', ({ event }: { event: any }) => {
+    if (event === 'hashchange') {
+      const listener = (event: HashChangeEvent) => {
+        const { oldURL, newURL } = event
+
+        system.emitter.emit('hashchange', { oldURL, newURL })
+      }
+
+      window.addEventListener('hashchange', listener)
+
+      return () => {
+        window.removeEventListener('hashchange', listener)
+      }
+    }
+  })
+
   root.style.fontFamily = "'Inconsolata', monospace"
 
   system.root = root

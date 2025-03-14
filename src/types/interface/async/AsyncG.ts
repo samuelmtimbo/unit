@@ -45,6 +45,10 @@ import {
   SET_UNIT_PIN_DATA,
 } from '../../../spec/actions/G'
 import { evaluate } from '../../../spec/evaluate'
+import {
+  evaluateGraphUnitSpec,
+  evaluateSpec,
+} from '../../../spec/evaluate/evaluateBundleSpec'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { stringify } from '../../../spec/stringify'
 import { stringifyGraphSpecData } from '../../../spec/stringifySpec'
@@ -849,8 +853,15 @@ export function evalBulkEdit(
     }
 
     if (action.type === ADD_UNIT) {
-      if (action.data.bundle.unit.memory) {
-        evaluateMemorySpec(action.data.bundle.unit.memory, specs, classes)
+      const { bundle } = action.data
+      const { unit, specs = {} } = bundle
+
+      evaluateGraphUnitSpec(unit, specs, classes)
+
+      for (const specId in specs) {
+        const spec = specs[specId]
+
+        evaluateSpec(spec, specs, classes)
       }
     } else if (
       action.type === MOVE_SUBGRAPH_INTO ||

@@ -1,6 +1,7 @@
 import { Memory } from '../Class/Unit/Memory'
 import { BundleSpec } from '../types/BundleSpec'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { stringifyDataObj } from '../types/stringifyPinData'
@@ -11,6 +12,14 @@ export const stringifyBundleSpec = (bundle: UnitBundleSpec): void => {
   stringifyGraphUnitSpecData(unit)
 }
 
+export const stringifySpecs = (specs: GraphSpecs): void => {
+  for (const specId in specs) {
+    const spec = specs[specId]
+
+    stringifyGraphSpecData(spec)
+  }
+}
+
 export function stringifyBundleSpecData(bundle: BundleSpec): void {
   const { spec } = bundle
 
@@ -19,6 +28,10 @@ export function stringifyBundleSpecData(bundle: BundleSpec): void {
 
 export function stringifyUnitBundleSpecData(bundle: UnitBundleSpec): void {
   stringifyGraphUnitSpecData(bundle.unit)
+
+  if (bundle.specs) {
+    stringifySpecs(bundle.specs)
+  }
 }
 
 export function stringifyGraphSpecData(spec: GraphSpec): void {

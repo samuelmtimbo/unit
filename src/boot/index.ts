@@ -1,15 +1,18 @@
 import { API, InterceptOpt, ServerHandler, ServerInterceptor } from '../API'
 import { Graph } from '../Class/Graph'
 import { EventEmitter_ } from '../EventEmitter'
+import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { Registry } from '../Registry'
 import { Component } from '../client/component'
 import { icons } from '../client/icons'
 import { themeColor } from '../client/theme'
+import { InvalidStateError } from '../exception/InvalidStateError'
 import { start } from '../start'
 import { BootOpt, System } from '../system'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
+import { Listener } from '../types/Listener'
 import { Unlisten } from '../types/Unlisten'
 import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
@@ -17,6 +20,8 @@ import { ASYNC } from '../types/interface/async/wrapper'
 import { remove } from '../util/array'
 import { weakMerge } from '../weakMerge'
 import { style } from './style'
+
+const SYSTEM_USER_VISIBLE_EVENTS = ['hashchange']
 
 export function boot(
   parent: System | null = null,
@@ -186,6 +191,44 @@ export function boot(
       return () => {
         remove(cache.interceptors, interceptor)
       }
+    },
+    addListener: function(
+      event: any,
+      listener: Listener<any>
+    ): Unlisten {
+      if (SYSTEM_USER_VISIBLE_EVENTS.includes('hashchange')) {
+        return emitter.addListener(event, listener)
+      }
+
+      return NOOP
+    },
+    prependListener: function <K extends string | number | symbol>(
+      event: K,
+      listener: Listener<any>
+    ): Unlisten {
+      throw new InvalidStateError()
+    },
+    removeListener: function <K extends string | number | symbol>(
+      event: K,
+      listener: Listener<any>
+    ): void {
+      throw new InvalidStateError()
+    },
+    eventNames: function (): string[] {
+      return SYSTEM_USER_VISIBLE_EVENTS
+    },
+    emit: function <K extends string | number | symbol>(
+      event: K,
+      ...args: any
+    ): void {
+      throw new InvalidStateError()
+    },
+    listenerCount: function (name: string): number {
+      if (SYSTEM_USER_VISIBLE_EVENTS.includes('hashchange')) {
+        return emitter.listenerCount(name)
+      }
+
+      return 0
     },
   }
 
