@@ -702,7 +702,7 @@ import {
   mapObjVK,
   revertObj,
 } from '../../../../../util/object'
-import { removeWhiteSpace } from '../../../../../util/string'
+import { localeCompare, removeWhiteSpace } from '../../../../../util/string'
 import { getDivTextSize } from '../../../../../util/text/getDivTextSize'
 import { getTextWidth } from '../../../../../util/text/getPlainTextWidth'
 import { getTextLines, spaces } from '../../../../../util/text/getTextLines'
@@ -10253,11 +10253,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const swap_data_outputs = filterObjRef('output', clone(swap_outputs), false)
     const swap_ref_outputs = filterObjRef('output', clone(swap_outputs), true)
 
-    const swap_input_data_ids = keys(swap_data_inputs)
-    const swap_input_ref_ids = keys(swap_ref_inputs)
+    const swap_input_data_ids = keys(swap_data_inputs).sort(localeCompare)
+    const swap_input_ref_ids = keys(swap_ref_inputs).sort(localeCompare)
 
-    const swap_output_data_ids = keys(swap_data_outputs)
-    const swap_output_ref_ids = keys(swap_ref_outputs)
+    const swap_output_data_ids = keys(swap_data_outputs).sort(localeCompare)
+    const swap_output_ref_ids = keys(swap_ref_outputs).sort(localeCompare)
 
     const swap_pin_ids = {
       input: {
@@ -36151,7 +36151,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     clientX: number,
     clientY: number
   ) => {
-    // console.log('Graph', '_swap_long_press_unit_bundle', unit_id, bundle, pointerId, clientX, clientY)
+    // console.log(
+    //   'Graph',
+    //   '_swap_long_press_unit_bundle',
+    //   unit_id,
+    //   bundle,
+    //   pointerId,
+    //   clientX,
+    //   clientY
+    // )
 
     const position = this._screen_to_world(clientX, clientY)
 
@@ -36497,21 +36505,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _generate_identity_matches = (unit_id: string) => {
     const unit_spec = this._get_unit_spec(unit_id)
 
-    const input_names = keys(unit_spec.inputs ?? {}).sort()
-    const output_names = keys(unit_spec.outputs ?? {}).sort()
+    const input_names = keys(unit_spec.inputs ?? {}).sort((a, b) =>
+      a.localeCompare(b)
+    )
+    const output_names = keys(unit_spec.outputs ?? {}).sort((a, b) =>
+      a.localeCompare(b)
+    )
 
-    const data_input_names = input_names.filter(
-      (pin_id) => !this.__is_link_pin_ref(unit_id, 'input', pin_id)
-    )
-    const data_output_names = output_names.filter(
-      (pin_id) => !this.__is_link_pin_ref(unit_id, 'output', pin_id)
-    )
-    const ref_input_names = input_names.filter((pin_id) =>
-      this.__is_link_pin_ref(unit_id, 'input', pin_id)
-    )
-    const ref_output_names = output_names.filter((pin_id) =>
-      this.__is_link_pin_ref(unit_id, 'output', pin_id)
-    )
+    const data_input_names = input_names
+      .filter((pin_id) => !this.__is_link_pin_ref(unit_id, 'input', pin_id))
+      .sort(localeCompare)
+    const data_output_names = output_names
+      .filter((pin_id) => !this.__is_link_pin_ref(unit_id, 'output', pin_id))
+      .sort(localeCompare)
+    const ref_input_names = input_names
+      .filter((pin_id) => this.__is_link_pin_ref(unit_id, 'input', pin_id))
+      .sort(localeCompare)
+    const ref_output_names = output_names
+      .filter((pin_id) => this.__is_link_pin_ref(unit_id, 'output', pin_id))
+      .sort(localeCompare)
 
     const valid_pin_match: IOKindOf<[number, number][]> = {
       input: {
