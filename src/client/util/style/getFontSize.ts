@@ -13,7 +13,8 @@ export function parseFontSizeStr(fontSize: string): {
 export function getFontSize(
   element: IOElement,
   width: number,
-  height: number
+  height: number,
+  parentFontSize: number
 ): number | undefined {
   if (element instanceof Text) {
     return
@@ -22,14 +23,15 @@ export function getFontSize(
   const { fontSize } = element.style
 
   if (fontSize) {
-    return parseFontSize(fontSize, width, height)
+    return parseFontSize(fontSize, width, height, parentFontSize)
   }
 }
 
 export function parseFontSize(
   fontSize: string,
   width: number,
-  height: number
+  height: number,
+  parentFontSize: number
 ): number {
   const { value, unit } = parseFontSizeStr(fontSize)
 
@@ -39,6 +41,8 @@ export function parseFontSize(
     value_ = (value_ * width) / 100
   } else if (unit === 'vh') {
     value_ = (value_ * height) / 100
+  } else if (unit === 'em') {
+    return value * parentFontSize
   }
 
   return value_

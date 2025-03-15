@@ -20684,6 +20684,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       color: 'currentcolor',
       maxWidth: '100%',
       maxHeight: '100%',
+      fontSize: '1em',
     }
 
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
@@ -20930,6 +20931,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     base = this._get_sub_component_root_base(sub_component_id),
     offset = this._context_trait()
   ): void => {
+    // console.log('_measure_sub_component_base', sub_component_id)
+
     const {
       api: {
         text: { measureText },

@@ -245,7 +245,8 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
               parseFontSize(
                 childFontSizeStr,
                 parentTrait.width,
-                parentTrait.height
+                parentTrait.height,
+                parentTrait.fontSize
               )) ||
             parentTrait.fontSize
 
@@ -263,6 +264,10 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
           if (fontSizeUnit === 'vh') {
             fontSize *= parentTrait.height / 100
+          }
+
+          if (fontSizeUnit === 'em') {
+            fontSize *= parentTrait.fontSize
           }
 
           const sx = parentTrait.sx * childScaleX

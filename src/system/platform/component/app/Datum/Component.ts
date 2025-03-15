@@ -351,6 +351,7 @@ export class Datum extends Element<HTMLDivElement, Props> {
     this._data_tree.setProp('data', data)
     this._data_tree.focusLeaf(focus)
     this._ignore_blur = false
+
     if (selectionStart !== undefined && selectionEnd !== undefined) {
       this._data_tree.setLeafSelectionRange(
         focus,
@@ -359,16 +360,17 @@ export class Datum extends Element<HTMLDivElement, Props> {
         direction
       )
     }
+
     this.dispatchEvent('datumchange', { data })
   }
 
   private _refreshFont = () => {
     const { $width, $height } = this.$context
-
     const { style = {} } = this.$props
 
     const fontSize =
-      (style.fontSize && parseFontSize(style.fontSize, $width, $height)) ||
+      (style.fontSize &&
+        parseFontSize(style.fontSize, $width, $height, this.getFontSize())) ||
       this.getFontSize()
 
     this._data_tree.setProp('fontSize', fontSize)

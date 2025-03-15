@@ -1527,7 +1527,18 @@ export class Component<
     const { $width, $height } = this.$context
 
     if (this.$primitive) {
-      const fontSize = getFontSize(this.$element, $width, $height)
+      let parentFontSize = DEFAULT_FONT_SIZE
+
+      if (this.$domParent) {
+        parentFontSize = this.$domParent.getFontSize()
+      }
+
+      const fontSize = getFontSize(
+        this.$element,
+        $width,
+        $height,
+        parentFontSize
+      )
 
       if (fontSize) {
         return fontSize
