@@ -52243,6 +52243,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const sub_component_spec = subComponents[unit_id]
 
+      this._spec.component = this._spec.component ?? {}
+
+      setSubComponent(
+        { unitId: unit_id, subComponent: sub_component_spec },
+        this._spec.component
+      )
+
       const copy_sub_component_spec = {
         width: sub_component_spec.width,
         height: sub_component_spec.height,
