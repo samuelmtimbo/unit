@@ -1,0 +1,55 @@
+{
+  "name": "set color",
+  "units": {
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'color'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "value"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `obj` background-color property to `value`",
+    "tags": ["platform", "core", "style"]
+  },
+  "id": "b153e3d9-cf4a-449f-974d-e63cc604568a",
+  "type": "`U`&`G`"
+}
