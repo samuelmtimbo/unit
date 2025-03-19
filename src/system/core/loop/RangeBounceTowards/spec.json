@@ -137,5 +137,6 @@
     "description": "range bounce between `start` and `and`, interchangeably",
     "tags": ["core", "loop"]
   },
+  "type": "`U`&`G`",
   "id": "d34a9900-e46d-4f23-98bf-485dde71d9a3"
 }
