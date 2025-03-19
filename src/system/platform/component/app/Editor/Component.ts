@@ -39208,7 +39208,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
-    this._pod_remove_pin_datum(pin_node_id)
     this._sim_remove_pin_datum_link(datum_node_id)
     this._spec_remove_pin_datum_link(pin_node_id, datum_node_id)
   }
