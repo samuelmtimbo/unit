@@ -451,6 +451,7 @@ import {
 } from '../../../../../spec/idFromUnitValue'
 import {
   ANY_TREE,
+  EMPTY_TREE,
   STRING_TREE,
   TreeNode,
   TreeNodeType,
@@ -11686,9 +11687,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     delete this._visible_data_node[datum_node_id]
 
-    const datum_node_content = this._node_content[datum_node_id]
+    const datum_container = this._datum_container[datum_node_id]
 
-    datum_node_content.$element.style.display = 'none'
+    datum_container.$element.style.display = 'none'
 
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
@@ -11761,12 +11762,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    if (this._data_tree_to_build.has(datum_node_id)) {
+      const datum = this._datum[datum_node_id]
+
+      if (datum instanceof Datum) {
+        const tree = this._get_datum_tree(datum_node_id)
+
+        datum.setProp('data', tree)
+      }
+
+      this._data_tree_to_build.delete(datum_node_id)
+    }
+
     delete this._hidden_data_node[datum_node_id]
     this._visible_data_node[datum_node_id] = this._node[datum_node_id]
 
-    const datum_node_content = this._node_content[datum_node_id]
+    const datum_container = this._datum_container[datum_node_id]
 
-    datum_node_content.$element.style.display = 'block'
+    datum_container.$element.style.display = 'flex'
 
     if (pin_node_id) {
       const datum_link_id = getLinkId(datum_node_id, pin_node_id)
@@ -11787,7 +11800,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       datum_link_comp.$element.style.display = 'block'
     }
 
-    this._start_graph_simulation(LAYER_NONE)
+    this._start_graph_simulation(LAYER_DATA)
   }
 
   private _get_link_pin_props = (unit_id: string, type: IO, pin_id: string) => {
@@ -12601,14 +12614,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     value: string,
     position: Position,
     tree?: TreeNode,
-    emit?: boolean
+    emit?: boolean,
+    hidden = false
   ): void => {
     // console.log('Graph', '_sim_add_datum_node', datum_id, value, position)
 
     tree = tree ?? getTree__cached(value)
 
-    return this.__sim_add_datum_node(datum_id, tree, position, emit)
+    return this.__sim_add_datum_node(datum_id, tree, position, emit, hidden)
   }
+
+  private _data_tree_to_build: Set<string> = new Set()
 
   private _is_related_target_visible = (relatedTarget: HTMLElement) => {
     const { container } = this.$props
@@ -12641,7 +12657,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_id: string,
     tree: TreeNode,
     { x, y }: Position,
-    emit: boolean
+    emit: boolean,
+    hidden: boolean = false
   ): void => {
     // console.log('Graph', '__sim_add_datum_node', datum_id, tree.value)
 
@@ -12682,10 +12699,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._node_layer[datum_node_id] = LAYER_DATA
     this._data_node[datum_node_id] = node
 
-    this._visible_data_node[datum_node_id] = node
+    if (hidden) {
+      this._hidden_data_node[datum_node_id] = node
+
+      // this._invalid_datum_node_id[datum_node_id] = true
+      // this._invalid_datum_data[datum_node_id] = tree.value
+    } else {
+      this._visible_data_node[datum_node_id] = node
+      this._visible_unlinked_data_node[datum_node_id] = node
+    }
 
     this._unlinked_data_node[datum_node_id] = node
-    this._visible_unlinked_data_node[datum_node_id] = node
 
     const valid = _isValidValue(tree)
 
@@ -12699,7 +12723,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           valid,
         }),
         style: {
-          display: 'flex',
+          display: hidden ? 'none' : 'block',
           width: `${width}px`,
           height: `${height}px`,
           overflow: 'hidden',
@@ -12772,10 +12796,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             ...userSelect('none'),
           },
           fontSize: DATUM_FONT_SIZE,
-          data: tree,
+          data: hidden ? EMPTY_TREE : tree,
         },
         this.$system
       )
+
+      if (hidden) {
+        this._data_tree_to_build.add(datum_node_id)
+      }
+
       const unlisten = datum.addEventListeners([
         makeKeydownListener((event) => {
           const { key } = event
@@ -12864,7 +12893,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._dispatch_data_added(datum_id, tree.value)
     }
 
-    this._start_graph_simulation(LAYER_DATA_LINKED)
+    if (!hidden) {
+      this._start_graph_simulation(LAYER_DATA_LINKED)
+    }
   }
 
   private _inc_merge_input_active = (merge_node_id: string): void => {
@@ -13186,17 +13217,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _sim_add_pin_datum_link = (
     datum_node_id: string,
     pin_node_id: string,
-    emit: boolean
+    emit: boolean,
+    hidden: boolean = false
   ): void => {
     // console.log('Graph', '_sim_add_pin_datum_link', datum_node_id, pin_node_id)
 
-    this._sim_add_datum_node_link(datum_node_id, pin_node_id, emit)
+    this._sim_add_datum_node_link(datum_node_id, pin_node_id, emit, hidden)
   }
 
   private _sim_add_datum_node_link = (
     datum_node_id: string,
     node_id: string,
-    emit: boolean
+    emit: boolean,
+    hidden: boolean = false
   ): void => {
     // console.log('Graph', '_sim_add_datum_link', datum_node_id, node_id)
 
@@ -13244,6 +13277,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       {
         stroke,
         strokeWidth: 1,
+        hidden,
       }
     )
 
@@ -13265,7 +13299,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._dispatch_data_removed(datumId)
     }
 
-    this._start_graph_simulation(LAYER_DATA_LINKED)
+    if (!hidden) {
+      this._start_graph_simulation(LAYER_DATA_LINKED)
+    }
   }
 
   private _sim_after_add_pin_datum_link = (
@@ -16156,7 +16192,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           'stroke-linecap': 'normal',
         },
         style: {
-          display: hidden ? 'none' : 'block',
           strokeWidth: `${strokeWidth}`,
           stroke,
           strokeDasharray: `${strokeDasharray}px`,
@@ -16237,7 +16272,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const link = new SVGG(
       {
         className: 'link',
-        style,
+        style: {
+          display: hidden ? 'none' : 'block',
+          ...style,
+        },
       },
       this.$system
     )
@@ -26263,159 +26301,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const pin_node_id = this._datum_to_pin[datum_node_id]
     const plug_node_id = this._datum_to_plug[datum_node_id]
 
+    const tree = this._get_datum_tree(datum_node_id)
+
     if (pin_node_id) {
-      const input_ext_node_id = this._pin_to_ext['input'][pin_node_id]
-      const output_ext_node_id = this._pin_to_ext['output'][pin_node_id]
-
-      if (input_ext_node_id) {
-        return true
-      }
-      if (output_ext_node_id) {
-        return true
-      }
-
-      if (this._is_link_pin_node_id(pin_node_id)) {
-        if (this._spec_is_link_pin_ignored(pin_node_id)) {
-          return true
-        }
-
-        const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
-
-        if (this._animating_unit_explosion[unitId]) {
-          return true
-        }
-
-        if (this._is_link_pin_ref(pin_node_id)) {
-          if (type === 'output') {
-            return true
-          } else {
-            const tree = this._get_datum_tree(datum_node_id)
-
-            if (
-              [
-                TreeNodeType.Class,
-                TreeNodeType.ClassLiteral,
-                TreeNodeType.Unit,
-                TreeNodeType.Generic,
-              ].includes(tree.type)
-            ) {
-              //
-            } else {
-              return true
-            }
-          }
-        }
-
-        if (this._collapsing) {
-          const mergeId = findPinMergeId(
-            this._collapse_init_spec,
-            unitId,
-            type,
-            pinId
-          )
-
-          if (mergeId) {
-            const merge_node_id = getMergeNodeId(mergeId)
-
-            if (this._collapse_init_node_id_set.has(merge_node_id)) {
-              return true
-            }
-          }
-        }
-
-        const merge_node_id = this._pin_to_merge[pin_node_id]
-
-        if (merge_node_id) {
-          if (this._collapse_init_node_id_set.has(merge_node_id)) {
-            return true
-          }
-
-          const { mergeId } = segmentMergeNodeId(merge_node_id)
-
-          const merge_datum_node_id = this._pin_to_datum[merge_node_id]
-
-          const ext_input_node_id = this._pin_to_ext['input']?.[merge_node_id]
-          const ext_output_node_id = this._pin_to_ext['output']?.[merge_node_id]
-
-          if (ext_input_node_id) {
-            const ext_input_datum = this._plug_to_datum[ext_input_node_id]
-
-            if (ext_input_datum) {
-              return true
-            }
-          }
-          if (ext_output_node_id) {
-            const ext_output_datum = this._plug_to_datum[ext_output_node_id]
-
-            if (ext_output_datum) {
-              return true
-            }
-          }
-
-          const input_only_merge = this._merge_output_count[mergeId] === 0
-
-          if (input_only_merge) {
-            if (merge_datum_node_id) {
-              return true
-            } else {
-              return false
-            }
-          }
-
-          const output_only_merge = this._merge_input_count[mergeId] === 0
-
-          if (output_only_merge) {
-            return false
-          }
-
-          const should_hide_merge_datum = this._should_hide_merge_datum(
-            datum_node_id,
-            merge_node_id
-          )
-
-          if (should_hide_merge_datum !== undefined) {
-            return false
-          } else if (this._is_node_hovered(pin_node_id)) {
-            return false
-          }
-
-          return true
-        }
-
-        return false
-      } else {
-        const ext_input_node_id = this._pin_to_ext['input']?.[pin_node_id]
-        const ext_output_node_id = this._pin_to_ext['output']?.[pin_node_id]
-
-        if (ext_input_node_id) {
-          //
-        }
-
-        if (ext_output_node_id) {
-          const ext_output_datum_node_id =
-            this._plug_to_datum[ext_output_node_id]
-
-          if (ext_output_datum_node_id) {
-            return true
-          }
-        }
-
-        const should_hide_merge_datum = this._should_hide_merge_datum(
-          datum_node_id,
-          pin_node_id
-        )
-
-        if (should_hide_merge_datum !== undefined) {
-          return should_hide_merge_datum
-        }
-
-        const { mergeId } = segmentMergeNodeId(pin_node_id)
-
-        const input_merge = this._merge_output_count[mergeId] === 0
-        const output_merge = this._merge_input_count[mergeId] === 0
-
-        return !input_merge && !output_merge
-      }
+      return this._will_hide_pin_datum(datum_node_id, tree, pin_node_id)
     } else if (plug_node_id) {
       const { type, pinId } = segmentPlugNodeId(plug_node_id)
 
@@ -26428,6 +26317,162 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return false
     } else {
       return false
+    }
+  }
+
+  private _will_hide_pin_datum = (
+    datum_node_id: string,
+    tree: TreeNode,
+    pin_node_id: string
+  ): boolean => {
+    const input_ext_node_id = this._pin_to_ext['input'][pin_node_id]
+    const output_ext_node_id = this._pin_to_ext['output'][pin_node_id]
+
+    if (input_ext_node_id) {
+      return true
+    }
+    if (output_ext_node_id) {
+      return true
+    }
+
+    if (this._is_link_pin_node_id(pin_node_id)) {
+      if (this._spec_is_link_pin_ignored(pin_node_id)) {
+        return true
+      }
+
+      const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
+
+      if (this._animating_unit_explosion[unitId]) {
+        return true
+      }
+
+      if (this._is_link_pin_ref(pin_node_id)) {
+        if (type === 'output') {
+          return true
+        } else {
+          if (
+            [
+              TreeNodeType.Class,
+              TreeNodeType.ClassLiteral,
+              TreeNodeType.Unit,
+              TreeNodeType.Generic,
+            ].includes(tree.type)
+          ) {
+            //
+          } else {
+            return true
+          }
+        }
+      }
+
+      if (this._collapsing) {
+        const mergeId = findPinMergeId(
+          this._collapse_init_spec,
+          unitId,
+          type,
+          pinId
+        )
+
+        if (mergeId) {
+          const merge_node_id = getMergeNodeId(mergeId)
+
+          if (this._collapse_init_node_id_set.has(merge_node_id)) {
+            return true
+          }
+        }
+      }
+
+      const merge_node_id = this._pin_to_merge[pin_node_id]
+
+      if (merge_node_id) {
+        if (this._collapse_init_node_id_set.has(merge_node_id)) {
+          return true
+        }
+
+        const { mergeId } = segmentMergeNodeId(merge_node_id)
+
+        const merge_datum_node_id = this._pin_to_datum[merge_node_id]
+
+        const ext_input_node_id = this._pin_to_ext['input']?.[merge_node_id]
+        const ext_output_node_id = this._pin_to_ext['output']?.[merge_node_id]
+
+        if (ext_input_node_id) {
+          const ext_input_datum = this._plug_to_datum[ext_input_node_id]
+
+          if (ext_input_datum) {
+            return true
+          }
+        }
+        if (ext_output_node_id) {
+          const ext_output_datum = this._plug_to_datum[ext_output_node_id]
+
+          if (ext_output_datum) {
+            return true
+          }
+        }
+
+        const input_only_merge = this._merge_output_count[mergeId] === 0
+
+        if (input_only_merge) {
+          if (merge_datum_node_id) {
+            return true
+          } else {
+            return false
+          }
+        }
+
+        const output_only_merge = this._merge_input_count[mergeId] === 0
+
+        if (output_only_merge) {
+          return false
+        }
+
+        const should_hide_merge_datum = this._should_hide_merge_datum(
+          datum_node_id,
+          merge_node_id
+        )
+
+        if (should_hide_merge_datum !== undefined) {
+          return false
+        } else if (this._is_node_hovered(pin_node_id)) {
+          return false
+        }
+
+        return true
+      }
+
+      return false
+    } else {
+      const ext_input_node_id = this._pin_to_ext['input']?.[pin_node_id]
+      const ext_output_node_id = this._pin_to_ext['output']?.[pin_node_id]
+
+      if (ext_input_node_id) {
+        //
+      }
+
+      if (ext_output_node_id) {
+        const ext_output_datum_node_id = this._plug_to_datum[ext_output_node_id]
+
+        if (ext_output_datum_node_id) {
+          return true
+        }
+      }
+
+      const should_hide_merge_datum = this._should_hide_merge_datum(
+        datum_node_id,
+        pin_node_id
+      )
+
+      if (should_hide_merge_datum !== undefined) {
+        return should_hide_merge_datum
+      }
+
+      const { mergeId } = segmentMergeNodeId(pin_node_id)
+
+      const input_merge = this._merge_output_count[mergeId] === 0
+      const output_merge = this._merge_input_count[mergeId] === 0
+
+      return !input_merge && !output_merge
     }
   }
 
@@ -28728,7 +28773,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._inc_unit_pin_active(unitId)
       }
 
-      if (pin_node_id) {
+      if (datum_node_id) {
         this._refresh_datum_visible(datum_node_id)
       }
     }
@@ -39217,8 +39262,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._unlinked_data_node[datum_node_id] = datum_node
 
+    let hidden = true
+
     if (this._visible_data_node[datum_node_id]) {
+      hidden = false
+
       this._visible_unlinked_data_node[datum_node_id] = datum_node
+
       this._set_node_layer(datum_node_id, LAYER_DATA)
     }
 
@@ -39232,7 +39282,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._refresh_compatible()
 
-    this._start_graph_simulation(LAYER_DATA_LINKED)
+    if (!hidden) {
+      this._start_graph_simulation(LAYER_DATA_LINKED)
+    }
   }
 
   private _mem_remove_pin_datum_tree = (pin_node_id: string): void => {
@@ -41481,6 +41533,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     delete this._datum_unlisten[datumId]
 
+    const hidden = !!this._visible_data_node[datum_node_id]
+
     if (this._is_datum_unlocked(datum_node_id)) {
       this._lock_datum(datum_node_id)
     }
@@ -41541,7 +41595,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._dispatch_data_removed(datumId)
     }
 
-    this._start_graph_simulation(LAYER_DATA_LINKED)
+    if (!hidden) {
+      this._start_graph_simulation(LAYER_DATA_LINKED)
+    }
   }
 
   private _remove_unit_merges = (unit_id: string): Dict<string> => {
@@ -57718,6 +57774,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const pin_node_id = getPinNodeId(unitId, type, pinId)
 
+    if (!this._has_anchor_node(pin_node_id)) {
+      return
+    }
+
     if (this._is_link_pin_ref(pin_node_id)) {
       this._on_graph_unit_ref_link_pin_data_moment(_data)
     } else {
@@ -58118,6 +58178,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const tree = _getValueTree__cached(value)
 
+    if (!this._has_anchor_node(pin_node_id)) {
+      return
+    }
+
     this._graph_debug_set_pin_data_tree(pin_node_id, tree)
   }
 
@@ -58172,8 +58236,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const position =
           this._predict_pin_datum_initial_position(anchor_node_id)
 
-        this._sim_add_datum_node(datum_id, tree.value, position)
-        this._sim_add_pin_datum_link(datum_node_id, pin_node_id, false)
+        const datum_hidden = this._will_hide_pin_datum(
+          datum_node_id,
+          tree,
+          pin_node_id
+        )
+
+        this._sim_add_datum_node(
+          datum_id,
+          tree.value,
+          position,
+          undefined,
+          undefined,
+          datum_hidden
+        )
+        this._sim_add_pin_datum_link(
+          datum_node_id,
+          pin_node_id,
+          false,
+          datum_hidden
+        )
 
         if (this._is_merge_node_id(anchor_node_id)) {
           const { mergeId } = segmentMergeNodeId(anchor_node_id)
