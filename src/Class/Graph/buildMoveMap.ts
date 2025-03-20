@@ -628,7 +628,7 @@ export function buildMoveMap(
           const setUnitPinNotConstantTask = newTask([
             {
               in: true,
-              action: makeSetUnitPinConstantAction(unitId, type, pinId, false),
+              action: makeSetUnitPinConstantAction(nextUnitId, type, pinId, false),
             },
           ])
 
@@ -2991,11 +2991,12 @@ export function buildMoveMap(
           if (datum) {
             movePlugTask.moves.push({
               in: false,
-              action: makeSetUnitPinDataAction(
-                graphId,
+              action: makeSetPlugDataAction(
                 nextPinType,
                 nextPinId,
-                datum
+                nextSubPinId,
+                datum,
+                undefined
               ),
             })
           }
@@ -3011,7 +3012,7 @@ export function buildMoveMap(
                   undefined
                 )
 
-                if (graphPinOutsidePlugs.length > 0) {
+                if (graphPinOutsidePlugs && graphPinOutsidePlugs.length > 0) {
                   forEach(graphPinOutsidePlugs, (outerPlug) => {
                     movePlugTask.moves.push({
                       in: true,
@@ -3342,3 +3343,4 @@ export function buildFullGraphSelection(
 
   return selection
 }
+
