@@ -84,6 +84,8 @@ export const style = {
   },
   rect: {
     fill: 'currentColor',
+    strokeWidth: '3px',
+    stroke: 'currentColor',
   },
   passwordfield: {
     '-webkit-text-security': 'disc',
@@ -187,6 +189,13 @@ export const style = {
     strokeWidth: '3px',
     fill: 'none',
     stroke: 'currentColor',
+  },
+  line: {
+    strokeWidth: '3px',
+    fill: 'none',
+    stroke: 'currentColor',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
   },
   icon: {
     display: 'flex',
