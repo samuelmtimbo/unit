@@ -17966,6 +17966,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           should_add_component = this._search_unit_spec_id_changed
         }
 
+        const bulk_action = makeBulkEditAction(actions)
+
+        this._dispatch_action(bulk_action)
+
+        this._pod.$bulkEdit({ actions, fork, bubble })
+
         if (this._mode === 'change') {
           if (did_spec_id_change) {
             if (!parent) {
@@ -17976,12 +17982,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         } else if (this._mode === 'add') {
           this._register_spec(this._search_unit_spec_id, specs, true)
         }
-
-        const bulk_action = makeBulkEditAction(actions)
-
-        this._dispatch_action(bulk_action)
-
-        this._pod.$bulkEdit({ actions, fork, bubble })
 
         this._download_pod_data()
 
@@ -29957,12 +29957,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     )
 
-    setTimeout(() => {
-      this._set_search_text('')
-      this._set_search_selected(spec_id)
-      this._set_search_filter(filter)
-      this._show_search()
-    }, 1)
+    // setTimeout(() => {
+    this._set_search_text('')
+    this._set_search_selected(spec_id)
+    this._set_search_filter(filter)
+    this._show_search()
+    // }, 1)
   }
 
   private _make_compatible_search_filter = (
@@ -56962,8 +56962,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._spec.units[unit_id].id = spec_id
 
-    this._unregister_unit(old_spec_id)
     this._register_unit(spec_id, specs)
+    this._unregister_unit(old_spec_id)
   }
 
   private _is_node_visible = (node_id: string): boolean => {
@@ -58801,6 +58801,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
           setUnitPinData: (data) => {
             this._on_graph_unit_set_unit_pin_data({ ...data, path })
+          },
+          setPlugData: (data) => {
+            //
           },
           setComponentSize: (data) => {
             this._on_graph_unit_set_component_size(data)
