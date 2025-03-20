@@ -1578,9 +1578,29 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     fork && this._fork(undefined, true, bubble)
 
+    const defaultIgnored = deepGetOrDefault(
+      this._spec,
+      [`${type}s`, pinId, 'defaultIgnored'],
+      undefined
+    )
+
     this._specSetPinSetDefaultIgnored(type, pinId, ignored)
     this._memSetPinSetDefaultIgnored(type, pinId, ignored)
     this._simSetPinSetDefaultIgnored(type, pinId, ignored)
+
+    if (!this._parent) {
+      const ignored = deepGetOrDefault(
+        this._spec,
+        [`${type}s`, pinId, 'defaultIgnored'],
+        undefined
+      )
+
+      if (!defaultIgnored && ignored) {
+        this.setPinIgnored(type, pinId, true)
+      } else if (defaultIgnored && !ignored) {
+        this.setPinIgnored(type, pinId, false)
+      }
+    }
   }
 
   private _specSetPinSetDefaultIgnored(
@@ -3785,6 +3805,32 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             }
           }
         )
+      )
+
+      unit.addListener(
+        'set_pin_set_default_ignored',
+        (type: IO, pinId: string, defaultIgnored: boolean) => {
+          const specIgnored = deepGetOrDefault(
+            this._spec,
+            ['units', unitId, type, pinId, 'ignored'],
+            undefined
+          )
+
+          if (specIgnored === undefined) {
+            const mergeId = this.getPinMergeId(unitId, type, pinId)
+
+            if (!mergeId) {
+              this._setUnitPinIgnored(
+                unitId,
+                type,
+                pinId,
+                defaultIgnored,
+                true,
+                true
+              )
+            }
+          }
+        }
       )
     }
 
