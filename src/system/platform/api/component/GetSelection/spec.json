@@ -1,0 +1,29 @@
+{
+  "name": "get selection",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "selection": {
+      "type": "{path:string[],start:number,end:number,direction:'forward'|'backward'|'none'}[]"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "space",
+    "description": "get the selection object inside `component`",
+    "tags": ["platform", "api", "component"]
+  },
+  "id": "0d1d2204-f096-4aac-99d3-7c8dcdde8767",
+  "base": true,
+  "type": "`U`"
+}

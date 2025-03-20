@@ -163,6 +163,12 @@ import {
   S_METHOD_WATCH,
 } from '../types/interface/async/$S'
 import {
+  SEL_METHOD_CALL,
+  SEL_METHOD_GET,
+  SEL_METHOD_REF,
+  SEL_METHOD_WATCH,
+} from '../types/interface/async/$SEL'
+import {
   TD_METHOD_CALL,
   TD_METHOD_GET,
   TD_METHOD_WATCH,
@@ -393,5 +399,11 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     call: RS_METHOD_CALL,
     watch: RS_METHOD_WATCH,
     ref: RS_METHOD_REF,
+  },
+  SEL: {
+    get: SEL_METHOD_GET,
+    call: SEL_METHOD_CALL,
+    watch: SEL_METHOD_WATCH,
+    ref: SEL_METHOD_REF,
   },
 }

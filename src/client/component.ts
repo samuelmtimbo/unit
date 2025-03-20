@@ -12,6 +12,7 @@ import { Dict } from '../types/Dict'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Unlisten } from '../types/Unlisten'
+import { SelectionObject } from '../types/interface/SEL'
 import { UCGEE } from '../types/interface/UCGEE'
 import { $Component } from '../types/interface/async/$Component'
 import { $EE } from '../types/interface/async/$EE'
@@ -1810,6 +1811,37 @@ export class Component<
       width: width / $sx,
       height: height / $sy,
     }
+  }
+
+  getSelection(): SelectionObject[] {
+    const {
+      api: {
+        document: { getSelection },
+      },
+    } = this.$system
+
+    const base = this.getRootBase()
+
+    const selections: SelectionObject[] = []
+
+    for (const [path, leaf] of base) {
+      selections.push(
+        ...leaf.getSelection().map((selection: SelectionObject) => ({
+          path: [...path, ...selection.path],
+          ...selection,
+        }))
+      )
+    }
+
+    return selections
+  }
+
+  setSelectionRange(
+    start: number,
+    end: number,
+    direction?: 'forward' | 'backward' | 'none' | undefined
+  ): void {
+    //
   }
 
   appendChild(child: Component, slotName: string = 'default'): number {

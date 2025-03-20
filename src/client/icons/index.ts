@@ -496,6 +496,7 @@ export const icons = JSON.parse(`{
   "tent": "M19 20L10 4 M5 20l9-16 M3 20h18 M12 15l-3 5 M12 15l3 5",
   "terminal-square": "M7 11l2-2-2-2 M11 13h4 M5 3 H19 A2 2 0 0 1 21 5 V19 A2 2 0 0 1 19 21 H5 A2 2 0 0 1 3 19 V5 A2 2 0 0 1 5 3 z",
   "terminal": "M4 17 L10 11 L4 5 M12 19 L20 19",
+  "text-select": "M17 22h-1a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h1 M7 22h1a4 4 0 0 0 4-4v-1 M7 2h1a4 4 0 0 1 4 4v1",
   "thermometer-snowflake": "M2 12h10 M9 4v16 M3 9l3 3-3 3 M12 6L9 9 6 6 M6 18l3-3 1.5 1.5 M18 2a2 2 0 00-2 2v10.5a4 4 0 104 0V4a2 2 0 00-2-2z",
   "thermometer-sun": "M12 9a4 4 0 00-2 7.5 M12 3v2 M6.6 18.4l-1.4 1.4 M18 2a2 2 0 012 2v10.5a4 4 0 11-4 0V4c0-1.1.9-2 2-2z M4 13H2 M6.6 7.6L5.2 6.2",
   "thermometer": "M12 2a2 2 0 00-2 2v10.5a4 4 0 104 0V4a2 2 0 00-2-2z",

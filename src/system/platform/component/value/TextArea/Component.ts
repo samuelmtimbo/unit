@@ -1,6 +1,7 @@
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { SEL, SelectionObject } from '../../../../../types/interface/SEL'
 
 export interface Props {
   className?: string
@@ -10,7 +11,10 @@ export interface Props {
   attr?: Dict<any>
 }
 
-export default class TextArea extends Field<HTMLTextAreaElement, Props> {
+export default class TextArea
+  extends Field<HTMLTextAreaElement, Props>
+  implements SEL
+{
   constructor($props: Props, $system: System) {
     const {
       flags: { defaultInputModeNone },
@@ -35,5 +39,30 @@ export default class TextArea extends Field<HTMLTextAreaElement, Props> {
     const { placeholder = '' } = $props
 
     this.$element.placeholder = placeholder
+  }
+
+  getSelection(): SelectionObject[] {
+    const { selectionStart, selectionEnd, selectionDirection } = this.$element
+
+    return [
+      {
+        path: [],
+        start: selectionStart,
+        end: selectionEnd,
+        direction: selectionDirection,
+      },
+    ]
+  }
+
+  setSelectionRange(
+    start: number,
+    end: number,
+    direction?: 'forward' | 'backward' | 'none' | undefined
+  ): void {
+    this.$element.setSelectionRange(
+      start ?? null,
+      end ?? null,
+      direction ?? 'none'
+    )
   }
 }
