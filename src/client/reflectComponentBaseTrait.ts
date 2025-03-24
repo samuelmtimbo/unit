@@ -325,6 +325,10 @@ export const expandSlot = (
   // }
 
   for (const child of parent.$domChildren) {
+    if (!child) {
+      continue
+    }
+
     if (!leaves.includes(child)) {
       const attr = extractAttr(child.$element)
       const style = rawExtractStyle(
