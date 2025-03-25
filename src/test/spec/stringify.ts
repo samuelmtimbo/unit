@@ -9,9 +9,9 @@ import _specs from '../../system/_specs'
 
 assert.deepEqual(stringify(1), '1')
 assert.deepEqual(stringify(Infinity), 'Infinity')
-assert.deepEqual(stringify('"\n"'), `"\\"\n\\""`)
+assert.deepEqual(stringify('"\n"'), `"\\"\\n\\""`)
 assert.deepEqual(stringify("'\\'"), `"'\\\\'"`)
-assert.deepEqual(stringify("'\n'"), `"'\n'"`)
+assert.deepEqual(stringify("'\n'"), `"'\\n'"`)
 assert.deepEqual(stringify("'\\n'"), `"'\\\\n'"`)
 assert.deepEqual(stringify('foo'), `"foo"`)
 assert.deepEqual(stringify('"foo"'), `"\\"foo\\""`)
@@ -60,7 +60,7 @@ assert.deepEqual(
     }
    }
    `),
-  `"{\n    \\"error\\": {\n     \\"errors\\": [\n      {\n       \\"domain\\": \\"global\\",\n       \\"reason\\": \\"required\\",\n       \\"message\\": \\"Login Required\\",\n       \\"locationType\\": \\"header\\",\n       \\"location\\": \\"Authorization\\"\n      }\n     ],\n     \\"code\\": 401,\n     \\"message\\": \\"Login Required\\"\n    }\n   }\n   "`
+  `"{\\n    \\"error\\": {\\n     \\"errors\\": [\\n      {\\n       \\"domain\\": \\"global\\",\\n       \\"reason\\": \\"required\\",\\n       \\"message\\": \\"Login Required\\",\\n       \\"locationType\\": \\"header\\",\\n       \\"location\\": \\"Authorization\\"\\n      }\\n     ],\\n     \\"code\\": 401,\\n     \\"message\\": \\"Login Required\\"\\n    }\\n   }\\n   "`
 )
 
 assert.deepEqual(stringify({ foo: 0 }), '{"foo":0}')

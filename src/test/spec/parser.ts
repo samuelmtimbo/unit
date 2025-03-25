@@ -751,7 +751,7 @@ assert(
 )
 
 assert.equal(_evaluate('"\n"'), '\n')
-assert.equal(_evaluate('"\\"\\n\\""'), '"\\n"')
+assert.equal(_evaluate('"\\"\\n\\""'), '"\n"')
 
 assert(
   isValidValue(

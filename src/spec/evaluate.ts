@@ -3,6 +3,33 @@ import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { fromUnitBundle } from './fromUnitBundle'
 import { TreeNode, TreeNodeType, _isValidObjKeyType, getTree } from './parser'
 
+export function unescape(str: string) {
+  return str.replace(/\\([nrtbfv\\'"0])/g, (match, ch) => {
+    switch (ch) {
+      case 'n':
+        return '\n'
+      case 'r':
+        return '\r'
+      case 't':
+        return '\t'
+      case 'b':
+        return '\b'
+      case 'f':
+        return '\f'
+      case 'v':
+        return '\v'
+      case '\\':
+        return '\\'
+      case '"':
+        return '"'
+      case '0':
+        return '\0'
+      default:
+        return match
+    }
+  })
+}
+
 export function _evaluate(
   tree: TreeNode,
   specs: Specs,
@@ -19,10 +46,7 @@ export function _evaluate(
     case TreeNodeType.Null:
       return null
     case TreeNodeType.StringLiteral:
-      return value
-        .substring(1, value.length - 1)
-        .replace(/\\"/g, '"')
-        .replace(/\\\\/g, '\\')
+      return unescape(value.substring(1, value.length - 1))
     case TreeNodeType.BooleanLiteral:
       return value === 'true' ? true : false
     case TreeNodeType.NumberLiteral:
