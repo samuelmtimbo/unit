@@ -82,10 +82,8 @@ export default class Default<T> extends Primitive<I<T>, O<T>> {
     this._current = undefined
     this._done()
     if (!this._input.a.empty()) {
-      this._current = this._input.d.peak()
       this._forward_if_ready()
     } else if (!this._input.d.empty()) {
-      this._current = this._input.d.peak()
       this._forward_if_ready()
     }
   }
