@@ -12,7 +12,7 @@ export function webClipboard(window: Window, opt: BootOpt): API['clipboard'] {
       return data
     }
 
-    throw new APINotSupportedError('Clipboar Read')
+    throw new APINotSupportedError('Clipboard Read')
   }
 
   const readText = async () => {
@@ -22,7 +22,7 @@ export function webClipboard(window: Window, opt: BootOpt): API['clipboard'] {
       return text
     }
 
-    throw new APINotSupportedError('Clipboar Read Text')
+    throw new APINotSupportedError('Clipboard Read Text')
   }
 
   const writeText = async (text: string) => {
