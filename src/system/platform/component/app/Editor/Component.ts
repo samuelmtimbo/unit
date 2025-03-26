@@ -21221,7 +21221,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     delete this._abort_sub_component_base_animation[sub_component_id]
   }
 
-  private _get_sub_compononent_layout_layer_opacity = (
+  private _get_sub_component_layout_layer_opacity = (
     sub_component_id: string
   ): number => {
     const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
@@ -21526,6 +21526,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._measure_sub_component_base(sub_component_id)
 
+      const leaf_layer_opacity =
+        this._get_sub_component_layout_layer_opacity(sub_component_id)
+
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const parent_fullwindow = this._is_sub_component_fullwindow(parent_id)
       const parent_visible =
@@ -21645,7 +21648,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const { $x, $y } = this.$context
 
           const leaf_layer_opacity =
-            this._get_sub_compononent_layout_layer_opacity(sub_component_id)
+            this._get_sub_component_layout_layer_opacity(sub_component_id)
 
           all_trait = mapObjVK(all_trait, (leaf_trait, leaf_id) => {
             if (leaf_trait) {
@@ -22012,7 +22015,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const leaf_base = this._get_sub_component_root_base(sub_component_id)
 
         const layer_opacity =
-          this._get_sub_compononent_layout_layer_opacity(sub_component_id)
+          this._get_sub_component_layout_layer_opacity(sub_component_id)
 
         let i = 0
 
@@ -34227,7 +34230,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             : clone(this._layout_node[target_id])
 
           layer_opacity =
-            this._get_sub_compononent_layout_layer_opacity(target_id)
+            this._get_sub_component_layout_layer_opacity(target_id)
 
           target_trait.x += $width / 2 - target_trait.width / 2
           target_trait.y += $height / 2 - target_trait.height / 2
@@ -37710,7 +37713,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const opposite_type = opposite(type)
 
     const int_node_id = this._pin_to_int[type][pin_node_id]
-    const oppposite_int_node_id = this._pin_to_int[opposite_type][pin_node_id]
+    const opposite_int_node_id = this._pin_to_int[opposite_type][pin_node_id]
 
     const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
 
@@ -37733,8 +37736,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       replug(type, pinId, subPinId)
     }
 
-    if (oppposite_int_node_id) {
-      const { pinId, type, subPinId } = segmentPlugNodeId(oppposite_int_node_id)
+    if (opposite_int_node_id) {
+      const { pinId, type, subPinId } = segmentPlugNodeId(opposite_int_node_id)
 
       replug(type, pinId, subPinId)
     }
