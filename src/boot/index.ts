@@ -18,6 +18,7 @@ import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
 import { ASYNC } from '../types/interface/async/wrapper'
 import { remove } from '../util/array'
+import { clone } from '../util/clone'
 import { weakMerge } from '../weakMerge'
 import { style } from './style'
 
@@ -117,10 +118,7 @@ export function boot(
     lock: specsLock,
     cache,
     feature,
-    foreground: {
-      svg: undefined,
-      app: undefined,
-    },
+    foreground: clone(parent?.foreground ?? {}),
     style,
     showLongPress: undefined,
     captureGesture: undefined,
