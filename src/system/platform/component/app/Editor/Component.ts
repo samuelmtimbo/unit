@@ -50894,9 +50894,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const unit_bundle = {
       unit: {
-        id: this._spec.id,
+        id: bundle.spec.id,
       },
-      specs: { ...bundle.specs, [this._spec.id]: this._spec },
+      specs: { ...bundle.specs, [bundle.spec.id]: bundle.spec },
     }
 
     return unit_bundle
