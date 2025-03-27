@@ -131,13 +131,5 @@ export function _extractFromRawStyle(
     treatProp('height')
   }
 
-  if (element instanceof HTMLInputElement) {
-    if (element.type === 'range') {
-      style.height = '18px'
-    }
-  } else if (element instanceof HTMLSelectElement) {
-    style.height = '18px'
-  }
-
   return style
 }
