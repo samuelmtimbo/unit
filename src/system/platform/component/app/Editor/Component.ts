@@ -52304,6 +52304,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         { unitId: unit_id, subComponent: sub_component_spec },
         this._spec.component
       )
+
+      let at: number
+
+      if (parent_id) {
+        //
+      } else {
+        const children = graph.component?.children ?? []
+
+        at = children.indexOf(unit_id)
+
+        this._spec_insert_component(null, unit_id, 'default', at)
+      }
     }
 
     for (const unit_id in subComponents) {
