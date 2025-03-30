@@ -1530,10 +1530,6 @@ export class Component<
     if (this.$primitive) {
       let parentFontSize = DEFAULT_FONT_SIZE
 
-      if (this.$domParent) {
-        parentFontSize = this.$domParent.getFontSize()
-      }
-
       const fontSize = getFontSize(
         this.$element,
         $width,
