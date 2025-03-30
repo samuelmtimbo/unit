@@ -1304,11 +1304,9 @@ export function _extractGenerics(
         value.type === TreeNodeType.Class ||
         value.type === TreeNodeType.ClassLiteral
       ) {
-        const valueChild = value.children[0]
-        const _valueTree = valueChild
-          ? getTree(valueChild.value.substring(1, valueChild.value.length - 1))
-          : ANY_TREE
-        return _extractGenerics(specs, _valueTree, type.children[0] || ANY_TREE)
+        const { placeholder: valueTree } = parseClassValue(value)
+
+        return _extractGenerics(specs, valueTree, type.children[0] || ANY_TREE)
       } else {
         break
       }

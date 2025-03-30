@@ -196,6 +196,7 @@ assert(isValidType('(a:number,b:number)=>(a+b:number)'))
 assert(isValidType('any'))
 assert(isValidType('<T>["S"]'))
 assert(isValidType('<T>["S","A"]'))
+assert(isValidType('`A<A>`'))
 
 assert(!isValidType("'foo's bar'"))
 assert(!isValidType('{{}}'))
@@ -333,6 +334,8 @@ assert(
   )
 )
 assert(_isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
+assert(_isTypeMatch('`A<`F`>`', '`A<T>`'))
+assert(_isTypeMatch('`A<`F`>`', '`A<A>`'))
 
 assert(!_isTypeMatch('', 'any'))
 assert(!_isTypeMatch('abc', 'any'))
