@@ -1,0 +1,26 @@
+{
+  "name": "click",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "base": true,
+  "metadata": {
+    "icon": "square",
+    "description": "click on `component`",
+    "tags": ["platform", "api", "component"]
+  },
+  "id": "0f49972c-fcbc-424a-90e5-d4c02ae07409",
+  "type": "`U`"
+}

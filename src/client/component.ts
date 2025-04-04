@@ -4018,6 +4018,12 @@ export class Component<
     return callAll(allUnlisten)
   }
 
+  public click() {
+    const leaf = this.getFirstRootLeaf()
+
+    leaf.click()
+  }
+
   private _call(method: string, data: any[] = []): void {
     if (this[method]) {
       this[method](...data)

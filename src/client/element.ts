@@ -114,6 +114,12 @@ export class Element<
       this.$unit.$set({ name, data: value }, NOOP)
     }
   }
+
+  click() {
+    if (this.$element instanceof HTMLElement) {
+      this.$element.click()
+    }
+  }
 }
 
 export function makeEventListener(
