@@ -745,6 +745,7 @@ import Cabinet from '../Cabinet/Component'
 import ClassDatum from '../Class/Component'
 import DataTree from '../DataTree/Component'
 import { Datum } from '../Datum/Component'
+import { KNOB_HEIGHT } from '../Drawer/Component'
 import GUI from '../GUI/Component'
 import Minimap, { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../Minimap/Component'
 import Modes from '../ModeSelector/Component'
@@ -1439,11 +1440,15 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       max_height = Math.max(max_height, height)
     }
 
-    const _width = clamp(max_width, GRAPH_WIDTH, $width)
-    const _height = clamp(max_height, GRAPH_HEIGHT, $height)
+    const max_side = Math.min(max_width, max_height)
 
-    const width = _width + PADDING
-    const height = _height + PADDING
+    const width_ = clamp(max_side, GRAPH_WIDTH, $width - 4 * KNOB_HEIGHT)
+    const height_ = clamp(max_side, GRAPH_HEIGHT, $height - 4 * KNOB_HEIGHT)
+
+    const side_ = Math.min(width_, height_)
+
+    const width = side_
+    const height = side_
 
     const editor_unit_spec = {
       id: ID_EDITOR,
