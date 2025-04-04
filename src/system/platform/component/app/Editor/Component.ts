@@ -1655,7 +1655,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._editor.enter(false)
     this._editor.enterFullwindow(false, false)
     this._editor.leaveFullwindow(true)
-    this._editor.temp_fixate_node(editor_unit_id, 100)
+    this._editor.temp_fixate_node(editor_unit_id, 1000)
 
     this._editor._prevent_next_reset = false
 
