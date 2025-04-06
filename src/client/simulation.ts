@@ -233,6 +233,8 @@ export class Simulation<
     const RKO0 = RKO[0]
     const RKO1 = RKO[1]
 
+    let delta = 0
+
     for (let i = 0; i < this._n; i++) {
       for (let j = 0; j < order; j++) {
         this._force(this._alpha)
@@ -263,11 +265,17 @@ export class Simulation<
             _rk._vx = __vx
             _rk._ax = __ax
 
+            const dx = __vx * k1
+
             node._x = __x
 
-            node.x += __vx * k1
+            delta += Math.abs(dx)
+
+            node.x += dx
             node.vx += __ax * k1
           } else {
+            delta += Math.abs(fx - node.x)
+
             node.x = fx
             node.vx = 0
           }
@@ -288,9 +296,15 @@ export class Simulation<
 
             node._y = __y
 
-            node.y += __vy * k1
+            const dy = __vy * k1
+
+            delta += Math.abs(dy)
+
+            node.y += dy
             node.vy += __ay * k1
           } else {
+            delta += Math.abs(fy - node.y)
+
             node.y = fy
             node.vy = 0
           }
@@ -302,6 +316,10 @@ export class Simulation<
           node.ay = 0
         }
       }
+    }
+
+    if (delta < 1) {
+      this._alpha = 0.1
     }
 
     this.emit('tick')
