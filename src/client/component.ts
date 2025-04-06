@@ -289,7 +289,9 @@ export class Component<
 
     events[id] = true
 
-    for (const root of this.getBaseRoots()) {
+    const roots = this.getRootLeaves()
+
+    for (const root of roots) {
       dispatchCustomEvent(root.$element, type, detail, bubbles)
     }
 
@@ -442,7 +444,7 @@ export class Component<
     listener: (event: Event) => boolean | void,
     opt?: boolean | AddEventListenerOptions
   ): Unlisten => {
-    const roots = this.getBaseRoots()
+    const roots = this.getRootLeaves()
 
     const allUnlisten = []
 
@@ -1697,26 +1699,6 @@ export class Component<
     return p
   }
 
-  getBaseRoots(): Component[] {
-    if (this.isBase()) {
-      return [this]
-    }
-
-    let p: Component[] = []
-
-    for (const root of this.$root) {
-      const rootRoots = root.getBaseRoots()
-
-      p = [...p, ...rootRoots]
-    }
-
-    if (p.length === 0) {
-      p = [this]
-    }
-
-    return p
-  }
-
   getFirstRootLeaf(): Component {
     const base = this.getRootBase()
 
@@ -1782,9 +1764,9 @@ export class Component<
     } = this.$system
 
     if (!this.$primitive) {
-      const base = this.getRootLeaves()
+      const leaves = this.getRootLeaves()
 
-      const rects = base.map((leaf) => leaf.getBoundingClientRect())
+      const rects = leaves.map((leaf) => leaf.getBoundingClientRect())
 
       return rectsBoundingRect(rects)
     }
@@ -3991,7 +3973,7 @@ export class Component<
   }
 
   public addEventListener = (listener: Listener): Unlisten => {
-    const roots = this.getBaseRoots()
+    const roots = this.getRootLeaves()
 
     const allUnlisten = []
 
@@ -4005,7 +3987,7 @@ export class Component<
   }
 
   public addEventListeners = (listeners: Listener[]): Unlisten => {
-    const roots = this.getBaseRoots()
+    const roots = this.getRootLeaves()
 
     const allUnlisten = []
 
