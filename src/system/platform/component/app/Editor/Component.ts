@@ -5880,11 +5880,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._rebuild_subgraph()
 
-    this._simulation_prevent_restart = false
-
     this._set_zoom(zoom)
     this._center_graph(true)
+
+    this._simulation_prevent_restart = false
+
     this._start_graph_simulation(LAYER_NONE)
+
     this._start_debugger()
   }
 
