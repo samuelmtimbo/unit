@@ -23812,11 +23812,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _maybe_refresh_simulation_by_drag() {
-    if (
-      this._exposed_pin_unplugged_count > 0 ||
-      this._empty_merge_node_count > 0
-    ) {
-      this._start_graph_simulation(LAYER_NONE)
+    let layer = Infinity
+
+    if (this._empty_merge_node_count > 0) {
+      layer = Math.min(layer, LAYER_NORMAL)
+    }
+
+    if (this._exposed_pin_unplugged_count) {
+      layer = Math.min(layer, LAYER_EXPOSED)
+    }
+
+    if (layer < Infinity) {
+      this._start_graph_simulation(layer)
     }
   }
 
