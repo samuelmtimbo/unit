@@ -5395,7 +5395,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return
     }
 
-    this._spec = spec
+    this._spec = new Proxy(spec, {
+      set: (target, p, newValue, receiver) => {
+        target[p] = newValue
+
+        this.dispatchEvent('change', this._spec)
+
+        return true
+      },
+    })
 
     this._destroy_subgraph_cache()
 
@@ -55774,7 +55782,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { unitId, newUnitId, name, specId, path } = data
 
     if (this._is_spec_updater(path)) {
-      const spec = clone(findSpecAtPath(specs, this._spec, path))
+      const spec =
+        path.length === 0
+          ? this._spec
+          : clone(findSpecAtPath(specs, this._spec, path))
 
       const prev_spec_id = getUnit(spec, unitId).id
 
@@ -55794,10 +55805,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       deepSet_(spec, ['units', newUnitId, 'id'], specId)
 
       setSpec(spec.id, spec)
-
-      if (path.length === 0) {
-        this._spec = spec
-      }
     }
   }
 
@@ -58684,7 +58691,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
 
           let next_spec_ = clone(spec_)
-          let next_parent_spec_ = clone(parent_spec_)
+          let next_parent_spec_ = i === 1 ? this._spec : clone(parent_spec_)
 
           if (i === path.length) {
             setUnitPinData(
@@ -58707,7 +58714,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           next_parent_spec_.units[graphId].id = next_spec_.id
 
           if (i === 1) {
-            this._spec = next_parent_spec_
+            //
           } else {
             setSpec(next_parent_spec_.id, next_parent_spec_)
           }
