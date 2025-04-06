@@ -468,6 +468,7 @@ export const icons = JSON.parse(`{
   "snowflake": "M2 12 L22 12 M12 2 L12 22 M20 16l-4-4 4-4 M4 8l4 4-4 4 M16 4l-4 4-4-4 M8 20l4-4 4 4",
   "sort-asc": "M11 5h10 M11 9h7 M11 13h4 M3 17l3 3 3-3 M6 18V4",
   "sort-desc": "M11 5h4 M11 9h7 M11 13h10 M3 17l3 3 3-3 M6 18V4",
+  "space": "M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1",
   "speaker": "M6 2 H18 A2 2 0 0 1 20 4 V20 A2 2 0 0 1 18 22 H6 A2 2 0 0 1 4 20 V4 A2 2 0 0 1 6 2 z M16 14 A4 4 0 0 1 12 18 A4 4 0 0 1 8 14 A4 4 0 0 1 16 14 z M12 6 L12.01 6",
   "split-half": "M 9 17 H 2 V 7 H 9 M 15 7 H 22 V 17 H 15 M12 5 L12 7 M12 11 L12 13 M12 17 L12 19",
   "split-text": "M3 6 L16 6 M20 6 L21 6 M3 12 L6 12 M10 12 L21 12 M3 18 L10 18 M14 18 L21 18",
