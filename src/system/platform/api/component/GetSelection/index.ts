@@ -4,7 +4,7 @@ import { Component } from '../../../../../client/component'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
 import { SEL, SelectionObject } from '../../../../../types/interface/SEL'
-import { ID_GET_CLIENT_BOUNDING_RECT } from '../../../../_ids'
+import { ID_GET_SELECTION } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 
 export type I = {
@@ -34,7 +34,7 @@ export default class GetSelection extends Semifunctional<I, O> {
         },
       },
       system,
-      ID_GET_CLIENT_BOUNDING_RECT
+      ID_GET_SELECTION
     )
   }
 
