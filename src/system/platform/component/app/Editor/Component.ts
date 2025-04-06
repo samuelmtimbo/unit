@@ -43548,12 +43548,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._control.dispatchEvent('temp_unlock', {}, false)
   }
 
+  private _pointer_down_timestamp: Dict<number> = {}
+
   private __on_pointer_down = (
     pointerId: number,
     clientX: number,
     clientY: number
   ): void => {
     // console.log('Graph', '__on_pointer_down', clientX, clientY)
+
+    this._pointer_down_timestamp[pointerId] = new Date().getTime()
 
     if (
       this._resize_pointer_count === 0 &&
@@ -43598,8 +43602,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!this._collapsing) {
       if (this._pointer_down_count === 2) {
         const [pointer_id_0, pointer_id_1] = keys(this._pointer_down)
+
         const { x: x0, y: y0 } = this._pointer_position[pointer_id_0]
         const { x: x1, y: y1 } = this._pointer_position[pointer_id_1]
+
         const d = distance(x0, y0, x1, y1)
         if (this._pressed_node_pointer_count === 0) {
           const x = (x0 + x1) / 2
@@ -47539,6 +47545,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { animate } = this._config()
 
+    const pointer_down_timestamp = this._pointer_down_timestamp[pointerId]
+
+    const pointer_up_timestamp = new Date().getTime()
+
+    const pointer_up_down_delta_time =
+      pointer_up_timestamp - pointer_down_timestamp
+
     if (this._collapse_pointer_to_unit[pointerId]) {
       delete this._collapse_pointer_to_unit[pointerId]
     }
@@ -47895,8 +47908,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (!this._pointer_down_count) {
         this._zooming = false
 
-        if (this._core_component_unlocked_count) {
-          this._focus_first_unlocked_component()
+        const is_click = pointer_up_down_delta_time < CLICK_TIMEOUT
+
+        if (!is_click) {
+          if (this._core_component_unlocked_count) {
+            this._focus_first_unlocked_component()
+          }
         }
       }
     }
