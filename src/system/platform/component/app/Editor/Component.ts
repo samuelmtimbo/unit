@@ -25972,6 +25972,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._unlisten_fullwindow_escape = addListeners(container, [
         makeKeydownListener((event, _event) => {
+          if (this._disabled) {
+            return
+          }
+
           const { key } = event
 
           if (key === 'Escape') {
@@ -25981,6 +25985,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         }),
         makeKeyupListener((event, _event) => {
+          if (this._disabled) {
+            return
+          }
+
           const { key } = event
 
           if (key === '`') {
