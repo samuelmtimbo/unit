@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { ID_TEXT_TO_CLIPBOARD } from '../../../../_ids'
+import { ID_COPY_TO_CLIPBOARD } from '../../../../_ids'
 
 export interface I<T> {
   text: string
@@ -9,7 +9,7 @@ export interface I<T> {
 
 export interface O<T> {}
 
-export default class TextToClipboard<T> extends Functional<I<T>, O<T>> {
+export default class CopyToClipboard<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
@@ -18,7 +18,7 @@ export default class TextToClipboard<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      ID_TEXT_TO_CLIPBOARD
+      ID_COPY_TO_CLIPBOARD
     )
   }
 

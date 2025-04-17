@@ -1,5 +1,5 @@
 {
-  "name": "text to clipboard",
+  "name": "copy to clipboard",
   "inputs": {
     "text": {
       "type": "string"
