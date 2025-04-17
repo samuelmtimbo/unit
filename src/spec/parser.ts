@@ -503,6 +503,7 @@ export function _isTypeMatch(
       )
     case TreeNodeType.ObjectExpression:
       return (
+        source.type === TreeNodeType.Object ||
         (source.type === TreeNodeType.ObjectExpression &&
           _isTypeMatch(specs, source.children[0], target.children[0])) ||
         (source.type === TreeNodeType.ObjectLiteral &&
