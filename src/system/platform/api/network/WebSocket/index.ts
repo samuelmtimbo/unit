@@ -6,6 +6,7 @@ import {
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
 import { CUSTOM_HEADER_X_WEBSOCKET_ID } from '../../../../../client/platform/web/api/http'
+import { intercept } from '../../../../../client/platform/web/api/intercept'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../../system'
@@ -76,22 +77,50 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       return
     }
 
+    const willIntercept = interceptors.some((interceptor) =>
+      intercept(interceptor.opt, url)
+    )
+
+    const upgrade = async () => {
+      return await fetch(
+        url,
+        {
+          method: 'GET',
+          headers: {
+            Upgrade: 'websocket',
+            Connection: 'upgrade',
+          },
+        },
+        servers,
+        interceptors
+      )
+    }
+
+    if (willIntercept) {
+      let response: Response
+
+      try {
+        response = await upgrade()
+      } catch (err) {
+        done(undefined, 'could not connect')
+
+        return
+      }
+
+      const redirectStatusCodes = [301, 302, 303, 307, 308]
+
+      if (redirectStatusCodes.includes(response.status)) {
+        const newUrl = response.headers.get('Location')
+
+        url = newUrl
+      }
+    }
+
     if (url.startsWith('unit://')) {
       let response: Response
 
       try {
-        response = await fetch(
-          url,
-          {
-            method: 'UPGRADE',
-            headers: {
-              Upgrade: 'websocket',
-              Connection: 'upgrade',
-            },
-          },
-          servers,
-          interceptors
-        )
+        response = await upgrade()
       } catch (err) {
         done(undefined, 'could not connect')
 
