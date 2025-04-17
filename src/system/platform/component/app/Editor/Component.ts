@@ -41497,20 +41497,33 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const pin_type = this._pin_type_of_kind(datum_pin_node_id, 'input')
 
-        if (_isValidTree(tree) && _isTypeMatch__cached(specs, tree, pin_type)) {
-          if (!prevent) {
-            this.set_graph_pin_data(datum_pin_node_id, tree.value)
+        const commit = (datum_pin_node_id: string) => {
+          if (
+            _isValidTree(tree) &&
+            _isTypeMatch__cached(specs, tree, pin_type)
+          ) {
+            if (!prevent) {
+              this.set_graph_pin_data(datum_pin_node_id, tree.value)
+            } else {
+              if (!this._is_pin_active(datum_pin_node_id)) {
+                this._sim_remove_datum(datum_node_id)
+              }
+            }
           } else {
-            if (!this._is_pin_active(datum_pin_node_id)) {
-              this._sim_remove_datum(datum_node_id)
+            if (tree.value === '') {
+              this._pod_remove_pin_datum(datum_pin_node_id)
+            } else {
+              this._remove_pin_datum_link(datum_node_id)
             }
           }
+        }
+
+        if (this._is_link_pin_node_id(datum_pin_node_id)) {
+          const anchor_node_id = this._get_pin_anchor_node_id(datum_pin_node_id)
+
+          commit(anchor_node_id)
         } else {
-          if (tree.value === '') {
-            this._pod_remove_pin_datum(datum_pin_node_id)
-          } else {
-            this._remove_pin_datum_link(datum_node_id)
-          }
+          commit(datum_pin_node_id)
         }
       }
     } else if (datum_plug_node_id) {
