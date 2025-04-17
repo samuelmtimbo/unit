@@ -53,7 +53,7 @@ export async function html(opt: WebTemplate): Promise<string> {
     />
     <meta name="theme-color" content="#ffffff" />
     ${pwa ? `<link rel="manifest" href="${manifest}" />` : ''}
-    <link rel="shortcut icon" href="favicon.svg" />
+    <link rel="shortcut icon" href="${pathname && !pathname.endsWith('/') ? `${pathname}/` : ''}favicon.svg" />
 
     <style>
       @font-face {
@@ -122,7 +122,7 @@ export async function html(opt: WebTemplate): Promise<string> {
       ${baseHtml || ''}
     </div>${
       script
-        ? `<script type="text/javascript" src="${pathname}/index.js"></script>`
+        ? `<script type="text/javascript" src="${pathname ? `${pathname}/` : ''}index.js"></script>`
         : ``
     }${
       pwa
