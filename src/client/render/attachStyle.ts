@@ -170,7 +170,7 @@ export const HTML_STYLE = `
     font-size: 14px;
     box-sizing: border-box;
     background: transparent;
-    // touch-action: none;
+    /* touch-action: none; */
     overflow: hidden;
     -ms-text-size-adjust: none;
     -webkit-text-size-adjust: none;
