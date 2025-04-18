@@ -10,6 +10,8 @@ export interface IOWheelEvent {
   offsetY: number
   deltaX: number
   deltaY: number
+  scrollLeft: number
+  scrollTop: number
   ctrlKey: boolean
   altKey: boolean
 }
@@ -57,6 +59,8 @@ export function listenWheel(
       return
     }
 
+    const { scrollLeft, scrollTop } = _event.target as HTMLElement
+
     onWheel(
       {
         deltaY,
@@ -69,6 +73,8 @@ export function listenWheel(
         offsetY,
         screenX: clientX,
         screenY: clientY,
+        scrollLeft,
+        scrollTop,
       },
       _event
     )
