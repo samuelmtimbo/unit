@@ -4,7 +4,7 @@ import { Style, Tag } from '../../../../system/platform/Style'
 import { traverseTree, Tree } from '../../../../tree'
 import { LayoutNode } from '../../../LayoutNode'
 import { mergeAttr } from '../../../attr'
-import { colorToHex, hexToRgba, RGBA } from '../../../color'
+import { colorToHex, hexToRgba, RGBA, rgbaToHex } from '../../../color'
 import { namespaceURI } from '../../../component/namespaceURI'
 import { parseLayoutValue } from '../../../parseLayoutValue'
 import { parseTransform } from '../../../parseTransform'
@@ -193,6 +193,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
       parentNode.style.fontSize = `${parentTrait.fontSize}px`
       parentNode.style.visibility = 'hidden'
       parentNode.style.margin = '0'
+      parentNode.style.color = rgbaToHex(parentTrait.color)
 
       fitTreeChildren(parentNode, tree, [], expandChild)
 
