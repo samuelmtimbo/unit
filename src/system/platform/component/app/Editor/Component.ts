@@ -19222,10 +19222,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_fullwindow_frame_off(_animate)
     }
 
-    if (!this._disabled) {
-      this._graph.focus()
-    }
-
     if (this._unlisten_fullwindow_escape) {
       this._unlisten_fullwindow_escape()
 
@@ -19266,6 +19262,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._transcend) {
       this._transcend.up()
+    }
+
+    if (!this._disabled) {
+      this._graph.focus()
     }
 
     this.dispatchEvent('leave_fullwindow', {}, false)
