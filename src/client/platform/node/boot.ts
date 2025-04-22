@@ -1,7 +1,7 @@
 import * as http from 'http'
 import { JSDOM } from 'jsdom'
 import { ReadableStream as ReadableStream_ } from 'node:stream/web'
-import * as ws from 'ws'
+import { MessageEvent, WebSocket, WebSocketServer } from 'ws'
 import {
   Server,
   ServerHandler,
@@ -82,7 +82,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
   }
 
   // @ts-ignore
-  window.WebSocket = ws.WebSocket
+  window.WebSocket = WebSocket
 
   // @ts-ignore
   const [system, unlisten] = webBoot(window, root, opt)
@@ -93,7 +93,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
   system.api.text.TextEncoder = TextEncoder
   system.api.text.TextDecoder = TextDecoder
 
-  const wss = new ws.Server({ noServer: true })
+  const wss = new WebSocketServer({ noServer: true })
 
   async function handleIncoming(
     req: http.IncomingMessage,
@@ -233,7 +233,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
               data: string | ArrayBufferLike | Blob | ArrayBufferView | Buffer[]
             ) => void
           ) {
-            ws.onmessage = (event: ws.MessageEvent) => {
+            ws.onmessage = (event: MessageEvent) => {
               const { data } = event
 
               handler(data)
