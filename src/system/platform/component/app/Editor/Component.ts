@@ -29300,7 +29300,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       keys(this._selected_node_id)
     )
 
-    if (this._is_node_selected(node_id)) {
+    if (
+      link_pin_node_ids.length + merge_node_ids.length ===
+      this._selected_node_count
+    ) {
+      should_copy = false
+    }
+
+    if (should_copy) {
       this.copy_selected_nodes(true)
     } else {
       if (this._is_pin_node_id(node_id)) {
