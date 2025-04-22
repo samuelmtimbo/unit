@@ -64,6 +64,8 @@ export default class RemoteGraph extends Holder<I, O> {
       this._remote_port.close()
 
       this._remote_port = undefined
+
+      this._forward_empty('graph')
     }
   }
 
