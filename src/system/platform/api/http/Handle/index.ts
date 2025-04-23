@@ -17,7 +17,7 @@ export type O = {
   url: string
 }
 
-export function headerToObj(headers_: Response['headers']) {
+export function headersToObj(headers_: Response['headers']) {
   const headers = {}
 
   headers_.forEach((value: string, key: string) => {

@@ -13,7 +13,7 @@ import {
 import { BootOpt, System } from '../../../system'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
-import { mapObjKeyKV } from '../../../util/object'
+import { mapObjVK } from '../../../util/object'
 import { stringToReadableStream } from '../../../util/readable'
 import { Waiter } from '../../../Waiter'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
@@ -99,10 +99,8 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
     req: http.IncomingMessage,
     handler: ServerHandler
   ): Promise<ServerResponse> {
-    const headers = mapObjKeyKV(req.headers, () => {
-      return (Array.isArray(req.headers) ? req.headers : [req.headers]).join(
-        ', '
-      )
+    const headers = mapObjVK(req.headers, (value) => {
+      return (Array.isArray(value) ? value : [value]).join(', ')
     }) as Dict<string>
 
     const { method } = req

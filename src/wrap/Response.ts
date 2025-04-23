@@ -6,7 +6,7 @@ import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { NOOP } from '../NOOP'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { System } from '../system'
-import { headerToObj } from '../system/platform/api/http/Handle'
+import { headersToObj } from '../system/platform/api/http/Handle'
 import { Callback } from '../types/Callback'
 import { RES } from '../types/interface/RES'
 import { Unlisten } from '../types/Unlisten'
@@ -36,7 +36,7 @@ export function wrapResponse(response: Response, system: System): RES & $ {
 
         callback({
           status: response.status,
-          headers: headerToObj(response.headers),
+          headers: headersToObj(response.headers),
           body: usedBodyToString(this._body),
         })
       })()
@@ -76,7 +76,7 @@ export function wrapResponse(response: Response, system: System): RES & $ {
 
       if (name === 'headers') {
         // @ts-ignore
-        return Promise.resolve(headerToObj(response.headers))
+        return Promise.resolve(headersToObj(response.headers))
       }
 
       // @ts-ignore
