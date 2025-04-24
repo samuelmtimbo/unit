@@ -127,7 +127,7 @@ export default class DocumentPictureInPicture extends Holder<I, O> {
     const back = () => {
       component_.setSystem($system)
 
-      for(const leaf of base) {
+      for (const leaf of base) {
         if (leaf.$domParent) {
           leaf.$domParent.$element.appendChild(leaf.$element)
         }

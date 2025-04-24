@@ -628,7 +628,12 @@ export function buildMoveMap(
           const setUnitPinNotConstantTask = newTask([
             {
               in: true,
-              action: makeSetUnitPinConstantAction(nextUnitId, type, pinId, false),
+              action: makeSetUnitPinConstantAction(
+                nextUnitId,
+                type,
+                pinId,
+                false
+              ),
             },
           ])
 
@@ -3343,4 +3348,3 @@ export function buildFullGraphSelection(
 
   return selection
 }
-
