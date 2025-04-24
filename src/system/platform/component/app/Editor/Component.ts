@@ -347,7 +347,6 @@ import { CodePathNotImplementedError } from '../../../../../exception/CodePathNo
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
 import { ShouldNeverHappenError } from '../../../../../exception/ShouldNeverHappenError'
 import { injectUserBundle, injectUserSpecs } from '../../../../../injectBundle'
-import { isFrameRelativeValue } from '../../../../../isFrameRelative'
 import { mirror } from '../../../../../mirror'
 import { proxyWrap } from '../../../../../proxyWrap'
 import {
@@ -730,7 +729,6 @@ import Frame from '../../Frame/Component'
 import { default as Icon, default as IconButton } from '../../Icon/Component'
 import Inherit from '../../Inherit/Component'
 import Zoom_ from '../../Zoom/Component'
-import Canvas_ from '../../canvas/Canvas/Component'
 import SVGDefs from '../../svg/Defs/Component'
 import SVGG from '../../svg/Group/Component'
 import SVGMarker from '../../svg/Marker/Component'
@@ -2530,7 +2528,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _leaf_init_style: Dict<Style> = {}
   private _leaf_style: Dict<Style> = {}
   private _leaf_target_trait: Dict<LayoutNode> = {}
-  private _leaf_attr: Dict<Dict<string>> = {}
   private _leaf_frame: Dict<Frame> = {}
   private _leaf_frame_active: Dict<boolean> = {}
   private _leaf_frame_layer: Dict<Component<HTMLElement>> = {}
@@ -20861,39 +20858,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           ...style,
           ...temp_style,
         })
-
-        if (is_canvas) {
-          const canvas_comp = leaf_comp as Canvas_
-
-          const canvas_width = canvas_comp.getProp('width')
-          const canvas_height = canvas_comp.getProp('height')
-
-          if (canvas_width) {
-            if (
-              typeof canvas_width === 'string' &&
-              isFrameRelativeValue(canvas_width)
-            ) {
-              this._leaf_attr[leaf_id] = {
-                width: canvas_comp.getProp('width'),
-              }
-
-              canvas_comp.setProp('width', '100vw')
-            }
-          }
-
-          if (
-            typeof canvas_height === 'string' &&
-            isFrameRelativeValue(canvas_height)
-          ) {
-            if (isFrameRelativeValue(canvas_height)) {
-              this._leaf_attr[leaf_id] = {
-                height: canvas_comp.getProp('height'),
-              }
-
-              canvas_comp.setProp('height', '100vh')
-            }
-          }
-        }
       }
     }
 
@@ -20927,7 +20891,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       delete this._leaf_init_style[leaf_id]
 
       const is_text = leaf_comp.$node instanceof Text
-      const is_canvas = leaf_comp.$node instanceof HTMLCanvasElement
 
       const prop_unlisten = this._leaf_prop_unlisten[leaf_id]
 
@@ -20937,12 +20900,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       if (!is_text) {
         applyStyle(leaf_comp.$node, style)
-
-        const leaf_attr = this._leaf_attr[leaf_id]
-
-        for (const attr in leaf_attr) {
-          leaf_comp.setProp(attr, leaf_attr[attr])
-        }
       }
     }
   }
@@ -21655,10 +21612,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           ...inner_sub_component_ids,
         ]
 
+        const trait: LayoutNode = extractTrait(sub_component_frame, measureText)
+
         const { tree, map } = buildTree(
           '',
           this._component,
           base,
+          trait,
           (leaf_id, leaf_comp, leaf_parent) => {
             return this._extract_style(
               sub_component_frame_trait,
@@ -33396,6 +33356,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           '',
           this._component,
           base,
+          trait,
           (leaf_id, leaf_comp, leaf_parent) => {
             return this._extract_style(trait, leaf_id, leaf_comp, leaf_parent)
           }
@@ -34230,6 +34191,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         '',
         this._component,
         base,
+        target_frame_trait,
         (leaf_id, leaf_comp, leaf_parent) => {
           return this._extract_style(
             target_frame_trait,

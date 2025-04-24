@@ -1,5 +1,26 @@
+import { isFrameRelativeValue } from '../isFrameRelative'
 import { Dict } from '../types/Dict'
+import { Component } from './component'
 import { IOElement } from './IOElement'
+import { LayoutNode } from './LayoutNode'
+
+export function extractComponentAttr(
+  component: Component,
+  trait: LayoutNode
+): Dict<string> {
+  const attr = extractAttr(component.$element)
+
+  if (component.$element instanceof HTMLCanvasElement) {
+    if (isFrameRelativeValue(component.getProp('width') ?? '')) {
+      attr['width'] = `${trait.width}px`
+    }
+    if (isFrameRelativeValue(component.getProp('height') ?? '')) {
+      attr['height'] = `${trait.height}px`
+    }
+  }
+
+  return attr
+}
 
 export function extractAttr(element: IOElement): Dict<string> {
   if (element instanceof Text) {

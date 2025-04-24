@@ -222,13 +222,13 @@ export default class Canvas_
   }
 
   private _set_width = (width: number): void => {
-    this.$element.setAttribute('width', `${width - 1}`)
+    this.$element.setAttribute('width', `${width}`)
 
     this._reset_redraw()
   }
 
   private _set_height = (height: number): void => {
-    this.$element.setAttribute('height', `${height - 1}`)
+    this.$element.setAttribute('height', `${height}`)
 
     this._reset_redraw()
   }

@@ -3,7 +3,7 @@ import { Tree } from '../tree'
 import { Dict } from '../types/Dict'
 import { mapObjVK } from '../util/object'
 import { LayoutNode } from './LayoutNode'
-import { extractAttr } from './attr'
+import { extractComponentAttr } from './attr'
 import { Component } from './component'
 import { joinPath } from './component/app/graph/joinLeafPath'
 import { LayoutBase } from './layout'
@@ -13,6 +13,7 @@ export function buildTree(
   prefix: string,
   component: Component,
   base: LayoutBase,
+  trait: LayoutNode,
   extractStyle: ExtractStyleFunction
 ): { tree: Tree<Tag>[]; map: Dict<Tree<Tag>>; root: string[] } {
   const tree: Tree<Tag>[] = []
@@ -41,7 +42,7 @@ export function buildTree(
       leaf_slot_parent
     )
 
-    const leaf_attr = extractAttr(leaf_comp.$element)
+    const leaf_attr = extractComponentAttr(leaf_comp, trait)
 
     const tag = {
       name: leaf_comp.$element.nodeName,
@@ -311,7 +312,7 @@ export const expandSlot = (
 
         const leaf_id = joinPath(leaf_path)
         const leaf_style = extractStyle(leaf_id, leaf_comp, parent)
-        const leaf_attr = extractAttr(leaf_comp.$element)
+        const leaf_attr = extractComponentAttr(leaf_comp, trait)
 
         styles.push({
           name: leaf_comp.$element.nodeName,
@@ -330,7 +331,7 @@ export const expandSlot = (
     }
 
     if (!leaves.includes(child)) {
-      const attr = extractAttr(child.$element)
+      const attr = extractComponentAttr(child, trait)
       const style = rawExtractStyle(
         child.$element,
         trait,
@@ -381,7 +382,7 @@ export const reflectComponentBaseTrait = (
     tree,
     map,
     root: root_,
-  } = buildTree(prefix, component, base, extractStyle)
+  } = buildTree(prefix, component, base, trait, extractStyle)
 
   reflectTreeTrait(root.$system, trait, tree, (path) => {
     const [head, ...tail] = path
