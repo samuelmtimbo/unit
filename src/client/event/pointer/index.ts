@@ -52,8 +52,8 @@ export const applyContextTransformToPointerEvent = (
   const cstx = ctx / $sx
   const csty = cty / $sy
 
-  const sox = offsetX / $sx
-  const soy = offsetY / $sy
+  const sox = offsetX
+  const soy = offsetY
 
   const c = { x: cstx, y: csty }
   const o = { x: sox, y: soy }
