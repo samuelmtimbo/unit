@@ -1671,51 +1671,78 @@ export function buildMoveMap(
 
             addDependency(unselectedPlugOutsideUnplugTask, moveMergeTask)
 
-            const unselectedPlugOutsideNextPinId = newTargetPinId(
-              plug.type,
-              plug.pinId
-            )
-            const unselectedPlugOutsideNextSubPinId = '0'
+            if (!targetExposePinSetTasks[plug.type]?.[plug.pinId]) {
+              nextInsideMergeId = nextInsideMergeId ?? newTargetMergeId()
 
-            const unselectedPlugOutsideExposePinTask = newTask([
-              {
-                in: true,
-                action: makeExposePinSetAction(
-                  plug.type,
-                  unselectedPlugOutsideNextPinId,
+              if (!addMergeInsideTask) {
+                addMergeInsideTask = newTask([
                   {
-                    plug: {
-                      [unselectedPlugOutsideNextSubPinId]: {
-                        mergeId: nextInsideMergeId,
+                    in: true,
+                    action: makeAddMergeAction(nextInsideMergeId, {}),
+                  },
+                ])
+
+                addDependency(addMergeInsideTask, moveMergeTask)
+              }
+
+              const unselectedPlugOutsideNextPinId = newTargetPinId(
+                plug.type,
+                plug.pinId
+              )
+
+              const unselectedPlugOutsideNextSubPinId = '0'
+
+              const unselectedPlugOutsideExposePinTask = newTask([
+                {
+                  in: true,
+                  action: makeExposePinSetAction(
+                    plug.type,
+                    unselectedPlugOutsideNextPinId,
+                    {
+                      plug: {
+                        [unselectedPlugOutsideNextSubPinId]: {
+                          mergeId: nextInsideMergeId,
+                        },
                       },
-                    },
-                    ref,
-                  }
-                ),
-              },
-            ])
+                      ref,
+                    }
+                  ),
+                },
+              ])
 
-            addDependency(
-              unselectedPlugOutsideExposePinTask,
-              unselectedPlugOutsideUnplugTask
-            )
+              addDependency(
+                unselectedPlugOutsideExposePinTask,
+                addMergeInsideTask
+              )
 
-            const unselectedPlugOutsidePlugTask = newTask([
-              {
-                in: false,
-                action: makePlugPinAction(
-                  plug.type,
-                  plug.pinId,
-                  plug.subPinId,
-                  { unitId: graphId, pinId: unselectedPlugOutsideNextPinId }
-                ),
-              },
-            ])
+              deepSet_(
+                targetExposePinSetTasks,
+                [plug.type, plug.pinId],
+                unselectedPlugOutsideExposePinTask
+              )
 
-            addDependency(
-              unselectedPlugOutsidePlugTask,
-              unselectedPlugOutsideExposePinTask
-            )
+              addDependency(
+                unselectedPlugOutsideExposePinTask,
+                unselectedPlugOutsideUnplugTask
+              )
+
+              const unselectedPlugOutsidePlugTask = newTask([
+                {
+                  in: false,
+                  action: makePlugPinAction(
+                    plug.type,
+                    plug.pinId,
+                    plug.subPinId,
+                    { unitId: graphId, pinId: unselectedPlugOutsideNextPinId }
+                  ),
+                },
+              ])
+
+              addDependency(
+                unselectedPlugOutsidePlugTask,
+                unselectedPlugOutsideExposePinTask
+              )
+            }
           }
         }
       }
@@ -1741,51 +1768,59 @@ export function buildMoveMap(
             subPinId: nextSubPinId,
           })
 
-          nextMergePinId[type] = nextPinId
+          if (!targetExposePinSetTasks[nextPinType][plug.pinId]) {
+            nextMergePinId[type] = nextPinId
 
-          const mergeExposePinTask = newTask([
-            {
-              in: true,
-              action: makeExposePinSetAction(nextPinType, nextPinId, {
-                plug: {
-                  [nextSubPinId]: {
-                    mergeId: nextInsideMergeId,
+            const mergeExposePinTask = newTask([
+              {
+                in: true,
+                action: makeExposePinSetAction(nextPinType, nextPinId, {
+                  plug: {
+                    [nextSubPinId]: {
+                      mergeId: nextInsideMergeId,
+                    },
                   },
-                },
-                ref,
-              }),
-            },
-            {
-              in: false,
-              action: makePlugPinAction(type, plug.pinId, plug.subPinId, {
-                unitId: graphId,
-                kind: nextPinType,
-                pinId: nextPinId,
-              }),
-            },
-          ])
+                  ref,
+                }),
+              },
+              {
+                in: false,
+                action: makePlugPinAction(type, plug.pinId, plug.subPinId, {
+                  unitId: graphId,
+                  kind: nextPinType,
+                  pinId: nextPinId,
+                }),
+              },
+            ])
 
-          mergeExposePinTasks[type] = mergeExposePinTask
+            mergeExposePinTasks[type] = mergeExposePinTask
 
-          const datum: string = deepGetOrDefault(
-            data,
-            ['plug', type, plug.pinId, plug.subPinId],
-            undefined
-          )
+            const datum: string = deepGetOrDefault(
+              data,
+              ['plug', type, plug.pinId, plug.subPinId],
+              undefined
+            )
 
-          if (datum) {
-            mergeExposePinTask.moves.push({
-              in: false,
-              action: makeSetUnitPinDataAction(
-                graphId,
-                nextPinType,
-                nextPinId,
-                datum
-              ),
-            })
+            if (datum) {
+              mergeExposePinTask.moves.push({
+                in: false,
+                action: makeSetUnitPinDataAction(
+                  graphId,
+                  nextPinType,
+                  nextPinId,
+                  datum
+                ),
+              })
+            }
+
+            addDependency(mergeExposePinTask, moveMergeTask)
+
+            deepSet_(
+              targetExposePinSetTasks,
+              [plug.type, plug.pinId],
+              mergeExposePinTask
+            )
           }
-
-          addDependency(mergeExposePinTask, moveMergeTask)
         })
       }
 

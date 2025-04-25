@@ -5189,3 +5189,97 @@ assert.deepEqual(applyMoves(specs, source, target, moves), {
     },
   },
 })
+
+source = {
+  units: {
+    untitled: {
+      id: ID_EMPTY,
+    },
+  },
+  merges: {
+    '0': {},
+  },
+  inputs: {
+    a: {
+      plug: {
+        '0': {
+          mergeId: '0',
+        },
+      },
+    },
+  },
+  outputs: {
+    a: {
+      plug: {
+        '0': {
+          mergeId: '0',
+        },
+      },
+    },
+  },
+}
+
+target = {}
+
+selection = {
+  merge: ['0'],
+}
+
+map = buildMoveMap(system.specs, source, target, graphId, selection, {}, false)
+
+moves = buildMoves(selection, map)
+
+assert.deepEqual(applyMoves(specs, source, target, moves), {
+  source: {
+    units: {
+      untitled: {
+        id: ID_EMPTY,
+      },
+    },
+    inputs: {
+      a: {
+        plug: {
+          '0': {
+            unitId: 'untitled',
+            pinId: 'a',
+          },
+        },
+      },
+    },
+    outputs: {
+      a: {
+        plug: {
+          '0': {
+            unitId: 'untitled',
+            pinId: 'a',
+          },
+        },
+      },
+    },
+  },
+  target: {
+    merges: {
+      '0': {},
+    },
+    inputs: {
+      a: {
+        plug: {
+          '0': {
+            mergeId: '0',
+          },
+        },
+        ref: false,
+      },
+    },
+    outputs: {
+      a: {
+        plug: {
+          '0': {
+            mergeId: '0',
+          },
+        },
+        ref: false,
+      },
+    },
+  },
+})
