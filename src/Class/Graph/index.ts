@@ -992,9 +992,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._destroying = false
   }
 
+  private _reseting: boolean = false
+
   private _reset = (): void => {
+    this._reseting = true
+
     forEachValueKey(this._unit, (u) => u.reset())
     forEach(this._children, (c) => c.reset())
+
+    this._reseting = false
 
     this.emit('call', { method: 'reset', data: [] })
   }
@@ -3657,6 +3663,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       const pin = this.getUnitPin(unitId, type, pinId)
 
       const set = (data: any) => {
+        if (this._reseting) {
+          return
+        }
+
         if (this._paused) {
           return
         }
