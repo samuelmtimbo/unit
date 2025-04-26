@@ -11,10 +11,20 @@ export function extractComponentAttr(
   const attr = extractAttr(component.$element)
 
   if (component.$element instanceof HTMLCanvasElement) {
-    if (isFrameRelativeValue(component.getProp('width') ?? '')) {
+    let propWidth = component.getProp('width')
+    let propHeight = component.getProp('height')
+
+    if (typeof propWidth === 'number') {
+      propWidth = propWidth + 'px'
+    }
+    if (typeof propHeight === 'number') {
+      propHeight = propHeight + 'px'
+    }
+
+    if (isFrameRelativeValue(propWidth ?? '')) {
       attr['width'] = `${trait.width}px`
     }
-    if (isFrameRelativeValue(component.getProp('height') ?? '')) {
+    if (isFrameRelativeValue(propHeight ?? '')) {
       attr['height'] = `${trait.height}px`
     }
   }
