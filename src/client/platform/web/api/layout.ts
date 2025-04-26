@@ -13,7 +13,7 @@ import { parseFontSize } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
 
 export const isTextName = (tag: string) => {
-  return ['text'].includes(tag)
+  return ['text', 'button'].includes(tag)
 }
 
 export const isSVGName = (tag: string) => {
@@ -165,9 +165,7 @@ const tagToElement = (child: Tag, parentTagName: string) => {
 
   if (isText) {
     container.textContent = textContent
-  }
 
-  if (isText) {
     container.style.display = 'inline'
   }
 
