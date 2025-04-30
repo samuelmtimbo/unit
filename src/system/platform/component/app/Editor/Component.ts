@@ -47107,7 +47107,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const n0 = { width: 2 * r, height: 2 * r }
 
-        this.__animate_core_style(
+        const stop = this.__animate_core_style(
           new_unit_id,
           n0,
           () => n1,
@@ -47125,7 +47125,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._refresh_core_icon_size(new_unit_id)
           },
           () => {
-            //
+            stop()
           }
         )
       }
