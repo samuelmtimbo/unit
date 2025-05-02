@@ -634,11 +634,11 @@ export const _getGraphTypeMap = (
           ...equivalence_set,
         ])
 
+        equivalence_set = equivalence[i]
+
         equivalence_set.forEach((j) => {
           equivalence_index[j] = i
         })
-
-        equivalence_set = equivalence[i]
       }
 
       if (!merged) {
