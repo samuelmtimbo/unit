@@ -47258,7 +47258,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         data_
       )
 
-      const moves = buildMoves(selection, map)
+      const moves = buildMoves(selection, clone(map))
 
       const position = this._jiggle_world_screen_center()
 
