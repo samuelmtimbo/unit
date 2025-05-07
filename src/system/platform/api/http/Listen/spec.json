@@ -2,7 +2,10 @@
   "name": "listen",
   "inputs": {
     "port": {
-      "type": "number"
+      "type": "number",
+      "metadata": {
+        "examples": ["80"]
+      }
     },
     "server": {
       "type": "`SE`",
