@@ -355,6 +355,14 @@ export function _isTypeMatch(
     return _isTypeMatch(specs, source.children[0], target)
   }
 
+  if (source.type === TreeNodeType.Class) {
+    if (source.value.startsWith('`V')) {
+      if (target.value.startsWith('`J') || target.value.startsWith('`A')) {
+        return true
+      }
+    }
+  }
+
   switch (target.type) {
     case TreeNodeType.Invalid:
       return false

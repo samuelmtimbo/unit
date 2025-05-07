@@ -316,6 +316,7 @@ assert(_isTypeMatch('`A<{}>`', '`A<T>`'))
 assert(_isTypeMatch('`A<A>`', '`A<T>`'))
 assert(_isTypeMatch('`A<number>`', '`A<number>`'))
 assert(_isTypeMatch('`A<`F`>`', '`A<A>`'))
+assert(_isTypeMatch('`V<T>`', '`J`'))
 
 assert(_isTypeMatch('`G`', '`EE`'))
 assert(_isTypeMatch('`G`', '`U`'))
