@@ -10,7 +10,56 @@ import { Unlisten } from '../types/Unlisten'
 export function wrapSharedRef<T extends Dict<any>>(data: SharedRef<T>): J<T> {
   const _data = new Object_<T>(data.current)
 
-  return _data
+  return {
+    get<K extends keyof T>(name: K): Promise<T[K]> {
+      return _data.get(name)
+    },
+
+    set<K extends keyof T>(name: K, data: T[K]): Promise<void> {
+      return _data.set(name, data)
+    },
+
+    delete<K extends keyof T>(name: K): Promise<void> {
+      return _data.delete(name)
+    },
+
+    hasKey(name: string): Promise<boolean> {
+      return _data.hasKey(name)
+    },
+
+    keys(): Promise<string[]> {
+      return _data.keys()
+    },
+
+    deepGet(path: string[]): Promise<any> {
+      return _data.deepGet(path)
+    },
+
+    deepSet(path: string[], data: any): Promise<void> {
+      return _data.deepSet(path, data)
+    },
+
+    deepDelete(path: string[]): Promise<void> {
+      return _data.deepDelete(path)
+    },
+
+    subscribe(
+      path: string[],
+      key: string,
+      listener: (
+        type: ObjectUpdateType,
+        path: string[],
+        key: string,
+        data: any
+      ) => void
+    ): Unlisten {
+      return _data.subscribe(path, key, listener)
+    },
+
+    raw() {
+      return data
+    },
+  } as J<T>
 }
 
 export function wrapObject<T extends object>(
@@ -19,7 +68,7 @@ export function wrapObject<T extends object>(
 ): J<T> & $ {
   const _data = new Object_<T>(data)
 
-  const _obj = new (class Array extends $ implements J<T> {
+  const _obj = new (class Object__ extends $ implements J<T> {
     __: string[] = ['J']
 
     get<K extends keyof T>(name: K): Promise<T[K]> {
@@ -73,4 +122,11 @@ export function wrapObject<T extends object>(
   })(system)
 
   return _obj
+}
+
+export function wrapSharedObjectInterface<T extends object>(
+  data: SharedRef<T>,
+  system: System
+): J<T> & $ {
+  return wrapObject(data.current, system)
 }
