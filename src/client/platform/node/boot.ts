@@ -156,7 +156,15 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
           async (req: http.IncomingMessage, res: http.ServerResponse) => {
             const response = await handleIncoming(req, handler)
 
-            res.writeHead(response.status, '', response.headers)
+            if (response.status >= 100 && response.status <= 599) {
+              res.writeHead(response.status, '', response.headers)
+            } else {
+              res.writeHead(500)
+
+              res.end()
+
+              return
+            }
 
             const reader = serverResponseBodyToReadableStream(
               system,
