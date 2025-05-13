@@ -57638,7 +57638,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const subgraph_at_path = this.getSubgraphAtPath(path)
 
-      if (subgraph_at_path) {
+      const should_not_move_root =
+        subgraph_at_path || (path.length === 1 && this._collapsing)
+
+      if (should_not_move_root) {
         //
       } else {
         const component = this._component.pathGetSubComponent(path)
