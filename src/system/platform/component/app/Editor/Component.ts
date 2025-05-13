@@ -11533,10 +11533,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (ignored) {
       layer = LAYER_IGNORED
     } else {
-      if (this._collapse_next_unit_id === unit_id) {
-        layer = LAYER_NONE
-      }
-
       if (this._collapse_init_node_id_set.has(unit_id)) {
         layer = LAYER_COLLAPSE
       }
@@ -27685,10 +27681,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _get_node_default_layer = (node_id: string): number => {
-    if (this._collapse_next_unit_id === node_id) {
-      return LAYER_NONE
-    }
-
     if (this._is_unit_node_id(node_id)) {
       return LAYER_NORMAL
     } else if (this._is_merge_node_id(node_id)) {
@@ -39698,6 +39690,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    if (this._collapse_init_node_id_set.has(unitId)) {
+      this._start_node_long_press_collapse(pin_node_id)
+    }
+
     this._refresh_merge_name(merge_node_id)
   }
 
@@ -49220,10 +49216,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       all_unlisten.push(stop)
     }
 
-    if (graph_unit_id) {
-      this._set_node_layer(graph_unit_id, LAYER_NONE)
-    }
-
     if (!animate) {
       for (const collapse_node_id of this._collapse_node_id) {
         this._stop_node_long_press_collapse(collapse_node_id)
@@ -50448,6 +50440,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   pin_id,
     //   map
     // )
+
+    if (this._collapse_init_node_id_set.has(unit_id)) {
+      return
+    }
 
     const graph_spec = this._get_unit_spec(graph_id) as GraphSpec
 
