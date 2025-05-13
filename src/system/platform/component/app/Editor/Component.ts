@@ -24534,6 +24534,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     ) {
       next_target_eval = this._target_datum_eval + '\n' + datum_eval
     } else if (
+      typeof this._target_datum_eval === 'boolean' &&
+      typeof datum_eval === 'boolean'
+    ) {
+      next_target_eval = datum_eval
+    } else if (
       typeof this._target_datum_eval === 'object' &&
       typeof datum_eval === 'object' &&
       this._target_datum_eval !== null &&
