@@ -1,5 +1,4 @@
 import { BaseSpec } from './BaseSpec'
+import { Dict } from './Dict'
 
-export type BaseSpecs = {
-  [path: string]: BaseSpec
-}
+export type BaseSpecs = Dict<BaseSpec>

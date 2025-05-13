@@ -13,7 +13,7 @@ export function fromBundle<
   bundle: BundleSpec,
   specs: Specs,
   classes: Classes,
-  branch: { [path: string]: true } = {}
+  branch: Dict<true> = {}
 ): GraphBundle<I, O> {
   const { spec = {}, specs: _specs = {} } = bundle
 

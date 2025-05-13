@@ -88,13 +88,9 @@ export type DatumMetadataSpec = {
 
 export type GraphDataSpec = Dict<DatumSpec>
 
-export type Artifact = 'spec' | 'component' | 'dir' | 'data'
-
 export type Spec = BaseSpec | GraphSpec
 
-export type Specs = {
-  [path: string]: Spec
-}
+export type Specs = Dict<Spec>
 
 export type GraphMetadataSpec = NodeMetadataSpec & {
   position?: Dict<Dict<Position> | None>
@@ -124,10 +120,6 @@ export type GraphComponentSpec = BaseComponentSpec & {
 }
 
 export type ComponentSpec = GraphComponentSpec | BaseComponentSpec
-
-export type ComponentSpecs = {
-  [path: string]: ComponentSpec
-}
 
 export type Email = string
 

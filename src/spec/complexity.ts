@@ -1,5 +1,6 @@
 import { keys } from '../system/f/object/Keys/f'
 import { Classes, Spec, Specs } from '../types'
+import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { deepGet } from '../util/object'
@@ -15,7 +16,7 @@ export function treeComplexityById(
   specs: Specs,
   classes: Classes,
   id: string,
-  known: { [path: string]: boolean } = {}
+  known: Dict<true> = {}
 ): number {
   if (known[id]) {
     return HIRC
@@ -32,7 +33,7 @@ export function treeComplexity(
   specs: Specs,
   classes: Classes,
   spec: Spec,
-  known: { [path: string]: boolean } = {}
+  known: Dict<true> = {}
 ): number {
   let c = 0
   const { base } = spec
@@ -103,7 +104,7 @@ export function graphMergeComplexity(graph: GraphSpec): number {
 }
 
 export function graphUnitComplexity(specs: Specs, graph: GraphSpec): number {
-  const known: { [path: string]: true } = {}
+  const known: Dict<true> = {}
 
   const { units = {} } = graph
 

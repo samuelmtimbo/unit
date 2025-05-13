@@ -16,7 +16,7 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   spec: GraphSpec,
   specs_: Specs,
   classes: Classes = {},
-  branch: { [path: string]: true } = {}
+  branch: Dict<true> = {}
 ): GraphBundle<I, O> {
   const Class = classFromSpec<I, O>(spec, specs_, classes, branch)
 
@@ -84,7 +84,7 @@ export function classFromSpec<I, O>(
   spec: GraphSpec,
   specs: Specs,
   classes: Classes,
-  branch: { [path: string]: true } = {}
+  branch: Dict<true> = {}
 ): GraphClass<I, O> {
   applyDefaultIgnored(spec, specs)
 
@@ -107,7 +107,7 @@ export function graphFromSpec<I, O>(
   system: System,
   spec: GraphSpec,
   specs: Specs,
-  branch: { [path: string]: true },
+  branch: Dict<true>,
   push: boolean
 ): Graph<I, O> {
   applyDefaultIgnored(spec, specs)

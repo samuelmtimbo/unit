@@ -43,7 +43,7 @@ export const getSpecTypeInterfaceById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  visited: Dict<true> = {}
 ): TypeInterface => {
   const typeInterface = _getSpecTypeInterfaceById(id, specs, cache, visited)
   return typeTreeToType(typeInterface)
@@ -53,7 +53,7 @@ export const _getSpecTypeInterfaceById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  visited: Dict<true> = {}
 ): TypeTreeInterface => {
   let typeInterface: TypeTreeInterface
   if (cache[id]) {
@@ -98,7 +98,7 @@ export const _getSpecTypeInterface = (
   spec: Spec,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {}
+  visited: Dict<true> = {}
 ): TypeTreeInterface => {
   let typeInterface: TypeTreeInterface
   const base = !!spec.base
@@ -139,7 +139,7 @@ export const _getGraphTypeInterfaceById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache,
-  visited: { [id: string]: true },
+  visited: Dict<true>,
   includeData: boolean
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterfaceById', id)
@@ -151,7 +151,7 @@ export const getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
   cache: TypeTreeInterfaceCache,
-  visited: { [id: string]: true },
+  visited: Dict<true>,
   includeData: boolean
 ) => {
   const graphTypeTree = _getGraphTypeInterface(
@@ -169,7 +169,7 @@ export const _getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
   cache: TypeTreeInterfaceCache,
-  visited: { [id: string]: true },
+  visited: Dict<true>,
   includeData: boolean
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterface')
@@ -431,7 +431,7 @@ export const getGraphTypeMapById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {},
+  visited: Dict<true> = {},
   includeData: boolean = true
 ): TypeMap => {
   const typeTreeMap = _getGraphTypeMapById(
@@ -448,7 +448,7 @@ export const _getGraphTypeMapById = (
   id: string,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {},
+  visited: Dict<true> = {},
   includeData: boolean = true
 ): TypeTreeMap => {
   const spec = specs[id] as GraphSpec
@@ -466,7 +466,7 @@ export const getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
   cache: TypeTreeInterfaceCache = {},
-  visited: { [id: string]: true } = {},
+  visited: Dict<true> = {},
   includeData: boolean = true
 ): TypeMap => {
   const typeTreeMap = _getGraphTypeMap(spec, specs, cache, visited, includeData)
@@ -477,7 +477,7 @@ export const _getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
   cache: TypeTreeInterfaceCache,
-  visited: { [id: string]: true },
+  visited: Dict<true>,
   includeData: boolean
 ): TypeTreeMap => {
   const typeMap: TypeTreeMap = {}
