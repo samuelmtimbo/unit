@@ -134,12 +134,19 @@ To enter Change Mode (Blue Mode) you can either click on the "z" mode button or 
 
 ![](/public/gif/start/8.gif)
 
-In Change Mode, clicking on an input or output will set it to constant or not.
+In Change Mode, clicking on an input or output will set it to constant or not:
 
 ![](/public/gif/start/25.gif)
 
 > [!NOTE]
 > When saving the current graph, only data in constant inputs will be persisted.
+
+Clicking on a graph input plug will toggle the input set between functional or not:
+
+![](/public/gif/start/55.gif)
+
+> [!NOTE]
+> All functional inputs need to be all activated before data can move into the graph, and they are also invalidated together.
 
 ## Graph | Tree View
 
