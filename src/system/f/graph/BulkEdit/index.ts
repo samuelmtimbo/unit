@@ -3,6 +3,7 @@ import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { Action } from '../../../../types/Action'
 import { $G } from '../../../../types/interface/async/$G'
+import { Async } from '../../../../types/interface/async/Async'
 import { ID_BULK_EDIT } from '../../../_ids'
 
 export interface I<T> {
@@ -32,6 +33,8 @@ export default class BulkEdit<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ graph, actions }: I<T>, done: Done<O<T>>): void {
+    graph = Async(graph, ['G'], this.__system.async)
+
     try {
       graph.$bulkEdit({ actions })
     } catch (err) {
