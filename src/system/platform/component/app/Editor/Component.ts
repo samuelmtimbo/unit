@@ -48360,6 +48360,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       link: [],
       merge: [],
       plug: [],
+      data: [],
     }
 
     for (const selected_node_id of selected_node_ids) {
@@ -48412,6 +48413,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         } else {
           selection.plug.push({ type, pinId, subPinId, template })
         }
+      } else if (this._is_datum_node_id(selected_node_id)) {
+        const { datumId } = segmentDatumNodeId(selected_node_id)
+
+        selection.data.push(datumId)
       }
     }
 
@@ -49532,7 +49537,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._stop_node_long_press_collapse(datum_node_id)
 
-    // this._move_datum_into_subgraph(graph_id, datum_node_id)
+    this._move_datum_into_subgraph(graph_id, datum_node_id)
   }
 
   private _move_datum_into_subgraph = (
