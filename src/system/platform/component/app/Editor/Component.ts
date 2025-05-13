@@ -57675,36 +57675,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (const child_id of children) {
           const child = component.getSubComponent(child_id)
 
-          const current_parent_id = component.getSubComponentParentId(child_id)
+          const currentParentId = component.getSubComponentParentId(child_id)
 
-          const slot_name = slotMap?.[child_id] ?? 'default'
+          const slotName = slotMap?.[child_id] ?? 'default'
 
-          let child_mounted = true
+          if (currentParentId) {
+            const currentParent = component.getSubComponent(currentParentId)
 
-          if (current_parent_id) {
-            const current_parent = component.getSubComponent(current_parent_id)
-
-            if (current_parent.$mountParentRoot.includes(child)) {
-              current_parent.unregisterParentRoot(child)
+            if (child.$mounted) {
+              currentParent.unregisterParentRoot(child)
             } else {
-              child_mounted = false
-
-              current_parent.pullParentRoot(child)
+              currentParent.pullParentRoot(child)
             }
           }
 
-          if (child_mounted) {
-            if (parent) {
-              parent.pushParentRoot(child, slot_name)
-            } else {
-              component.pushRoot(child)
-            }
+          if (parent) {
+            parent.registerParentRoot(child, slotName, index + i)
           } else {
-            if (parent) {
-              parent.registerParentRoot(child, slot_name, index + i)
-            } else {
-              component.registerRoot(child)
-            }
+            component.registerRoot(child)
           }
         }
       }
