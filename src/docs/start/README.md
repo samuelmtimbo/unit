@@ -12,15 +12,17 @@ Following is a list of useful graph manipulation features.
 6. [Data Mode](#data-mode)
 7. [Remove Mode](#remove-mode)
 8. [Change Mode](#change-mode)
-9. [Graph | Tree View](#graph--tree-view)
-10. [Fullwindow](#fullwindow)
-11. [Unlock | Lock Component](#unlock--lock-component)
-12. [Minimap](#minimap)
-13. [Drawing](#drawing)
-14. [Composition](#composition)
-15. [Enter | Leave Graph](#enter--leave-graph)
-16. [Undo | Redo](#undo--redo)
-17. [Save | Load](#save--load)
+9. [Constant Inputs](#constant-inputs)
+10. [Functional Inputs](#functional-inputs)
+11. [Graph | Tree View](#graph--tree-view)
+12. [Fullwindow](#fullwindow)
+13. [Unlock | Lock Component](#unlock--lock-component)
+14. [Minimap](#minimap)
+15. [Drawing](#drawing)
+16. [Composition](#composition)
+17. [Enter | Leave Graph](#enter--leave-graph)
+18. [Undo | Redo](#undo--redo)
+19. [Save | Load](#save--load)
 
 ## Search
 
@@ -134,19 +136,39 @@ To enter Change Mode (Blue Mode) you can either click on the "z" mode button or 
 
 ![](/public/gif/start/8.gif)
 
+## Constant Inputs
+
 In Change Mode, clicking on an input or output will set it to constant or not:
 
 ![](/public/gif/start/25.gif)
 
+The data in constant inputs is not be consumed during backpropagation:
+
+![](/public/gif/start/56.gif)
+
 > [!NOTE]
 > When saving the current graph, only data in constant inputs will be persisted.
+> ![](/public/gif/start/58.gif)
 
-Clicking on a graph input plug will toggle the input set between functional or not:
+## Functional Inputs
+
+In Change Mode, clicking on a graph input plug will toggle the input set between functional or not:
 
 ![](/public/gif/start/55.gif)
 
+All functional inputs of a graph will have the following behavior:
+
+1. They need to be all activated before data can move into the graph through them.
+2. They are all invalidated together, mening invalidating one functional input will invalidate all others.
+3. They all need to be consumed internally, before they are consumed externally.
+
+![](/public/gif/start/57.gif)
+
 > [!NOTE]
-> All functional inputs need to be all activated before data can move into the graph, and they are also invalidated together.
+>
+> 1. The default inputs of a graph ("iterative" inputs) do not have any particular interlinked behavior.
+> 2. Use functional inputs for configuration, and iterative inputs for stream data.
+> 3. For single-input-single-output graphs, this distinction makes no difference.
 
 ## Graph | Tree View
 
