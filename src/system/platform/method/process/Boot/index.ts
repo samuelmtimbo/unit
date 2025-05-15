@@ -3,7 +3,7 @@ import { Holder } from '../../../../../Class/Holder'
 import { BootOpt, System } from '../../../../../system'
 import { $S } from '../../../../../types/interface/async/$S'
 import { Async } from '../../../../../types/interface/async/Async'
-import { clone } from '../../../../../util/clone'
+import { weakMerge } from '../../../../../weakMerge'
 import { wrapSystem } from '../../../../../wrap/System'
 import { ID_BOOT } from '../../../../_ids'
 
@@ -41,10 +41,10 @@ export default class Boot extends Holder<I, O> {
 
   f({ init }: I, done: Done<O>): void {
     const _system = this.__system.boot({
-      specs: clone(this.__system.specs),
+      ...init,
+      specs: weakMerge(this.__system.specs, init.specs ?? {}),
       classes: this.__system.classes,
       components: this.__system.components,
-      ...init,
     })
 
     this._system = _system
