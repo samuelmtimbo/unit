@@ -1,0 +1,28 @@
+{
+  "name": "debug",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{events?:string[]}"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "moment": {
+      "type": "{event:string,data:object}"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "watch `unit` for specified debug data events",
+    "tags": ["f", "unit"]
+  },
+  "id": "c2184162-4fda-49fb-afc3-6bc882a2736d",
+  "base": true,
+  "type": "`U`"
+}
