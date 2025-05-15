@@ -51,10 +51,14 @@ import {
 } from '../../../spec/evaluate/evaluateBundleSpec'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { stringify } from '../../../spec/stringify'
-import { stringifyGraphSpecData } from '../../../spec/stringifySpec'
+import {
+  stringifyGraphSpecData,
+  stringifyGraphUnitSpecData,
+} from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone } from '../../../util/clone'
 import { weakMerge } from '../../../weakMerge'
+import { Action } from '../../Action'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
@@ -882,6 +886,50 @@ export function evalMoveSubgraph(
   data.moves = data.moves.map((move) => {
     if (move.action.type === SET_UNIT_PIN_DATA) {
       move.action.data.data = evaluate(move.action.data.data, specs, classes)
+    }
+
+    return move
+  })
+}
+
+export function stringifyBulkEdit(data: GraphBulkEditData) {
+  data.actions = stringifyBulkEditActions(data.actions)
+}
+
+export function stringifyBulkEditActions(actions: Action[]) {
+  return actions.map((action) => {
+    action = clone(action)
+
+    if (action.data.data) {
+      action.data.data = stringify(action.data.data)
+    }
+
+    if (action.type === ADD_UNIT) {
+      const { bundle } = action.data
+      const { unit, specs = {} } = bundle
+
+      stringifyGraphUnitSpecData(unit)
+
+      for (const specId in specs) {
+        const spec = specs[specId]
+
+        stringifyGraphSpecData(spec)
+      }
+    } else if (
+      action.type === MOVE_SUBGRAPH_INTO ||
+      action.type === MOVE_SUBGRAPH_OUT_OF
+    ) {
+      stringifyMoveSubgraph(action.data)
+    }
+
+    return action
+  })
+}
+
+export function stringifyMoveSubgraph(data: GraphMoveSubGraphData) {
+  data.moves = data.moves.map((move) => {
+    if (move.action.type === SET_UNIT_PIN_DATA) {
+      move.action.data.data = stringify(move.action.data.data)
     }
 
     return move
