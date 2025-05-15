@@ -57881,14 +57881,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._graph_debug_set_pin_value(pin_node_id, data)
   }
 
-  private _on_graph_unit_ref_link_pin_drop_moment = (
-    _data: GraphUnitPinDropMomentData
-  ) => {
-    // console.log('_on_graph_unit_ref_link_pin_drop_moment', _data)
-
-    this._on_graph_unit_link_pin_drop_moment(_data)
-  }
-
   private _on_graph_unit_destroy = (data: { path: string[] }) => {
     // console.log('_on_graph_unit_destroy', data)
 
@@ -58882,16 +58874,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     output: {
       data: this._on_graph_unit_link_pin_data_moment,
       drop: this._on_graph_unit_link_pin_drop_moment,
-      invalid: this._on_graph_unit_link_pin_invalid_moment,
-    },
-    ref_input: {
-      data: this._on_graph_unit_ref_link_pin_data_moment,
-      drop: this._on_graph_unit_ref_link_pin_drop_moment,
-      invalid: this._on_graph_unit_link_pin_invalid_moment,
-    },
-    ref_output: {
-      data: this._on_graph_unit_ref_link_pin_data_moment,
-      drop: this._on_graph_unit_ref_link_pin_drop_moment,
       invalid: this._on_graph_unit_link_pin_invalid_moment,
     },
     merge: {

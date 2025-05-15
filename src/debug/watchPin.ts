@@ -1,11 +1,11 @@
 import { Pin } from '../Pin'
+import { IO } from '../types/IO'
 import { callAll } from '../util/call/callAll'
 import { PinDataMoment } from './PinDataMoment'
-import { PinType } from './PinType'
 import { watchPinEvent } from './watchPinEvent'
 
 export function watchPin(
-  type: PinType,
+  type: IO,
   pinId: string,
   pin: Pin<any>,
   callback: (moment: PinDataMoment) => void

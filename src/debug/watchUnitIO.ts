@@ -10,10 +10,7 @@ import { Unlisten } from '../types/Unlisten'
 import { remove } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { Moment } from './Moment'
-import { watchDataInput } from './watchInput'
-import { watchDataOutput } from './watchOutput'
-import { watchRefInput } from './watchRefInput'
-import { watchRefOutput } from './watchRefOutput'
+import { watchPin } from './watchPin'
 import { watchUnitErr } from './watchUnitErr'
 import {
   watchComponentAppendChildrenEvent,
@@ -31,32 +28,15 @@ export function watchUnitIO<T extends Unit>(
   let all: Unlisten[] = []
 
   const watch_data_input = events.includes('input')
-  const watch_ref_input = events.includes('ref_input')
-
   const watch_data_output = events.includes('output')
-  const watch_ref_output = events.includes('ref_output')
 
   const watch_rename_input = events.includes('rename_input')
   const watch_rename_output = events.includes('rename_output')
 
   const pin_listener_map: IOOf<Dict<Unlisten>> = emptyIO({}, {})
 
-  const watchPin = (
-    kind: 'ref' | 'data',
-    type: IO,
-    pinId: string,
-    pin: Pin<any>
-  ) => {
-    const unlisten = {
-      ref: {
-        input: watchRefInput,
-        output: watchRefOutput,
-      },
-      data: {
-        input: watchDataInput,
-        output: watchDataOutput,
-      },
-    }[kind][type](pinId, pin, callback)
+  const watchPin_ = (type: IO, pinId: string, pin: Pin<any>) => {
+    const unlisten = watchPin(type, pinId, pin, callback)
 
     pin_listener_map[type][pinId] = unlisten
 
@@ -65,12 +45,9 @@ export function watchUnitIO<T extends Unit>(
     return unlisten
   }
 
-  const makeWatchPin = (
-    type: IO,
-    kind: 'ref' | 'data'
-  ): ((pin, pinId) => void) => {
+  const makeWatchPin = (type: IO): ((pin, pinId) => void) => {
     return (pin: Pin<any>, pinId: string) => {
-      watchPin(kind, type, pinId, pin)
+      watchPin_(type, pinId, pin)
     }
   }
 
@@ -87,24 +64,16 @@ export function watchUnitIO<T extends Unit>(
 
   const listenPin = (type: IO, pinId: string) => {
     const pin = unit.getPin(type, pinId)
-    const ref = unit.isPinRef(type, pinId)
 
-    if (ref && watch_ref_input) {
-      watchPin('ref', type, pinId, pin)
-    } else if (!ref && watch_data_input) {
-      watchPin('data', type, pinId, pin)
-    }
+    watchPin_(type, pinId, pin)
   }
 
   if (watch_data_input) {
-    forEachValueKey(unit.getDataInputs(), makeWatchPin('input', 'data'))
+    forEachValueKey(unit.getDataInputs(), makeWatchPin('input'))
+    forEachValueKey(unit.getRefInputs(), makeWatchPin('input'))
   }
 
-  if (watch_ref_input) {
-    forEachValueKey(unit.getRefInputs(), makeWatchPin('input', 'ref'))
-  }
-
-  if (watch_data_input || watch_ref_input) {
+  if (watch_data_input) {
     all.push(
       unit.addListener('set_input', (pinId: string, pin, { ref }) => {
         listenPin('input', pinId)
@@ -157,21 +126,14 @@ export function watchUnitIO<T extends Unit>(
   )
 
   if (watch_data_output) {
-    forEachValueKey(unit.getDataOutputs(), makeWatchPin('output', 'data'))
+    forEachValueKey(unit.getDataOutputs(), makeWatchPin('output'))
+    forEachValueKey(unit.getRefOutputs(), makeWatchPin('output'))
   }
 
-  if (watch_ref_output) {
-    forEachValueKey(unit.getRefOutputs(), makeWatchPin('output', 'ref'))
-  }
-
-  if (watch_data_output || watch_ref_output) {
+  if (watch_data_output) {
     all.push(
-      unit.addListener('set_output', (pinId: string, pin, { ref }) => {
-        if (ref && watch_ref_output) {
-          watchPin('ref', 'output', pinId, pin)
-        } else if (!ref && watch_data_output) {
-          watchPin('data', 'output', pinId, pin)
-        }
+      unit.addListener('set_output', (pinId: string, pin) => {
+        watchPin_('output', pinId, pin)
       })
     )
   }
