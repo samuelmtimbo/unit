@@ -138,7 +138,7 @@ export const appendSubComponentChild = (
   }: { parentId: string; childId: string; slotName: string },
   state: GraphComponentSpec
 ): void => {
-  const { subComponents } = state
+  const { subComponents = {} } = state
 
   subComponents[parentId] = subComponents[parentId] ?? {}
 
@@ -162,7 +162,7 @@ export const insertSubComponentChild = (
   }: { parentId: string; childId: string; slotName: string; at: number },
   state: GraphComponentSpec
 ): void => {
-  const { subComponents } = state
+  const { subComponents = {} } = state
 
   subComponents[parentId] = subComponents[parentId] ?? {}
 
