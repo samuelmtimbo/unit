@@ -59,6 +59,7 @@ import {
   getPlugSpecs,
   hasMerge,
   hasMergePin,
+  isMergeRef,
   isPinRef,
   isSelfPin,
   opposite,
@@ -2325,6 +2326,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPinId: string,
     propagate: boolean = true
   ): void => {
+    const { specs } = this.__system
+
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
     const {
@@ -2342,7 +2345,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const active = pin.active()
 
     if (_mergeId) {
-      if (output) {
+      const ref = isMergeRef(specs, this._spec, _mergeId)
+
+      if (output && !ref) {
         this._simRemoveMergeOutput(_mergeId, propagate)
       }
 
