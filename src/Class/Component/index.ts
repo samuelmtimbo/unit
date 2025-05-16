@@ -7,6 +7,7 @@ import {
   appendParentChild,
   cancelAnimation,
   hasChild,
+  insertChild,
   pullChild,
   pushChild,
   refChild,
@@ -153,7 +154,7 @@ export class Component__<
   }
 
   insertChild(Bundle: UnitBundle, at: number): void {
-    throw new MethodNotImplementedError()
+    return insertChild(this, this._children, Bundle, at)
   }
 
   pushChild(Bundle: UnitBundle): number {
