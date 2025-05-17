@@ -1,23 +1,26 @@
 {
-  "name": "group",
+  "name": "view",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "viewBox": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'0 0 100 100'"]
+      }
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG view element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "4e555154-695c-471a-8a91-47bda70f8110",
   "base": true,
   "component": {
     "defaultWidth": 200,

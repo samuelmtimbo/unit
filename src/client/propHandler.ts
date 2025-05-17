@@ -57,6 +57,40 @@ export function svgPropHandler<P extends Dict<any> = any>(
   return {
     ...basePropHandler(component, element, DEFAULT_STYLE, DEFAULT_ATTR),
     ...stylePropHandler(component, element, DEFAULT_STYLE),
+    ...{
+      x: (
+        x: number | undefined = component.$props.attr.x ?? DEFAULT_ATTR.x
+      ) => {
+        element.setAttribute('x', `${x}`)
+      },
+      y: (
+        y: number | undefined = component.$props.attr.y ?? DEFAULT_ATTR.y
+      ) => {
+        element.setAttribute('y', `${y}`)
+      },
+      width: (
+        width: number | undefined = component.$props.attr.width ??
+          DEFAULT_ATTR.width
+      ) => {
+        element.setAttribute('width', `${width}`)
+      },
+      height: (
+        height: number | undefined = component.$props.attr.height ??
+          DEFAULT_ATTR.height
+      ) => {
+        element.setAttribute('height', `${height}`)
+      },
+      rx: (
+        rx: number | undefined = component.$props.attr.rx ?? DEFAULT_ATTR.rx
+      ) => {
+        element.setAttribute('rx', `${rx}`)
+      },
+      ry: (
+        ry: number | undefined = component.$props.attr.ry ?? DEFAULT_ATTR.ry
+      ) => {
+        element.setAttribute('ry', `${ry}`)
+      },
+    },
   }
 }
 

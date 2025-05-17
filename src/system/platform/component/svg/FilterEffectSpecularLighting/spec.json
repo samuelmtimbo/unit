@@ -1,0 +1,38 @@
+{
+  "name": "filter effect specular lighting",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "specularExponent": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "lightingColor": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'white'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG faSpecularLighting element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "e98c55d5-9dce-4ca3-b7e5-08aa6b18eacf",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

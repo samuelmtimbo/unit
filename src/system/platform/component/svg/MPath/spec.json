@@ -1,23 +1,22 @@
 {
-  "name": "group",
+  "name": "mpath",
   "inputs": {
-    "style": {
+    "attr": {
       "type": "object",
       "optional": true
     },
-    "attr": {
-      "type": "object",
-      "optional": true,
-      "defaultIgnored": true
+    "href": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG tspan element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "a95746c4-013d-4dd4-8488-fdca75c4757b",
   "base": true,
   "component": {
     "defaultWidth": 200,

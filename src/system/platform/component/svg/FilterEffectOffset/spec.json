@@ -1,0 +1,38 @@
+{
+  "name": "filter effect offset",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "dx": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "dy": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG feOffset element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "9023fbd3-8308-4436-a26a-cc19044183e4",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

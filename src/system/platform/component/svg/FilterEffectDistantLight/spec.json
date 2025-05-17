@@ -1,0 +1,38 @@
+{
+  "name": "filter effect distant light",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "azimuth": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "elevation": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG faSpotlLight element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "fc78d9fd-45dc-4b01-83d9-8979b5697f56",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

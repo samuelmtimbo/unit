@@ -1,0 +1,59 @@
+{
+  "name": "filter effect spot light",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "x": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "y": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "z": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "pointsAtX": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    },
+    "pointsAtY": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG faSpotlLight element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "01193871-ae03-4ab3-9d06-e9956b28e626",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

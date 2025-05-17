@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "switch",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG switch element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "c68b0424-ced2-43b3-ac82-965163579f7e",
   "base": true,
   "component": {
     "defaultWidth": 200,

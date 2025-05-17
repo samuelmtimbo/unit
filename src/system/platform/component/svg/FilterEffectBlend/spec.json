@@ -1,0 +1,43 @@
+{
+  "name": "filter effect blend",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "in": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'SourceGraphic'"]
+      }
+    },
+    "in2": {
+      "type": "string",
+      "metadata": {
+        "examples": ["'BackgroundImage'"]
+      }
+    },
+    "mode": {
+      "type": "string",
+      "metadata": {
+        "examples": ["'multiply'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG feBlend element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "066655a1-b9ac-4877-a258-53c8a008db0e",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

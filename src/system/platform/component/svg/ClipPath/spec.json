@@ -1,23 +1,23 @@
 {
-  "name": "group",
+  "name": "clip path",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "id": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG filter element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "8a204a3a-12af-4970-8851-464ebb91342e",
   "base": true,
   "component": {
     "defaultWidth": 200,

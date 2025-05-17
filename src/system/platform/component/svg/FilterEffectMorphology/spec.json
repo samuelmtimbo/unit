@@ -1,0 +1,38 @@
+{
+  "name": "filter effect morphology",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "operator": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'erode','dilate'"]
+      }
+    },
+    "radius": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["2"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG feMorphology element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "541f7ae5-3db1-4344-8e87-f42e4d1fdfe8",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

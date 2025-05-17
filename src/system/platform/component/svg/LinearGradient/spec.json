@@ -1,0 +1,44 @@
+{
+  "name": "linear gradient",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "id": {
+      "type": "string",
+      "optional": true
+    },
+    "x1": {
+      "type": "string",
+      "optional": true
+    },
+    "y1": {
+      "type": "string",
+      "optional": true
+    },
+    "x2": {
+      "type": "string",
+      "optional": true
+    },
+    "y2": {
+      "type": "string",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG linearGradient element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "a693fa9e-1ab3-4145-968a-9c234a7df038",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

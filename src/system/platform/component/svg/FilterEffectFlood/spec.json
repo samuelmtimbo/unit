@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect flood",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feMergeNode element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "d94b1e9d-0445-4e54-a549-b79e47a3c7a0",
   "base": true,
   "component": {
     "defaultWidth": 200,

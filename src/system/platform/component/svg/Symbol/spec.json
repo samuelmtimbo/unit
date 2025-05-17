@@ -1,6 +1,11 @@
 {
-  "name": "group",
+  "name": "symbol",
   "inputs": {
+    "id": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
     "style": {
       "type": "object",
       "optional": true
@@ -14,10 +19,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG symbol element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "3c629fa2-6cc6-4ebc-b265-80444b446d2b",
   "base": true,
   "component": {
     "defaultWidth": 200,

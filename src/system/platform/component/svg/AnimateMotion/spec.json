@@ -1,0 +1,35 @@
+{
+  "name": "animate motion",
+  "inputs": {
+    "dur": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["'0.2s', '1s', '3s'"]
+      }
+    },
+    "repeatCount": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["'indefinite'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG animate motion element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "9140df42-1c5e-4e18-a106-6ad9be30bb55",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

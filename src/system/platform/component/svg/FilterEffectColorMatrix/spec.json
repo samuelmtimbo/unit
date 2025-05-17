@@ -1,0 +1,37 @@
+{
+  "name": "filter effect color matrix",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "type": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'matrix'"]
+      }
+    },
+    "values": {
+      "type": "string",
+      "metadata": {
+        "examples": ["'1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG feColorMatrix element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "6a9360da-a323-4e67-b522-4dbd704483a3",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

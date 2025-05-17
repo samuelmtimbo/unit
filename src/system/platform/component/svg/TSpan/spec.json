@@ -1,23 +1,18 @@
 {
-  "name": "group",
+  "name": "tspan",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
-      "optional": true,
-      "defaultIgnored": true
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG tspan element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "e535bcf4-395f-41c7-afa4-01a4861c8859",
   "base": true,
   "component": {
     "defaultWidth": 200,

@@ -32,36 +32,7 @@ export default class SVGRect extends SVGElement_<SVGRectElement, Props> {
       $system.api.document.createElementNS(namespaceURI, 'rect'),
       $system.style['rect'],
       {},
-      {
-        x: (x: number | undefined = this.$props.attr.x ?? DEFAULT_ATTR.x) => {
-          this.$element.setAttribute('x', `${x}`)
-        },
-        y: (y: number | undefined = this.$props.attr.y ?? DEFAULT_ATTR.y) => {
-          this.$element.setAttribute('y', `${y}`)
-        },
-        width: (
-          width: number | undefined = this.$props.attr.width ??
-            DEFAULT_ATTR.width
-        ) => {
-          this.$element.setAttribute('width', `${width}`)
-        },
-        height: (
-          height: number | undefined = this.$props.attr.height ??
-            DEFAULT_ATTR.height
-        ) => {
-          this.$element.setAttribute('height', `${height}`)
-        },
-        rx: (
-          rx: number | undefined = this.$props.attr.rx ?? DEFAULT_ATTR.rx
-        ) => {
-          this.$element.setAttribute('rx', `${rx}`)
-        },
-        ry: (
-          ry: number | undefined = this.$props.attr.ry ?? DEFAULT_ATTR.ry
-        ) => {
-          this.$element.setAttribute('ry', `${ry}`)
-        },
-      }
+      {}
     )
 
     const {

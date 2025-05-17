@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect gaussian blur",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feGaussianBlur element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "8fa07772-cd92-4b7b-b876-29883a27d7c7",
   "base": true,
   "component": {
     "defaultWidth": 200,

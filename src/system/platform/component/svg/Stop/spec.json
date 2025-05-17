@@ -1,0 +1,45 @@
+{
+  "name": "stop",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "offset": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'0'"]
+      }
+    },
+    "stopColor": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'red'"]
+      }
+    },
+    "stopOpacity": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["'1'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG view element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "56744e26-6909-4432-9849-2c77b0f2f2bf",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

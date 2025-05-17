@@ -1,25 +1,26 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { Dict } from '../../../../../types/Dict'
-import { ID_GROUP } from '../../../../_ids'
+import { ID_POLYLINE } from '../../../../_ids'
+import { Attr, Style } from '../../../Style'
 
 export interface I {
-  style: object
-  attr: Dict<string>
+  attr: Attr
+  style: Style
+  points: string
 }
 
 export interface O {}
 
-export default class SVGGroup extends Element_<I, O> {
+export default class SVGPolyline extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'attr'],
+        i: ['attr', 'style', 'points'],
         o: [],
       },
       {},
       system,
-      ID_GROUP
+      ID_POLYLINE
     )
   }
 }

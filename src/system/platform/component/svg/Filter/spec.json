@@ -1,23 +1,23 @@
 {
-  "name": "group",
+  "name": "filter",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "id": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG filter element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "7bc94934-0b91-46ca-bf45-7b5d2918dd6a",
   "base": true,
   "component": {
     "defaultWidth": 200,

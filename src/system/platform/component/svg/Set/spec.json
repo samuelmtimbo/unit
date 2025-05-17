@@ -1,0 +1,44 @@
+{
+  "name": "set",
+  "inputs": {
+    "attributeName": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "to": {
+      "type": "string",
+      "optional": true
+    },
+    "begin": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["'0s', '1s"]
+      }
+    },
+    "dur": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["'0.2s', '1s', '3s'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG set element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "224dcb68-db0e-494c-8b91-7e2ebe0051c6",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

@@ -1,23 +1,23 @@
 {
-  "name": "group",
+  "name": "mask",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "id": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG mask element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "a9d998f8-4e62-40b0-8c4d-440e39d28ca3",
   "base": true,
   "component": {
     "defaultWidth": 200,

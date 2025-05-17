@@ -1,5 +1,5 @@
 {
-  "name": "group",
+  "name": "image",
   "inputs": {
     "style": {
       "type": "object",
@@ -9,15 +9,31 @@
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "x": {
+      "type": "string",
+      "optional": true
+    },
+    "y": {
+      "type": "string",
+      "optional": true
+    },
+    "width": {
+      "type": "string",
+      "optional": true
+    },
+    "height": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG image element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "3865cbaf-aac1-4640-b809-c08f979b67f0",
   "base": true,
   "component": {
     "defaultWidth": 200,

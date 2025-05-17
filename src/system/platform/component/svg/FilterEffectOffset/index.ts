@@ -1,25 +1,26 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_GROUP } from '../../../../_ids'
+import { ID_FILTER_EFFECT_OFFSET } from '../../../../_ids'
 
 export interface I {
-  style: object
   attr: Dict<string>
+  dx: number
+  dy: number
 }
 
 export interface O {}
 
-export default class SVGGroup extends Element_<I, O> {
+export default class SVGSFilterEffectOffset extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'attr'],
+        i: ['attr', 'dx', 'dy'],
         o: [],
       },
       {},
       system,
-      ID_GROUP
+      ID_FILTER_EFFECT_OFFSET
     )
   }
 }

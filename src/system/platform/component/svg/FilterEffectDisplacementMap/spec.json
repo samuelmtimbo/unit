@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect displacement map",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feDisplacementMap element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "1e9b1142-bbcf-4627-8cc2-86d5a3bb3dd1",
   "base": true,
   "component": {
     "defaultWidth": 200,

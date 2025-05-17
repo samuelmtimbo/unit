@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect drop shadow",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feMergeNode element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "0c15cd43-6997-4f9f-b52f-acd4c0ed0670",
   "base": true,
   "component": {
     "defaultWidth": 200,

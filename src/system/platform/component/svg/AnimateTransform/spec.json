@@ -1,0 +1,52 @@
+{
+  "name": "animate transform",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true
+    },
+    "attributeName": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "from": {
+      "type": "string",
+      "optional": true
+    },
+    "to": {
+      "type": "string",
+      "optional": true
+    },
+    "dur": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["'0.2s', '1s', '3s'"]
+      }
+    },
+    "repeatCount": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["'indefinite'"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG animate transform element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "25f45f9e-1a62-4b96-9347-7ea5bc0af651",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

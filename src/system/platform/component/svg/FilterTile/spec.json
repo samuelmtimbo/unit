@@ -1,0 +1,38 @@
+{
+  "name": "filter effect tile",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "in": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["circle.svg"]
+      }
+    },
+    "elevation": {
+      "type": "number",
+      "optional": true,
+      "metadata": {
+        "examples": ["0"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG faSpotlLight element",
+    "tags": ["platform", "component", "svg"]
+  },
+  "id": "bdce9206-5331-47dd-a111-902ee41f16ce",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}

@@ -1,23 +1,23 @@
 {
-  "name": "group",
+  "name": "radial gradient",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "id": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG radialGradient element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "d1c76124-8869-4145-ba30-e3604e928527",
   "base": true,
   "component": {
     "defaultWidth": 200,

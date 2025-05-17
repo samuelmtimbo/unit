@@ -1,23 +1,27 @@
 {
-  "name": "group",
+  "name": "filter effect convolve matrix",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "order": {
+      "type": "number",
+      "optional": true
+    },
+    "kernelMatrix": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feConvolveMatrix element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "7db232f5-870c-418a-8efd-fa9bba6c8c4a",
   "base": true,
   "component": {
     "defaultWidth": 200,

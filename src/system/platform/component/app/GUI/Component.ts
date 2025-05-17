@@ -23,7 +23,7 @@ import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
-import { ID_SWITCH } from '../../../../_ids'
+import { ID_SWITCH_0 } from '../../../../_ids'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
 import Parent from '../../Parent/Component'
@@ -145,7 +145,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     const { component: color_theme } = graphComponentFromId(
       this.$system,
-      ID_SWITCH,
+      ID_SWITCH_0,
       {
         style: {
           height: '26px',

@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect component transfer",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feComponentTransfer element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "90d0f768-3991-4cd3-9995-07d0dab6d41c",
   "base": true,
   "component": {
     "defaultWidth": 200,

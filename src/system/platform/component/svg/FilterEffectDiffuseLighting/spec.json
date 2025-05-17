@@ -1,23 +1,27 @@
 {
-  "name": "group",
+  "name": "filter effect diffuse lighting",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
       "defaultIgnored": true
+    },
+    "lightingColor": {
+      "type": "string",
+      "optional": true
+    },
+    "surfaceScale": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feDiffuseLighting element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "fdae0046-d36c-4b21-bb1d-77182d89cadf",
   "base": true,
   "component": {
     "defaultWidth": 200,

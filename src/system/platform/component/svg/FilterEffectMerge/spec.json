@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect merge",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feMergeNode element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "f87fd33f-c02a-4238-959f-3520611c7903",
   "base": true,
   "component": {
     "defaultWidth": 200,

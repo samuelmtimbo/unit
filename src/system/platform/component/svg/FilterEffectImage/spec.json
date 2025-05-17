@@ -1,10 +1,6 @@
 {
-  "name": "group",
+  "name": "filter effect image",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true
-    },
     "attr": {
       "type": "object",
       "optional": true,
@@ -14,10 +10,10 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG G",
+    "description": "SVG feImage element",
     "tags": ["platform", "component", "svg"]
   },
-  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "id": "bc9e9f08-877a-4814-a33f-ee80c013fca3",
   "base": true,
   "component": {
     "defaultWidth": 200,

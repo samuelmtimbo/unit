@@ -1,25 +1,26 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_GROUP } from '../../../../_ids'
+import { ID_FILTER_EFFECT_COLOR_MATRIX } from '../../../../_ids'
 
 export interface I {
-  style: object
   attr: Dict<string>
+  type: string
+  values: string
 }
 
 export interface O {}
 
-export default class SVGGroup extends Element_<I, O> {
+export default class SVGSFilterEffectColorMatrix extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'attr'],
+        i: ['attr', 'type', 'values'],
         o: [],
       },
       {},
       system,
-      ID_GROUP
+      ID_FILTER_EFFECT_COLOR_MATRIX
     )
   }
 }
