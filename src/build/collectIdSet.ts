@@ -1,4 +1,3 @@
-import { deepGet } from '../util/object'
 import { evaluateDataValue } from '../spec/evaluateDataValue'
 import _classes from '../system/_classes'
 import _specs from '../system/_specs'
@@ -9,6 +8,7 @@ import { GraphSpec } from '../types/GraphSpec'
 import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
+import { deepGet } from '../util/object'
 
 export function collectUnitIdSet(
   unit: GraphUnitSpec,
@@ -41,7 +41,7 @@ export function collectUnitIdSet(
     if (data !== undefined) {
       const dataRef = evaluateDataValue(data, _specs, _classes)
 
-      for (const path of (dataRef.ref ?? [])) {
+      for (const path of dataRef.ref ?? []) {
         const bundle = deepGet(dataRef.data, path)
 
         buildBundleIdSet(bundle)

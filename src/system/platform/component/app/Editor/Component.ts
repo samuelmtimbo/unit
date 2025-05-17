@@ -217,7 +217,10 @@ import { listenMovement } from '../../../../../client/listenMovement'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
-import { rawExtractStyle } from '../../../../../client/rawExtractStyle'
+import {
+  cssTextToObj,
+  rawExtractStyle,
+} from '../../../../../client/rawExtractStyle'
 import {
   buildTree,
   expandSlot,
@@ -680,6 +683,7 @@ import { bit } from '../../../../../util/boolean'
 import { callAll } from '../../../../../util/call/callAll'
 import { clone } from '../../../../../util/clone'
 import { parseNumberSentence } from '../../../../../util/dictation'
+import { elementToJson } from '../../../../../util/element'
 import { readFileAsText } from '../../../../../util/file'
 import { hashCode } from '../../../../../util/hashCode'
 import { randomIdNotIn } from '../../../../../util/id'
@@ -703,6 +707,7 @@ import {
   revertObj,
 } from '../../../../../util/object'
 import { localeCompare, removeWhiteSpace } from '../../../../../util/string'
+import { TAG_TO_SPEC_ID } from '../../../../../util/tagToId'
 import { getDivTextSize } from '../../../../../util/text/getDivTextSize'
 import { getTextWidth } from '../../../../../util/text/getPlainTextWidth'
 import { getTextLines, spaces } from '../../../../../util/text/getTextLines'
@@ -3720,12 +3725,58 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _drop_image_file__template = (
+    file: File | Blob,
+    callback: (
+      imageDataUrl: string,
+      image: HTMLImageElement,
+      size: Size
+    ) => void
+  ) => {
+    const reader = new FileReader()
+
+    reader.onload = async (e) => {
+      const image_data_url = e.target.result.toString()
+
+      const image = this.$system.api.document.createElement('img')
+
+      image.src = image_data_url
+
+      image.onload = () => {
+        const ratio = image.naturalWidth / image.naturalHeight
+
+        let width = image.naturalWidth
+        let height = image.naturalHeight
+
+        if (width > height) {
+          width = clamp(width, MIN_WIDTH, MAX_DROP_ELEMENT_WIDTH)
+          height = width / ratio
+        } else {
+          height = clamp(height, MIN_HEIGHT, MAX_DROP_ELEMENT_HEIGHT)
+          width = height * ratio
+        }
+
+        callback(image_data_url, image, { width, height })
+
+        image.onload = null
+      }
+    }
+
+    reader.readAsDataURL(file)
+
+    return
+  }
+
   private _drop_file = async (
     file: File | Blob,
     position?: Position
   ): Promise<void> => {
     if (file.type.startsWith('image/')) {
-      return this._drop_image_file(file, position)
+      if (file.type.endsWith('/svg+xml')) {
+        return this._drop_svg_file(file, position)
+      } else {
+        return this._drop_image_file(file, position)
+      }
     } else if (file.type.startsWith('audio/')) {
       return this._drop_audio_file(file, position)
     } else if (file.type.startsWith('video/')) {
@@ -3756,33 +3807,164 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _drop_svg_file = async (file: File | Blob, position?: Position) => {
+    return this._drop_image_file__template(
+      file,
+      async (_: string, __: HTMLImageElement, { width, height }) => {
+        const { specs, getSpec, newSpec } = this.$props
+
+        type Tag = { tag: string; attr: Dict<string>; children: Tag[] }
+
+        const text = await file.text()
+
+        const parser = new DOMParser()
+
+        const svgDoc = parser.parseFromString(text, 'image/svg+xml')
+
+        const svg = svgDoc.documentElement
+
+        const tree = elementToJson(svg)
+
+        let name = 'untitled'
+
+        if (file instanceof File) {
+          name = file.name
+        }
+
+        const template_spec = {
+          name,
+          render: true,
+          units: {},
+          component: { defaultWidth: width, defaultHeight: height },
+        }
+
+        const addChild = (node: Tag, parent_id: string | null) => {
+          const node_spec_id = TAG_TO_SPEC_ID[node.tag]
+          const node_unit_id = newUnitId(specs, template_spec, node_spec_id)
+          const node_spec = getSpec(node_spec_id)
+
+          const attr = clone(node.attr)
+
+          const parseProp = (prop: string, value: string): any => {
+            if (prop === 'style') {
+              return cssTextToObj(value)
+            }
+
+            return value
+          }
+
+          const SURFACE_PROPS = ['style', 'd', 'x', 'y', 'width', 'height']
+
+          const input = {
+            attr: {
+              constant: true,
+              ignored: false,
+              data: { ref: [], data: attr },
+            },
+          }
+
+          for (const prop of SURFACE_PROPS) {
+            if (attr[prop] && node_spec.inputs?.[prop]) {
+              input[prop] = {
+                constant: true,
+                ignored: false,
+                data: {
+                  ref: [],
+                  data: parseProp(prop, attr[prop]),
+                },
+              }
+            }
+
+            delete attr[prop]
+          }
+
+          addUnit(
+            {
+              unitId: node_unit_id,
+              unit: {
+                id: node_spec_id,
+                input,
+              },
+            },
+            template_spec
+          )
+
+          setSubComponent(
+            { unitId: node_unit_id, subComponent: {} },
+            template_spec.component
+          )
+
+          if (parent_id) {
+            appendSubComponentChild(
+              {
+                parentId: parent_id,
+                childId: node_unit_id,
+                slotName: 'default',
+              },
+              template_spec.component
+            )
+          } else {
+            appendRoot({ childId: node_unit_id }, template_spec.component)
+          }
+
+          for (const child of node.children) {
+            addChild(child, node_unit_id)
+          }
+        }
+
+        addChild(tree, null)
+
+        const new_spec = newSpec(emptySpec(template_spec))
+
+        const new_unit_id = this._new_unit_id(new_spec.id)
+
+        const bundle: UnitBundleSpec = {
+          unit: {
+            id: new_spec.id,
+            metadata: {
+              component: {
+                width,
+                height,
+              },
+            },
+          },
+          specs: {
+            [new_spec.id]: new_spec,
+          },
+        }
+
+        const center_of_screen = position ?? this._jiggle_world_screen_center()
+
+        this._add_unit(
+          new_unit_id,
+          bundle,
+          null,
+          null,
+          null,
+          position,
+          {},
+          center_of_screen
+        )
+
+        this._sim_add_sub_component(
+          new_unit_id,
+          undefined,
+          undefined,
+          undefined
+        )
+
+        this._connect_sub_component(new_unit_id)
+      }
+    )
+  }
+
   private _drop_image_file = async (file: File | Blob, position?: Position) => {
-    const reader = new FileReader()
-
-    reader.onload = async (e) => {
-      const image_data_url = e.target.result.toString()
-
-      const image = this.$system.api.document.createElement('img')
-
-      image.src = image_data_url
-
-      image.onload = () => {
+    return this._drop_image_file__template(
+      file,
+      (image_data_url: string, image: HTMLImageElement, { width, height }) => {
         const id = ID_IMAGE_1
 
         const new_unit_id = this._new_unit_id(id)
-
-        const ratio = image.naturalWidth / image.naturalHeight
-
-        let width = image.naturalWidth
-        let height = image.naturalHeight
-
-        if (width > height) {
-          width = clamp(width, MIN_WIDTH, MAX_DROP_ELEMENT_WIDTH)
-          height = width / ratio
-        } else {
-          height = clamp(height, MIN_HEIGHT, MAX_DROP_ELEMENT_HEIGHT)
-          width = height * ratio
-        }
 
         const bundle: UnitBundleSpec = {
           unit: {
@@ -3829,14 +4011,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
 
         this._connect_sub_component(new_unit_id)
-
-        image.onload = null
       }
-    }
-
-    reader.readAsDataURL(file)
-
-    return
+    )
   }
 
   private _drop_audio_file = async (file: File | Blob, position: Position) => {

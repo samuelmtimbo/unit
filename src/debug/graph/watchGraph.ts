@@ -62,7 +62,7 @@ export function watchGraph<T extends Graph>(
     const input = merge.getInput(mergeInputNodeId)
 
     const unlisten = watchPin(
-      'merge',
+      'input',
       mergeId,
       input,
       ({ type, event, data }: Moment) => {

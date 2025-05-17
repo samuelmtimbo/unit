@@ -1,4 +1,5 @@
 import { IOElement } from '../client/IOElement'
+import { Dict } from '../types/Dict'
 
 export function appendChild<T extends Node>(node: Node, newChild: T): T {
   return node.appendChild(newChild)
@@ -50,5 +51,17 @@ export function insertAt(node: Node, newChild: Node, at: number) {
     return insertBefore(node, newChild, currentChild)
   } else {
     return appendChild(node, newChild)
+  }
+}
+
+export type Tag = { tag: string; attr: Dict<string>; children: Tag[] }
+
+export function elementToJson(element: HTMLElement): Tag {
+  return {
+    tag: element.tagName,
+    attr: Object.fromEntries(
+      [...element.attributes].map((attr) => [attr.name, attr.value])
+    ),
+    children: [...element.children].map(elementToJson),
   }
 }
