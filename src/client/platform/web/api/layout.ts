@@ -1,4 +1,5 @@
 import { API } from '../../../../API'
+import { isFrameRelativeValue } from '../../../../isFrameRelative'
 import { BootOpt, System } from '../../../../system'
 import { Style, Tag } from '../../../../system/platform/Style'
 import { traverseTree, Tree } from '../../../../tree'
@@ -7,13 +8,21 @@ import { mergeAttr } from '../../../attr'
 import { colorToHex, hexToRgba, RGBA, rgbaToHex } from '../../../color'
 import { namespaceURI } from '../../../component/namespaceURI'
 import { parseLayoutValue } from '../../../parseLayoutValue'
+import { parseRelativeUnit } from '../../../parseRelativeUnit'
 import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
 
+export const LENGTH_STYLE_PROP_NAMES = [
+  'width',
+  'height',
+  'maxWidth',
+  'maxHeight',
+]
+
 export const isTextName = (tag: string) => {
-  return ['text', 'button'].includes(tag)
+  return ['text'].includes(tag)
 }
 
 export const isSVGName = (tag: string) => {
@@ -187,6 +196,18 @@ const tagToElement = (
 
   if (isText) {
     container.style.display = 'inline'
+  }
+
+  const transformRelative = (name: string) => {
+    return parseRelativeUnit(style[name], trait[name], trait[name])
+  }
+
+  for (const name of LENGTH_STYLE_PROP_NAMES) {
+    if (style[name] && isFrameRelativeValue(style[name])) {
+      const width = transformRelative(name)
+
+      container.style[name] = `${width}px`
+    }
   }
 
   return { element, container }

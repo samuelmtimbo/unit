@@ -216,6 +216,7 @@ import { LayoutBase } from '../../../../../client/layout'
 import { listenMovement } from '../../../../../client/listenMovement'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
+import { LENGTH_STYLE_PROP_NAMES } from '../../../../../client/platform/web/api/layout'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import {
   cssTextToObj,
@@ -350,6 +351,7 @@ import { CodePathNotImplementedError } from '../../../../../exception/CodePathNo
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
 import { ShouldNeverHappenError } from '../../../../../exception/ShouldNeverHappenError'
 import { injectUserBundle, injectUserSpecs } from '../../../../../injectBundle'
+import { isFrameRelativeValue } from '../../../../../isFrameRelative'
 import { mirror } from '../../../../../mirror'
 import { proxyWrap } from '../../../../../proxyWrap'
 import {
@@ -20946,6 +20948,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       leaf_frame.appendChild(leaf_comp)
 
+      const style_prop = leaf_comp.getProp('style') ?? {}
       const style = rawExtractStyle(leaf_comp.$node, leaf_node, measureText)
       const leaf_style = extractStyle(leaf_comp, leaf_node, measureText)
 
@@ -21020,6 +21023,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           slot = slot.$rootParent ?? slot.$parent?.$rootParent
         } while (slot)
+      }
+
+      for (const name of LENGTH_STYLE_PROP_NAMES) {
+        if (style_prop[name] && isFrameRelativeValue(style_prop[name])) {
+          leaf_style[name] = style_prop[name]
+        }
       }
 
       this._leaf_init_style[leaf_id] = style

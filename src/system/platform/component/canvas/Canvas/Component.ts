@@ -155,13 +155,13 @@ export default class Canvas_
 
     this.$element.width = parseRelativeUnit(
       width,
-      this._get_parent_width,
-      this._get_frame_width
+      this._get_parent_width(),
+      this._get_frame_width()
     )
     this.$element.height = parseRelativeUnit(
       height,
-      this._get_parent_height,
-      this._get_frame_height
+      this._get_parent_height(),
+      this._get_frame_height()
     )
 
     const ctx = this.$element.getContext('2d', { willReadFrequently: true })

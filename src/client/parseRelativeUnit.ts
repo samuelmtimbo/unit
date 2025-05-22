@@ -3,8 +3,8 @@ import { isParentRelativeValue } from '../isParentRelative'
 
 export function parseRelativeUnit(
   value: number | string,
-  getParentUnit: () => number,
-  getFrameUnit: () => number
+  parentLength: number,
+  frameLength: number
 ): number {
   if (typeof value === 'number') {
     return value
@@ -12,15 +12,13 @@ export function parseRelativeUnit(
     if (isParentRelativeValue(value)) {
       const valueNum = value.substring(0, value.length - 1)
       const valueUnit = Number.parseFloat(valueNum)
-      const parentUnit: number = getParentUnit()
       const percent = valueUnit / 100
-      return percent * parentUnit
+      return percent * parentLength
     } else if (isFrameRelativeValue(value)) {
       const valueNum = value.substring(0, value.length - 2)
       const valueUnit = Number.parseFloat(valueNum)
-      const frameUnit: number = getFrameUnit()
       const percent = valueUnit / 100
-      return percent * frameUnit
+      return percent * frameLength
     } else {
       const valueUnit = Number.parseFloat(value)
       return valueUnit
