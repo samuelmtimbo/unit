@@ -38,6 +38,7 @@ const shouldExpandStyle = (style: Style) => {
 }
 
 const maybeExpand = (
+  parentTrait: LayoutNode,
   tag: Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement },
   path: number[],
   expandChild: (
@@ -47,11 +48,12 @@ const maybeExpand = (
   const shouldExpand = shouldExpandStyle(tag.style)
 
   if (shouldExpand) {
-    expand(tag, path, expandChild)
+    expand(parentTrait, tag, path, expandChild)
   }
 }
 
 const expand = (
+  parentTrait: LayoutNode,
   tag: Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement },
   path: number[],
   expandChild: (
@@ -63,19 +65,25 @@ const expand = (
   let i = 0
 
   for (const childTag of childrenTags) {
-    const { container, element } = tagToElement(childTag, 'div')
+    const { container, element } = tagToElement(
+      childTag,
+      parentTrait,
+      'div',
+      false
+    )
 
     childTag.element = element
 
     tag.element.appendChild(container)
 
-    maybeExpand(childTag, [...path, i], expandChild)
+    maybeExpand(parentTrait, childTag, [...path, i], expandChild)
 
     i++
   }
 }
 
 const fitTreeChildren = (
+  parentTrait: LayoutNode,
   parentNode: HTMLElement | SVGElement,
   tree: Tree<
     Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement }
@@ -90,9 +98,14 @@ const fitTreeChildren = (
 
     const tag = node.value
 
+    const parentTagName = parentNode.tagName.toLowerCase()
+    const isLeaf = node.children.length === 0
+
     const { container, element } = tagToElement(
       tag,
-      parentNode.tagName.toLowerCase()
+      parentTrait,
+      parentTagName,
+      isLeaf
     )
 
     node.value.element = element
@@ -100,16 +113,21 @@ const fitTreeChildren = (
     parentNode.appendChild(container)
 
     if (!node.children.length) {
-      maybeExpand(tag, childPath, expandChild)
+      maybeExpand(parentTrait, tag, childPath, expandChild)
     }
 
-    fitTreeChildren(element, node.children, childPath, expandChild)
+    fitTreeChildren(parentTrait, element, node.children, childPath, expandChild)
 
     i++
   }
 }
 
-const tagToElement = (child: Tag, parentTagName: string) => {
+const tagToElement = (
+  child: Tag,
+  trait: LayoutNode,
+  parentTagName: string,
+  isLeaf: boolean
+) => {
   const { name, attr, style, textContent } = child
 
   let tag = name.replace('#', '').toLocaleLowerCase()
@@ -163,9 +181,11 @@ const tagToElement = (child: Tag, parentTagName: string) => {
   mergeAttr(element, attr)
   applyStyle(element, style)
 
-  if (isText) {
+  if (isLeaf) {
     container.textContent = textContent
+  }
 
+  if (isText) {
     container.style.display = 'inline'
   }
 
@@ -193,7 +213,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
       parentNode.style.margin = '0'
       parentNode.style.color = rgbaToHex(parentTrait.color)
 
-      fitTreeChildren(parentNode, tree, [], expandChild)
+      fitTreeChildren(parentTrait, parentNode, tree, [], expandChild)
 
       system.foreground.layout.appendChild(parentNode)
 
