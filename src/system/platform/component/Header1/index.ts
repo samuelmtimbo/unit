@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { ID_HEADER_2 } from '../../../_ids'
+import { ID_HEADER_1 } from '../../../_ids'
 
 export interface I {
   style: object
@@ -10,7 +10,7 @@ export interface I {
 
 export interface O {}
 
-export default class H1 extends Element_<I, O> {
+export default class Header1 extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
@@ -19,7 +19,7 @@ export default class H1 extends Element_<I, O> {
       },
       {},
       system,
-      ID_HEADER_2
+      ID_HEADER_1
     )
   }
 }

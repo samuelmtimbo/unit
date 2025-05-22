@@ -7,13 +7,13 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export default class H3 extends HTMLElement_<HTMLHeadingElement, Props> {
+export default class Header2 extends HTMLElement_<HTMLHeadingElement, Props> {
   constructor($props: Props, $system: System) {
     super(
       $props,
       $system,
-      $system.api.document.createElement('h3'),
-      $system.style['h3'],
+      $system.api.document.createElement('h2'),
+      $system.style['h2'],
       {},
       {}
     )

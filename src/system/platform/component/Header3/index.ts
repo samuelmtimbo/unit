@@ -10,7 +10,7 @@ export interface I {
 
 export interface O {}
 
-export default class H3 extends Element_<I, O> {
+export default class Header3 extends Element_<I, O> {
   constructor(system: System) {
     super(
       {

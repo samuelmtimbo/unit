@@ -1,0 +1,71 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text header 1",
+  "units": {
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 104,
+          "y": 50
+        }
+      }
+    },
+    "header1": {
+      "id": "dd7616e2-2e64-4d9c-b13e-ca7efeacd982"
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "text",
+          "pinId": "value",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "header1",
+          "pinId": "style",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "type",
+    "description": "text header1"
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "text": {
+        "children": [],
+        "childSlot": {},
+        "width": 180,
+        "height": 90
+      },
+      "header1": {
+        "children": ["text"],
+        "childSlot": {},
+        "width": 120,
+        "height": 120
+      }
+    },
+    "children": ["header1"],
+    "defaultWidth": 180,
+    "defaultHeight": 120
+  },
+  "id": "e82b5eac-b3d0-4e6a-adb6-a8411c0c2db2"
+}

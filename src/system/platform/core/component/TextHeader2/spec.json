@@ -1,0 +1,59 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text header 2",
+  "units": {
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092"
+    },
+    "header2": {
+      "id": "321f971c-b898-4ca4-9e6e-3d75d68940f7"
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "text",
+          "pinId": "value",
+          "kind": "input"
+        }
+      }
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "header2",
+          "pinId": "style",
+          "kind": "input"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "type",
+    "description": "text header2"
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "text": {
+        "children": [],
+        "childSlot": {},
+        "width": 180,
+        "height": 90
+      },
+      "header2": {
+        "children": ["text"],
+        "childSlot": {},
+        "width": 120,
+        "height": 120
+      }
+    },
+    "children": ["header2"],
+    "defaultWidth": 180,
+    "defaultHeight": 120
+  },
+  "id": "783e349b-769e-4d88-ab39-b4750c1f5d21"
+}

@@ -7,7 +7,7 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export default class H1 extends HTMLElement_<HTMLHeadingElement, Props> {
+export default class Header1 extends HTMLElement_<HTMLHeadingElement, Props> {
   constructor($props: Props, $system: System) {
     super(
       $props,
