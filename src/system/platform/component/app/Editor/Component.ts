@@ -39885,7 +39885,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (this._collapse_init_node_id_set.has(unitId)) {
-      this._start_node_long_press_collapse(pin_node_id)
+      if (this._has_node(pin_node_id)) {
+        this._start_node_long_press_collapse(pin_node_id)
+      }
     }
 
     this._refresh_merge_name(merge_node_id)
