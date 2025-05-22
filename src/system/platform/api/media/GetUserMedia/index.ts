@@ -1,10 +1,10 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { MS } from '../../../../../types/interface/MS'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
-import { ID_USER_MEDIA } from '../../../../_ids'
+import { ID_GET_USER_MEDIA } from '../../../../_ids'
 
 export type I = {
   opt: MediaStreamConstraints
@@ -14,7 +14,7 @@ export type O = {
   stream: MS
 }
 
-export default class UserMedia extends Functional<I, O> {
+export default class UserMedia extends Holder<I, O> {
   private _stream: MediaStream
 
   constructor(system: System) {
@@ -31,7 +31,7 @@ export default class UserMedia extends Functional<I, O> {
         },
       },
       system,
-      ID_USER_MEDIA
+      ID_GET_USER_MEDIA
     )
   }
 

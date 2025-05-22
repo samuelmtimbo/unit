@@ -1,8 +1,12 @@
 {
-  "name": "user media",
+  "name": "get user media",
   "inputs": {
     "opt": {
       "type": "{audio?:boolean,video?:boolean}"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "outputs": {

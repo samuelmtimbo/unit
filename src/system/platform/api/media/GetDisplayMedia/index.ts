@@ -1,5 +1,5 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { MS } from '../../../../../types/interface/MS'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
@@ -14,7 +14,7 @@ export type O = {
   stream: MS
 }
 
-export default class GetDisplayMedia extends Functional<I, O> {
+export default class GetDisplayMedia extends Holder<I, O> {
   private _stream: MediaStream
 
   constructor(system: System) {
