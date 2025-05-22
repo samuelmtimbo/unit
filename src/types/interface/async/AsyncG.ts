@@ -50,6 +50,8 @@ import {
   evaluateSpec,
 } from '../../../spec/evaluate/evaluateBundleSpec'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
+import { evaluateDataValue } from '../../../spec/evaluateDataValue'
+import { resolveDataRef } from '../../../spec/resolveDataValue'
 import { stringify } from '../../../spec/stringify'
 import {
   stringifyGraphSpecData,
@@ -853,7 +855,9 @@ export function evalBulkEdit(
     action = clone(action)
 
     if (action.data.data) {
-      action.data.data = evaluate(action.data.data, specs, classes)
+      const dataRef = evaluateDataValue(action.data.data, specs, classes)
+
+      action.data.data = resolveDataRef(dataRef, specs, classes)
     }
 
     if (action.type === ADD_UNIT) {
