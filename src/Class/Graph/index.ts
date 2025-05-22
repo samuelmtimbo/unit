@@ -3098,7 +3098,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _initAddUnits(units: GraphUnitsSpec, push: boolean): void {
-    forEachValueKey(units, (unit: Unit, unitId: string) => {
+    forEachValueKey(units, (unit: GraphUnitSpec, unitId: string) => {
       this._initAddUnit(unitId, unit, push)
     })
   }
@@ -6130,15 +6130,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
           this._setComponentSize(width, height, fork, bubble)
         },
+        setPinData: ({ type, pinId, data }) => {
+          this.setPinData(type, pinId, data)
+        },
         bulkEdit: (data: GraphBulkEditData) => {
           const { actions } = data
 
           this._bulkEdit(actions, propagate, fork, bubble)
         },
       },
-      () => {
-        //
-      }
+      () => {}
     )
   }
 

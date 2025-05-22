@@ -9,6 +9,7 @@ export type GraphUnitSpecBase = {
   output?: GraphUnitPinsSpec
   state?: Dict<any>
   memory?: Memory
+  err?: string
   flag?: Dict<any>
   children?: GraphUnitSpec[] | None
   reorder?: string[] | None

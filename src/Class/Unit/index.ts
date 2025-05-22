@@ -30,11 +30,10 @@ export type SnapshotOpt = {
   deep?: boolean
   state?: boolean
   system?: boolean
+  error?: boolean
 }
 
-export type BundleOpt = SnapshotOpt & {
-  system?: boolean
-}
+export type BundleOpt = SnapshotOpt & {}
 
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
 
@@ -1270,6 +1269,7 @@ export class Unit<
     deep = false,
     system = false,
     state = false,
+    error = false,
   }: BundleOpt = {}): UnitBundleSpec {
     const memory = this.snapshot({ deep, state })
 
@@ -1307,10 +1307,27 @@ export class Unit<
       specs[id] = this.__system.specs[id]
     }
 
-    return { unit: { id, memory, input, output }, specs }
+    const bundle: UnitBundleSpec = {
+      unit: { id, memory, input, output },
+      specs,
+    }
+
+    if (error) {
+      const err = this.getErr()
+
+      if (err) {
+        bundle.unit.err = err
+      }
+    }
+
+    return bundle
   }
 
   public snapshotSelf(opt: SnapshotOpt = {}): Dict<any> {
+    if (opt.error && this.hasErr()) {
+      return { err: this._err }
+    }
+
     return undefined
   }
 
