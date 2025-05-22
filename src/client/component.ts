@@ -195,6 +195,7 @@ export class Component<
 
   public $mounted: boolean = false
   public $detached: boolean = false
+  public $moving: boolean = false
 
   private _stopPropagationSet: Set<string>
   private _stopImmediatePropagationSet: Set<string>

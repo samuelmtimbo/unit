@@ -96,6 +96,10 @@ export function applyDynamicStyle(
   }
 
   const set = (name: string, value: number) => {
+    if (component.$moving) {
+      return
+    }
+
     const px = value + 'px'
 
     style[name] = px

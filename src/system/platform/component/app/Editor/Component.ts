@@ -20924,6 +20924,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return style_
     })
 
+    leaf_comp.$moving = true
+
     this._leaf_prop_unlisten[leaf_id] = prop_unlisten
 
     let leaf_frame: Frame = this._leaf_frame[leaf_id]
@@ -21058,6 +21060,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const leaf_comp = this._leaf_comp[leaf_id]
       const leaf_layer = this._leaf_frame_layer[leaf_id]
       const leaf_frame = this._leaf_frame[leaf_id]
+
+      leaf_comp.$moving = false
 
       leaf_frame.removeChild(leaf_comp)
       leaf_layer.removeChild(leaf_frame)
