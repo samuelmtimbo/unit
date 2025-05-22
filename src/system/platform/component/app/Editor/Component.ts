@@ -21831,7 +21831,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               this._component,
               trait,
               slot_id,
-              slot_path.length ? path.slice(1) : path,
+              path.slice(1),
               expand,
               (leaf_id, leaf_comp, leaf_parent) => {
                 return this._extract_style(
@@ -33553,7 +33553,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._component,
             trait,
             sub_component_id,
-            path,
+            path.slice(1),
             false,
             (leaf_id, leaf_comp, leaf_parent) => {
               return this._extract_style(trait, leaf_id, leaf_comp, leaf_parent)
@@ -34504,7 +34504,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               this._component,
               target_trait,
               slot_id,
-              slot_path.length ? path.slice(1) : path,
+              path.slice(1),
               expand,
               (leaf_id, leaf_comp, leaf_parent) => {
                 return this._extract_style(
