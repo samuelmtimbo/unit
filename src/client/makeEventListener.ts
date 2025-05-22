@@ -3,6 +3,7 @@ import { makeDragEndListener } from './event/drag/dragend'
 import { makeDragOverListener } from './event/drag/dragover'
 import { makeDragStartListener } from './event/drag/dragstart'
 import { makeDropListener } from './event/drag/drop'
+import { makeEndedListener } from './event/ended'
 import { makeInputListener } from './event/input'
 import {
   makeKeydownListener,
@@ -53,6 +54,7 @@ export type IOUIEventName =
   | 'show'
   | 'hide'
   | 'load'
+  | 'ended'
   | 'loadeddata'
 
 export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
@@ -81,6 +83,7 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'show',
   'hide',
   'load',
+  'ended',
   'loadeddata',
 ])
 
@@ -139,6 +142,8 @@ export function makeUIEventListener(
       return makeToggleListener(callback)
     case 'load':
       return makeLoadListener(callback)
+    case 'ended':
+      return makeEndedListener(callback)
     case 'loadeddata':
       return makeLoadedDataListener(callback)
     default:
