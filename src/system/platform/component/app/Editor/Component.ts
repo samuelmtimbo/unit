@@ -59137,6 +59137,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       data = 'null'
     }
 
+    // AD HOC
+    if (!this._spec_has_exposed_pin_named(type, pinId)) {
+      return
+    }
+
     this.__sim_set_pin_set_data(type as IO, pinId, data)
   }
 
