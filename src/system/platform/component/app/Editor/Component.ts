@@ -57412,11 +57412,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     let unlisten: Unlisten
 
-    const prevParentId = data.prevParentIdMap[data.children[0]] ?? null
-    const prevSlotName = data.prevSlotMap[data.children[0]] ?? 'default'
-    const parentId = data.parentId
-    const slotName = data.slotMap[data.children[0]] ?? 'default'
-    const children = data.children
+    const prevParentId = data.prevParentIdMap?.[data.children[0]] ?? null
+    const prevSlotName = data.prevSlotMap?.[data.children[0]] ?? 'default'
+    const parentId = data.parentId ?? null
+    const slotName = data.slotMap?.[data.children[0]] ?? 'default'
+    const children = data.children ?? []
 
     if (this._tree_layout) {
       if (
