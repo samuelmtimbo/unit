@@ -223,8 +223,8 @@ export const style = {
     alignItems: 'center',
     justifyContent: 'space-around',
     boxSizing: 'border-box',
-    width: '60px',
-    height: '36px',
+    minWidth: '60px',
+    minHeight: '36px',
     padding: '6px',
   },
   canvas: {
