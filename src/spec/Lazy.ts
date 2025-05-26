@@ -544,9 +544,9 @@ export function lazyFromSpec(
       return this.__graph.exposePinSet(type, pinId, pinSpec)
     }
 
-    public setPinSetId(type: IO, pinId: string, nextPinId: string): void {
+    public setPinSetId(type: IO, pinId: string, newPinId: string): void {
       this._ensure()
-      return this.__graph.setPinSetId(type, pinId, nextPinId)
+      return this.__graph.setPinSetId(type, pinId, newPinId)
     }
 
     public setPinSetFunctional(

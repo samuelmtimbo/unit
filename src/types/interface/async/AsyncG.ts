@@ -438,11 +438,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     $setPinSetId({
       type,
       pinId,
-      nextPinId,
+      newPinId,
       fork = true,
       bubble = true,
     }: GraphSetPinSetIdData): void {
-      call(graph, 'setPinSetId', fork, bubble, type, pinId, nextPinId)
+      call(graph, 'setPinSetId', fork, bubble, type, pinId, newPinId)
     },
 
     $setPinSetFunctional({
@@ -500,7 +500,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unitId,
       type,
       pinId,
-      nextPinId,
+      newPinId,
       fork = true,
       bubble = true,
     }: GraphSetUnitPinSetIdData): void {
@@ -512,7 +512,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         unitId,
         type,
         pinId,
-        nextPinId
+        newPinId
       )
     },
 

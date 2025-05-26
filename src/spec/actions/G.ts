@@ -278,9 +278,9 @@ export const makeExposePinAction = (
 export const makeSetPinSetIdAction = (
   type: IO,
   pinId: string,
-  nextPinId: string
+  newPinId: string
 ) => {
-  return wrapSetPinSetIdAction({ type, pinId, nextPinId })
+  return wrapSetPinSetIdAction({ type, pinId, newPinId })
 }
 
 export const wrapSetPinSetIdAction = (data: GraphSetPinSetIdData) => {
@@ -536,13 +536,13 @@ export const makeSetUnitPinSetIdAction = (
   unitId: string,
   type: IO,
   pinId: string,
-  nextPinId: string
+  newPinId: string
 ) => {
   return wrapSetUnitPinSetIdAction({
     unitId,
     type,
     pinId,
-    nextPinId,
+    newPinId,
   })
 }
 

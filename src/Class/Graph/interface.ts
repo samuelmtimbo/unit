@@ -178,7 +178,7 @@ export type GraphExposeUnitPinSetData = {
 export type GraphSetPinSetIdData = {
   type: IO
   pinId: string
-  nextPinId: string
+  newPinId: string
 } & Flags
 
 export type GraphSetPinSetDefaultIgnoredData = {
@@ -197,7 +197,7 @@ export type GraphSetUnitPinSetIdData = {
   unitId: string
   type: IO
   pinId: string
-  nextPinId: string
+  newPinId: string
 } & Flags
 
 export type GraphSetUnitPinConstantData = {

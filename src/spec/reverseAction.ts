@@ -342,7 +342,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
         undefined
       )
     case SET_PIN_SET_ID:
-      return makeSetPinSetIdAction(data.type, data.nextPinId, data.pinId)
+      return makeSetPinSetIdAction(data.type, data.newPinId, data.pinId)
     case SET_PIN_SET_FUNCTIONAL:
       return makeSetPinSetFunctionalAction(
         data.type,

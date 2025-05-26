@@ -169,7 +169,7 @@ export interface G<
     ...extra: any[]
   ): void
   unplugPin(type: IO, pinId: string, subPinId: string, ...extra: any[]): void
-  setPinSetId(type: IO, pinId: string, nextPinId: string): void
+  setPinSetId(type: IO, pinId: string, newPinId: string): void
   setPinSetFunctional(type: IO, name: string, functional: boolean): void
   setPinSetDefaultIgnored(type: IO, name: string, ignored: boolean): void
   setUnitSize(unitId: string, width: number, height: number): void

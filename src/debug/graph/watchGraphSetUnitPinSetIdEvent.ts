@@ -17,7 +17,7 @@ export function watchGraphSetUnitPinSetId(
   callback: (moment: GraphSetUnitPinSetIdMoment) => void
 ): () => void {
   const listener = (
-    ...[unitId, type, pinId, nextPinId, path]: G_EE['set_unit_pin_set_id']
+    ...[unitId, type, pinId, newPinId, path]: G_EE['set_unit_pin_set_id']
   ) => {
     callback({
       type: 'graph',
@@ -26,7 +26,7 @@ export function watchGraphSetUnitPinSetId(
         unitId,
         type,
         pinId,
-        nextPinId,
+        newPinId,
         path,
       },
     })

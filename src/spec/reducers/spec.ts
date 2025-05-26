@@ -590,13 +590,13 @@ export const coverOutput = (
 }
 
 export const setPinSetId = (
-  { type, pinId, nextPinId }: { type: IO; pinId: string; nextPinId: string },
+  { type, pinId, newPinId }: { type: IO; pinId: string; newPinId: string },
   spec: GraphSpec
 ): void => {
   const pinSpec = deepGet(spec, [`${type}s`, pinId])
 
   deepDelete(spec, [`${type}s`, pinId])
-  deepSet_(spec, [`${type}s`, nextPinId], pinSpec)
+  deepSet_(spec, [`${type}s`, newPinId], pinSpec)
 }
 
 export const setPinSetFunctional = (

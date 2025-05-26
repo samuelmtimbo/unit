@@ -155,6 +155,7 @@ import {
   GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
+  GraphSetUnitPinSetIdData,
   GraphSetUnitSizeData,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
@@ -1637,34 +1638,34 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public setPinSetId(
     type: IO,
     pinId: string,
-    nextPinId: string,
+    newPinId: string,
     emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ): void {
-    this._setPinSetId(type, pinId, nextPinId, fork, bubble)
+    this._setPinSetId(type, pinId, newPinId, fork, bubble)
 
-    this.renamePin(type, pinId, nextPinId)
+    this.renamePin(type, pinId, newPinId)
 
-    emit && this.edit('set_pin_set_id', type, pinId, nextPinId, [])
+    emit && this.edit('set_pin_set_id', type, pinId, newPinId, [])
   }
 
   public _setPinSetId(
     type: IO,
     pinId: string,
-    nextPinId: string,
+    newPinId: string,
     fork: boolean,
     bubble: boolean
   ): void {
-    // console.log('Graph', '_setPinSetId', type, pinId, nextPinId)
+    // console.log('Graph', '_setPinSetId', type, pinId, newPinId)
 
     fork && this._fork(undefined, true, bubble)
 
-    this._specSetPinSetId(type, pinId, nextPinId)
+    this._specSetPinSetId(type, pinId, newPinId)
   }
 
-  private _specSetPinSetId(type: IO, pinId: string, nextPinId: string): void {
-    setPinSetId({ type, pinId, nextPinId }, this._spec)
+  private _specSetPinSetId(type: IO, pinId: string, newPinId: string): void {
+    setPinSetId({ type, pinId, newPinId }, this._spec)
   }
 
   public exposePin = (
@@ -5096,7 +5097,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     )
   }
 
-  setUnitPinSetId(
+  public setUnitPinSetId(
     unitId: string,
     type: IO,
     pinId: string,
@@ -5105,11 +5106,22 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ): void {
+    this._setUnitPinSetId(unitId, type, pinId, newPinId, fork, bubble)
+
+    emit && this.edit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
+  }
+
+  private _setUnitPinSetId(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    newPinId: string,
+    fork: boolean = true,
+    bubble: boolean = true
+  ): void {
     const unit = this.getUnit(unitId) as Graph
 
     unit.setPinSetId(type, pinId, newPinId, fork, bubble)
-
-    emit && this.edit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
   }
 
   public setUnitPinConstant(
@@ -6020,9 +6032,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           this.takeUnitErr(unitId)
         },
         setPinSetId: (data: GraphSetPinSetIdData) => {
-          const { type, pinId, nextPinId } = data
+          const { type, pinId, newPinId } = data
 
-          this._setPinSetId(type, pinId, nextPinId, fork, bubble)
+          this._setPinSetId(type, pinId, newPinId, fork, bubble)
         },
         setPinSetFunctional: (data: GraphSetPinSetFunctionalData) => {
           const { type, pinId, functional } = data
@@ -6051,6 +6063,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             fork,
             bubble
           )
+        },
+        setUnitPinSetId: (data: GraphSetUnitPinSetIdData) => {
+          const { unitId, type, pinId, newPinId } = data
+
+          this._setUnitPinSetId(unitId, type, pinId, newPinId, fork, bubble)
         },
         setMergeData: (_data: GraphSetMergeDataData) => {
           const { mergeId, data } = _data

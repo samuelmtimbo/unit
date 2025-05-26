@@ -30,6 +30,7 @@ import {
   GraphSetPlugDataData,
   GraphSetSubComponentSizeData,
   GraphSetUnitIdData,
+  GraphSetUnitPinSetIdData,
   GraphSetUnitSizeData,
 } from '../../../../../Class/Graph/interface'
 import { moveLink } from '../../../../../Class/Graph/moveLink'
@@ -401,6 +402,7 @@ import {
   SET_UNIT_PIN_CONSTANT,
   SET_UNIT_PIN_DATA,
   SET_UNIT_PIN_IGNORED,
+  SET_UNIT_PIN_SET_ID,
   SET_UNIT_SIZE,
   TAKE_UNIT_ERR,
   UNPLUG_PIN,
@@ -7651,7 +7653,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     unitId: string,
     type: IO,
     pinId: string,
-    nextPinId: string
+    newPinId: string
   ): void => {
     const { fork, bubble } = this.$props
 
@@ -7664,7 +7666,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     $unit.$setPinSetId({
       type,
       pinId,
-      nextPinId,
+      newPinId,
       fork,
       bubble,
     })
@@ -8869,26 +8871,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _set_pin_set_id = (
     type: IO,
     pinId: string,
-    nextPinId: string
+    newPinId: string
   ): void => {
-    this._state_set_pin_set_id(type, pinId, nextPinId)
-    this._pod_set_pin_set_id(type, pinId, nextPinId)
+    this._state_set_pin_set_id(type, pinId, newPinId)
+    this._pod_set_pin_set_id(type, pinId, newPinId)
   }
 
-  public set_pin_set_id = (type: IO, pinId: string, nextPinId: string) => {
-    this._dispatch_action(makeSetPinSetIdAction(type, pinId, nextPinId))
+  public set_pin_set_id = (type: IO, pinId: string, newPinId: string) => {
+    this._dispatch_action(makeSetPinSetIdAction(type, pinId, newPinId))
 
-    this._set_pin_set_id(type, pinId, nextPinId)
+    this._set_pin_set_id(type, pinId, newPinId)
   }
 
   private _state_set_pin_set_id = (
     type: IO,
     pinId: string,
-    nextPinId: string
+    newPinId: string
   ): void => {
-    // console.log('Graph', '_state_set_exposed_pin_name', type, pinId, nextPinId)
+    // console.log('Graph', '_state_set_exposed_pin_name', type, pinId, newPinId)
 
-    const has_next_pin_id = hasPin(this._spec, type, nextPinId)
+    const has_next_pin_id = hasPin(this._spec, type, newPinId)
 
     const pin_spec = this._get_pin_spec(type, pinId)
     const plug_position = this._get_pin_plug_position(type, pinId)
@@ -8912,13 +8914,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       for (const sub_pin_id in plug) {
         const sub_pin = plug[sub_pin_id]
 
-        const next_sub_pin_id = this._new_sub_pin_id(type, nextPinId)
+        const next_sub_pin_id = this._new_sub_pin_id(type, newPinId)
 
         const sub_pin_position = plug_position[sub_pin_id]
 
         this._state_expose_pin(
           type,
-          nextPinId,
+          newPinId,
           next_sub_pin_id,
           sub_pin,
           {},
@@ -8926,14 +8928,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       }
     } else {
-      this._spec_set_exposed_pin_name(type, pinId, nextPinId)
-      this._sim_expose_pin_set(type, nextPinId, pin_spec, plug_position)
+      this._spec_set_exposed_pin_name(type, pinId, newPinId)
+      this._sim_expose_pin_set(type, newPinId, pin_spec, plug_position)
     }
 
     if (data !== undefined) {
       this.__sim_set_pin_set_data(
         type,
-        nextPinId,
+        newPinId,
         data,
         undefined,
         plug_datum_position
@@ -8944,11 +8946,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec_set_exposed_pin_name = (
     type: IO,
     pinId: string,
-    nextPinId: string
+    newPinId: string
   ): void => {
-    // console.log('Graph', '_spec_set_exposed_pin_name', type, pinId, nextPinId)
+    // console.log('Graph', '_spec_set_exposed_pin_name', type, pinId, newPinId)
 
-    setPinSetId({ type, pinId, nextPinId }, this._spec)
+    setPinSetId({ type, pinId, newPinId }, this._spec)
   }
 
   private _get_pin_plug_position = (
@@ -9039,11 +9041,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_set_pin_set_id = (
     type: IO,
     pinId: string,
-    nextPinId: string
+    newPinId: string
   ): void => {
     const { fork, bubble } = this.$props
 
-    this._pod.$setPinSetId({ type, pinId, nextPinId, fork, bubble })
+    this._pod.$setPinSetId({ type, pinId, newPinId, fork, bubble })
   }
 
   private _get_err_size = (err: string): Size => {
@@ -53626,9 +53628,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         {
           const data_ = data as GraphSetPinSetIdData
 
-          this._state_set_pin_set_id(data_.type, data_.pinId, data_.nextPinId)
+          this._state_set_pin_set_id(data_.type, data_.pinId, data_.newPinId)
           emit &&
-            this._pod_set_pin_set_id(data_.type, data_.pinId, data_.nextPinId)
+            this._pod_set_pin_set_id(data_.type, data_.pinId, data_.newPinId)
         }
         break
       case SET_PIN_SET_DEFAULT_IGNORED:
@@ -53684,6 +53686,27 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
         break
       case TAKE_UNIT_ERR:
+        break
+      case SET_UNIT_PIN_SET_ID:
+        {
+          const data_ = data as GraphSetUnitPinSetIdData
+
+          const pin_node_id = getPinNodeId(
+            data_.unitId,
+            data_.type,
+            data_.pinId
+          )
+
+          this._on_graph_unit_set_pin_set_id({ ...data_, path: [data_.unitId] })
+
+          emit &&
+            this._pod_set_unit_pin_set_id(
+              data_.unitId,
+              data_.type,
+              data_.pinId,
+              data_.newPinId
+            )
+        }
         break
       default:
         throw new CodePathNotImplementedError()
@@ -56062,9 +56085,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_set_pin_set_id = (data: GraphSetPinSetIdMomentData) => {
-    const { type, pinId, nextPinId } = data
+    const { type, pinId, newPinId } = data
 
-    this._state_set_pin_set_id(type, pinId, nextPinId)
+    this._state_set_pin_set_id(type, pinId, newPinId)
   }
 
   private _on_set_pin_set_default_ignored = (
@@ -58588,7 +58611,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { parent, specs, setSpec } = this.$props
 
-    const { type, pinId, nextPinId, path } = data
+    const { type, pinId, newPinId, path } = data
 
     const opposite_type = opposite(type)
 
@@ -58651,20 +58674,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         deepSet(
           this._spec,
-          ['units', graphUnitId, type, nextPinId],
+          ['units', graphUnitId, type, newPinId],
           unit_pin_spec
         )
       }
 
-      setPinSetId({ type, pinId, nextPinId }, spec)
+      setPinSetId({ type, pinId, newPinId }, spec)
 
       if (path.length === 1) {
-        const next_pin_node_id = getPinNodeId(graphUnitId, type, nextPinId)
+        const next_pin_node_id = getPinNodeId(graphUnitId, type, newPinId)
 
         this._state_graph_unit_expose_pin_set(
           graphUnitId,
           type,
-          nextPinId,
+          newPinId,
           pin_spec,
           pin_position
         )
@@ -58683,7 +58706,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             )
           } else {
             deepDelete(merge, [graphUnitId, type, pinId])
-            deepSet(merge, [graphUnitId, type, nextPinId], true)
+            deepSet(merge, [graphUnitId, type, newPinId], true)
 
             this._state_add_merge(mergeId, merge, merge_position)
             this._sim_collapse_merge(mergeId)
@@ -58697,7 +58720,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             subPinSpec = {
               kind: subPinSpec.kind ?? _type,
               unitId: subPinSpec.unitId,
-              pinId: nextPinId,
+              pinId: newPinId,
             }
           }
 
@@ -58728,13 +58751,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
 
       deepDelete(next_spec, ['units', unitId, type, pinId])
-      deepSet(next_spec, ['units', unitId, type, nextPinId], unit_pin_spec)
+      deepSet(next_spec, ['units', unitId, type, newPinId], unit_pin_spec)
 
       if (mergeId) {
         const merge = next_spec.merges[mergeId]
 
         deepDelete(merge, [unitId, type, pinId])
-        deepSet(merge, [unitId, type, nextPinId], true)
+        deepSet(merge, [unitId, type, newPinId], true)
 
         removeMerge({ mergeId }, next_spec)
         addMerge({ mergeId, mergeSpec: merge }, next_spec)
@@ -59356,19 +59379,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _state_graph_unit_expose_pin_set(
-    graphUnitId: string,
+    unit_id: string,
     type: IO,
-    nextPinId: string,
+    new_pin_id: string,
     pin_spec: GraphPinSpec,
     pin_position?: Point
   ) {
-    this._spec_graph_unit_expose_pin_set(graphUnitId, type, nextPinId, pin_spec)
-    this._sim_graph_unit_expose_pin_set(
-      graphUnitId,
-      type,
-      nextPinId,
-      pin_position
-    )
+    this._spec_graph_unit_expose_pin_set(unit_id, type, new_pin_id, pin_spec)
+    this._sim_graph_unit_expose_pin_set(unit_id, type, new_pin_id, pin_position)
   }
 
   private _unlisten_frame: Unlisten
