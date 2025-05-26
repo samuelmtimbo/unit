@@ -1381,7 +1381,9 @@ export function buildMoveMap(
         )
 
         if (outsideCount[type_] > 0) {
-          const nextPinIdStart = plug?.pinId ?? 'a'
+          const fallbackNextPin = getSingleMergePin(outside[type_])
+
+          const nextPinIdStart = plug?.pinId ?? fallbackNextPin.pinId
 
           const nextPinId = newTargetPinId(oppositeType, nextPinIdStart)
           const nextPinType = oppositeType
