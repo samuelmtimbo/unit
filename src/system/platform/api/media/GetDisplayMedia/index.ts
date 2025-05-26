@@ -20,8 +20,8 @@ export default class GetDisplayMedia extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['opt'],
-        o: ['stream'],
+        fi: ['opt'],
+        fo: ['stream'],
       },
       {},
       system,
