@@ -31591,7 +31591,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    this._flush_debugger()
+    if (this._pod) {
+      this._setup_pod(this._pod)
+    }
 
     setTimeout(() => {
       this._force_control_animation_false = false
@@ -31720,6 +31722,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
 
         this._disable_transcend()
+
+        this._stop_debugger()
+        this._plunk_pod()
       } else {
         if (this._tree_layout) {
           return
