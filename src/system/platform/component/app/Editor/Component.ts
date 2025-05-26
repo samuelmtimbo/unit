@@ -247,6 +247,7 @@ import {
   getThemeModeColor,
   themeBackgroundColor,
 } from '../../../../../client/theme'
+import { time } from '../../../../../client/util/date/time'
 import {
   NULL_VECTOR,
   Shape,
@@ -16575,6 +16576,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._spec_get_layout_layer_children(current_layout_layer)
   }
 
+  private _pointer_last_moved: Dict<number> = {}
+
   private _high_zoom: boolean = false
 
   private _set_zoom = (zoom: Zoom) => {
@@ -16713,6 +16716,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_pointer_enter = (event: UnitPointerEvent): void => {
     // console.log('Graph', '_on_pointer_enter')
+
+    const { pointerId } = event
+
+    this._pointer_last_moved[pointerId] = time()
   }
 
   private _on_pointer_cancel = (event: UnitPointerEvent) => {
@@ -23062,6 +23069,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { dispatchEvent } = this.$props
 
+    const now = time()
+
+    const pointer_last_moved = this._pointer_last_moved[pointerId]
+
+    const pointer_idle_time = now - pointer_last_moved
+
+    if (pointer_idle_time > 1 * 1000) {
+      return
+    }
+
     const hover_node_id = this._pointer_id_hover_node_id[pointerId]
 
     if (!hover_node_id) {
@@ -23227,11 +23244,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { dispatchEvent } = this.$props
 
-    if (this._pointer_id_hover_node_id[pointer_id]) {
-      this._set_node_hovered(node_id, pointer_id, false)
-    } else {
+    if (!this._pointer_id_hover_node_id[pointer_id]) {
       return
     }
+
+    this._set_node_hovered(node_id, pointer_id, false)
 
     dispatchEvent('nodepointerleave', this._get_node_spec(node_id), false)
   }
@@ -46381,6 +46398,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { pointerId, clientX, clientY } = event
 
+    this._pointer_last_moved[pointerId] = time()
+
     const pointer_down_position = this._pointer_down_position[pointerId]
 
     if (this._pointer_down[pointerId]) {
@@ -47776,6 +47795,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._pointer_down_count--
     }
+
+    delete this._pointer_last_moved[pointerId]
 
     if (this._long_press_pointer.has(pointerId)) {
       this._long_press_pointer.delete(pointerId)
