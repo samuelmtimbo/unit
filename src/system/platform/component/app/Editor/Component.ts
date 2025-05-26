@@ -53899,10 +53899,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return
     }
 
-    if (event.repeat) {
-      return
-    }
-
     let current_index = -1
 
     let nodes_ordered_by_axis
