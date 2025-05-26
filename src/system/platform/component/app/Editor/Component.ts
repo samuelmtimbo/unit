@@ -43884,6 +43884,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { $width, $height } = this.$context
 
+    if (this._animate_zoom_center_unlisten) {
+      this._animate_zoom_center_unlisten()
+      this._animate_zoom_center_unlisten = undefined
+    }
+
     const n0 = this._zoom
     const n1 = zoomTransformCenteredAt(x, y, this._zoom.z, $width, $height)
 
