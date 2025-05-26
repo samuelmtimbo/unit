@@ -195,7 +195,9 @@ If you have a feature idea or hit a malfunction, this is a basic workflow to fol
 2. Open a pull request explaining the problem and solution;
 3. Iterate over it to make sure the change is positive and aligned with Unit's design and vision.
 
-The Unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated it.
+Everyone interacting in Unit and its sub-projects' codebases, issue trackers, chat rooms, and mailing lists is expected to follow the [Unit code of conduct](CODE_OF_CONDUCT.md).
+
+The Unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what has motivated it from the start.
 
 ## Backlog
 
@@ -207,7 +209,7 @@ Visit [Evolution](/src/docs/evolution/README.md) to learn more about where Unit 
 
 ## Community
 
-If you have a question or a suggestion related to Unit, or if you just want to talk about the future of Programming, or if you wish to join Unit team, feel free to message me at [@io_sammt](https://x.com/io_sammt) or email me at sam@ioun.it.
+If you have a question or a suggestion related to Unit, or if you just want to talk about the future of Programming, or if you wish to join the Unit team, feel free to message me at [@io_sammt](https://x.com/io_sammt) or email me at sam@ioun.it.
 
 For updates about Unit's development, including thoughts about vision and roadmap, follow us on X [@io_unit](https://x.com/io_unit).
 
