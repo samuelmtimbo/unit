@@ -57624,7 +57624,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { actions } = data
 
     for (const action of actions) {
-      this._execute_action(action, false)
+      const { path = [] } = action
+
+      if (path.length === 0) {
+        this._execute_action(action, false)
+      } else {
+        this._on_graph_unit_bulk_edit({
+          actions: [action],
+          path,
+        })
+      }
     }
   }
 
