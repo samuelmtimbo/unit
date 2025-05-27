@@ -266,6 +266,7 @@ export function noneApi(): API {
       Audio: undefined,
       OffscreenCanvas: undefined,
       WebSocket: undefined,
+      DOMParser: undefined,
       open: function (url: string, target: string, features: string): Window {
         throw new MethodNotImplementedError()
       },

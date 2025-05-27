@@ -311,6 +311,7 @@ export type API = {
     OffscreenCanvas: typeof OffscreenCanvas
     BroadcastChannel: typeof BroadcastChannel
     WebSocket: typeof WebSocket
+    DOMParser: typeof DOMParser
     open: (url: string, target: string, features: string) => Window
     getComputedStyle: (element: Element) => CSSStyleDeclaration
     setTimeout(callback: () => any, ms: number): any

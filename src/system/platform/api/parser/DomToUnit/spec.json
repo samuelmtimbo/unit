@@ -1,0 +1,24 @@
+{
+  "name": "dom to unit",
+  "inputs": {
+    "type": {
+      "type": "'application/xhtml+xml'|'application/xml'|'image/svg+xml'|'text/html'|'text/xml'"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "unit": {
+      "type": "`C`"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "convert a XML or HTML string into an equivalent unit component class",
+    "tags": ["platform", "api", "parser"]
+  },
+  "id": "cdbac889-fb2d-4975-8938-00641a61f35b",
+  "base": true,
+  "type": "`U`"
+}

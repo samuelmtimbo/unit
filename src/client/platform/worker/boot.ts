@@ -266,6 +266,7 @@ export function workerApi(): API {
       Audio: globalThis.Audio,
       OffscreenCanvas: globalThis.OffscreenCanvas,
       WebSocket: globalThis.WebSocket,
+      DOMParser: globalThis.DOMParser,
       open: function (url: string, target: string, features: string): Window {
         throw new MethodNotImplementedError()
       },
