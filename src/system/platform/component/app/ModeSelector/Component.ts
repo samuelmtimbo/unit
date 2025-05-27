@@ -121,12 +121,15 @@ export default class Modes extends Element<HTMLDivElement, Props> {
         {
           style: {
             position: 'relative',
-            height: '21px',
             width: '21px',
+            height: '21px',
           },
         },
         this.$system
       )
+
+      const MODE_BUTTON_WIDTH = 33 + 24
+      const MODE_BUTTON_HEIGHT = 33
 
       const mode_button_touch_area = new SVGRect(
         {
@@ -134,8 +137,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
             position: 'absolute',
             top: '0px',
             left: '0px',
-            width: '33px',
-            height: '33px',
+            width: `${MODE_BUTTON_WIDTH}px`,
+            height: `${MODE_BUTTON_HEIGHT}px`,
             transform: 'translate(-6px, -6px)',
             stroke: 'transparent',
             zIndex: '-1',
