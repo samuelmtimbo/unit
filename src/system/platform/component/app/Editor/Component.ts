@@ -207,6 +207,7 @@ import {
   segmentMergeNodeId,
   segmentPinLinkId,
   segmentPlugNodeId,
+  snakeToCamel,
 } from '../../../../../client/id'
 import { getComponentInterface } from '../../../../../client/interface'
 import { isCanvasLike } from '../../../../../client/isCanvas'
@@ -719,10 +720,12 @@ import { getTextLines, spaces } from '../../../../../util/text/getTextLines'
 import { weakMerge } from '../../../../../weakMerge'
 import {
   ID_AUDIO,
+  ID_DIV,
   ID_EDITOR,
   ID_IMAGE,
   ID_IMAGE_1,
   ID_SCROLL_SNAP_Y_BOX,
+  ID_SVG,
   ID_VIDEO,
 } from '../../../../_ids'
 import forEachValueKey from '../../../../core/object/ForEachKeyValue/f'
@@ -3776,7 +3779,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     file: File | Blob,
     position?: Position
   ): Promise<void> => {
-    if (file.type.startsWith('image/')) {
+    if (file.type === 'text/html') {
+      return this._drop_html_file(file, position)
+    } else if (file.type.startsWith('image/')) {
       if (file.type.endsWith('/svg+xml')) {
         return this._drop_svg_file(file, position)
       } else {
@@ -3812,155 +3817,193 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _drop_parseable_file = async (
+    type: DOMParserSupportedType,
+    fallbackSpecId: string,
+    file: File | Blob,
+    size: Size,
+    position?: Position
+  ) => {
+    const { specs, getSpec, newSpec } = this.$props
+
+    const { width, height } = size
+
+    type Tag = { tag: string; attr: Dict<string>; children: Tag[] }
+
+    const text = await file.text()
+
+    const parser = new DOMParser()
+
+    const doc = parser.parseFromString(text, type)
+
+    const element = doc.documentElement
+
+    const tree = elementToJson(element)
+
+    let name = 'untitled'
+
+    if (file instanceof File) {
+      name = file.name
+    }
+
+    const template_spec = {
+      name,
+      render: true,
+      units: {},
+      component: { defaultWidth: width, defaultHeight: height },
+    }
+
+    const addChild = (node: Tag, parent_id: string | null) => {
+      const node_spec_id = TAG_TO_SPEC_ID[node.tag] ?? fallbackSpecId
+      const node_unit_id = newUnitId(specs, template_spec, node_spec_id)
+      const node_spec = getSpec(node_spec_id)
+
+      const attr = clone(node.attr)
+
+      const parseProp = (prop: string, value: string): any => {
+        if (prop === 'style') {
+          return cssTextToObj(value)
+        }
+
+        return value
+      }
+
+      const SURFACE_PROPS = [
+        'style',
+        'd',
+        'x',
+        'y',
+        'width',
+        'height',
+        'x0',
+        'y0',
+        'x1',
+        'y1',
+        'rx',
+        'ry',
+        'viewBox',
+        'href',
+        'fill',
+        'stop-color',
+      ]
+
+      const input = {
+        attr: {
+          constant: true,
+          ignored: false,
+          data: { ref: [], data: attr },
+        },
+      }
+
+      for (const name of SURFACE_PROPS) {
+        const pinId = snakeToCamel(name)
+
+        if (attr[name] && node_spec.inputs?.[pinId]) {
+          input[pinId] = {
+            constant: true,
+            ignored: false,
+            data: {
+              ref: [],
+              data: parseProp(name, attr[name]),
+            },
+          }
+        }
+
+        delete attr[name]
+      }
+
+      addUnit(
+        {
+          unitId: node_unit_id,
+          unit: {
+            id: node_spec_id,
+            input,
+          },
+        },
+        template_spec
+      )
+
+      setSubComponent(
+        { unitId: node_unit_id, subComponent: {} },
+        template_spec.component
+      )
+
+      if (parent_id) {
+        appendSubComponentChild(
+          {
+            parentId: parent_id,
+            childId: node_unit_id,
+            slotName: 'default',
+          },
+          template_spec.component
+        )
+      } else {
+        appendRoot({ childId: node_unit_id }, template_spec.component)
+      }
+
+      for (const child of node.children) {
+        addChild(child, node_unit_id)
+      }
+    }
+
+    addChild(tree, null)
+
+    const new_spec = newSpec(emptySpec(template_spec))
+
+    const new_unit_id = this._new_unit_id(new_spec.id)
+
+    const bundle: UnitBundleSpec = {
+      unit: {
+        id: new_spec.id,
+        metadata: {
+          component: {
+            width,
+            height,
+          },
+        },
+      },
+      specs: {
+        [new_spec.id]: new_spec,
+      },
+    }
+
+    const center_of_screen = position ?? this._jiggle_world_screen_center()
+
+    this._add_unit(
+      new_unit_id,
+      bundle,
+      null,
+      null,
+      null,
+      position,
+      {},
+      center_of_screen
+    )
+
+    this._sim_add_sub_component(new_unit_id, undefined, undefined, undefined)
+
+    this._connect_sub_component(new_unit_id)
+  }
+
   private _drop_svg_file = async (file: File | Blob, position?: Position) => {
     return this._drop_image_file__template(
       file,
-      async (_: string, __: HTMLImageElement, { width, height }) => {
-        const { specs, getSpec, newSpec } = this.$props
-
-        type Tag = { tag: string; attr: Dict<string>; children: Tag[] }
-
-        const text = await file.text()
-
-        const parser = new DOMParser()
-
-        const svgDoc = parser.parseFromString(text, 'image/svg+xml')
-
-        const svg = svgDoc.documentElement
-
-        const tree = elementToJson(svg)
-
-        let name = 'untitled'
-
-        if (file instanceof File) {
-          name = file.name
-        }
-
-        const template_spec = {
-          name,
-          render: true,
-          units: {},
-          component: { defaultWidth: width, defaultHeight: height },
-        }
-
-        const addChild = (node: Tag, parent_id: string | null) => {
-          const node_spec_id = TAG_TO_SPEC_ID[node.tag]
-          const node_unit_id = newUnitId(specs, template_spec, node_spec_id)
-          const node_spec = getSpec(node_spec_id)
-
-          const attr = clone(node.attr)
-
-          const parseProp = (prop: string, value: string): any => {
-            if (prop === 'style') {
-              return cssTextToObj(value)
-            }
-
-            return value
-          }
-
-          const SURFACE_PROPS = ['style', 'd', 'x', 'y', 'width', 'height']
-
-          const input = {
-            attr: {
-              constant: true,
-              ignored: false,
-              data: { ref: [], data: attr },
-            },
-          }
-
-          for (const prop of SURFACE_PROPS) {
-            if (attr[prop] && node_spec.inputs?.[prop]) {
-              input[prop] = {
-                constant: true,
-                ignored: false,
-                data: {
-                  ref: [],
-                  data: parseProp(prop, attr[prop]),
-                },
-              }
-            }
-
-            delete attr[prop]
-          }
-
-          addUnit(
-            {
-              unitId: node_unit_id,
-              unit: {
-                id: node_spec_id,
-                input,
-              },
-            },
-            template_spec
-          )
-
-          setSubComponent(
-            { unitId: node_unit_id, subComponent: {} },
-            template_spec.component
-          )
-
-          if (parent_id) {
-            appendSubComponentChild(
-              {
-                parentId: parent_id,
-                childId: node_unit_id,
-                slotName: 'default',
-              },
-              template_spec.component
-            )
-          } else {
-            appendRoot({ childId: node_unit_id }, template_spec.component)
-          }
-
-          for (const child of node.children) {
-            addChild(child, node_unit_id)
-          }
-        }
-
-        addChild(tree, null)
-
-        const new_spec = newSpec(emptySpec(template_spec))
-
-        const new_unit_id = this._new_unit_id(new_spec.id)
-
-        const bundle: UnitBundleSpec = {
-          unit: {
-            id: new_spec.id,
-            metadata: {
-              component: {
-                width,
-                height,
-              },
-            },
-          },
-          specs: {
-            [new_spec.id]: new_spec,
-          },
-        }
-
-        const center_of_screen = position ?? this._jiggle_world_screen_center()
-
-        this._add_unit(
-          new_unit_id,
-          bundle,
-          null,
-          null,
-          null,
-          position,
-          {},
-          center_of_screen
+      async (_: string, __: HTMLImageElement, size) => {
+        return this._drop_parseable_file(
+          'image/svg+xml',
+          ID_SVG,
+          file,
+          size,
+          position
         )
-
-        this._sim_add_sub_component(
-          new_unit_id,
-          undefined,
-          undefined,
-          undefined
-        )
-
-        this._connect_sub_component(new_unit_id)
       }
     )
+  }
+
+  private _drop_html_file = async (file: File | Blob, position?: Position) => {
+    const size = { width: 200, height: 300 }
+
+    return this._drop_parseable_file('text/html', ID_DIV, file, size, position)
   }
 
   private _drop_image_file = async (file: File | Blob, position?: Position) => {

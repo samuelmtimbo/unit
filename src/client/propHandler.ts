@@ -68,6 +68,26 @@ export function svgPropHandler<P extends Dict<any> = any>(
       ) => {
         element.setAttribute('y', `${y}`)
       },
+      x1: (
+        x1: number | undefined = component.$props.attr.x1 ?? DEFAULT_ATTR.x1
+      ) => {
+        element.setAttribute('x1', `${x1}`)
+      },
+      x2: (
+        x2: number | undefined = component.$props.attr.x2 ?? DEFAULT_ATTR.x2
+      ) => {
+        element.setAttribute('x2', `${x2}`)
+      },
+      y1: (
+        y1: number | undefined = component.$props.attr.y1 ?? DEFAULT_ATTR.y1
+      ) => {
+        element.setAttribute('y1', `${y1}`)
+      },
+      y2: (
+        y2: number | undefined = component.$props.attr.y2 ?? DEFAULT_ATTR.y2
+      ) => {
+        element.setAttribute('y2', `${y2}`)
+      },
       width: (
         width: number | undefined = component.$props.attr.width ??
           DEFAULT_ATTR.width
@@ -89,6 +109,12 @@ export function svgPropHandler<P extends Dict<any> = any>(
         ry: number | undefined = component.$props.attr.ry ?? DEFAULT_ATTR.ry
       ) => {
         element.setAttribute('ry', `${ry}`)
+      },
+      href: (
+        href: number | undefined = component.$props.attr.href ??
+          DEFAULT_ATTR.href
+      ) => {
+        element.setAttribute('href', `${href}`)
       },
     },
   }
