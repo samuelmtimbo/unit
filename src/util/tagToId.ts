@@ -66,6 +66,7 @@ import {
   ID_TABLE_HEADER,
   ID_TABLE_ROW,
   ID_TEXT,
+  ID_TEXT_0,
   ID_TEXT_PATH,
   ID_TSPAN,
   ID_USE,
@@ -74,6 +75,7 @@ import {
 } from '../system/_ids'
 
 export const TAG_TO_SPEC_ID = {
+  _text: ID_TEXT_0,
   a: ID_ANCHOR,
   b: ID_BOLD,
   button: ID_BUTTON,

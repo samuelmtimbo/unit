@@ -54,14 +54,35 @@ export function insertAt(node: Node, newChild: Node, at: number) {
   }
 }
 
-export type Tag = { tag: string; attr: Dict<string>; children: Tag[] }
+export type Tag = {
+  name: string
+  attr: Dict<string>
+  children: Tag[]
+  textContent?: string
+}
 
 export function elementToJson(element: HTMLElement): Tag {
+  if (element instanceof Text) {
+    return {
+      name: '_text',
+      attr: {
+        value: element.textContent,
+      },
+      children: [],
+    }
+  }
+
+  const attr = Object.fromEntries(
+    [...element.attributes].map((attr) => [attr.name, attr.value])
+  )
+
+  const children = [...element.childNodes].map(elementToJson)
+
+  const name = element.tagName.toLowerCase()
+
   return {
-    tag: element.tagName,
-    attr: Object.fromEntries(
-      [...element.attributes].map((attr) => [attr.name, attr.value])
-    ),
-    children: [...element.children].map(elementToJson),
+    name,
+    attr,
+    children,
   }
 }

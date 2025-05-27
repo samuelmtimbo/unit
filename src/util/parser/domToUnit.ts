@@ -11,6 +11,8 @@ import { addUnit } from '../../spec/reducers/spec'
 import { emptySpec, newUnitId } from '../../spec/util'
 import { System } from '../../system'
 import { ID_DIV, ID_SVG } from '../../system/_ids'
+import { Dict } from '../../types/Dict'
+import { GraphUnitPinSpec } from '../../types/GraphUnitPinSpec'
 import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { clone } from '../clone'
@@ -71,7 +73,7 @@ export function domToBundle(
   const addChild = (node: Tag, parent_id: string | null) => {
     const fallbackSpecId = isSvg ? ID_SVG : ID_DIV
 
-    const node_spec_id = TAG_TO_SPEC_ID[node.tag] ?? fallbackSpecId
+    const node_spec_id = TAG_TO_SPEC_ID[node.name] ?? fallbackSpecId
     const node_unit_id = newUnitId(specs, template_spec, node_spec_id)
     const node_spec = getSpec(node_spec_id)
 
@@ -102,14 +104,17 @@ export function domToBundle(
       'href',
       'fill',
       'stop-color',
+      'value',
     ]
 
-    const input = {
-      attr: {
+    const input: Dict<GraphUnitPinSpec> = {}
+
+    if (node_spec.inputs?.['attr']) {
+      input.attr = {
         constant: true,
         ignored: false,
         data: { ref: [], data: attr },
-      },
+      }
     }
 
     for (const name of SURFACE_PROPS) {
