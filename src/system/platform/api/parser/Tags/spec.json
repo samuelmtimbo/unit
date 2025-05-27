@@ -1,0 +1,21 @@
+{
+  "name": "tags",
+  "inputs": {
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "tags": {
+      "type": "string{}"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "object mapping HTML tag name to spec id",
+    "tags": ["platform", "api", "parser"]
+  },
+  "id": "efd75c06-67c3-4053-8dda-9aadc1d0161c",
+  "base": true,
+  "type": "`U`"
+}
