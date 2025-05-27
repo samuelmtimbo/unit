@@ -26791,13 +26791,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return false
       }
 
-      const { type: _type } = segmentLinkPinNodeId(pin_node_id)
+      const { type: pin_type } = segmentLinkPinNodeId(pin_node_id)
 
-      if (config?.plugReverse || type === _type) {
-        const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
+      if (config?.plugReverse || type === pin_type) {
+        const exp_ignore_data = pin_type === 'output'
+
+        const exp_pin_type = this.__get_ext_pin_type(
+          type,
+          pin_id,
+          exp_ignore_data
+        )
         const link_pin_type = this._get_link_pin_type(pin_node_id)
 
-        if (_type === 'input') {
+        if (pin_type === 'input') {
           if (this._is_link_pin_ref(pin_node_id)) {
             if (this._is_unit_datum_type(exp_pin_type)) {
               return true
