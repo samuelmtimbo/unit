@@ -190,7 +190,7 @@ const tagToElement = (
   mergeAttr(element, attr)
   applyStyle(element, style)
 
-  if (isLeaf) {
+  if (isLeaf && textContent) {
     container.textContent = textContent
   }
 
