@@ -8,6 +8,7 @@ import { Component } from './component'
 import { joinPath } from './component/app/graph/joinLeafPath'
 import { LayoutBase } from './layout'
 import { rawExtractStyle } from './rawExtractStyle'
+import { extractTextContent } from './textContent'
 
 export function buildTree(
   prefix: string,
@@ -44,11 +45,13 @@ export function buildTree(
 
     const leaf_attr = extractComponentAttr(leaf_comp, trait)
 
+    const textContent = extractTextContent(leaf_comp)
+
     const tag = {
       name: leaf_comp.$element.nodeName,
       style: leaf_style,
       attr: leaf_attr,
-      textContent: leaf_comp.$element.textContent,
+      textContent,
     }
 
     const node = {
@@ -314,11 +317,13 @@ export const expandSlot = (
         const leaf_style = extractStyle(leaf_id, leaf_comp, parent)
         const leaf_attr = extractComponentAttr(leaf_comp, trait)
 
+        const textContent = extractTextContent(leaf_comp)
+
         styles.push({
           name: leaf_comp.$element.nodeName,
           attr: leaf_attr,
           style: leaf_style,
-          textContent: leaf_comp.$element.textContent,
+          textContent,
         })
       }
     }
@@ -338,11 +343,13 @@ export const expandSlot = (
         component.$system.api.text.measureText
       )
 
+      const textContent = extractTextContent(child)
+
       styles.push({
         name: child.$element.nodeName,
         attr,
         style,
-        textContent: child.$element.textContent,
+        textContent,
       })
     }
   }

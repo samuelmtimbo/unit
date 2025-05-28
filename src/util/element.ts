@@ -76,7 +76,9 @@ export function elementToJson(element: HTMLElement): Tag {
     [...element.attributes].map((attr) => [attr.name, attr.value])
   )
 
-  const children = [...element.childNodes].map(elementToJson)
+  const children = [...element.childNodes]
+    .filter((node) => !(node instanceof Text) || !!node.textContent.trim())
+    .map(elementToJson)
 
   const name = element.tagName.toLowerCase()
 

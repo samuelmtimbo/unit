@@ -74,12 +74,7 @@ const expand = (
   let i = 0
 
   for (const childTag of childrenTags) {
-    const { container, element } = tagToElement(
-      childTag,
-      parentTrait,
-      'div',
-      false
-    )
+    const { container, element } = tagToElement(childTag, parentTrait, 'div')
 
     childTag.element = element
 
@@ -108,14 +103,8 @@ const fitTreeChildren = (
     const tag = node.value
 
     const parentTagName = parentNode.tagName.toLowerCase()
-    const isLeaf = node.children.length === 0
 
-    const { container, element } = tagToElement(
-      tag,
-      parentTrait,
-      parentTagName,
-      isLeaf
-    )
+    const { container, element } = tagToElement(tag, parentTrait, parentTagName)
 
     node.value.element = element
 
@@ -131,12 +120,7 @@ const fitTreeChildren = (
   }
 }
 
-const tagToElement = (
-  child: Tag,
-  trait: LayoutNode,
-  parentTagName: string,
-  isLeaf: boolean
-) => {
+const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
   const { name, attr, style, textContent } = child
 
   let tag = name.replace('#', '').toLocaleLowerCase()
@@ -190,7 +174,7 @@ const tagToElement = (
   mergeAttr(element, attr)
   applyStyle(element, style)
 
-  if (isLeaf && textContent) {
+  if (textContent) {
     container.textContent = textContent
   }
 

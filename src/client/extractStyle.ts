@@ -3,7 +3,6 @@ import { MeasureTextFunction } from '../text'
 import { Component } from './component'
 import { camelToDashed } from './id'
 import { IOElement } from './IOElement'
-import { isContentEditable } from './isContentEditable'
 import { LayoutNode } from './LayoutNode'
 import { rawExtractStyle } from './rawExtractStyle'
 
@@ -72,53 +71,6 @@ export function _extractFromRawStyle(
       window: { getComputedStyle },
     },
   } = component.$system
-
-  const fitWidth = style['width'] === 'fit-content'
-  const fitHeight = style['height'] === 'fit-content'
-
-  if (element instanceof Text) {
-    const { textContent } = component.$element
-
-    const { width, height } = measureText(
-      textContent,
-      trait.fontSize,
-      trait.width
-    )
-
-    return {
-      width: `${width}px`,
-      height: `${height}px`,
-    }
-  }
-
-  const contentEditable = isContentEditable(element)
-
-  if (contentEditable && (fitWidth || fitHeight)) {
-    const fontSize = component.getFontSize()
-
-    const { textContent } = component.$element
-
-    let { width, height } = measureText(textContent, fontSize, trait.width)
-
-    if (fitWidth) {
-      style['width'] = `${width}px`
-    }
-
-    if (fitHeight) {
-      if (contentEditable && !textContent) {
-        ;({ height } = measureText('|', fontSize, trait.width))
-      }
-
-      style['height'] = `${height}px`
-    }
-  }
-
-  if (style['display'] === 'contents') {
-    style = {
-      width: '100%',
-      height: '100%',
-    }
-  }
 
   if (element instanceof SVGElement) {
     const treatProp = (name: 'width' | 'height') => {

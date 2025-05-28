@@ -5,25 +5,6 @@ import { camelToDashed } from './id'
 import { IOElement } from './IOElement'
 import { LayoutNode } from './LayoutNode'
 
-export function rawSimulateTextStyle(
-  element: Text,
-  trait: LayoutNode,
-  measureText: MeasureTextFunction
-): Style {
-  const { textContent } = element
-
-  const { width, height } = measureText(
-    textContent,
-    trait.fontSize,
-    trait.width
-  )
-
-  return {
-    width: `${width}px`,
-    height: `${height}px`,
-  }
-}
-
 export function cssTextToObj(cssText: string): Dict<string> {
   return Object.fromEntries(
     cssText
@@ -45,7 +26,7 @@ export function rawExtractStyle(
   measureText: MeasureTextFunction
 ): Style {
   if (element instanceof Text) {
-    return rawSimulateTextStyle(element, trait, measureText)
+    return {}
   }
 
   const { style } = element
