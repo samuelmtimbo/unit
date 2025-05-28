@@ -26,6 +26,16 @@ export function isPrimitive(data: any): boolean {
     return true
   }
 
+  if (isBundle(data)) {
+    return true
+  }
+
+  return false
+}
+
+export function isBundle(data: any): boolean {
+  const t = typeof data
+
   if (t === 'function' && data.__bundle) {
     return true
   }

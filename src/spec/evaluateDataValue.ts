@@ -3,7 +3,7 @@ import { DataRef } from '../DataRef'
 import { Classes, Specs } from '../types'
 import { _evaluate } from './evaluate'
 import { findAndReplaceUnitNodes_, getTree } from './parser'
-import { isPrimitive } from './primitive'
+import { isBundle, isPrimitive } from './primitive'
 
 export function evaluateDataValue(
   value: string | DataRef,
@@ -38,7 +38,13 @@ export function evaluateData(
 ): DataRef<any> {
   let ref = []
 
-  if (isPrimitive(data)) {
+  if (isBundle(data)) {
+    ref.push([])
+
+    data = data.__bundle
+
+    delete data.unit.memory
+  } else if (isPrimitive(data)) {
     //
   } else if (
     data.constructor.name === 'Array' ||
