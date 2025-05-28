@@ -1744,6 +1744,31 @@ export function buildMoveMap(
                 unselectedPlugOutsidePlugTask,
                 unselectedPlugOutsideExposePinTask
               )
+
+              const datum: string = deepGetOrDefault(
+                data,
+                ['plug', plug.type, plug.pinId, plug.subPinId],
+                undefined
+              )
+
+              if (datum) {
+                const unselectedPlugOutsideSetPinDataTask = newTask([
+                  {
+                    in: false,
+                    action: makeSetUnitPinDataAction(
+                      graphId,
+                      plug.type,
+                      unselectedPlugOutsideNextPinId,
+                      datum
+                    ),
+                  },
+                ])
+
+                addDependency(
+                  unselectedPlugOutsideSetPinDataTask,
+                  unselectedPlugOutsidePlugTask
+                )
+              }
             }
           }
         }
