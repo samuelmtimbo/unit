@@ -29,9 +29,9 @@ export default class _MediaRecorder extends Holder<I, O> {
     super(
       {
         fi: ['opt', 'stream'],
-        fo: [],
+        fo: ['blob'],
         i: ['start', 'stop'],
-        o: ['blob', 'err'],
+        o: ['err'],
       },
       {
         input: {
@@ -82,11 +82,11 @@ export default class _MediaRecorder extends Holder<I, O> {
     }
 
     this._media_recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: opt.mimeType ?? 'audio/wav' })
+      const blob_ = new Blob(chunks, { type: opt.mimeType ?? 'audio/wav' })
 
-      const blob_ = wrapBlob(blob, this.__system)
+      const blob = wrapBlob(blob_, this.__system)
 
-      this._output.blob.push(blob_)
+      this._done({ blob })
 
       this._stop_waiter.set(true)
       this._stop_waiter.clear()
