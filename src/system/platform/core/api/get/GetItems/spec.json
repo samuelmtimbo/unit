@@ -1,0 +1,149 @@
+{
+  "name": "get items",
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "obj"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -125,
+            "y": -34
+          }
+        }
+      }
+    },
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "wait0",
+          "pinId": "b"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 120,
+            "y": 33
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -125,
+            "y": 33
+          }
+        }
+      }
+    }
+  },
+  "units": {
+    "get": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -102,
+              "y": -18
+            }
+          }
+        },
+        "name": {}
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -102,
+              "y": 17
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -56,
+          "y": 0
+        }
+      }
+    },
+    "wait0": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'value'",
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": -18
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": 17
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "wait0": {
+        "output": {
+          "a": true
+        }
+      },
+      "get": {
+        "input": {
+          "name": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get `obj` \"items\" property",
+    "tags": ["platform", "core", "api", "get"],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -2,
+          "y": 0
+        }
+      }
+    }
+  },
+  "id": "d0349c4b-8d69-48f0-a5ac-9e6beffce765",
+  "type": "`U`&`G`"
+}
