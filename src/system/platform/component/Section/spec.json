@@ -1,0 +1,34 @@
+{
+  "name": "section",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": []
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": []
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML section element",
+    "tags": ["platform", "component"]
+  },
+  "id": "3ea02a11-9b11-46d9-948e-ff0e21e4ba14",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 200
+  },
+  "render": true
+}
