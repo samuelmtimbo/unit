@@ -70,8 +70,8 @@
   },
   "metadata": {
     "icon": "object-get",
-    "description": "get host `obj` property",
-    "tags": ["platform", "api", "read"]
+    "description": "get `obj` \"host\" property",
+    "tags": ["platform", "core", "api", "get"]
   },
   "id": "38b257d7-fa9d-483f-b858-4a0e6cbf7f66",
   "type": "`U`&`G`"

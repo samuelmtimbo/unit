@@ -133,7 +133,7 @@
   },
   "metadata": {
     "icon": "object-get",
-    "description": "get unit's current width",
+    "description": "get `obj` \"width\" property",
     "tags": ["platform", "core", "api", "get"],
     "position": {
       "merge": {

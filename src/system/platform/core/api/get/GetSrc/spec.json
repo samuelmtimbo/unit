@@ -70,8 +70,8 @@
   },
   "metadata": {
     "icon": "object-get",
-    "description": "get src `obj` property",
-    "tags": ["platform", "api", "read"]
+    "description": "get `obj` \"src\" property",
+    "tags": ["platform", "core", "api", "get"]
   },
   "id": "c0dfeea2-4c9c-45df-99ea-d458925ddc94",
   "type": "`U`&`G`"
