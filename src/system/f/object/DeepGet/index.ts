@@ -31,6 +31,10 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
 
     try {
       value = deepGet(obj, path)
+
+      if (value === undefined) {
+        throw new Error('key not found')
+      }
     } catch (err) {
       done(undefined, 'key not found')
 
