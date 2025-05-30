@@ -6,7 +6,7 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": ["{}", "{background:'red'}"]
+        "examples": []
       }
     },
     "attr": {
@@ -14,7 +14,7 @@
       "optional": true,
       "defaultIgnored": true,
       "metadata": {
-        "examples": ["{tabIndex:1}", "{title:'header'}", "{draggable:true}"]
+        "examples": []
       }
     }
   },

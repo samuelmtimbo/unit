@@ -6,7 +6,7 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": ["{}", "{background:'red'}"]
+        "examples": ["{}"]
       }
     },
     "attr": {
