@@ -22842,27 +22842,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           return
         }
 
-        if (
-          this._zoom_comp._svg.$element.contains(relatedTarget) ||
-          (this._control &&
-            this._control._control.$element.contains(relatedTarget) &&
-            !this._control._main.$element.contains(relatedTarget)) ||
-          this._subgraph_unit_id
-        ) {
-          return
-        }
-
-        if (container && container.$element.contains(relatedTarget)) {
-          return
-        }
-
-        if (
-          this._control?._main.$element.contains(relatedTarget) &&
-          relatedTarget.classList.contains('data-tree-leaf')
-        ) {
-          return
-        }
-
         const hide = this._temp_control_unlock || this._control_lock
 
         this._disable(hide)
