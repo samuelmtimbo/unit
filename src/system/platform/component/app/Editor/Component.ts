@@ -32534,22 +32534,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _enter_datum_class_literal = (datum_node_id: string) => {
     const {
       system,
-      fork,
       specs,
       typeCache,
       container,
       config,
-      hasSpec,
-      emptySpec,
       setSpec,
-      newSpec,
-      deleteSpec,
-      forkSpec,
-      shouldFork,
-      injectSpecs,
-      registerUnit,
-      unregisterUnit,
-      newSpecId,
       enterFullwindow,
       leaveFullwindow,
       dispatchEvent,
@@ -32641,6 +32630,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       editor._graph.addEventListener(
         makeCustomListener('leave', () => {
           const {
+            specs,
             api: {
               window: { setTimeout },
             },
@@ -32648,9 +32638,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const modified_bundle = editor.getUnitBundle()
 
-          const spec_id_map = this.$props.injectSpecs(modified_bundle.specs)
+          // const spec_id_map = this.$props.injectSpecs(modified_bundle.specs)
 
-          remapUnitBundle(modified_bundle, spec_id_map)
+          // remapUnitBundle(modified_bundle, spec_id_map)
 
           const modified_value = `$${stringify(modified_bundle)}`
 
