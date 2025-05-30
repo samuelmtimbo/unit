@@ -59,7 +59,7 @@
     }
   },
   "outputs": {
-    "origin": {
+    "src": {
       "plug": {
         "0": {
           "unitId": "get",
