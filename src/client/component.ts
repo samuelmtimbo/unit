@@ -403,9 +403,7 @@ export class Component<
       const texts: string[] = await Promise.all(promises)
 
       if (this.$unit) {
-        const $emitter = this.$unit.$refEmitter({ _: ['EE'] })
-
-        $emitter.$emit({ type: 'drop', data: texts }, NOOP)
+        this.$unit.$emit({ event: 'drop', data: texts }, NOOP)
       }
     })
   }
@@ -2074,9 +2072,7 @@ export class Component<
 
       const unlisten = this.addEventListener(
         makeCustomListener(_event, (data) => {
-          const $emitter = this.$unit.$refEmitter({ _: ['EE'] })
-
-          $emitter.$emit({ type: event, data }, NOOP)
+          this.$unit.$emit({ event, data }, NOOP)
         })
       )
 
@@ -2084,9 +2080,7 @@ export class Component<
     } else {
       const unlisten = this.addEventListener(
         makeUIEventListener(event, (data) => {
-          const $emitter = this.$unit.$refEmitter({ _: ['EE'] })
-
-          $emitter.$emit({ type: event, data }, NOOP)
+          this.$unit.$emit({ event: event, data }, NOOP)
         })
       )
 
@@ -2267,7 +2261,7 @@ export class Component<
       }
     })
 
-    const $emitter = $unit.$refEmitter({ _: ['EE'] })
+    const $emitter = $unit
 
     const unlisten_control = this.$control($emitter)
 
