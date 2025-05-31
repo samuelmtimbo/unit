@@ -28,14 +28,6 @@ import { Async } from './Async'
 
 export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
   return {
-    $getGlobalId(data: {}, callback: Callback<string>): void {
-      unit.register()
-
-      const __globalId = unit.getGlobalId()
-
-      callback(__globalId)
-    },
-
     $paused(data: {}, callback: Callback<boolean>): void {
       const paused = unit.paused()
 
@@ -186,7 +178,7 @@ export const AsyncUWatch = (unit: Unit): $U_W => {
 export const AsyncURef = (unit: Unit): $U_R => {
   return {
     $refGlobalObj(data: GlobalRefSpec): $_ {
-      const system = unit.refSystem()
+      const system = unit.__system
 
       const { globalId, __ } = data
 

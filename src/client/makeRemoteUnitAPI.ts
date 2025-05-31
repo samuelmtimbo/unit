@@ -21,7 +21,7 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
         ref: {},
       }
 
-      for (const __ of _) {
+      for (const __ of ['$', ..._]) {
         const methods = METHOD[__]
 
         for (const type in methods) {
@@ -68,7 +68,7 @@ export function $makeRemoteObjectAPI($obj: any, _: string[]): RemoteAPI {
     ref: {},
   }
 
-  for (const __ of _) {
+  for (const __ of ['$', ..._]) {
     const method = METHOD[__]
 
     for (const type of METHOD_TYPES) {

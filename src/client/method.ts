@@ -1,6 +1,12 @@
 import { AllTypes } from '../interface'
 import { AllKeys } from '../types/AllKeys'
 import {
+  $_METHOD_CALL,
+  $_METHOD_GET,
+  $_METHOD_REF,
+  $_METHOD_WATCH,
+} from '../types/interface/async/$$'
+import {
   A_METHOD_CALL,
   A_METHOD_GET,
   A_METHOD_REF,
@@ -208,6 +214,12 @@ export const METHOD_TYPES: MethodType[] = [
 ] as const
 
 export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
+  $: {
+    get: $_METHOD_GET,
+    call: $_METHOD_CALL,
+    watch: $_METHOD_WATCH,
+    ref: $_METHOD_REF,
+  },
   EE: {
     get: EE_METHOD_GET,
     call: EE_METHOD_CALL,

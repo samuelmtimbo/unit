@@ -47,6 +47,7 @@ export const CLASS_TYPE_TEXT_DECODER = 'TD' // TextDecoder
 export const CLASS_TYPE_READABLE_STREAM = 'RS' // ReadableStream
 
 export type AllTypes<T> = {
+  $: T
   B: T
   IB: T
   CA: T
@@ -83,6 +84,7 @@ export type AllTypes<T> = {
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
+  $: true,
   B: true,
   IB: true,
   CA: true,

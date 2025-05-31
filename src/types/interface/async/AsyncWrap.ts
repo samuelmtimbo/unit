@@ -7,7 +7,7 @@ export const AsyncWrap = (
 ): any => {
   let $unit = unit
 
-  for (const __ of _) {
+  for (const __ of ['$', ..._]) {
     const AsyncWrapper = wrapper[__]
 
     if (!AsyncWrapper) {

@@ -1,4 +1,5 @@
 import { AllTypes } from '../../../interface'
+import { Async$ } from './Async$'
 import { AsyncA } from './AsyncA'
 import { AsyncAB } from './AsyncAB'
 import { AsyncAC } from './AsyncAC'
@@ -34,6 +35,7 @@ import { AsyncV } from './AsyncV'
 import { AsyncWP } from './AsyncWP'
 
 export const ASYNC: AllTypes<(unit: any) => any> = {
+  $: Async$,
   C: AsyncC,
   CA: AsyncCA,
   G: AsyncG,

@@ -715,13 +715,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       call(graph, 'bulkEdit', fork, bubble, actions, undefined)
     },
 
-    $setMergeData({
-      mergeId,
-      data,
-      fork = true,
-      bubble = true,
-    }: GraphSetMergeDataData): void {
-      const system = graph.refSystem()
+    $setMergeData({ mergeId, data }: GraphSetMergeDataData): void {
+      const system = graph.__system
 
       const { specs, classes } = system
 
@@ -730,19 +725,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.setMergeData(mergeId, _data)
     },
 
-    $removeMergeData({
-      mergeId,
-      fork = true,
-      bubble = true,
-    }: GraphRemoveMergeDataData): void {
+    $removeMergeData({ mergeId }: GraphRemoveMergeDataData): void {
       graph.removeMergeData(mergeId)
     },
 
-    $takeUnitErr({
-      unitId,
-      fork = true,
-      bubble = true,
-    }: GraphTakeUnitErrData): void {
+    $takeUnitErr({ unitId }: GraphTakeUnitErrData): void {
       graph.takeUnitErr(unitId)
     },
 

@@ -133,7 +133,7 @@ export function interfaceFilters(
     ref: new Set(),
   }
 
-  for (const __ of _) {
+  for (const __ of ['$', ..._]) {
     for (const type of METHOD_TYPES) {
       const FILTER = ASYNC_FILTER[__][type]
 

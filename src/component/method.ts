@@ -52,7 +52,7 @@ export function instanceChild(
   component,
   Class: UnitBundle<Component_>
 ): Component_ {
-  const system = component.refSystem()
+  const system = component.__system
 
   const unit = new Class(system)
 
