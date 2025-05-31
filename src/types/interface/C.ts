@@ -37,6 +37,8 @@ export type ComponentSetup = {
   stopPropagation: string[]
   stopImmediatePropagation: string[]
   preventDefault: string[]
+  attachText: [string, string][]
+  attachDropTarget: [][]
 }
 
 export interface C {
@@ -72,5 +74,7 @@ export interface C {
   cancelAnimation(id: string): void
   getAnimations(): AnimationSpec[]
   stopPropagation(name: string): Unlisten
+  attachText(type: string, text: string): Unlisten
+  attachDropTarget(): Unlisten
   getSetup(): ComponentSetup
 }

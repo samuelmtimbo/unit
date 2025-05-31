@@ -378,14 +378,20 @@ export class Component<
     }
   }
 
+  private _dropTargetUnlisten: Unlisten
+
   attachDropTarget(): void {
-    const rootLeaf = this.getFirstRootLeaf()
+    if (this._dropTargetUnlisten) {
+      return
+    }
 
-    rootLeaf.$element.addEventListener('dragover', (event) => {
+    const roots = this.getRootLeaves()
+
+    const dragOverListener = (event) => {
       event.preventDefault()
-    })
+    }
 
-    rootLeaf.$element.addEventListener('drop', async (event: DragEvent) => {
+    const dropListener = async (event: DragEvent) => {
       event.preventDefault()
 
       const { dataTransfer } = event
@@ -403,9 +409,33 @@ export class Component<
       const texts: string[] = await Promise.all(promises)
 
       if (this.$unit) {
-        this.$unit.$emit({ event: 'drop', data: texts }, NOOP)
+        this.$unit.$emit({ event: 'drop_', data: texts }, NOOP)
       }
-    })
+    }
+
+    const unlisten = []
+
+    for (const root of roots) {
+      root.$element.addEventListener('dragover', dragOverListener)
+      root.$element.addEventListener('drop', dropListener)
+
+      unlisten.push(() => {
+        root.$element.removeEventListener('dragover', dragOverListener)
+        root.$element.removeEventListener('drop', dropListener)
+      })
+    }
+
+    this._dropTargetUnlisten = callAll(unlisten)
+  }
+
+  detachDropTarget(): void {
+    if (!this._dropTargetUnlisten) {
+      return
+    }
+
+    this._dropTargetUnlisten()
+
+    this._dropTargetUnlisten = undefined
   }
 
   preventDefault(event: string): Unlisten {
@@ -2244,6 +2274,8 @@ export class Component<
         stopPropagation,
         stopImmediatePropagation,
         preventDefault,
+        attachDropTarget,
+        attachText,
       } = setup
 
       for (const event of events) {
@@ -2258,6 +2290,14 @@ export class Component<
 
       for (const event of stopPropagation) {
         this.stopPropagation(event)
+      }
+
+      for (const [type, text] of attachText) {
+        this.attachText(type, text)
+      }
+
+      for (const [] of attachDropTarget) {
+        this.attachDropTarget()
       }
     })
 

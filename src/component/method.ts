@@ -7,7 +7,7 @@ import { AnimationSpec } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { UnitBundle } from '../types/UnitBundle'
 import { Unlisten } from '../types/Unlisten'
-import { insert, push } from '../util/array'
+import { insert, push, remove } from '../util/array'
 
 function _appendChild(
   component: Component_,
@@ -358,7 +358,9 @@ export function stopPropagation(
   stopPropagationCount[name] = stopPropagationCount[name] ?? 0
   stopPropagationCount[name]++
 
-  component.emit('call', { method: 'stopPropagation', data: [name] })
+  if (stopPropagationCount[name] === 1) {
+    component.emit('call', { method: 'stopPropagation', data: [name] })
+  }
 
   return () => {
     stopPropagationCount[name]--
@@ -367,6 +369,49 @@ export function stopPropagation(
       delete stopPropagationCount[name]
 
       component.emit('call', { method: 'cancelStopPropagation', data: [name] })
+    }
+  }
+}
+
+export function attachText(
+  component: Component_,
+  attachTextArray: [string, string][],
+  type: string,
+  text: string
+): Unlisten {
+  const entry = [type, text]
+
+  push(attachTextArray, entry)
+
+  if (attachTextArray.length === 1) {
+    component.emit('call', { method: 'attachText', data: [type, text] })
+  }
+
+  return () => {
+    remove(attachTextArray, entry)
+
+    if (attachTextArray.length === 0) {
+      component.emit('call', { method: 'detachText', data: [name] })
+    }
+  }
+}
+
+export function attachDropTarget(
+  component: Component_,
+  attachTextDropTargetArray: [][]
+): Unlisten {
+  const entry = []
+
+  push(attachTextDropTargetArray, entry)
+
+  if (attachTextDropTargetArray)
+    component.emit('call', { method: 'attachDropTarget', data: [] })
+
+  return () => {
+    remove(attachTextDropTargetArray, entry)
+
+    if (attachTextDropTargetArray.length === 0) {
+      component.emit('call', { method: 'detachDropTarget', data: [] })
     }
   }
 }

@@ -2,6 +2,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_ATTACH_TEXT } from '../../../../_ids'
 
 export interface I<T> {
@@ -16,9 +17,7 @@ export interface O<T> {}
 export const VALID_MIME_TYPES = ['text/plain', 'text/html', 'text/uri-list']
 
 export default class AttachText<T> extends Holder<I<T>, O<T>> {
-  private _component: Component_
-  private _text: string
-  private _type: string
+  private _unlisten: Unlisten
 
   constructor(system: System) {
     super(
@@ -47,34 +46,14 @@ export default class AttachText<T> extends Holder<I<T>, O<T>> {
       return
     }
 
-    this._component = component
-    this._text = text
-    this._type = type
-
-    // AD HOC
-    setTimeout(() => {
-      component.emit('call', { method: 'attachText', data: [type, text] })
-    }, 0)
+    this._unlisten = component.attachText(type, text)
   }
 
   d() {
-    const {
-      api: {
-        window: { setTimeout },
-      },
-    } = this.__system
+    if (this._unlisten) {
+      this._unlisten()
 
-    if (this._component) {
-      setTimeout(() => {
-        if (this._component) {
-          this._component.emit('call', {
-            method: 'detachText',
-            data: [this._type, this._text],
-          })
-
-          this._component = undefined
-        }
-      }, 0)
+      this._unlisten = undefined
     }
   }
 }

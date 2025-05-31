@@ -1,9 +1,16 @@
 {
-  "name": "drop target",
+  "name": "attach drop target",
   "inputs": {
     "component": {
       "type": "`C`",
       "ref": true
+    },
+    "opt": {
+      "type": "object"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -13,7 +20,7 @@
   },
   "metadata": {
     "icon": "object-set",
-    "description": "make `component` a drag and drop target",
+    "description": "make `component` a text drag and drop target",
     "tags": ["platform", "method", "component"]
   },
   "id": "05169310-5447-4cf8-a90f-fda957de4891",

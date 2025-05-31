@@ -123,6 +123,16 @@ export function lazyFromSpec(
       return this.__graph.stopPropagation(name)
     }
 
+    attachText(type: string, text: string): Unlisten {
+      this._ensure()
+      return this.__graph.attachText(type, text)
+    }
+
+    attachDropTarget(): Unlisten {
+      this._ensure()
+      return this.__graph.attachDropTarget()
+    }
+
     getSetup(): ComponentSetup {
       this._ensure()
       return this.__graph.getSetup()

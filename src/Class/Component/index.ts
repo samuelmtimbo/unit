@@ -1,10 +1,11 @@
-import { Component } from '../../client/component'
 import { isComponentEvent } from '../../client/isComponentEvent'
 import {
   animate,
   appendChild,
   appendChildren,
   appendParentChild,
+  attachDropTarget,
+  attachText,
   cancelAnimation,
   hasChild,
   insertChild,
@@ -28,7 +29,7 @@ import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { fromUnitBundle } from '../../spec/fromUnitBundle'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
-import { AnimationSpec, C_EE, ComponentSetup } from '../../types/interface/C'
+import { AnimationSpec, C, C_EE, ComponentSetup } from '../../types/interface/C'
 import { Component_, ComponentEvents } from '../../types/interface/Component'
 import { UnitBundle } from '../../types/UnitBundle'
 import { Unlisten } from '../../types/Unlisten'
@@ -44,11 +45,13 @@ export type ComponentEE<_EE extends Dict<any[]>> = PrimitiveEvents<
   Component_EE
 
 export class Component__<
-  I extends Dict<any> = any,
-  O extends Dict<any> = any,
-  EE extends ComponentEE<EE> = ComponentEE<Component_EE>,
-  C extends Component = Component,
-> extends Primitive<I, O, EE> {
+    I extends Dict<any> = any,
+    O extends Dict<any> = any,
+    EE extends ComponentEE<EE> = ComponentEE<Component_EE>,
+  >
+  extends Primitive<I, O, EE>
+  implements C
+{
   __ = ['U', 'C', 'EE']
 
   public _children: Component_[] = []
@@ -56,11 +59,12 @@ export class Component__<
   public _parent_root: Component_[] = []
   public _parent_children: Component_[] = []
   public _slot: Dict<Component_> = {}
-  public _component: C
   public _animations: AnimationSpec[] = []
   public _stopPropagation: Dict<number> = {}
   public _stopImmediatePropagation: Dict<number> = {}
   public _preventDefault: Dict<number> = {}
+  public _attachDropTarget: [][] = []
+  public _attachText: [string, string][] = []
 
   constructor(
     { i = [], o = [] }: ION<I, O>,
@@ -211,6 +215,14 @@ export class Component__<
     return stopPropagation(this, this._stopPropagation, name)
   }
 
+  attachText(type: string, text: string): Unlisten {
+    return attachText(this, this._attachText, type, text)
+  }
+
+  attachDropTarget(): Unlisten {
+    return attachDropTarget(this, this._attachDropTarget)
+  }
+
   getSetup(): ComponentSetup {
     const setup: ComponentSetup = {
       animations: this._animations,
@@ -218,6 +230,8 @@ export class Component__<
       stopPropagation: Object.keys(this._stopPropagation),
       stopImmediatePropagation: Object.keys(this._stopImmediatePropagation),
       preventDefault: Object.keys(this._preventDefault),
+      attachText: this._attachText,
+      attachDropTarget: this._attachDropTarget,
     }
 
     return setup
