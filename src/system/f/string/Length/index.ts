@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_LENGTH } from '../../../_ids'
+import { ID_LENGTH_0 } from '../../../_ids'
 
 export interface I {
   a: string
@@ -19,7 +19,7 @@ export default class Length extends Functional<I, O> {
       },
       {},
       system,
-      ID_LENGTH
+      ID_LENGTH_0
     )
   }
 
