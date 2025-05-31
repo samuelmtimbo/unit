@@ -40,8 +40,8 @@ import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
 import { Context, dispatchCustomEvent } from './context'
+import { readDropEventItemsAsText } from './drag'
 import { makeCustomListener } from './event/custom'
-import { readDataTransferItemAsText } from './event/drag'
 import { extractTrait } from './extractTrait'
 import { getComponentInterface } from './interface'
 import { isHTML } from './isHTML'
@@ -394,19 +394,7 @@ export class Component<
     const dropListener = async (event: DragEvent) => {
       event.preventDefault()
 
-      const { dataTransfer } = event
-
-      const { items } = dataTransfer
-
-      const promises: Promise<string>[] = []
-
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i]
-
-        promises.push(readDataTransferItemAsText(item))
-      }
-
-      const texts: string[] = await Promise.all(promises)
+      const texts: string[] = await readDropEventItemsAsText(event)
 
       if (this.$unit) {
         this.$unit.$emit({ event: 'drop_', data: texts }, NOOP)

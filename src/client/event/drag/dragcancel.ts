@@ -1,32 +1,38 @@
+import { IODragEvent } from '.'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import { UnitPointerEvent } from '../pointer'
-
-export type IODragCancelEvent = UnitPointerEvent & { data: any }
+import { applyContextTransformToPointerEvent } from '../pointer'
 
 export function makeDragCancelListener(
-  listener: (event: IODragCancelEvent) => void,
+  listener: (event: IODragEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): Listener {
   return (component) => {
-    return listenDragCancel(component, listener, _global)
+    return listenDragCancel(component, listener)
   }
 }
 
 export function listenDragCancel(
   component: Listenable,
-  listener: (event: IODragCancelEvent) => void,
+  listener: (event: IODragEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): () => void {
   const { $element } = component
 
-  const dragCancelListener = (_event: CustomEvent<IODragCancelEvent>) => {
-    const { detail } = _event
+  const dragCancelListener = (_event: DragEvent) => {
+    const { $context } = component
 
-    listener(detail)
+    const event: IODragEvent = {
+      ...applyContextTransformToPointerEvent($context, _event),
+      dataTransfer: null,
+    }
+
+    listener(event, _event)
   }
-  $element.addEventListener('dragcancel', dragCancelListener, _global)
+
+  $element.addEventListener('dragcancel', dragCancelListener)
+
   return () => {
-    $element.removeEventListener('dragcancel', dragCancelListener, _global)
+    $element.removeEventListener('dragcancel', dragCancelListener)
   }
 }

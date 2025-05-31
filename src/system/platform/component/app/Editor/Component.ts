@@ -110,6 +110,7 @@ import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { IODragEvent } from '../../../../../client/event/drag'
+import { makeDragCancelListener } from '../../../../../client/event/drag/dragcancel'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
 import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
 import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
@@ -3388,6 +3389,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }),
       makeDragOverListener(this._on_drag_over),
       makeDropListener(this._on_drop),
+      makeDragLeaveListener(this._on_drag_leave),
+      makeDragCancelListener(this._on_drag_cancel),
     ])
 
     const shouldPreventSelection = (target: EventTarget) => {
@@ -3508,8 +3511,74 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _first_open_filename: string
   private _last_open_filename_on_empty_graph: string
 
-  private _on_drag_over = async (event, _event: DragEvent) => {
+  private _drag_showing_search: boolean = false
+
+  private _on_drag_over = (event: IODragEvent, _event: DragEvent) => {
+    const { animate } = this._config()
+
     _event.preventDefault()
+
+    if (!this._drag_showing_search) {
+      this._drag_showing_search = true
+
+      if (this._control) {
+        this._enable_search()
+
+        this._set_search_selected(null)
+
+        const filter = this._make_compatible_search_filter(
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          {
+            input: {
+              data: [getTree('string')],
+              ref: [],
+            },
+            output: {
+              data: [],
+              ref: [],
+            },
+          },
+          (id, match) => {
+            this._search_option_valid_pin_matches[id] = match
+          }
+        )
+
+        this._set_search_filter(filter)
+
+        this._control.show_search(animate)
+      }
+    }
+  }
+
+  private _hide_drag_search = () => {
+    const { animate } = this._config()
+
+    if (this._control.is_hidden()) {
+      this._drag_showing_search = false
+
+      this._control.hide_search(animate)
+
+      this._hide_search()
+    }
+  }
+
+  private _on_drag_leave = (event: IODragEvent, _event: DragEvent) => {
+    if (!this._is_related_target_visible(_event.target as HTMLElement)) {
+      this._hide_drag_search()
+
+      return
+    }
+  }
+
+  private _on_drag_cancel = (event, _event) => {
+    this._on_drag_leave(event, _event)
   }
 
   private _on_drop = async (event, _event: DragEvent) => {
@@ -3518,6 +3587,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { clientX, clientY, screenX, screenY } = event
 
     const { dataTransfer } = _event
+
+    if (this._drag_showing_search) {
+      this._hide_drag_search()
+    }
 
     const drop_position = this._screen_to_world(clientX, clientY)
 
@@ -16907,6 +16980,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (
+      this._mode === 'none' ||
       this._mode === 'add' ||
       this._mode === 'multiselect' ||
       this._mode === 'remove'
@@ -16956,7 +17030,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._state_remove_search_unit()
     } else {
-      if (this._mode === 'add') {
+      if (this._mode === 'none' || this._mode === 'add') {
         this._search_fallback_position = this._world_screen_center()
       }
     }
@@ -17348,7 +17422,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       pin_icon_color
     )
 
-    if (this._mode === 'add' || this._mode === 'remove') {
+    if (
+      this._mode === 'none' ||
+      this._mode === 'add' ||
+      this._mode === 'remove'
+    ) {
       this._set_unit_layer(unit_id, LAYER_SEARCH)
     }
 
@@ -17859,8 +17937,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_link_opacity(err_link_id, opacity)
   }
 
-  private _on_search_item_pick = ({ id }: { id: string }) => {
+  private _on_search_item_pick = ({
+    id,
+    dropText,
+  }: {
+    id: string
+    dropText?: string[]
+  }) => {
     // console.log('Graph', '_on_search_item_pick', id)
+
+    const { getSpec } = this.$props
 
     if (!this._control_lock) {
       return
@@ -17868,9 +17954,49 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const search_unit_id = this._search_unit_id
     const search_unit_datum_id = this._search_unit_datum_id
+    const search_unit_spec_id = this._search_unit_spec_id
 
     if (search_unit_id) {
       this._commit_shift_search()
+
+      if (this._drag_showing_search) {
+        this._drag_showing_search = false
+
+        const search_unit_spec = getSpec(search_unit_spec_id)
+
+        const data_inputs_names = keys(search_unit_spec.inputs)
+          .filter((input_id) => {
+            const input = search_unit_spec.inputs[input_id]
+
+            const { ref } = input
+
+            return !ref
+          })
+          .sort(localeCompare)
+
+        const valid_pin_matches =
+          this._search_option_valid_pin_matches[search_unit_spec_id]
+
+        const first_input_valid_index =
+          valid_pin_matches.input.data[0]?.[0]?.[1]
+
+        if (first_input_valid_index !== undefined) {
+          const first_input_valid_name =
+            data_inputs_names[first_input_valid_index]
+
+          const pin_node_id = getPinNodeId(
+            search_unit_id,
+            'input',
+            first_input_valid_name
+          )
+
+          const escaped_tree = this._escape_external_text_if_needed(dropText[0])
+
+          this._set_unit_pin_data(pin_node_id, escaped_tree.value)
+        }
+
+        this._search_option_valid_pin_matches = {}
+      }
 
       if (this._has_node(search_unit_id)) {
         this._refresh_node_color(search_unit_id)
@@ -17905,7 +18031,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_on_search_empty')
 
     if (this._search_unit_id) {
-      if (this._mode === 'add') {
+      if (this._mode === 'none' || this._mode === 'add') {
         this._state_remove_search_unit()
       }
     }
@@ -17964,6 +18090,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._refresh_unit_layer(search_unit_id)
 
       if (
+        this._mode === 'none' ||
         this._mode === 'add' ||
         this._mode === 'change' ||
         this._mode === 'multiselect' ||
@@ -17990,6 +18117,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         let should_add_component = false
 
         if (
+          this._mode === 'none' ||
           this._mode === 'add' ||
           this._mode === 'multiselect' ||
           this._mode === 'info'
@@ -18075,7 +18203,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               this._register_spec(this._search_unit_spec_id, specs, true)
             }
           }
-        } else if (this._mode === 'add') {
+        } else if (this._mode === 'none' || this._mode === 'add') {
           this._register_spec(this._search_unit_spec_id, specs, true)
         }
 
@@ -25156,7 +25284,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _lock_all_component_but = (component_id: string): void => {
     for (const c_id in this._core_component_unlocked) {
       if (c_id !== component_id) {
-        this._lock_sub_component(c_id)
+        this._lock_sub_component(c_id, true)
       }
     }
   }
@@ -30097,8 +30225,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         output: outputs,
       }
 
-      const input_ids = keys(inputs)
-      const output_ids = keys(outputs)
+      const input_ids = keys(inputs).sort(localeCompare)
+      const output_ids = keys(outputs).sort(localeCompare)
 
       const pin_ids = {
         input: input_ids,
@@ -30108,7 +30236,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const filter_pin_ids = (type: IO, _ref: boolean): string[] => {
         return pin_ids[type].filter((input_id) => {
           const i = pins[type][input_id]
+
           const { ref } = i
+
           return !!ref === _ref
         })
       }
@@ -30122,9 +30252,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const input_ref_count = input_ref_ids.length
       const output_data_count = output_data_ids.length
       const output_ref_count = output_ref_ids.length
-
-      const input_count = input_ids.length
-      const output_count = output_ids.length
 
       const { input: input_type, output: output_type } =
         _getSpecTypeInterfaceById(
@@ -46615,7 +46742,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _translate_search_node = () => {
-    if (this._search_unit_id && this._mode === 'add') {
+    if (
+      this._search_unit_id &&
+      (this._mode === 'none' || this._mode === 'add')
+    ) {
       const { x: pointer_x, y: pointer_y } = this._world_screen_center()
 
       const [p_x, p_y] = zoomInvert(this._zoom, pointer_x, pointer_y)

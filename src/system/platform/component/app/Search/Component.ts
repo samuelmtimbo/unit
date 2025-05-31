@@ -2,7 +2,13 @@ import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
 import { classnames } from '../../../../../client/classnames'
 import { debounce } from '../../../../../client/debounce'
+import { readDropEventItemsAsText } from '../../../../../client/drag'
 import { Element } from '../../../../../client/element'
+import { IODragEvent } from '../../../../../client/event/drag'
+import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
+import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
+import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
+import { makeDropListener } from '../../../../../client/event/drag/drop'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
 import { makeFocusOutListener } from '../../../../../client/event/focus/focusout'
 import { makeInputListener } from '../../../../../client/event/input'
@@ -219,6 +225,20 @@ export default class Search extends Element<HTMLDivElement, Props> {
         },
       ])
     )
+    input.addEventListener(
+      makeDragOverListener((event: IODragEvent, _event: DragEvent) => {
+        _event.preventDefault()
+
+        if (this._list_hidden) {
+          this._show_list()
+        }
+      })
+    )
+    input.addEventListener(
+      makeDropListener((event, _event: DragEvent) => {
+        _event.preventDefault()
+      })
+    )
     this._input = input
 
     const {
@@ -249,8 +269,28 @@ export default class Search extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+
+    let microphoneDragCount = 0
+
     microphone.preventDefault('mousedown')
     microphone.preventDefault('touchdown')
+    microphone.addEventListeners([
+      makeDragEnterListener(() => {
+        microphoneDragCount++
+
+        if (microphoneDragCount === 1) {
+          this._start_microphone()
+        }
+      }),
+      makeDragLeaveListener(() => {
+        microphoneDragCount--
+        if (microphoneDragCount === 0) {
+          if (this._microphone.$output.recording) {
+            this._stop_microphone()
+          }
+        }
+      }),
+    ])
     this._microphone = microphone
 
     const shape_button = new IconButton(
@@ -281,6 +321,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     this._shape_button = shape_button
 
+    let dragCount: number = 0
+
     const search = new Div(
       {
         className: classnames('search', className),
@@ -292,6 +334,24 @@ export default class Search extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+
+    search.addEventListener(
+      makeDragEnterListener((event: IODragEvent, event_: DragEvent) => {
+        dragCount++
+      })
+    )
+    search.addEventListener(
+      makeDragLeaveListener((event: IODragEvent, event_: DragEvent) => {
+        dragCount--
+
+        if (dragCount === 0) {
+          if (!this._list_hidden) {
+            this._hide_list()
+          }
+        }
+      })
+    )
+
     search.registerParentRoot(list)
     search.registerParentRoot(input)
     search.registerParentRoot(shape_button)
@@ -427,9 +487,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     } else if (prop === 'selected') {
       const { selected } = this.$props
 
-      if (selected) {
-        this._set_selected_item_id(selected)
-      }
+      this._set_selected_item_id(selected)
     } else if (prop === 'filter') {
       this._filter_list(true)
     } else if (prop === 'registry') {
@@ -665,19 +723,36 @@ export default class Search extends Element<HTMLDivElement, Props> {
     list_item_div.preventDefault('mousedown')
     list_item_div.preventDefault('touchdown')
     list_item_div.appendChild(list_item_content)
-    list_item_div.addEventListener(
+    list_item_div.addEventListeners([
       makePointerEnterListener((event) => {
         this._on_list_item_pointer_enter(event, id)
-      })
-    )
-
-    list_item_div.addEventListener(
+      }),
       makeClickListener({
         onClick: (event) => {
           this._on_list_item_click(event, id)
         },
-      })
-    )
+      }),
+      makeDragOverListener((event: IODragEvent, _event: DragEvent) => {
+        _event.preventDefault()
+
+        if (this._selected_id !== id) {
+          this.set_selected_item_id(id)
+        }
+      }),
+      makeDropListener(async (event, _event: DragEvent) => {
+        _event.preventDefault()
+
+        if (!this._list_hidden) {
+          if (this._selected_id) {
+            const items = await readDropEventItemsAsText(_event)
+
+            this._dispatch_item_pick(this._selected_id, items)
+          }
+
+          this._hide_list()
+        }
+      }),
+    ])
     this._list_item_div[id] = list_item_div
     this._list.appendChild(list_item_div)
   }
@@ -885,8 +960,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this.dispatchEvent('shape', { shape: this._shape })
   }
 
-  private _dispatch_item_pick = (id: string): void => {
-    this.dispatchEvent('pick', { id })
+  private _dispatch_item_pick = (id: string, dropText?: string[]): void => {
+    this.dispatchEvent('pick', { id, dropText })
   }
 
   private _dispatch_list_shown = (): void => {
@@ -957,10 +1032,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     this._selected_id = id
 
-    this._set_list_item_color(id, selectedColor)
+    if (id) {
+      this._set_list_item_color(id, selectedColor)
 
-    if (!this._list_hidden) {
-      this._scroll_into_item_if_needed(id, force_scroll)
+      if (!this._list_hidden) {
+        this._scroll_into_item_if_needed(id, force_scroll)
+      }
     }
   }
 
