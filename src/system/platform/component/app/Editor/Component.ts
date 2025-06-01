@@ -29890,8 +29890,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._pod.$removeMergeData({ mergeId })
   }
 
-  private _spec_type_interface_cache: Dict<any> = {}
-
   private _on_unit_blue_click = (unit_id: string): void => {
     // console.log('Graph', '_on_unit_blue_click', unit_id)
 
@@ -30215,7 +30213,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     ) => {}
   ) => {
     return (id: string) => {
-      const { specs } = this.$props
+      const { specs, typeCache } = this.$props
 
       const inputs = getSpecInputs(specs, id)
       const outputs = getSpecOutputs(specs, id)
@@ -30254,12 +30252,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const output_ref_count = output_ref_ids.length
 
       const { input: input_type, output: output_type } =
-        _getSpecTypeInterfaceById(
-          id,
-          specs,
-          this._spec_type_interface_cache,
-          {}
-        )
+        _getSpecTypeInterfaceById(id, specs, typeCache, {})
 
       const data_input_types = input_data_ids.map(
         (input_id) => input_type[input_id]
