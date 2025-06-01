@@ -3560,13 +3560,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _hide_drag_search = () => {
     const { animate } = this._config()
 
-    if (this._control.is_hidden()) {
-      this._drag_showing_search = false
+    this._drag_showing_search = false
 
+    if (this._control.is_hidden()) {
       this._control.hide_search(animate)
 
       this._hide_search()
     }
+
+    this._set_search_filter(undefined)
   }
 
   private _on_drag_leave = (event: IODragEvent, _event: DragEvent) => {
