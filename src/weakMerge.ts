@@ -1,13 +1,14 @@
 export function weakMerge<A extends object, B extends object>(
   a: A,
-  b: B
+  b: B,
+  c: A | B = b
 ): A & B {
   return new Proxy(b, {
     get(_, p) {
       return b[p] ?? a[p]
     },
     set(_, p, v) {
-      b[p] = v
+      c[p] = v
 
       return true
     },

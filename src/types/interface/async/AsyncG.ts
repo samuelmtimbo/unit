@@ -99,13 +99,16 @@ function call(
       const sibling = all[globalId] as Graph
 
       sibling[method].call(
-        weakMerge(sibling, {
-          _spec: clone(spec),
-        }),
+        weakMerge(
+          sibling,
+          {
+            _spec: clone(spec),
+          },
+          sibling
+        ),
         ...args,
         fork,
-        bubble,
-        false
+        bubble
       )
     }
   }
@@ -251,7 +254,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         type,
         pinId,
         data,
-        true
+        undefined,
+        undefined
       )
     },
 
