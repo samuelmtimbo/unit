@@ -1,0 +1,382 @@
+{
+  "type": "`U`&`G`",
+  "name": "remove all units",
+  "units": {
+    "bundle": {
+      "id": "13d738b9-401d-43c9-852f-e9611545f5bc",
+      "input": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": -40,
+              "y": -25
+            }
+          }
+        },
+        "opt": {
+          "constant": false
+        }
+      },
+      "output": {
+        "bundle": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -3,
+          "y": -50
+        }
+      }
+    },
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -12,
+              "y": 166
+            }
+          }
+        },
+        "i": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 18,
+              "y": 143
+            }
+          }
+        },
+        "test": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -64,
+              "y": 151
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -27,
+          "y": 122
+        }
+      }
+    },
+    "keys": {
+      "id": "45b9c329-64e9-4c4a-800b-790947c75754",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "keys": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 73,
+          "y": 105
+        }
+      }
+    },
+    "removeunit": {
+      "id": "c47d84b2-4207-11eb-a064-a3633d64f05d",
+      "input": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": -175,
+              "y": 125
+            }
+          }
+        },
+        "id": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -127,
+          "y": 125
+        }
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "spec"
+          },
+          "metadata": {
+            "position": {
+              "x": 143,
+              "y": -51
+            },
+            "data": {
+              "position": {
+                "x": 174,
+                "y": -74
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 100,
+          "y": -30
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {
+              "system": false,
+              "state": false
+            }
+          },
+          "metadata": {
+            "data": {
+              "position": {
+                "x": -222,
+                "y": -139
+              }
+            },
+            "position": {
+              "x": -151,
+              "y": -92
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -154,
+              "y": -57
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -108,
+          "y": -72
+        }
+      }
+    },
+    "get0": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "units"
+          },
+          "metadata": {
+            "position": {
+              "x": 209,
+              "y": 57
+            },
+            "data": {
+              "position": {
+                "x": 255,
+                "y": 64
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 160,
+          "y": 52
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "bundle": {
+        "input": {
+          "opt": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "bundle": {
+        "output": {
+          "bundle": true
+        }
+      }
+    },
+    "2": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "keys": {
+        "output": {
+          "keys": true
+        }
+      }
+    },
+    "3": {
+      "removeunit": {
+        "input": {
+          "id": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "4": {
+      "get0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "get": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "5": {
+      "keys": {
+        "input": {
+          "obj": true
+        }
+      },
+      "get0": {
+        "output": {
+          "value": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "ref": true,
+      "plug": {
+        "0": {
+          "unitId": "removeunit",
+          "kind": "input",
+          "pinId": "graph"
+        },
+        "1": {
+          "unitId": "bundle",
+          "pinId": "graph",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -198,
+              "y": 125
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -48,
+              "y": -3
+            }
+          }
+        }
+      }
+    },
+    "any": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "wait",
+          "kind": "input",
+          "pinId": "b"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -174,
+              "y": -44
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "x",
+    "description": "remove all units from a graph",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -55,
+          "y": -65
+        },
+        "1": {
+          "x": 49,
+          "y": -43
+        },
+        "2": {
+          "x": 24,
+          "y": 116
+        },
+        "3": {
+          "x": -78,
+          "y": 125
+        },
+        "4": {
+          "x": 134,
+          "y": 9
+        },
+        "5": {
+          "x": 120,
+          "y": 85
+        }
+      }
+    }
+  },
+  "id": "3866656a-8fe0-44b5-a278-59284c555606"
+}
