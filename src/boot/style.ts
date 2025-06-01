@@ -186,12 +186,10 @@ export const style = {
     color: 'currentColor',
   },
   path: {
-    strokeWidth: '3px',
     fill: 'none',
     stroke: 'currentColor',
   },
   line: {
-    strokeWidth: '3px',
     fill: 'none',
     stroke: 'currentColor',
     'stroke-linecap': 'round',
