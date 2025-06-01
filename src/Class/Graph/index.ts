@@ -6017,7 +6017,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     // console.log('Graph', 'bulkEdit', actions, propagate)
 
-    // actions = clone(actions)
+    actions = clone(actions)
 
     for (const action of actions) {
       let target: Graph = this
