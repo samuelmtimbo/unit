@@ -8,20 +8,17 @@ export const style = {
     height: 'fit-content',
   },
   audio: {
-    display: 'block',
     height: '45px',
     width: '100%',
     boxSizing: 'border-box',
   },
   image: {
-    display: 'block',
     width: '100%',
     height: '100%',
     objectFit: 'contain',
   },
   anchor: {},
   checkbox: {
-    display: 'block',
     height: '100%',
     width: '100%',
     color: 'inherit',
