@@ -20,7 +20,7 @@ export default class HTMLElement_<
     $defaultAttr: Dict<any> = {},
     $propHandlers: Dict<(value: any) => void> = {}
   ) {
-    super($props, $system)
+    super({ ...$props, style: { ...$defaultStyle, ...$props.style } }, $system)
 
     const { className, style, attr } = this.$props
 

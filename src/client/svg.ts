@@ -19,7 +19,7 @@ export class SVGElement_<
     $defaultAttr: Dict<any> = {},
     $propHandlers: Dict<(value: any) => void>
   ) {
-    super($props, $system)
+    super({ ...$props, style: { ...$defaultStyle, ...$props.style } }, $system)
 
     const { style, attr } = this.$props
 
