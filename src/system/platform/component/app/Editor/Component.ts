@@ -51776,6 +51776,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const id = newSpecId()
 
+    const { datum_node_ids } = this._decant_node_ids(node_ids)
+
+    if (datum_node_ids.length === 1) {
+      const single_datum_node_id = datum_node_ids[0]
+
+      const tree = this._get_datum_tree(single_datum_node_id)
+
+      if (tree.type === TreeNodeType.Unit) {
+        //
+      } else {
+        await writeText(tree.value)
+
+        return
+      }
+    }
+
     const bundle = this._sub_graph_selection(node_ids)
 
     const copyToClipboard = async () => {
