@@ -374,7 +374,8 @@
           "data": {
             "ref": [],
             "data": {
-              "fill": "currentColor"
+              "fill": "currentColor",
+              "strokeWidth": "3px"
             }
           }
         },
