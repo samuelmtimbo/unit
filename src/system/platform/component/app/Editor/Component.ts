@@ -57122,6 +57122,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               parent_component.getSubComponent(parent_id)
 
             if (
+              sub_component_parent_root &&
               sub_component_parent_root.$parentRoot.includes(removed_component)
             ) {
               if (
