@@ -18,8 +18,8 @@ const id2 = 'id2'
 
 composition0.play()
 
-composition0.addUnitSpecs({
-  [id0]: {
+composition0.addUnitSpec(id0, {
+  unit: {
     id: ID_IDENTITY,
     input: {
       a: {
@@ -28,10 +28,14 @@ composition0.addUnitSpecs({
     },
     output: {},
   },
-  [id1]: {
+})
+composition0.addUnitSpec(id1, {
+  unit: {
     id: ID_IDENTITY,
   },
-  [id2]: {
+})
+composition0.addUnitSpec(id2, {
+  unit: {
     id: ID_IDENTITY,
   },
 })

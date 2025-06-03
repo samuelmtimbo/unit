@@ -15,7 +15,6 @@ import { GraphMergesSpec } from '../types/GraphMergesSpec'
 import { GraphPinSpec } from '../types/GraphPinSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
-import { GraphUnitsSpec } from '../types/GraphUnitsSpec'
 import { IO } from '../types/IO'
 import { IOOf } from '../types/IOOf'
 import { UnitBundle } from '../types/UnitBundle'
@@ -283,11 +282,6 @@ export function lazyFromSpec(
     removeUnitPinData(unitId: string, type: IO, pinId: string) {
       this._ensure()
       return this.__graph.removeUnitPinData(unitId, type, pinId)
-    }
-
-    addUnitSpecs(units: GraphUnitsSpec): void {
-      this._ensure()
-      return this.__graph.addUnitSpecs(units)
     }
 
     addUnitSpec(
@@ -766,11 +760,6 @@ export function lazyFromSpec(
     public getMergePinCount(mergeId: string): number {
       this._ensure()
       return this.__graph.getMergePinCount(mergeId)
-    }
-
-    public addUnits = (units: GraphUnitsSpec): void => {
-      this._ensure()
-      return this.__graph.addUnitSpecs(units)
     }
 
     public addUnit = (unitId: string, unit: Unit, ...extra: any[]): void => {
