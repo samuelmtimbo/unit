@@ -56075,14 +56075,57 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { setSpec, forkSpec, specs, parent } = this.$props
 
-    const { type, pinId, path } = data
+    const { type, pinId, path, pinSpec } = data
 
     const unitId = path[0]
 
-    if (path.length === 1) {
-      this._sim_graph_remove_unit_pin(unitId, type, pinId)
+    const unit_spec = this._get_unit_spec(unitId)
 
-      this._spec_remove_unit_pin(unitId, type, pinId)
+    if (path.length === 1) {
+      if (!this._spec_graph_unit_has_pin(unitId, type, pinId)) {
+        return
+      }
+
+      for (const unitId in this._spec.units) {
+        const id = this._get_unit_spec_id(unitId)
+
+        if (id === unit_spec.id) {
+          this._sim_graph_remove_unit_pin(unitId, type, pinId)
+
+          this._spec_remove_unit_pin(unitId, type, pinId)
+        }
+      }
+    }
+
+    if (path.length > 1) {
+      const unit_id = last(path)
+      const parent_path = butLast(path)
+
+      let [parent_spec_id, parent_spec] = forkSpec(
+        findSpecAtPath(specs, this._spec, parent_path)
+      )
+
+      parent_spec = clone(parent_spec)
+
+      const parent_spec_unit = parent_spec.units[unit_id]
+
+      for (const unit_id_ in parent_spec.units) {
+        const unit_ = parent_spec.units[unit_id_]
+
+        if (unit_.id === parent_spec_unit.id) {
+          const pin_plug = findUnitPinPlug(parent_spec, unit_id_, type, pinId)
+
+          deepDelete(parent_spec, ['units', unit_id_, type, pinId])
+
+          if (pin_plug) {
+            const plug_count = getPlugCount(parent_spec, type, pinId)
+
+            unplugPin(pin_plug, parent_spec)
+          }
+
+          setSpec(parent_spec.id, parent_spec)
+        }
+      }
     }
 
     if (this._is_spec_updater(path)) {
@@ -56091,31 +56134,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       coverPinSet({ type, pinId }, spec)
 
       setSpec(spec.id, spec)
-
-      if (path.length >= 1) {
-        const unit_id = last(path)
-        const parent_path = butLast(path)
-
-        let [parent_spec_id, parent_spec] = forkSpec(
-          findSpecAtPath(specs, this._spec, parent_path)
-        )
-
-        parent_spec = clone(parent_spec)
-
-        const pin_plug = findUnitPinPlug(parent_spec, unit_id, type, pinId)
-
-        deepDelete(parent_spec, ['units', unit_id, type, pinId])
-
-        if (pin_plug) {
-          const plug_count = getPlugCount(parent_spec, type, pinId)
-
-          unplugPin(pin_plug, parent_spec)
-        }
-
-        if (path.length > 1) {
-          setSpec(parent_spec.id, parent_spec)
-        }
-      }
     }
   }
 
