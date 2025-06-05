@@ -31,6 +31,7 @@ export type SnapshotOpt = {
   state?: boolean
   system?: boolean
   error?: boolean
+  metadata?: boolean
 }
 
 export type BundleOpt = SnapshotOpt & {}

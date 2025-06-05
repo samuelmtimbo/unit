@@ -1,5 +1,6 @@
 import { UNTITLED } from '../constant/STRING'
 import { deepSet_ } from '../deepSet'
+import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../system/core/object/KeyCount/f'
 import isEqual from '../system/f/comparison/Equals/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
@@ -12,6 +13,7 @@ import {
   Spec,
   Specs,
 } from '../types'
+import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphPinSpec } from '../types/GraphPinSpec'
@@ -682,4 +684,53 @@ export function remapUnitPlugs(
   })
 
   return plugs_
+}
+
+export function removeBundleMetadata(bundle: BundleSpec): void {
+  const { spec = {}, specs = {} } = bundle
+
+  removeSpecMetadata(spec)
+
+  forEachValueKey(specs, removeSpecMetadata)
+}
+
+export function removeSpecMetadata(spec: GraphSpec): void {
+  const {
+    units = {},
+    inputs = {},
+    outputs = {},
+    metadata = {},
+    data = {},
+  } = spec
+
+  for (const unitId in units) {
+    const unit = units[unitId]
+
+    delete unit.metadata
+
+    forEachValueKey(unit.input ?? {}, (input) => {
+      delete input.metadata
+    })
+    forEachValueKey(unit.output ?? {}, (output) => {
+      delete output.metadata
+    })
+  }
+
+  forEachValueKey(inputs, (input) => {
+    delete input.metadata
+    delete input.icon
+  })
+  forEachValueKey(outputs, (output) => {
+    delete output.metadata
+    delete output.icon
+  })
+
+  for (const datumId in data) {
+    const datum = data[datumId]
+
+    delete datum.metadata
+  }
+
+  delete metadata.icon
+  delete metadata.position
 }

@@ -43,6 +43,7 @@ import {
 } from '../../spec/reducers/spec'
 import { stringify } from '../../spec/stringify'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
+import { removeBundleMetadata } from '../../spec/util'
 import { getSubComponentParentId } from '../../spec/util/component'
 import {
   findMergePlugOfType,
@@ -1026,20 +1027,28 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return this._spec
   }
 
-  public getBundleSpec({ deep, system, state }: SnapshotOpt = {}): BundleSpec {
+  public getBundleSpec(
+    { deep, system, state, metadata = true }: SnapshotOpt = { metadata: true }
+  ): BundleSpec {
     const { spec, specs } = bundleSpec(this._spec, this.__system.specs, system)
 
     const spec_ = clone(spec)
 
     if (deep) {
       forEachObjKV(this._unit, (unitId, unit) => {
-        const unitMemory = unit.snapshot({ deep, state })
+        const memory = unit.snapshot({ deep, state })
 
-        deepSet(spec_, ['units', unitId, 'memory'], unitMemory)
+        deepSet(spec_, ['units', unitId, 'memory'], memory)
       })
     }
 
-    return { spec: spec_, specs }
+    const bundle = { spec: spec_, specs }
+
+    if (!metadata) {
+      removeBundleMetadata(bundle)
+    }
+
+    return bundle
   }
 
   public getUnitBundleSpec({
