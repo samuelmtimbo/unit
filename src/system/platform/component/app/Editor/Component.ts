@@ -57650,7 +57650,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { unitId, type, pinId, data, path } = _data
 
     if (path.length === 0) {
-      setUnitPinData({ unitId, type, pinId, data }, this._spec, specs, classes)
+      const dataRef = evaluateDataValue(data, specs, classes)
+
+      setUnitPinData(
+        { unitId, type, pinId, data: dataRef },
+        this._spec,
+        specs,
+        classes
+      )
     }
   }
 
@@ -58110,19 +58117,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (data) {
       this._graph_debug_set_pin_value(pin_node_id, data)
     }
-  }
-
-  private _should_watch_ref_pin = (
-    pin_node_id: string,
-    unitId: string,
-    type: IO,
-    pinId: string
-  ): boolean => {
-    return (
-      this._is_input_pin_node_id(pin_node_id) &&
-      this._is_link_pin_ref(pin_node_id) &&
-      this._spec_is_link_pin_constant(unitId, type, pinId)
-    )
   }
 
   private _on_graph_unit_ref_link_pin_data_moment = (

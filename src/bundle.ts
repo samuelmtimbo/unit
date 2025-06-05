@@ -132,10 +132,6 @@ function _bundleUnit(
         }
 
         _bundleUnit(bundle.unit, specs, custom, branch, system)
-
-        if (bundle.specs) {
-          delete bundle.specs
-        }
       }
     }
   }

@@ -14,6 +14,7 @@ import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
 import { processAction } from '../../spec/actions/G'
 import { cloneUnitClass } from '../../spec/cloneUnit'
 import { evaluateData } from '../../spec/evaluateDataValue'
+import { fromBundle } from '../../spec/fromBundle'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
 import {
@@ -3429,7 +3430,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       }
 
       const edit = (data: Graph) => {
-        const Class = data.constructor
+        const { specs, classes } = this.__system
+
+        const bundle = data.getBundleSpec()
+
+        const Class = fromBundle(
+          bundle,
+          weakMerge(specs, bundle.specs ?? {}),
+          classes
+        )
 
         set(Class)
       }

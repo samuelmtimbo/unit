@@ -11,13 +11,15 @@ export function fromUnitBundle<T extends Unit>(
   specs: Specs,
   classes: Classes
 ): UnitBundle<T> {
-  const { unit, specs: _specs = {} } = bundle
+  const { unit } = bundle
 
   const { id } = unit
 
-  const Class = classFromId<T>(id, weakMerge(_specs, specs), classes, {})
+  const specs_ = weakMerge(specs, bundle.specs ?? {})
 
-  const Bundle = bundleClass(Class, bundle, specs)
+  const Class = classFromId<T>(id, specs_, classes, {})
+
+  const Bundle = bundleClass(Class, bundle, specs_)
 
   return Bundle
 }
