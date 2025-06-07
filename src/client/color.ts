@@ -157,20 +157,22 @@ export function isHex(name: string): boolean {
 }
 
 const rgbaRegex =
-  /^(rgb|rgba)\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})(?:,\s*\d{1,3})?\)|(255)$/
+  /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(\d*\.?\d+))?\s*\)$/
 
 export function isRgbaString(color: string): boolean {
   return rgbaRegex.test(color)
 }
 
 export function rgbaStringToHex(color: string): string {
-  const [_, __, r, g, b, a = '255'] = color.match(rgbaRegex)
+  const [, r, g, b, a = '1'] = color.match(rgbaRegex)
+
+  const alpha = Math.round(Number.parseFloat(a) * 255)
 
   return rgbaToHex_(
     Number.parseInt(r),
     Number.parseInt(g),
     Number.parseInt(b),
-    Number.parseInt(a)
+    alpha
   )
 }
 
@@ -190,7 +192,10 @@ export function colorToHex(color: string): string {
 
 export function rgbaToHex_(r: number, g: number, b: number, a: number) {
   const hex =
-    '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1)
+    '#' +
+    (0x100000000 + r * 0x1000000 + g * 0x10000 + b * 0x100 + a)
+      .toString(16)
+      .slice(1)
   return hex
 }
 
