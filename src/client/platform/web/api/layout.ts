@@ -5,7 +5,13 @@ import { Style, Tag } from '../../../../system/platform/Style'
 import { traverseTree, Tree } from '../../../../tree'
 import { LayoutNode } from '../../../LayoutNode'
 import { mergeAttr } from '../../../attr'
-import { colorToHex, hexToRgba, RGBA, rgbaToHex } from '../../../color'
+import {
+  colorToHex,
+  hexToRgba,
+  RGBA,
+  rgbaToHex,
+  TRANSPARENT_RGBA,
+} from '../../../color'
 import { namespaceURI } from '../../../component/namespaceURI'
 import { parseLayoutValue } from '../../../parseLayoutValue'
 import { parseRelativeUnit } from '../../../parseRelativeUnit'
@@ -307,6 +313,14 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
             color = parentTrait.color
           }
 
+          let background: RGBA = TRANSPARENT_RGBA
+
+          if (computedStyle.backgroundColor) {
+            const hex: string = colorToHex(computedStyle.backgroundColor)
+
+            background = (hex && hexToRgba(hex)) || TRANSPARENT_RGBA
+          }
+
           node.value.trait = {
             x,
             y,
@@ -317,6 +331,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
             sx,
             sy,
             color,
+            background,
           }
         })
       }

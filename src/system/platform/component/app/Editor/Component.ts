@@ -77,6 +77,7 @@ import { applyAttr } from '../../../../../client/attr'
 import { classnames } from '../../../../../client/classnames'
 import {
   RGBA,
+  TRANSPARENT_RGBA,
   hexToRgba,
   rgbaToHex,
   setAlpha,
@@ -8266,6 +8267,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       opacity: 1,
       fontSize,
       color,
+      background: TRANSPARENT_RGBA,
     }
 
     this._layout_node[unit_id] = layout_node
@@ -20667,6 +20669,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ['opacity', ANIMATION_DELTA_THRESHOLD / 100],
         ['fontSize', ANIMATION_DELTA_THRESHOLD / 10],
         ['color', ANIMATION_DELTA_THRESHOLD / 100],
+        ['background', ANIMATION_DELTA_THRESHOLD / 100],
       ],
       tick,
       callback
@@ -20902,7 +20905,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       },
     } = this.$system
 
-    const { x, y, width, height, sx, sy, fontSize, opacity, color } = leaf_node
+    const {
+      x,
+      y,
+      width,
+      height,
+      sx,
+      sy,
+      fontSize,
+      opacity,
+      color,
+      background,
+    } = leaf_node
 
     const frame_style = {
       display: 'block',
@@ -20924,6 +20938,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       overflow: 'visible',
       pointerEvents: 'none',
       color: rgbaToHex(color),
+      background: rgbaToHex(background),
     }
 
     const is_text = isTextLike(leaf_comp)
@@ -20946,6 +20961,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       opacity: '1',
       transform: '',
       color: 'currentcolor',
+      background: 'var(--background_)',
       maxWidth: '100%',
       maxHeight: '100%',
       fontSize: '1em',
@@ -21906,6 +21922,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 opacity: leaf_trait.opacity * leaf_layer_opacity,
                 fontSize: leaf_trait.fontSize,
                 color: leaf_trait.color,
+                background: leaf_trait.background,
               }
 
               this._leaf_target_trait[leaf_id] = leaf_trait_
@@ -21993,7 +22010,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const layout_node = this._layout_node[sub_component_id]
 
-        const { x, y, width, height, color } = layout_node
+        const { x, y, width, height, color, background } = layout_node
 
         const { x: scrollX, y: scrollY } = getScrollPosition(
           leaf_layer.$element,
@@ -22011,6 +22028,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             sy: 1,
             opacity: 1,
             color,
+            background,
           }
 
           all_leaf_trait = this._reflect_sub_component_base_trait(
@@ -22037,6 +22055,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           opacity: leaf_trait.opacity * leaf_layer_opacity,
           fontSize: leaf_trait.fontSize,
           color: leaf_trait.color,
+          background: leaf_trait.background,
         }
 
         this._leaf_target_trait[leaf_id] = leaf_trait_
@@ -22069,6 +22088,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const sub_component = this._get_sub_component(node_id)
 
     const color = sub_component.getColor()
+    const background = sub_component.getBackgroundColor()
 
     const { z } = this._zoom
 
@@ -22082,6 +22102,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       opacity: 1,
       fontSize: 14,
       color,
+      background,
     }
 
     return trait
@@ -22320,6 +22341,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               opacity: leaf_trait.opacity,
               fontSize: leaf_trait.fontSize,
               color: leaf_trait.color,
+              background: leaf_trait.background,
             }
           },
           async () => {
@@ -28455,6 +28477,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           opacity: leaf_trait.opacity,
           fontSize: leaf_trait.fontSize,
           color: leaf_trait.color,
+          background: leaf_trait.background,
         }
       },
       callback
@@ -31537,6 +31560,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               opacity: trait.opacity,
               fontSize: trait.fontSize,
               color: trait.color,
+              background: trait.background,
             }
           },
           async () => {
@@ -33323,6 +33347,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       opacity: 1,
       color: hexToRgba($color),
       fontSize: DEFAULT_FONT_SIZE,
+      background: TRANSPARENT_RGBA,
     }
   }
 
@@ -33375,6 +33400,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         (leaf_id: string) => {
           if (i === 0) {
             const color = sub_component.getColor()
+            const background = sub_component.getBackgroundColor()
 
             let target_slot = frame_slot
 
@@ -33404,6 +33430,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               opacity,
               fontSize,
               color,
+              background,
             }
 
             all_trait = this.___reflect_sub_component_base_trait(
@@ -33433,6 +33460,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             opacity: _trait.opacity,
             fontSize: _trait.fontSize,
             color: _trait.color,
+            background: _trait.background,
           }
 
           i = (i + 1) % leaf_total
@@ -33610,6 +33638,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             opacity: leaf_trait.opacity * target_layer_trait.opacity,
             fontSize: leaf_trait.fontSize,
             color: leaf_trait.color,
+            background: leaf_trait.background,
           }
         }
       }
@@ -34254,6 +34283,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ['sx', ANIMATION_DELTA_THRESHOLD / 10],
         ['sy', ANIMATION_DELTA_THRESHOLD / 10],
         ['color', ANIMATION_DELTA_THRESHOLD / 100],
+        ['background', ANIMATION_DELTA_THRESHOLD / 100],
       ],
       (n) => {
         this._animate_leaf_frame_tick(leaf_id, n, include_scroll)
@@ -34263,7 +34293,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _animate_leaf_frame_tick = (
     leaf_id: string,
-    { x, y, sx, sy, width, height, opacity, fontSize, color },
+    { x, y, sx, sy, width, height, opacity, fontSize, color, background },
     include_scroll: () => boolean
   ) => {
     const leaf_node = this._leaf_frame_node[leaf_id]
@@ -34284,12 +34314,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     leaf_node.sx = sx
     leaf_node.sy = sy
     leaf_node.color = color
+    leaf_node.background = background
 
     const color_: RGBA = [
       Math.floor(color[0]),
       Math.floor(color[1]),
       Math.floor(color[2]),
       Math.floor(color[3]),
+    ]
+
+    const background_: RGBA = [
+      Math.floor(background[0]),
+      Math.floor(background[1]),
+      Math.floor(background[2]),
+      Math.floor(background[3]),
     ]
 
     const scroll = include_scroll()
@@ -34315,6 +34353,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     leaf_frame.$element.style.opacity = `${opacity}`
     leaf_frame.$element.style.fontSize = `${fontSize}px`
     leaf_frame.$element.style.color = `${rgbaToHex(color_)}`
+    leaf_frame.$element.style.setProperty(
+      '--background_',
+      `${rgbaToHex(background_)}`
+    )
   }
 
   private _tick_animate_layout_move_children = (
@@ -49335,6 +49377,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               const { width, height } = get_final_size()
 
               const color = sub_component.getColor()
+              const background = sub_component.getBackgroundColor()
 
               const trait: LayoutNode = {
                 x: x - 1,
@@ -49346,6 +49389,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 opacity: 1,
                 fontSize: 14,
                 color,
+                background,
               }
 
               trait.x *= this.$context.$sx

@@ -511,3 +511,5 @@ export function lightenColor(color: string, percent: number): string {
 export function darkenColor(color: string, percent: number): string {
   return lightenColor(color, -percent)
 }
+
+export const TRANSPARENT_RGBA = hexToRgba('#00000000')

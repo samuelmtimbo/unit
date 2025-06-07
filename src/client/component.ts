@@ -1543,6 +1543,43 @@ export class Component<
     }
   }
 
+  getBackgroundColor(): RGBA {
+    const {
+      api: {
+        window: { HTMLElement, SVGElement, getComputedStyle },
+      },
+    } = this.$system
+
+    const defaultColor = () => {
+      return hexToRgba(this.$system.color)
+    }
+
+    if (this.$primitive) {
+      if (
+        this.$element instanceof HTMLElement ||
+        this.$element instanceof SVGElement
+      ) {
+        const styleColor = getComputedStyle(this.$element).backgroundColor
+
+        if (styleColor === 'currentcolor') {
+          return defaultColor()
+        }
+
+        if (styleColor) {
+          const hex = colorToHex(styleColor)
+
+          return (hex && hexToRgba(hex)) || defaultColor()
+        } else {
+          return defaultColor()
+        }
+      } else {
+        return defaultColor()
+      }
+    } else {
+      return defaultColor()
+    }
+  }
+
   getFontSize(): number {
     const { $width, $height } = this.$context
 

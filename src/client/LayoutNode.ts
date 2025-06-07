@@ -10,4 +10,5 @@ export type LayoutNode = {
   opacity: number
   fontSize: number
   color: RGBA
+  background: RGBA
 }

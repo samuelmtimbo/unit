@@ -1,5 +1,5 @@
 import { MeasureTextFunction } from '../text'
-import { hexToRgba, RGBA } from './color'
+import { hexToRgba, RGBA, TRANSPARENT_RGBA } from './color'
 import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
 import { getPosition, getRelativePosition } from './util/style/getPosition'
@@ -26,11 +26,12 @@ export const extractTrait = (
     const fontSize: number = leafComp.getFontSize()
     const opacity: number = leafComp.getOpacity()
     const color: RGBA = leafComp.getColor()
+    const background: RGBA = leafComp.getBackgroundColor()
 
     width /= Math.abs(sx)
     height /= Math.abs(sy)
 
-    return { x, y, width, height, sx, sy, opacity, fontSize, color }
+    return { x, y, width, height, sx, sy, opacity, fontSize, color, background }
   } else if ($node instanceof Text) {
     const fontSize = leafComp.getFontSize()
 
@@ -42,7 +43,8 @@ export const extractTrait = (
     let sy: number = 1
     let opacity: number = 1
     let color: RGBA
-    ;({ width = width, height = height } = getSize($node))
+    let background: RGBA
+    ;({ width, height } = getSize($node))
 
     let parentTrait: LayoutNode
 
@@ -55,6 +57,8 @@ export const extractTrait = (
 
       color = hexToRgba($color)
     }
+
+    background = TRANSPARENT_RGBA
 
     const position = getRelativePosition($node, leaf_context.$element)
 
@@ -73,6 +77,7 @@ export const extractTrait = (
       opacity,
       fontSize,
       color,
+      background,
     }
   }
 }
