@@ -22669,6 +22669,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._zoom_comp._root.$element.style.opacity = `${1}`
     }
 
+    const current_layout_layer = this._get_current_layout_layer()
+
+    current_layout_layer.content.$element.style.overflowX = 'hidden'
+    current_layout_layer.content.$element.style.overflowY = 'hidden'
+
     this._layout_comp.$element.style.pointerEvents = 'none'
 
     this._flush_all_layout_layer_opacity_animation()
