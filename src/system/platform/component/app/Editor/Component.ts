@@ -20938,7 +20938,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       overflow: 'visible',
       pointerEvents: 'none',
       color: rgbaToHex(color),
-      background: rgbaToHex(background),
+      '--background': rgbaToHex(background),
     }
 
     const is_text = isTextLike(leaf_comp)
