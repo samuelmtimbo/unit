@@ -34544,8 +34544,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           layer_opacity =
             this._get_sub_component_layout_layer_opacity(target_id)
 
-          target_trait.x += $width / 2 - target_trait.width / 2
-          target_trait.y += $height / 2 - target_trait.height / 2
+          const { children: leaf_layer } =
+            this._ensure_parent_layout_layer(target_id)
+
+          const { x: scrollX, y: scrollY } = getScrollPosition(
+            leaf_layer.$element,
+            this.$context.$element
+          )
+
+          target_trait.x += $width / 2 - target_trait.width / 2 - scrollX
+          target_trait.y += $height / 2 - target_trait.height / 2 - scrollY
 
           target_trait.opacity *= layer_opacity
         } else {
