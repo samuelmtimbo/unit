@@ -17996,6 +17996,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const escaped_tree = this._escape_external_text_if_needed(dropText[0])
 
+          this._sim_set_unit_pin_constant(pin_node_id, true)
           this._set_unit_pin_data(pin_node_id, escaped_tree.value)
         }
 
