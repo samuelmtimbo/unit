@@ -37005,6 +37005,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const pin_node_id = getPinNodeId(unitId, type, pinId)
 
       node_ids.push(pin_node_id)
+
+      const datum_node_id = this._pin_to_datum[pin_node_id]
+
+      if (datum_node_id) {
+        if (this._is_node_visible(datum_node_id)) {
+          node_ids.push(datum_node_id)
+        }
+      }
     }
 
     for (const merge_id of selection.merge) {
