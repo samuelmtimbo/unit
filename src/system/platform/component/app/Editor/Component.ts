@@ -10784,7 +10784,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const position = merge_position[merge_id]
 
-      const has_merge = this._has_node(merge_node_id)
+      const has_merge = this._has_anchor_node(merge_node_id)
 
       if (!has_merge) {
         forEachPinOnMerge(merge, (unitId, type, pinId) => {
