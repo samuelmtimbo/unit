@@ -38381,7 +38381,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._inc_merge_output_active(merge_node_id)
       }
 
-      this._refresh_datum_visible(datum_node_id)
+      if (datum_node_id) {
+        this._refresh_datum_visible(datum_node_id)
+      }
     }
 
     this._show_link_text(pin_link_id)
