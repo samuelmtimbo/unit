@@ -10,18 +10,38 @@ export function parseRelativeUnit(
     return value
   } else {
     if (isParentRelativeValue(value)) {
-      const valueNum = value.substring(0, value.length - 1)
-      const valueUnit = Number.parseFloat(valueNum)
-      const percent = valueUnit / 100
-      return percent * parentLength
+      return parseParentRelativeUnit(value, parentLength)
     } else if (isFrameRelativeValue(value)) {
-      const valueNum = value.substring(0, value.length - 2)
-      const valueUnit = Number.parseFloat(valueNum)
-      const percent = valueUnit / 100
-      return percent * frameLength
+      return parseFrameRelativeUnit(value, frameLength)
     } else {
       const valueUnit = Number.parseFloat(value)
       return valueUnit
     }
   }
+}
+
+export function parseParentRelativeUnit(
+  value: string,
+  parentLength: number
+): number {
+  const valueNum = value.substring(0, value.length - 1)
+
+  const valueUnit = Number.parseFloat(valueNum)
+
+  const percent = valueUnit / 100
+
+  return percent * parentLength
+}
+
+export function parseFrameRelativeUnit(
+  value: string,
+  frameLength: number
+): number {
+  const valueNum = value.substring(0, value.length - 2)
+
+  const valueUnit = Number.parseFloat(valueNum)
+
+  const percent = valueUnit / 100
+
+  return percent * frameLength
 }

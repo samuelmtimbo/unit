@@ -14,7 +14,10 @@ import {
 } from '../../../color'
 import { namespaceURI } from '../../../component/namespaceURI'
 import { parseLayoutValue } from '../../../parseLayoutValue'
-import { parseRelativeUnit } from '../../../parseRelativeUnit'
+import {
+  parseFrameRelativeUnit,
+  parseRelativeUnit,
+} from '../../../parseRelativeUnit'
 import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
@@ -25,6 +28,7 @@ export const LENGTH_STYLE_PROP_NAMES = [
   'height',
   'maxWidth',
   'maxHeight',
+  'fontSize',
 ]
 
 export const isTextName = (tag: string) => {
@@ -252,6 +256,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
           let {
             opacity: childOpacityStr = '1',
             transform: childTransform = '',
+            fontSize: fontSizeStr = '',
           } = style
 
           const [
@@ -284,16 +289,15 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
           opacity *= ((parent && parent.value.trait.opacity) || 1) ?? 1
 
-          const fontSizeUnit = childFontSizeStr?.match(
-            /(px|em|rem|pt|vw|vh|%)$/
-          )?.[1]
+          const fontSizeUnit =
+            fontSizeStr?.match(/(px|em|rem|pt|vw|vh|%)$/)?.[1] ?? 'px'
 
           if (fontSizeUnit === 'vw') {
-            fontSize *= parentTrait.width / 100
+            fontSize = parseFrameRelativeUnit(fontSizeStr, parentTrait.width)
           }
 
           if (fontSizeUnit === 'vh') {
-            fontSize *= parentTrait.height / 100
+            fontSize = parseFrameRelativeUnit(fontSizeStr, parentTrait.height)
           }
 
           if (fontSizeUnit === 'em') {
