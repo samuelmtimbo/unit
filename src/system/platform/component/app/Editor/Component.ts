@@ -41778,7 +41778,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (datum_plug_node_id) {
       if (this._is_datum_plug_type_match(datum_node_id, datum_plug_node_id)) {
         if (!prevent) {
-          this._set_plug_data(datum_plug_node_id, tree.value)
+          // this._set_plug_data(datum_plug_node_id, tree.value)
+          const { type, pinId } = segmentPlugNodeId(datum_plug_node_id)
+
+          this._set_pin_set_data(type, pinId, tree.value)
         }
       } else {
         this.remove_plug_datum_link(datum_plug_node_id)
