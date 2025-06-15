@@ -34,6 +34,7 @@ import {
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
 import { BundleOpt, Unit } from '../../../Class/Unit'
+import { unitBundleSpec } from '../../../bundle'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
@@ -66,6 +67,7 @@ import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { IO } from '../../IO'
 import { Key } from '../../Key'
+import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { $Component } from './$Component'
@@ -852,15 +854,23 @@ export function evalBulkEdit(
     }
 
     if (action.type === ADD_UNIT) {
-      const { bundle } = action.data
-      const { unit, specs = {} } = bundle
+      let { bundle } = action.data
 
-      evaluateGraphUnitSpec(unit, specs, classes)
+      const { unit } = bundle as UnitBundleSpec
 
-      for (const specId in specs) {
-        const spec = specs[specId]
+      const specs_ = weakMerge(specs, bundle.specs ?? {})
 
-        evaluateSpec(spec, specs, classes)
+      bundle = unitBundleSpec(
+        { id: bundle.unit.id },
+        weakMerge(specs, bundle.specs ?? {})
+      )
+
+      evaluateGraphUnitSpec(unit, specs_, classes)
+
+      for (const specId in bundle.specs) {
+        const spec = bundle.specs[specId]
+
+        evaluateSpec(spec, specs_, classes)
       }
     } else if (
       action.type === MOVE_SUBGRAPH_INTO ||

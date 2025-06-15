@@ -26,14 +26,11 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
       }
 
       if (move.action.type === ADD_UNIT) {
-        const {
-          unitId,
-          bundle: { unit },
-        } = move.action.data
+        const { unitId, bundle } = move.action.data
 
         const unit_ = units[unitId]
 
-        target.addUnit(unitId, unit_, { unit }, undefined, false, false, false)
+        target.addUnit(unitId, unit_, bundle, undefined, false, false, false)
       } else {
         target.act(move.action, false, false, false)
       }
