@@ -3909,6 +3909,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       null,
       null,
       null,
+      null,
       position,
       {},
       center_of_screen
@@ -3979,6 +3980,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           null,
           null,
           null,
+          null,
           position,
           {},
           center_of_screen
@@ -4039,6 +4041,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._add_unit(
       new_unit_id,
       bundle,
+      null,
       null,
       null,
       null,
@@ -4118,6 +4121,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._add_unit(
         new_unit_id,
         bundle,
+        null,
         null,
         null,
         null,
@@ -6193,6 +6197,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _add_unit(
     unit_id: string,
     bundle: UnitBundleSpec,
+    sub_component: Component,
     parent_id: string | null,
     parent_slot: string | null,
     parent_index: number | null,
@@ -6209,6 +6214,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._state_add_unit(
       unit_id,
       bundle,
+      sub_component,
       parent_id,
       parent_slot,
       parent_index,
@@ -6223,6 +6229,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _state_add_unit(
     unit_id: string,
     bundle: UnitBundleSpec,
+    sub_component: Component,
     sub_component_parent_id: string | null,
     sub_component_parent_slot_name: string | null,
     sub_component_parent_index: number | null,
@@ -6274,7 +6281,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (is_component) {
       if (sub_component_parent_id) {
-        this._mem_add_unit_component(unit_id)
+        this._mem_add_unit_component(unit_id, sub_component)
         this._mem_insert_sub_component_child(
           sub_component_parent_id,
           unit_id,
@@ -6334,6 +6341,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._add_unit(
       unit_id,
       bundle,
+      null,
       parent_id,
       null,
       null,
@@ -8763,6 +8771,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const unit_data = this._get_unit_data(unit_id)
 
+    const sub_component = this._get_sub_component(unit_id)
+
     const {
       valid_pin_match,
       merged_pin_ids,
@@ -8784,7 +8794,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       null,
       null,
       null,
-      null
+      null,
+      { disconnect: false, sub_component }
     )
 
     forIOObjKV(unit_data, (type, pin_id, pin_data) => {
@@ -10313,7 +10324,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_sub_component_parent_slot_name: string,
     next_sub_component_parent_index: number,
     next_sub_component_children: string[],
-    next_sub_component_children_slot_map: Dict<string>
+    next_sub_component_children_slot_map: Dict<string>,
+    {
+      disconnect,
+      sub_component,
+    }: { disconnect: boolean; sub_component?: Component }
   ): {
     next_swap_merges: GraphMergesSpec
     next_ref_merge_id: string | null
@@ -10620,8 +10635,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const is_swap_unit_component = isComponentSpec(new_unit_spec)
 
-    if (is_unit_component && this._search_unit_id !== unit_id) {
-      this._disconnect_sub_component(unit_id)
+    if (disconnect) {
+      if (is_unit_component && this._search_unit_id !== unit_id) {
+        this._disconnect_sub_component(unit_id)
+      }
     }
 
     const graph_unit_spec: GraphUnitSpec = { id: new_unit_spec.id }
@@ -10682,6 +10699,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._state_add_unit(
       new_unit_id,
       bundle,
+      sub_component,
       next_sub_component_parent_id,
       next_sub_component_parent_slot_name,
       next_sub_component_parent_index,
@@ -10694,7 +10712,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._is_unit_component(new_unit_id)) {
       if (this._search_unit_id !== unit_id) {
-        this._sim_add_sub_component(new_unit_id, undefined, {}, true)
+        this._sim_add_sub_component(new_unit_id, sub_component, {}, true)
 
         this._refresh_layout_node_target_position(unit_parent_id)
       }
@@ -17137,7 +17155,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._search_start_unit_parent_slot_name,
           this._search_start_unit_parent_index,
           this._search_start_unit_children,
-          this._search_start_unit_children_slot_map
+          this._search_start_unit_children_slot_map,
+          { disconnect: true }
         )
 
         this._search_unit_id = new_unit_id
@@ -24329,7 +24348,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       null,
       null,
       null,
-      null
+      null,
+      { disconnect: true }
     )
 
     if (memory) {
@@ -29682,6 +29702,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._add_unit(
       new_unit_id,
       bundle,
+      null,
       null,
       null,
       null,
@@ -36951,7 +36972,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       null,
       null,
       null,
-      null
+      null,
+      { disconnect: true }
     )
 
     const { x, y, width, height } = this._node[new_unit_id]
@@ -47483,6 +47505,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         null,
         null,
         null,
+        null,
         position,
         pin_position,
         layout_position
@@ -48997,6 +49020,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._state_add_unit(
         new_unit_id,
         new_unit_bundle,
+        null,
         lowest_common_ancestor_component,
         undefined,
         undefined,
@@ -49997,6 +50021,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._add_unit(
       new_unit_id,
       bundle,
+      null,
       null,
       null,
       null,
@@ -53054,6 +53079,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._add_unit(
             data_.unitId,
             data_.bundle,
+            null,
             parentId,
             data_.parentSlot,
             data_.parentIndex,
