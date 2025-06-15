@@ -81,6 +81,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   private _hidden: boolean = true
   private _down: boolean = false
 
+  private _dim: boolean = true
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -186,6 +188,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
     ])
     const reset_dim = () => {
       let on_active = (): void => {
+        this._dim = false
+
         mergePropStyle(container, {
           opacity: '1',
         })
@@ -194,6 +198,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
         if (!this._down) {
           return
         }
+
+        this._dim = true
 
         mergePropStyle(container, {
           opacity: `${DIM_OPACITY}`,
@@ -249,12 +255,19 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
       top = `${this._y}px`
     }
 
+    let opacity = `1`
+
+    if (this._dim) {
+      opacity = `${DIM_OPACITY}`
+    }
+
     return {
       ...DEFAULT_STYLE,
       ...style,
       left,
       top,
       height,
+      opacity,
     }
   }
 
