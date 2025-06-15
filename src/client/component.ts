@@ -964,7 +964,9 @@ export class Component<
     let leafEnd = 0
 
     const couple = (leaf: Component) => {
-      remove(leaf.$hostSlot.$attachedChildren, leaf)
+      if (leaf.$hostSlot) {
+        remove(leaf.$hostSlot.$attachedChildren, leaf)
+      }
 
       leaf.$hostSlot = null
 
