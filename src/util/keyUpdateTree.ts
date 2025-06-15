@@ -1,4 +1,8 @@
 import {
+  processBackspace,
+  processKeydown,
+} from '../client/event/keyboard/write'
+import {
   TreeNode,
   TreeNodeType,
   _getLastLeaf,
@@ -66,7 +70,7 @@ export const _keyUpdateTree = (
         nextRoot = _removeNodeAt(nextRoot, path)
       }
 
-      let nextNode
+      let nextNode: TreeNode
 
       nextPath = leftLeafPath
       nextNode = leftLeafNode
@@ -371,8 +375,32 @@ export const _keyUpdateTree = (
             nextSelectionStart = previous.value.length
             nextSelectionEnd = nextSelectionStart
           } else {
-            nextSelectionStart = selectionStart - 1
-            nextSelectionEnd = nextSelectionStart
+            const textState = processBackspace(
+              {
+                value,
+                selectionStart,
+                selectionEnd,
+                selectionDirection: 'none',
+              },
+              { ctrlKey: false, altKey: false, shiftKey: false }
+            )
+
+            const nextValue = getTree(textState.value)
+
+            nextRoot = _updateNodeAt(root, path, nextValue)
+
+            nextSelectionStart = textState.selectionStart
+            nextSelectionEnd = textState.selectionEnd
+
+            const nextNode = _getNodeAtPath(nextRoot, path)
+
+            if (nextNode) {
+              if (nextNode.type === TreeNodeType.KeyValue) {
+                preventDefault = true
+
+                nextPath = [...path, 0]
+              }
+            }
           }
         }
       }
@@ -667,6 +695,32 @@ export const _keyUpdateTree = (
         preventDefault = true
         nextSelectionStart = value.length
         nextSelectionEnd = nextSelectionStart
+      } else {
+        const textState = processKeydown(
+          {
+            value,
+            selectionStart,
+            selectionEnd,
+            selectionDirection: 'none',
+          },
+          { ctrlKey: false, altKey: false, shiftKey: false },
+          key
+        )
+
+        const nextValue = getTree(textState.value)
+
+        nextRoot = _updateNodeAt(root, path, nextValue)
+
+        nextSelectionStart = textState.selectionStart
+        nextSelectionEnd = textState.selectionEnd
+
+        const nextNode = _getNodeAtPath(nextRoot, path)
+
+        if (!nextNode) {
+          preventDefault = true
+
+          nextPath = getParentPath(path)
+        }
       }
     }
   } else if (key === `\``) {

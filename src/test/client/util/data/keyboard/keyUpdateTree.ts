@@ -46,6 +46,42 @@ assert.deepEqual(keyUpdateTree('{}', [0], '', 'Backspace', 0, 0, false), [
     nextSelectionEnd: 0,
   },
 ])
+assert.deepEqual(
+  keyUpdateTree('{"a","b":2}', [0], '"a"', 'Backspace', 3, 3, false),
+  [
+    true,
+    {
+      nextRoot: '{"a,"b":2}',
+      nextPath: [0, 0],
+      nextSelectionStart: 2,
+      nextSelectionEnd: 2,
+    },
+  ]
+)
+assert.deepEqual(
+  keyUpdateTree('{"a",b:2}', [0], '"a"', 'Backspace', 3, 3, false),
+  [
+    true,
+    {
+      nextRoot: '{"a,b:2}',
+      nextPath: [0, 0],
+      nextSelectionStart: 2,
+      nextSelectionEnd: 2,
+    },
+  ]
+)
+assert.deepEqual(
+  keyUpdateTree('{"a,"b":2}', [0, 0], '"a,"b"', '"', 2, 2, false),
+  [
+    true,
+    {
+      nextRoot: '{"a","b":2}',
+      nextPath: [0],
+      nextSelectionStart: 3,
+      nextSelectionEnd: 3,
+    },
+  ]
+)
 assert.deepEqual(keyUpdateTree('{}', [0], '', ',', 0, 0, false), [
   true,
   {
@@ -359,12 +395,12 @@ assert.deepEqual(
   ]
 )
 assert.deepEqual(
-  keyUpdateTree('{"a":"b","c","d":"e"}', [2], '"c"', 'Backspace', 3, 3, false),
+  keyUpdateTree('{"a":"b","c","d":"e"}', [1], '"c"', 'Backspace', 3, 3, false),
   [
-    false,
+    true,
     {
-      nextRoot: '{"a":"b","c","d":"e"}',
-      nextPath: [2],
+      nextRoot: '{"a":"b","c,"d":"e"}',
+      nextPath: [1, 0],
       nextSelectionStart: 2,
       nextSelectionEnd: 2,
     },

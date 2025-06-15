@@ -146,17 +146,10 @@ export function processKeydown(
     nextSelectionEnd = nextSelectionStart
   } else {
     if (key === 'Backspace') {
-      if (selectionStart === selectionEnd) {
-        nextValue =
-          value.substr(0, selectionStart - 1) +
-          value.substr(selectionStart, value.length)
-      } else {
-        nextValue =
-          value.substr(0, selectionStart) +
-          value.substr(selectionEnd, value.length)
-      }
-      nextSelectionStart = clamp(selectionStart - 1, 0, nextValue.length)
-      nextSelectionEnd = nextSelectionStart
+      processBackspace(
+        { value, selectionStart, selectionEnd, selectionDirection },
+        { ctrlKey, shiftKey, altKey }
+      )
     } else if (key === 'Enter') {
       nextValue =
         value.substr(0, selectionStart) +
@@ -233,6 +226,47 @@ export function processKeydown(
       }
     }
   }
+
+  return {
+    value: nextValue,
+    selectionStart: nextSelectionStart,
+    selectionEnd: nextSelectionEnd,
+    selectionDirection: nextSelectionDirection,
+  }
+}
+
+export function processBackspace(
+  {
+    value,
+    selectionStart = 0,
+    selectionEnd = 0,
+    selectionDirection = 'none',
+  }: TextState,
+  { ctrlKey, shiftKey, altKey }
+): TextState {
+  if (selectionStart === null) {
+    selectionStart = 0
+  }
+  if (selectionEnd === null) {
+    selectionEnd = selectionStart
+  }
+
+  let nextValue = value
+  let nextSelectionStart = selectionStart
+  let nextSelectionEnd = selectionEnd
+  let nextSelectionDirection: 'forward' | 'backward' | 'none' =
+    selectionDirection
+
+  if (selectionStart === selectionEnd) {
+    nextValue =
+      value.substr(0, selectionStart - 1) +
+      value.substr(selectionStart, value.length)
+  } else {
+    nextValue =
+      value.substr(0, selectionStart) + value.substr(selectionEnd, value.length)
+  }
+  nextSelectionStart = clamp(selectionStart - 1, 0, nextValue.length)
+  nextSelectionEnd = nextSelectionStart
 
   return {
     value: nextValue,
