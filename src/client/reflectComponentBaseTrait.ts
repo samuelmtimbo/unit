@@ -198,6 +198,12 @@ export function buildTree(
     const slot_node = map[slot_id]
 
     for (const leaf_id of slot_base) {
+      if (!map[leaf_id]) {
+        const leaf_path = leaf_id.split('/')
+
+        add(leaf_id, component.pathGetSubComponent(leaf_path), null)
+      }
+
       const leaf_node = map[leaf_id]
 
       slot_node.children.push(leaf_node)
