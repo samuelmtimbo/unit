@@ -338,6 +338,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
       knob,
       content,
       column,
+      tooltip,
     })
 
     this.registerRoot(drawer)

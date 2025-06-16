@@ -60,6 +60,9 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
     this.$slot = {
       default: input,
     }
+    this.$subComponent = {
+      input,
+    }
 
     this.registerRoot(input)
   }

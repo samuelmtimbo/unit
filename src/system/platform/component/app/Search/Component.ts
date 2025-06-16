@@ -391,6 +391,16 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
     this.$unbundled = false
     this.$primitive = true
+    this.$subComponent = {
+      search,
+      tooltip,
+      shape_tooltip,
+      microphone_tooltip,
+      list,
+      input,
+      shape_button,
+      microphone,
+    }
 
     if (selected) {
       if (this._filtered_id_list.includes(selected)) {
