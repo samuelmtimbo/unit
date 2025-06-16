@@ -46904,6 +46904,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._sim_graph_unit_expose_pin_set(unitId, type, pinId, position)
 
+      const subgraph = this._subgraph_cache[unitId]
+
+      if (subgraph) {
+        subgraph._state_expose_pin_set(type, pinId, pinSpec)
+      }
+
       this.temp_fixate_node(unitId)
     }
   }
