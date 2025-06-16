@@ -3902,20 +3902,6 @@ export class Component<
   }
 
   public setSubComponent(id: string, component: Component): void {
-    // if (id === 'box') {
-    //   component = new Proxy(component, {
-    //     set(target, p, newValue, receiver) {
-    //       // if (p === '$mounted') {
-    //       //   debugger
-    //       // }
-
-    //       target[p] = newValue
-
-    //       return true
-    //     },
-    //   })
-    // }
-
     set(component, '$parent', this)
 
     this.$subComponent[id] = component
