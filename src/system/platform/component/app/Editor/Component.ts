@@ -50137,10 +50137,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _process_move_into_moves = (graph_id: string, moves: Moves) => {
     for (const move of moves) {
       if (move.in) {
+        const actions = [move.action]
+
         this._on_graph_unit_bulk_edit({
-          actions: [move.action],
+          actions: clone(actions),
           path: [graph_id],
         })
+
+        const subgraph = this._subgraph_cache[graph_id]
+
+        if (subgraph) {
+          subgraph._on_bulk_edit({ actions: clone(actions) })
+        }
       } else {
         this._execute_actions([move.action], false)
       }
