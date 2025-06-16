@@ -939,7 +939,7 @@ export function _getTypeTree(
     }
   }
 
-  const orTest = /^.+(\|.+)+$/.exec(value)
+  const orTest = /^(?!(['"])[^'"]*\1$).+?\|.+$/.exec(value)
   if (orTest) {
     const children = _getDelimiterSeparated(value, false, false, '|', getTree)
     return {
@@ -949,7 +949,7 @@ export function _getTypeTree(
     }
   }
 
-  const andTest = /^(.+)&(.+)$/.exec(value)
+  const andTest = /^(?!(['"])[^'"]*\1$).+?&.+$/.exec(value)
   if (andTest) {
     const children = _getDelimiterSeparated(value, false, false, '&', getTree)
     return {
