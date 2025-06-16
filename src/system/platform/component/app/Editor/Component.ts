@@ -8341,15 +8341,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _set_sub_component_index = (
-    sub_component_id: string,
-    i: number
-  ): void => {
-    // console.log('Graph', '_set_sub_component_index', i)
-
-    this._sub_component_index[sub_component_id] = i
-  }
-
   private _mem_add_unit_component = (
     unit_id: string,
     sub_component?: Component,
@@ -19205,15 +19196,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._couple_all_fullwindow_component()
   }
 
-  private _sub_component_index: Dict<number> = {}
-
   private _set_tree_sub_component_index = (
     sub_component_id: string,
     i: number
   ): number => {
     // console.log('Graph', '_set_tree_sub_component_index', sub_component_id, i)
-
-    this._set_sub_component_index(sub_component_id, i)
 
     const children = this._spec_get_sub_component_children(sub_component_id)
 
@@ -19248,8 +19235,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_component_ids: string[]
   ): string[] => {
     return sub_component_ids.sort((a, b) => {
-      const a_index = this._sub_component_index[a]
-      const b_index = this._sub_component_index[b]
+      const a_index = this._get_sub_component_tree_index(a)
+      const b_index = this._get_sub_component_tree_index(b)
+
       return a_index - b_index
     })
   }
