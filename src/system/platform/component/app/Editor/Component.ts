@@ -7990,8 +7990,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       let { width, height } = layout_size
 
-      width = Math.min(width, $width - 2 * LAYOUT_HORIZONTAL_PADDING)
-      height = Math.min(height, $height - 2 * LAYOUT_VERTICAL_PADDING)
+      width = clamp(
+        width,
+        0,
+        Math.max($width - 2 * LAYOUT_HORIZONTAL_PADDING, 0)
+      )
+      height = clamp(
+        height,
+        0,
+        Math.max($height - 2 * LAYOUT_VERTICAL_PADDING, 0)
+      )
 
       const layout_target_node = this._layout_target_node[child_id]
 
@@ -8025,7 +8033,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         : this._spec_get_sub_component_children(parent_id)
 
     for (const child of children) {
-      const { x, y, width, height } = this._layout_target_node[child]
+      let { x, y, width, height } = this._layout_target_node[child]
+
+      ;({ width, height } = this._clamp_layout_core_size({ width, height }))
 
       this._set_layout_core_position(child, x, y)
       this.__resize_layout_core(child, width, height)
@@ -8219,10 +8229,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { width, height } = size
 
     const max_width = this._get_layout_max_width()
+    const max_height = this._get_layout_max_height()
 
     return {
       width: clamp(width, MIN_WIDTH, max_width),
-      height,
+      height: clamp(height, MIN_HEIGHT, max_height),
     }
   }
 
@@ -20849,8 +20860,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._force_all_layout_node_traits()
 
     for (const sub_component_id in this._component.$subComponent) {
-      const { width, height } =
+      let { width, height } =
         this._get_unit_component_layout_size(sub_component_id)
+
+      ;({ width, height } = this._clamp_layout_core_size({ width, height }))
 
       this._sim_layout_resize_sub_component(sub_component_id, width, height)
     }
@@ -21932,11 +21945,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           all_trait = mapObjVK(all_trait, (leaf_trait, leaf_id) => {
             if (leaf_trait) {
+              let width = leaf_trait.width / Math.abs(leaf_trait.sx)
+              let height = leaf_trait.height / Math.abs(leaf_trait.sy)
+
+              if (this._tree_layout) {
+                ;({ width, height } = this._clamp_layout_core_size(leaf_trait))
+              }
+
               const leaf_trait_ = {
                 x: (-$x + leaf_trait.x) / leaf_trait.sx,
                 y: (-$y + leaf_trait.y) / leaf_trait.sy,
-                width: leaf_trait.width / Math.abs(leaf_trait.sx),
-                height: leaf_trait.height / Math.abs(leaf_trait.sy),
+                width,
+                height,
                 sx: leaf_trait.sx,
                 sy: leaf_trait.sy,
                 opacity: leaf_trait.opacity * leaf_layer_opacity,
@@ -43556,12 +43576,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _get_layout_max_width = (): number => {
     const { $width } = this.$context
 
-    const max_width = Math.min(
-      MAX_WIDTH,
-      $width - 2 * LAYOUT_HORIZONTAL_PADDING
+    const max_width = Math.max(
+      Math.min(MAX_WIDTH, $width - 2 * LAYOUT_HORIZONTAL_PADDING),
+      0
     )
 
     return max_width
+  }
+
+  private _get_layout_max_height = (): number => {
+    const { $height } = this.$context
+
+    const max_height = Math.max(
+      Math.min(MAX_WIDTH, $height - 2 * LAYOUT_VERTICAL_PADDING),
+      0
+    )
+
+    return max_height
   }
 
   private _layout_delta_resize_component = (
