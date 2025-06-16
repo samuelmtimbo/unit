@@ -27909,7 +27909,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._target_node[node_id] ||
       (!this._all_data &&
         this._compatible_node_id[node_id] &&
-        (this._is_node_id(node_id) || this._is_int_node_id(node_id)))
+        (this._is_node_id(node_id) || this._is_int_node_id(node_id))) ||
+      this._collapse_next_unit_id === node_id
     ) {
       fixed = true
     }
@@ -49225,6 +49226,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._collapse_init_spec = clone(this._spec)
     this._collapse_next_unit_id = graph_unit_id
     this._collapse_move_map = map
+
+    this._set_node_fixed(graph_unit_id, true)
 
     const none_node_selected =
       unit.length === 0 &&
