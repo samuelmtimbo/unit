@@ -122,6 +122,9 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     const tooltip = new Tooltip(
       {
         shortcut,
+        component: this._knob,
+        x: -30 - 6,
+        y: 4.5,
       },
       this.$system
     )
@@ -621,9 +624,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
   }
 
   public show_tooltip = () => {
-    const bbox = this._knob.getBoundingClientRect()
-
-    this._tooltip.show(bbox.x - 30 - 3, bbox.y + 4.5)
+    this._tooltip.show()
   }
 
   public hide_tooltip = () => {

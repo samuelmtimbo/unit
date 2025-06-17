@@ -360,6 +360,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const tooltip = new Tooltip(
       {
         shortcut: ';',
+        component: search,
+        x: 0,
+        y: -SEARCH_ITEM_HEIGHT + 6 - 1,
       },
       this.$system
     )
@@ -368,6 +371,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const shape_tooltip = new Tooltip(
       {
         shortcut: 'l',
+        component: shape_button,
+        x: -3,
+        y: -SEARCH_ITEM_HEIGHT + 6 + 1,
       },
       this.$system
     )
@@ -376,6 +382,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const microphone_tooltip = new Tooltip(
       {
         shortcut: '|',
+        component: microphone,
+        x: 3,
+        y: -TOOLTIP_WIDTH - 4.5 + 1,
       },
       this.$system
     )
@@ -1392,17 +1401,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   public showTooltip(): void {
-    const bbox = this._search.getBoundingClientRect()
-
-    this._tooltip.show(
-      bbox.x + bbox.width / 2 - TOOLTIP_WIDTH / 2,
-      bbox.y - SEARCH_ITEM_HEIGHT + 6
-    )
-    this._shape_tooltip.show(bbox.x + 6, bbox.y - SEARCH_ITEM_HEIGHT + 6)
-    this._microphone_tooltip.show(
-      bbox.x + bbox.width - TOOLTIP_WIDTH - 4.5,
-      bbox.y - SEARCH_ITEM_HEIGHT + 6
-    )
+    this._tooltip.show()
+    this._shape_tooltip.show()
+    this._microphone_tooltip.show()
   }
 
   public hideTooltip(): void {

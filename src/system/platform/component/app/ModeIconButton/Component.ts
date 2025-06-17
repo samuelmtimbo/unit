@@ -62,6 +62,9 @@ export default class ModeIconButton extends Element<HTMLDivElement, Props> {
     const tooltip = new Tooltip(
       {
         shortcut,
+        component: this._icon_button,
+        x: +30 + 6,
+        y: 0,
       },
       this.$system
     )
@@ -95,9 +98,7 @@ export default class ModeIconButton extends Element<HTMLDivElement, Props> {
   }
 
   public showTooltip(): void {
-    const bbox = this._icon_button.getBoundingClientRect()
-
-    this._tooltip.show(bbox.x + 30 + 1.5, bbox.y)
+    this._tooltip.show()
   }
 
   public hideTooltip(): void {

@@ -1,7 +1,9 @@
 import { addListeners } from '../../../../../client/addListener'
+import { Component } from '../../../../../client/component'
 import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
+import { makeResizeListener } from '../../../../../client/event/resize'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -15,6 +17,9 @@ export interface Props {
   icon?: string
   title?: string
   shortcut?: string
+  component?: Component
+  x?: number
+  y?: number
 }
 
 export const TOOLTIP_WIDTH = 30
@@ -110,14 +115,15 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     }
   }
 
-  public show(x: number, y: number): void {
-    if (this._tooltip.$element.showPopover) {
-      mergePropStyle(this._tooltip, {
-        left: `${x}px`,
-        top: `${y - 3}px`,
-      })
+  public show(): void {
+    const { component } = this.$props
 
-      this._tooltip.$element.showPopover()
+    if (component) {
+      this._reposition()
+
+      if (this._tooltip.$element.showPopover) {
+        this._tooltip.$element.showPopover()
+      }
     }
   }
 
@@ -125,6 +131,28 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     if (this._tooltip.$element.hidePopover) {
       this._tooltip.$element.hidePopover()
     }
+  }
+
+  private _reposition = () => {
+    const { component, x = 0, y = 0 } = this.$props
+
+    if (component) {
+      const bbox = component.getBoundingClientRect()
+
+      if (this._tooltip.$element.showPopover) {
+        const x_ = bbox.x + bbox.width / 2 - TOOLTIP_WIDTH / 2 + x
+        const y_ = bbox.y + y - 3
+
+        mergePropStyle(this._tooltip, {
+          left: `${x_}px`,
+          top: `${y_}px`,
+        })
+      }
+    }
+  }
+
+  public hidden(): boolean {
+    return !this._tooltip.$element.matches(':popover-open')
   }
 
   private _context_unlisten: Unlisten
@@ -141,9 +169,20 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     }
   }
 
+  private _on_context_theme_changed = () => {
+    this._refresh_background_color()
+  }
+
+  private _on_context_resize = () => {
+    if (!this.hidden()) {
+      this._reposition()
+    }
+  }
+
   onMount(): void {
     this._context_unlisten = addListeners(this.$context, [
-      makeCustomListener('themechanged', this._refresh_background_color),
+      makeCustomListener('themechanged', this._on_context_theme_changed),
+      makeResizeListener(this._on_context_resize),
     ])
   }
 
