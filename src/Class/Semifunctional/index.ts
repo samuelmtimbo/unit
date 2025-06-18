@@ -241,4 +241,21 @@ export class Semifunctional<
       this._forward_empty(fo)
     }
   }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _primitive: this._primitive.snapshotSelf(),
+      _functional: this._functional.snapshotSelf(),
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _primitive, _functional, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    _primitive && this._primitive.restoreSelf(_primitive)
+    _functional && this._functional.restoreSelf(_functional)
+  }
 }
