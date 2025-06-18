@@ -712,13 +712,13 @@ export class Component<
 
       leaf.$slotParent = target
 
-      leaf.mount(target._$context)
+      leaf.mount(target.$context)
 
       frames.push(frame)
 
       const { x: scrollX0, y: scrollY0 } = getScrollPosition(
         target.$element,
-        target._$context.$element
+        target.$context.$element
       )
 
       const stop = animateSimulate(
@@ -745,7 +745,7 @@ export class Component<
 
           const { x: scrollX, y: scrollY } = getScrollPosition(
             target.$element,
-            target._$context.$element
+            target.$context.$element
           )
 
           const scrollDx = scrollX - scrollX0
@@ -753,13 +753,13 @@ export class Component<
 
           frame.style.left = `${
             x -
-            (reverse ? this._$context.$x : trait.x) +
+            (reverse ? this.$context.$x : trait.x) +
             ((Math.abs(sx) - 1) * width) / 2 -
             scrollDx
           }px`
           frame.style.top = `${
             y -
-            (reverse ? this._$context.$y : trait.y) +
+            (reverse ? this.$context.$y : trait.y) +
             ((Math.abs(sy) - 1) * height) / 2 -
             scrollDy
           }px`
@@ -914,7 +914,7 @@ export class Component<
     }
 
     this.$detachedSlotParent = this.$slotParent
-    this.$detachedContext = this._$context
+    this.$detachedContext = this.$context
 
     let index = 0
     if (this.$rootParent) {
@@ -922,7 +922,7 @@ export class Component<
     } else if (this.$parent) {
       index = this.$parent.$parentRoot.indexOf(this)
     } else {
-      index = this._$context.$children.indexOf(this)
+      index = this.$context.$children.indexOf(this)
     }
 
     this.$returnIndex = index
@@ -984,7 +984,7 @@ export class Component<
         //
       }
 
-      leaf.mount(this.$parent._$context)
+      leaf.mount(this.$parent.$context)
     }
 
     if (animate) {
@@ -1147,7 +1147,7 @@ export class Component<
   }
 
   public mountChild(child: Component, commit: boolean = true): void {
-    child.mount(this._$context, commit)
+    child.mount(this.$context, commit)
   }
 
   public unmountDescendent(child: Component): void {
@@ -1207,7 +1207,7 @@ export class Component<
     return current
   }
 
-  mount(_$context: Context, commit: boolean = true): void {
+  mount(context: Context, commit: boolean = true): void {
     // console.log(this.constructor.name, 'mount')
 
     if (this.$detached) {
@@ -1218,7 +1218,7 @@ export class Component<
       throw new Error('cannot mount a mounted component')
     }
 
-    this._$context = _$context
+    this._$context = context
     this.$mounted = true
 
     this._forAllMountDescendent((child) => {
@@ -2747,7 +2747,7 @@ export class Component<
   }
 
   public postAppendRoot(component: Component): void {
-    _if(this.$mounted, mount, component, this._$context)
+    _if(this.$mounted, mount, component, this.$context)
   }
 
   public domAppendRoot(component: Component, at: number, index: number): void {
