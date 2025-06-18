@@ -34,6 +34,10 @@
       "metadata": {
         "examples": ["1"]
       }
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

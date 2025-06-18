@@ -18,6 +18,7 @@ export interface I<T> {
 
 export interface O<T> {
   image: J & ID
+  done: any
 }
 
 export default class ImageData_<T> extends Holder<I<T>, O<T>> {
@@ -26,6 +27,7 @@ export default class ImageData_<T> extends Holder<I<T>, O<T>> {
       {
         fi: ['data', 'width', 'height', 'opt'],
         fo: ['image'],
+        o: ['done'],
       },
       {
         input: {
@@ -62,5 +64,9 @@ export default class ImageData_<T> extends Holder<I<T>, O<T>> {
     done({
       image,
     })
+  }
+
+  b() {
+    this._output.done.push(true)
   }
 }
