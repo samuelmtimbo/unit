@@ -18,6 +18,10 @@
       "_type": "<T>['S',N]",
       "type": "any",
       "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

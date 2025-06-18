@@ -12,6 +12,7 @@ export interface I<T> {
 
 export interface O<T> {
   value: T
+  done: any
 }
 
 export default class Get1<T> extends Holder<I<T>, O<T>> {
@@ -53,5 +54,9 @@ export default class Get1<T> extends Holder<I<T>, O<T>> {
     }
 
     done({ value })
+  }
+
+  b() {
+    this._output.done.push(true)
   }
 }
