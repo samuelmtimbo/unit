@@ -16,6 +16,10 @@
       "type": "`V`&`A<number>`&`TA`",
       "ref": true,
       "icon": "array"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {

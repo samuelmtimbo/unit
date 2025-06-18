@@ -13,6 +13,7 @@ export interface I {
 
 export interface O {
   array: A & TA
+  done: any
 }
 
 export default class Uint8ClampedArray_ extends Holder<I, O> {
@@ -22,7 +23,7 @@ export default class Uint8ClampedArray_ extends Holder<I, O> {
         fi: ['length'],
         fo: ['array'],
         i: [],
-        o: [],
+        o: ['done'],
       },
       {
         output: {
@@ -44,5 +45,9 @@ export default class Uint8ClampedArray_ extends Holder<I, O> {
     done({
       array,
     })
+  }
+
+  b() {
+    this._output.done.push(true)
   }
 }
