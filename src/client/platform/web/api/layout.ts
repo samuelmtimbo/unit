@@ -197,10 +197,18 @@ const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
   }
 
   for (const name of LENGTH_STYLE_PROP_NAMES) {
-    if (style[name] && isFrameRelativeValue(style[name])) {
-      const width = transformRelative(name)
+    let value = style[name]
 
-      container.style[name] = `${width}px`
+    if (value !== undefined) {
+      if (typeof value === 'number') {
+        value = `${value}px`
+      }
+
+      if (isFrameRelativeValue(value)) {
+        const length = transformRelative(name)
+
+        container.style[name] = `${length}px`
+      }
     }
   }
 

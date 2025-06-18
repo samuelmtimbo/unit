@@ -21105,8 +21105,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       for (const name of LENGTH_STYLE_PROP_NAMES) {
-        if (style_prop[name] && isFrameRelativeValue(style_prop[name])) {
-          leaf_style[name] = style_prop[name]
+        let value = style_prop[name]
+
+        if (value !== undefined) {
+          if (typeof value === 'number') {
+            value = `${value}px`
+          }
+
+          if (isFrameRelativeValue(value)) {
+            leaf_style[name] = style_prop[name]
+          }
         }
       }
 
