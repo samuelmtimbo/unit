@@ -51910,7 +51910,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { datum_node_ids } = this._decant_node_ids(node_ids)
 
-    if (datum_node_ids.length === 1) {
+    if (node_ids.length === 1 && node_ids.length === datum_node_ids.length) {
       const single_datum_node_id = datum_node_ids[0]
 
       const tree = this._get_datum_tree(single_datum_node_id)
