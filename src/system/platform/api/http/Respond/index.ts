@@ -52,7 +52,21 @@ export default class Respond extends Semifunctional<I, O> {
 
     const raw = await body.raw()
 
-    waiter.set({ status, headers, body: raw })
+    const ok = status >= 200 && status < 300
+
+    const type: ResponseType = 'basic'
+
+    waiter.set({
+      status,
+      statusText: 'OK',
+      headers,
+      body: raw,
+      redirected: false,
+      bodyUsed: false,
+      ok,
+      url,
+      type,
+    })
 
     done()
   }

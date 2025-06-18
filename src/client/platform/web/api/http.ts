@@ -60,7 +60,12 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
       const id = uuidNotIn(wss)
 
       response.set({
+        url: request.url,
         status: 200, // 101
+        statusText: 'OK',
+        redirected: false,
+        bodyUsed: false,
+        type: 'basic',
         headers: {
           Connection: 'Upgrade',
           Upgrade: 'websocket',
@@ -68,6 +73,7 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
           [CUSTOM_HEADER_X_WEBSOCKET_ID]: id,
         },
         body: '',
+        ok: true,
       })
 
       wss[id] = socket

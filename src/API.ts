@@ -39,6 +39,12 @@ export type ServerResponse = {
   status: number
   headers: Dict<string>
   body: string | ReadableStream
+  ok: boolean
+  statusText: string
+  type: ResponseType
+  url: string
+  redirected: boolean
+  bodyUsed: boolean
 }
 
 export type ServerRequest = {

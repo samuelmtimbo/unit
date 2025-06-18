@@ -34,11 +34,19 @@ export function wrapResponse(response: Response, system: System): RES & $ {
           this._body = await response.text()
         }
 
-        callback({
+        const res: ServerResponse = {
+          url: response.url,
+          type: response.type,
           status: response.status,
+          statusText: response.statusText,
+          redirected: response.redirected,
+          bodyUsed: response.bodyUsed,
           headers: headersToObj(response.headers),
           body: usedBodyToString(this._body),
-        })
+          ok: response.ok,
+        }
+
+        callback(res)
       })()
     }
 
