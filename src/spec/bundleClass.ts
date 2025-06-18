@@ -13,7 +13,7 @@ export function bundleClass(
 ): UnitBundle {
   const { unit } = bundle
 
-  const { id, memory } = unit
+  let { id, memory } = unit
 
   if (!bundle.specs) {
     bundle = unitBundleSpec(unit, specs)
@@ -27,6 +27,10 @@ export function bundleClass(
         const map = system.injectSpecs(bundle.specs)
 
         remapSpecs(bundle, map)
+
+        id = map[id] ?? id
+
+        bundle.unit.id = id
       }
 
       super(system, id, push || !memory)

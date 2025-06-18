@@ -25,7 +25,7 @@ export function appendChild(
 ): number {
   const [i, child] = _appendChild(component, children, Class)
 
-  const { __bundle } = Class
+  const { __bundle } = child.constructor as UnitBundle
 
   emit && component.emit('append_child', __bundle, child, [])
 
