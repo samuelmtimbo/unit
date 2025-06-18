@@ -56455,7 +56455,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return
       }
 
-      this._spec_fork_unit(unitId, forked_unit_spec.id)
+      this._spec_fork_unit(unitId, forked_unit_spec.id, forked_unit_spec)
       this._sim_fork_unit(unitId, forked_unit_spec.id)
     } else {
       const spec = this._get_unit_spec(unitId) as GraphSpec
