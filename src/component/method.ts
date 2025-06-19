@@ -383,16 +383,12 @@ export function attachText(
 
   push(attachTextArray, entry)
 
-  if (attachTextArray.length === 1) {
-    component.emit('call', { method: 'attachText', data: [type, text] })
-  }
+  component.emit('call', { method: 'attachText', data: [type, text] })
 
   return () => {
     remove(attachTextArray, entry)
 
-    if (attachTextArray.length === 0) {
-      component.emit('call', { method: 'detachText', data: [name] })
-    }
+    component.emit('call', { method: 'detachText', data: [type] })
   }
 }
 
