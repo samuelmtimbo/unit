@@ -7,7 +7,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  'log(a)': number
+  'ln(a)': number
 }
 
 export default class Log<T> extends Functional<I<T>, O<T>> {
