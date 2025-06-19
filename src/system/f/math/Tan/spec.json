@@ -1,0 +1,21 @@
+{
+  "name": "tan",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "tan(a)": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "tangent of angle `a` in rad",
+    "tags": ["f", "math"]
+  },
+  "id": "682c1419-d2cc-489d-b95f-a8b7dacada6c",
+  "base": true,
+  "type": "`U`"
+}
