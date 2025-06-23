@@ -2,6 +2,7 @@ import { BuildOptions } from 'esbuild'
 
 export const DEFAULT_OPTIONS: BuildOptions = {
   bundle: true,
+  treeShaking: true,
   logLevel: 'warning',
   loader: {
     '.woff2': 'dataurl',
