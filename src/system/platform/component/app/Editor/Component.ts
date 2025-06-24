@@ -35980,7 +35980,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (this._is_node_mode_long_press_able(node_id)) {
-      this._animate_pulse(screenX, screenY, 'out')
+      let pulse_direction: 'in' | 'out' = 'out'
+
+      if (this._mode === 'multiselect') {
+        pulse_direction = 'in'
+
+        if (this._is_node_selected(node_id)) {
+          pulse_direction = 'out'
+        }
+      }
+
+      this._animate_pulse(screenX, screenY, pulse_direction)
     }
 
     if (this._tree_layout) {
