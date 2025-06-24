@@ -2660,6 +2660,12 @@ export function buildMoveMap(
               undefined
             )
 
+            const data_ = deepGetOrDefault(
+              data,
+              ['plug', type, pinId, subPinId],
+              undefined
+            )
+
             if (!exposePinSetTask) {
               if (!hasPin(target, nextPinType, nextPinId)) {
                 exposePinSetTask = newTask([
@@ -2723,6 +2729,23 @@ export function buildMoveMap(
                 subPinId: nextSubPinId,
               }
             )
+
+            if (data_) {
+              const setPlugDataTask = newTask([
+                {
+                  in: true,
+                  action: makeSetPlugDataAction(
+                    nextPinType,
+                    nextPinId,
+                    nextSubPinId,
+                    data_,
+                    undefined
+                  ),
+                },
+              ])
+
+              addDependency(setPlugDataTask, targetExposePinTask)
+            }
 
             if (isUnitSelected(subPinSpec.unitId)) {
               const plugPinToUnitTask = newTask([
@@ -2867,6 +2890,28 @@ export function buildMoveMap(
 
             addDependency(targetExposePinTask, exposePinSetTask)
             addDependency(targetExposePinTask, movePlugTask)
+
+            const data_ = deepGetOrDefault(
+              data,
+              ['plug', type, pinId, subPinId],
+              undefined
+            )
+
+            if (data_ !== undefined) {
+              const setPinOutsideDataTask = newTask([
+                {
+                  in: false,
+                  action: makeSetUnitPinDataAction(
+                    graphId,
+                    nextPinType,
+                    nextPinId,
+                    data_
+                  ),
+                },
+              ])
+
+              addDependency(setPinOutsideDataTask, targetExposePinTask)
+            }
 
             const nextUnitId =
               mapping.unit?.[subPinSpec.unitId]?.in?.unit.unitId ??
