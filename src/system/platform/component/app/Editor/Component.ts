@@ -4355,7 +4355,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const bundle = bundleSpec(this._spec, specs)
 
-        const json = JSON.stringify(bundle)
+        const json = JSON.stringify(bundle, null, 2)
 
         event.dataTransfer.setData('text/plain', json)
 
@@ -51946,7 +51946,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const copyToClipboard = async () => {
       try {
-        const json = JSON.stringify(bundle)
+        const json = JSON.stringify(bundle, null, 2)
 
         await writeText(json)
       } catch (err) {
