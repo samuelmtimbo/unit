@@ -27,6 +27,7 @@ export const ROOT_STYLE = `
   * {
     scrollbar-width: thin;
     scrollbar-color: currentcolor #00000000;
+    box-sizing: border-box;
   }
 
   input,

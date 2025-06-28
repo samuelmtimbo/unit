@@ -201,6 +201,7 @@ export const style = {
     strokeLinejoin: 'round',
     stroke: 'currentColor',
     fill: 'transparent',
+    boxSizing: 'content-box',
     ...userSelect('none'),
   },
   ellipse: {
