@@ -22,4 +22,16 @@ export default class EditableField extends Field<HTMLDivElement, Props> {
       },
     })
   }
+
+  blur(): void {
+    const {
+      api: {
+        document: { getSelection },
+      },
+    } = this.$system
+
+    super.blur()
+
+    getSelection().removeAllRanges()
+  }
 }
