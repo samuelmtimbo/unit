@@ -18263,6 +18263,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._state_remove_search_unit()
       }
+
+      if (this._has_node(search_unit_id)) {
+        for (const pointerId in this._pointer_position) {
+          const pointer_position = this._pointer_position[pointerId]
+
+          if (
+            this._is_point_inside_node(
+              search_unit_id,
+              pointer_position.x,
+              pointer_position.y,
+              NODE_PADDING
+            )
+          ) {
+            this.__on_node_pointer_enter(
+              search_unit_id,
+              Number.parseInt(pointerId)
+            )
+          }
+        }
+      }
     }
 
     const datum_node_id = this._search_unit_datum_node_id
