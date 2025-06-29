@@ -10,7 +10,7 @@ export interface I {
 
 export interface O {}
 
-export default class Div extends Element_<I, O> {
+export default class Form extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
