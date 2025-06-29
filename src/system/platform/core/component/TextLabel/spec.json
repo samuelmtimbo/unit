@@ -1,0 +1,110 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text label",
+  "units": {
+    "label": {
+      "id": "23b7df22-79e0-4233-8388-7e6e8f1859c6",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -155,
+              "y": -66
+            }
+          }
+        },
+        "attr": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -154,
+              "y": -95
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -47,
+          "y": -66
+        }
+      }
+    },
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -92,
+              "y": 54
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 155,
+              "y": 54
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 32,
+          "y": 54
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "style": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "label",
+          "kind": "input",
+          "pinId": "style"
+        }
+      }
+    },
+    "value": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "text",
+          "kind": "input",
+          "pinId": "value"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": null,
+    "description": ""
+  },
+  "render": true,
+  "component": {
+    "slots": [],
+    "defaultWidth": 152,
+    "defaultHeight": 47,
+    "subComponents": {
+      "label": {
+        "children": ["text"],
+        "childSlot": {
+          "text": "default"
+        }
+      },
+      "text": {}
+    },
+    "children": ["label"]
+  },
+  "id": "b27a5ddd-f78a-4356-bb24-c16b137107fa"
+}
