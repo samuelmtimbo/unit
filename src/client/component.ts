@@ -107,6 +107,10 @@ export const defaultFocusLookup = (
     component.$parentRoot[0].focus(options)
   }
 
+  if (component.$parentChildren.length > 0) {
+    component.$parentChildren[0].focus(options)
+  }
+
   if (component.$children.length > 0) {
     component.$children[0].focus(options)
   }
