@@ -19271,8 +19271,45 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._is_node_selected
     )
 
-    if (visible_selected_component_ids.length > 0) {
-      visible_component_ids = visible_selected_component_ids
+    if (this._tree_layout) {
+      const parent_visible_selected_component_ids =
+        visible_selected_component_ids.filter((component_id) =>
+          this._is_layout_component_layer_visible(component_id)
+        )
+
+      if (parent_visible_selected_component_ids.length === 0) {
+        const current_parent_id = this._get_current_layout_layer_id()
+
+        if (current_parent_id) {
+          const tree_visible_sub_component_ids = []
+
+          const include = (sub_component_id: string) => {
+            tree_visible_sub_component_ids.push(sub_component_id)
+
+            const children =
+              this._spec_get_sub_component_children(sub_component_id)
+
+            for (const child_id of children) {
+              include(child_id)
+            }
+          }
+
+          const current_parent_children =
+            this._spec_get_sub_component_children(current_parent_id)
+
+          for (const current_parent_child_id of current_parent_children) {
+            include(current_parent_child_id)
+          }
+
+          visible_component_ids = tree_visible_sub_component_ids
+        } else {
+          visible_component_ids = all_component_ids
+        }
+      }
+    } else {
+      if (visible_selected_component_ids.length > 0) {
+        visible_component_ids = visible_selected_component_ids
+      }
     }
 
     const ordered_all_component_ids = this._order_sub_component_ids(
