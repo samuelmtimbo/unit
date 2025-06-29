@@ -203,15 +203,12 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _enabled = (): boolean => {
     const { disabled } = this.$props
     if (document.visibilityState === 'visible') {
-      if (disabled === undefined) {
-        const { $disabled } = this.$context
-        return !$disabled
-      } else {
-        return !disabled
-      }
+      return !disabled
     } else {
       return false
     }
+
+    return !disabled
   }
 
   private _disabled: boolean = true
