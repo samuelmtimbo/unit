@@ -17,6 +17,7 @@ import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
 import { parseLayoutValue } from '../../../../../client/parseLayoutValue'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { applyStyle } from '../../../../../client/style'
 import { getThemeModeColor } from '../../../../../client/theme'
 import {
@@ -30,6 +31,8 @@ import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
+import Div from '../../Div/Component'
+import SVGSVG from '../../svg/SVG/Component'
 
 const HARMONIC = harmonicArray(20)
 
@@ -71,8 +74,6 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _tx: number = 0 // target x
   private _ty: number = 0 // target y
 
-  private _svg: SVGSVGElement
-
   private _pointer_position: Dict<Position> = {}
   private _pointer_down_position: Dict<Position> = {}
   private _pointer_down: Dict<boolean> = {}
@@ -96,7 +97,9 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _move_timeout: number
 
-  private _container: HTMLDivElement
+  private _container: Div
+  private _svg: SVGSVG
+  private _children: Div
 
   private _container_x: number = 0
   private _container_y: number = 0
@@ -126,24 +129,38 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this._x = x - r - 2
     this._y = y - r - 2
 
-    const container = this.$system.api.document.createElement('div')
-    applyStyle(container, { ...DEFAULT_STYLE, ...style })
+    const container = new Div(
+      { style: { ...DEFAULT_STYLE, ...style } },
+      this.$system
+    )
     this._container = container
 
-    const svg = this.$system.api.document.createElementNS(namespaceURI, 'svg')
-    svg.classList.add('bot-svg')
-    if (className) {
-      svg.classList.add(className)
-    }
-    applyStyle(svg, {
-      ...{
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        stroke: 'currentColor',
-        cursor: 'default',
+    const children = new Div(
+      {
+        style: {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+        },
       },
-    })
+      this.$system
+    )
+    this._children = children
+
+    const svg = new SVGSVG(
+      {
+        style: {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          stroke: 'currentColor',
+          cursor: 'default',
+        },
+      },
+      this.$system
+    )
     this._svg = svg
 
     this._bot = this.$system.api.document.createElementNS(namespaceURI, 'g')
@@ -177,11 +194,28 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this._eye_brow.setAttribute('stroke-width', '3')
     this._bot.appendChild(this._eye_brow)
 
-    svg.appendChild(this._bot)
+    svg.$element.appendChild(this._bot)
 
-    container.appendChild(svg)
+    const $element = parentElement(this.$system)
 
-    this.$element = container
+    this.$element = $element
+    this.$unbundled = false
+    this.$primitive = true
+
+    this.$subComponent = {
+      container,
+      children,
+      svg,
+    }
+
+    this.$slot = {
+      default: children,
+    }
+
+    this.registerRoot(container)
+
+    container.registerParentRoot(svg)
+    container.registerParentRoot(children)
 
     this.addEventListener(makePointerEnterListener(this._onPointerEnter))
     this.addEventListener(makePointerLeaveListener(this._onPointerLeave))
@@ -493,7 +527,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
         this._laser_focus[pointerId] = laser_focus
         this._laser_ray[pointerId] = laser_ray
 
-        this._svg.appendChild(laser)
+        this._svg.$element.appendChild(laser)
       }
 
       const lx = p.x
@@ -859,7 +893,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     if (laser) {
       // log('Bot', '_removePointerLaser', pointerId)
 
-      this._svg.removeChild(laser)
+      this._svg.$element.removeChild(laser)
 
       delete this._laser_position[pointerId]
       delete this._laser[pointerId]
@@ -890,8 +924,8 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _resizeSVG = () => {
     const { $width, $height } = this.$context
 
-    this._svg.setAttribute('width', `${$width}`)
-    this._svg.setAttribute('height', `${$height}`)
+    this._svg.$element.setAttribute('width', `${$width}`)
+    this._svg.$element.setAttribute('height', `${$height}`)
   }
 
   private _translate = () => {
@@ -1102,7 +1136,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       }),
     ])
 
-    this._position_observer.observe(this._container)
+    this._position_observer.observe(this._container.$element)
 
     this._resizeSVG()
   }
@@ -1139,7 +1173,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   onPropChanged(prop: string, current: any) {
     // console.log('Bot', prop, current)
     if (prop === 'style') {
-      applyStyle(this._container, { ...DEFAULT_STYLE, ...current })
+      applyStyle(this._container.$element, { ...DEFAULT_STYLE, ...current })
       this._tick_color()
     }
     if (prop === 'disabled') {
