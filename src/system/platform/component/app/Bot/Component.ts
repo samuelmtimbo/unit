@@ -704,10 +704,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _onContextPointerEnter = (event: UnitPointerEvent) => {
     const { pointerId, pointerType } = event
 
-    if (
-      (pointerType === 'pen' || pointerType === 'mouse') &&
-      !this._pointer_down[pointerId]
-    ) {
+    if (pointerType === 'pen' && !this._pointer_down[pointerId]) {
       return
     }
 
@@ -793,10 +790,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
     // ignore pen events for now because Samsung S-Pen hover does not emit
     // pointerenter/pointerleave events (tested on a Samsung Galaxy Note Ultra).
-    if (
-      (pointerType === 'pen' || pointerType === 'mouse') &&
-      !this._pointer_down[pointerId]
-    ) {
+    if (pointerType === 'pen' && !this._pointer_down[pointerId]) {
       return
     }
 
@@ -848,7 +842,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
       this._tick_body()
 
-      if (pointerType === 'pen' || pointerType === 'mouse') {
+      if (pointerType === 'pen') {
         this.__onContextPointerEnter(event)
       }
     }
@@ -900,7 +894,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       // console.log('Bot', '_onContextPointerUp', pointerId)
       this._remove_pointer_down(event)
 
-      if (pointerType === 'pen' || pointerType === 'mouse') {
+      if (pointerType === 'pen') {
         this._onContextPointerLeave(event)
       }
     }
