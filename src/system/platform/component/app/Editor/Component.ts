@@ -51220,7 +51220,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._long_press_background_pointer.add(pointerId)
     this._long_press_background_count++
 
-    this._animate_pulse(screenX, screenY, 'in')
+    if (this._can_leave()) {
+      this._animate_pulse(screenX, screenY, 'in')
+    }
 
     if (this._tree_layout) {
       this._on_layout_background_long_press(event)
