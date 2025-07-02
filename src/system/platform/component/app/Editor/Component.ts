@@ -51192,23 +51192,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._mode === 'remove' ||
       this._mode === 'data'
     ) {
-      if (!this._capturing_gesture && this._search_hidden) {
-        const all_selected_node_ids = this._get_all_selected_node_ids()
-        const all_node_ids = keys(this._node)
-        if (all_selected_node_ids.length > 0) {
-          this._start_long_press_collapse(
-            pointerId,
-            null,
-            all_selected_node_ids,
-            { x: clientX, y: clientY }
-          )
-        } else {
-          this._start_long_press_collapse(pointerId, null, all_node_ids, {
-            x: clientX,
-            y: clientY,
-          })
-        }
-      }
+      // if (!this._capturing_gesture && this._search_hidden) {
+      //   const all_selected_node_ids = this._get_all_selected_node_ids()
+      //   const all_node_ids = keys(this._node)
+      //   if (all_selected_node_ids.length > 0) {
+      //     this._start_long_press_collapse(
+      //       pointerId,
+      //       null,
+      //       all_selected_node_ids,
+      //       { x: clientX, y: clientY }
+      //     )
+      //   } else {
+      //     this._start_long_press_collapse(pointerId, null, all_node_ids, {
+      //       x: clientX,
+      //       y: clientY,
+      //     })
+      //   }
+      // }
     }
   }
 
