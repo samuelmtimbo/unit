@@ -92,8 +92,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
       {
         style: {
           position: 'absolute',
-          width: '23px',
-          height: '23px',
+          width: '25px',
+          height: '25px',
           left: '4px',
           top: '4px',
           borderRadius: '1px',
