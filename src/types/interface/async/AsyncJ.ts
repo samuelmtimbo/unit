@@ -6,7 +6,7 @@ import { $J, $J_C, $J_G, $J_R, $J_W } from './$J'
 export const AsyncJGet: (value: J) => $J_G = (value) => {
   return {
     $get({ name }: { name: string }, callback: Callback<any>): void {
-      ;(async () => {
+      void (async () => {
         let data: any
 
         try {
@@ -26,7 +26,7 @@ export const AsyncJCall: (value: J) => $J_C = (value) => {
       { name, data }: { name: string; data: string },
       callback: Callback<any>
     ): void {
-      ;(async () => {
+      void (async () => {
         try {
           const _data = evaluate(data, {}, {})
 

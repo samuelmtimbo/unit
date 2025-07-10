@@ -119,7 +119,7 @@ export default class Canvas_
           }
         },
         d: (d: any[]) => {
-          this.clear()
+          void this.clear()
 
           this._d = d || []
 

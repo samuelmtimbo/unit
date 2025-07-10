@@ -124,18 +124,22 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
     // if (name === 'stream') {
     const _stream = await unit.mediaStream()
 
-    if (_stream === null) {
-      if (this._stream) {
-        this._remove_stream(this._stream)
+    void (async () => {
+      if (_stream === null) {
+        if (this._stream) {
+          await this._remove_stream(this._stream)
+        }
+        this._stream = null
+      } else {
+        if (this._stream) {
+          await this._remove_stream(this._stream)
+        }
+
+        void this._add_stream(_stream)
+
+        this._stream = _stream
       }
-      this._stream = null
-    } else {
-      if (this._stream) {
-        this._remove_stream(this._stream)
-      }
-      this._add_stream(_stream)
-      this._stream = _stream
-    }
+    })
     // }
   }
 
@@ -196,26 +200,28 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
 
     if (this._stream) {
       this._stream = null
+
       if (this._peer) {
-        this._remove_stream(this._stream)
+        void this._remove_stream(this._stream)
       }
     }
     // }
   }
 
-  private _add_stream = (stream: MediaStream) => {
+  private _add_stream = async (stream: MediaStream) => {
     // console.log('Peer', '_add_stream')
 
     this._stream = stream
+
     if (this._peer) {
-      this._peer.addStream(stream)
+      await this._peer.addStream(stream)
     }
   }
 
-  private _remove_stream = (stream: MediaStream) => {
+  private _remove_stream = async (stream: MediaStream) => {
     // console.log('Transmitter', '_remove_stream')
 
-    this._peer.removeStream()
+    await this._peer.removeStream()
   }
 
   private async _send_data(data: string) {

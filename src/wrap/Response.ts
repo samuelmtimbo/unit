@@ -29,7 +29,7 @@ export function wrapResponse(response: Response, system: System): RES & $ {
     _body: string | Blob
 
     read(callback: Callback<ServerResponse>): void {
-      ;(async () => {
+      void (async () => {
         if (!this._body) {
           this._body = await response.text()
         }

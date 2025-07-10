@@ -33,7 +33,7 @@ export const animateSimulate = <T extends Dict<AnimatableValue>>(
     const ended = animateSimulateTick(n, n_, ff, tf)
 
     if (ended) {
-      callback()
+      void callback()
     }
 
     if (!cancelled) {

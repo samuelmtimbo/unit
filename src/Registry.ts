@@ -68,7 +68,7 @@ export class Registry implements R {
   setSpec(specId: string, spec: GraphSpec) {
     // console.log('Registry', 'setSpec', specId, spec)
 
-    this.specs_.set(specId, spec)
+    void this.specs_.set(specId, spec)
   }
 
   injectSpecs(newSpecs: GraphSpecs): Dict<string> {
@@ -134,7 +134,7 @@ export class Registry implements R {
         }
       }
 
-      this.specs_.set(specId, spec)
+      void this.specs_.set(specId, spec)
     }
 
     for (const specId in newSpecs) {
@@ -246,7 +246,7 @@ export class Registry implements R {
   deleteSpec(id: string): void {
     // console.log('deleteSpec', id)
 
-    this.specs_.delete(id)
+    void this.specs_.delete(id)
   }
 
   lockSpec(id: string): void {

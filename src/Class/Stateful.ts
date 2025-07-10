@@ -68,14 +68,14 @@ export class Stateful<
   public _set_from_input: boolean = false
 
   onDataInputData<K extends keyof I>(name: K, data: any): void {
-    this.set(name, data, true)
+    void this.set(name, data, true)
   }
 
   onDataInputDrop<K extends keyof I>(name: K): void {
     this._set_from_input = false
 
     if (!this._backwarding) {
-      this.set(name, undefined)
+      void this.set(name, undefined)
     }
   }
 
@@ -83,13 +83,13 @@ export class Stateful<
     super.onRefInputData(name, data)
 
     this._forwarding = true
-    this.set(name, data)
+    void this.set(name, data)
     this._forwarding = false
   }
 
   onRefInputDrop(name: any): void {
     if (!this._backwarding) {
-      this.set(name, undefined)
+      void this.set(name, undefined)
     }
   }
 

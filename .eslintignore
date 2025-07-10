@@ -1,0 +1,6 @@
+**/*.js
+**/*.d.ts
+
+node_modules/
+lib/
+build/

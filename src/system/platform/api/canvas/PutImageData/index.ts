@@ -51,7 +51,7 @@ export default class PutImageData<T> extends Semifunctional<I<T>, O<T>> {
   ): Promise<void> {
     const imageData = image.imageData()
 
-    canvas.putImageData(imageData, dx, dy, x, y, width, height)
+    await canvas.putImageData(imageData, dx, dy, x, y, width, height)
 
     done({
       done: true,

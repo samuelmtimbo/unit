@@ -51,7 +51,7 @@ export default class _Notification extends Primitive<I, O, NotificationEvents> {
       const { permission } = Notification
 
       if (permission === 'default') {
-        Notification.requestPermission().then(
+        Notification.requestPermission().catch(
           (_permission: NotificationPermission) => {
             this.err('not authorized')
           }

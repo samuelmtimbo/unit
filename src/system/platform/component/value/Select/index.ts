@@ -67,7 +67,7 @@ export default class Select extends Field<'value', I, O> {
           const value = option.peakInput('value')
 
           if (value !== undefined) {
-            this.set('value', value)
+            void this.set('value', value)
 
             this._forward('value', value)
             this._backward('value')
@@ -93,7 +93,7 @@ export default class Select extends Field<'value', I, O> {
             const value = option.peakInput('value')
 
             if (value !== undefined) {
-              this.set('value', value)
+              void this.set('value', value)
 
               this._forward('value', value)
 
@@ -107,7 +107,7 @@ export default class Select extends Field<'value', I, O> {
         }
 
         if (!this._first_option) {
-          this.set('value', undefined)
+          void this.set('value', undefined)
 
           this._forwarding_empty = true
           this._forward_empty('value')
@@ -125,7 +125,7 @@ export default class Select extends Field<'value', I, O> {
       const value = this._first_option.peakInput('value')
 
       if (value !== undefined) {
-        this.set('value', value)
+        void this.set('value', value)
 
         this._forward('value', value)
       }

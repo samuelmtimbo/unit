@@ -12,9 +12,12 @@ const createWindow = () => {
     height: 600,
   })
 
-  window.loadURL(`http://localhost:${PORT}`)
+  void window.loadURL(`http://localhost:${PORT}`)
 }
 
-app.whenReady().then(() => {
-  createWindow()
-})
+app
+  .whenReady()
+  .then(() => {
+    void createWindow()
+  })
+  .catch((err) => {})

@@ -45,7 +45,7 @@ export default class WakeLock extends Holder<I, O> {
 
   d() {
     if (this._wake_lock) {
-      this._wake_lock.release()
+      void this._wake_lock.release()
 
       this._wake_lock = undefined
     }

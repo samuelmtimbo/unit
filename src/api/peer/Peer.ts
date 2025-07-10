@@ -232,7 +232,7 @@ export class Peer extends $<PeerEvents> {
       offerToReceiveVideo: true,
     })
 
-    rtc.setLocalDescription(answer)
+    await rtc.setLocalDescription(answer)
 
     const { sdp } = answer
 

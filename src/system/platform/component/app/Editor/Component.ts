@@ -884,7 +884,7 @@ const saveToUnitFile = async (
         new CompressionStream('gzip')
       )
 
-      compressedReadableStream.pipeTo(writableStream)
+      await compressedReadableStream.pipeTo(writableStream)
     } else {
       await writableStream.write(json)
       await writableStream.close()
@@ -3606,7 +3606,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
 
-          this._drop_data_transfer_item(item, drop_position, screen_position)
+          void this._drop_data_transfer_item(
+            item,
+            drop_position,
+            screen_position
+          )
 
           break
         }
@@ -3614,7 +3618,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (let i = 0; i < files.length; i++) {
           const file = items[i].getAsFile()
 
-          this._drop_file(file, drop_position)
+          void this._drop_file(file, drop_position)
         }
       }
     }
@@ -3649,7 +3653,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         if (handle) {
           if (handle.kind === 'directory') {
-            this._drop_file_system_directory_handle(handle, screen_position)
+            void this._drop_file_system_directory_handle(
+              handle,
+              screen_position
+            )
 
             return
           }
@@ -3666,7 +3673,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      this._drop_file(file, position)
+      void this._drop_file(file, position)
     } else if (item.kind === 'string') {
       if (item.type === 'text/plain') {
         await this._drop_data_transfer_item_as_string(item, position)
@@ -3705,7 +3712,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     reader.readEntries(
       (entries) => {
-        this._paste_file_system_directory_entries(entries)
+        void this._paste_file_system_directory_entries(entries)
       },
       (err: any) => {
         //
@@ -3719,7 +3726,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ) => {
     entry.file(
       async (file: File) => {
-        this._drop_file(file, position)
+        await this._drop_file(file, position)
       },
       (err: any) => {
         //
@@ -3763,7 +3770,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             injectUserSpecs(this.$props, specs)
           }
         } else if (handle.kind === 'directory') {
-          this._paste_file_system_directory_handle(
+          await this._paste_file_system_directory_handle(
             handle as FileSystemDirectoryHandle
           )
         } else {
@@ -3884,7 +3891,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._last_open_filename_on_empty_graph = file.name
       }
 
-      this._drop_bundle_file(file, position)
+      await this._drop_bundle_file(file, position)
     }
   }
 
@@ -21743,7 +21750,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       promises.push(waitFinish(this._layout_layer_opacity_animation[parent_id]))
     }
 
-    Promise.all(promises).then(callback)
+    void Promise.all(promises)
+      .then(callback)
+      .catch(() => {})
   }
 
   private _is_layout_parent_visible = (sub_component_id: string) => {
@@ -29663,7 +29672,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _yellow_click_datum = (datum_node_id: string) => {
-    this._copy_nodes([datum_node_id], true)
+    void this._copy_nodes([datum_node_id], true)
   }
 
   private _yellow_long_press_datum = (
@@ -29742,7 +29751,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _yellow_click_unit = (unit_id: string): void => {
     // console.log('Graph', '_yellow_click_unit', unit_id)
 
-    this._copy_nodes([unit_id], true)
+    void this._copy_nodes([unit_id], true)
   }
 
   private _yellow_long_press_class_literal = (
@@ -32573,7 +32582,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           parent_animation_finished = true
 
           if (children_animation_finished) {
-            finish()
+            void finish()
           }
         }
       )
@@ -32606,7 +32615,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               children_animation_finished = true
 
               if (parent_animation_finished) {
-                finish()
+                void finish()
               }
             }
           }
@@ -48633,7 +48642,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (this._mode === 'none') {
         this._none_double_click_background(position)
       } else if (this._mode === 'add') {
-        this._paste_clipboard(position)
+        void this._paste_clipboard(position)
       } else if (this._mode === 'data') {
         this.__on_data_background_double_click(pointerId, clientX, clientY)
       } else if (this._mode === 'multiselect') {
@@ -51623,7 +51632,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       await this._save_silently(bundle)
     } else {
-      downloadData({
+      void downloadData({
         name: `${name}.unit`,
         text: JSON.stringify(bundle, null, 2),
         mimetype: 'text/json',
@@ -51651,19 +51660,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_ctrl_s_keydown = () => {
     // console.log('Graph', '_on_ctrl_s_keydown')
 
-    this.save()
+    void this.save()
   }
 
   private _on_ctrl_shift_s_keydown = () => {
     // console.log('Graph', '_on_ctrl_shift_s_keydown')
 
-    this.save(true)
+    void this.save(true)
   }
 
   private _on_ctrl_o_keydown = () => {
     // console.log('Graph', '_on_ctrl_o_keydown')
 
-    this._open_file()
+    void this._open_file()
   }
 
   private _on_ctrl_r_keydown = () => {
@@ -52071,7 +52080,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       await Promise.all(promises)
     }
 
-    copyToClipboard()
+    void copyToClipboard()
   }
 
   public _show_err = (err: string): void => {
@@ -52079,8 +52088,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.error(err)
   }
 
-  public cut_nodes = (node_ids: string[]) => {
-    this._copy_nodes(node_ids, true)
+  public cut_nodes = async (node_ids: string[]) => {
+    await this._copy_nodes(node_ids, true)
 
     this._remove_nodes(node_ids)
   }
@@ -52088,19 +52097,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   public cut_single_node = (node_id: string): void => {
     const node_ids = [node_id]
 
-    this.cut_nodes(node_ids)
+    void this.cut_nodes(node_ids)
   }
 
   public cut_selected_nodes = () => {
     // console.log('Graph', 'cut_selected_nodes')
     const node_ids = keys(this._selected_node_id)
-    this.cut_nodes(node_ids)
+
+    void this.cut_nodes(node_ids)
   }
 
   public copy_single_node = (node_id: string, deep: boolean): void => {
     const node_ids = [node_id]
 
-    this._copy_nodes(node_ids, deep)
+    void this._copy_nodes(node_ids, deep)
   }
 
   public copy_selected_nodes = (deep: boolean) => {
@@ -52124,7 +52134,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const node_ids = keys(selected_node_id_clone)
 
-    this._copy_nodes(node_ids, deep)
+    void this._copy_nodes(node_ids, deep)
   }
 
   private _validate_graph_spec = (data: any): boolean => {
@@ -52163,11 +52173,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         if (item.types.includes('image/png')) {
           const blob = await item.getType('image/png')
 
-          this._drop_file(blob, position)
+          await this._drop_file(blob, position)
         } else if (item.types.includes('text/plain')) {
           const text = await item.getType('text/plain')
 
-          this._drop_file(text, position)
+          await this._drop_file(text, position)
 
           return
         }
@@ -53081,7 +53091,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_ctrl_v_keydown = (): void => {
     const position = this._jiggle_world_screen_center()
 
-    this._paste_clipboard(position)
+    void this._paste_clipboard(position)
   }
 
   private _on_ctrl_l_keydown = (key: string): void => {
@@ -56001,7 +56011,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const file = await fileHandle.getFile()
 
-        this._drop_file(file)
+        await this._drop_file(file)
       } catch (err) {
         return
       }
@@ -56009,7 +56019,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       try {
         const [file] = await fallbackShowOpenFilePicker(opt)
 
-        this._drop_file(file)
+        await this._drop_file(file)
       } catch (err) {
         return
       }
@@ -57472,7 +57482,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const subgraph = this.getSubgraphAtPath(path)
 
       if (subgraph) {
-        ;(async () => {
+        void (async () => {
           if (subgraph._animating_unit_explosion[unitId]) {
             await subgraph._animating_unit_explosion[unitId]
           }
@@ -58147,7 +58157,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             })
           )
         } else if (subgraph._animating_unit_explosion[data.graphId]) {
-          ;(async () => {
+          void (async () => {
             await subgraph._animating_unit_explosion[data.graphId]
 
             commit()

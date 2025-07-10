@@ -22,7 +22,7 @@ export default class Vibrate extends Functional<I, O> {
     )
   }
 
-  f({ pattern }: I, done: Done<O>) {
+  async f({ pattern }: I, done: Done<O>) {
     const {
       api: {
         device: { vibrate },
@@ -30,7 +30,7 @@ export default class Vibrate extends Functional<I, O> {
     } = this.__system
 
     try {
-      vibrate(pattern)
+      await vibrate(pattern)
     } catch (err) {
       done(undefined, err.message)
 

@@ -55,7 +55,7 @@ export default class BluetoothCharacteristic_ extends Functional<
 
     this.addListener('listen', ({ event }: { event: string }) => {
       if (event === 'write') {
-        this.startNotifications()
+        void this.startNotifications()
       }
     })
     this.addListener('unlisten', ({ event }: { event: string }) => {
@@ -82,7 +82,7 @@ export default class BluetoothCharacteristic_ extends Functional<
       __ = ['BC']
 
       read(callback: Callback<any>): void {
-        ;(async () => {
+        void (async () => {
           const dataView = await characteristic.readValue()
 
           const data = dataView.getUint8(0).toString()
@@ -92,7 +92,7 @@ export default class BluetoothCharacteristic_ extends Functional<
       }
 
       write(data: any, callback: Callback): void {
-        ;(async () => {
+        void (async () => {
           try {
             const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
 

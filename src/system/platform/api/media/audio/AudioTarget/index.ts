@@ -47,11 +47,13 @@ export default class AudioTarget extends Functional<I, O> {
       await this._audio.setSinkId(id)
     } catch (err) {
       done(undefined, err.message.toLowerCase())
-
-      this.err(err.message)
     }
 
-    this._audio.play()
+    try {
+      await this._audio.play()
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+    }
   }
 
   d() {

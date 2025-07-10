@@ -67,7 +67,7 @@ export default class Audio_
   }
 
   play(): void {
-    this.$element.play()
+    void this.$element.play()
   }
 
   pause(): void {

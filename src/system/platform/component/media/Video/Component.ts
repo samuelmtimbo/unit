@@ -113,7 +113,7 @@ export default class Video_
   }
 
   play(): void {
-    this.$element.play()
+    void this.$element.play()
   }
 
   pause(): void {

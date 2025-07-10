@@ -80,7 +80,8 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     this._input.graph.push(this._fallback_graph)
 
     this.register()
-    ;(async () => {
+
+    void (async () => {
       const component = (await firstGlobalComponentPromise(
         this.__system,
         this.__global_id

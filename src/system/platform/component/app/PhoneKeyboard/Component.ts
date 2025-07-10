@@ -390,11 +390,11 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
     } = this.$system
 
     // log('PhoneKeyboard', '_on_backspace_long_press')
-    this._backspace_interval = setInterval(() => {
+    this._backspace_interval = setInterval(async () => {
       // log('backspace')
       emitPhoneKey(this.$system, 'Backspace', this._shift, this._alt)
 
-      vibrate([10])
+      await vibrate([10])
     }, 30)
   }
 

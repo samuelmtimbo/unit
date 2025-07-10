@@ -55,7 +55,7 @@ export default class AudioContext_ extends Functional<I, O> {
 
   d() {
     if (this._ctx) {
-      this._ctx.close()
+      void this._ctx.close()
 
       this._ctx = undefined
     }

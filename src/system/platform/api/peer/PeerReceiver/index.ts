@@ -77,7 +77,7 @@ export default class PeerReceiver extends Holder<I, O> {
     this._setup_peer()
 
     if (this._input.offer.active()) {
-      this._output_answer(this._input.offer.peak())
+      await this._output_answer(this._input.offer.peak())
     }
   }
 
@@ -122,7 +122,7 @@ export default class PeerReceiver extends Holder<I, O> {
 
     if (name === 'offer') {
       if (this._input.opt.active()) {
-        this._output_answer(data)
+        await this._output_answer(data)
       }
     }
   }
