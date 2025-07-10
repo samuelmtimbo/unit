@@ -16715,9 +16715,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_pointer_enter = (event: UnitPointerEvent): void => {
     // console.log('Graph', '_on_pointer_enter')
 
-    const { pointerId } = event
+    const { pointerId, clientX, clientY } = event
 
     this._pointer_last_moved[pointerId] = time()
+    this._pointer_position[pointerId] = { x: clientX, y: clientY }
+
+    this._refresh_pointer_hover(pointerId)
   }
 
   private _on_pointer_cancel = (event: UnitPointerEvent) => {
@@ -18264,25 +18267,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._state_remove_search_unit()
       }
 
-      if (this._has_node(search_unit_id)) {
-        for (const pointerId in this._pointer_position) {
-          const pointer_position = this._pointer_position[pointerId]
-
-          if (
-            this._is_point_inside_node(
-              search_unit_id,
-              pointer_position.x,
-              pointer_position.y,
-              NODE_PADDING
-            )
-          ) {
-            this.__on_node_pointer_enter(
-              search_unit_id,
-              Number.parseInt(pointerId)
-            )
-          }
-        }
-      }
+      this._refresh_all_pointer_hover()
     }
 
     const datum_node_id = this._search_unit_datum_node_id
@@ -18297,6 +18282,57 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       this._refresh_datum_color(datum_node_id)
+    }
+  }
+
+  private _refresh_all_pointer_hover = () => {
+    // console.log('Graph', '_refresh_all_pointer_hover', this._id)
+
+    for (const pointerId in this._pointer_position) {
+      this._refresh_pointer_hover(Number.parseInt(pointerId))
+    }
+  }
+
+  private _refresh_pointer_hover = (pointerId: number) => {
+    // console.log('Graph', '_refresh_pointer_hover', pointerId)
+
+    const current_hover_node_id = this._pointer_id_hover_node_id[pointerId]
+
+    let hover_node_id: string
+
+    for (const node_id in this._node) {
+      const pointer_position = this._pointer_position[pointerId]
+
+      const pointer_world_position = this._screen_to_world(
+        pointer_position.x,
+        pointer_position.y
+      )
+
+      if (
+        this._is_point_inside_node(
+          node_id,
+          pointer_world_position.x,
+          pointer_world_position.y,
+          NODE_PADDING
+        ) &&
+        this._is_node_visible(node_id)
+      ) {
+        hover_node_id = node_id
+
+        break
+      }
+    }
+
+    if (hover_node_id) {
+      if (current_hover_node_id && current_hover_node_id !== hover_node_id) {
+        this.__on_node_pointer_leave(current_hover_node_id, pointerId)
+      }
+
+      this.__on_node_pointer_enter(hover_node_id, pointerId)
+    } else {
+      if (current_hover_node_id) {
+        this.__on_node_pointer_leave(current_hover_node_id, pointerId)
+      }
     }
   }
 
@@ -31696,6 +31732,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._force_control_animation_false = true
     this._force_trasncend_animation_false = true
 
+    this._refresh_all_pointer_hover()
+
     if (animate && !this._fetching_bundle) {
       this._animate_enter(
         animate_config,
@@ -31977,6 +32015,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._subgraph_graph && this._subgraph_unit_id) {
       this._force_control_animation_false = true
+
+      this._refresh_all_pointer_hover()
 
       const unit_id = this._subgraph_unit_id
 
