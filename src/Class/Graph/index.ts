@@ -671,6 +671,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
 
+    const mergePinCount = getMergePinCount(this.getMergeSpec(mergeId))
+
+    propagate = propagate || mergePinCount === 0
+
     this._ensureMergePin(type, mergeId, data, propagate)
 
     const subPin = this._pin[mergePinNodeId]

@@ -1389,18 +1389,6 @@ export function buildMoveMap(
           const nextPinType = oppositeType
           const nextSubPinId = '0'
 
-          const mergeExposePinTask = newTask([
-            {
-              in: true,
-              action: makeExposePinSetAction(nextPinType, nextPinId, {
-                plug: {
-                  [nextSubPinId]: {},
-                },
-                ref,
-              }),
-            },
-          ])
-
           let datum: string
 
           forEachPinOnMerge(outside[type_], (unitId, type, pinId) => {
@@ -1410,20 +1398,25 @@ export function buildMoveMap(
                 ['pin', unitId, type, pinId],
                 undefined
               )
-
-              if (datum) {
-                mergeExposePinTask.moves.push({
-                  in: false,
-                  action: makeSetUnitPinDataAction(
-                    graphId,
-                    nextPinType,
-                    nextPinId,
-                    datum
-                  ),
-                })
-              }
             }
           })
+
+          const mergeExposePinTask = newTask([
+            {
+              in: true,
+              action: makeExposePinSetAction(
+                nextPinType,
+                nextPinId,
+                {
+                  plug: {
+                    [nextSubPinId]: {},
+                  },
+                  ref,
+                },
+                datum
+              ),
+            },
+          ])
 
           nextMergePinId[type_] = nextPinId
 

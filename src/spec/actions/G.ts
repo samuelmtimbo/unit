@@ -394,9 +394,10 @@ export const makeExposePinSetAction = (
   type: IO,
   pinId: string,
   pinSpec: GraphPinSpec,
+  data?: string,
   flags?: Flags
 ) => {
-  return wrapExposePinSetAction({ type, pinId, pinSpec, ...flags })
+  return wrapExposePinSetAction({ type, pinId, pinSpec, data, ...flags })
 }
 
 export const wrapCoverPinSetAction = (data: GraphCoverPinSetData) => {
