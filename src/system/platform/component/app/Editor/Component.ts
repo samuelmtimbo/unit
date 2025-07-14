@@ -7840,6 +7840,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this.$system
     )
 
+    core_component_frame.setDisabled(true)
+
     stopAllPropagation(core_component_frame.$element)
 
     stopByPropagation(core_component_frame.$element, 'dragenter')
@@ -25277,9 +25279,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { animate } = this._config()
 
     const component = this._get_sub_component(unit_id)
+    const frame = this._get_sub_component_frame(unit_id)
 
     if (component) {
       if (!this._core_component_unlocked[unit_id]) {
+        frame.setDisabled(false)
+
         this._core_component_unlocked[unit_id] = true
         this._core_component_unlocked_count++
 
@@ -25408,7 +25413,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._core_component_unlocked_count--
 
+    const frame = this._get_sub_component_frame(unit_id)
+
     if (this._core_component_unlocked_count === 0) {
+      frame.setDisabled(true)
+
       if (!unlocking) {
         this._enable_input()
         this._enable_transcend()

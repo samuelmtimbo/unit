@@ -142,6 +142,10 @@ export class Component<
     return this._$context ?? this.$system.context[0]
   }
 
+  public get $disabled(): boolean {
+    return this._$disabled || this.$slotParent?.$disabled
+  }
+
   public $connected: boolean = false
   public $unit: U
 
@@ -151,6 +155,7 @@ export class Component<
 
   public $unbundled: boolean = true
   public $controlled: boolean = false
+  public _$disabled: boolean = false
 
   public $children: Component[] = []
   public $slotChildren: Dict<Component[]> = { default: [] }
@@ -1276,6 +1281,10 @@ export class Component<
         window: { Text },
       },
     } = this.$system
+
+    if (this.$disabled) {
+      return
+    }
 
     if (this.$slot['default'] === this) {
       if (this.$element instanceof Text) {
@@ -3883,6 +3892,10 @@ export class Component<
 
   public setControlled(controlled: boolean): void {
     this.$controlled = controlled
+  }
+
+  public setDisabled(disabled: boolean): void {
+    this._$disabled = disabled
   }
 
   public setSystem(system: System): void {
