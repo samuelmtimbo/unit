@@ -925,3 +925,11 @@ export function getUnitInputDatum(
 export function isEmptyMerge(mergeSpec: GraphMergeSpec) {
   return getMergePinCount(mergeSpec) === 0
 }
+
+export const hasPinId = (spec: Spec, type: IO, pinId: string): boolean => {
+  return !!(spec[`${type}s`] || {})[pinId]
+}
+
+export const hasDatum = (spec: GraphSpec, datumId: string): boolean => {
+  return !!spec.data?.[datumId]
+}

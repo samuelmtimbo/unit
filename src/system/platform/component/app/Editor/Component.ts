@@ -590,9 +590,11 @@ import {
   getSubPinSpec,
   getUnit,
   getUnitSpec,
+  hasDatum,
   hasMerge,
   hasMergePin,
   hasPin,
+  hasPinId,
   hasPlug,
   hasUnit,
   isPinRef,
@@ -1869,10 +1871,6 @@ export const NOT_SELECTED_AREA = { x0: 0, y0: 0, x1: 0, y1: 0 }
 // area
 
 export const NODE_PADDING: number = 12
-
-export const hasPinId = (spec: Spec, type: IO, pinId: string): boolean => {
-  return !!(spec[`${type}s`] || {})[pinId]
-}
 
 export const newSpecPinId = (
   spec: GraphSpec,
@@ -51431,69 +51429,80 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const round_node_position = roundPoint(node_position)
 
       if (isUnitNodeId(node_id)) {
-        deepSet(
-          spec,
-          ['units', node_id, 'metadata', 'position'],
-          round_node_position
-        )
+        if (hasUnit(spec, node_id)) {
+          deepSet(
+            spec,
+            ['units', node_id, 'metadata', 'position'],
+            round_node_position
+          )
+        }
       } else if (isLinkPinNodeId(node_id)) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
 
-        deepSet(
-          spec,
-          ['units', unitId, type, pinId, 'metadata', 'position'],
-          round_node_position
-        )
+        if (hasUnit(spec, unitId)) {
+          deepSet(
+            spec,
+            ['units', unitId, type, pinId, 'metadata', 'position'],
+            round_node_position
+          )
+        }
       } else if (isMergeNodeId(node_id)) {
         const { mergeId } = segmentMergeNodeId(node_id)
 
-        deepSet(
-          spec,
-          ['metadata', 'position', 'merge', mergeId],
-          round_node_position
-        )
+        if (hasMerge(spec, mergeId)) {
+          deepSet(
+            spec,
+            ['metadata', 'position', 'merge', mergeId],
+            round_node_position
+          )
+        }
       } else if (isExternalNodeId(node_id)) {
         const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
-
-        deepSet(
-          spec,
-          [`${type}s`, pinId, 'metadata', 'position', subPinId, 'ext'],
-          round_node_position
-        )
+        if (hasPinId(spec, type, pinId)) {
+          deepSet(
+            spec,
+            [`${type}s`, pinId, 'metadata', 'position', subPinId, 'ext'],
+            round_node_position
+          )
+        }
       } else if (isInternalNodeId(node_id)) {
         const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
 
-        deepSet(
-          spec,
-          [
-            `${type}s`,
-            pinId,
-            'plug',
-            subPinId,
-            'metadata',
-            'position',
-            subPinId,
-            'int',
-          ],
-          round_node_position
-        )
+        if (hasPinId(spec, type, pinId)) {
+          deepSet(
+            spec,
+            [
+              `${type}s`,
+              pinId,
+              'plug',
+              subPinId,
+              'metadata',
+              'position',
+              subPinId,
+              'int',
+            ],
+            round_node_position
+          )
+        }
       } else if (isDatumNodeId(node_id)) {
         const { datumId } = segmentDatumNodeId(node_id)
 
-        const unit_pin = editor.getDatumPin(datumId)
+        if (hasDatum(spec, datumId)) {
+          const unit_pin = editor.getDatumPin(datumId)
 
-        if (unit_pin) {
-          const { unitId, type, pinId } = unit_pin
+          if (unit_pin) {
+            const { unitId, type, pinId } = unit_pin
 
-          if (isUnitPinConstant(spec, unitId, type, pinId)) {
-            deepSet(
-              spec,
-              ['units', unitId, type, pinId, 'metadata', 'data', 'position'],
-              round_node_position
-            )
+            if (isUnitPinConstant(spec, unitId, type, pinId)) {
+              deepSet(
+                spec,
+                ['units', unitId, type, pinId, 'metadata', 'data', 'position'],
+                round_node_position
+              )
+            }
+          } else {
+            deepSet(spec, ['metadata', 'position', 'data'], round_node_position)
           }
-        } else {
-          deepSet(spec, ['metadata', 'position', 'data'], round_node_position)
         }
       }
     }
@@ -51560,6 +51569,33 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     processSubGraph(editor, spec)
+  }
+
+  private _set_bundle_node_positions_rec = (
+    editor: Editor_,
+    bundle: BundleSpec,
+    specs: Specs
+  ) => {
+    const processSubGraph = (editor: Editor_, spec: GraphSpec) => {
+      if (!isSystemSpec(spec)) {
+        let node_positions = editor.get_node_relative_positions()
+
+        this._set_spec_node_positions(spec, editor, node_positions)
+
+        for (const unitId in spec.units) {
+          const unit = spec.units[unitId]
+
+          const subgraph = editor._subgraph_cache[unitId]
+          const unit_spec = bundle.specs[unit.id]
+
+          if (subgraph && unit_spec) {
+            processSubGraph(subgraph, unit_spec)
+          }
+        }
+      }
+    }
+
+    processSubGraph(editor, bundle.spec ?? {})
   }
 
   public set_spec_node_positions_rec = (
@@ -52051,6 +52087,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     const bundle = this._sub_graph_selection(node_ids)
+
+    this._set_bundle_node_positions_rec(this, bundle, specs)
 
     const copyToClipboard = async () => {
       try {
