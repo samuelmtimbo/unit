@@ -107,6 +107,7 @@ import {
   parentClass,
   parentComponent,
 } from '../../../../../client/createParent'
+import { debounce } from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
@@ -1675,10 +1676,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     })
   }
 
-  private _on_zoom = (zoom) => {
+  private _on_zoom = debounce(this.$system, (zoom: Zoom) => {
     // console.log('Graph', '_on_zoom')
     this.set('zoom', zoom)
-  }
+  }, 200)
 
   onPropChanged(prop: string, current: any): void {
     // console.log('Graph', name, current)
