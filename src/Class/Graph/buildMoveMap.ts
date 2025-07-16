@@ -2089,7 +2089,7 @@ export function buildMoveMap(
 
       movePlugTask.moves.push({
         in: false,
-        action: makePlugPinAction(type, pinId, subPinId, {
+        action: makePlugPinAction(type, pinId, nextSubPinId, {
           unitId: graphId,
           kind: type,
           pinId: nextPinId,
@@ -3046,9 +3046,9 @@ export function buildMoveMap(
           nextMergeSpec[nextUnitId] = unitMerge
         }
 
-        const nextMergeId = subPinSpec.mergeId
-
         if (reverse) {
+          const nextMergeId = subPinSpec.mergeId
+
           const graphPinOutsidePlugs = deepGetOrDefault(
             graphPlugMap,
             [type, pinId],
@@ -3153,6 +3153,18 @@ export function buildMoveMap(
             }
           }
         } else {
+          const nextMergeId = deepGetOrDefault(
+            mapping,
+            ['merge', subPinSpec.mergeId, 'in', 'merge', 'mergeId'],
+            newMergeId(target)
+          )
+
+          deepSet_(
+            mapping,
+            ['merge', subPinSpec.mergeId, 'in', 'merge', 'mergeId'],
+            nextMergeId
+          )
+
           if (isMergeSelected(subPinSpec.mergeId)) {
             const outsideCount = mergeOutsideCount[subPinSpec.mergeId] ?? {
               input: 0,
