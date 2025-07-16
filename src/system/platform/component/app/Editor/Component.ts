@@ -96,6 +96,7 @@ import {
 } from '../../../../../client/component/getDatumSize'
 import { mergeProps } from '../../../../../client/component/mergeProps'
 import { mergePropStyle } from '../../../../../client/component/mergeStyle'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { componentClassFromSpecId } from '../../../../../client/componentClassFromSpecId'
 import {
   componentFromSpecId,
@@ -156,6 +157,7 @@ import { extractStyle } from '../../../../../client/extractStyle'
 import { extractTrait } from '../../../../../client/extractTrait'
 import { findRef } from '../../../../../client/findRef'
 import { getSize } from '../../../../../client/getSize'
+import { marchingSquares, pointsToSmoothPath } from '../../../../../client/glob'
 import {
   GraphNodeMap,
   add_link_to_graph,
@@ -953,6 +955,7 @@ export type Config = {
   plugNames: boolean
   unitNames: boolean
   pinNames: boolean
+  metaSelection: boolean
 }
 
 export interface Props {
@@ -1676,10 +1679,14 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     })
   }
 
-  private _on_zoom = debounce(this.$system, (zoom: Zoom) => {
-    // console.log('Graph', '_on_zoom')
-    this.set('zoom', zoom)
-  }, 200)
+  private _on_zoom = debounce(
+    this.$system,
+    (zoom: Zoom) => {
+      // console.log('Graph', '_on_zoom')
+      this.set('zoom', zoom)
+    },
+    200
+  )
 
   onPropChanged(prop: string, current: any): void {
     // console.log('Graph', name, current)
@@ -1817,7 +1824,7 @@ export interface Props_ extends R {
   specs?: Specs
   system?: System
   typeCache?: TypeTreeInterfaceCache
-  config?: Config
+  config?: Partial<Config>
   zoom?: Zoom
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
   enterFullwindow: () => void
@@ -1858,6 +1865,7 @@ const defaultProps: DefaultProps = {
     plugNames: true,
     unitNames: true,
     pinNames: true,
+    metaSelection: false,
   },
 }
 
@@ -2563,6 +2571,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _zoom_comp: Zoom_
   private _zoom_comp_alt: Zoom_
 
+  private _meta_balls_path: SVGPathElement
+
   private _node_comp: Dict<Div> = {}
   private _node_content: Dict<Div> = {}
   private _node_selection: Dict<Selection> = {}
@@ -3131,9 +3141,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _refresh_config = (): void => {
-    const {
-      config: { unitNames, pinNames },
-    } = this.$props
+    const { unitNames, pinNames } = this._config()
 
     for (const unit_id in this._unit_node) {
       const unit_core = this._core[unit_id]
@@ -3152,6 +3160,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       ext_name.$props.style.visibility = unitNames ? 'visible' : 'hidden'
     }
+
+    this._refresh_all_selected_node_color()
   }
 
   private _theme: {
@@ -3261,6 +3271,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this.$system
     )
     this._zoom_comp_alt = zoom_comp_alt
+
+    this._meta_balls_path = $system.api.document.createElementNS(
+      namespaceURI,
+      'path'
+    )
+
+    this._meta_balls_path.style.fill = 'none'
+    this._meta_balls_path.style.strokeWidth = '1.5px'
+    this._meta_balls_path.style.pointerEvents = 'none'
+
+    this._zoom_comp_alt._svg_g.$element.appendChild(this._meta_balls_path)
 
     const area_select_rect = new SVGRect(
       {
@@ -4233,9 +4254,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _config = (): Omit<Config, 'zoom'> & Config_ => {
-    const { config, zoom } = this.$props
+    const { config = {}, zoom } = this.$props
 
     return {
+      ...defaultProps.config,
       ...config,
       ...{
         zoom:
@@ -7239,7 +7261,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const { classes } = this.$system
 
-    const { config, specs, getSpec } = this.$props
+    const { specs, getSpec } = this.$props
+
+    const config = this._config()
 
     const { id } = unit
 
@@ -9821,7 +9845,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   position
     // )
 
-    const { config } = this.$props
+    const config = this._config()
 
     const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
     const int_node_id = getIntNodeId(type, pin_id, sub_pin_id)
@@ -11689,7 +11713,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //   y,
     // })
 
-    const { config } = this.$props
+    // const { config } = this.$props
+
+    const config = this._config()
 
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
@@ -12001,7 +12027,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _get_link_pin_props = (unit_id: string, type: IO, pin_id: string) => {
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
-    const { config } = this.$props
+    const config = this._config()
 
     const ignored = this._spec_is_link_pin_ignored(pin_node_id)
     const ref = this._is_link_pin_ref(pin_node_id)
@@ -16145,6 +16171,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       strokeWidth = 1,
       paddingX = 6,
       paddingY = 6,
+      style,
     } = selection_opt
 
     const strokeDashOffset = this._get_node_selection_dashoffset(
@@ -16167,6 +16194,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         strokeDashOffset,
         style: {
           ...userSelect('none'),
+          // ...style,
         },
       },
       this.$system
@@ -16766,10 +16794,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return position
   }
 
-  private _world_to_screen = (x: number, y: number): Position => {
+  private _world_to_screen = (
+    x: number,
+    y: number,
+    z: number = this._zoom.z
+  ): Position => {
     const position = {
-      x: (x - this._zoom.x) * this._zoom.z,
-      y: (y - this._zoom.y) * this._zoom.z,
+      x: (x - this._zoom.x) * z,
+      y: (y - this._zoom.y) * z,
     }
     return position
   }
@@ -25647,7 +25679,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _select_node = (node_id: string): void => {
     // console.log('Graph', '_select_node', node_id)
 
-    const { config } = this.$props
+    const config = this._config()
 
     if (this._selected_node_id[node_id]) {
       return
@@ -26530,14 +26562,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _get_node_selection_color = (node_id: string): string => {
+    const { metaSelection } = this._config()
+
     const selected = this._selected_node_id[node_id]
     const hovered = this._hover_node_pointer_count[node_id] > 0
     const pressed = this._node_pressed_count[node_id] > 0
     const compatible = this._compatible_node_id[node_id]
     const unlocked = this._unlocked_node.has(node_id)
+
     if (compatible) {
       return COLOR_GREEN
     } else if (selected) {
+      if (metaSelection) {
+        return COLOR_NONE
+      }
+
       return this._theme.selected
     } else if (unlocked) {
       return this._theme.selected
@@ -26862,7 +26901,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _is_pin_pin_match(a: string, b: string): boolean {
     // console.log('Graph', '_is_pin_pin_match', a, b)
 
-    const { config } = this.$props
+    const config = this._config()
 
     if (a === b) {
       return false
@@ -27040,7 +27079,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pin_id: string,
     pin_node_id: string
   ): boolean => {
-    const { specs, config } = this.$props
+    const { specs } = this.$props
+
+    const config = this._config()
 
     const { pinId: pin_exposed_id } = this._spec_get_pin_node_plug_spec(
       type,
@@ -27224,7 +27265,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pin_id: string,
     unit_id: string
   ): boolean => {
-    const { specs, config } = this.$props
+    const { specs } = this.$props
+
+    const config = this._config()
 
     if (!config?.plugUnit) {
       return false
@@ -27378,7 +27421,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     datum_node_id: string,
     pin_node_id: string
   ): boolean => {
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     if (!config?.dataCompatible) {
       return false
@@ -27821,7 +27866,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _refresh_compatible = (): void => {
     // console.log('Graph', 'refresh_compatible')
 
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     if (!config?.highlightCompatible) {
       return
@@ -30929,7 +30976,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pin_node_id: string,
     event: UnitPointerEvent
   ): void => {
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     if (this._mode === 'none') {
       if (
@@ -31490,7 +31539,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       },
     } = this.$system
 
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     if (config?.dataEdit) {
       if (this._is_datum_editable(datum_node_id)) {
@@ -32736,7 +32787,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_unit_long_click = (unit_id: string) => {
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     if (
       !this._resize_node_id_pointer_id[unit_id] &&
@@ -32820,14 +32873,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       specs,
       typeCache,
       container,
-      config,
       setSpec,
       enterFullwindow,
       leaveFullwindow,
       dispatchEvent,
     } = this.$props
 
-    const { animate } = this._config()
+    const config = this._config()
+
+    const { animate } = config
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
 
@@ -40160,7 +40214,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     type: IO,
     pinId: string
   ) => {
-    const { config, fork, bubble } = this.$props
+    const { fork, bubble } = this.$props
+
+    const config = this._config()
 
     const take = !!config?.unlinkTake
 
@@ -40700,7 +40756,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_remove_merge = (merge_node_id: string): void => {
     // console.log('Graph', '_pod_remove_merge', merge_node_id)
 
-    const { config, fork, bubble } = this.$props
+    const { fork, bubble } = this.$props
+
+    const config = this._config()
 
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
@@ -43577,7 +43635,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     pinId: string,
     subPinId: string
   ): void => {
-    const { config, fork } = this.$props
+    const { fork } = this.$props
+
+    const config = this._config()
 
     const take = config?.unlinkTake ? true : false
 
@@ -44866,7 +44926,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _drag_move = (node_id: string, event: UnitPointerEvent): void => {
     // console.log('_drag_move', node_id)
 
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     const { clientX, clientY, pointerId } = event
 
@@ -48660,7 +48722,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _none_double_click_background = (position: Position) => {
-    const { config } = this.$props
+    const {} = this.$props
+
+    const config = this._config()
 
     if (config?.dataCreate) {
       if (this._selected_node_count > 0) {
@@ -55530,6 +55594,83 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._minimap) {
       this._tick_minimap()
     }
+
+    this._tick_meta_balls()
+  }
+
+  private _tick_meta_balls = (): void => {
+    const { metaSelection } = this._config()
+
+    const clear = () => {
+      this._meta_balls_path.setAttribute('d', '')
+    }
+
+    if (!metaSelection) {
+      clear()
+
+      return
+    }
+
+    if (!this._selected_node_count) {
+      clear()
+
+      return
+    }
+
+    const circles: Circle[] = []
+
+    for (const selected_node_id in this._selected_node_id) {
+      if (selected_node_id === this._collapse_unit_id) {
+        continue
+      }
+
+      const selected_node = this.get_node(selected_node_id)
+
+      const selected_node_screen_position = this._world_to_screen(
+        selected_node.x,
+        selected_node.y,
+        1
+      )
+
+      const circle = {
+        x: selected_node_screen_position.x,
+        y: selected_node_screen_position.y,
+        r: selected_node.r,
+      }
+
+      circles.push(selected_node)
+    }
+
+    const gridStep = 3
+    const threshold = 0.25
+    const eps: number = 0.01
+    const margin: number = 100
+
+    const contours = marchingSquares(circles, gridStep, threshold, eps, margin)
+
+    const segments = contours.map((contour) => {
+      const filtered: Point[] = []
+
+      for (let i = 0; i < contour.length; ++i) {
+        if (
+          filtered.length === 0 ||
+          Math.hypot(
+            filtered[filtered.length - 1].x - contour[i].x,
+            filtered[filtered.length - 1].y - contour[i].y
+          ) > 1
+        ) {
+          filtered.push(contour[i])
+        }
+      }
+
+      const d = pointsToSmoothPath(filtered)
+
+      return d
+    })
+
+    const d = segments.join(' ')
+
+    this._meta_balls_path.setAttribute('d', d)
   }
 
   private _on_simulation_end = (): void => {

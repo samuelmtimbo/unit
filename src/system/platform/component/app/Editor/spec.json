@@ -34,7 +34,7 @@
       "defaultIgnored": true
     },
     "config": {
-      "type": "{geometryOverride?:boolean,plugIcons?:boolean,unlinkTake?:boolean,dataCreate?:boolean,dataEdit?:boolean,dataUnlink?:boolean,dataSelect?:boolean,dataCompatible?:boolean,drawing?:boolean,enterGraph?:boolean,highlightCompatible?:boolean,plugReverse?:boolean,plugUnit?:boolean,multiInputMerge?:boolean,edgeDrag?:boolean,plugNames?:boolean,unitNames?:boolean,pinNames?:boolean,zoom?:boolean|{x?:number,y?:number,z?:number,maxZoom?:number,minZoom?:number}}",
+      "type": "{geometryOverride?:boolean,plugIcons?:boolean,unlinkTake?:boolean,dataCreate?:boolean,dataEdit?:boolean,dataUnlink?:boolean,dataSelect?:boolean,dataCompatible?:boolean,drawing?:boolean,enterGraph?:boolean,highlightCompatible?:boolean,plugReverse?:boolean,plugUnit?:boolean,multiInputMerge?:boolean,edgeDrag?:boolean,plugNames?:boolean,unitNames?:boolean,pinNames?:boolean,zoom?:boolean|{x?:number,y?:number,z?:number,maxZoom?:number,minZoom?:number,metaSelection?:boolean}}",
       "optional": true,
       "defaultIgnored": true
     }

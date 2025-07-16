@@ -35,6 +35,7 @@ export default class Selection extends Element<HTMLDivElement, Props> {
       y = 0,
       stroke = 'currentColor',
       strokeWidth = 1,
+      style,
     } = this.$props
 
     const selection_shape = this._render_selection_shape()
@@ -54,6 +55,7 @@ export default class Selection extends Element<HTMLDivElement, Props> {
           transform: 'translate(-50%, -50%)',
           userSelect: 'none',
           stroke,
+          // ...style,
         },
       },
       this.$system
