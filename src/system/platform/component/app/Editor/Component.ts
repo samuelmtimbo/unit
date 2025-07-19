@@ -37481,13 +37481,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { x, y, width, height } = core_node
 
-    const k = 1.25
-
     const target_node = {
       x,
       y,
-      width: k * width,
-      height: k * height,
+      width: 1,
+      height: 1,
       opacity: 0,
     }
 
