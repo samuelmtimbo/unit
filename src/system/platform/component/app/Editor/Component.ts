@@ -18328,6 +18328,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _refresh_all_pointer_hover = () => {
     // console.log('Graph', '_refresh_all_pointer_hover', this._id)
 
+    return
+
     for (const pointerId in this._pointer_position) {
       this._refresh_pointer_hover(Number.parseInt(pointerId))
     }
