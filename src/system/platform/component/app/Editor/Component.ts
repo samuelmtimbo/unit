@@ -51341,7 +51341,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._long_press_background_pointer.add(pointerId)
     this._long_press_background_count++
 
-    if (this._can_leave()) {
+    if (this._can_leave() || this._mode === 'multiselect') {
       this._animate_pulse(screenX, screenY, 'in')
     }
 
