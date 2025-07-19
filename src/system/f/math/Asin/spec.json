@@ -1,0 +1,21 @@
+{
+  "name": "asin",
+  "inputs": {
+    "x": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "rad": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "arc sine (inverse sine) of a number",
+    "tags": ["f", "math"]
+  },
+  "id": "50195696-e8d3-4b45-9a0a-26f2edf2a6bc",
+  "base": true,
+  "type": "`U`"
+}

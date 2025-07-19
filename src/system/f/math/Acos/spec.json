@@ -1,0 +1,21 @@
+{
+  "name": "acos",
+  "inputs": {
+    "x": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "rad": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "arc cosine (inverse cosine) of a number",
+    "tags": ["f", "math"]
+  },
+  "id": "c5f518c9-650f-4718-8c19-161496fdc676",
+  "base": true,
+  "type": "`U`"
+}

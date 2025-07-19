@@ -1,0 +1,21 @@
+{
+  "name": "asinh",
+  "inputs": {
+    "x": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "rad": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "inverse hyperbolic sine of a number",
+    "tags": ["f", "math"]
+  },
+  "id": "5a5efeaf-79b7-4e7d-9507-09331b339962",
+  "base": true,
+  "type": "`U`"
+}
