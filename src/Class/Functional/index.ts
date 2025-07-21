@@ -2,9 +2,7 @@ import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
-import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../../types/Dict'
-import { filterObj } from '../../util/object'
 import { ION, Opt } from '../Unit'
 import { Done } from './Done'
 import { Fail } from './Fail'
@@ -206,42 +204,46 @@ export class Functional<
 
       const signal = this._signal
 
-      this.f(this._i, (...args) => {
-        if (signal !== this._signal) {
-          return
-        }
+      this.f(
+        this._i,
+        (...args) => {
+          if (signal !== this._signal) {
+            return
+          }
 
-        this._done(...args)
-      })
+          this._done(...args)
+        },
+        this._fail
+      )
     }
   }
 
+  protected _fail = (err: string) => {
+    this._forwarding = true
+    this.err(err)
+    this._forwarding = false
+    this._forward_all_empty()
+  }
+
   public _done: Done<O> = (data, err = null) => {
-    if (err) {
+    if (data !== undefined) {
       this._forwarding = true
-      this.err(err)
-      this._forwarding = false
-      this._forward_all_empty()
-    } else {
-      if (data !== undefined) {
-        const output_empty = filterObj(this._output, (o) => o.empty())
-        const output_not_empty = filterObj(this._output, (o) => !o.empty())
 
-        const push_or_pull = (output, name) => {
-          const o = data[name]
-          if (o === undefined) {
-            output.pull()
-          } else {
-            output.push(o)
-          }
+      for (const name in this._output) {
+        const output = this._output[name]
+
+        const d = data[name]
+
+        if (d === undefined) {
+          output.pull()
+        } else {
+          output.push(d)
         }
-
-        this._forwarding = true
-        forEachValueKey(output_empty, push_or_pull)
-        forEachValueKey(output_not_empty, push_or_pull)
-        this._forwarding = false
       }
+
+      this._forwarding = false
     }
+
     this._backward_if_ready()
   }
 

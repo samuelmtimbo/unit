@@ -6,7 +6,6 @@ import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../types/Dict'
 import { Key } from '../types/Key'
-import { filterObj } from '../util/object'
 
 export const ID_SYSTEM_MERGE = '_d2c4b19b-aa58-438b-8541-9df478b80aa3'
 
@@ -117,7 +116,16 @@ export default class Merge<
 
     this._current = name
 
-    this._forward_if_ready()
+    if (
+      !this._backwarding &&
+      !this._forwarding &&
+      this._o_active.size - this._o_invalid.size === 0 &&
+      this._o_count > 0
+    ) {
+      this._loop_invalid_o = new Set()
+
+      this._run()
+    }
 
     if (override) {
       this._backward(current)
@@ -211,10 +219,7 @@ export default class Merge<
       !this._backwarding &&
       !this._forwarding &&
       this._o_active.size - this._o_invalid.size === 0 &&
-      this._o_count > 0 &&
-      this._current !== undefined &&
-      this._i_active.has(this._current) &&
-      !this._i_invalid.has(this._current)
+      this._current !== undefined
     ) {
       this._loop_invalid_o = new Set()
 
@@ -232,17 +237,26 @@ export default class Merge<
       this._loop_invalid_o = new Set()
 
       this._backward(this._current)
-      this._forward_if_ready()
+
+      if (
+        !this._forwarding &&
+        this._o_count > 0 &&
+        this._current !== undefined
+      ) {
+        this._loop_invalid_o = new Set()
+
+        this._run()
+      }
     }
   }
 
   private _run() {
     const data = this._i[this._current!]
-    const output_empty = filterObj(this._output, (o) => o.empty())
-    const output_not_empty = filterObj(this._output, (o) => !o.empty())
     this._forwarding = true
-    forEachValueKey(output_empty, (o) => o.push(data as any))
-    forEachValueKey(output_not_empty, (o) => o.push(data as any))
+    for (const name in this._output) {
+      const output = this._output[name]
+      output.push(data)
+    }
     this._forwarding = false
     this._backward_if_ready()
   }

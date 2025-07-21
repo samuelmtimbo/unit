@@ -71,6 +71,12 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     this._constant = constant || false
     this._ignored = ignored || false
     this._ref = ref || false
+
+    if (this._ref) {
+      this._push = this._push_ref
+    } else {
+      this._push = this._push_data
+    }
   }
 
   public take(propagate: boolean = true): T | undefined {
@@ -163,6 +169,28 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     return data
   }
 
+  private __embody = (data: any) => {
+    if (data instanceof Function) {
+      this._embodied = true
+
+      data = new data(this.__system)
+    }
+
+    if (data instanceof $) {
+      if (data.__.includes('U')) {
+        ;(data as Unit).play()
+      }
+
+      data.register()
+
+      this._unlisten = data.addListener('edit', () => {
+        this.emit('edit', data)
+      })
+    }
+
+    return data
+  }
+
   private _disembody = (data: any) => {
     if (this._ref) {
       if (this._unlisten) {
@@ -188,7 +216,17 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     return data
   }
 
+  private _push: Function
+
   public push(
+    data: any,
+    backpropagation: boolean = false,
+    propagate: boolean = true
+  ): void {
+    this._push(data, backpropagation, propagate)
+  }
+
+  private _push_data(
     data: any,
     backpropagation: boolean = false,
     propagate: boolean = true
@@ -199,20 +237,34 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
     this.start()
 
-    data = this._embody(data)
-
     this._register = data
 
     if (propagate) {
       this.emit('data', data, backpropagation)
     }
 
-    if (this._ref) {
-      //
-    } else {
-      if (this._ignored && !this._constant) {
-        this.take()
-      }
+    if (this._ignored && !this._constant) {
+      this.take()
+    }
+  }
+
+  private _push_ref(
+    data: any,
+    backpropagation: boolean = false,
+    propagate: boolean = true
+  ): void {
+    this.invalidate()
+
+    this._invalid = false
+
+    this.start()
+
+    data = this.__embody(data)
+
+    this._register = data
+
+    if (propagate) {
+      this.emit('data', data, backpropagation)
     }
   }
 
