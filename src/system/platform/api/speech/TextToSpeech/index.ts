@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_TEXT_TO_SPEECH } from '../../../../_ids'
 
@@ -23,7 +24,7 @@ export default class TextToSpeech extends Functional<I, O> {
     )
   }
 
-  f({ message, voice }: I, done: Done<O>) {
+  f({ message, voice }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         speech: { SpeechSynthesis, SpeechSynthesisUtterance },
@@ -39,7 +40,7 @@ export default class TextToSpeech extends Functional<I, O> {
     try {
       synth = SpeechSynthesis
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }
@@ -57,14 +58,14 @@ export default class TextToSpeech extends Functional<I, O> {
 
     const _speak = () => {
       if (voice < 0 || voice > voices.length - 1) {
-        done(undefined, 'voice index out of range')
+        fail('voice index out of range')
         return
       }
 
       const _voice = voices[voice]
       const utterance = new SpeechSynthesisUtterance(message)
       utterance.addEventListener('error', (err) => {
-        done(undefined, err.error)
+        fail(err.error)
       })
       utterance.addEventListener('end', () => {
         done()

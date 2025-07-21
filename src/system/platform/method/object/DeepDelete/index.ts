@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
 import { ID_DEEP_DELETE } from '../../../../_ids'
@@ -30,11 +31,11 @@ export default class DeepDelete<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, path }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ obj, path }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     try {
       await obj.deepDelete(path)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

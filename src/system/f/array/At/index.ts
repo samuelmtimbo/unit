@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_AT } from '../../../_ids'
 
@@ -25,11 +26,11 @@ export default class At<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a, i }: I<T>, done: Done<O<T>>): void {
+  f({ a, i }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (i >= 0 && i < a.length) {
       done({ 'a[i]': a[i] })
     } else {
-      done(undefined, 'index out of boundary')
+      fail('index out of boundary')
     }
   }
 }

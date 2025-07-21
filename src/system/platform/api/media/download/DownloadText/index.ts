@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { ID_DOWNLOAD_TEXT } from '../../../../../_ids'
 
@@ -27,7 +28,8 @@ export default class DownloadText extends Functional<I, O> {
 
   async f(
     { text: text, name, mimetype, charset }: I,
-    done: Done<O>
+    done: Done<O>,
+    fail: Fail
   ): Promise<void> {
     const {
       api: {
@@ -38,7 +40,7 @@ export default class DownloadText extends Functional<I, O> {
     try {
       await downloadText({ text, name, mimetype, charset })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

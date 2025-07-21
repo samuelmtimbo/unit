@@ -1,5 +1,6 @@
 import { $, $Events, $_EE } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { EventEmitter_EE } from '../../../../../EventEmitter'
 import { System } from '../../../../../system'
@@ -42,7 +43,7 @@ export default class EventSource_ extends Holder<I, O> {
     )
   }
 
-  f({ url, opt }: I, done: Done<O>) {
+  f({ url, opt }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         http: { EventSource },
@@ -56,7 +57,7 @@ export default class EventSource_ extends Holder<I, O> {
     eventSource.onerror = (err) => {
       this.d()
 
-      done(undefined, 'error connecting to server')
+      fail('error connecting to server')
     }
 
     eventSource.onopen = (event) => {

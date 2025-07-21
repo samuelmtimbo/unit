@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { MS } from '../../../../../types/interface/MS'
@@ -29,7 +30,7 @@ export default class GetDisplayMedia extends Holder<I, O> {
     )
   }
 
-  async f({ opt }: I, done: Done<O>): Promise<void> {
+  async f({ opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         media: { getDisplayMedia },
@@ -42,12 +43,12 @@ export default class GetDisplayMedia extends Holder<I, O> {
       _stream = await getDisplayMedia(opt)
     } catch (err) {
       if (err.name === 'NotAllowedError') {
-        done(undefined, 'permission denied')
+        fail('permission denied')
 
         return
       }
 
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { fromBundle } from '../../../../spec/fromBundle'
 import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
@@ -35,7 +36,7 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ id, graph }: I<T>, done: Done<O<T>>): void {
+  f({ id, graph }: I<T>, done: Done<O<T>>, fail: Fail): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     let Class: UnitBundle
@@ -49,7 +50,7 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
         Class = fromBundle(bundle, this.__system.specs, this.__system.classes)
       })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

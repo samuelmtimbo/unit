@@ -7,6 +7,7 @@ import { Dict } from '../../types/Dict'
 import { filterObj } from '../../util/object'
 import { ION, Opt } from '../Unit'
 import { Done } from './Done'
+import { Fail } from './Fail'
 
 export type Functional_EE = {}
 
@@ -145,7 +146,7 @@ export class Functional<
     this._invalidate()
   }
 
-  f(i: Partial<I>, done: Done<O>) {}
+  f(i: Partial<I>, done: Done<O>, fail: Fail) {}
 
   d() {}
 

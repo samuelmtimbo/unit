@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { isBaseSpecId } from '../../../../client/id'
 import { System } from '../../../../system'
 import { GraphBundle } from '../../../../types/GraphClass'
@@ -27,14 +28,14 @@ export default class Graph1<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit }: I<T>, done: Done<O<T>>): void {
+  f({ unit }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (
       isBaseSpecId(
         weakMerge(this.__system.specs, unit.__bundle.specs),
         unit.__bundle.unit.id
       )
     ) {
-      done(undefined, 'not a graph')
+      fail('not a graph')
 
       return
     }

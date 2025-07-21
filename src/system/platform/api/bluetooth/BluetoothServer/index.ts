@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { BluetoothService } from '../../../../../types/global/BluetoothService'
 import { BD } from '../../../../../types/interface/BD'
@@ -42,13 +43,13 @@ export default class BluetoothServer extends Functional implements BS {
     )
   }
 
-  async f({ device }: I, done: Done<O>): Promise<void> {
+  async f({ device }: I, done: Done<O>, fail: Fail): Promise<void> {
     let _server: any
 
     try {
       _server = await device.getServer()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

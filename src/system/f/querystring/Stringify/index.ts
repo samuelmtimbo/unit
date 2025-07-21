@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { ID_STRINGIFY_2 } from '../../../_ids'
@@ -24,7 +26,7 @@ export default class Stringify extends Functional<I, O> {
     )
   }
 
-  f({ obj }: I, done): void {
+  f({ obj }: I, done: Done<O>, fail: Fail): void {
     const {
       api: {
         querystring: { stringify },
@@ -36,7 +38,7 @@ export default class Stringify extends Functional<I, O> {
     try {
       str = stringify(obj)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

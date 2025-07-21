@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { V } from '../../../../../types/interface/V'
@@ -34,10 +35,10 @@ export default class Read<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
-  f({ value, any }: I<T>, done: Done<O<T>>) {
+  f({ value, any }: I<T>, done: Done<O<T>>, fail: Fail) {
     value.read((data, err) => {
       if (err) {
-        done(undefined, err)
+        fail(err)
 
         return
       }

@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_ENCODE } from '../../../../_ids'
 
@@ -24,13 +25,14 @@ export default class EncodeBase64 extends Functional<I, O> {
     )
   }
 
-  f({ a }: I, done: Done<O>): void {
-    let b
+  f({ a }: I, done: Done<O>, fail: Fail): void {
+    let b: string
 
     try {
       b = btoa(a)
     } catch (err) {
-      done(undefined, 'invalid string')
+      fail('invalid string')
+
       return
     }
 

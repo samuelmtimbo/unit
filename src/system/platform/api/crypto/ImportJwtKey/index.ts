@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { CK } from '../../../../../types/interface/CK'
 import { J } from '../../../../../types/interface/J'
@@ -44,7 +45,8 @@ export default class ImportJwkKey extends Functional<I, O> {
 
   async f(
     { data, algorithm, extractable, keyUsages }: I,
-    done: Done<O>
+    done: Done<O>,
+    fail: Fail
   ): Promise<void> {
     const {
       api: {
@@ -59,7 +61,7 @@ export default class ImportJwkKey extends Functional<I, O> {
     try {
       key_ = await importKey('jwk', data, algorithm_, extractable, keyUsages)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

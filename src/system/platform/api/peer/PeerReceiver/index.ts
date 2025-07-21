@@ -1,6 +1,7 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
@@ -65,11 +66,11 @@ export default class PeerReceiver extends Holder<I, O> {
     })
   }
 
-  async f({ opt }: I, done: Done<O>) {
+  async f({ opt }: I, done: Done<O>, fail: Fail) {
     try {
       this._peer = new Peer(this.__system, false, opt)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

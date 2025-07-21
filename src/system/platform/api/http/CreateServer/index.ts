@@ -1,6 +1,7 @@
 import { Server } from '../../../../../API'
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -35,7 +36,7 @@ export default class CreateServer extends Holder<I, O> {
     )
   }
 
-  async f({ opt }: I, done: Done<O>): Promise<void> {
+  async f({ opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         http: { createServer },
@@ -48,7 +49,7 @@ export default class CreateServer extends Holder<I, O> {
     try {
       _server = createServer(opt, servers)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

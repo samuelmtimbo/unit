@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { AB } from '../../../../../types/interface/AB'
@@ -48,7 +49,11 @@ export default class Sign extends Holder<I, O> {
     )
   }
 
-  async f({ key, algorithm, data }: I, done: Done<O>): Promise<void> {
+  async f(
+    { key, algorithm, data }: I,
+    done: Done<O>,
+    fail: Fail
+  ): Promise<void> {
     const {
       api: {
         crypto: { sign },
@@ -64,7 +69,7 @@ export default class Sign extends Holder<I, O> {
     try {
       _signature = (await sign(algorithm_, key_, data_)) as ArrayBuffer
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

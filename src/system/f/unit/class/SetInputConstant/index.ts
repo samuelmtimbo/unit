@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { deepSet_ } from '../../../../../deepSet'
 import { fromUnitBundle } from '../../../../../spec/fromUnitBundle'
 import { getSpec } from '../../../../../spec/util'
@@ -34,7 +35,7 @@ export default class SetPinConstant<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit, type, name, constant }: I<T>, done: Done<O<T>>): void {
+  f({ unit, type, name, constant }: I<T>, done: Done<O<T>>, fail: Fail): void {
     const { __bundle } = unit
 
     const {
@@ -48,13 +49,13 @@ export default class SetPinConstant<T> extends Functional<I<T>, O<T>> {
     const { inputs = {}, outputs = {} } = spec
 
     if (type === 'input' && !inputs[name]) {
-      done(undefined, 'input not found')
+      fail('input not found')
 
       return
     }
 
     if (type === 'output' && !outputs[name]) {
-      done(undefined, 'output not found')
+      fail('output not found')
 
       return
     }

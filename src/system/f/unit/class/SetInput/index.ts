@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { deepSet_ } from '../../../../../deepSet'
 import { evaluateData } from '../../../../../spec/evaluateDataValue'
 import { fromUnitBundle } from '../../../../../spec/fromUnitBundle'
@@ -33,7 +34,7 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit, name, data }: I<T>, done: Done<O<T>>): void {
+  f({ unit, name, data }: I<T>, done: Done<O<T>>, fail: Fail): void {
     const { __bundle } = unit
 
     const {
@@ -47,7 +48,7 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
     const { inputs = {} } = spec
 
     if (!inputs[name]) {
-      done(undefined, 'input not found')
+      fail('input not found')
 
       return
     }

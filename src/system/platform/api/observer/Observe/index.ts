@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
@@ -39,7 +40,11 @@ export default class Observe<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ observer, component }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f(
+    { observer, component }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): Promise<void> {
     const {
       api: {
         document: {},
@@ -56,7 +61,7 @@ export default class Observe<T> extends Holder<I<T>, O<T>> {
     const leaf = _component.getFirstRootLeaf()
 
     if (leaf.$element instanceof Text) {
-      done(undefined, 'cannot observe text node')
+      fail('cannot observe text node')
 
       return
     }

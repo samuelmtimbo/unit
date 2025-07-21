@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { AB } from '../../../../../types/interface/AB'
@@ -36,7 +37,7 @@ export default class ExportKey extends Holder<I, O> {
     )
   }
 
-  async f({ key, format }: I, done: Done<O>): Promise<void> {
+  async f({ key, format }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         crypto: { exportKey },
@@ -50,7 +51,7 @@ export default class ExportKey extends Holder<I, O> {
     try {
       key__ = (await exportKey(format, key___)) as ArrayBuffer
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

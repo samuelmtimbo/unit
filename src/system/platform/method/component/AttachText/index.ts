@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
@@ -39,9 +40,9 @@ export default class AttachText<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ component, text, type }: I<T>, done: Done<O<T>>) {
+  async f({ component, text, type }: I<T>, done: Done<O<T>>, fail: Fail) {
     if (!VALID_MIME_TYPES.includes(type)) {
-      done(undefined, 'invalid mime type')
+      fail('invalid mime type')
 
       return
     }

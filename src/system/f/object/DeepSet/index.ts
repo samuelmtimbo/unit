@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { clone } from '../../../../util/clone'
 import { deepSet } from '../../../../util/object'
@@ -28,13 +29,13 @@ export default class DeepSet<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ obj, path, value }: I<T>, done: Done<O<T>>): void {
+  f({ obj, path, value }: I<T>, done: Done<O<T>>, fail: Fail): void {
     let result = clone(obj)
 
     try {
       deepSet(result, path, value)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

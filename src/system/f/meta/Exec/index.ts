@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { Unit } from '../../../../Class/Unit'
 import { System } from '../../../../system'
 import { ID_EXEC } from '../../../_ids'
@@ -33,7 +34,7 @@ export default class Exec extends Functional<I, O> {
     )
   }
 
-  public f({ unit, method, args }: Partial<I>, done: Done<O>) {
+  public f({ unit, method, args }: Partial<I>, done: Done<O>, fail: Fail) {
     const f = unit[method]
 
     let _return: any
@@ -42,12 +43,12 @@ export default class Exec extends Functional<I, O> {
       try {
         _return = f.call(unit, ...args)
       } catch (err) {
-        done(undefined, err.message)
+        fail(err.message)
 
         return
       }
     } else {
-      done(undefined, 'invalid method')
+      fail('invalid method')
 
       return
     }

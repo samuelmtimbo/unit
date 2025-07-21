@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { ID } from '../../../../../types/interface/ID'
@@ -46,7 +47,11 @@ export default class ImageData_<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ data, width, height, opt }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f(
+    { data, width, height, opt }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): Promise<void> {
     let imageData: ImageData
 
     try {
@@ -54,7 +59,7 @@ export default class ImageData_<T> extends Holder<I<T>, O<T>> {
 
       imageData = new ImageData(_data, width, height, opt)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

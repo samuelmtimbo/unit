@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
@@ -42,13 +43,13 @@ export default class Get1<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, name }: I<T>, done: Done<O<T>>) {
+  async f({ obj, name }: I<T>, done: Done<O<T>>, fail: Fail) {
     let value: any
 
     try {
       value = await obj.get(name)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

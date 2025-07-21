@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -38,7 +39,7 @@ export default class RequestPictureInPicture extends Holder<I, O> {
     )
   }
 
-  async f({ media, opt }: I, done: Done<O>): Promise<void> {
+  async f({ media, opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         document: { pictureInPictureElement },
@@ -52,13 +53,13 @@ export default class RequestPictureInPicture extends Holder<I, O> {
     try {
       element = await media.requestPictureInPicture()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }
 
     if (pictureInPictureElement === element) {
-      done(undefined, 'media is already displayed picture in picture')
+      fail('media is already displayed picture in picture')
 
       return
     }

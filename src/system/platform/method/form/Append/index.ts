@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { FD } from '../../../../../types/interface/FD'
@@ -38,13 +39,17 @@ export default class Append<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
-  async f({ form, name, value }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f(
+    { form, name, value }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): Promise<void> {
     try {
       const data = await value.raw()
 
       form.append(name, data)
     } catch (err) {
-      done(undefined, err.message.toString())
+      fail(err.message.toString())
 
       return
     }

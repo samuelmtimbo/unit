@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
 import { ID_SHIFT } from '../../../../_ids'
@@ -32,13 +33,13 @@ export default class Shift<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ a }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ a }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     let first: T
 
     try {
       first = await a.shift()
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

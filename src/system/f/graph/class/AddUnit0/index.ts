@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { bundleSpec } from '../../../../../bundle'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { applyUnitDefaultIgnored } from '../../../../../spec/fromSpec'
@@ -37,7 +38,7 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
+  f({ id, class: Class, graph }: I<T>, done: Done<O<T>>, fail: Fail): void {
     let new_graph: GraphBundle
 
     try {
@@ -75,7 +76,7 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
 
       new_graph = fromBundle(new_bundle, specs_, this.__system.classes)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { bundleSpec } from '../../../../../bundle'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { setMetadata } from '../../../../../spec/reducers/spec'
@@ -34,7 +35,7 @@ export default class SetMetadata<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ path, value, graph }: I<T>, done: Done<O<T>>): void {
+  f({ path, value, graph }: I<T>, done: Done<O<T>>, fail: Fail): void {
     let new_graph: GraphBundle
 
     try {
@@ -57,7 +58,7 @@ export default class SetMetadata<T> extends Functional<I<T>, O<T>> {
 
       new_graph = fromBundle(new_bundle, specs_, this.__system.classes)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_DECODE } from '../../../../_ids'
 
@@ -24,13 +25,13 @@ export default class Decode extends Functional<I, O> {
     )
   }
 
-  f({ b }: I, done: Done<O>): void {
+  f({ b }: I, done: Done<O>, fail: Fail): void {
     let a
 
     try {
       a = atob(b)
     } catch {
-      done(undefined, 'string not correctly encoded')
+      fail('string not correctly encoded')
 
       return
     }

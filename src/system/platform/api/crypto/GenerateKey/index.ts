@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { CK } from '../../../../../types/interface/CK'
@@ -43,7 +44,8 @@ export default class GenerateKey extends Holder<I, O> {
 
   async f(
     { algorithm, extractable, keyUsages }: I,
-    done: Done<O>
+    done: Done<O>,
+    fail: Fail
   ): Promise<void> {
     const {
       api: {
@@ -54,7 +56,7 @@ export default class GenerateKey extends Holder<I, O> {
     const algorithm_ = algorithm.raw()
 
     if (!['HMAC'].includes(algorithm_.name)) {
-      done(undefined, 'invalid algorithm single key generation')
+      fail('invalid algorithm single key generation')
 
       return
     }
@@ -68,7 +70,7 @@ export default class GenerateKey extends Holder<I, O> {
         keyUsages
       )) as CryptoKey
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

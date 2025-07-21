@@ -1,6 +1,7 @@
 import { $ } from '../../../../../../Class/$'
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { AB } from '../../../../../../types/interface/AB'
 import { TD } from '../../../../../../types/interface/TD'
@@ -38,7 +39,7 @@ export default class Decode extends Functional<I, O> {
     )
   }
 
-  async f({ opt, decoder, data }: I, done: Done<O>) {
+  async f({ opt, decoder, data }: I, done: Done<O>, fail: Fail) {
     let text: string
 
     const data_ = (await data.raw()) as ArrayBuffer
@@ -46,7 +47,7 @@ export default class Decode extends Functional<I, O> {
     try {
       text = decoder.decode(opt, data_)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

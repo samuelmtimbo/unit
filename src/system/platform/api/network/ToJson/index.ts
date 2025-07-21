@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { BO } from '../../../../../types/interface/BO'
 import { ID_TO_JSON } from '../../../../_ids'
@@ -27,13 +28,13 @@ export default class ToJson extends Functional<I, O> {
     )
   }
 
-  async f({ body }: I, done: Done<O>): Promise<void> {
+  async f({ body }: I, done: Done<O>, fail: Fail): Promise<void> {
     let json: any
 
     try {
       json = await body.json()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

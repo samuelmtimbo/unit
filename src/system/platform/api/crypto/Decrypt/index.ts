@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { AB } from '../../../../../types/interface/AB'
@@ -49,7 +50,11 @@ export default class Decrypt extends Holder<I, O> {
     )
   }
 
-  async f({ opt, key, algorithm, data }: I, done: Done<O>): Promise<void> {
+  async f(
+    { opt, key, algorithm, data }: I,
+    done: Done<O>,
+    fail: Fail
+  ): Promise<void> {
     const {
       api: {
         crypto: { decrypt },
@@ -66,12 +71,12 @@ export default class Decrypt extends Holder<I, O> {
       _data = await decrypt(algorithm_, key_, data_)
     } catch (err) {
       if (err.name === 'OperationError') {
-        done(undefined, 'operation error')
+        fail('operation error')
 
         return
       }
 
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

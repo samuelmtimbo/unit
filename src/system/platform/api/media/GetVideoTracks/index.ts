@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../../system'
@@ -45,13 +46,13 @@ export default class GetVideoTracks extends Holder<I, O> {
     )
   }
 
-  async f({ stream }: I, done: Done<O>) {
+  async f({ stream }: I, done: Done<O>, fail: Fail) {
     let _tracks: MediaStreamTrack[]
 
     try {
       _tracks = await stream.getVideoTracks()
     } catch (err) {
-      done(undefined, err)
+      fail(err)
     }
 
     const tracks = new (class Array extends $ implements A<MST> {

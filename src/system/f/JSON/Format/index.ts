@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_FORMAT } from '../../../_ids'
 
@@ -24,13 +26,13 @@ export default class Format<T> extends Functional<I<T>, O> {
     )
   }
 
-  f({ json, space }: I<T>, done): void {
+  f({ json, space }: I<T>, done: Done<O>, fail: Fail): void {
     let string: string
 
     try {
       string = JSON.stringify(json, null, space)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

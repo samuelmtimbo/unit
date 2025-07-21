@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
@@ -37,7 +38,7 @@ export default class FileReader extends Holder<I, O> {
     )
   }
 
-  async f({ opt }: I, done: Done<O>): Promise<void> {
+  async f({ opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         file: { FileReader },
@@ -45,7 +46,7 @@ export default class FileReader extends Holder<I, O> {
     } = this.__system
 
     if (!FileReader) {
-      done(undefined, apiNotSupportedError('FileReader'))
+      fail(apiNotSupportedError('FileReader'))
 
       return
     }

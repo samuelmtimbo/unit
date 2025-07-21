@@ -1,6 +1,7 @@
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { CH } from '../../../../types/interface/CH'
 import { ID_SEND } from '../../../_ids'
@@ -31,7 +32,7 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ channel, data }: I<T>, done: Done<O<T>>) {
+  async f({ channel, data }: I<T>, done: Done<O<T>>, fail: Fail) {
     try {
       let _data = data
 
@@ -41,7 +42,7 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
 
       await channel.send(_data)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

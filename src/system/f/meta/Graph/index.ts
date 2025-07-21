@@ -1,6 +1,7 @@
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { Graph } from '../../../../Class/Graph'
 import { System } from '../../../../system'
 import { G } from '../../../../types/interface/G'
@@ -38,9 +39,9 @@ export default class Graph0<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit }: I<T>, done: Done<O<T>>): void {
+  f({ unit }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (!unit.__.includes('G')) {
-      done(undefined, 'not a graph')
+      fail('not a graph')
 
       return
     }

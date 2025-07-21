@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { cloneUnitBundle } from '../../../../../cloneUnitClass'
 import { getSpec } from '../../../../../spec/util'
 import { System } from '../../../../../system'
@@ -32,7 +33,7 @@ export default class UnsetPin<T extends Unit> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit, type, name }: I<T>, done: Done<O<T>>): void {
+  f({ unit, type, name }: I<T>, done: Done<O<T>>, fail: Fail): void {
     const {
       unit: { id },
       specs,
@@ -43,7 +44,7 @@ export default class UnsetPin<T extends Unit> extends Functional<I<T>, O<T>> {
     const spec = getSpec(specs_, id)
 
     if (!spec[`${type}s`][name]) {
-      done(undefined, `${type} not found`)
+      fail(`${type} not found`)
 
       return
     }

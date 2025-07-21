@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
@@ -44,13 +45,13 @@ export default class ToBlob extends Holder<I, O> {
     )
   }
 
-  async f({ body }: I, done: Done<O>) {
+  async f({ body }: I, done: Done<O>, fail: Fail) {
     let blob_: Blob
 
     try {
       blob_ = await body.blob()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

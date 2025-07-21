@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_PARSE_JSON } from '../../../_ids'
 
@@ -24,13 +25,13 @@ export default class ParseJSON extends Functional<I, O> {
     )
   }
 
-  f({ string }: I, done: Done<O>): void {
+  f({ string }: I, done: Done<O>, fail: Fail): void {
     let json
 
     try {
       json = JSON.parse(string)
     } catch (err) {
-      done(undefined, 'invalid JSON')
+      fail('invalid JSON')
 
       return
     }

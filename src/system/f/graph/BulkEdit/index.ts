@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { Action } from '../../../../types/Action'
 import { $G } from '../../../../types/interface/async/$G'
@@ -32,13 +33,13 @@ export default class BulkEdit<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ graph, actions }: I<T>, done: Done<O<T>>): void {
+  f({ graph, actions }: I<T>, done: Done<O<T>>, fail: Fail): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$bulkEdit({ actions })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

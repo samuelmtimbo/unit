@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -28,7 +29,7 @@ export default class RequestAnimationFrame extends Functional<I, O> {
     )
   }
 
-  public f({ a }: I, done: Done<O>): void {
+  public f({ a }: I, done: Done<O>, fail: Fail): void {
     const {
       api: {
         animation: { requestAnimationFrame },
@@ -36,7 +37,7 @@ export default class RequestAnimationFrame extends Functional<I, O> {
     } = this.__system
 
     if (!requestAnimationFrame) {
-      done(undefined, apiNotSupportedError('Request Animation Frame'))
+      fail(apiNotSupportedError('Request Animation Frame'))
 
       return
     }

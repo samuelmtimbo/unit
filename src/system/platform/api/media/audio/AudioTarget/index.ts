@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { MS } from '../../../../../../types/interface/MS'
 import { ID_AUDIO_TARGET } from '../../../../../_ids'
@@ -32,7 +33,7 @@ export default class AudioTarget extends Functional<I, O> {
     )
   }
 
-  async f({ stream, id }: I, done: Done<O>) {
+  async f({ stream, id }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         window: { Audio },
@@ -46,13 +47,13 @@ export default class AudioTarget extends Functional<I, O> {
     try {
       await this._audio.setSinkId(id)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
     }
 
     try {
       await this._audio.play()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
     }
   }
 

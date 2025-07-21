@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { V } from '../../../../../types/interface/V'
@@ -34,10 +35,10 @@ export default class Write<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
-  async f({ value, data }: I<T>, done: Done<O<T>>) {
+  async f({ value, data }: I<T>, done: Done<O<T>>, fail: Fail) {
     value.write(data, (data, err) => {
       if (err) {
-        done(undefined, err)
+        fail(err)
 
         return
       }

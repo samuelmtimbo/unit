@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { BO } from '../../../../../types/interface/BO'
 import { ID_TO_TEXT } from '../../../../_ids'
@@ -33,13 +34,13 @@ export default class ToText extends Functional<I, O> {
     )
   }
 
-  async f({ body }: I, done: Done<O>) {
+  async f({ body }: I, done: Done<O>, fail: Fail) {
     let text: string
 
     try {
       text = await body.text()
     } catch (err) {
-      done(undefined, err.message.toString())
+      fail(err.message.toString())
 
       return
     }

@@ -1,5 +1,6 @@
 import { $ } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { Holder } from '../../../../Class/Holder'
 import { System } from '../../../../system'
 import { A } from '../../../../types/interface/A'
@@ -43,7 +44,7 @@ export default class Blob_<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ parts, opt }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ parts, opt }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     let _blob: Blob
 
     const parts_ = await parts.raw()
@@ -51,7 +52,7 @@ export default class Blob_<T> extends Holder<I<T>, O<T>> {
     try {
       _blob = new Blob(parts_, opt)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { GraphSubPinSpec } from '../../../../types'
 import { $G } from '../../../../types/interface/async/$G'
@@ -36,13 +37,17 @@ export default class AddPlug<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ graph, pinId, type, subPinId, subPin }: I<T>, done: Done<O<T>>): void {
+  f(
+    { graph, pinId, type, subPinId, subPin }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$exposePin({ type, pinId, subPinId, subPinSpec: subPin })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

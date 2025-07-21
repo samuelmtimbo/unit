@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_INDEX_OF } from '../../../_ids'
 
@@ -25,7 +26,7 @@ export default class IndexOf<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ 'a[]': _a, a }: I<T>, done: Done<O<T>>): void {
+  f({ 'a[]': _a, a }: I<T>, done: Done<O<T>>, fail: Fail): void {
     done({
       i: _a.indexOf(a),
     })

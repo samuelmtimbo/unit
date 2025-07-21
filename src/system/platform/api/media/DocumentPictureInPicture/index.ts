@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { webBoot } from '../../../../../client/platform/web/boot'
 import { HTML_STYLE } from '../../../../../client/render/attachStyle'
@@ -43,7 +44,7 @@ export default class DocumentPictureInPicture extends Holder<I, O> {
     )
   }
 
-  async f({ component, opt }: I, done: Done<O>): Promise<void> {
+  async f({ component, opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         document: { createTextNode },
@@ -53,7 +54,7 @@ export default class DocumentPictureInPicture extends Holder<I, O> {
 
     // @ts-ignore
     if (!documentPictureInPicture || !documentPictureInPicture.requestWindow) {
-      done(undefined, apiNotSupportedError('Document Picture In Picture'))
+      fail(apiNotSupportedError('Document Picture In Picture'))
 
       return
     }
@@ -69,12 +70,12 @@ export default class DocumentPictureInPicture extends Holder<I, O> {
         err.message ===
         "Failed to execute 'requestWindow' on 'DocumentPictureInPicture': Document PiP requires user activation"
       ) {
-        done(undefined, 'Document PiP requires user activation')
+        fail('Document PiP requires user activation')
 
         return
       }
 
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

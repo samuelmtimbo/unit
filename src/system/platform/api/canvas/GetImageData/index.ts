@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
@@ -48,7 +49,8 @@ export default class GetImageData<T> extends Holder<I<T>, O<T>> {
 
   async f(
     { canvas, x, y, width, height, opt }: I<T>,
-    done: Done<O<T>>
+    done: Done<O<T>>,
+    fail: Fail
   ): Promise<void> {
     let imageData: ImageData
 
@@ -56,12 +58,12 @@ export default class GetImageData<T> extends Holder<I<T>, O<T>> {
       imageData = await canvas.getImageData(x, y, width, height, opt)
     } catch (err) {
       if (err instanceof RangeError) {
-        done(undefined, 'out of memory')
+        fail('out of memory')
 
         return
       }
 
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

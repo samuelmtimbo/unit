@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { MS } from '../../../../../types/interface/MS'
@@ -35,7 +36,7 @@ export default class UserMedia extends Holder<I, O> {
     )
   }
 
-  async f({ opt }: I, done: Done<O>): Promise<void> {
+  async f({ opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         media: { getUserMedia },
@@ -51,7 +52,7 @@ export default class UserMedia extends Holder<I, O> {
 
       stream = wrapMediaStream(_stream, this.__system)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

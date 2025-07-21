@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
 import { ID_DELETE_0 } from '../../../../_ids'
@@ -30,13 +31,13 @@ export default class Delete<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, name }: I<T>, done: Done<O<T>>) {
+  async f({ obj, name }: I<T>, done: Done<O<T>>, fail: Fail) {
     try {
       await obj.delete(name)
 
       done()
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
     }
   }
 }

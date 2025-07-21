@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { GraphMergeSpec } from '../../../../types/GraphMergeSpec'
 import { $G } from '../../../../types/interface/async/$G'
@@ -33,13 +34,13 @@ export default class AddMerge<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ id, merge, graph }: I<T>, done: Done<O<T>>): void {
+  f({ id, merge, graph }: I<T>, done: Done<O<T>>, fail: Fail): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$addMerge({ mergeSpec: merge, mergeId: id })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

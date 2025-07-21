@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
 import { Async } from '../../../../types/interface/async/Async'
@@ -35,13 +36,17 @@ export default class SetUnitPinConstant<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ graph, id, type, name, constant }: I<T>, done: Done<O<T>>): void {
+  f(
+    { graph, id, type, name, constant }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$setUnitPinConstant({ unitId: id, type, pinId: name, constant })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

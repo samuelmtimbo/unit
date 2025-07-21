@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
@@ -36,7 +37,7 @@ export default class SetUnitPinData<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ graph, id, type, name, data }: I<T>, done: Done<O<T>>): void {
+  f({ graph, id, type, name, data }: I<T>, done: Done<O<T>>, fail: Fail): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
@@ -47,7 +48,7 @@ export default class SetUnitPinData<T> extends Functional<I<T>, O<T>> {
         data: stringify(data),
       })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

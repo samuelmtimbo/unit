@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_PARSE_URL } from '../../../../_ids'
 
@@ -36,7 +37,7 @@ export default class ParseUrl<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ url }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ url }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     const {
       api: {
         // url: { URL },
@@ -60,7 +61,7 @@ export default class ParseUrl<T> extends Functional<I<T>, O<T>> {
         port: urlParser.port,
       }
     } catch (err) {
-      done(undefined, 'invalid url')
+      fail('invalid url')
 
       return
     }

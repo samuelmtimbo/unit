@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
 import { ID_DEEP_SET_0 } from '../../../../_ids'
@@ -31,11 +32,11 @@ export default class DeepSet<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, path, value }: I<T>, done: Done<O<T>>) {
+  async f({ obj, path, value }: I<T>, done: Done<O<T>>, fail: Fail) {
     try {
       await obj.deepSet(path, value)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

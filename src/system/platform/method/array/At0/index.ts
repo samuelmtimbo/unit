@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
 import { ID_AT_0 } from '../../../../_ids'
@@ -32,7 +33,7 @@ export default class At0<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ a, i }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ a, i }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     let _a_i: T
 
     try {
@@ -41,12 +42,12 @@ export default class At0<T> extends Functional<I<T>, O<T>> {
       if (i >= 0 && i < l) {
         _a_i = await a.at(i)
       } else {
-        done(undefined, 'index out of boundary')
+        fail('index out of boundary')
 
         return
       }
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

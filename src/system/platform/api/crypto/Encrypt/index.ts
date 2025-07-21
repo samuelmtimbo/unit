@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { AB } from '../../../../../types/interface/AB'
@@ -48,7 +49,11 @@ export default class Encrypt extends Holder<I, O> {
     )
   }
 
-  async f({ key, algorithm, data }: I, done: Done<O>): Promise<void> {
+  async f(
+    { key, algorithm, data }: I,
+    done: Done<O>,
+    fail: Fail
+  ): Promise<void> {
     const {
       api: {
         crypto: { encrypt },
@@ -65,12 +70,12 @@ export default class Encrypt extends Holder<I, O> {
       _data = (await encrypt(algorithm_, key_, data_)) as ArrayBuffer
     } catch (err) {
       if (err.message) {
-        done(undefined, err.message.toLowerCase())
+        fail(err.message.toLowerCase())
       } else {
         if (err.name === 'OperationError') {
-          done(undefined, 'encrypt operation error')
+          fail('encrypt operation error')
         } else {
-          done(undefined, 'encrypt failed for an unknown reason')
+          fail('encrypt failed for an unknown reason')
         }
       }
 

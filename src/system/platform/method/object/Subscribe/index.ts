@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import { System } from '../../../../../system'
@@ -42,7 +43,7 @@ export default class Subscribe<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, path, key }: I<T>, done: Done<O<T>>) {
+  async f({ obj, path, key }: I<T>, done: Done<O<T>>, fail: Fail) {
     try {
       this._unlisten = obj.subscribe(path, key, (type, path_, key_, data) => {
         this._output.type.push(type)
@@ -51,7 +52,7 @@ export default class Subscribe<T> extends Holder<I<T>, O<T>> {
         this._output.data.push(data)
       })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

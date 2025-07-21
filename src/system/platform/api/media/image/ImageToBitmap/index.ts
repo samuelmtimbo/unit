@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { Rect } from '../../../../../../client/util/geometry/types'
 import { System } from '../../../../../../system'
 import { IB } from '../../../../../../types/interface/IB'
@@ -44,7 +45,7 @@ export default class ImageToBitmap extends Functional<I, O> {
     )
   }
 
-  async f({ opt, rect, image }: I, done: Done<O>): Promise<void> {
+  async f({ opt, rect, image }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         media: {
@@ -60,7 +61,7 @@ export default class ImageToBitmap extends Functional<I, O> {
     try {
       _bitmap = await createImageBitmap(_image, rect, opt)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

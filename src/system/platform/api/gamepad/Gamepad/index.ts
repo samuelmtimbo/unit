@@ -1,5 +1,6 @@
 import { $, $Events } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { Gamepad_, Gamepad_J } from '../../../../../client/event/gamepad'
 import { System } from '../../../../../system'
@@ -53,7 +54,7 @@ export default class _Gamepad extends Holder<I, O> {
     )
   }
 
-  async f({ i }, done: Done<O>): Promise<void> {
+  async f({ i }, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         input: {
@@ -67,7 +68,7 @@ export default class _Gamepad extends Holder<I, O> {
 
       this._gamepad = new Gamepad_(this.__system, gamepad)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

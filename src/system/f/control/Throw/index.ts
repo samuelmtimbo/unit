@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_THROW } from '../../../_ids'
 
@@ -19,7 +20,7 @@ export default class Throw extends Functional<I, {}> {
     )
   }
 
-  f({ message }: I, done: Done<{}>): void {
-    done(undefined, message)
+  f({ message }: I, done: Done<{}>, fail: Fail): void {
+    fail(message)
   }
 }

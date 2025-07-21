@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { C } from '../../../../../types/interface/C'
 import { ID_REMOVE_CHILD } from '../../../../_ids'
@@ -30,13 +31,13 @@ export default class RemoveChild extends Functional<I, O> {
     )
   }
 
-  f({ parent, at }: I, done: Done<O>): void {
+  f({ parent, at }: I, done: Done<O>, fail: Fail): void {
     try {
       const child = parent.removeChild(at)
 
       child.destroy()
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,5 +1,6 @@
 import { $ } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { Holder } from '../../../../Class/Holder'
 import { System } from '../../../../system'
 import { IO } from '../../../../types/IO'
@@ -46,13 +47,13 @@ export default class Pin_<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ unit, name, type }: I<T>, done: Done<O<T>>) {
+  async f({ unit, name, type }: I<T>, done: Done<O<T>>, fail: Fail) {
     try {
       const pin = unit.getPin(type, name)
 
       done({ pin })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
     }
   }
 

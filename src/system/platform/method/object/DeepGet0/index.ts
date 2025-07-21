@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { extractInterface } from '../../../../../extractInterface'
 import { System } from '../../../../../system'
 import { $_ } from '../../../../../types/interface/$_'
@@ -40,13 +41,13 @@ export default class DeepGet0<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, path }: I<T>, done: Done<O<T>>) {
+  async f({ obj, path }: I<T>, done: Done<O<T>>, fail: Fail) {
     let value_: any
 
     try {
       value_ = await obj.deepGet(path)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

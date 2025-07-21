@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { TD } from '../../../../../types/interface/TD'
@@ -36,7 +37,7 @@ export default class TextDecoder_ extends Holder<I, O> {
     )
   }
 
-  f({ label, opt }: I, done: Done<O>) {
+  f({ label, opt }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         text: { TextDecoder },
@@ -48,7 +49,7 @@ export default class TextDecoder_ extends Holder<I, O> {
     try {
       decoder_ = new TextDecoder(label, opt)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

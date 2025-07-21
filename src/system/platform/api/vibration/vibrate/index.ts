@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_VIBRATE } from '../../../../_ids'
 
@@ -22,7 +23,7 @@ export default class Vibrate extends Functional<I, O> {
     )
   }
 
-  async f({ pattern }: I, done: Done<O>) {
+  async f({ pattern }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         device: { vibrate },
@@ -32,7 +33,7 @@ export default class Vibrate extends Functional<I, O> {
     try {
       await vibrate(pattern)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,6 +1,7 @@
 import { $ } from '../../../../../../Class/$'
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { AC } from '../../../../../../types/interface/AC'
 import { AN } from '../../../../../../types/interface/AN'
@@ -50,7 +51,11 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
 
   private _destroy = () => {}
 
-  async f({ node: sourceNode, stream, opt }: I, done: Done<O>): Promise<void> {
+  async f(
+    { node: sourceNode, stream, opt }: I,
+    done: Done<O>,
+    fail: Fail
+  ): Promise<void> {
     let _node: MediaStreamAudioSourceNode
 
     const {
@@ -79,7 +84,7 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
         mediaStream,
       })
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

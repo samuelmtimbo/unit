@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
@@ -43,7 +44,7 @@ export default class ImageCapture_ extends Holder<I, O> {
     )
   }
 
-  async f({ init, track }: I, done: Done<O>) {
+  async f({ init, track }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         window: { ImageCapture },
@@ -51,7 +52,7 @@ export default class ImageCapture_ extends Holder<I, O> {
     } = this.__system
 
     if (!ImageCapture) {
-      done(undefined, apiNotSupportedError('Image Capture'))
+      fail(apiNotSupportedError('Image Capture'))
 
       return
     }

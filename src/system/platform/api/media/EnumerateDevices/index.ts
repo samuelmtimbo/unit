@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { DeviceInfo } from '../../../../../types/global/DeviceInfo'
 import { ID_ENUMERATE_DEVICES } from '../../../../_ids'
@@ -25,7 +26,7 @@ export default class EnumerateDevices extends Functional<I, O> {
     )
   }
 
-  async f({}: I, done: Done<O>) {
+  async f({}: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         media: { enumerateDevices },
@@ -42,7 +43,7 @@ export default class EnumerateDevices extends Functional<I, O> {
         label: d.label,
       }))
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

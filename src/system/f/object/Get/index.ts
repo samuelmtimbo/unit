@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_GET } from '../../../_ids'
 
@@ -25,11 +26,11 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ obj, key }: I<T>, done: Done<O<T>>): void {
+  f({ obj, key }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (obj.hasOwnProperty(key) && obj[key] !== undefined) {
       done({ value: obj[key] })
     } else {
-      done(undefined, 'key not found')
+      fail('key not found')
     }
   }
 }

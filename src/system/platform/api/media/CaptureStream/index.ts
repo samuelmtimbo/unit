@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { Source } from '../../../../../Source'
 import { System } from '../../../../../system'
@@ -50,13 +51,13 @@ export default class CaptureStream extends Holder<I, O> {
     )
   }
 
-  async f({ source, opt }: I, done: Done<O>): Promise<void> {
+  async f({ source, opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     let _stream: MediaStream
 
     try {
       _stream = await source.captureStream(opt)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

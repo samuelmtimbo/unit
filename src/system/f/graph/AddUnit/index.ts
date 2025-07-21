@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { applyUnitDefaultIgnored } from '../../../../spec/fromSpec'
 import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
@@ -36,7 +37,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
+  f({ id, class: Class, graph }: I<T>, done: Done<O<T>>, fail: Fail): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
@@ -55,7 +56,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
 
       graph.$addUnit({ unitId: id, bundle })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

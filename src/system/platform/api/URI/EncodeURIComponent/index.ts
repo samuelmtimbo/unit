@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_ENCODE_URI_COMPONENT } from '../../../../_ids'
 
@@ -24,7 +25,7 @@ export default class EncodeURIComponent<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ text }: I<T>, done: Done<O<T>>): void {
+  f({ text }: I<T>, done: Done<O<T>>, fail: Fail): void {
     const {
       api: {
         uri: { encodeURIComponent },
@@ -36,7 +37,7 @@ export default class EncodeURIComponent<T> extends Functional<I<T>, O<T>> {
     try {
       uri = encodeURIComponent(text)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

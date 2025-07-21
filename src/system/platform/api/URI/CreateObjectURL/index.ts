@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
@@ -35,7 +36,7 @@ export default class CreateObjectURI<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
-  async f({ blob, init }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ blob, init }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     const {
       api: {
         url: { createObjectURL },
@@ -49,7 +50,7 @@ export default class CreateObjectURI<T> extends Semifunctional<I<T>, O<T>> {
     try {
       url = await createObjectURL(_blob)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

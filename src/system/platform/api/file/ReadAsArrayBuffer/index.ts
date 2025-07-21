@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { AB } from '../../../../../types/interface/AB'
 import { B } from '../../../../../types/interface/B'
@@ -46,7 +47,7 @@ export default class ReadAsArrayBuffer extends Functional<I, O> {
     )
   }
 
-  async f({ reader, file, opt }: I, done: Done<O>): Promise<void> {
+  async f({ reader, file, opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const file_ = (await file.raw()) as File | Blob
 
     let array_: ArrayBuffer
@@ -54,7 +55,7 @@ export default class ReadAsArrayBuffer extends Functional<I, O> {
     try {
       array_ = await reader.readAsArrayBuffer(file_)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

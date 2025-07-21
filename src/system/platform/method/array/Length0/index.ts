@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
 import { ID_LENGTH_1 } from '../../../../_ids'
@@ -32,13 +33,13 @@ export default class Length1<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ a }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ a }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     let length: number
 
     try {
       length = await a.length()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

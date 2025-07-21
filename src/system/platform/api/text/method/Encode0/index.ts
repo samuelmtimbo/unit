@@ -1,5 +1,6 @@
 import { $ } from '../../../../../../Class/$'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../../Class/Holder'
 import { System } from '../../../../../../system'
 import { AB } from '../../../../../../types/interface/AB'
@@ -44,7 +45,7 @@ export default class Encode0 extends Holder<I, O> {
     )
   }
 
-  async f({ opt, text, encoder }: I, done: Done<O>) {
+  async f({ opt, text, encoder }: I, done: Done<O>, fail: Fail) {
     let data_: Uint8Array
 
     try {
@@ -52,7 +53,7 @@ export default class Encode0 extends Holder<I, O> {
 
       data_ = encoder.encode(opt, text_)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

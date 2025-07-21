@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_PUT } from '../../../_ids'
 
@@ -26,13 +27,13 @@ export default class Put<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a, v, i }: I<T>, done: Done<O<T>>): void {
+  f({ a, v, i }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (i < a.length) {
       const b = [...a]
       b[i] = v
       done({ a: b })
     } else {
-      done(undefined, 'index out of boundary')
+      fail('index out of boundary')
     }
   }
 }

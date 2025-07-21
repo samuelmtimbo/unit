@@ -1,5 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { C } from '../../../../../types/interface/C'
@@ -45,11 +46,11 @@ export default class Child extends Holder<I, O> {
     )
   }
 
-  f({ parent, at }: I, done: Done<O>): void {
+  f({ parent, at }: I, done: Done<O>, fail: Fail): void {
     const child = parent.refChild(at)
 
     if (!child) {
-      done(undefined, 'no child at this position')
+      fail('no child at this position')
 
       return
     }

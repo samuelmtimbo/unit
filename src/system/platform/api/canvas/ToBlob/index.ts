@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
@@ -44,13 +45,17 @@ export default class ToBlob<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ canvas, quality, type }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f(
+    { canvas, quality, type }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): Promise<void> {
     let _blob: Blob
 
     try {
       _blob = await canvas.toBlob(type, quality)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

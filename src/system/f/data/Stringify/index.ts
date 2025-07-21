@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
 import { ID_STRINGIFY } from '../../../_ids'
@@ -25,13 +26,13 @@ export default class Stringify extends Functional<I, O> {
     )
   }
 
-  f({ a }: I, done: Done<O>): void {
+  f({ a }: I, done: Done<O>, fail: Fail): void {
     let str: string
 
     try {
       str = stringify(a)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

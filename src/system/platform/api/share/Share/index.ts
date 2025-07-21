@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_SHARE } from '../../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Share extends Functional<I, O> {
     )
   }
 
-  async f({ data }: I, done: Done<O>): Promise<void> {
+  async f({ data }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         navigator: { share },
@@ -34,7 +35,7 @@ export default class Share extends Functional<I, O> {
     try {
       await share(data)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

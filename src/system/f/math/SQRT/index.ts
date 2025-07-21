@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_SQRT } from '../../../_ids'
 
@@ -23,9 +25,9 @@ export default class SQRT<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a }: I<T>, done): void {
+  f({ a }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (a < 0) {
-      done(undefined, 'cannot square root negative number')
+      fail('cannot square root negative number')
     } else {
       done({ '√a': Math.sqrt(a) })
     }

@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
@@ -40,13 +41,17 @@ export default class ToDataUrl<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
-  async f({ canvas, quality, type }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f(
+    { canvas, quality, type }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): Promise<void> {
     let url: string
 
     try {
       url = await canvas.toDataUrl(type, quality)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

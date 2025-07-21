@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { ID_PROMPT } from '../../../../_ids'
 
@@ -25,7 +26,7 @@ export default class Prompt extends Functional<I, O> {
     )
   }
 
-  f({ message, default: default_ }: I, done: Done<O>): void {
+  f({ message, default: default_ }: I, done: Done<O>, fail: Fail): void {
     const {
       api: {
         alert: { prompt },
@@ -35,7 +36,7 @@ export default class Prompt extends Functional<I, O> {
     const answer = prompt(message, default_)
 
     if (answer === null) {
-      done(undefined, 'user cancelled prompt')
+      fail('user cancelled prompt')
 
       return
     }

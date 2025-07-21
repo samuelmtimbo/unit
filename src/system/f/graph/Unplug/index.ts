@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
 import { Async } from '../../../../types/interface/async/Async'
@@ -34,13 +35,17 @@ export default class Unplug<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ graph, type, pinId, subPinId }: I<T>, done: Done<O<T>>): void {
+  f(
+    { graph, type, pinId, subPinId }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): void {
     graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$unplugPin({ type, pinId, subPinId, subPinSpec: {} })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

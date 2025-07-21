@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { ID_DOWNLOAD_URL } from '../../../../../_ids'
 
@@ -23,7 +24,7 @@ export default class DownloadURL extends Functional<I, O> {
     )
   }
 
-  async f({ url, name }: I, done: Done<O>): Promise<void> {
+  async f({ url, name }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         file: { downloadURL },
@@ -33,7 +34,7 @@ export default class DownloadURL extends Functional<I, O> {
     try {
       await downloadURL({ url, name })
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional, FunctionalEvents } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { BluetoothCharacteristic } from '../../../../../types/global/BluetoothCharacteristic'
@@ -65,13 +66,13 @@ export default class BluetoothCharacteristic_ extends Functional<
     })
   }
 
-  async f({ service, uuid }, done: Done<O>): Promise<void> {
+  async f({ service, uuid }, done: Done<O>, fail: Fail): Promise<void> {
     let characteristic: any
 
     try {
       characteristic = await service.getCharacteristic(uuid)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

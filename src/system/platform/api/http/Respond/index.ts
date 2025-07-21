@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -37,7 +38,11 @@ export default class Respond extends Semifunctional<I, O> {
     )
   }
 
-  async f({ url, status, headers, body }: I, done: Done<O>): Promise<void> {
+  async f(
+    { url, status, headers, body }: I,
+    done: Done<O>,
+    fail: Fail
+  ): Promise<void> {
     const {
       cache: { responses },
     } = this.__system
@@ -45,7 +50,7 @@ export default class Respond extends Semifunctional<I, O> {
     const waiter = responses[url]
 
     if (!waiter) {
-      done(undefined, 'could not find request')
+      fail('could not find request')
 
       return
     }

@@ -5,6 +5,7 @@ import { System } from '../../system'
 import { Dict } from '../../types/Dict'
 import { Functional } from '../Functional'
 import { Done } from '../Functional/Done'
+import { Fail } from '../Functional/Fail'
 import { Opt } from '../Unit'
 
 export type Semifunctional_EE = {}
@@ -57,8 +58,8 @@ export class Semifunctional<
         )
       }
 
-      f(i: Partial<I>, done: Done<O>) {
-        self.f(i, done)
+      f(i: Partial<I>, done: Done<O>, fail: Fail) {
+        self.f(i, done, fail)
       }
 
       d() {
@@ -195,14 +196,14 @@ export class Semifunctional<
     )
   }
 
-  f(i: Partial<I>, done: Done<O>) {}
+  f(i: Partial<I>, done: Done<O>, fail: Fail) {}
 
   d() {}
 
   b() {}
 
-  protected _done: Done<O> = (data, err = null) => {
-    this._functional._done(data, err)
+  protected _done: Done<O> = (data) => {
+    this._functional._done(data)
   }
 
   public onIterDataInputData<K extends keyof I>(name: K, data: any): void {}

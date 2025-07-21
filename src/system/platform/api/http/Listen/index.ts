@@ -4,6 +4,7 @@ import {
   ServerResponse,
 } from '../../../../../API'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { Waiter } from '../../../../../Waiter'
 import { System } from '../../../../../system'
@@ -78,13 +79,13 @@ export default class Listen0 extends Holder<I, O> {
     )
   }
 
-  async f({ server, port }: I, done: Done<O>): Promise<void> {
+  async f({ server, port }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       cache: { servers },
     } = this.__system
 
     if (port < 1 || port > 65535) {
-      done(undefined, 'invalid out-of-range port')
+      fail('invalid out-of-range port')
 
       return
     }
@@ -96,7 +97,7 @@ export default class Listen0 extends Holder<I, O> {
     try {
       this._unlisten = server.listen(port, handler, servers)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
     }
   }
 

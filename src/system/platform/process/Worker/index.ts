@@ -1,6 +1,7 @@
 import { AsyncWorker } from '../../../../AsyncWorker'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { workerPort } from '../../../../client/platform/web/port/worker'
 import { RemoteClient } from '../../../../RemoteClient'
 import { System } from '../../../../system'
@@ -37,7 +38,7 @@ export default class Worker_ extends Functional<I, O> {
     )
   }
 
-  f({ init }: I, done: Done<O>) {
+  f({ init }: I, done: Done<O>, fail: Fail) {
     const {
       specs,
       api: {
@@ -50,7 +51,7 @@ export default class Worker_ extends Functional<I, O> {
     try {
       worker = start()
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

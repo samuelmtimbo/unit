@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_SIGN } from '../../../_ids'
 
@@ -23,7 +25,7 @@ export default class Sign<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a }: I<T>, done): void {
+  f({ a }: I<T>, done: Done<O<T>>, fail: Fail): void {
     done({ 'sign(a)': Math.sign(a) })
   }
 }

@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import {
   Semifunctional_EE,
@@ -62,7 +63,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     )
   }
 
-  async f({ url }: I, done: Done<O>) {
+  async f({ url }: I, done: Done<O>, fail: Fail) {
     let {
       api: {
         window: { WebSocket },
@@ -72,7 +73,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     } = this.__system
 
     if (!WebSocket) {
-      done(undefined, apiNotSupportedError('WebSocket'))
+      fail(apiNotSupportedError('WebSocket'))
 
       return
     }
@@ -102,7 +103,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       try {
         response = await upgrade()
       } catch (err) {
-        done(undefined, 'could not connect')
+        fail('could not connect')
 
         return
       }
@@ -122,7 +123,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       try {
         response = await upgrade()
       } catch (err) {
-        done(undefined, 'could not connect')
+        fail('could not connect')
 
         return
       }
@@ -160,7 +161,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
 
         ws[internalId] = this._web_socket
       } else {
-        done(undefined, 'failed to connect')
+        fail('failed to connect')
 
         return
       }
@@ -172,9 +173,9 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
           err.message ===
           "Failed to construct 'WebSocket': The URL '' is invalid."
         ) {
-          done(undefined, 'malformed url')
+          fail('malformed url')
         } else {
-          done(undefined, err.message.toLowerCase())
+          fail(err.message.toLowerCase())
         }
 
         return
@@ -190,7 +191,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       channel.emit('message', message.data)
     }
     this._web_socket.onerror = (event: Event) => {
-      done(undefined, 'could not connect')
+      fail('could not connect')
     }
     this._web_socket.onclose = (event: CloseEvent) => {
       const { code, reason } = event

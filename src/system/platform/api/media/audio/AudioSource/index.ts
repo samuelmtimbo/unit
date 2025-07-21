@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { MS } from '../../../../../../types/interface/MS'
 import { wrapMediaStream } from '../../../../../../wrap/MediaStream'
@@ -87,14 +88,14 @@ export default class AudioSource extends Functional<I, O> {
     })
   }
 
-  async f({ src }, done: Done<O>) {
+  async f({ src }, done: Done<O>, fail: Fail) {
     let srcObject: MediaStream
     let source: AudioBufferSourceNode
 
     try {
       ;({ stream: srcObject, source } = await createMediaStreamFromUrl(src))
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

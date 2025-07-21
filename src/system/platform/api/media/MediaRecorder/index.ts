@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { Waiter } from '../../../../../Waiter'
 import { System } from '../../../../../system'
@@ -50,13 +51,13 @@ export default class _MediaRecorder extends Holder<I, O> {
     )
   }
 
-  async f({ opt, stream }: I, done: Done<O>): Promise<void> {
+  async f({ opt, stream }: I, done: Done<O>, fail: Fail): Promise<void> {
     const _stream: MediaStream = await stream.mediaStream()
 
     try {
       this._media_recorder = new MediaRecorder(_stream, opt)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

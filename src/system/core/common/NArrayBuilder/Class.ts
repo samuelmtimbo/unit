@@ -1,4 +1,5 @@
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../Class/Semifunctional'
 import { System } from '../../../../system'
 import { ID_N_ARRAY_BUILDER } from '../../../_ids'
@@ -35,9 +36,9 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
     })
   }
 
-  f({ n }: I<T>, done: Done<O<T>>) {
+  f({ n }: I<T>, done: Done<O<T>>, fail: Fail) {
     if (n < 0) {
-      done(undefined, 'n cannot be negative')
+      fail('n cannot be negative')
 
       return
     }

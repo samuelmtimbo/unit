@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { deepGet } from '../../../../util/object'
 import { ID_DEEP_GET } from '../../../_ids'
@@ -26,7 +27,7 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ obj, path }: I<T>, done: Done<O<T>>): void {
+  f({ obj, path }: I<T>, done: Done<O<T>>, fail: Fail): void {
     let value: any
 
     try {
@@ -36,7 +37,7 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
         throw new Error('key not found')
       }
     } catch (err) {
-      done(undefined, 'key not found')
+      fail('key not found')
 
       return
     }

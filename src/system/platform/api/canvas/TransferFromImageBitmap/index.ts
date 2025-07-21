@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { IB } from '../../../../../types/interface/IB'
 import { IBRC } from '../../../../../types/interface/IBCA'
@@ -35,13 +36,17 @@ export default class TransferFromImageBitmap<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ canvas, bitmap, init }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f(
+    { canvas, bitmap, init }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): Promise<void> {
     const imageBitmap = await bitmap.imageBitmap()
 
     try {
       await canvas.transferFromImageBitmap(imageBitmap)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

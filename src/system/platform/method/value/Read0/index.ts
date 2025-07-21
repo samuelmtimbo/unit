@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { V } from '../../../../../types/interface/V'
 import { ID_READ_0 } from '../../../../_ids'
@@ -38,10 +39,10 @@ export default class Read0<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ value, any }: I<T>, done: Done<O<T>>) {
+  f({ value, any }: I<T>, done: Done<O<T>>, fail: Fail) {
     value.read((data, err) => {
       if (err) {
-        done(undefined, err)
+        fail(err)
 
         return
       }

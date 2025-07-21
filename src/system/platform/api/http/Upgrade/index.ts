@@ -1,5 +1,6 @@
 import { ServerSocket } from '../../../../../API'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -40,7 +41,7 @@ export default class Upgrade extends Holder<I, O> {
     )
   }
 
-  async f({ url }: I, done: Done<O>): Promise<void> {
+  async f({ url }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       cache: { requests, responses, ws, wss },
       api: {
@@ -52,7 +53,7 @@ export default class Upgrade extends Holder<I, O> {
     const _response = responses[url]
 
     if (!_request) {
-      done(undefined, 'request not found')
+      fail('request not found')
 
       return
     }
@@ -62,7 +63,7 @@ export default class Upgrade extends Holder<I, O> {
     try {
       _socket = await handleUpgrade(_request, _response, ws, wss)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

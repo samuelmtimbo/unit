@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { AB } from '../../../../../types/interface/AB'
 import { CK } from '../../../../../types/interface/CK'
@@ -45,7 +46,8 @@ export default class Verify extends Functional<I, O> {
 
   async f(
     { key, algorithm, signature, data }: I,
-    done: Done<O>
+    done: Done<O>,
+    fail: Fail
   ): Promise<void> {
     const {
       api: {
@@ -63,7 +65,7 @@ export default class Verify extends Functional<I, O> {
     try {
       valid = await verify(algorithm_, key_, signature_, data_)
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

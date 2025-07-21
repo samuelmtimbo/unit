@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { BluetoothDeviceOpt } from '../../../../../types/global/BluetoothDevice'
 import { BluetoothServer } from '../../../../../types/global/BluetoothServer'
@@ -34,7 +35,7 @@ export default class BluetoothDevice extends Functional<I, O> {
     )
   }
 
-  async f({ opt }: I, done: Done<O>) {
+  async f({ opt }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         bluetooth: { requestDevice },
@@ -52,7 +53,7 @@ export default class BluetoothDevice extends Functional<I, O> {
         }
       })(this.__system)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

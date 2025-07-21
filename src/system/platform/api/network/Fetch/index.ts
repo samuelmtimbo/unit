@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { BO } from '../../../../../types/interface/BO'
@@ -46,7 +47,7 @@ export default class Fetch extends Holder<I, O> {
     )
   }
 
-  async f({ url, opt, body }: I, done: Done<O>): Promise<void> {
+  async f({ url, opt, body }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         http: { fetch },
@@ -61,13 +62,13 @@ export default class Fetch extends Holder<I, O> {
     try {
       ;({ port } = new URL(url))
     } catch (err) {
-      done(undefined, 'invalid url')
+      fail('invalid url')
 
       return
     }
 
     if (isUnsafePort(Number.parseInt(port))) {
-      done(undefined, 'unsafe port')
+      fail('unsafe port')
 
       return
     }
@@ -87,7 +88,7 @@ export default class Fetch extends Holder<I, O> {
         })
         .catch((err) => {
           if (err.message === 'Failed to fetch') {
-            done(undefined, 'failed to fetch')
+            fail('failed to fetch')
 
             return
           }
@@ -96,7 +97,7 @@ export default class Fetch extends Holder<I, O> {
             err.message.toLowerCase() ===
             "failed to execute 'fetch' on 'window': request with get/head method cannot have body."
           ) {
-            done(undefined, 'GET/HEAD request cannot have body')
+            fail('GET/HEAD request cannot have body')
 
             return
           }
@@ -106,15 +107,15 @@ export default class Fetch extends Holder<I, O> {
               "Failed to execute 'fetch' on 'Window': Failed to parse URL from "
             )
           ) {
-            done(undefined, 'failed to parse url')
+            fail('failed to parse url')
 
             return
           }
 
-          done(undefined, err.message.toLowerCase())
+          fail(err.message.toLowerCase())
         })
     } catch (err) {
-      done(undefined, 'malformed')
+      fail('malformed')
 
       return
     }

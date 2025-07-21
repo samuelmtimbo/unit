@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { IB } from '../../../../../types/interface/IB'
@@ -52,13 +53,13 @@ export default class GrabFrame extends Holder<I, O> {
 
   private _err_flag = false
 
-  async f({ camera, opt }: I, done: Done<O>) {
+  async f({ camera, opt }: I, done: Done<O>, fail: Fail) {
     let _image: ImageBitmap
 
     try {
       _image = await this._i.camera.grabFrame()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       this._err_flag = true
 

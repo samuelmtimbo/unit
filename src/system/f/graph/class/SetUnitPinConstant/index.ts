@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { bundleSpec } from '../../../../../bundle'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { setUnitPinConstant } from '../../../../../spec/reducers/spec'
@@ -37,7 +38,11 @@ export default class SetUnitPinConstant<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ id, type, pinId, constant, graph }: I<T>, done: Done<O<T>>): void {
+  f(
+    { id, type, pinId, constant, graph }: I<T>,
+    done: Done<O<T>>,
+    fail: Fail
+  ): void {
     let new_graph: GraphBundle
 
     try {
@@ -60,7 +65,7 @@ export default class SetUnitPinConstant<T> extends Functional<I<T>, O<T>> {
 
       new_graph = fromBundle(new_bundle, specs_, this.__system.classes)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

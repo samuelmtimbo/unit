@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
@@ -40,13 +41,13 @@ export default class Set0<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, name, data }: I<T>, done: Done<O<T>>) {
+  async f({ obj, name, data }: I<T>, done: Done<O<T>>, fail: Fail) {
     try {
       const raw = await data.raw()
 
       await obj.set(name, raw)
     } catch (err) {
-      done(undefined, err.message)
+      fail(err.message)
 
       return
     }

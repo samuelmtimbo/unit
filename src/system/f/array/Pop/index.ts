@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_POP } from '../../../_ids'
 
@@ -24,7 +26,7 @@ export default class Pop<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a }: I<T>, done): void {
+  f({ a }: I<T>, done: Done<O<T>>, fail: Fail): void {
     if (a.length > 0) {
       const _a = [...a]
 
@@ -32,7 +34,7 @@ export default class Pop<T> extends Functional<I<T>, O<T>> {
 
       done({ a: _a, last })
     } else {
-      done(undefined, 'cannot pop empty array')
+      fail('cannot pop empty array')
     }
   }
 }

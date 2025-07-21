@@ -1,4 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
@@ -40,7 +41,7 @@ export default class At1<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  async f({ a, i }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ a, i }: I<T>, done: Done<O<T>>, fail: Fail): Promise<void> {
     let _a_i: T
 
     try {
@@ -49,12 +50,12 @@ export default class At1<T> extends Holder<I<T>, O<T>> {
       if (i >= 0 && i < l) {
         _a_i = await a.at(i)
       } else {
-        done(undefined, 'index out of boundary')
+        fail('index out of boundary')
 
         return
       }
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

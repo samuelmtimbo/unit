@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
 import { CK } from '../../../../../types/interface/CK'
 import { ID_EXPORT_JWK_KEY } from '../../../../_ids'
@@ -33,7 +34,7 @@ export default class ExportJwtKey extends Functional<I, O> {
     )
   }
 
-  async f({ key, format }: I, done: Done<O>): Promise<void> {
+  async f({ key, format }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
         crypto: { exportKey },
@@ -47,7 +48,7 @@ export default class ExportJwtKey extends Functional<I, O> {
     try {
       key_ = (await exportKey(format, key__)) as JsonWebKey
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }

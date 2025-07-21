@@ -1,5 +1,6 @@
 import { SpeechRecorder } from '../../../../../api/speech'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { SpeechRecognitionOpt } from '../../../../../types/global/SpeechRecognition'
@@ -33,7 +34,7 @@ export default class SpeechToText extends Holder<I, O> {
     )
   }
 
-  f({ opt }: I, done: Done<O>) {
+  f({ opt }: I, done: Done<O>, fail: Fail) {
     const recorder = new SpeechRecorder(this.__system, opt)
 
     this._recorder = recorder
@@ -43,7 +44,7 @@ export default class SpeechToText extends Holder<I, O> {
     })
 
     this._recorder.addListener('err', (err) => {
-      done(undefined, err)
+      fail(err)
     })
   }
 

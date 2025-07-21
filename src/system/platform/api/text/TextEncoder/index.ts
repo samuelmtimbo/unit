@@ -1,5 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { TE } from '../../../../../types/interface/TE'
@@ -33,7 +34,7 @@ export default class TextEncoder_ extends Holder<I, O> {
     )
   }
 
-  f({ opt }: I, done: Done<O>) {
+  f({ opt }: I, done: Done<O>, fail: Fail) {
     const {
       api: {
         text: { TextEncoder },
@@ -45,7 +46,7 @@ export default class TextEncoder_ extends Holder<I, O> {
     try {
       encoder_ = new TextEncoder()
     } catch (err) {
-      done(undefined, err.message.toLowerCase())
+      fail(err.message.toLowerCase())
 
       return
     }
