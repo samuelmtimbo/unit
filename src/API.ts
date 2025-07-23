@@ -33,6 +33,7 @@ export type RequestOpt = {
   method: string
   body: BodyInit
   cors: boolean
+  duplex?: string
 }
 
 export type ServerResponse = {

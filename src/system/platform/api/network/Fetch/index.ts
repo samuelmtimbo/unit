@@ -1,3 +1,4 @@
+import { RequestOpt } from '../../../../../API'
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../Class/Functional/Fail'
@@ -11,7 +12,7 @@ import { ID_FETCH_0 } from '../../../../_ids'
 
 export type I = {
   url: string
-  opt: RequestInit
+  opt: RequestOpt
   body: BO & $
   done: any
 }
@@ -77,6 +78,10 @@ export default class Fetch extends Holder<I, O> {
 
     if (method === 'GET' || method === 'HEAD') {
       delete opt.body
+    }
+
+    if (opt.body instanceof ReadableStream) {
+      opt.duplex = 'half'
     }
 
     try {
