@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "commander": "12.1.0",
-    "compression": "1.7.4",
+    "compression": "1.8.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
@@ -62,7 +62,7 @@
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",
     "@typescript-eslint/typescript-estree": "6.20.0",
-    "electron": "28.1.1",
+    "electron": "28.3.3",
     "esbuild": "0.25.0",
     "eslint": "8.5.0",
     "eslint-config-prettier": "8.3.0",
