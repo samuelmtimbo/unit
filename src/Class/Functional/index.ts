@@ -223,6 +223,7 @@ export class Functional<
     this.err(err)
     this._forwarding = false
     this._forward_all_empty()
+    this._backward_if_ready()
   }
 
   public _done: Done<O> = (data, err = null) => {
