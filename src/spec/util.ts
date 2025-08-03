@@ -694,6 +694,24 @@ export function removeBundleMetadata(bundle: BundleSpec): void {
   forEachValueKey(specs, removeSpecMetadata)
 }
 
+export function removeBundleMemory(bundle: BundleSpec): void {
+  const { spec = {}, specs = {} } = bundle
+
+  removeSpecMemory(spec)
+
+  forEachValueKey(specs, removeSpecMemory)
+}
+
+export function removeSpecMemory(spec: GraphSpec): void {
+  const { units = {} } = spec
+
+  for (const unitId in units) {
+    const unit = units[unitId]
+
+    delete unit.memory
+  }
+}
+
 export function removeSpecMetadata(spec: GraphSpec): void {
   const {
     units = {},

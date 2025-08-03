@@ -52190,6 +52190,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       await Promise.all(promises)
+    } else {
+      removeBundleMemory(bundle)
     }
 
     void copyToClipboard()
