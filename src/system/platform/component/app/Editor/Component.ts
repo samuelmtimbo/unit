@@ -249,6 +249,7 @@ import {
   getThemeModeColor,
   themeBackgroundColor,
 } from '../../../../../client/theme'
+import { throttle } from '../../../../../client/throttle'
 import { time } from '../../../../../client/util/date/time'
 import {
   NULL_VECTOR,
@@ -333,7 +334,7 @@ import { GraphExposePinEventData } from '../../../../../debug/graph/watchGraphEx
 import { GraphExposedPinSetMomentData } from '../../../../../debug/graph/watchGraphExposedPinSetEvent'
 import { GraphForkMomentData } from '../../../../../debug/graph/watchGraphForkEvent'
 import { GraphMergeMomentData } from '../../../../../debug/graph/watchGraphMergeEvent'
-import { GraphMetadataMomentData } from '../../../../../debug/graph/watchGraphMetadataEvent'
+import { GraphSetMetadataMomentData } from '../../../../../debug/graph/watchGraphMetadataEvent'
 import { GraphMoveSubComponentRootMomentData } from '../../../../../debug/graph/watchGraphMoveSubComponentRoot'
 import { GraphMoveSubgraphIntoMomentData } from '../../../../../debug/graph/watchGraphMoveSubgraphIntoEvent'
 import { GraphMergePinMomentData } from '../../../../../debug/graph/watchGraphPinMergeEvent'
@@ -426,15 +427,19 @@ import {
   makeRemovePinFromMergeAction,
   makeRemoveUnitAction,
   makeSetMergeDataAction,
+  makeSetMetadataAction,
+  makeSetPinMetadataAction,
   makeSetPinSetDefaultIgnoredAction,
   makeSetPinSetFunctionalAction,
   makeSetPinSetIdAction,
   makeSetPlugDataAction,
   makeSetSubComponentSizeAction,
   makeSetUnitIdAction,
+  makeSetUnitMetadataAction,
   makeSetUnitPinConstantAction,
   makeSetUnitPinDataAction,
   makeSetUnitPinIgnoredAction,
+  makeSetUnitPinMetadataAction,
   makeSetUnitPinSetIdAction,
   makeSetUnitSizeAction,
   makeUnplugPinAction,
@@ -561,6 +566,7 @@ import {
   newUnitIdFromName,
   remapUnitMerges,
   remapUnitPlugs,
+  removeBundleMemory,
 } from '../../../../../spec/util'
 import {
   getSubComponentChildren,
@@ -9558,8 +9564,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { fork, bubble } = this.$props
 
     $unit.$setMetadata({
-      path: ['description'],
-      data: description,
+      path_: ['description'],
+      value: description,
       fork,
       bubble,
     })
@@ -38954,6 +38960,113 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     setUnitPinData({ unitId, type, pinId, data }, this._spec, specs, classes)
   }
 
+  private _pod_sync_position_metadata = (): void => {
+    // console.log('Graph', '_pod_sync_position_metadata')
+
+    let node_positions = this.get_node_relative_positions()
+
+    const spec = clone(this._spec)
+
+    const editor = this
+
+    const actions: Action[] = []
+
+    for (const node_id in node_positions) {
+      const node_position = node_positions[node_id]
+
+      const round_node_position = roundPoint(node_position)
+
+      if (isUnitNodeId(node_id)) {
+        if (hasUnit(spec, node_id)) {
+          actions.push(
+            makeSetUnitMetadataAction(
+              node_id,
+              ['metadata', 'position'],
+              round_node_position
+            )
+          )
+        }
+      } else if (isLinkPinNodeId(node_id)) {
+        const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
+
+        if (hasUnit(spec, node_id)) {
+          actions.push(
+            makeSetUnitMetadataAction(
+              node_id,
+              [type, pinId, 'metadata', 'position'],
+              round_node_position
+            )
+          )
+        }
+      } else if (isMergeNodeId(node_id)) {
+        const { mergeId } = segmentMergeNodeId(node_id)
+
+        if (hasMerge(spec, mergeId)) {
+          actions.push(
+            makeSetMetadataAction(
+              ['position', 'merge', mergeId],
+              round_node_position
+            )
+          )
+        }
+      } else if (isExternalNodeId(node_id)) {
+        const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
+
+        if (hasPinId(spec, type, pinId)) {
+          actions.push(
+            makeSetPinMetadataAction(
+              type,
+              pinId,
+              ['position', subPinId, 'ext'],
+              round_node_position
+            )
+          )
+        }
+      } else if (isInternalNodeId(node_id)) {
+        const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
+
+        if (hasPinId(spec, type, pinId)) {
+          actions.push(
+            makeSetPinMetadataAction(
+              type,
+              pinId,
+              ['position', subPinId, 'int'],
+              round_node_position
+            )
+          )
+        }
+      } else if (isDatumNodeId(node_id)) {
+        const { datumId } = segmentDatumNodeId(node_id)
+
+        if (hasDatum(spec, datumId)) {
+          const unit_pin = editor.getDatumPin(datumId)
+
+          if (unit_pin) {
+            const { unitId, type, pinId } = unit_pin
+
+            if (isUnitPinConstant(spec, unitId, type, pinId)) {
+              if (hasPinId(spec, type, pinId)) {
+                actions.push(
+                  makeSetUnitPinMetadataAction(
+                    unitId,
+                    type,
+                    pinId,
+                    ['data', 'position'],
+                    round_node_position
+                  )
+                )
+              }
+            }
+          } else {
+            //
+          }
+        }
+      }
+    }
+
+    this._pod_bulk_edit(actions)
+  }
+
   private _pod_set_pin_data = (
     pin_node_id: string,
     data: string,
@@ -39018,7 +39131,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_set_metadata = (path: string[], data: any): void => {
     const { fork, bubble } = this.$props
 
-    this._pod.$setMetadata({ path, data, fork, bubble })
+    this._pod.$setMetadata({ path_: path, value: data, fork, bubble })
   }
 
   private _set_core_border_color = (
@@ -55681,7 +55794,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._simulation_end = true
 
     this.dispatchEvent('simulationend')
+
+    this._throttled_pod_sync_position_metadata()
   }
+
+  private _throttled_pod_sync_position_metadata = throttle(
+    this.$system,
+    () => {
+      this._pod_sync_position_metadata()
+    },
+    1000
+  )
 
   private _get_layout_node_anchor_id = (node_id: string): string => {
     let anchor_id = node_id
@@ -59440,23 +59563,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_graph_unit_metadata = (data: GraphMetadataMomentData) => {
-    // console.log('Graph', '_on_graph_unit_metadata', data)
+  private _on_graph_unit_set_metadata = (data: GraphSetMetadataMomentData) => {
+    // console.log('Graph', '_on_graph_unit_set_metadata', data)
 
     const { specs, setSpec } = this.$props
 
-    const {
-      path,
-      data: { path: path_, data: data_ },
-    } = data
+    const { path, path_, value } = data
 
     if (this._is_spec_updater(path)) {
       const spec = clone(findSpecAtPath(specs, this._spec, path))
 
       if (path_[0] === 'icon') {
-        const icon = data_
+        const icon = value
 
-        setMetadata({ path: ['metadata', ...path_], value: data_ }, spec)
+        setMetadata({ path: ['metadata', ...path_], value }, spec)
 
         if (path.length === 1) {
           const unitId = path[0]
@@ -59464,9 +59584,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._set_core_icon(unitId, icon)
         }
       } else if (path_[0] === 'description') {
-        const description = data_
+        const description = value
 
-        setMetadata({ path: ['metadata', ...path_], value: data_ }, spec)
+        setMetadata({ path: ['metadata', ...path_], value }, spec)
 
         if (path.length === 1) {
           const unitId = path[0]
@@ -59649,7 +59769,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       set_unit_pin_ignored: this._on_graph_unit_set_unit_pin_ignored,
       set_unit_pin_data: this._on_graph_unit_set_unit_pin_data,
       remove_unit_pin_data: this._on_graph_unit_remove_unit_pin_data_moment,
-      set_metadata: this._on_graph_unit_metadata,
+      set_metadata: this._on_graph_unit_set_metadata,
       bulk_edit: this._on_graph_unit_bulk_edit,
     },
   }

@@ -80,6 +80,10 @@ export class RemoteRef {
 
           const ref = this._ref[id]
 
+          if (!ref) {
+            break
+          }
+
           ref.exec(__data)
         }
 

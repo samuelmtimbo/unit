@@ -902,6 +902,32 @@ export function lazyFromSpec(
       this._ensure()
       this.__graph.setMetadata(path, data)
     }
+
+    public setUnitMetadata(unitId: string, path: string[], data: any): void {
+      this._ensure()
+      this.__graph.setUnitMetadata(unitId, path, data)
+    }
+
+    public setUnitPinMetadata(
+      unitId: string,
+      type: IO,
+      pinId: string,
+      path: string[],
+      data: any
+    ): void {
+      this._ensure()
+      this.__graph.setUnitPinMetadata(unitId, type, pinId, path, data)
+    }
+
+    public setPinMetadata(
+      type: IO,
+      pinId: string,
+      path: string[],
+      data: any
+    ): void {
+      this._ensure()
+      this.__graph.setPinMetadata(type, pinId, path, data)
+    }
   }
 
   return Lazy

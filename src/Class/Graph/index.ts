@@ -151,12 +151,16 @@ import {
   GraphReorderSubComponentData,
   GraphSetComponentSizeData,
   GraphSetMergeDataData,
+  GraphSetMetadataData,
+  GraphSetPinMetadataData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
   GraphSetUnitIdData,
+  GraphSetUnitMetadataData,
   GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
+  GraphSetUnitPinMetadataData,
   GraphSetUnitPinSetIdData,
   GraphSetUnitSizeData,
   GraphTakeUnitErrData,
@@ -5188,9 +5192,69 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   public setMetadata(path: string[], data: any): void {
-    deepSet_(this._spec.metadata, path, data)
+    this._setMetadata(path, data)
 
-    this.edit('set_metadata', { path, data }, [])
+    this.edit('set_metadata', path, data, [])
+  }
+
+  private _setMetadata(path: string[], data: any): void {
+    deepSet_(this._spec.metadata, path, data)
+  }
+
+  public setUnitMetadata(unitId: string, path: string[], data: any): void {
+    this._setUnitMetadata(unitId, path, data)
+
+    this.edit('set_unit_metadata', unitId, path, data, [])
+  }
+
+  private _setUnitMetadata(unitId: string, path: string[], data: any): void {
+    deepSet_(this._spec, ['units', unitId, 'metadata', ...path], data)
+  }
+
+  public setUnitPinMetadata(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    path: string[],
+    data: any
+  ): void {
+    this._setUnitPinMetadata(unitId, type, pinId, path, data)
+
+    this.edit('set_unit_pin_metadata', path, data, [])
+  }
+
+  private _setUnitPinMetadata(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    path: string[],
+    data: any
+  ): void {
+    deepSet_(
+      this._spec,
+      ['units', unitId, type, pinId, 'metadata', ...path],
+      data
+    )
+  }
+
+  public setPinMetadata(
+    type: IO,
+    pinId: string,
+    path: string[],
+    data: any
+  ): void {
+    this._setPinMetadata(type, pinId, path, data)
+
+    this.edit('set_pin_metadata', type, pinId, path, data, [])
+  }
+
+  private _setPinMetadata(
+    type: IO,
+    pinId: string,
+    path: string[],
+    data: any
+  ): void {
+    deepSet_(this._spec, [`${type}s`, pinId, 'metadata', ...path], data)
   }
 
   public getSubComponentsParentMap(
@@ -5865,6 +5929,26 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           const { actions } = data
 
           this._bulkEdit(actions, propagate, fork, bubble)
+        },
+        setMetadata: (data: GraphSetMetadataData) => {
+          const { path_, value } = data
+
+          this._setMetadata(path_, value)
+        },
+        setUnitMetadata: (data: GraphSetUnitMetadataData) => {
+          const { unitId, path_, value } = data
+
+          this._setUnitMetadata(unitId, path_, value)
+        },
+        setUnitPinMetadata: (data: GraphSetUnitPinMetadataData) => {
+          const { unitId, type, pinId, path_, value } = data
+
+          this._setUnitPinMetadata(unitId, type, pinId, path_, value)
+        },
+        setPinMetadata: (data: GraphSetPinMetadataData) => {
+          const { type, pinId, path_, value } = data
+
+          this._setPinMetadata(type, pinId, path_, value)
         },
       },
       () => {}

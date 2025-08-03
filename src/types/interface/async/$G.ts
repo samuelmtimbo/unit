@@ -20,14 +20,17 @@ import {
   GraphReorderSubComponentData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
+  GraphSetPinMetadataData,
   GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
   GraphSetPlugDataData,
   GraphSetUnitIdData,
+  GraphSetUnitMetadataData,
   GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
+  GraphSetUnitPinMetadataData,
   GraphSetUnitPinSetIdData,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
@@ -163,6 +166,9 @@ export interface $G_C {
   $removePinFromMerge(data: GraphRemovePinFromMergeData): void
   $takeUnitErr(data: GraphTakeUnitErrData): void
   $setMetadata(data: GraphSetMetadataData): void
+  $setUnitMetadata(data: GraphSetUnitMetadataData): void
+  $setUnitPinMetadata(data: GraphSetUnitPinMetadataData): void
+  $setPinMetadata(data: GraphSetPinMetadataData): void
   $reorderSubComponent(data: GraphReorderSubComponentData): void
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
   $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void

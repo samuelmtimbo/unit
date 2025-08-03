@@ -2,7 +2,11 @@
 
 import { System } from '../system'
 
-export const throttle = (system: System, func: Function, limit): any => {
+export const throttle = (
+  system: System,
+  func: Function,
+  limit: number
+): any => {
   const {
     api: {
       window: { setTimeout, clearTimeout },

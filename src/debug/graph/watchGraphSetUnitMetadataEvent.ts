@@ -1,26 +1,34 @@
 import { Graph } from '../../Class/Graph'
-import { GraphSetMetadataData } from '../../Class/Graph/interface'
 import { Moment } from '../Moment'
 
-export interface GraphSetMetadataMomentData extends GraphSetMetadataData {
+export interface GraphSetUnitMetadataMomentData {
+  unitId: string
+  path_: string[]
+  data: any
   path: string[]
 }
 
 export interface GraphMetadataMoment
-  extends Moment<GraphSetMetadataMomentData> {}
+  extends Moment<GraphSetUnitMetadataMomentData> {}
 
-export function watchGraphSetMetadataEvent(
-  event: 'set_metadata',
+export function watchGraphSetUnitMetadataEvent(
+  event: 'set_unit_metadata',
   graph: Graph,
   callback: (moment) => void
 ): () => void {
-  const listener = (path_: string[], value: any, path: string[]) => {
+  const listener = (
+    unitId: string,
+    path_: string[],
+    data: any,
+    path: string[]
+  ) => {
     callback({
       type: 'graph',
       event,
       data: {
+        unitId,
         path_,
-        value,
+        data,
         path,
       },
     })

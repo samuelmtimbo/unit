@@ -21,14 +21,18 @@ import {
   GraphRemoveUnitData,
   GraphRemoveUnitPinDataData,
   GraphSetMergeDataData,
+  GraphSetMetadataData,
+  GraphSetPinMetadataData,
   GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
   GraphSetPlugDataData,
   GraphSetUnitIdData,
+  GraphSetUnitMetadataData,
   GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
+  GraphSetUnitPinMetadataData,
   GraphSetUnitPinSetIdData,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
@@ -610,17 +614,55 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     },
 
     $setMetadata({
-      path,
-      data,
+      path_,
+      value,
       fork = true,
       bubble = true,
-    }: {
-      path: string[]
-      data: any
-      fork?: boolean
-      bubble?: boolean
-    }): void {
-      call(graph, 'setMetadata', fork, bubble, path, data)
+    }: GraphSetMetadataData): void {
+      call(graph, 'setMetadata', fork, bubble, path_, value)
+    },
+
+    $setUnitMetadata({
+      unitId,
+      path_,
+      value,
+      fork = true,
+      bubble = true,
+    }: GraphSetUnitMetadataData): void {
+      call(graph, 'setUnitMetadata', fork, bubble, unitId, path_, value)
+    },
+
+    $setUnitPinMetadata({
+      unitId,
+      type,
+      pinId,
+      path_,
+      value,
+      fork = true,
+      bubble = true,
+    }: GraphSetUnitPinMetadataData): void {
+      call(
+        graph,
+        'setUnitPinMetadata',
+        fork,
+        bubble,
+        unitId,
+        type,
+        pinId,
+        path_,
+        value
+      )
+    },
+
+    $setPinMetadata({
+      type,
+      pinId,
+      path_,
+      value,
+      fork = true,
+      bubble = true,
+    }: GraphSetPinMetadataData): void {
+      call(graph, 'setPinMetadata', fork, bubble, type, pinId, path_, value)
     },
 
     $reorderSubComponent({

@@ -210,6 +210,15 @@ export interface G<
     specId: string
   ): void
   setMetadata(path: string[], data: any): void
+  setUnitMetadata(unitId: string, path: string[], data: any): void
+  setUnitPinMetadata(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    path: string[],
+    data: any
+  ): void
+  setPinMetadata(type: IO, pinId: string, path: string[], data: any): void
   moveSubComponentRoot(
     subComponentId: string | null,
     children: string[],
@@ -287,7 +296,10 @@ export type G_EE = {
   set_plug_pin_data: [IO, string, string, string[]]
   remove_unit_pin_data: [string, IO, string, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
-  set_metadata: [{ path: string[]; data: any }, string[]]
+  set_metadata: [string[], any, string[]]
+  set_pin_metadata: [IO, string, string[], any, string[]]
+  set_unit_metadata: [string, string[], any, string[]]
+  set_unit_pin_metadata: [string, IO, string, string[], any, string[]]
   component_append: [string, GraphUnitSpec, string[]]
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]

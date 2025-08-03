@@ -117,6 +117,8 @@ export const SET_PIN_SET_DEFAULT_IGNORED = 'setPinSetDefaultIgnored'
 export const SET_PIN_SET_REF = 'setPinSetRef'
 export const SET_METADATA = 'setMetadata'
 export const SET_UNIT_METADATA = 'setUnitMetadata'
+export const SET_PIN_METADATA = 'setPinMetadata'
+export const SET_UNIT_PIN_METADATA = 'setUnitPinMetadata'
 export const BULK_EDIT = 'bulkEdit'
 export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
@@ -639,8 +641,8 @@ export const makeSetUnitMetadataAction = (
 ) => {
   return wrapSetUnitMetadataAction({
     unitId,
-    path,
-    data,
+    path_: path,
+    value: data,
   })
 }
 
@@ -717,6 +719,42 @@ export const makeSetMetadataAction = (path: string[], value: any) => {
   return {
     type: SET_METADATA,
     data: {
+      path,
+      value,
+    },
+  }
+}
+
+export const makeSetPinMetadataAction = (
+  type: string,
+  pinId: string,
+  path: string[],
+  value: any
+) => {
+  return {
+    type: SET_PIN_METADATA,
+    data: {
+      type,
+      pinId,
+      path,
+      value,
+    },
+  }
+}
+
+export const makeSetUnitPinMetadataAction = (
+  type: string,
+  pinId: string,
+  subPinId: string,
+  path: string[],
+  value: any
+) => {
+  return {
+    type: SET_UNIT_PIN_METADATA,
+    data: {
+      type,
+      pinId,
+      subPinId,
       path,
       value,
     },

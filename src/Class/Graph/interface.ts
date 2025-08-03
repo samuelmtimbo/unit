@@ -307,14 +307,29 @@ export type GraphSetSubComponentSizeData = {
 } & Flags
 
 export type GraphSetMetadataData = {
-  path: string[]
-  data: any
+  path_: string[]
+  value: any
 } & Flags
 
 export type GraphSetUnitMetadataData = {
   unitId: string
-  path: string[]
-  data: any
+  path_: string[]
+  value: any
+} & Flags
+
+export type GraphSetUnitPinMetadataData = {
+  unitId: string
+  type: IO
+  pinId: string
+  path_: string[]
+  value: any
+} & Flags
+
+export type GraphSetPinMetadataData = {
+  type: IO
+  pinId: string
+  path_: string[]
+  value: any
 } & Flags
 
 export type GraphBulkEditData = {
