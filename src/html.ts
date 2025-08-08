@@ -116,7 +116,7 @@ export async function html(opt: WebTemplate): Promise<string> {
         position: absolute;
         width: 100%;
         height: 100%;
-        overflow: hidden;
+        overflow: auto;
       "
     >
       ${baseHtml || ''}
