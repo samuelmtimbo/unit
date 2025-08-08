@@ -1,8 +1,8 @@
 import { Graph } from '../../Class/Graph'
+import { GraphSetNameData } from '../../Class/Graph/interface'
 import { Moment } from '../Moment'
 
-export interface GraphSetNameMomentData {
-  name: string
+export interface GraphSetNameMomentData extends GraphSetNameData {
   path: string[]
 }
 

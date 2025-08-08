@@ -200,6 +200,10 @@ export type GraphSetUnitPinSetIdData = {
   newPinId: string
 } & Flags
 
+export type GraphSetNameData = {
+  name: string
+} & Flags
+
 export type GraphSetUnitPinConstantData = {
   unitId: string
   type: IO

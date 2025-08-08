@@ -152,6 +152,7 @@ import {
   GraphSetComponentSizeData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
+  GraphSetNameData,
   GraphSetPinMetadataData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
@@ -5026,8 +5027,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     emit && this.edit('set_name', name, [])
   }
 
-  private _setName(name: string, fork: boolean = true) {
-    fork && this._fork()
+  private _setName(name: string, fork: boolean = true, bubble: boolean = true) {
+    fork && this._fork(undefined, true, bubble)
 
     this._specSetName(name)
   }
@@ -5692,6 +5693,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     processAction(
       action,
       {
+        setName: (data: GraphSetNameData) => {
+          const { name } = data
+
+          this._setName(name, fork, bubble)
+        },
         addUnitSpec: (data: GraphAddUnitData) => {
           const { unitId, bundle, parentId, merges, plugs } = data
 

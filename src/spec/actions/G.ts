@@ -115,6 +115,7 @@ export const SET_PIN_SET_ID = 'setPinSetId'
 export const SET_PIN_SET_FUNCTIONAL = 'setPinSetFunctional'
 export const SET_PIN_SET_DEFAULT_IGNORED = 'setPinSetDefaultIgnored'
 export const SET_PIN_SET_REF = 'setPinSetRef'
+export const SET_NAME = 'setName'
 export const SET_METADATA = 'setMetadata'
 export const SET_UNIT_METADATA = 'setUnitMetadata'
 export const SET_PIN_METADATA = 'setPinMetadata'
@@ -713,6 +714,16 @@ export const makeSetComponentSizeAction = (
     prevWidth,
     prevHeight,
   })
+}
+
+export const makeSetNameAction = (path: string[], name: string) => {
+  return {
+    type: SET_METADATA,
+    data: {
+      path,
+      name,
+    },
+  }
 }
 
 export const makeSetMetadataAction = (path: string[], value: any) => {

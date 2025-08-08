@@ -397,6 +397,7 @@ import {
   REMOVE_UNIT_PIN_DATA,
   SET_COMPONENT_SIZE,
   SET_MERGE_DATA,
+  SET_NAME,
   SET_PIN_SET_DEFAULT_IGNORED,
   SET_PIN_SET_FUNCTIONAL,
   SET_PIN_SET_ID,
@@ -8971,6 +8972,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         plug_datum_position
       )
     }
+  }
+
+  private _spec_set_name = (name: string) => {
+    this._spec.name = name
   }
 
   private _spec_set_exposed_pin_name = (
@@ -54241,6 +54246,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               data_.pinId,
               data_.newPinId
             )
+        }
+        break
+      case SET_NAME:
+        {
+          const { name } = data as GraphSetNameMomentData
+          
+          this._spec_set_name(name)
         }
         break
       default:
