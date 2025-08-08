@@ -277,7 +277,7 @@ export type GraphMoveSubComponentRootData = {
   prevSlotMap: Dict<string>
   parentId: string | null
   children: string[]
-  slotMap: Dict<string>
+  slotMap?: Dict<string>
   index: number
 } & Flags
 

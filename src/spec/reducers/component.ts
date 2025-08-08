@@ -189,7 +189,7 @@ export const reorderSubComponent = (
 }
 
 export const _removeSubComponentFromParent = (
-  { parentId, children, slotMap }: GraphMoveSubComponentRootData,
+  { parentId, children, slotMap = {} }: GraphMoveSubComponentRootData,
   state: GraphComponentSpec
 ) => {
   for (const childId of children) {
@@ -205,7 +205,7 @@ export const _removeSubComponentFromParent = (
 }
 
 export const moveSubComponentRoot = (
-  { parentId, children, slotMap }: GraphMoveSubComponentRootData,
+  { parentId, children, slotMap = {} }: GraphMoveSubComponentRootData,
   state: GraphComponentSpec
 ) => {
   for (const childId of children) {

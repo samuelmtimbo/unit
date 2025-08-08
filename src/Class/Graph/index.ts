@@ -5289,8 +5289,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public moveSubComponentRoot(
     subComponentId: string | null,
     children: string[],
-    slotMap: Dict<string>,
-    index: number,
+    slotMap: Dict<string> = {},
+    index: number = 0,
     emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true

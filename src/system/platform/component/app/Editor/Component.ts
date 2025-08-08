@@ -58504,7 +58504,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { specs, setSpec } = this.$props
 
-    const { path, index, slotMap } = data
+    const { path, index = 0, slotMap = {} } = data
 
     const graph_unit_id = path[0]
 
