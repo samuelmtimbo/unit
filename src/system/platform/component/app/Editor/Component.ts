@@ -728,11 +728,11 @@ import { getTextLines, spaces } from '../../../../../util/text/getTextLines'
 import { weakMerge } from '../../../../../weakMerge'
 import {
   ID_AUDIO,
+  ID_BOX,
   ID_DIV,
   ID_EDITOR,
   ID_IMAGE,
   ID_IMAGE_1,
-  ID_SCROLL_SNAP_Y_BOX,
   ID_SVG,
   ID_VIDEO,
 } from '../../../../_ids'
@@ -1349,7 +1349,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _create_fallback_frame = (): Component => {
     const { component: fallback_frame } = graphComponentFromId(
       this.$system,
-      ID_SCROLL_SNAP_Y_BOX,
+      // ID_SCROLL_SNAP_Y_BOX,
+      ID_BOX,
       {
         style: {
           position: 'absolute',
