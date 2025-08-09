@@ -3639,7 +3639,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     registerRoot: boolean = true
   ): void {
     if (unit.isElement()) {
-      this.emit('set_sub_component', unitId, bundle)
+      emit && this.emit('set_sub_component', unitId, bundle)
 
       if (registerRoot) {
         if (parentId) {
