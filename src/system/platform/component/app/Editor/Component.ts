@@ -57076,39 +57076,42 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._get_node_shape(graph_unit_id) === 'rect'
     const graph_unit_spec_render = this._get_unit_spec_render(graph_unit_id)
 
-    const pod = this._pod.$refUnit({
+    const graph_unit_pod = this._pod.$refUnit({
       unitId: graph_unit_id,
       _: UCGEE,
     }) as $Graph
 
-    const spec = findSpecAtPath(
+    const parent_spec = findSpecAtPath(
       weakMerge(bundle.specs ?? {}, specs),
       this._spec,
       path
     )
 
-    const parent_spec_id = spec.id
-    const parent_spec_render = spec.render
+    const parent_spec_id = parent_spec.id
+    const parent_spec_render = parent_spec.render
 
-    let next_spec = clone(spec)
+    let next_parent_spec = clone(parent_spec)
 
     if (this._is_spec_updater(path)) {
-      addUnit({ unitId, unit: bundle.unit }, next_spec)
+      addUnit({ unitId, unit: bundle.unit }, next_parent_spec)
 
-      next_spec.metadata = next_spec.metadata || {}
+      next_parent_spec.metadata = next_parent_spec.metadata || {}
 
-      delete next_spec.metadata.complexity
+      delete next_parent_spec.metadata.complexity
 
-      next_spec.component = next_spec.component ?? {}
+      next_parent_spec.component = next_parent_spec.component ?? {}
 
       if (added_unit_is_component) {
-        setSubComponent({ unitId, subComponent: {} }, next_spec.component)
+        setSubComponent(
+          { unitId, subComponent: {} },
+          next_parent_spec.component
+        )
 
         if (parentId) {
           if (parentIndex === null || parentIndex === undefined) {
             appendSubComponentChild(
               { parentId, childId: unitId, slotName: parentSlot },
-              next_spec.component
+              next_parent_spec.component
             )
           } else {
             insertSubComponentChild(
@@ -57118,16 +57121,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 slotName: parentSlot,
                 at: parentIndex,
               },
-              next_spec.component
+              next_parent_spec.component
             )
           }
         } else {
           if (parentIndex === null || parentIndex === undefined) {
-            appendRoot({ childId: unitId }, next_spec.component)
+            appendRoot({ childId: unitId }, next_parent_spec.component)
           } else {
             insertRoot(
               { childId: unitId, at: parentIndex },
-              next_spec.component
+              next_parent_spec.component
             )
           }
         }
@@ -57141,25 +57144,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             prevSlotMap: {},
             index: 0,
           },
-          next_spec.component
+          next_parent_spec.component
         )
 
         const { component: added_component_spec } = added_unit_spec
 
         const { defaultWidth = 120, defaultHeight = 120 } = added_component_spec
 
-        next_spec.component.defaultWidth =
-          next_spec.component.defaultWidth || defaultWidth
-        next_spec.component.defaultHeight =
-          next_spec.component.defaultHeight || defaultHeight
+        next_parent_spec.component.defaultWidth =
+          next_parent_spec.component.defaultWidth || defaultWidth
+        next_parent_spec.component.defaultHeight =
+          next_parent_spec.component.defaultHeight || defaultHeight
 
-        next_spec.type = `\`U\`&\`G\`&\`C\``
+        next_parent_spec.type = `\`U\`&\`G\`&\`C\``
       }
 
       for (const mergeId in merges) {
         const mergeSpec = merges[mergeId]
 
-        addMerge({ mergeId, mergeSpec }, next_spec)
+        addMerge({ mergeId, mergeSpec }, next_parent_spec)
       }
 
       forIOObjKV(plugss, (type, unitPinId, plugs) => {
@@ -57171,12 +57174,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               subPinId,
               subPinSpec: { unitId, kind, pinId: unitPinId },
             },
-            next_spec
+            next_parent_spec
           )
         })
       })
 
-      setSpec(next_spec.id, next_spec)
+      setSpec(next_parent_spec.id, next_parent_spec)
 
       this._register_unit(bundle.unit.id, specs)
     }
@@ -57184,7 +57187,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
 
     const next_graph_unit_spec =
-      path.length === 1 ? next_spec : clone(graph_unit_spec)
+      path.length === 1 ? next_parent_spec : clone(graph_unit_spec)
 
     let all_added_unit_ancestors_are_component = true
 
@@ -57230,35 +57233,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (graph_unit_is_component) {
-      if (added_unit_is_component && !all_added_unit_ancestors_are_component) {
+      if (added_unit_is_component) {
         if (!this._subgraph_graph) {
-          const sub_component = this._get_sub_component(graph_unit_id)
+          const parent_component = this._component.pathGetSubComponent(path)
 
-          let added_sub_component = sub_component.getSubComponent(unitId)
+          if (parent_component) {
+            let added_sub_component = parent_component.getSubComponent(unitId)
 
-          if (!added_sub_component) {
-            added_sub_component = null
+            if (!added_sub_component) {
+              added_sub_component = componentFromSpecId(
+                this.$system,
+                specs,
+                bundle.unit.id,
+                {}
+              )
 
-            const sub_pod = pod.$refUnit({
-              unitId,
-              _: ['U', 'C', 'G', 'EE', 'V'],
-            }) as $Graph
+              const parent_pod = parent_component.$unit
 
-            const sub_sub_component = componentFromSpecId(
-              this.$system,
-              this.$system.specs,
-              parent_spec_id,
-              {}
-            )
-            sub_sub_component.connect(sub_pod)
+              if (parent_pod) {
+                const added_sub_component_pod = parent_pod.$refUnit({
+                  unitId,
+                  _: ['U', 'C', 'G', 'EE', 'V'],
+                }) as $Graph
 
-            sub_component.setSubComponent(unitId, sub_sub_component)
-            sub_component.pushRoot(sub_sub_component)
+                added_sub_component.connect(added_sub_component_pod)
+              }
 
-            added_sub_component = sub_sub_component
+              parent_component.setSubComponent(unitId, added_sub_component)
+              parent_component.pushRoot(added_sub_component)
+              parent_component.appendRoot(added_sub_component)
+            }
           }
-
-          sub_component.appendRoot(added_sub_component)
         }
       }
     }
@@ -58568,6 +58573,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               currentParent.unregisterParentRoot(child)
             } else {
               currentParent.pullParentRoot(child)
+            }
+          }
+
+          if (!currentParentId) {
+            if (child.$mounted) {
+              if (parent) {
+                component.unregisterRoot(child)
+              }
             }
           }
 
