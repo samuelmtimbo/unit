@@ -26239,6 +26239,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_set_fullwindow_frame_off')
 
     this._unclear_main(animate)
+
+    this._main.$element.style.userSelect = 'auto'
   }
 
   private _clear_component = (
@@ -26298,6 +26300,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_set_fullwindow_frame_on')
 
     this._clear_main(animate)
+
+    this._main.$element.style.userSelect = 'none'
   }
 
   private _fullwindow_focusing: boolean = false
