@@ -778,40 +778,45 @@ export function buildMoveMap(
               undefined
             )
 
-            if (!exposePinSetTask) {
-              exposePinSetTask = newTask([
-                {
-                  in: true,
-                  action: makeExposePinSetAction(type, nextPinId, { ref }),
-                },
-              ])
-
-              addDependency(exposePinSetTask, addUnitTask)
-
-              if (!linkSelected || outerPlugSelected.length === 0) {
-                const exposePinTask = newTask([
+            if (
+              !unit?.[type]?.[pinId].ignored &&
+              !spec?.[`${type}s`]?.[pinId].defaultIgnored
+            ) {
+              if (!exposePinSetTask) {
+                exposePinSetTask = newTask([
                   {
                     in: true,
-                    action: makeExposePinAction(
-                      type,
-                      nextPinId,
-                      nextSubPinId,
-                      subPinSpec
-                    ),
+                    action: makeExposePinSetAction(type, nextPinId, { ref }),
                   },
                 ])
 
-                addDependency(exposePinTask, exposePinSetTask)
+                addDependency(exposePinSetTask, addUnitTask)
+
+                if (!linkSelected || outerPlugSelected.length === 0) {
+                  const exposePinTask = newTask([
+                    {
+                      in: true,
+                      action: makeExposePinAction(
+                        type,
+                        nextPinId,
+                        nextSubPinId,
+                        subPinSpec
+                      ),
+                    },
+                  ])
+
+                  addDependency(exposePinTask, exposePinSetTask)
+                }
+
+                addSetPinDatumTask(nextPinId, exposePinSetTask)
+                addSetPinConstantTasks(nextPinId, exposePinSetTask)
+
+                deepSet_(
+                  targetExposePinSetTasks,
+                  [type, nextPinId],
+                  exposePinSetTask
+                )
               }
-
-              addSetPinDatumTask(nextPinId, exposePinSetTask)
-              addSetPinConstantTasks(nextPinId, exposePinSetTask)
-
-              deepSet_(
-                targetExposePinSetTasks,
-                [type, nextPinId],
-                exposePinSetTask
-              )
             }
 
             forEach(outerPlugNotSelected, (outerPlug) => {
