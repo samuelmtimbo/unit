@@ -249,7 +249,6 @@ import {
   getThemeModeColor,
   themeBackgroundColor,
 } from '../../../../../client/theme'
-import { throttle } from '../../../../../client/throttle'
 import { time } from '../../../../../client/util/date/time'
 import {
   NULL_VECTOR,
@@ -31596,6 +31595,33 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._subgraph.appendChild(graph)
   }
 
+  public uncache_subgraph(unit_id: string) {
+    const { setSpec } = this.$props
+
+    const subgraph = this._subgraph_cache[unit_id]
+
+    if (subgraph) {
+      const node_positions = subgraph.get_node_relative_positions()
+
+      const spec = clone(this._get_unit_spec(unit_id)) as GraphSpec
+
+      this._set_spec_node_positions(spec, subgraph, node_positions)
+
+      setSpec(spec.id, spec)
+
+      if (this._subgraph_unit_id === unit_id) {
+        this._leave_subgraph()
+      }
+
+      this._subgraph.removeChild(subgraph)
+
+      subgraph.destroy()
+    }
+
+    delete this._subgraph_cache[unit_id]
+    delete this._subgraph_pod_cache[unit_id]
+  }
+
   private _in_component_control: boolean = false
 
   public _take_component_control = (): void => {
@@ -32155,6 +32181,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._compose_sub_component(unit_id)
         }
       }
+
+      this.uncache_subgraph(unit_id)
 
       if (this._subgraph_return_fullwindow) {
         this._enter_fullwindow(
@@ -42839,17 +42867,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const core_graph = this._subgraph_cache[unit_id]
 
     if (core_graph) {
-      if (this._subgraph_unit_id === unit_id) {
-        this._leave_subgraph()
-      }
-
-      this._subgraph.removeChild(core_graph)
-
-      core_graph.destroy()
+      this.uncache_subgraph(unit_id)
     }
-
-    delete this._subgraph_cache[unit_id]
-    delete this._subgraph_pod_cache[unit_id]
 
     delete this._unit_node[unit_id]
 
@@ -55812,10 +55831,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this.dispatchEvent('simulationend')
 
-    this._throttled_pod_sync_position_metadata()
+    this._debounce_pod_sync_position_metadata()
   }
 
-  private _throttled_pod_sync_position_metadata = throttle(
+  private _debounce_pod_sync_position_metadata = debounce(
     this.$system,
     () => {
       this._pod_sync_position_metadata()
