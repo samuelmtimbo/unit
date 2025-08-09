@@ -896,16 +896,45 @@ export function evalBulkEdit(
     }
 
     if (action.type === ADD_UNIT) {
-      let { bundle } = action.data
+      let { unitId, bundle } = action.data as GraphAddUnitData
 
       const { unit } = bundle as UnitBundleSpec
 
       const specs_ = weakMerge(specs, bundle.specs ?? {})
 
-      bundle = unitBundleSpec(
-        { id: bundle.unit.id },
-        weakMerge(specs, bundle.specs ?? {})
-      )
+      const { id } = unit
+
+      if (!specs[id] && !bundle.specs?.[id]) {
+        bundle.specs = bundle.specs ?? {}
+
+        const spec = {
+          name: `${unitId}`,
+          id,
+          inputs: {},
+          outputs: {},
+        }
+
+        const { input = {}, output = {} } = unit
+
+        for (const name in input) {
+          spec.inputs[name] = {
+            plug: {
+              '0': {},
+            },
+          }
+        }
+        for (const name in output) {
+          spec.outputs[name] = {
+            plug: {
+              '0': {},
+            },
+          }
+        }
+
+        bundle.specs[id] = spec
+      }
+
+      bundle = unitBundleSpec({ id }, weakMerge(specs, bundle.specs ?? {}))
 
       evaluateGraphUnitSpec(unit, specs_, classes)
 
