@@ -7867,6 +7867,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           top: '0',
           width: '100%',
           height: '100%',
+          userSelect: userSelect('all'),
         },
       },
       this.$system
