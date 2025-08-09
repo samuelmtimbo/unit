@@ -16767,7 +16767,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._pointer_last_moved[pointerId] = time()
     this._pointer_position[pointerId] = { x: clientX, y: clientY }
 
-    this._refresh_pointer_hover(pointerId)
+    // this._refresh_pointer_hover(pointerId)
   }
 
   private _on_pointer_cancel = (event: UnitPointerEvent) => {
