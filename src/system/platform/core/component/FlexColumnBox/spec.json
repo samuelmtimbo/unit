@@ -17,7 +17,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{display:'flex',flexDirection:'column',overflow:'auto',height:'100%',width:'100%'}"
+          "data": "{display:'flex',flexDirection:'column',height:'100%',width:'100%'}"
         }
       },
       "output": {
