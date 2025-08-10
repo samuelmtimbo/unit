@@ -58189,6 +58189,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const slot_name = data.slotMap?.[child_id] ?? 'default'
         const prev_parent_id = data.prevParentIdMap?.[child_id] ?? null
 
+        if (this._is_fullwindow) {
+          this._decouple_sub_component(child_id)
+        }
+
         this._pull_sub_component(child_id)
 
         this._state_pre_append_sub_component_child(
