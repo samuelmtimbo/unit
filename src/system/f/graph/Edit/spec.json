@@ -1,0 +1,21 @@
+{
+  "name": "edit",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "action": {
+      "type": "{type:string,data:object}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "execute one action on `graph`",
+    "tags": ["f", "graph"]
+  },
+  "id": "6364c619-778c-43b6-b574-d475f758aeea",
+  "base": true,
+  "type": "`U`"
+}
