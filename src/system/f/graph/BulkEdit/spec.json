@@ -12,7 +12,7 @@
   "outputs": {},
   "metadata": {
     "icon": "circle",
-    "description": "add `subgraph` spec with `id` unit `type` `name` pin `data`",
+    "description": "execute a sequence of actions on `graph`",
     "tags": ["f", "graph"]
   },
   "id": "2fcdd937-62b4-4601-b972-196144d3ab33",
