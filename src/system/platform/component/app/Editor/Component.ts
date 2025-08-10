@@ -19689,8 +19689,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._spec_get_sub_component_parent_root_index(sub_component_id)
 
       this._couple_sub_component(sub_component_id, at)
-    }
-    if (this._tree_layout) {
+    } else if (this._tree_layout) {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
 
       if (!parent_id || this._is_layout_parent_visible(sub_component_id)) {
