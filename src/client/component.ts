@@ -1188,6 +1188,14 @@ export class Component<
       return
     }
 
+    for (let i = 0; i < this._svg_wrapper.length; i++) {
+      const svg = this._svg_wrapper[i]
+      const mirror = this._svg_wrapper_mirror[i]
+      const element = this._svg_wrapper_element[i]
+
+      this._svg_view_box_resize(svg, mirror, element)
+    }
+
     this.onMount()
 
     this._forAllMountDescendent((child) => {
@@ -1669,6 +1677,8 @@ export class Component<
   }
 
   private _svg_wrapper: SVGSVGElement[] = []
+  private _svg_wrapper_mirror: SVGElement[] = []
+  private _svg_wrapper_element: Element[] = []
   private _html_wrapper: SVGForeignObjectElement[] = []
 
   private _svgWrapper(): SVGSVGElement {
@@ -2834,6 +2844,101 @@ export class Component<
 
   public $wrapElement: HTMLElement | SVGElement
 
+  private _svg_view_box_resize = (
+    svg: SVGSVGElement,
+    mirror,
+    $element: Element
+  ) => {
+    if (!$element.isConnected) {
+      const oldViewBox = $element.getAttribute('data-viewbox')
+
+      if (oldViewBox) {
+        svg.setAttribute('viewBox', oldViewBox)
+
+        return
+      }
+    }
+
+    function parseTransformMatrix(matrixString: string) {
+      if (!matrixString || matrixString === 'none') {
+        return [1, 0, 0, 1, 0, 0]
+      }
+
+      return matrixString
+        .replace('matrix(', '')
+        .replace(')', '')
+        .split(',')
+        .map(parseFloat)
+    }
+
+    function applyMatrixToPoint(matrix: number[], x: number, y: number) {
+      const [a, b, c, d, e, f] = matrix
+
+      const newX = a * x + c * y + e
+      const newY = b * x + d * y + f
+
+      return { x: newX, y: newY }
+    }
+
+    function getTransformedRect(
+      element: HTMLElement | SVGElement,
+      rect: Rect
+    ): Rect {
+      if (!element.isConnected) {
+        return rect
+      }
+
+      const matrixString = getComputedStyle(element).transform
+      const matrix = parseTransformMatrix(matrixString)
+
+      const topLeft = applyMatrixToPoint(matrix, rect.x, rect.y)
+      const topRight = applyMatrixToPoint(matrix, rect.x + rect.width, rect.y)
+      const bottomLeft = applyMatrixToPoint(
+        matrix,
+        rect.x,
+        rect.y + rect.height
+      )
+      const bottomRight = applyMatrixToPoint(
+        matrix,
+        rect.x + rect.width,
+        rect.y + rect.height
+      )
+
+      const xCoords = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]
+      const yCoords = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]
+
+      const maxX = Math.max(...xCoords)
+      const maxY = Math.max(...yCoords)
+      const minX = Math.min(...xCoords)
+      const minY = Math.min(...yCoords)
+
+      return {
+        x: minX,
+        y: minY,
+        width: maxX - minX,
+        height: maxY - minY,
+      }
+    }
+
+    const strokeWidth =
+      parseLayoutValue(
+        ($element as SVGElement).style.strokeWidth ??
+          ($element as SVGElement).getAttribute('stroke-width') ??
+          '3px'
+      )[0] + 3
+
+    const rect = mirror.getBoundingClientRect()
+    const tRect = getTransformedRect($element as SVGElement, rect)
+
+    const { x, y, width, height } = tRect
+
+    const viewBox = `${x - strokeWidth} ${y - strokeWidth} ${width + 2 * strokeWidth} ${height + 2 * strokeWidth}`
+
+    $element.setAttribute('data-viewbox', viewBox)
+
+    svg.setAttribute('viewBox', viewBox)
+  }
+
   private _wrapElement = (
     parent: Component,
     child: Component<HTMLElement | SVGElement>
@@ -2873,33 +2978,7 @@ export class Component<
       mirror.style.visibility = 'hidden'
 
       const resize = () => {
-        if (!$element.isConnected) {
-          const oldViewBox = $element.getAttribute('data-viewbox')
-
-          if (oldViewBox) {
-            svg.setAttribute('viewBox', oldViewBox)
-
-            return
-          }
-        }
-
-        const strokeWidth =
-          parseLayoutValue(
-            ($element as SVGElement).style.strokeWidth ??
-              ($element as SVGElement).getAttribute('stroke-width') ??
-              '3px'
-          )[0] + 3
-
-        const rect = mirror.getBoundingClientRect()
-        const tRect = getTransformedRect($element as SVGElement, rect)
-
-        const { x, y, width, height } = tRect
-
-        const viewBox = `${x - strokeWidth} ${y - strokeWidth} ${width + 2 * strokeWidth} ${height + 2 * strokeWidth}`
-
-        $element.setAttribute('data-viewbox', viewBox)
-
-        svg.setAttribute('viewBox', viewBox)
+        this._svg_view_box_resize(svg, mirror, $element)
       }
 
       resize()
@@ -2930,67 +3009,6 @@ export class Component<
       })
 
       observer.observe($element, config)
-
-      function parseTransformMatrix(matrixString: string) {
-        if (!matrixString || matrixString === 'none') {
-          return [1, 0, 0, 1, 0, 0]
-        }
-
-        return matrixString
-          .replace('matrix(', '')
-          .replace(')', '')
-          .split(',')
-          .map(parseFloat)
-      }
-
-      function applyMatrixToPoint(matrix: number[], x: number, y: number) {
-        const [a, b, c, d, e, f] = matrix
-
-        const newX = a * x + c * y + e
-        const newY = b * x + d * y + f
-
-        return { x: newX, y: newY }
-      }
-
-      function getTransformedRect(
-        element: HTMLElement | SVGElement,
-        rect: Rect
-      ): Rect {
-        if (!element.isConnected) {
-          return rect
-        }
-
-        const matrixString = getComputedStyle(element).transform
-        const matrix = parseTransformMatrix(matrixString)
-
-        const topLeft = applyMatrixToPoint(matrix, rect.x, rect.y)
-        const topRight = applyMatrixToPoint(matrix, rect.x + rect.width, rect.y)
-        const bottomLeft = applyMatrixToPoint(
-          matrix,
-          rect.x,
-          rect.y + rect.height
-        )
-        const bottomRight = applyMatrixToPoint(
-          matrix,
-          rect.x + rect.width,
-          rect.y + rect.height
-        )
-
-        const xCoords = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]
-        const yCoords = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]
-
-        const maxX = Math.max(...xCoords)
-        const maxY = Math.max(...yCoords)
-        const minX = Math.min(...xCoords)
-        const minY = Math.min(...yCoords)
-
-        return {
-          x: minX,
-          y: minY,
-          width: maxX - minX,
-          height: maxY - minY,
-        }
-      }
 
       let transitionCount = child.$animationCount
 
@@ -3041,6 +3059,8 @@ export class Component<
       $element.addEventListener('animationstend', onTransitionEnd)
 
       this._svg_wrapper.push(target as SVGSVGElement)
+      this._svg_wrapper_element.push($element)
+      this._svg_wrapper_mirror.push(mirror)
       this._svg_wrapper_unlisten.push(() => {
         observer.disconnect()
 
@@ -3082,6 +3102,8 @@ export class Component<
       target = this._svg_wrapper[at]
 
       this._svg_wrapper.splice(at, 1)
+      this._svg_wrapper_mirror.splice(at, 1)
+      this._svg_wrapper_element.splice(at, 1)
 
       this._svg_wrapper_unlisten[at]()
       this._svg_wrapper_unlisten.splice(at, 1)
