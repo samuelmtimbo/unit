@@ -35183,7 +35183,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const sub_component = this._get_sub_component(sub_component_id)
 
-    if (this.$mountRoot.includes(sub_component)) {
+    if (this._component.$mountRoot.includes(sub_component)) {
       this._component.removeRoot(sub_component)
     }
   }
