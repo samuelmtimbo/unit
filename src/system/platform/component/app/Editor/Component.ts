@@ -58592,6 +58592,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           } else {
             component.registerRoot(child)
           }
+
+          i++
         }
       }
 
