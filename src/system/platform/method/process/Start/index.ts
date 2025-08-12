@@ -7,6 +7,7 @@ import { GraphBundle } from '../../../../../types/GraphClass'
 import { GraphSpec } from '../../../../../types/GraphSpec'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
+import { Async } from '../../../../../types/interface/async/Async'
 import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { weakMerge } from '../../../../../weakMerge'
 import { $wrap } from '../../../../../wrap'
@@ -53,6 +54,8 @@ export default class Start extends Holder<I, O> {
   }
 
   f({ graph: Graph, system, opt }: I, done: Done<O>): void {
+    system = Async(system, ['S'], this.__system.async)
+
     const { paused } = opt || {}
 
     const { __bundle } = Graph
