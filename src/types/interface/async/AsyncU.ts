@@ -28,6 +28,12 @@ import { Async } from './Async'
 
 export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
   return {
+    $getSpec(data, callback) {
+      const spec = unit.getSpec()
+
+      callback(spec)
+    },
+
     $paused(data: {}, callback: Callback<boolean>): void {
       const paused = unit.paused()
 

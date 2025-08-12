@@ -1,12 +1,14 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Unit } from '../../../../Class/Unit'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { Spec } from '../../../../types'
+import { $U } from '../../../../types/interface/async/$U'
+import { Async } from '../../../../types/interface/async/Async'
 import { ID_SPEC } from '../../../_ids'
 
 export interface I<T> {
-  unit: Unit
+  unit: $U
 }
 
 export interface O<T> {
@@ -32,11 +34,17 @@ export default class _Spec<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit }: I<T>, done: Done<O<T>>): void {
-    const spec = unit.getSpec()
+  f({ unit }: I<T>, done: Done<O<T>>, fail: Fail): void {
+    unit = Async(unit, ['U'], this.__system.async)
 
-    done({
-      spec,
+    unit.$getSpec({}, (spec, err) => {
+      if (err) {
+        fail(err)
+
+        return
+      }
+
+      done({ spec })
     })
   }
 }

@@ -3,6 +3,8 @@ import { Memory } from './Memory'
 
 export type UnitGetGlobalIdData = {}
 
+export type UnitGetSpecData = {}
+
 export type UnitDestroyData = {}
 
 export type UnitPlayData = {}

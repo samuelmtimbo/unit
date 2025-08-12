@@ -1,9 +1,11 @@
+import { Spec } from '../..'
 import {
   UnitDestroyData,
   UnitGetAllInputDataData,
   UnitGetAllPinDataData,
   UnitGetAllRefInputDataData,
   UnitGetPinDataData,
+  UnitGetSpecData,
   UnitGetUnitBundleSpecData,
   UnitPauseData,
   UnitPlayData,
@@ -24,6 +26,7 @@ import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 
 export const U_METHOD_GET = [
+  'getSpec',
   'getPinData',
   'getAllPinData',
   'getAllInputData',
@@ -50,6 +53,7 @@ export const U_METHOD_WATCH = ['watch']
 export const U_METHOD_REF = ['refGlobalObj']
 
 export interface $U_G {
+  $getSpec(data: UnitGetSpecData, callback: Callback<Spec>): void
   $paused(data: UnitPauseData, callback: Callback<boolean>): void
   $getPinData(data: UnitGetPinDataData, callback: (data: any) => void): void
   $getAllPinData(
