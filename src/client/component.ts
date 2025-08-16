@@ -671,7 +671,7 @@ export class Component<
           name: leaf.$element.nodeName,
           attr: extractAttr(leaf.$element),
           style: rawExtractStyle(leaf.$element, trait, measureText),
-          textContent: extractTextContent(leaf.$element),
+          textContent: extractTextContent(leaf),
         },
         children: [],
       })),

@@ -37,7 +37,8 @@ export const style = {
   },
   textarea: {
     width: '100%',
-    height: '100%',
+    height: 'fit-content',
+    fieldSizing: 'content',
     textAlign: 'left',
     wordWrap: 'break-word',
     wordBreak: 'break-word',
