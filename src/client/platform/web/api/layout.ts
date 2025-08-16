@@ -22,6 +22,7 @@ import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
+import { setNodeApparentTextContent } from '../../../util/style/setNodeApparentTextContent'
 
 export const LENGTH_STYLE_PROP_NAMES = [
   'width',
@@ -185,7 +186,7 @@ const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
   applyStyle(element, style)
 
   if (textContent) {
-    container.textContent = textContent
+    setNodeApparentTextContent(container, textContent)
   }
 
   if (isText) {

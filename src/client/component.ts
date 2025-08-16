@@ -56,6 +56,7 @@ import { parseLayoutValue } from './parseLayoutValue'
 import { rawExtractStyle } from './rawExtractStyle'
 import { stopImmediatePropagation, stopPropagation } from './stopPropagation'
 import { applyStyle } from './style'
+import { extractTextContent } from './textContent'
 import { unmount } from './unmount'
 import { addVector, rectsBoundingRect } from './util/geometry'
 import { Rect } from './util/geometry/types'
@@ -667,10 +668,10 @@ export class Component<
       },
       children: leaves.map((leaf) => ({
         value: {
-          name: (leaf.$element as Node).nodeName,
+          name: leaf.$element.nodeName,
           attr: extractAttr(leaf.$element),
           style: rawExtractStyle(leaf.$element, trait, measureText),
-          textContent: (leaf.$element as Node).textContent,
+          textContent: extractTextContent(leaf.$element),
         },
         children: [],
       })),
