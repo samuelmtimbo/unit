@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { ID_DELETE } from '../../../_ids'
@@ -27,7 +28,7 @@ export default class Delete<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ obj, key }: I<T>, done): void {
+  f({ obj, key }: I<T>, done: Done<O<T>>): void {
     done({ obj: _dissoc(obj, key) })
   }
 }

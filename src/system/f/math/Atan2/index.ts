@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_ATAN2 } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Atan2<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ x, y }: I<T>, done): void {
+  f({ x, y }: I<T>, done: Done<O<T>>): void {
     done({ rad: Math.atan2(x, y) })
   }
 }

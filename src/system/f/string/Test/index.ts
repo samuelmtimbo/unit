@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_TEST } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Test<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ str, regex }: Partial<I<T>>, done): void {
+  f({ str, regex }: Partial<I<T>>, done: Done<O<T>>): void {
     const regex_ = new RegExp(regex)
 
     const match = regex_.test(str)

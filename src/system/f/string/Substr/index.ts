@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_SUBSTRING } from '../../../_ids'
 
@@ -25,7 +26,7 @@ export default class Substring extends Functional<I, O> {
     )
   }
 
-  f({ a, from, length }: I, done): void {
+  f({ a, from, length }: I, done: Done<O>): void {
     done({ a: a.substring(from, from + length) })
   }
 }

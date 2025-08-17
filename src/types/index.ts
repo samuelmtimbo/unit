@@ -2,7 +2,7 @@ import {
   DatumNodeSpec,
   ErrNodeSpec,
   MergeNodeSpec,
-  PinNodeSpec as PinNodeSpec,
+  PinNodeSpec,
   PlugNodeSpec,
   UnitNodeSpec,
 } from '../Class/Graph/buildMoveMap'

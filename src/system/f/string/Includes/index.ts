@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_INCLUDES_1 } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Includes<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ str, search }: Partial<I<T>>, done): void {
+  f({ str, search }: Partial<I<T>>, done: Done<O<T>>): void {
     const test = str.includes(search)
 
     done({ test })

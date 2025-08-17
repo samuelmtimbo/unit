@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_PI } from '../../../_ids'
 
@@ -7,7 +8,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  pi: number
+  PI: number
 }
 
 export default class PI<T> extends Functional<I<T>, O<T>> {
@@ -23,7 +24,7 @@ export default class PI<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ any }: I<T>, done): void {
+  f({ any }: I<T>, done: Done<O<T>>): void {
     done({ PI: Math.PI })
   }
 }

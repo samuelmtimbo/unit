@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_INSERT } from '../../../_ids'
 
@@ -25,7 +26,7 @@ export default class Insert<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a, i, b }: I<T>, done): void {
+  f({ a, i, b }: I<T>, done: Done<O<T>>): void {
     const _a = [...a]
 
     _a.splice(i, 0, b)

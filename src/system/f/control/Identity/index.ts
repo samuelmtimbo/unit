@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_IDENTITY } from '../../../_ids'
 
@@ -23,7 +24,7 @@ export default class Identity<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a }: Partial<I<T>>, done): void {
+  f({ a }: Partial<I<T>>, done: Done<O<T>>): void {
     done({ a })
   }
 }

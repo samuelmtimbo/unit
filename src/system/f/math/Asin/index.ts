@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_ASIN } from '../../../_ids'
 
@@ -23,7 +24,7 @@ export default class Asin<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ x }: I<T>, done): void {
+  f({ x }: I<T>, done: Done<O<T>>): void {
     done({ rad: Math.asin(x) })
   }
 }

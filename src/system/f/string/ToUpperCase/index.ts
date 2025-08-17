@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_TO_UPPER_CASE } from '../../../_ids'
 
@@ -23,7 +24,7 @@ export default class ToUpperCase extends Functional<I, O> {
     )
   }
 
-  f({ a }: I, done): void {
+  f({ a }: I, done: Done<O>): void {
     done({ A: a.toUpperCase() })
   }
 }

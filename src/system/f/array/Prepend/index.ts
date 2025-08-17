@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_PREPEND } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Prepend<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a, b }: I<T>, done): void {
+  f({ a, b }: I<T>, done: Done<O<T>>): void {
     done({ a: [b, ...a] })
   }
 }

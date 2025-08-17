@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_CONCAT } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Concat<A, B> extends Functional<I<A, B>, O<A, B>> {
     )
   }
 
-  f({ a, b }: I<A, B>, done): void {
+  f({ a, b }: I<A, B>, done: Done<O<A, B>>): void {
     done({ ab: a.concat(b as any) })
   }
 }

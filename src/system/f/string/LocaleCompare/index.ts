@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_LOCALE_COMPARE } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class LocaleCompare extends Functional<I, O> {
     )
   }
 
-  f({ a, b }: I, done): void {
+  f({ a, b }: I, done: Done<O>): void {
     const a_before_b = b.localeCompare(a) === 1
 
     done({ 'a < b': a_before_b })

@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_SLICE } from '../../../_ids'
 import slice from './f'
@@ -26,7 +27,7 @@ export default class Slice<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f(i: I<T>, done): void {
+  f(i: I<T>, done: Done<O<T>>): void {
     done(slice(i))
   }
 }

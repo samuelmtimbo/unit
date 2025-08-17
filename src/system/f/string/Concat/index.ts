@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_CONCAT_0 } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Concat extends Functional<I, O> {
     )
   }
 
-  f({ a, b }: I, done): void {
+  f({ a, b }: I, done: Done<O>): void {
     done({ ab: a + b })
   }
 }

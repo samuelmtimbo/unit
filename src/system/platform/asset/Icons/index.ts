@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { ID_ICONS } from '../../../_ids'
@@ -24,7 +25,7 @@ export default class Icons<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ any }: I<T>, done): void {
+  f({ any }: I<T>, done: Done<O<T>>): void {
     const { icons } = this.__system
 
     done({ icons })

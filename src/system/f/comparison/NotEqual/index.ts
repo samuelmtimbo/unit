@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_NOT_EQUAL } from '../../../_ids'
 import isEqual from '../Equals/f'
@@ -25,7 +26,7 @@ export default class NotEqual<T> extends Functional<I<T>, O> {
     )
   }
 
-  f({ a, b }: I<T>, done): void {
+  f({ a, b }: I<T>, done: Done<O>): void {
     done({
       'a ≠ b': !isEqual(a, b),
     })

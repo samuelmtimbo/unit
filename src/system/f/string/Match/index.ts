@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { ID_MATCH } from '../../../_ids'
@@ -30,7 +31,7 @@ export default class Match extends Functional<I, O> {
     )
   }
 
-  f({ str, regex }: I, done): void {
+  f({ str, regex }: I, done: Done<O>): void {
     const results = str.match(new RegExp(regex))
 
     if (!results) {

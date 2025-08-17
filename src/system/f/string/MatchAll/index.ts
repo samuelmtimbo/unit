@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_MATCH_ALL } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class MatchAll extends Functional<I, O> {
     )
   }
 
-  f({ str, regex }: I, done): void {
+  f({ str, regex }: I, done: Done<O>): void {
     const result: IterableIterator<RegExpExecArray> = str.matchAll(
       new RegExp(regex, 'g')
     )

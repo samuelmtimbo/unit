@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_JOIN } from '../../../_ids'
 
@@ -24,7 +25,7 @@ export default class Join extends Functional<I, O> {
     )
   }
 
-  f({ a, sep }: I, done): void {
+  f({ a, sep }: I, done: Done<O>): void {
     const str = a.join(sep)
     done({ str })
   }

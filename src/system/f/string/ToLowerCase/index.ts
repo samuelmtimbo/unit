@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_TO_LOWER_CASE } from '../../../_ids'
 
@@ -23,7 +24,7 @@ export default class ToLowerCase extends Functional<I, O> {
     )
   }
 
-  f({ A }: I, done): void {
+  f({ A }: I, done: Done<O>): void {
     done({ a: A.toLowerCase() })
   }
 }

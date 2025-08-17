@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_NOW } from '../../../_ids'
 
@@ -23,7 +24,7 @@ export default class Now<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ any }: Partial<I<T>>, done): void {
+  f({ any }: Partial<I<T>>, done: Done<O<T>>): void {
     done({ now: new Date().getTime() })
   }
 }

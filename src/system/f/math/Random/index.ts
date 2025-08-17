@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_RANDOM } from '../../../_ids'
 
@@ -23,7 +24,7 @@ export default class Random<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a }: I<T>, done): void {
+  f({ a }: I<T>, done: Done<O<T>>): void {
     done({ random: Math.random() })
   }
 }

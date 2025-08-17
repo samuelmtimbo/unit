@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { ID_VALUES } from '../../../_ids'
@@ -24,7 +25,7 @@ export default class Values<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ obj }: I<T>, done): void {
+  f({ obj }: I<T>, done: Done<O<T>>): void {
     done({ values: Object.values(obj) })
   }
 }

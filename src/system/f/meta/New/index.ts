@@ -1,3 +1,4 @@
+import { Done } from '../../../../Class/Functional/Done'
 import { Holder } from '../../../../Class/Holder'
 import { Unit } from '../../../../Class/Unit'
 import { System } from '../../../../system'
@@ -34,7 +35,7 @@ export default class New<T> extends Holder<I<T>, O<T>> {
     )
   }
 
-  f({ class: Class }: I<T>, done): void {
+  f({ class: Class }: I<T>, done: Done<O<T>>): void {
     const unit = new Class(this.__system)
 
     unit.play()

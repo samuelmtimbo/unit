@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_IF } from '../../../_ids'
 
@@ -24,8 +25,7 @@ export default class If<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ a, b }: I<T>, done): void {
-    // console.log('If', 'f')
+  f({ a, b }: I<T>, done: Done<O<T>>): void {
     if (b === true) {
       done({ 'a if b': a })
     } else {
