@@ -7,6 +7,7 @@ import { fromBundle } from '../../../../../spec/fromBundle'
 import { fromSpec } from '../../../../../spec/fromSpec'
 import { emptySpec, newSpecId } from '../../../../../spec/util'
 import { System } from '../../../../../system'
+import { GraphNodeSpec } from '../../../../../types'
 import { BundleSpec } from '../../../../../types/BundleSpec'
 import { Dict } from '../../../../../types/Dict'
 import { G } from '../../../../../types/interface/G'
@@ -97,6 +98,18 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           },
           set zoom(zoom: Zoom) {
             component.setZoom(zoom)
+          },
+          get selected(): GraphNodeSpec[] {
+            return component.getSelectedNodes()
+          },
+          set selected(selected: GraphNodeSpec[]) {
+            component.setSelectedNodes(selected)
+          },
+          get path() {
+            return component.getSubgraphPath()
+          },
+          set path(path: string[]) {
+            component.setSubgraphPath(path)
           },
         },
         this.__system

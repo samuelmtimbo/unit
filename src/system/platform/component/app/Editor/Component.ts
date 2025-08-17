@@ -1,10 +1,13 @@
 import { Graph } from '../../../../../Class/Graph'
 import {
-  LinkNodeSpec,
+  DatumNodeSpec,
+  ErrNodeSpec,
   MergeNodeSpec,
   MoveMap,
   MoveMapping,
+  PinNodeSpec,
   PlugNodeSpec,
+  UnitNodeSpec,
   buildFullGraphSelection,
   buildMoveMap,
 } from '../../../../../Class/Graph/buildMoveMap'
@@ -633,12 +636,19 @@ import {
   DatumSpec,
   GraphComponentSpec,
   GraphDataSpec,
+  GraphDatumNodeSpec,
+  GraphErrNodeSpec,
+  GraphMergeNodeSpec,
   GraphNodeSpec,
+  GraphPinNodeSpec,
   GraphPinsSpec,
+  GraphPlugNodeSpec,
   GraphPlugOuterSpec,
   GraphSubComponentSpec,
   GraphSubPinSpec,
   GraphUnitMetadataSpec,
+  GraphUnitNodeSpec,
+  NodeSpec,
   PinSpec,
   PinsSpecBase,
   Spec,
@@ -1742,6 +1752,22 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   public setZoom(zoom: Zoom): void {
     return this._editor.setZoom(zoom)
+  }
+
+  public getSelectedNodes(): GraphNodeSpec[] {
+    return this._editor.getSelectedNodes()
+  }
+
+  public setSelectedNodes(nodes: GraphNodeSpec[]): void {
+    this._editor.setSelectedNodes(nodes)
+  }
+
+  public getSubgraphPath(): string[] {
+    return this._editor.getSubgraphPath()
+  }
+
+  public setSubgraphPath(path: string[]): string[] {
+    return this._editor.setSubgraphPath(path)
   }
 }
 
@@ -6226,6 +6252,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   public getZoom = (): Zoom => {
+    if (this._subgraph_graph) {
+      return this._subgraph_graph.getZoom()
+    }
+
     return this._zoom
   }
 
@@ -23338,27 +23368,36 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     dispatchEvent('nodepointerenter', this._get_node_spec(node_id), false)
   }
 
-  private _get_node_spec = (node_id: string) => {
+  private _get_node_spec = (node_id: string): GraphNodeSpec => {
     return this._node_type__template(node_id, {
       unit: function (unit_id: string) {
-        return { type: 'unit', spec: node_id }
+        return { type: 'unit', spec: { unitId: unit_id } } as GraphUnitNodeSpec
       },
       link: function (pin_node_id: string) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        return { type: 'link', spec: { unitId, type, pinId } }
+        return {
+          type: 'pin',
+          spec: { unitId, type, pinId },
+        } as GraphPinNodeSpec
       },
       merge: function (merge_node_id: string) {
         const { mergeId } = segmentMergeNodeId(merge_node_id)
 
-        return { type: 'merge', spec: mergeId }
+        return { type: 'merge', spec: { mergeId } } as GraphMergeNodeSpec
       },
       plug: function (plug_node_id: string) {
         const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
-        return { type: 'plug', spec: { type, pinId, subPinId } }
+        return {
+          type: 'plug',
+          spec: { type, pinId, subPinId },
+        } as GraphPlugNodeSpec
       },
       datum: (datum_node_id: string) => {
+        const { classes } = this.$system
+        const { specs } = this.$props
+
         const { datumId } = segmentDatumNodeId(datum_node_id)
 
         const { datum_pin_node_id, datum_plug_node_id } =
@@ -23372,19 +23411,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const value = this._get_datum_value(datum_node_id) ?? null
 
-        return { type: 'datum', spec: { datumId, value, attachedTo } }
+        const dataRef = evaluateDataValue(value, specs, classes)
+
+        return {
+          type: 'datum',
+          spec: { datumId, value: dataRef, attachedTo },
+        } as GraphDatumNodeSpec
       },
       err: function (err_node_id: string) {
         const { unitId } = segmentErrNodeId(err_node_id)
 
-        return { type: 'err', spec: unitId }
+        return { type: 'err', spec: { unitId } } as GraphErrNodeSpec
       },
     })
   }
 
-  private _node_spec_to_node_id = (node_spec: GraphNodeSpec) => {
-    if ((node_spec as LinkNodeSpec).unitId) {
-      const { unitId, type, pinId } = node_spec as LinkNodeSpec
+  private _node_spec_to_node_id = (node_spec: NodeSpec) => {
+    if ((node_spec as PinNodeSpec).unitId) {
+      const { unitId, type, pinId } = node_spec as PinNodeSpec
 
       return getPinNodeId(unitId, type, pinId)
     } else if ((node_spec as MergeNodeSpec).mergeId) {
@@ -23398,42 +23442,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _spec_to_node_id = (node_spec: { type: string; spec: any }) => {
+  private _spec_to_node_id = (node_spec: GraphNodeSpec) => {
     const { type, spec } = node_spec
 
     return {
-      unit: function (unitId: string) {
+      unit: function ({ unitId }: UnitNodeSpec) {
         return unitId
       },
-      link: function ({
-        unitId,
-        type,
-        pinId,
-      }: {
-        unitId: string
-        type: IO
-        pinId: string
-      }) {
+      link: function ({ unitId, type, pinId }: PinNodeSpec) {
         return getPinNodeId(unitId, type, pinId)
       },
-      merge: function (mergeId: string) {
+      merge: function ({ mergeId }: MergeNodeSpec) {
         return getMergeNodeId(mergeId)
       },
-      plug: function ({
-        type,
-        pinId,
-        subPinId,
-      }: {
-        type: IO
-        pinId: string
-        subPinId: string
-      }) {
+      plug: function ({ type, pinId, subPinId }: PlugNodeSpec) {
         return getExtNodeId(type, pinId, subPinId)
       },
-      datum: (datumId: string) => {
+      datum: function ({ datumId }: DatumNodeSpec) {
         return getDatumNodeId(datumId)
       },
-      err: function (unitId: string) {
+      err: function ({ unitId }: ErrNodeSpec) {
         return getErrNodeId(unitId)
       },
     }[type](spec)
@@ -25178,6 +25206,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     return []
+  }
+
+  public setSubgraphPath(path: string[]): string[] {
+    if (path.length === 0) {
+      return
+    }
+
+    const [unitId, ...rest] = path
+
+    if (this._subgraph_unit_id) {
+      if (this._subgraph_unit_id !== unitId) {
+        this._leave_subgraph()
+      } else {
+        //
+      }
+    } else {
+      this._enter_subgraph(unitId)
+    }
+
+    this._subgraph_graph.setSubgraphPath(path)
   }
 
   public getSubgraphAtPath(path: string[]): Editor_ {
@@ -36477,6 +36525,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //
   }
 
+  public getSelectedNodes(): GraphNodeSpec[] {
+    const all_selected_node_ids = this._get_all_selected_node_ids()
+
+    const selected_node_specs = all_selected_node_ids.map((node_id) =>
+      this._get_node_spec(node_id)
+    )
+
+    return selected_node_specs
+  }
+
+  public setSelectedNodes(selected: GraphNodeSpec[]): void {
+    const node_ids = selected.map((node_spec) =>
+      this._spec_to_node_id(node_spec)
+    )
+
+    for (const node_id of node_ids) {
+      this._select_node(node_id)
+    }
+  }
+
   private _get_all_selected_node_ids = () => {
     return keys(this._selected_node_id)
   }
@@ -39775,7 +39843,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._sim_remove_pin_set_data(type, pinId)
   }
 
-  private _node_id_to_node_spec = (pin_node_id: string): GraphNodeSpec => {
+  private _node_id_to_node_spec = (pin_node_id: string): NodeSpec => {
     if (this._is_merge_node_id(pin_node_id)) {
       const { mergeId } = segmentMergeNodeId(pin_node_id)
 
@@ -39810,7 +39878,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const value = this._get_datum_value(datum_node_id)
 
-    const pin_node_spec: GraphNodeSpec = this._node_id_to_node_spec(pin_node_id)
+    const pin_node_spec: NodeSpec = this._node_id_to_node_spec(pin_node_id)
 
     if (this._is_link_pin_node_id(pin_node_id)) {
       const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
@@ -54275,7 +54343,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       case SET_NAME:
         {
           const { name } = data as GraphSetNameMomentData
-          
+
           this._spec_set_name(name)
         }
         break

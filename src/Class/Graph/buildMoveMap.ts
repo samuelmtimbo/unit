@@ -1,5 +1,6 @@
 import { unitBundleSpec } from '../../bundle'
 import { getExtNodeId, getMergeNodeId } from '../../client/id'
+import { DataRef } from '../../DataRef'
 import { deepDefault_ } from '../../deepDefault'
 import { deepSet_ } from '../../deepSet'
 import { makeMoveSubComponentRootAction } from '../../spec/actions/C'
@@ -66,7 +67,12 @@ import {
 } from '../../spec/util/spec'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import { keys } from '../../system/f/object/Keys/f'
-import { GraphPlugOuterSpec, GraphSubPinSpec, Specs } from '../../types'
+import {
+  GraphNodeSpec,
+  GraphPlugOuterSpec,
+  GraphSubPinSpec,
+  Specs,
+} from '../../types'
 import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
@@ -86,17 +92,19 @@ import {
 } from '../../util/object'
 import { Moves } from './buildMoves'
 
-export type LinkNodeSpec = {
+export type PinNodeSpec = {
   unitId: string
   type: IO
   pinId: string
 }
+
 export type PlugNodeSpec = {
   type: IO
   pinId: string
   subPinId: string
   template?: boolean
 }
+
 export type UnitNodeSpec = {
   unitId: string
   component?: {
@@ -108,8 +116,19 @@ export type UnitNodeSpec = {
     slot?: string
   }
 }
+
 export type MergeNodeSpec = {
   mergeId: string
+}
+
+export type DatumNodeSpec = {
+  datumId: string
+  value: DataRef
+  attachedTo: GraphNodeSpec | null
+}
+
+export type ErrNodeSpec = {
+  unitId: string
 }
 
 export type MoveUnitMap = {

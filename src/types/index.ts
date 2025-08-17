@@ -1,7 +1,10 @@
 import {
-  LinkNodeSpec,
+  DatumNodeSpec,
+  ErrNodeSpec,
   MergeNodeSpec,
+  PinNodeSpec as PinNodeSpec,
   PlugNodeSpec,
+  UnitNodeSpec,
 } from '../Class/Graph/buildMoveMap'
 import { DataRef } from '../DataRef'
 import { Position } from '../client/util/geometry/types'
@@ -69,7 +72,51 @@ export type GraphSubPinSpec =
   | GraphExposedLinkPinSpec
   | GraphExposedEmptyPinSpec
 
-export type GraphNodeSpec = LinkNodeSpec | MergeNodeSpec | PlugNodeSpec
+export type NodeSpec =
+  | PinNodeSpec
+  | MergeNodeSpec
+  | PlugNodeSpec
+  | UnitNodeSpec
+  | DatumNodeSpec
+  | ErrNodeSpec
+
+export type GraphPinNodeSpec = {
+  type: 'pin'
+  spec: PinNodeSpec
+}
+
+export type GraphMergeNodeSpec = {
+  type: 'merge'
+  spec: MergeNodeSpec
+}
+
+export type GraphUnitNodeSpec = {
+  type: 'unit'
+  spec: UnitNodeSpec
+}
+
+export type GraphPlugNodeSpec = {
+  type: 'plug'
+  spec: PlugNodeSpec
+}
+
+export type GraphDatumNodeSpec = {
+  type: 'datum'
+  spec: DatumNodeSpec
+}
+
+export type GraphErrNodeSpec = {
+  type: 'err'
+  spec: ErrNodeSpec
+}
+
+export type GraphNodeSpec =
+  | GraphPinNodeSpec
+  | GraphMergeNodeSpec
+  | GraphUnitNodeSpec
+  | GraphPlugNodeSpec
+  | GraphDatumNodeSpec
+  | GraphErrNodeSpec
 
 export type GraphPinsSpec = Dict<GraphPinSpec>
 
