@@ -260,6 +260,11 @@ export const getSpecPinIcon = (
     pin_icon_name = icon
   } else if (plug) {
     const sub_pin_id = getObjSingleKey(plug)
+
+    if (!sub_pin_id) {
+      return null
+    }
+
     const sub_pin = plug[sub_pin_id]
 
     const { unitId, pinId, mergeId, kind = type } = sub_pin
