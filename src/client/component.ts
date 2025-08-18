@@ -2841,6 +2841,8 @@ export class Component<
     insertAt(parent.$element, target, at)
   }
 
+  protected _insertAt__bound = this._insertAt.bind(this)
+
   private _svg_wrapper_unlisten: Unlisten[] = []
 
   public $wrapElement: HTMLElement | SVGElement
@@ -3129,11 +3131,11 @@ export class Component<
   }
 
   protected domCommitAppendChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, this._insertAt.bind(this))
+    this._domCommitChild__template(component, at, this._insertAt__bound)
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, this._insertAt.bind(this))
+    this._domCommitChild__template(component, at, this._insertAt__bound)
   }
 
   protected _domCommitChild__template = (
