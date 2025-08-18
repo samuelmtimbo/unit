@@ -1,0 +1,25 @@
+{
+  "name": "start",
+  "inputs": {
+    "node": {
+      "type": "`BSN`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{start?:number,offset?:number,duration?:number}",
+      "metadata": {
+        "examples": ["{}", "{start:0}"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "activity",
+    "description": "schedule audio buffer node playback",
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioContext"]
+  },
+  "id": "766e8fb5-b78e-4266-8571-54238eb1636b",
+  "base": true,
+  "type": "`U`"
+}

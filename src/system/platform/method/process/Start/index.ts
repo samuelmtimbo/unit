@@ -11,7 +11,7 @@ import { Async } from '../../../../../types/interface/async/Async'
 import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { weakMerge } from '../../../../../weakMerge'
 import { $wrap } from '../../../../../wrap'
-import { ID_START } from '../../../../_ids'
+import { ID_START_0 } from '../../../../_ids'
 
 export interface I {
   graph: GraphBundle
@@ -49,7 +49,7 @@ export default class Start extends Holder<I, O> {
         },
       },
       system,
-      ID_START
+      ID_START_0
     )
   }
 

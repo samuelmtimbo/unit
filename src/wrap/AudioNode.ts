@@ -3,7 +3,7 @@ import { System } from '../system'
 import { AAN } from '../types/interface/AAN'
 import { AN } from '../types/interface/AN'
 
-export function wrapAudioNode(audioNode: AudioNode, system: System): AN {
+export function wrapAudioNode(audioNode: AudioNode, system: System): AN & $ {
   return new (class Node extends $ implements AN {
     __: string[] = ['AN']
 

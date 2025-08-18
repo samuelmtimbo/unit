@@ -1,0 +1,32 @@
+{
+  "name": "buffer source node",
+  "inputs": {
+    "buffer": {
+      "type": "`ADB`",
+      "ref": true
+    },
+    "context": {
+      "type": "`AC`",
+      "ref": true
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "node": {
+      "type": "`BSN`",
+      "ref": true,
+      "icon": "audio-waveform"
+    }
+  },
+  "metadata": {
+    "icon": "file-output",
+    "description": "audio source node consisting of in-memory buffer to be played once",
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["Audio"]
+  },
+  "id": "9007bcd5-6697-480c-9566-a5edf4d7c90f",
+  "base": true,
+  "type": "`U`"
+}

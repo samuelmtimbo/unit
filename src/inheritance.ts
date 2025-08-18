@@ -14,4 +14,5 @@ export const INHERITANCE = {
   WSS: ['EE', 'A', 'J'],
   RES: ['BO', 'J', 'V'],
   RS: ['BO'],
+  BSN: ['AN', 'EE'],
 }

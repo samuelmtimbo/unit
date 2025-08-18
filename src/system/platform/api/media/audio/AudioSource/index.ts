@@ -18,7 +18,9 @@ async function createMediaStreamFromUrl(
   src: string
 ): Promise<{ stream: MediaStream; source: AudioBufferSourceNode }> {
   // @ts-ignore
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+  const audioContext = new (window.AudioContext ||
+    // @ts-ignore
+    window.webkitAudioContext)() as AudioContext
 
   let source: AudioBufferSourceNode
 

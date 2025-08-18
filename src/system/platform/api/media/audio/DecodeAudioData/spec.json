@@ -1,0 +1,29 @@
+{
+  "name": "decode audio data",
+  "inputs": {
+    "buffer": {
+      "type": "`AB`",
+      "ref": true
+    },
+    "context": {
+      "type": "`AC`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "buffer": {
+      "type": "`ADB`",
+      "ref": true,
+      "icon": "audio-waveform"
+    }
+  },
+  "metadata": {
+    "icon": "file-output",
+    "description": "decode audio file data contained in an array buffer",
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["Audio"]
+  },
+  "id": "59332eaf-ab47-44e5-9417-7179574fb2af",
+  "base": true,
+  "type": "`U`"
+}

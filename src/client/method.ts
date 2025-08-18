@@ -25,6 +25,18 @@ import {
   AC_METHOD_WATCH,
 } from '../types/interface/async/$AC'
 import {
+  ADB_METHOD_CALL,
+  ADB_METHOD_GET,
+  ADB_METHOD_REF,
+  ADB_METHOD_WATCH,
+} from '../types/interface/async/$ADB'
+import {
+  AN_METHOD_CALL,
+  AN_METHOD_GET,
+  AN_METHOD_REF,
+  AN_METHOD_WATCH,
+} from '../types/interface/async/$AN'
+import {
   B_METHOD_CALL,
   B_METHOD_GET,
   B_METHOD_REF,
@@ -54,6 +66,12 @@ import {
   BSE_METHOD_REF,
   BSE_METHOD_WATCH,
 } from '../types/interface/async/$BSE'
+import {
+  BSN_METHOD_CALL,
+  BSN_METHOD_GET,
+  BSN_METHOD_REF,
+  BSN_METHOD_WATCH,
+} from '../types/interface/async/$BSN'
 import {
   C_METHOD_CALL,
   C_METHOD_GET,
@@ -417,5 +435,23 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     call: SEL_METHOD_CALL,
     watch: SEL_METHOD_WATCH,
     ref: SEL_METHOD_REF,
+  },
+  BSN: {
+    get: BSN_METHOD_GET,
+    call: BSN_METHOD_CALL,
+    watch: BSN_METHOD_WATCH,
+    ref: BSN_METHOD_REF,
+  },
+  ADB: {
+    get: ADB_METHOD_GET,
+    call: ADB_METHOD_CALL,
+    watch: ADB_METHOD_WATCH,
+    ref: ADB_METHOD_REF,
+  },
+  AN: {
+    get: AN_METHOD_GET,
+    call: AN_METHOD_CALL,
+    watch: AN_METHOD_WATCH,
+    ref: AN_METHOD_REF,
   },
 }

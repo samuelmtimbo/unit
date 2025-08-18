@@ -28,6 +28,7 @@ export const CLASS_TYPE_LOCATION = 'L' // Location
 export const CLASS_TYPE_REGISTRY = 'R' // Registry
 export const CLASS_TYPE_AUDIO_CONTEXT = 'AC' // AudioContext
 export const CLASS_TYPE_AUDIO_OSCILLATOR_NODE = 'ON' // OscillatorNode
+export const CLASS_TYPE_AUDIO_BUFFER_SOURCE_NODE = 'BSN' // BufferSourceNode
 export const CLASS_TYPE_AUDIO_NODE = 'ON' // AudioNode
 export const CLASS_TYPE_DATE = 'D' // Date
 export const CLASS_TYPE_IMAGE_CAPTURE = 'IC' // ImageCapture
@@ -42,6 +43,7 @@ export const CLASS_TYPE_RESPONSE = 'RES' // RESponse
 export const CLASS_TYPE_BODY = 'BO' // BOdy
 export const CLASS_TYPE_CRYPTO_KEY = 'CK' // CryptoKey
 export const CLASS_TYPE_ARRAY_BUFFER = 'AB' // ArrayBuffer
+export const CLASS_TYPE_AUDIO_BUFFER = 'ADB' // AuDioBuffer
 export const CLASS_TYPE_TEXT_ENCODER = 'TE' // TextEncoder
 export const CLASS_TYPE_TEXT_DECODER = 'TD' // TextDecoder
 export const CLASS_TYPE_READABLE_STREAM = 'RS' // ReadableStream
@@ -81,6 +83,9 @@ export type AllTypes<T> = {
   IM: T
   RS: T
   SEL: T
+  AN: T
+  BSN: T
+  ADB: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -118,6 +123,9 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   IM: true,
   RS: true,
   SEL: true,
+  AN: true,
+  BSN: true,
+  ADB: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

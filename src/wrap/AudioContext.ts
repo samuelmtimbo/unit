@@ -33,6 +33,14 @@ export function wrapAudioContext(
       throw new MethodNotImplementedError()
     }
 
+    createBufferSource(): AudioBufferSourceNode {
+      return audioContext.createBufferSource()
+    }
+
+    decodeAudioData(buffer: ArrayBuffer): Promise<AudioBuffer> {
+      return audioContext.decodeAudioData(buffer)
+    }
+
     disconnect(audioNode?: AudioNode): void {
       //
     }

@@ -4,4 +4,6 @@ export interface AC {
   getDestination(): AudioDestinationNode
   createOscillator(opt: OscillatorOptions): OscillatorNode
   createAnalyser(opt: AnalyserOptions): AnalyserNode
+  createBufferSource(): AudioBufferSourceNode
+  decodeAudioData(buffer: ArrayBuffer): Promise<AudioBuffer>
 }

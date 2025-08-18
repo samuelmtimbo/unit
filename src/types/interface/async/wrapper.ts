@@ -3,11 +3,14 @@ import { Async$ } from './Async$'
 import { AsyncA } from './AsyncA'
 import { AsyncAB } from './AsyncAB'
 import { AsyncAC } from './AsyncAC'
+import { AsyncADB } from './AsyncADB'
+import { AsyncAN } from './AsyncAN'
 import { AsyncB } from './AsyncB'
 import { AsyncBC } from './AsyncBC'
 import { AsyncBD } from './AsyncBD'
 import { AsyncBS } from './AsyncBS'
 import { AsyncBSE } from './AsyncBSE'
+import { AsyncBSN } from './AsyncBSN'
 import { AsyncC } from './AsyncC'
 import { AsyncCA } from './AsyncCA'
 import { AsyncCH } from './AsyncCH'
@@ -69,4 +72,7 @@ export const ASYNC: AllTypes<(unit: any) => any> = {
   IM: AsyncIM,
   RS: AsyncRS,
   SEL: AsyncSEL,
+  AN: AsyncAN,
+  BSN: AsyncBSN,
+  ADB: AsyncADB,
 }
