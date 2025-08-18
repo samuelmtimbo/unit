@@ -47915,6 +47915,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       })
       this._show_search()
+    } else if (this._mode === 'change') {
+      if (contained_nodes.length === 1) {
+        const contained_node_id = contained_nodes[0]
+
+        if (
+          !this._is_unit_base(contained_node_id) &&
+          this._is_unit_component(contained_node_id)
+        ) {
+          this._spec_set_unit_spec_render(contained_node_id, false)
+
+          this._decomponentify_core(contained_node_id)
+
+          this._refresh_core_icon_hidden(contained_node_id)
+          this._refresh_core_size(contained_node_id)
+          this._refresh_core_icon_size(contained_node_id)
+
+          this._start_graph_simulation(LAYER_NONE)
+        }
+      }
     }
   }
 
