@@ -23411,6 +23411,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const value = this._get_datum_value(datum_node_id) ?? null
 
+        if (!value) {
+          return {
+            type: 'datum',
+            spec: { datumId, value: null, attachedTo },
+          }
+        }
+
         const dataRef = evaluateDataValue(value, specs, classes)
 
         return {
