@@ -21,6 +21,10 @@ export function wrapBody(_body: Body, system: System): BO & $ {
     async raw() {
       return _body
     }
+
+    async arrayBuffer(): Promise<ArrayBuffer> {
+      return _body.arrayBuffer()
+    }
   })(system)
 
   return body

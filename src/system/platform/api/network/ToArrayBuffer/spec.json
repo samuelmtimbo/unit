@@ -1,0 +1,35 @@
+{
+  "name": "to array buffer",
+  "inputs": {
+    "body": {
+      "type": "`BO`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "buffer": {
+      "type": "`AB`",
+      "ref": true,
+      "icon": "array"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "reads response to completion and parse the body as an ArrayBuffer",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+    "tags": ["platform", "api", "network"]
+  },
+  "id": "e0cc1342-810e-4d19-a450-08498819fae7",
+  "base": true,
+  "type": "`U`"
+}

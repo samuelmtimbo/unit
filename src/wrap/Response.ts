@@ -12,7 +12,7 @@ import { RES } from '../types/interface/RES'
 import { Unlisten } from '../types/Unlisten'
 import { wrapReadableStream } from './ReadableStream'
 
-export type UsedBody = string | Blob
+export type UsedBody = string | Blob | ArrayBuffer
 
 export function usedBodyToString(usedBody: UsedBody): string {
   if (typeof usedBody === 'string') {
@@ -26,7 +26,7 @@ export function wrapResponse(response: Response, system: System): RES & $ {
   const $response = new (class Response_ extends $ implements RES {
     __: string[] = ['RES']
 
-    _body: string | Blob
+    _body: UsedBody
 
     read(callback: Callback<ServerResponse>): void {
       void (async () => {
@@ -68,6 +68,12 @@ export function wrapResponse(response: Response, system: System): RES & $ {
 
     async blob(): Promise<Blob> {
       this._body = await response.blob()
+
+      return this._body
+    }
+
+    async arrayBuffer(): Promise<ArrayBuffer> {
+      this._body = await response.arrayBuffer()
 
       return this._body
     }

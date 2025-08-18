@@ -9,20 +9,24 @@ export function wrapReadableStream(
   const readableStream = new (class ReadableStream_ extends $ implements RS {
     __: string[] = ['RS']
 
-    json(): Promise<any> {
+    async json(): Promise<any> {
       return new Response(readableStream_).json()
     }
 
-    text(): Promise<string> {
+    async text(): Promise<string> {
       return new Response(readableStream_).text()
     }
 
-    blob(): Promise<Blob> {
+    async blob(): Promise<Blob> {
       return new Response(readableStream_).blob()
     }
 
     async raw() {
       return readableStream_
+    }
+
+    async arrayBuffer(): Promise<ArrayBuffer> {
+      return new Response(readableStream_).arrayBuffer()
     }
   })(system)
 
