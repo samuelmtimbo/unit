@@ -6,12 +6,15 @@ import {
   UnitRestoreData,
 } from '../../../Class/Unit/interface'
 import { Memory } from '../../../Class/Unit/Memory'
+import { DataRef } from '../../../DataRef'
 import { Moment } from '../../../debug/Moment'
 import { watchUnit } from '../../../debug/watchUnit'
 import { getGlobalRef } from '../../../global'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
+import { evaluateDataValue } from '../../../spec/evaluateDataValue'
+import { resolveDataRef } from '../../../spec/resolveDataValue'
 import { stringify } from '../../../spec/stringify'
 import { stringifyMemorySpecData } from '../../../spec/stringifySpec'
 import { clone } from '../../../util/clone'
@@ -136,10 +139,20 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       unit.takeErr()
     },
 
-    $setPinData({ type, pinId, data }: { type: IO; pinId: string; data: any }) {
+    $setPinData({
+      type,
+      pinId,
+      data,
+    }: {
+      type: IO
+      pinId: string
+      data: string | DataRef
+    }) {
       const { classes, specs } = unit.__system
 
-      const _data = evaluate(data, specs, classes)
+      const dataRef = evaluateDataValue(data, specs, classes)
+
+      const _data = resolveDataRef(dataRef, specs, classes)
 
       unit.setPinData(type, pinId, _data)
     },

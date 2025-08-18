@@ -24701,12 +24701,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._pod_set_pin_set_data(type, pinId, data)
   }
 
-  private _state_set_pin_set_data = (type: IO, pinId: string, data: string) => {
+  private _state_set_pin_set_data = (
+    type: IO,
+    pinId: string,
+    data: string | DataRef
+  ) => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
+    data = stringifyDataValue(data, specs, classes)
+
     this.__spec_set_pin_set_data(type, pinId, data)
     this.__sim_set_pin_set_data(type, pinId, data)
   }
 
-  private _pod_set_pin_set_data = (type: IO, pinId: string, data: string) => {
+  private _pod_set_pin_set_data = (
+    type: IO,
+    pinId: string,
+    data: string | DataRef
+  ) => {
     const lastData = deepGetOrDefault(
       this._unit_datum,
       [type, pinId],

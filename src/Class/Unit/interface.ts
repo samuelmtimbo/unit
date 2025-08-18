@@ -1,3 +1,4 @@
+import { DataRef } from '../../DataRef'
 import { IO } from '../../types/IO'
 import { Memory } from './Memory'
 
@@ -35,7 +36,7 @@ export type UnitSetPinIgnoredData = {
 export type UnitSetPinDataData = {
   pinId: string
   type: IO
-  data: string
+  data: string | DataRef
   lastData: string
 }
 
