@@ -60,7 +60,9 @@ export default class Start extends Holder<I, O> {
 
     const { __bundle } = Graph
 
-    const id = __bundle.unit.id
+    const { unit } = __bundle
+
+    const { id, input = {} } = unit
 
     const specs_ = weakMerge(__bundle.specs, this.__system.specs)
 
@@ -69,6 +71,19 @@ export default class Start extends Holder<I, O> {
     const bundle = bundleSpec(spec, specs_, false)
 
     const $graph = system.$start({ bundle, _: UCGEE })
+
+    for (const pinId in input) {
+      const pin = input[pinId]
+
+      if (pin.data !== undefined) {
+        $graph.$setPinData({
+          type: 'input',
+          pinId,
+          data: pin.data,
+          lastData: undefined,
+        })
+      }
+    }
 
     const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 
