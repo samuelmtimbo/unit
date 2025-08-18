@@ -359,10 +359,21 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       subPinId,
       subPinSpec,
+      pinSpec,
       fork = true,
       bubble = true,
     }: GraphExposePinData) {
-      call(graph, 'exposePin', fork, bubble, type, pinId, subPinId, subPinSpec)
+      call(
+        graph,
+        'exposePin',
+        fork,
+        bubble,
+        type,
+        pinId,
+        subPinId,
+        subPinSpec,
+        pinSpec
+      )
     },
 
     $coverPin({
