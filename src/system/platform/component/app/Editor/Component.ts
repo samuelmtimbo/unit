@@ -32174,17 +32174,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_base: LayoutBase = [],
     sub_base_node: LayoutNode[] = []
   ): void => {
-    const {
-      api: {
-        text: { measureText },
-      },
-    } = this.$system
-
     const { dispatchEvent } = this.$props
 
     const { animate } = this._config()
 
     // console.log('Graph', '_leave_subgraph', sub_base, sub_base_node)
+
+    if (this._subgraph_graph && this._subgraph_unit_id) {
+      this.__leave_subgraph(sub_base, sub_base_node, animate)
+
+      if (this._enabled()) {
+        this._enable_transcend()
+
+        this._show_transcend(animate)
+      }
+
+      this.focus()
+
+      dispatchEvent('leaveunit', {}, false)
+    }
+  }
+
+  private __leave_subgraph = (
+    sub_base: LayoutBase = [],
+    sub_base_node: LayoutNode[] = [],
+    animate: boolean
+  ): void => {
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
 
     if (this._subgraph_graph && this._subgraph_unit_id) {
       this._force_control_animation_false = true
@@ -32253,16 +32273,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._subgraph_return_fullwindow = false
         this._subgraph_return_fullwindow_component_ids = []
       }
-
-      if (this._enabled()) {
-        this._enable_transcend()
-
-        this._show_transcend(animate)
-      }
-
-      this.focus()
-
-      dispatchEvent('leaveunit', {}, false)
     }
   }
 
@@ -60191,6 +60201,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_zoom(current)
     } else if (prop === 'graph') {
       const { graph, component } = this.$props
+
+      if (this._subgraph_graph) {
+        this.__leave_subgraph(undefined, undefined, false)
+      }
 
       const { animate } = this._config()
 
