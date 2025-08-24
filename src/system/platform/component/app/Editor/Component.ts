@@ -15085,6 +15085,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (!this._has_node(type_node_id)) {
         this._sim_add_pin_type(anchor_node_id, { x, y })
       }
+
+      const datum_node_id = this._get_pin_datum_node_id(anchor_node_id)
+
+      if (datum_node_id) {
+        this._show_datum(datum_node_id)
+      }
     }
   }
 
@@ -15105,13 +15111,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         // const type_link_id = getLinkId(type_node_id, pin_node_id)
         const type_link_id = getLinkId(type_node_id, anchor_node_id)
+
         this._set_link_opacity(type_link_id, 1)
       }
 
-      const pin_datum_node_id = this._pin_to_datum[anchor_node_id]
+      const pin_datum_node_id = this._get_pin_datum_node_id(anchor_node_id)
 
       if (pin_datum_node_id) {
-        const datum_link_id = getLinkId(pin_datum_node_id, anchor_node_id)
+        const datum_anchor_node_id = this._datum_to_pin[pin_datum_node_id]
+
+        const datum_link_id = getLinkId(pin_datum_node_id, datum_anchor_node_id)
 
         this._set_node_opacity(pin_datum_node_id, 1)
         this._set_link_opacity(datum_link_id, 1)
@@ -15239,6 +15248,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._is_unit_node_id(node_id)) {
       this._hide_unit_info(node_id)
+
       this._for_each_unit_pin(node_id, (pin_node_id: string) => {
         if (!this._spec_is_link_pin_ignored(pin_node_id)) {
           this._refresh_node_info(pin_node_id)
@@ -15307,9 +15317,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_hide_pin_info')
     const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
     const type_node_id = getTypeNodeId(anchor_node_id)
+
     if (this._has_node(type_node_id)) {
       this._sim_remove_pin_type(anchor_node_id)
     }
+
+    this._refresh_pin_datum_visible(anchor_node_id)
   }
 
   private _refresh_class_literal_datum_node_selection = (
@@ -25826,17 +25839,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._refresh_compatible()
     }
 
+    this._refresh_all_visible_datum()
+    this._refresh_all_selected_pin_datum_visible()
+
     if (this._mode === 'info') {
       if (this._hover_node_count === 0) {
         if (this._selected_node_count === 1) {
           this._set_all_nodes_links_opacity(0.2)
         }
+
         this._show_node_info(node_id)
       }
     }
-
-    this._refresh_all_visible_datum()
-    this._refresh_all_selected_pin_datum_visible()
   }
 
   private _refresh_all_selected_pin_datum_visible = () => {
