@@ -8,8 +8,8 @@
         "a": {
           "metadata": {
             "position": {
-              "x": -64,
-              "y": 57
+              "x": 109,
+              "y": 54
             }
           }
         },
@@ -17,12 +17,12 @@
           "constant": true,
           "data": {
             "ref": [],
-            "data": 0
+            "data": 1
           },
           "metadata": {
             "position": {
-              "x": -82,
-              "y": 24
+              "x": 26,
+              "y": 62
             },
             "data": {
               "position": {
@@ -33,15 +33,11 @@
           }
         },
         "end": {
-          "constant": true,
-          "data": {
-            "ref": [],
-            "data": -1
-          },
+          "constant": false,
           "metadata": {
             "position": {
-              "x": -64,
-              "y": -8
+              "x": -29,
+              "y": 11
             },
             "data": {
               "position": {
@@ -56,16 +52,16 @@
         "a": {
           "metadata": {
             "position": {
-              "x": 17,
-              "y": 24
+              "x": 110,
+              "y": 19
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -32,
-          "y": 24
+          "x": 64,
+          "y": 36
         }
       }
     },
@@ -75,8 +71,8 @@
         "a": {
           "metadata": {
             "position": {
-              "x": -73,
-              "y": -106
+              "x": -5,
+              "y": -93
             }
           }
         }
@@ -85,21 +81,53 @@
         "a[0]": {
           "metadata": {
             "position": {
-              "x": 24,
-              "y": -106
+              "x": 91,
+              "y": -93
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -25,
-          "y": -106
+          "x": 43,
+          "y": -93
+        }
+      }
+    },
+    "length": {
+      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
+      "metadata": {
+        "position": {
+          "x": -37,
+          "y": 9
+        }
+      },
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -86,
+              "y": 5
+            }
+          }
         }
       }
     }
   },
-  "merges": {},
+  "merges": {
+    "0": {
+      "slice": {
+        "input": {
+          "end": true
+        }
+      },
+      "length": {
+        "output": {
+          "length": true
+        }
+      }
+    }
+  },
   "inputs": {
     "a": {
       "plug": {
@@ -112,20 +140,31 @@
           "unitId": "first",
           "pinId": "a",
           "kind": "input"
+        },
+        "2": {
+          "unitId": "length",
+          "kind": "input",
+          "pinId": "a"
         }
       },
       "metadata": {
         "position": {
           "0": {
             "ext": {
-              "x": -71,
-              "y": 80
+              "x": 126,
+              "y": 71
             }
           },
           "1": {
             "ext": {
-              "x": -96,
-              "y": -106
+              "x": -28,
+              "y": -93
+            }
+          },
+          "2": {
+            "ext": {
+              "x": -107,
+              "y": -5
             }
           }
         }
@@ -145,8 +184,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": 41,
-              "y": 24
+              "x": 129,
+              "y": 5
             }
           }
         }
@@ -164,8 +203,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": 47,
-              "y": -106
+              "x": 114,
+              "y": -93
             }
           }
         }
@@ -179,8 +218,15 @@
       "data": {
         "x": 75,
         "y": -106
+      },
+      "merge": {
+        "0": {
+          "x": 13,
+          "y": 19
+        }
       }
-    }
+    },
+    "tags": ["core", "array"]
   },
   "id": "e9831075-2e62-43a4-84af-0653f7e707a9"
 }
