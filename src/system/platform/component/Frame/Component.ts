@@ -1,3 +1,4 @@
+import { getActiveElement } from '../../../../client/activeElement'
 import { addListeners } from '../../../../client/addListener'
 import { Component, defaultFocusLookup } from '../../../../client/component'
 import {
@@ -10,6 +11,7 @@ import {
 } from '../../../../client/context'
 import { makeCustomListener } from '../../../../client/event/custom'
 import HTMLElement_ from '../../../../client/html'
+import { isTextField } from '../../../../client/isTextField'
 import { renderFrame } from '../../../../client/renderFrame'
 import { Theme } from '../../../../client/theme'
 import { System } from '../../../../system'
@@ -71,6 +73,12 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
         // shadowRoot; if this can be detected, accept the
         // default browser behavior
         if (!canSelectShadowDom()) {
+          return
+        }
+
+        const activeElement = getActiveElement(this.$system)
+
+        if (activeElement && isTextField(activeElement as HTMLElement)) {
           return
         }
 
