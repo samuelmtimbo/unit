@@ -115,7 +115,7 @@ import { debounce } from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
-import { IODragEvent } from '../../../../../client/event/drag'
+import { UnitDragEvent } from '../../../../../client/event/drag'
 import { makeDragCancelListener } from '../../../../../client/event/drag/dragcancel'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
 import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
@@ -3567,7 +3567,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _drag_showing_search: boolean = false
 
-  private _on_drag_over = (event: IODragEvent, _event: DragEvent) => {
+  private _on_drag_over = (event: UnitDragEvent, _event: DragEvent) => {
     const { animate } = this._config()
 
     _event.preventDefault()
@@ -3625,7 +3625,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_search_filter(undefined)
   }
 
-  private _on_drag_leave = (event: IODragEvent, _event: DragEvent) => {
+  private _on_drag_leave = (event: UnitDragEvent, _event: DragEvent) => {
     if (!this._is_related_target_visible(_event.target as HTMLElement)) {
       this._hide_drag_search()
 
@@ -22652,7 +22652,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._on_node_click_hold(node_id, event)
         },
       }),
-      makeDropListener((event: IODragEvent, _event: DragEvent) => {
+      makeDropListener((event: UnitDragEvent, _event: DragEvent) => {
         _event.preventDefault()
 
         const { dataTransfer } = event

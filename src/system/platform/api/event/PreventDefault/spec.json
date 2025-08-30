@@ -1,0 +1,21 @@
+{
+  "name": "prevent default",
+  "inputs": {
+    "event": {
+      "type": "`EV`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "prevent all default platform reactions to this event, if any",
+    "tags": ["platform", "api", "event"]
+  },
+  "id": "8127337f-955d-4365-b180-21de8426feaa",
+  "base": true,
+  "type": "`U`"
+}

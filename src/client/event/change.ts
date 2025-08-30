@@ -1,14 +1,14 @@
 import { Listener } from '../Listener'
 import { listenCustom } from './custom'
 
-export type IOChangeEvent = any
+export type UnitChangeEvent = any
 
 export function makeChangeListener(
-  listener: (data: IOChangeEvent) => void
+  listener: (data: UnitChangeEvent, _event: Event) => void
 ): Listener {
   return (component) => {
-    return listenCustom('change', component, (value) => {
-      listener(value)
+    return listenCustom('change', component, (value, _event) => {
+      listener(value, _event)
     })
   }
 }

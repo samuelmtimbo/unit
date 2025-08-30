@@ -1,0 +1,21 @@
+{
+  "name": "stop propagation",
+  "inputs": {
+    "event": {
+      "type": "`EV`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "TODO",
+    "tags": ["platform", "api", "event"]
+  },
+  "id": "48db8d23-dc55-4b03-b2ff-ca56c61927c8",
+  "base": true,
+  "type": "`U`"
+}

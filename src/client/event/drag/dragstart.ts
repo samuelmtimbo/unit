@@ -1,11 +1,11 @@
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import { IOMouseEvent, applyContextTransformToPointerEvent } from '../pointer'
+import { UnitMouseEvent, applyContextTransformToPointerEvent } from '../pointer'
 
-export type IODragStartEvent = IOMouseEvent
+export type UnitDragStartEvent = UnitMouseEvent
 
 export function makeDragStartListener(
-  listener: (event: IODragStartEvent) => void,
+  listener: (event: UnitDragStartEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): Listener {
   return (component) => {
@@ -15,7 +15,7 @@ export function makeDragStartListener(
 
 export function listenDragStart(
   component: Listenable,
-  listener: (event: IODragStartEvent) => void,
+  listener: (event: UnitDragStartEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): () => void {
   const { $element } = component
@@ -25,7 +25,7 @@ export function listenDragStart(
 
     const event = applyContextTransformToPointerEvent($context, _event)
 
-    listener(event)
+    listener(event, _event)
   }
   $element.addEventListener('dragstart', dragStartListener, _global)
   return () => {

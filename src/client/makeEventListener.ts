@@ -26,7 +26,7 @@ import { makeToggleListener } from './event/popover/toggle'
 import { makeWheelListener } from './event/wheel'
 import { Listener } from './Listener'
 
-export type IOUIEventName =
+export type UIEventName =
   | 'click'
   | 'dbclick'
   | 'longpress'
@@ -57,7 +57,7 @@ export type IOUIEventName =
   | 'ended'
   | 'loadeddata'
 
-export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
+export const UI_EVENT_SET: Set<UIEventName> = new Set([
   'click',
   'dbclick',
   'longpress',
@@ -88,8 +88,8 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
 ])
 
 export function makeUIEventListener(
-  event: IOUIEventName,
-  callback: (data: any) => void
+  event: UIEventName,
+  callback: (data: any, event: any) => void
 ): Listener {
   switch (event) {
     case 'message':

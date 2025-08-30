@@ -4,7 +4,7 @@ import { classnames } from '../../../../../client/classnames'
 import { debounce } from '../../../../../client/debounce'
 import { readDropEventItemsAsText } from '../../../../../client/drag'
 import { Element } from '../../../../../client/element'
-import { IODragEvent } from '../../../../../client/event/drag'
+import { UnitDragEvent } from '../../../../../client/event/drag'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
 import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
 import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
@@ -226,7 +226,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       ])
     )
     input.addEventListener(
-      makeDragOverListener((event: IODragEvent, _event: DragEvent) => {
+      makeDragOverListener((event: UnitDragEvent, _event: DragEvent) => {
         _event.preventDefault()
 
         if (this._list_hidden) {
@@ -336,12 +336,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
     )
 
     search.addEventListener(
-      makeDragEnterListener((event: IODragEvent, event_: DragEvent) => {
+      makeDragEnterListener((event: UnitDragEvent, event_: DragEvent) => {
         dragCount++
       })
     )
     search.addEventListener(
-      makeDragLeaveListener((event: IODragEvent, event_: DragEvent) => {
+      makeDragLeaveListener((event: UnitDragEvent, event_: DragEvent) => {
         dragCount--
 
         if (dragCount === 0) {
@@ -751,7 +751,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
           this._on_list_item_click(event, id)
         },
       }),
-      makeDragOverListener((event: IODragEvent, _event: DragEvent) => {
+      makeDragOverListener((event: UnitDragEvent, _event: DragEvent) => {
         _event.preventDefault()
 
         if (this._selected_id !== id) {

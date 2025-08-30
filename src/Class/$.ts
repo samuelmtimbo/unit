@@ -26,6 +26,10 @@ export class $<_EE extends $Events<_EE> & Dict<any[]> = $Events<$_EE>>
   }
 
   getGlobalId(): string {
+    if (!this.__global_id) {
+      this.register()
+    }
+
     return this.__global_id
   }
 

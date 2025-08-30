@@ -47,7 +47,7 @@ import { getComponentInterface } from './interface'
 import { isHTML } from './isHTML'
 import { isSVG, isSVGSVG } from './isSVG'
 import {
-  IOUIEventName,
+  UIEventName,
   UI_EVENT_SET,
   makeUIEventListener,
 } from './makeEventListener'
@@ -2147,7 +2147,7 @@ export class Component<
 
   private _unit_unlisten: Unlisten
 
-  private _addUnitEventListener = (event: IOUIEventName): void => {
+  private _addUnitEventListener = (event: UIEventName): void => {
     if (event.startsWith('_')) {
       const _event = event.slice(1)
 
@@ -2214,7 +2214,7 @@ export class Component<
 
     this.$unit = proxyWrap($unit, UCGEE)
 
-    const listen = (event: IOUIEventName): void => {
+    const listen = (event: UIEventName): void => {
       this.$named_listener_count[event] = this.$named_listener_count[event] || 0
       this.$named_listener_count[event]++
 
@@ -2330,7 +2330,7 @@ export class Component<
       } = setup
 
       for (const event of events) {
-        listen(event as IOUIEventName)
+        listen(event as UIEventName)
       }
 
       for (const animation of animations) {
@@ -2360,13 +2360,13 @@ export class Component<
 
     const unlisten_emitter = callAll([
       $emitter.$addListener({ event: 'listen' }, ([{ event }]) => {
-        if (UI_EVENT_SET.has(event as IOUIEventName) || event.startsWith('_')) {
+        if (UI_EVENT_SET.has(event as UIEventName) || event.startsWith('_')) {
           listen(event)
         }
       }),
       $emitter.$addListener({ event: 'unlisten' }, ([{ event }]) => {
         if (
-          UI_EVENT_SET.has((event as IOUIEventName) || event.startsWith('_'))
+          UI_EVENT_SET.has((event as UIEventName) || event.startsWith('_'))
         ) {
           unlisten(event)
         }

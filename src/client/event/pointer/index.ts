@@ -15,7 +15,7 @@ export const POINTER_EVENT_NAMES = [
   'pointerout',
 ]
 
-export interface IOMouseEvent {
+export interface UnitMouseEvent {
   clientX: number
   clientY: number
   offsetX: number
@@ -26,7 +26,7 @@ export interface IOMouseEvent {
   pageY: number
 }
 
-export interface UnitPointerEvent extends IOMouseEvent {
+export interface UnitPointerEvent extends UnitMouseEvent {
   pointerId: number
   pointerType: string
 }

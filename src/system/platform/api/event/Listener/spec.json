@@ -1,0 +1,34 @@
+{
+  "name": "listener",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "event": {
+      "type": "string"
+    },
+
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "`EV`&`V`",
+      "ref": true
+    },
+    "data": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "listen to `emitter` `event`",
+    "tags": ["platform", "api", "event"]
+  },
+  "id": "aa810e5e-bf17-4abc-b726-bc06a7f210d9",
+  "base": true,
+  "type": "`U`"
+}

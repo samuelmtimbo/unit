@@ -1,10 +1,10 @@
-import { IODragEvent } from '.'
+import { UnitDragEvent } from '.'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { applyContextTransformToPointerEvent } from '../pointer'
 
 export function makeDragOverListener(
-  listener: (event: IODragEvent, _event: DragEvent) => void,
+  listener: (event: UnitDragEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): Listener {
   return (component) => {
@@ -14,7 +14,7 @@ export function makeDragOverListener(
 
 export function listenDragOver(
   component: Listenable,
-  listener: (event: IODragEvent, _event: DragEvent) => void,
+  listener: (event: UnitDragEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): () => void {
   const { $element } = component
@@ -22,7 +22,7 @@ export function listenDragOver(
   const dragOverListener = (_event: DragEvent) => {
     const { $context } = component
 
-    const event: IODragEvent = {
+    const event: UnitDragEvent = {
       ...applyContextTransformToPointerEvent($context, _event),
       dataTransfer: null,
     }

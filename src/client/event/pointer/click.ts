@@ -24,8 +24,8 @@ import { makePointerUpListener } from './pointerup'
 export type Handlers = {
   onClick?: (event: UnitPointerEvent, _event: PointerEvent) => void
   onClickCancel?: (event: UnitPointerEvent) => void
-  onDoubleClick?: (event: UnitPointerEvent) => void
-  onLongClick?: (event: UnitPointerEvent) => void
+  onDoubleClick?: (event: UnitPointerEvent, _event: PointerEvent) => void
+  onLongClick?: (event: UnitPointerEvent, _event: PointerEvent) => void
   onLongPress?: (event: UnitPointerEvent, _event: PointerEvent) => void
   onLongClickCancel?: (event: UnitPointerEvent) => void
   onClickHold?: (event: UnitPointerEvent) => void
@@ -269,7 +269,7 @@ export function listenClick(
 
         if (d <= POINTER_CLICK_RADIUS && !longClickCancel) {
           if (longPress[pointerId]) {
-            onLongClick && onLongClick(event)
+            onLongClick && onLongClick(event, _event)
           } else {
             onClick && onClick(event, _event)
           }
@@ -284,7 +284,7 @@ export function listenClick(
           pointDistance(lastTapPosition, position) <= POINTER_CLICK_RADIUS
         ) {
           if (onDoubleClick) {
-            onDoubleClick(event)
+            onDoubleClick(event, _event)
           } else if (onClick) {
             onClick(event, _event)
           }

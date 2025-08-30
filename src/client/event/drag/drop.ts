@@ -1,10 +1,10 @@
-import { IODragEvent, parseDataTransfer } from '.'
+import { UnitDragEvent, parseDataTransfer } from '.'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { applyContextTransformToPointerEvent } from '../pointer'
 
 export function makeDropListener(
-  listener: (event: IODragEvent, _event: DragEvent) => void,
+  listener: (event: UnitDragEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): Listener {
   return (component) => {
@@ -14,7 +14,7 @@ export function makeDropListener(
 
 export function listenDrop(
   component: Listenable,
-  listener: (event: IODragEvent, _event: DragEvent) => void,
+  listener: (event: UnitDragEvent, _event: DragEvent) => void,
   _global: boolean = false
 ): () => void {
   const { $element } = component

@@ -1,25 +1,25 @@
-import { IOMouseEvent } from '../pointer'
+import { UnitMouseEvent } from '../pointer'
 
-export interface IODataTransferItem {
+export interface UnitDataTransferItem {
   kind: string
   type: string
 }
 
-export interface IODataTransfer {
+export interface UnitDataTransfer {
   dropEffect: string
   effectAllowed: string
   files: FileList
-  items: IODataTransferItem[]
+  items: UnitDataTransferItem[]
   types: string[]
 }
 
-export interface IODragEvent extends IOMouseEvent {
-  dataTransfer: IODataTransfer
+export interface UnitDragEvent extends UnitMouseEvent {
+  dataTransfer: UnitDataTransfer
 }
 
 export const parseDataTransfer = (
   dataTransfer: DataTransfer
-): IODataTransfer => {
+): UnitDataTransfer => {
   const { dropEffect, effectAllowed, files, items, types } = dataTransfer
 
   return {
@@ -33,8 +33,8 @@ export const parseDataTransfer = (
 
 export const parseDataTransferItems = (
   items: DataTransferItemList
-): IODataTransferItem[] => {
-  const result: IODataTransferItem[] = []
+): UnitDataTransferItem[] => {
+  const result: UnitDataTransferItem[] = []
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
