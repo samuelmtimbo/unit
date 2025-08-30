@@ -120,7 +120,7 @@ export default class Fetch extends Holder<I, O> {
           fail(err.message.toLowerCase())
         })
     } catch (err) {
-      fail('malformed')
+      fail('malformed request')
 
       return
     }
