@@ -9,15 +9,47 @@
       },
       "output": {
         "i": {
-          "ignored": false
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 155,
+              "y": -18
+            }
+          }
         },
-        "result": {},
+        "result": {
+          "metadata": {
+            "position": {
+              "x": 157,
+              "y": 9
+            }
+          }
+        },
         "a": {
-          "ignored": false
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 134,
+              "y": -40
+            }
+          }
         },
-        "a[i]": {},
+        "a[i]": {
+          "metadata": {
+            "position": {
+              "x": 140,
+              "y": 32
+            }
+          }
+        },
         "test": {
           "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 101,
+          "y": -2
         }
       }
     },
@@ -31,10 +63,28 @@
       "output": {
         "current": {},
         "local": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -56,
+              "y": 45
+            }
+          }
         },
         "final": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 15,
+              "y": 31
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -23,
+          "y": 3
         }
       }
     },
@@ -42,7 +92,20 @@
       "id": "c059a789-b57c-4c2e-976b-fdbbe8f9993a",
       "input": {
         "b": {},
-        "a": {}
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -189,
+              "y": -85
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -137,
+          "y": -77
+        }
       }
     },
     "false": {
@@ -52,6 +115,103 @@
       },
       "output": {
         "false": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 41,
+          "y": 73
+        }
+      }
+    },
+    "ifnot": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if not b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -64,
+          "y": -97
+        }
+      }
+    },
+    "iftrue0": {
+      "id": "9ee34534-a1e8-478d-87ca-81a5325f5d5c",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "true": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -122,
+          "y": -26
+        }
+      }
+    },
+    "identity0": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -42,
+          "y": -49
+        }
+      }
+    },
+    "identity1": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 39,
+          "y": -87
+        }
+      }
+    },
+    "false0": {
+      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "false": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -2,
+          "y": -32
+        }
+      }
+    },
+    "identity": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -108,
+          "y": 17
+        }
       }
     }
   },
@@ -78,22 +238,32 @@
         "output": {
           "current": true
         }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      },
+      "iftrue0": {
+        "input": {
+          "a": true
+        }
       }
     },
     "2": {
-      "andnot": {
-        "output": {
-          "a && !b": true
-        }
-      },
       "findlastindex": {
         "input": {
           "test": true
         }
       },
-      "loop": {
-        "input": {
-          "next": true
+      "identity1": {
+        "output": {
+          "a": true
+        }
+      },
+      "false0": {
+        "output": {
+          "false": true
         }
       }
     },
@@ -120,6 +290,69 @@
           "init": true
         }
       }
+    },
+    "5": {
+      "ifnot": {
+        "input": {
+          "a": true
+        }
+      },
+      "andnot": {
+        "output": {
+          "a && !b": true
+        }
+      }
+    },
+    "6": {
+      "identity0": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "identity": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "7": {
+      "ifnot": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "identity1": {
+        "input": {
+          "a": true
+        }
+      },
+      "identity0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "8": {
+      "iftrue0": {
+        "output": {
+          "true": true
+        }
+      },
+      "identity": {
+        "input": {
+          "a": true
+        }
+      },
+      "false0": {
+        "input": {
+          "any": true
+        }
+      }
     }
   },
   "inputs": {
@@ -128,6 +361,17 @@
         "0": {
           "mergeId": "3"
         }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 92,
+              "y": 71
+            }
+          }
+        }
       }
     },
     "test": {
@@ -135,6 +379,17 @@
         "0": {
           "unitId": "andnot",
           "pinId": "a"
+        }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -213,
+              "y": -91
+            }
+          }
         }
       }
     }
@@ -147,7 +402,17 @@
           "pinId": "i"
         }
       },
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 178,
+              "y": -28
+            }
+          }
+        }
+      }
     },
     "test": {
       "plug": {
@@ -155,13 +420,34 @@
           "mergeId": "0"
         }
       },
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 45,
+              "y": 27
+            }
+          }
+        }
+      }
     },
     "a[i]": {
       "plug": {
         "0": {
           "unitId": "findlastindex",
           "pinId": "a[i]"
+        }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 155,
+              "y": 53
+            }
+          }
         }
       }
     },
@@ -172,7 +458,17 @@
           "pinId": "a"
         }
       },
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 146,
+              "y": -62
+            }
+          }
+        }
+      }
     },
     "result": {
       "plug": {
@@ -180,13 +476,64 @@
           "unitId": "findlastindex",
           "pinId": "result"
         }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 182,
+              "y": 15
+            }
+          }
+        }
       }
     }
   },
   "metadata": {
     "icon": "brackets",
     "description": "find index `i` of first element in array `a` for which `test` is true",
-    "tags": ["core", "array"]
+    "tags": ["core", "array"],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 39,
+          "y": 5
+        },
+        "1": {
+          "x": -80,
+          "y": -47
+        },
+        "2": {
+          "x": 56,
+          "y": -40
+        },
+        "3": {
+          "x": 84,
+          "y": 48
+        },
+        "4": {
+          "x": -4,
+          "y": 52
+        },
+        "5": {
+          "x": -110,
+          "y": -113
+        },
+        "6": {
+          "x": -65,
+          "y": 2
+        },
+        "7": {
+          "x": -12,
+          "y": -90
+        },
+        "8": {
+          "x": -68,
+          "y": -17
+        }
+      }
+    }
   },
   "id": "7ca98fbb-6e84-4133-b658-46329a8e45cf",
   "type": "`U`&`G`"
