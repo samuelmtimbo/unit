@@ -7886,6 +7886,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     selection.setProp('shape', shape)
   }
 
+  private _set_sub_component_frame_disabled = (
+    unit_id: string,
+    disabled: boolean
+  ): void => {
+    const frame = this._get_sub_component_frame(unit_id)
+
+    frame.setDisabled(disabled)
+  }
+
   private _sim_add_core_component_frame = (unit_id: string): void => {
     const core_content = this._core_content[unit_id]
 
@@ -25406,11 +25415,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { animate } = this._config()
 
     const component = this._get_sub_component(unit_id)
-    const frame = this._get_sub_component_frame(unit_id)
 
     if (component) {
       if (!this._core_component_unlocked[unit_id]) {
-        frame.setDisabled(false)
+        this._set_sub_component_frame_disabled(unit_id, false)
 
         this._core_component_unlocked[unit_id] = true
         this._core_component_unlocked_count++
@@ -25540,10 +25548,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._core_component_unlocked_count--
 
-    const frame = this._get_sub_component_frame(unit_id)
-
     if (this._core_component_unlocked_count === 0) {
-      frame.setDisabled(true)
+      this._set_sub_component_frame_disabled(unit_id, true)
 
       if (!unlocking) {
         this._enable_input()
@@ -26499,10 +26505,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             last_sub_component_id
           )
 
-          if (focus) {
-            last_sub_component.focus()
-          }
-
           let all_base = []
 
           const layer = this._get_fullwindow_foreground()
@@ -26608,6 +26610,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
             }
           )
+
+          if (focus) {
+            last_sub_component.focus()
+          }
         } else {
           if (this._tree_layout) {
             for (const sub_component_id of sub_component_ids) {

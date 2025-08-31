@@ -720,7 +720,7 @@ export class Component<
 
       frame.appendChild(leaf.$element)
 
-      leaf.$slotParent = target
+      leaf.setSlotParent(target)
 
       leaf.mount(target.$context)
 
@@ -1995,7 +1995,7 @@ export class Component<
     this._domAppendChild(fragment, slotName)
 
     for (const child of children) {
-      child.$slotParent = slot
+      child.setSlotParent(slot)
     }
   }
 
@@ -2007,6 +2007,10 @@ export class Component<
     }
 
     return slot
+  }
+
+  protected setSlotParent(slotParent: Component) {
+    this.$slotParent = slotParent
   }
 
   private _domAppendChild(
@@ -2120,7 +2124,7 @@ export class Component<
 
     slot.domRemoveParentChildAt(child, slotName, at, at, this.$slotParent)
 
-    child.$slotParent = null
+    child.setSlotParent(null)
   }
 
   public postRemoveChild(child: Component, at: number): void {
@@ -2773,7 +2777,9 @@ export class Component<
   }
 
   public domAppendRoot(component: Component, at: number, index: number): void {
-    set(component, '$slotParent', this)
+    // component.setSlotParent(this)
+
+    component.setSlotParent(this)
 
     this.$slotParentChildren['default'] =
       this.$slotParentChildren['default'] ?? []
@@ -3145,6 +3151,8 @@ export class Component<
       let i = 0
 
       for (const root of component.$root) {
+        root.setSlotParent(this)
+
         this._domCommitChild__template(root, at + i, callback)
 
         i++
@@ -3199,7 +3207,7 @@ export class Component<
   }
 
   public domInsertRootAt(component: Component, at: number): void {
-    set(component, '$slotParent', this)
+    component.setSlotParent(this)
 
     this.$slotParentChildren['default'][at] = component
 
@@ -3319,7 +3327,7 @@ export class Component<
       }
     }
 
-    set(component, '$slotParent', null)
+    component.setSlotParent(null)
   }
 
   public postRemoveRoot(component: Component): void {
@@ -3513,7 +3521,7 @@ export class Component<
     at: number,
     index: number
   ): void {
-    set(component, '$slotParent', this)
+    component.setSlotParent(this)
 
     this.$slotParentChildren['default'] =
       this.$slotParentChildren['default'] ?? []
@@ -3619,7 +3627,7 @@ export class Component<
     slotName: string,
     at: number
   ): void {
-    set(component, '$slotParent', this)
+    component.setSlotParent(this)
 
     this.$slotParentChildren[slotName] =
       this.$slotParentChildren[slotName] ?? []
@@ -3773,7 +3781,7 @@ export class Component<
       }
     }
 
-    set(component, '$slotParent', null)
+    component.setSlotParent(null)
   }
 
   protected domCommitRemoveChild(component: Component, at: number) {
