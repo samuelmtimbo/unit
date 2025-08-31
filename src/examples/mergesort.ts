@@ -8,10 +8,17 @@ const bundle = require('./MergeSort.json')
 
 const MergeSort = fromBundle(bundle, _specs, {})
 
-const mergeSort = new MergeSort(system)
+const graph = new MergeSort(system)
 
-mergeSort.play()
+graph.play()
 
-mergeSort.push('a', [2, 1])
+graph.push('a', [2, 1])
 
-console.log(mergeSort.take('a')) // [1, 2]
+console.log(graph.take('a')) // [1, 2]
+
+graph.getOutput('a').addListener('data', (data) => {
+  console.log(data)
+})
+
+graph.push('a', [3, 2, 1, 0])
+graph.push('a', [1, 2, 0, 3])

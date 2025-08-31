@@ -2365,9 +2365,7 @@ export class Component<
         }
       }),
       $emitter.$addListener({ event: 'unlisten' }, ([{ event }]) => {
-        if (
-          UI_EVENT_SET.has((event as UIEventName) || event.startsWith('_'))
-        ) {
+        if (UI_EVENT_SET.has((event as UIEventName) || event.startsWith('_'))) {
           unlisten(event)
         }
       }),
