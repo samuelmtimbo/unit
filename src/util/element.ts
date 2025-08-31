@@ -1,4 +1,6 @@
 import { IOElement } from '../client/IOElement'
+import { isTextField } from '../client/isTextField'
+import { System } from '../system'
 import { Dict } from '../types/Dict'
 
 export function appendChild<T extends Node>(node: Node, newChild: T): T {
@@ -87,4 +89,39 @@ export function elementToJson(element: HTMLElement): Tag {
     attr,
     children,
   }
+}
+
+export function isElementFocusable(system: System, element: Element): boolean {
+  const {
+    api: {
+      window: { HTMLElement, getComputedStyle },
+    },
+  } = system
+
+  if (!(element instanceof HTMLElement)) {
+    return false
+  }
+
+  const tabIndex = element.getAttribute('tabindex')
+  const hasTabIndex = tabIndex !== null
+
+  const style = getComputedStyle(element)
+
+  if (style.visibility === 'hidden' || style.display === 'none') {
+    return false
+  }
+
+  if ('disabled' in element && element.disabled) {
+    return false
+  }
+
+  if (isTextField(element)) {
+    return true
+  }
+
+  if (hasTabIndex && parseInt(tabIndex, 10) >= 0) {
+    return true
+  }
+
+  return false
 }

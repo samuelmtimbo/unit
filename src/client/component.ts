@@ -20,7 +20,7 @@ import { $Graph } from '../types/interface/async/$Graph'
 import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
-import { insertAt, removeChild } from '../util/element'
+import { insertAt, isElementFocusable, removeChild } from '../util/element'
 import { forEachObjKV, get, set } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import {
@@ -1301,7 +1301,11 @@ export class Component<
       }
 
       if (this.$primitive) {
-        this.$element.focus(options)
+        if (isElementFocusable(this.$system, this.$element)) {
+          this.$element.focus(options)
+        } else {
+          defaultFocusLookup(this, options)
+        }
       } else {
         defaultFocusLookup(this, options)
       }
