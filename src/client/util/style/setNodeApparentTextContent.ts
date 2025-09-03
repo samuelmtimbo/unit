@@ -9,5 +9,5 @@ export const setNodeApparentTextContent = (node: Node, textContent: string) => {
     }
   }
 
-  return node.textContent
+  node.textContent = textContent
 }
