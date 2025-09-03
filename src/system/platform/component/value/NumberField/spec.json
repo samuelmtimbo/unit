@@ -12,6 +12,13 @@
         "examples": ["{fontSize:'30px'}", "{}"]
       }
     },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": ["{}"]
+      }
+    },
     "min": {
       "type": "number",
       "optional": true,
