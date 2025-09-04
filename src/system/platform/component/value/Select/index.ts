@@ -5,11 +5,13 @@ import { System } from '../../../../../system'
 import { UnitBundleSpec } from '../../../../../types/UnitBundleSpec'
 import { Component_ } from '../../../../../types/interface/Component'
 import { ID_SELECT } from '../../../../_ids'
+import { Attr } from '../../../Style'
 import Option from '../Option'
 
 export interface I {
   style: object
   value: string
+  attr: Attr
 }
 
 export interface O {
@@ -44,7 +46,7 @@ export default class Select extends Field<'value', I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'style'],
+        i: ['value', 'style', 'attr'],
         o: ['value'],
       },
       {},
