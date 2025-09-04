@@ -984,6 +984,9 @@ export const act = (
     setUnitPinConstant: (data: GraphSetUnitPinConstantData) => {
       setUnitPinConstant(data, spec)
     },
+    setPlugData: (data: GraphSetPlugDataData) => {
+      //
+    },
   })[type](data)
 }
 
