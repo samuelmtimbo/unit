@@ -1,6 +1,6 @@
 {
   "name": "@_unit/unit",
-  "version": "1.0.78",
+  "version": "1.0.79",
   "main": "lib/index.js",
   "bin": "./lib/server/index.js",
   "repository": "git@github.com:samuelmtimbo/unit.git",
@@ -62,7 +62,7 @@
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",
     "@typescript-eslint/typescript-estree": "6.20.0",
-    "electron": "28.3.3",
+    "electron": "38.0.0",
     "esbuild": "0.25.0",
     "eslint": "8.5.0",
     "eslint-config-prettier": "8.3.0",
