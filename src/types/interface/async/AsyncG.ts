@@ -351,7 +351,16 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphCoverPinSetData) {
-      call(graph, 'coverPinSet', fork, bubble, type, pinId, true)
+      call(
+        graph,
+        'coverPinSet',
+        fork,
+        bubble,
+        type,
+        pinId,
+        undefined,
+        undefined
+      )
     },
 
     $exposePin({
@@ -372,7 +381,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         pinId,
         subPinId,
         subPinSpec,
-        pinSpec
+        pinSpec,
+        undefined,
+        undefined
       )
     },
 
@@ -463,7 +474,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphSetPinSetIdData): void {
-      call(graph, 'setPinSetId', fork, bubble, type, pinId, newPinId)
+      call(graph, 'setPinSetId', fork, bubble, type, pinId, newPinId, undefined)
     },
 
     $setPinSetFunctional({
