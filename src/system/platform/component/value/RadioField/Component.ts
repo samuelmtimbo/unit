@@ -1,10 +1,11 @@
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
-import { Dict } from '../../../../../types/Dict'
+import { Attr, Style } from '../../../Style'
 
 export interface Props {
   className?: string
-  style?: Dict<any>
+  attr?: Attr
+  style?: Style
   value?: string
   name?: string
 }
