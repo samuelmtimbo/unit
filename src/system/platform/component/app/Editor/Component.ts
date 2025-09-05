@@ -59511,7 +59511,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         )
       }
 
-      setPinSetId({ type, pinId, newPinId }, spec)
+      if (hasPinId(spec, type, pinId)) {
+        setPinSetId({ type, pinId, newPinId }, spec)
+      }
 
       if (path.length === 1) {
         const next_pin_node_id = getPinNodeId(graphUnitId, type, newPinId)
