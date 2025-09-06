@@ -59521,11 +59521,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (path.length === 1) {
         const next_pin_node_id = getPinNodeId(graphUnitId, type, newPinId)
 
-        this._state_graph_unit_expose_pin_set(
+        this._sim_graph_unit_expose_pin_set(
           graphUnitId,
           type,
           newPinId,
-          pin_spec,
           pin_position
         )
 
