@@ -51051,7 +51051,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (hasPin(next_graph_spec, type, pinId)) {
-    coverPinSet({ pinId, type }, next_graph_spec)
+      coverPinSet({ pinId, type }, next_graph_spec)
     }
 
     if (mergeId) {

@@ -2,6 +2,7 @@ import { build, BuildOptions } from 'esbuild'
 import { pathExists, readJSON } from 'fs-extra'
 import { unlink } from 'fs/promises'
 import * as path from 'path'
+import { PATH_UNIT } from '../path'
 import { sync } from '../script/sync'
 import { collectIdSetFromBundle } from './collectIdSet'
 import { DEFAULT_BUILD_OPTIONS } from './constants'
@@ -15,8 +16,36 @@ export async function bundle(
 ): Promise<void> {
   const bundlePath = path.join(projectPath, 'bundle.json')
   const bootPath = path.join(projectPath, 'system.json')
+
+  await bundle_(
+    unitPath,
+    bundlePath,
+    bootPath,
+    outputFolder,
+    includeSystem,
+    opt
+  )
+}
+
+export async function bundle_(
+  unitPath: string,
+  bundlePath: string,
+  bootPath: string,
+  outputFolder: string,
+  includeSystem: boolean,
+  opt: BuildOptions
+): Promise<void> {
+  console.log({
+    unitPath,
+    bundlePath,
+    bootPath,
+    outputFolder,
+    includeSystem,
+    opt,
+  })
+
   const systemPath = path.join(unitPath, 'src', 'system')
-  const entrypoint =  path.join(unitPath, 'src/client/platform/web/index.ts')
+  const entrypoint = path.join(unitPath, 'src/client/platform/web/index.ts')
   const fallbackBootPath = path.join(
     unitPath,
     'src/client/platform/web/system.json'
@@ -25,7 +54,7 @@ export async function bundle(
 
   const bootPathExists = await pathExists(bootPath)
   const bundle = await readJSON(bundlePath)
-  
+
   const set = includeSystem ? undefined : collectIdSetFromBundle(bundle)
 
   await sync(systemPath, outputFolder, set)
@@ -75,7 +104,6 @@ export async function bundle(
 
           const otherPath = path.join(outputFolder, `${absolutePath}.ts`)
 
-
           return { path: otherPath }
         }
 
@@ -98,4 +126,23 @@ export async function bundle(
   await unlink(path.join(outputFolder, '_ids.ts'))
   await unlink(path.join(outputFolder, '_classes.ts'))
   await unlink(path.join(outputFolder, '_components.ts'))
+}
+
+export async function defaultBundle(
+  bundlePath: string,
+  bootPath: string,
+  outputFolder: string,
+  includeSystem: boolean,
+  opt: BuildOptions
+): Promise<void> {
+  const unitPath = PATH_UNIT
+
+  return bundle_(
+    unitPath,
+    bundlePath,
+    bootPath,
+    outputFolder,
+    includeSystem,
+    opt
+  )
 }

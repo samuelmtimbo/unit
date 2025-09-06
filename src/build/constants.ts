@@ -7,6 +7,7 @@ export const DEFAULT_OPTIONS: BuildOptions = {
   loader: {
     '.woff2': 'dataurl',
     '.woff': 'dataurl',
+    '.unit': 'json',
   },
 }
 
