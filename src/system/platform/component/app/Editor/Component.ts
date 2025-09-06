@@ -483,6 +483,7 @@ import {
   getTree,
   getValueTree,
   isTypeMatch,
+  isValidValue,
   traverseTree,
 } from '../../../../../spec/parser'
 import {
@@ -23433,7 +23434,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const value = this._get_datum_value(datum_node_id) ?? null
 
-        if (!value) {
+        if (!value || !isValidValue(value)) {
           return {
             type: 'datum',
             spec: { datumId, value: null, attachedTo },
