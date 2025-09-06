@@ -170,6 +170,10 @@ export function inputPropHandler(
       // @ts-ignore
       element.placeholder = placeholder ?? ''
     },
+    checked: (checked: boolean | undefined) => {
+      // @ts-ignore
+      element.checked = checked
+    },
     disabled: makeAttrHandler(element, 'disabled'),
   }
 }
