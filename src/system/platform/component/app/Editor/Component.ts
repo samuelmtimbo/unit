@@ -51050,7 +51050,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._spec_unplug_sub_pin(type, pin_plug.pinId, pin_plug.subPinId)
     }
 
+    if (hasPin(next_graph_spec, type, pinId)) {
     coverPinSet({ pinId, type }, next_graph_spec)
+    }
 
     if (mergeId) {
       const pin_node_id = getPinNodeId(graphId, type, pinId)
