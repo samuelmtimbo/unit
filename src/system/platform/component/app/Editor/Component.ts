@@ -22142,12 +22142,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           all_trait = mapObjVK(all_trait, (leaf_trait, leaf_id) => {
             if (leaf_trait) {
-              let width = leaf_trait.width / Math.abs(leaf_trait.sx)
-              let height = leaf_trait.height / Math.abs(leaf_trait.sy)
-
-              if (this._tree_layout) {
-                ;({ width, height } = this._clamp_layout_core_size(leaf_trait))
-              }
+              const width = leaf_trait.width / Math.abs(leaf_trait.sx)
+              const height = leaf_trait.height / Math.abs(leaf_trait.sy)
 
               const leaf_trait_ = {
                 x: (-$x + leaf_trait.x) / leaf_trait.sx,
