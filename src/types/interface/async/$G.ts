@@ -18,6 +18,7 @@ import {
   GraphRemoveUnitData,
   GraphRemoveUnitPinDataData,
   GraphReorderSubComponentData,
+  GraphSetForkData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
   GraphSetPinMetadataData,
@@ -174,6 +175,7 @@ export interface $G_C {
   $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void
   $moveSubgraphOutOf(data: GraphMoveSubGraphIntoData): void
   $bulkEdit(data: GraphBulkEditData): void
+  $setFork(data: GraphSetForkData): void
 }
 
 export interface $G_W {

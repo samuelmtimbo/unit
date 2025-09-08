@@ -20,6 +20,7 @@ import {
   GraphRemovePinFromMergeData,
   GraphRemoveUnitData,
   GraphRemoveUnitPinDataData,
+  GraphSetForkData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
   GraphSetPinMetadataData,
@@ -828,6 +829,10 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         pinId,
         defaultIgnored
       )
+    },
+
+    $setFork: function ({ fork }: GraphSetForkData): void {
+      call(graph, 'setFork', undefined, undefined, fork)
     },
   }
 

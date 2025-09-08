@@ -2825,6 +2825,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     emit && this.edit('add_unit', unitId, bundle, unit, [])
   }
 
+  public setFork(fork: boolean) {
+    this._noFork = !fork
+  }
+
   public fork(specId?: string, emit: boolean = true, bubble: boolean = true) {
     this._fork(specId, emit)
   }
@@ -3429,7 +3433,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           return
         }
 
-        if (!this._preventFork) {
+        if (!this._noFork) {
           this._fork()
         }
 
@@ -5111,7 +5115,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pin.push(data)
   }
 
-  private _preventFork: boolean = false
+  private _noFork: boolean = false
 
   public setUnitPinData(
     unitId: string,
@@ -5123,11 +5127,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ) {
-    this._preventFork = !fork
-
     this._setUnitPinData(unitId, type, pinId, data, propagate, fork, bubble)
-
-    this._preventFork = false
 
     emit && this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
   }

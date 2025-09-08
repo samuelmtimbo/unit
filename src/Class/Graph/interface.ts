@@ -340,3 +340,8 @@ export type GraphBulkEditData = {
   actions: Action[]
   transaction?: boolean
 } & Flags
+
+export type GraphSetForkData = {
+  fork: boolean
+  transaction?: boolean
+} & Flags

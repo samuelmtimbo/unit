@@ -243,6 +243,7 @@ export interface G<
   setName(name: string): void
   setSlot(slotName: string, subComponentId: string): void
   bulkEdit(actions: Action[]): void
+  setFork(fork: boolean): void
   fork(): void
 }
 

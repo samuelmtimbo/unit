@@ -31601,6 +31601,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._mem_enter_subgraph(unit_id, graph)
 
+    const pod = this._get_subgraph_pod(unit_id)
+
+    pod.$setFork({ fork: this._subgraph_fork })
+
     this._disable_input()
     this._disable_transcend()
 
@@ -32231,6 +32235,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } = this.$system
 
     if (this._subgraph_graph && this._subgraph_unit_id) {
+      const pod = this._get_subgraph_pod(this._subgraph_unit_id)
+
+      pod.$setFork({ fork: true })
+
       this._force_control_animation_false = true
 
       this._refresh_all_pointer_hover()
