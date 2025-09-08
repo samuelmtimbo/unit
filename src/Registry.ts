@@ -176,7 +176,7 @@ export class Registry implements R {
       const id = remapSpec(spec, specIdMap)
 
       if (this.hasSpec(id)) {
-        if (JSON.stringify(spec) === JSON.stringify(this.getSpec(specId))) {
+        if (sameSpec(spec, this.getSpec(specId) as GraphSpec)) {
           //
         } else {
           nextSpecs[id] = spec

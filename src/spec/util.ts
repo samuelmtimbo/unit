@@ -349,9 +349,9 @@ export function sameSpec(a: GraphSpec, b: GraphSpec): boolean {
     return false
   }
 
-  if (!sameMetadata(a, b)) {
-    return false
-  }
+  // if (!sameMetadata(a, b)) {
+  //   return false
+  // }
 
   return true
 }
