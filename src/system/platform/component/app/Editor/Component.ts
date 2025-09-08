@@ -57237,61 +57237,66 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       next_parent_spec.component = next_parent_spec.component ?? {}
 
       if (added_unit_is_component) {
-        setSubComponent(
-          { unitId, subComponent: {} },
-          next_parent_spec.component
-        )
-
-        if (parentId) {
-          if (parentIndex === null || parentIndex === undefined) {
-            appendSubComponentChild(
-              { parentId, childId: unitId, slotName: parentSlot },
-              next_parent_spec.component
-            )
-          } else {
-            insertSubComponentChild(
-              {
-                parentId,
-                childId: unitId,
-                slotName: parentSlot,
-                at: parentIndex,
-              },
-              next_parent_spec.component
-            )
-          }
+        if (hasSubComponent(next_parent_spec, unitId)) {
+          //
         } else {
-          if (parentIndex === null || parentIndex === undefined) {
-            appendRoot({ childId: unitId }, next_parent_spec.component)
+          setSubComponent(
+            { unitId, subComponent: {} },
+            next_parent_spec.component
+          )
+
+          if (parentId) {
+            if (parentIndex === null || parentIndex === undefined) {
+              appendSubComponentChild(
+                { parentId, childId: unitId, slotName: parentSlot },
+                next_parent_spec.component
+              )
+            } else {
+              insertSubComponentChild(
+                {
+                  parentId,
+                  childId: unitId,
+                  slotName: parentSlot,
+                  at: parentIndex,
+                },
+                next_parent_spec.component
+              )
+            }
           } else {
-            insertRoot(
-              { childId: unitId, at: parentIndex },
-              next_parent_spec.component
-            )
+            if (parentIndex === null || parentIndex === undefined) {
+              appendRoot({ childId: unitId }, next_parent_spec.component)
+            } else {
+              insertRoot(
+                { childId: unitId, at: parentIndex },
+                next_parent_spec.component
+              )
+            }
           }
+
+          moveSubComponentRoot(
+            {
+              parentId: unitId,
+              children,
+              slotMap: childrenSlot,
+              prevParentIdMap: {},
+              prevSlotMap: {},
+              index: 0,
+            },
+            next_parent_spec.component
+          )
+
+          const { component: added_component_spec } = added_unit_spec
+
+          const { defaultWidth = 120, defaultHeight = 120 } =
+            added_component_spec
+
+          next_parent_spec.component.defaultWidth =
+            next_parent_spec.component.defaultWidth || defaultWidth
+          next_parent_spec.component.defaultHeight =
+            next_parent_spec.component.defaultHeight || defaultHeight
+
+          next_parent_spec.type = `\`U\`&\`G\`&\`C\``
         }
-
-        moveSubComponentRoot(
-          {
-            parentId: unitId,
-            children,
-            slotMap: childrenSlot,
-            prevParentIdMap: {},
-            prevSlotMap: {},
-            index: 0,
-          },
-          next_parent_spec.component
-        )
-
-        const { component: added_component_spec } = added_unit_spec
-
-        const { defaultWidth = 120, defaultHeight = 120 } = added_component_spec
-
-        next_parent_spec.component.defaultWidth =
-          next_parent_spec.component.defaultWidth || defaultWidth
-        next_parent_spec.component.defaultHeight =
-          next_parent_spec.component.defaultHeight || defaultHeight
-
-        next_parent_spec.type = `\`U\`&\`G\`&\`C\``
       }
 
       for (const mergeId in merges) {
@@ -57369,7 +57374,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (graph_unit_is_component) {
       if (added_unit_is_component) {
-        if (!this._subgraph_graph) {
+        if (this._subgraph_unit_id === graph_unit_id) {
+          //
+        } else {
           const parent_component = this._component.pathGetSubComponent(path)
 
           if (parent_component) {
