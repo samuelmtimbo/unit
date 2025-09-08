@@ -896,9 +896,10 @@ export const makeBulkEditAction = (actions: Action[]): Action => {
 }
 
 export const processAction = (
+  self: any,
   action: Action,
   method: Partial<AllKeys<G & U, Function>>,
-  fallback?: (data) => void
+  fallback?: (data: any) => void
 ): void => {
   const { type, data } = action
 
@@ -906,7 +907,7 @@ export const processAction = (
     throw new Error(`no method for ${type}`)
   }
 
-  ;(method[type] ?? fallback)(data)
+  ;(method[type] ?? fallback).call(self, data)
 }
 
 export const act = (
@@ -991,11 +992,12 @@ export const act = (
 }
 
 export const processActions = (
+  self: any,
   actions: Action[],
   method: Partial<AllKeys<G, Function>>,
   fallback?: (data: any) => void
 ): void => {
-  actions.forEach((action) => processAction(action, method, fallback))
+  actions.forEach((action) => processAction(self, action, method, fallback))
 }
 
 export const bulkEdit = (spec_: GraphSpec, actions: Action[]): GraphSpec => {

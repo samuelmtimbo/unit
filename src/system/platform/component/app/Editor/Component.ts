@@ -59806,6 +59806,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { actions, path } = data
 
     processActions(
+      this,
       actions,
       mapObjKV(
         {

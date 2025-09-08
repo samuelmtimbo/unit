@@ -5705,14 +5705,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     // console.log('act', action.type, action.data, propagate)
 
     processAction(
+      this,
       action,
       {
-        setName: (data: GraphSetNameData) => {
+        setName: function (data: GraphSetNameData) {
           const { name } = data
 
           this._setName(name, fork, bubble)
         },
-        addUnitSpec: (data: GraphAddUnitData) => {
+        addUnitSpec: function (data: GraphAddUnitData) {
           const { unitId, bundle, parentId, merges, plugs } = data
 
           this._addUnitSpec(unitId, bundle, parentId, fork, bubble)
@@ -5728,14 +5729,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           }
 
           if (merges) {
-            this._addUnitMerges(merges, propagate)
+            this._addUnitMerges(merges, propagate, fork, bubble)
           }
 
           if (plugs) {
-            this._addUnitPlugs(unitId, plugs, propagate)
+            this._addUnitPlugs(unitId, plugs, propagate, fork, bubble)
           }
         },
-        removeUnit: (data: GraphRemoveUnitData) => {
+        removeUnit: function (data: GraphRemoveUnitData) {
           const { unitId } = data
 
           const unit = this.getUnit(unitId)
@@ -5744,7 +5745,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
           this._removeUnit(unitId, propagate, true, fork, bubble)
         },
-        exposePinSet: (data: GraphExposePinSetData) => {
+        exposePinSet: function (data: GraphExposePinSetData) {
           const { type, pinId, pinSpec, data: data_ } = data
 
           this._exposePinSet(
@@ -5757,22 +5758,22 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             bubble
           )
         },
-        exposePin: (data: GraphExposePinData) => {
+        exposePin: function (data: GraphExposePinData) {
           const { type, pinId, subPinId, subPinSpec, pinSpec } = data
 
           this._exposePin(type, pinId, subPinId, subPinSpec, pinSpec, propagate)
         },
-        coverPin: (data: GraphCoverPinData) => {
+        coverPin: function (data: GraphCoverPinData) {
           const { type, pinId, subPinId } = data
 
           this._coverPin(type, pinId, subPinId, propagate, fork, bubble)
         },
-        coverPinSet: (data: GraphCoverPinSetData) => {
+        coverPinSet: function (data: GraphCoverPinSetData) {
           const { type, pinId } = data
 
           this._coverPinSet(type, pinId, propagate, fork, bubble)
         },
-        plugPin: (data: GraphPlugPinData) => {
+        plugPin: function (data: GraphPlugPinData) {
           const { type, pinId, subPinId, subPinSpec } = data
 
           this._plugPin(
@@ -5786,19 +5787,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             bubble
           )
         },
-        unplugPin: (data: GraphUnplugPinData) => {
+        unplugPin: function (data: GraphUnplugPinData) {
           const { type, pinId, subPinId } = data
 
           this._unplugPin(type, pinId, subPinId, propagate, fork, bubble)
         },
-        removeMerge: (data: GraphRemoveMergeData) => {
+        removeMerge: function (data: GraphRemoveMergeData) {
           const { mergeId } = data
 
           if (this.hasMerge(mergeId)) {
             this._removeMerge(mergeId, propagate, fork, bubble)
           }
         },
-        removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
+        removePinFromMerge: function (data: GraphRemovePinFromMergeData) {
           const { mergeId, unitId, type, pinId } = data
 
           this._removePinFromMerge(
@@ -5811,42 +5812,42 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             bubble
           )
         },
-        addMerge: (data: GraphAddMergeData) => {
+        addMerge: function (data: GraphAddMergeData) {
           const { mergeId, mergeSpec } = data
 
           this._addMerge(mergeSpec, mergeId, propagate, fork, bubble)
         },
-        addPinToMerge: (data: GraphAddPinToMergeData) => {
+        addPinToMerge: function (data: GraphAddPinToMergeData) {
           const { mergeId, unitId, type, pinId } = data
 
           this._addPinToMerge(mergeId, unitId, type, pinId, propagate)
         },
-        takeUnitErr: (data: GraphTakeUnitErrData) => {
+        takeUnitErr: function (data: GraphTakeUnitErrData) {
           const { unitId } = data
 
           this.takeUnitErr(unitId)
         },
-        setPinSetId: (data: GraphSetPinSetIdData) => {
+        setPinSetId: function (data: GraphSetPinSetIdData) {
           const { type, pinId, newPinId } = data
 
           this._setPinSetId(type, pinId, newPinId, fork, bubble)
         },
-        setPinSetFunctional: (data: GraphSetPinSetFunctionalData) => {
+        setPinSetFunctional: function (data: GraphSetPinSetFunctionalData) {
           const { type, pinId, functional } = data
 
           this._setPinSetFunctional(type, pinId, functional, fork, bubble)
         },
-        setUnitPinConstant: (data: GraphSetUnitPinConstantData) => {
+        setUnitPinConstant: function (data: GraphSetUnitPinConstantData) {
           const { unitId, type, pinId, constant } = data
 
           this._setUnitPinConstant(unitId, type, pinId, constant, fork, bubble)
         },
-        setUnitPinIgnored: (data: GraphSetUnitPinIgnoredData) => {
+        setUnitPinIgnored: function (data: GraphSetUnitPinIgnoredData) {
           const { unitId, type, pinId, ignored } = data
 
           this._setUnitPinIgnored(unitId, type, pinId, ignored, fork, bubble)
         },
-        setUnitPinData: (_data: GraphSetUnitPinDataData) => {
+        setUnitPinData: function (_data: GraphSetUnitPinDataData) {
           const { unitId, type, pinId, data } = _data
 
           this._setUnitPinData(
@@ -5859,32 +5860,32 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             bubble
           )
         },
-        setUnitPinSetId: (data: GraphSetUnitPinSetIdData) => {
+        setUnitPinSetId: function (data: GraphSetUnitPinSetIdData) {
           const { unitId, type, pinId, newPinId } = data
 
           this._setUnitPinSetId(unitId, type, pinId, newPinId, fork, bubble)
         },
-        setMergeData: (_data: GraphSetMergeDataData) => {
+        setMergeData: function (_data: GraphSetMergeDataData) {
           const { mergeId, data } = _data
 
           this._setMergeData(mergeId, data)
         },
-        setUnitId: (data: GraphSetUnitIdData) => {
+        setUnitId: function (data: GraphSetUnitIdData) {
           const { unitId, newUnitId, name, specId } = data
 
           this._setUnitId(unitId, newUnitId, name, specId)
         },
-        removeUnitPinData: (data: GraphRemoveUnitPinDataData) => {
+        removeUnitPinData: function (data: GraphRemoveUnitPinDataData) {
           const { unitId, type, pinId } = data
 
           this._removeUnitPinData(unitId, type, pinId, propagate, fork, bubble)
         },
-        removeMergeData: (data: GraphRemoveMergeData) => {
+        removeMergeData: function (data: GraphRemoveMergeData) {
           const { mergeId } = data
 
           this._removeMergeData(mergeId)
         },
-        moveSubComponentRoot: (data: GraphMoveSubComponentRootData) => {
+        moveSubComponentRoot: function (data: GraphMoveSubComponentRootData) {
           const { parentId, children, slotMap = {}, index } = data
 
           for (let i = 0; i < children.length; i++) {
@@ -5902,70 +5903,70 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             )
           }
         },
-        moveSubgraphInto: (data: GraphMoveSubGraphIntoData) => {
+        moveSubgraphInto: function (data: GraphMoveSubGraphIntoData) {
           const { graphId, spec, selection, mapping, moves } = data
 
           this._moveSubgraphInto(graphId, spec, selection, mapping, moves, fork)
         },
-        moveSubgraphOutOf: (data: GraphMoveSubGraphOutOfData) => {
+        moveSubgraphOutOf: function (data: GraphMoveSubGraphOutOfData) {
           const { graphId, spec, selection, moves, mapping } = data
 
           this._moveSubgraphOutOf(graphId, spec, selection, mapping, moves)
         },
-        reorderSubComponent: (data: GraphReorderSubComponentData) => {
+        reorderSubComponent: function (data: GraphReorderSubComponentData) {
           const { parentId, childId, to } = data
 
           this._reorderSubComponent(parentId, childId, to, false, fork, bubble)
         },
-        removePinData: (data: UnitRemovePinDataData) => {
+        removePinData: function (data: UnitRemovePinDataData) {
           const { type, pinId } = data
 
           this.removePinData(type, pinId)
         },
-        takeInput: (data: UnitTakeInputData) => {
+        takeInput: function (data: UnitTakeInputData) {
           const { pinId } = data
 
           this.removePinData('input', pinId)
         },
-        setUnitSize: (data: GraphSetUnitSizeData) => {
+        setUnitSize: function (data: GraphSetUnitSizeData) {
           const { unitId, width, height } = data
 
           this._setUnitSize(unitId, width, height, fork, bubble)
         },
-        setSubComponentSize: (data: GraphSetUnitSizeData) => {
+        setSubComponentSize: function (data: GraphSetUnitSizeData) {
           const { unitId, width, height } = data
 
           this._setSubComponentSize(unitId, width, height, fork, bubble)
         },
-        setComponentSize: (data: GraphSetComponentSizeData) => {
+        setComponentSize: function (data: GraphSetComponentSizeData) {
           const { width, height } = data
 
           this._setComponentSize(width, height, fork, bubble)
         },
-        setPinData: ({ type, pinId, data }) => {
+        setPinData: function ({ type, pinId, data }) {
           this.setPinData(type, pinId, data)
         },
-        bulkEdit: (data: GraphBulkEditData) => {
+        bulkEdit: function (data: GraphBulkEditData) {
           const { actions } = data
 
           this._bulkEdit(actions, propagate, fork, bubble)
         },
-        setMetadata: (data: GraphSetMetadataData) => {
+        setMetadata: function (data: GraphSetMetadataData) {
           const { path_, value } = data
 
           this._setMetadata(path_, value)
         },
-        setUnitMetadata: (data: GraphSetUnitMetadataData) => {
+        setUnitMetadata: function (data: GraphSetUnitMetadataData) {
           const { unitId, path_, value } = data
 
           this._setUnitMetadata(unitId, path_, value)
         },
-        setUnitPinMetadata: (data: GraphSetUnitPinMetadataData) => {
+        setUnitPinMetadata: function (data: GraphSetUnitPinMetadataData) {
           const { unitId, type, pinId, path_, value } = data
 
           this._setUnitPinMetadata(unitId, type, pinId, path_, value)
         },
-        setPinMetadata: (data: GraphSetPinMetadataData) => {
+        setPinMetadata: function (data: GraphSetPinMetadataData) {
           const { type, pinId, path_, value } = data
 
           this._setPinMetadata(type, pinId, path_, value)
