@@ -467,7 +467,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ) {
-    this._removeUnitPinData(unitId, type, pinId, fork, bubble)
+    this._removeUnitPinData(unitId, type, pinId, undefined, fork, bubble)
 
     emit && this.edit('remove_unit_pin_data', unitId, type, pinId, [])
   }
