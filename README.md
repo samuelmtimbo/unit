@@ -78,11 +78,7 @@ To install unit globally:
 npm install --global @_unit/unit
 ```
 
-Then to start a local server:
-
-```sh
-unit
-```
+### Usage
 
 To render a unit JSON bundle:
 
@@ -138,6 +134,43 @@ mergeSort.push('a', [2, 1])
 
 console.log(mergeSort.take('a')) // [1, 2]
 ```
+
+### Server
+
+To start a local Unit server:
+
+```sh
+unit
+```
+
+### Build
+
+To build a Unit JSON bundle into a website, try:
+
+```sh
+unit build bundle.unit
+```
+
+This will produce a `index.js` file that can be loaded into HTML:
+
+```html
+<body>
+  <div
+    id="__SYSTEM__ROOT__"
+    style="
+      display: block;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    "
+  ></div>
+  <script type="text/javascript" src="index.js"></script>
+</body>
+```
+
+Check [index.html](https://github.com/samuelmtimbo/unit/tree/main/public/index.html) for a more complete template.
 
 ## Test
 
