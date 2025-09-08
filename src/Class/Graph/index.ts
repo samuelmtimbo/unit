@@ -4023,7 +4023,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _addUnitMerges(
     merges: GraphUnitMerges,
-    propagate: boolean = true
+    propagate: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     forEachValueKey(merges, (merge, mergeId) => {
       if (this.hasMerge(mergeId)) {
@@ -4031,11 +4033,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           if (this.hasMergePin(mergeId, mergeUnitId, type, pinId)) {
             //
           } else {
-            this._addPinToMerge(mergeId, mergeUnitId, type, pinId, propagate)
+            this._addPinToMerge(
+              mergeId,
+              mergeUnitId,
+              type,
+              pinId,
+              propagate,
+              fork,
+              bubble
+            )
           }
         })
       } else {
-        this._addMerge(merge, mergeId, undefined, propagate)
+        this._addMerge(merge, mergeId, propagate, fork, bubble)
       }
     })
   }
@@ -5062,7 +5072,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _addUnitPlugs(
     unitId: string,
     plugs: GraphUnitPlugs,
-    propagate: boolean = true
+    propagate: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
     forIOObjKV(
       plugs,
@@ -5078,7 +5090,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               kind: type,
             },
             undefined,
-            propagate
+            propagate,
+            fork,
+            bubble
           )
         }
       }
