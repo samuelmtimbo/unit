@@ -465,7 +465,7 @@ assert(
   )
 )
 assert(
-  !sameSpec(
+  sameSpec(
     {
       name: 'untitled',
       units: {
@@ -836,7 +836,7 @@ assert(
   )
 )
 assert(
-  !sameSpec(
+  sameSpec(
     {
       name: 'untitled',
       units: {
