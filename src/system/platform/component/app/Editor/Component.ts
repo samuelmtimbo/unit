@@ -53247,7 +53247,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else {
         const children = graph.component?.children ?? []
 
-        at = children.indexOf(unit_id)
+        const end = this._spec.component?.children?.length ?? 0
+
+        at = end + children.indexOf(unit_id)
 
         this._spec_insert_component(null, unit_id, 'default', at)
       }
