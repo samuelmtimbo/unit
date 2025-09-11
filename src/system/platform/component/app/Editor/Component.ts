@@ -58751,9 +58751,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
 
           if (parent) {
-            parent.registerParentRoot(child, slotName, index + i)
+            if (!parent.hasParentRoot(child)) {
+              parent.registerParentRoot(child, slotName, index + i)
+            }
           } else {
-            component.registerRoot(child)
+            if (!component.hasRoot(child)) {
+              component.registerRoot(child)
+            }
           }
 
           i++
