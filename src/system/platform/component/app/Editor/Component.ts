@@ -57926,6 +57926,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           if (parent_component) {
             if (parent_component.$root.includes(removed_component)) {
               if (parent_component.$mountRoot.includes(removed_component)) {
+                for (const removed_component_parent_root of [
+                  ...removed_component.$parentRoot,
+                ]) {
+                  removed_component.removeParentRoot(
+                    removed_component_parent_root
+                  )
+
+                  parent_component.appendRoot(removed_component_parent_root)
+                }
+
                 parent_component.removeRoot(removed_component)
               }
 
