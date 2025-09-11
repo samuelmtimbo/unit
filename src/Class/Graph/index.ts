@@ -1037,6 +1037,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return this._spec
   }
 
+  public setSpec(spec: GraphSpec) {
+    this._spec = spec
+  }
+
   public getBundleSpec(
     { deep, system, state, metadata = true }: SnapshotOpt = { metadata: true }
   ): BundleSpec {

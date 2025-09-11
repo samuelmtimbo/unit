@@ -65,7 +65,7 @@ import {
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone } from '../../../util/clone'
-import { weakMerge } from '../../../weakMerge'
+import { weakMerge, weakReadMerge } from '../../../weakMerge'
 import { Action } from '../../Action'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
@@ -98,7 +98,9 @@ function call(
 
     delete all[graph.__global_id]
 
-    const spec = clone(graph.getSpec())
+    const spec = graph.getSpec()
+
+    const spec_ = clone(spec)
 
     result = graph[method].call(graph, ...args, fork, bubble)
 
@@ -106,18 +108,18 @@ function call(
       const sibling = all[globalId] as Graph
 
       sibling[method].call(
-        weakMerge(
-          sibling,
-          {
-            _spec: clone(spec),
-          },
-          sibling
-        ),
+        weakReadMerge(sibling, {
+          _spec: clone(spec_),
+        }),
         ...args,
         fork,
         bubble
       )
+
+      sibling.setSpec(spec)
     }
+
+    graph.__system.setSpec(spec.id, spec)
   }
 
   return result
