@@ -24,6 +24,8 @@ import {
   GraphRemoveUnitPinDataData,
   GraphSetComponentSizeData,
   GraphSetMergeDataData,
+  GraphSetMetadataData,
+  GraphSetPinMetadataData,
   GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
@@ -33,6 +35,7 @@ import {
   GraphSetUnitMetadataData,
   GraphSetUnitPinConstantData,
   GraphSetUnitPinDataData,
+  GraphSetUnitPinMetadataData,
   GraphSetUnitPinSetIdData,
   GraphSetUnitSizeData,
   GraphTakeUnitErrData,
@@ -726,50 +729,61 @@ export const makeSetNameAction = (path: string[], name: string) => {
   }
 }
 
-export const makeSetMetadataAction = (path: string[], value: any) => {
+export const wrapSetMetadataAction = (data: GraphSetMetadataData) => {
   return {
     type: SET_METADATA,
-    data: {
-      path,
-      value,
-    },
+    data,
+  }
+}
+
+export const makeSetMetadataAction = (path_: string[], value: any) => {
+  return wrapSetMetadataAction({ path_, value })
+}
+
+export const wrapSetPinMetadataAction = (data: GraphSetPinMetadataData) => {
+  return {
+    type: SET_PIN_METADATA,
+    data,
   }
 }
 
 export const makeSetPinMetadataAction = (
-  type: string,
+  type: IO,
   pinId: string,
-  path: string[],
+  path_: string[],
   value: any
 ) => {
+  return wrapSetPinMetadataAction({
+    type,
+    pinId,
+    path_,
+    value,
+  })
+}
+
+export const wrapSetUnitPinMetadataAction = (
+  data: GraphSetUnitPinMetadataData
+) => {
   return {
-    type: SET_PIN_METADATA,
-    data: {
-      type,
-      pinId,
-      path,
-      value,
-    },
+    type: SET_UNIT_PIN_METADATA,
+    data,
   }
 }
 
 export const makeSetUnitPinMetadataAction = (
-  type: string,
+  unitId: string,
+  type: IO,
   pinId: string,
-  subPinId: string,
-  path: string[],
+  path_: string[],
   value: any
 ) => {
-  return {
-    type: SET_UNIT_PIN_METADATA,
-    data: {
-      type,
-      pinId,
-      subPinId,
-      path,
-      value,
-    },
-  }
+  return wrapSetUnitPinMetadataAction({
+    unitId,
+    type,
+    pinId,
+    path_,
+    value,
+  })
 }
 
 export const wrapAddMergeActionData = (data: GraphAddMergeData) => {

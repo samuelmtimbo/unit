@@ -32103,6 +32103,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
+      this._pod_sync_position_metadata()
+
       this.dispatchEvent(
         'leave',
         {
@@ -39142,7 +39144,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           actions.push(
             makeSetUnitMetadataAction(
               node_id,
-              ['metadata', 'position'],
+              ['position'],
               round_node_position
             )
           )
@@ -39150,11 +39152,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else if (isLinkPinNodeId(node_id)) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
 
-        if (hasUnit(spec, node_id)) {
+        if (hasUnit(spec, unitId)) {
           actions.push(
-            makeSetUnitMetadataAction(
-              node_id,
-              [type, pinId, 'metadata', 'position'],
+            makeSetUnitPinMetadataAction(
+              unitId,
+              type,
+              pinId,
+              ['position'],
               round_node_position
             )
           )
@@ -59911,6 +59915,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
           bulkEdit: (data) => {
             this._on_graph_unit_bulk_edit({ ...data, path })
+          },
+          setMetadata: (data) => {
+            //
+          },
+          setUnitMetadata: (data) => {
+            //
+          },
+          setUnitPinMetadata: (data) => {
+            //
+          },
+          setPinMetadata: () => {
+            //
           },
           addDatum: (data) => {
             //
