@@ -2417,8 +2417,12 @@ export class Component<
     return callAll([
       $emitter.$addListener(
         { event: 'set_sub_component' },
-        ([subComponentId, bundle]) => {
+        ([subComponentId, bundle, path = []]) => {
           if (!this.$controlled) {
+            if (path.length > 0) {
+              return
+            }
+
             const child = $childToComponent(this.$system, { bundle })
 
             const _ = getComponentInterface(child)
@@ -2436,8 +2440,12 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_root' },
-        ([globalRef]: [GlobalRefSpec]) => {
+        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
           if (!this.$controlled) {
+            if (path.length > 0) {
+              return
+            }
+
             const { globalId } = globalRef
 
             let subComponent: Component
@@ -2464,8 +2472,12 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_root' },
-        ([globalRef]: [GlobalRefSpec]) => {
+        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
           if (!this.$controlled) {
+            if (path.length > 0) {
+              return
+            }
+
             const { globalId } = globalRef
 
             let subComponent: Component
@@ -2497,8 +2509,12 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_parent_root' },
-        ([globalRef]: [GlobalRefSpec]) => {
+        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
           if (!this.$controlled) {
+            if (path.length > 0) {
+              return
+            }
+
             const { globalId } = globalRef
 
             const components = this.$system.getLocalComponents(globalId)
@@ -2539,8 +2555,12 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_parent_root' },
-        ([globalRef]: [GlobalRefSpec]) => {
+        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
           if (!this.$controlled) {
+            if (path.length > 0) {
+              return
+            }
+
             const { globalId } = globalRef
 
             const components = this.$system.getLocalComponents(globalId)
@@ -2581,7 +2601,11 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'reorder_sub_component' },
-        ([parentId, childId, to]) => {
+        ([parentId, childId, to, path = []]) => {
+          if (path.length > 0) {
+            return
+          }
+
           if (!this.$controlled) {
             const child = this.getSubComponent(childId)
 
@@ -2601,7 +2625,19 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'move_sub_component_root' },
-        ([parentId, prevParentMap, children, slotMap, prevSlotMap]) => {
+        ([
+          parentId,
+          prevParentMap,
+          children,
+          index,
+          slotMap,
+          prevSlotMap,
+          path = [],
+        ]) => {
+          if (path.length > 0) {
+            return
+          }
+
           if (!this.$controlled) {
             for (const childId of children) {
               const child = this.getSubComponent(childId)
