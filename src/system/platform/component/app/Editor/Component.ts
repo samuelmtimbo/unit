@@ -57962,16 +57962,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         }
 
-        removeSubComponent(
-          { unitId: possibly_turned_circle_unit_id },
-          next_parent_spec.component
-        )
-        removeSubComponentFromParent(
-          { subComponentId: unit_id_to_update },
-          next_parent_spec.component
-        )
+        if (hasSubComponent(next_parent_spec, possibly_turned_circle_unit_id)) {
+          removeSubComponent(
+            { unitId: possibly_turned_circle_unit_id },
+            next_parent_spec.component
+          )
+          removeSubComponentFromParent(
+            { subComponentId: unit_id_to_update },
+            next_parent_spec.component
+          )
 
-        setSpec(next_parent_spec.id, next_parent_spec)
+          setSpec(next_parent_spec.id, next_parent_spec)
+        } else {
+          break
+        }
 
         if (!parent_path_to_update.length) {
           break
