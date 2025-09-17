@@ -112,6 +112,11 @@ export function lazyFromSpec(
       })
     }
 
+    setFork(fork: boolean): void {
+      this._ensure()
+      this.__graph.setFork(fork)
+    }
+
     setName(name: string, ...extra: any[]): void {
       this._ensure()
       this.__graph.setName(name, ...extra)
