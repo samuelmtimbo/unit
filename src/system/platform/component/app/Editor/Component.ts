@@ -19533,8 +19533,27 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
       const sub_component_index =
         parent_sub_component_children.indexOf(sub_component_id)
+
       const index = parent_sub_component_index + sub_component_index
+
       return index
+    } else {
+      return this._spec_get_sub_component_root_index(sub_component_id)
+    }
+  }
+
+  private _get_sub_component_parent_index = (
+    sub_component_id: string
+  ): number => {
+    const parent_sub_component_id =
+      this._spec_get_sub_component_parent_id(sub_component_id)
+    if (parent_sub_component_id) {
+      const parent_sub_component_children =
+        this._spec_get_sub_component_children(parent_sub_component_id)
+      const sub_component_index =
+        parent_sub_component_children.indexOf(sub_component_id)
+
+      return sub_component_index
     } else {
       return this._spec_get_sub_component_root_index(sub_component_id)
     }
@@ -44602,7 +44621,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
     this._layout_drag_node[unit_id] = true
     this._layout_drag_index[unit_id] =
-      this._get_sub_component_tree_index(unit_id)
+      this._get_sub_component_parent_index(unit_id)
     this._layout_drag_direction[unit_id] = undefined
 
     const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
