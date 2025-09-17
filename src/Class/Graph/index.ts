@@ -2870,7 +2870,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     )
 
     this._memAddUnit(unitId, _unit, bundle)
-    this._simAddUnit(unitId, { unit }, _unit, null, false, false)
+    this._simAddUnit(unitId, { unit }, _unit, null, false, true)
   }
 
   private _initUnits(units: GraphUnitsSpec, push: boolean): void {
