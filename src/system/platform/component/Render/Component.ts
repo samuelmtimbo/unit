@@ -1,14 +1,14 @@
 import { Component } from '../../../../client/component'
-import HTMLElement_ from '../../../../client/html'
-import {
-  $renderComponent,
-  renderComponent,
-} from '../../../../client/render/renderComponent'
+import { componentFromUnitSpec } from '../../../../client/componentFromUnitSpec'
+import { Element } from '../../../../client/element'
+import { parentElement } from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { $Component } from '../../../../types/interface/async/$Component'
 import { UCGEE } from '../../../../types/interface/UCGEE'
+import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
 import { Unlisten } from '../../../../types/Unlisten'
+import { weakMerge } from '../../../../weakMerge'
 
 export interface Props {
   component?: $Component
@@ -16,14 +16,7 @@ export interface Props {
   attr?: Dict<string>
 }
 
-const DEFAULT_STYLE = {
-  width: '100%',
-  height: '100%',
-  color: 'currentColor',
-  boxSizing: 'border-box',
-}
-
-export default class Render extends HTMLElement_<HTMLDivElement, Props> {
+export default class Render extends Element<HTMLDivElement, Props> {
   private _unlisten: Unlisten
   private _component: Component
 
@@ -32,62 +25,15 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
   }
 
   constructor($props: Props, $system: System) {
-    super(
-      $props,
-      $system,
-      $system.api.document.createElement('div'),
-      DEFAULT_STYLE,
-      {},
-      {
-        component: (component: $Component) => {
-          if (this._unlisten) {
-            this._unlisten()
+    const $element = parentElement($system)
 
-            this._unlisten = undefined
-          }
+    super($props, $system, $element)
 
-          if (component) {
-            this._unlisten = $renderComponent(
-              this.$system,
-              this.$context,
-              this.$element,
-              component,
-              (component_) => {
-                this._component = component_
-              }
-            )
-          }
-        },
-      }
-    )
+    this.$unbundled = false
+    this.$primitive = true
   }
 
-  onUnmount(): void {
-    if (this._unlisten) {
-      this._unlisten()
-
-      this._unlisten = undefined
-    }
-  }
-
-  onMount(): void {
-    if (this._unlisten) {
-      this._unlisten()
-
-      this._unlisten = undefined
-    }
-
-    if (this._component) {
-      this._unlisten = renderComponent(
-        this.$system,
-        this.$context,
-        this.$element,
-        this._component
-      )
-    }
-  }
-
-  focus() {
+  public focus() {
     if (this._component) {
       this._component.focus()
 
@@ -99,5 +45,51 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
     if (child) {
       child.focus()
     }
+  }
+
+  onPropChanged(prop: any, current: any, prev: any) {
+    void {
+      component: ($component: $Component) => {
+        if (this._unlisten) {
+          this._unlisten()
+
+          this._unlisten = undefined
+        }
+
+        if ($component) {
+          $component.$getUnitBundleSpec({}, (bundle: UnitBundleSpec) => {
+            const { unit } = bundle
+
+            const specs = weakMerge(this.$system.specs, bundle.specs ?? {})
+
+            const component = componentFromUnitSpec(this.$system, specs, unit)
+
+            component.connect($component as $Component)
+
+            this.setSubComponents({
+              component,
+            })
+
+            this.registerRoot(component)
+
+            this._component = component
+
+            this.$slot['default'] = component
+          })
+
+          this._unlisten = () => {
+            if (this._component) {
+              this.unregisterRoot(this._component)
+
+              this.setSubComponents({})
+
+              this._component = undefined
+
+              this.$slot['default'] = this
+            }
+          }
+        }
+      },
+    }[prop](current, prev)
   }
 }
