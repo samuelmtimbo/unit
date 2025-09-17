@@ -221,7 +221,7 @@ export function unregisterParentRoot(
 
   parentRoot.splice(at, 1)
 
-  emit && component.emit('unregister_parent_root', component)
+  emit && component.emit('unregister_parent_root', child)
 }
 
 export function reorderRoot(
