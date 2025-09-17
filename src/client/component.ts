@@ -2461,11 +2461,16 @@ export class Component<
             }
 
             if (subComponent) {
-              if (subComponent.$rootParent) {
+              if (
+                subComponent.$rootParent &&
+                subComponent.$rootParent.$mountParentRoot.includes(subComponent)
+              ) {
                 subComponent.$rootParent.removeParentRoot(subComponent)
               }
 
-              this.registerRoot(subComponent)
+              if (!this.hasRoot(subComponent)) {
+                this.registerRoot(subComponent)
+              }
             }
           }
         }
@@ -2502,14 +2507,20 @@ export class Component<
                 this.registerRoot(parentRoot)
               }
 
-              this.unregisterRoot(subComponent)
+              if (this.hasRoot(subComponent)) {
+                this.unregisterRoot(subComponent)
+              }
             }
           }
         }
       ),
       $emitter.$addListener(
         { event: 'register_parent_root' },
-        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
+        ([globalRef, slotName, path = []]: [
+          GlobalRefSpec,
+          string,
+          string[],
+        ]) => {
           if (!this.$controlled) {
             if (path.length > 0) {
               return
@@ -2538,7 +2549,12 @@ export class Component<
               }
 
               if (subComponent) {
-                if (subComponent.$rootParent) {
+                if (
+                  subComponent.$rootParent &&
+                  subComponent.$rootParent.$mountParentRoot.includes(
+                    subComponent
+                  )
+                ) {
                   subComponent.$rootParent.removeParentRoot(subComponent)
                 } else if (
                   subComponent.$parent &&
@@ -2547,7 +2563,9 @@ export class Component<
                   subComponent.$parent.removeRoot(subComponent)
                 }
 
-                this.registerParentRoot(subComponent)
+                if (!this.hasParentRoot(subComponent)) {
+                  this.registerParentRoot(subComponent)
+                }
               }
             }
           }
@@ -2565,35 +2583,11 @@ export class Component<
 
             const components = this.$system.getLocalComponents(globalId)
 
-            if (!components.length) {
-              return
-            }
+            for (const component of components) {
+              if (this.hasParentRoot(component)) {
+                this.unregisterParentRoot(component)
 
-            let subComponent: Component
-
-            if (!this.$parent.$controlled) {
-              for (const subComponentId in this.$parent.$subComponent) {
-                const siblingComponent =
-                  this.$parent.$subComponent[subComponentId]
-
-                if (siblingComponent.$remoteId === globalId) {
-                  subComponent = siblingComponent
-
-                  break
-                }
-              }
-
-              if (subComponent) {
-                if (subComponent.$rootParent) {
-                  subComponent.$rootParent.removeParentRoot(subComponent)
-                } else if (
-                  subComponent.$parent &&
-                  subComponent.$parent.$mountRoot.includes(subComponent)
-                ) {
-                  subComponent.$parent.removeRoot(subComponent)
-                }
-
-                this.unregisterParentRoot(subComponent)
+                break
               }
             }
           }
@@ -2614,10 +2608,14 @@ export class Component<
 
               const slotName = 'default'
 
-              parent.removeParentRoot(child)
+              if (parent.hasParentRoot(child)) {
+                parent.removeParentRoot(child)
+              }
               parent.insertParentChildAt(child, slotName, to)
             } else {
-              this.removeRoot(child)
+              if (this.hasRoot(child)) {
+                this.removeRoot(child)
+              }
               this.insertRootAt(child, to)
             }
           }
@@ -2648,7 +2646,9 @@ export class Component<
 
                 parent.unregisterParentRoot(child)
               } else {
-                this.unregisterRoot(child)
+                if (this.hasRoot(child)) {
+                  this.unregisterRoot(child)
+                }
               }
 
               if (parentId) {
@@ -2658,7 +2658,9 @@ export class Component<
 
                 parent.registerParentRoot(child, slotName)
               } else {
-                this.registerRoot(child)
+                if (!this.hasRoot(child)) {
+                  this.registerRoot(child)
+                }
               }
             }
           }
