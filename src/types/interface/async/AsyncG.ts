@@ -730,8 +730,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         bubble,
         parentId,
         children,
+        slotMap,
         index,
-        slotMap
+        undefined
       )
     },
 
