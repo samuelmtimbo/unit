@@ -1360,7 +1360,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ): void {
-    // console.log('Graph', '_exposePinSet', type, pinId, pinSpec, data, propagate)
+    // console.log(
+    //   'Graph',
+    //   '_exposePinSet',
+    //   type,
+    //   pinId,
+    //   pinSpec,
+    //   data,
+    //   propagate,
+    //   fork,
+    //   bubble
+    // )
 
     const exposedPin = new Pin({ data }, this.__system)
 
@@ -1951,7 +1961,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ): void {
-    // console.log('Graph', '_plugPin', type, pinId, subPinId, subPinSpec)
+    // console.log(
+    //   'Graph',
+    //   '_plugPin',
+    //   type,
+    //   pinId,
+    //   subPinId,
+    //   subPinSpec,
+    //   data,
+    //   propagate,
+    //   fork,
+    //   bubble
+    // )
 
     const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
 
@@ -3041,11 +3062,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     childId: string,
     at: number,
     slot: string,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     // console.log('Graph', '_insertSubComponentChild', subComponentId, childId, at, slot)
 
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSubComponentInsertChild(subComponentId, childId, at, slot)
     this._simSubComponentInsertChild(subComponentId, childId, at, slot, emit)
@@ -5608,7 +5631,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._removeSubComponentFromParent(childId, false, fork, bubble)
 
     if (parentId) {
-      this._insertSubComponentChild(parentId, childId, to, slotName, false)
+      this._insertSubComponentChild(
+        parentId,
+        childId,
+        to,
+        slotName,
+        false,
+        fork,
+        bubble
+      )
     } else {
       this._specAppendRoot(childId)
 
