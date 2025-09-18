@@ -3255,14 +3255,16 @@ export class Component<
 
     if (!this.$primitive) {
       if (!component.$primitive) {
-        for (const root of component.$mountRoot) {
-          let i = 0
+        let i = 0
 
+        for (const root of component.$mountRoot) {
           if (this.$slotParent) {
+            const index = this.$slotParent.$slotParentChildren['default'].length
+
             this.$slotParent.domInsertParentChildAt(
               component,
               'default',
-              at + i
+              index + i
             )
           } else {
             this.domCommitInsertChild(root, at)
