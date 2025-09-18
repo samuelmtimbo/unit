@@ -243,7 +243,13 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
       for (const root of tree) {
         traverseTree(root, null, (node, parent) => {
-          const { name, attr, style, element } = node.value
+          const { name, attr, style } = node.value
+
+          let { element } = node.value
+
+          if (element.style.display === 'contents') {
+            element = (element.childNodes.item(0) ?? element) as HTMLElement
+          }
 
           const computedStyle = window.getComputedStyle(element)
           const rect = element.getBoundingClientRect()
