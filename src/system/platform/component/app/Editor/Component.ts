@@ -21187,7 +21187,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const is_auto = is_svg || is_table
 
-    const temp_style = {
+    const temp_style: Dict<string> = {
       position: 'relative',
       boxSizing: 'border-box',
       margin: '0',
@@ -21200,7 +21200,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       opacity: '1',
       transform: '',
       color: 'currentcolor',
-      background: 'var(--background_)',
       maxWidth: '100%',
       maxHeight: '100%',
       fontSize: '1em',
@@ -21334,6 +21333,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             leaf_style[name] = style_prop[name]
           }
         }
+      }
+
+      if (!style['background'] && !style['background-image']) {
+        temp_style.background = 'var(--background)'
       }
 
       this._leaf_init_style[leaf_id] = style
