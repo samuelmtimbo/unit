@@ -26476,7 +26476,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (!this._frame_out) {
       if (focus) {
+        this._fullwindow_focusing = true
+
         container.focus()
+
+        this._fullwindow_focusing = false
       }
 
       this._unlisten_fullwindow_escape = addListeners(container, [
@@ -26619,9 +26623,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                   if (is_last_sub_component) {
                     if (this._enabled()) {
                       if (focus) {
+                        this._fullwindow_focusing = true
+
                         this._frame.focus()
 
                         last_sub_component.focus()
+
+                        this._fullwindow_focusing = false
                       }
                     }
                   }
@@ -26631,7 +26639,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
 
           if (focus) {
+            this._fullwindow_focusing = true
+
             last_sub_component.focus()
+
+            this._fullwindow_focusing = false
           }
         } else {
           if (this._tree_layout) {
