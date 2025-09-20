@@ -801,11 +801,22 @@ export function buildMoveMap(
               !unit?.[type]?.[pinId].ignored &&
               !spec?.[`${type}s`]?.[pinId].defaultIgnored
             ) {
+              const pinData = deepGetOrDefault(
+                data,
+                ['pin', unitId, type, pinId],
+                undefined
+              )
+
               if (!exposePinSetTask) {
                 exposePinSetTask = newTask([
                   {
                     in: true,
-                    action: makeExposePinSetAction(type, nextPinId, { ref }),
+                    action: makeExposePinSetAction(
+                      type,
+                      nextPinId,
+                      { ref },
+                      pinData
+                    ),
                   },
                 ])
 
