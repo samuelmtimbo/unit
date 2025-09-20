@@ -1,0 +1,46 @@
+{
+  "name": "on pointer cancel",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'pointercancel'",
+          "constant": true
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "emitter"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` pointercancel event",
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "6151735b-8120-4f42-bad0-8c83dccbcc8c",
+  "type": "`U`&`G`"
+}
