@@ -21,7 +21,7 @@ export default class Render extends Element<HTMLDivElement, Props> {
   private _component: Component
 
   public $input = {
-    component: UCGEE,
+    component: [...UCGEE, 'V'],
   }
 
   constructor($props: Props, $system: System) {
