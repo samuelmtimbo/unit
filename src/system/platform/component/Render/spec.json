@@ -2,24 +2,9 @@
   "name": "render",
   "type": "`U`&`C`&`V`",
   "inputs": {
-    "style": {
-      "type": "object",
-      "optional": true,
-      "metadata": {
-        "examples": ["{}"]
-      }
-    },
     "component": {
       "type": "`C`",
       "ref": true
-    },
-    "attr": {
-      "type": "object",
-      "optional": true,
-      "defaultIgnored": true,
-      "metadata": {
-        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
-      }
     }
   },
   "outputs": {},
