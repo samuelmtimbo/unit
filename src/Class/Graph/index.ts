@@ -2941,7 +2941,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const bundle = unit.getUnitBundleSpec({})
 
-    emit && this.emit('set_sub_component', unitId, bundle)
+    this.emit('set_sub_component', unitId, bundle)
   }
 
   private _simInjectSubComponent(
@@ -3276,7 +3276,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     if (unit.isElement()) {
       this._specInjectSubComponent(unitId)
-      this._specAppendRoot(unitId)
+
+      if (parentId) {
+        this._specSubComponentAppendChild(parentId, unitId, 'default')
+      } else {
+        this._specAppendRoot(unitId)
+      }
     }
   }
 
@@ -3670,7 +3675,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     registerRoot: boolean = true
   ): void {
     if (unit.isElement()) {
-      emit && this.emit('set_sub_component', unitId, bundle)
+      this.emit('set_sub_component', unitId, bundle)
 
       if (registerRoot) {
         if (parentId) {
@@ -3678,7 +3683,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
           parentComponent.registerParentRoot(unit as Component_, 'default')
         } else {
-          this.registerRoot(unit as Component_, emit)
+          this.registerRoot(unit as Component_, true)
         }
       }
 
@@ -5379,7 +5384,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const subComponent = this.getUnit(subComponentId) as Component_
 
     if (this._root.includes(subComponent)) {
-      this.unregisterRoot(subComponent, emit)
+      this.unregisterRoot(subComponent, true)
     }
   }
 
@@ -5754,16 +5759,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           const { unitId, bundle, parentId, merges, plugs } = data
 
           this._addUnitSpec(unitId, bundle, parentId, fork, bubble)
-
-          if (parentId) {
-            this._appendSubComponentChild(
-              parentId,
-              unitId,
-              'default',
-              fork,
-              bubble
-            )
-          }
 
           if (merges) {
             this._addUnitMerges(merges, propagate, fork, bubble)
