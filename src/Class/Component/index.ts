@@ -127,8 +127,8 @@ export class Component__<
     )
   }
 
-  unregisterParentRoot(component: Component_): void {
-    return unregisterParentRoot(this, this._parent_root, component, true)
+  unregisterParentRoot(component: Component_, emit: boolean): void {
+    return unregisterParentRoot(this, this._parent_root, component, emit)
   }
 
   reorderParentRoot(component: Component_<ComponentEvents>, to: number): void {

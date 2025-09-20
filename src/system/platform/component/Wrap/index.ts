@@ -114,12 +114,12 @@ export default class Wrap extends Element_<I, O> implements WP {
     return super.registerParentRoot(component, slotName)
   }
 
-  unregisterParentRoot(component: Unit & C): void {
+  unregisterParentRoot(component: Unit & C, emit: boolean = true): void {
     const at = this._parent_container.indexOf(component)
 
     this._parent_container.splice(at, 1)
 
-    return super.unregisterParentRoot(component)
+    return super.unregisterParentRoot(component, emit)
   }
 
   appendParentChild(component: Component_, slotName: string): void {

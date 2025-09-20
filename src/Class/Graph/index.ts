@@ -3860,7 +3860,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     delete this._unit[unitId]
   }
 
-  private _simRemoveUnit(unitId: string, propagate: boolean = true): void {
+  private _simRemoveUnit(unitId: string, emit: boolean = true): void {
     const unit = this.getUnit(unitId)
 
     if (unit.hasErr()) {
@@ -3873,9 +3873,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       kind: 'output',
     })
 
-    this._simUnplugUnit(unitId, propagate)
+    this._simUnplugUnit(unitId, emit)
 
-    if (propagate) {
+    if (emit) {
       if (exposedOutputId) {
         this.takeOutput(exposedOutputId)
       }
@@ -3898,13 +3898,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         this.registerRoot(child, true)
       }
 
-        if (parentId) {
-          const parent = this.getSubComponent(parentId)
+      if (parentId) {
+        const parent = this.getSubComponent(parentId)
 
-        parent.unregisterParentRoot(component, 'default', undefined, propagate)
+        parent.unregisterParentRoot(component, emit)
       }
 
-      this._simRemoveSubComponentFromParent(unitId, propagate)
+      this._simRemoveSubComponentFromParent(unitId, emit)
     }
   }
 

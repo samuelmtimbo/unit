@@ -395,14 +395,19 @@ export function lazyFromSpec(
       return this.__graph.unregisterRoot(component, emit)
     }
 
-    public registerParentRoot(component: Component_, slotName: string): void {
+    public registerParentRoot(
+      component: Component_,
+      slotName: string,
+      at: number,
+      emit?: boolean
+    ): void {
       this._ensure()
-      return this.__graph.registerParentRoot(component, slotName)
+      return this.__graph.registerParentRoot(component, slotName, at, emit)
     }
 
-    public unregisterParentRoot(component: Component_): void {
+    public unregisterParentRoot(component: Component_, emit?: boolean): void {
       this._ensure()
-      return this.__graph.unregisterParentRoot(component)
+      return this.__graph.unregisterParentRoot(component, emit)
     }
 
     private _load(): void {
