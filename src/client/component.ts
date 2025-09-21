@@ -935,7 +935,7 @@ export class Component<
     if (this.$rootParent) {
       index = this.$rootParent.$parentRoot.indexOf(this)
     } else if (this.$parent) {
-      index = this.$parent.$parentRoot.indexOf(this)
+      index = this.$parent.$root.indexOf(this)
     } else {
       index = this.$context.$children.indexOf(this)
     }
@@ -1743,6 +1743,10 @@ export class Component<
   }
 
   getRootBase(path: string[] = []): [string[], Component][] {
+    if (this.$detached) {
+      return []
+    }
+
     if (this.isBase()) {
       return [[path, this]]
     }
@@ -1801,6 +1805,10 @@ export class Component<
   }
 
   getBase(path: string[] = []): [string[], Component][] {
+    if (this.$detached) {
+      return []
+    }
+
     if (this.isBase()) {
       return [[path, this]]
     }
@@ -2056,6 +2064,10 @@ export class Component<
   ): void {
     // console.log('Component', 'domAppendChild')
 
+    if (child.$detached) {
+      return
+    }
+
     this._domAppendChild(child, slotName)
   }
 
@@ -2136,6 +2148,10 @@ export class Component<
     at = at ?? slot.$slotChildren[slotName].indexOf(child)
 
     slot.domRemoveParentChildAt(child, slotName, at, at, this.$slotParent)
+
+    if (child.$detached) {
+      return
+    }
 
     child.setSlotParent(null)
   }
@@ -2837,7 +2853,9 @@ export class Component<
   }
 
   public domAppendRoot(component: Component, at: number, index: number): void {
-    // component.setSlotParent(this)
+    if (component.$detached) {
+      return
+    }
 
     component.setSlotParent(this)
 
@@ -3267,6 +3285,10 @@ export class Component<
   }
 
   public domInsertRootAt(component: Component, at: number): void {
+    if (component.$detached) {
+      return
+    }
+
     component.setSlotParent(this)
 
     this.$slotParentChildren['default'][at] = component
@@ -3351,6 +3373,10 @@ export class Component<
   }
 
   public domRemoveRoot(component: Component, index: number, at: number): void {
+    if (component.$detached) {
+      return
+    }
+
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (let i = 0; i < component.$mountRoot.length; i++) {
@@ -3583,6 +3609,10 @@ export class Component<
     at: number,
     index: number
   ): void {
+    if (component.$detached) {
+      return
+    }
+
     component.setSlotParent(this)
 
     this.$slotParentChildren['default'] =
@@ -3695,6 +3725,10 @@ export class Component<
       this.$slotParentChildren[slotName] ?? []
     this.$slotParentChildren[slotName][at] = component
 
+    if (component.$detached) {
+      return
+    }
+
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (const root of component.$mountRoot) {
@@ -3784,6 +3818,10 @@ export class Component<
     index: number,
     slotParent?: Component
   ): void {
+    if (component.$detached) {
+      return
+    }
+
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (let i = 0; i < component.$mountRoot.length; i++) {
