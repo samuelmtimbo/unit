@@ -134,7 +134,7 @@ assert.equal(A.$mountParentRoot.indexOf(C), 1)
 assert.equal(BDiv.$slotParent, ADiv)
 assert.equal(CDiv.$slotParent, ADiv)
 
-assert.equal(A.$slotParent, parentA)
+assert.equal(A.$slotParent, parentB)
 
 parentB.removeRoot(parentA)
 parentB.appendRoot(parentA)
@@ -160,4 +160,4 @@ assert.equal(A.$mountParentRoot.indexOf(C), 1)
 assert.equal(BDiv.$slotParent, ADiv)
 assert.equal(CDiv.$slotParent, ADiv)
 
-assert.equal(A.$slotParent, parentA)
+assert.equal(A.$slotParent, parentB)
