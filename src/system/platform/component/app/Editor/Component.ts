@@ -1770,6 +1770,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   public setSubgraphPath(path: string[]): string[] {
     return this._editor.setSubgraphPath(path)
   }
+
+  public getRect() {
+    return this._editor.getRect()
+  }
 }
 
 export interface LinkProps {
@@ -25303,6 +25307,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       return cached_subgraph.getSubgraphAtPath(sub_path)
     }
+  }
+
+  public getRect() {
+    return this.get_nodes_bounding_rect(this._node)
   }
 
   public focus(options: FocusOptions | undefined = { preventScroll: true }) {

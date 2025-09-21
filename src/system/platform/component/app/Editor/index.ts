@@ -2,6 +2,7 @@ import { $ } from '../../../../../Class/$'
 import { Element_ } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
 import { SnapshotOpt } from '../../../../../Class/Unit'
+import { Rect } from '../../../../../client/util/geometry/types'
 import { Zoom } from '../../../../../client/zoom'
 import { fromBundle } from '../../../../../spec/fromBundle'
 import { fromSpec } from '../../../../../spec/fromSpec'
@@ -98,6 +99,9 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           },
           set zoom(zoom: Zoom) {
             component.setZoom(zoom)
+          },
+          get rect(): Rect {
+            return component.getRect()
           },
           get selected(): GraphNodeSpec[] {
             return component.getSelectedNodes()
