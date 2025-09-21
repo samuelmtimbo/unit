@@ -973,6 +973,7 @@ export type Config = {
   unitNames: boolean
   pinNames: boolean
   metaSelection: boolean
+  center: 'node' | 'unit'
 }
 
 export interface Props {
@@ -1904,6 +1905,7 @@ const defaultProps: DefaultProps = {
     unitNames: true,
     pinNames: true,
     metaSelection: false,
+    center: 'unit',
   },
 }
 
@@ -6139,11 +6141,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _center_graph = (preventAnimation?: boolean) => {
+    const { center } = this._config()
+
     if (this._node_count === 0) {
       return
     }
 
-    this._center_on_nodes(this._unit_node, preventAnimation)
+    if (center === 'unit') {
+      this._center_on_nodes(this._unit_node, preventAnimation)
+    } else {
+      // center === 'node'
+      this._center_on_nodes(this._node, preventAnimation)
+    }
   }
 
   private _center_graph_on_selected = (preventAnimation?: boolean) => {
