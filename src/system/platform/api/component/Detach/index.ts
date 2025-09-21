@@ -1,8 +1,8 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
-import { globalUrl } from '../../../../../spec/globalUrl'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_DETACH } from '../../../../_ids'
 
 export type DetachOpt = {
@@ -19,7 +19,7 @@ export interface I {
 export interface O {}
 
 export default class Detach extends Holder<I, O> {
-  private _component: Component_
+  private _unlisten: Unlisten
 
   constructor(system: System) {
     super(
@@ -43,21 +43,14 @@ export default class Detach extends Holder<I, O> {
   }
 
   f({ component, host, opt }: I, done: Done<O>): void {
-    this._component = component
-
-    const hostUrl = globalUrl(host.__global_id)
-
-    component.emit('call', { method: 'detach', data: [hostUrl, opt] })
+    this._unlisten = component.detach(host, opt)
   }
 
   d() {
-    if (this._component) {
-      this._component.emit('call', {
-        method: 'attach',
-        data: [this._i.opt],
-      })
+    if (this._unlisten) {
+      this._unlisten()
 
-      this._component = undefined
+      this._unlisten = undefined
     }
   }
 }

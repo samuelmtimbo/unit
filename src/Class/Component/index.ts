@@ -7,6 +7,7 @@ import {
   attachDropTarget,
   attachText,
   cancelAnimation,
+  detach,
   hasChild,
   insertChild,
   pullChild,
@@ -26,8 +27,10 @@ import {
 } from '../../component/method'
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
+import { SharedRef } from '../../SharefRef'
 import { fromUnitBundle } from '../../spec/fromUnitBundle'
 import { System } from '../../system'
+import { DetachOpt } from '../../system/platform/api/component/Detach'
 import { Dict } from '../../types/Dict'
 import { AnimationSpec, C, C_EE, ComponentSetup } from '../../types/interface/C'
 import { Component_, ComponentEvents } from '../../types/interface/Component'
@@ -63,6 +66,9 @@ export class Component__<
   public _stopPropagation: Dict<number> = {}
   public _stopImmediatePropagation: Dict<number> = {}
   public _preventDefault: Dict<number> = {}
+  public _detachTo: SharedRef<{ host: string; opt: DetachOpt }> = {
+    current: null,
+  }
   public _attachDropTarget: [][] = []
   public _attachText: [string, string][] = []
 
@@ -89,6 +95,10 @@ export class Component__<
     this._slot = {
       default: this,
     }
+  }
+
+  detach(host: Component_, opt: DetachOpt): Unlisten {
+    return detach(this, this._detachTo, host, opt)
   }
 
   isElement(): boolean {
@@ -230,6 +240,7 @@ export class Component__<
       stopPropagation: Object.keys(this._stopPropagation),
       stopImmediatePropagation: Object.keys(this._stopImmediatePropagation),
       preventDefault: Object.keys(this._preventDefault),
+      detachTo: this._detachTo.current,
       attachText: this._attachText,
       attachDropTarget: this._attachDropTarget,
     }
@@ -239,8 +250,6 @@ export class Component__<
 
   private _component_reset(): void {
     forEach(this._children, (u) => u.reset())
-
-    // this.emit('call', { method: 'reset', data: [] })
   }
 
   private _component_play(): void {

@@ -1,3 +1,4 @@
+import { DetachOpt } from '../../system/platform/api/component/Detach'
 import { Dict } from '../Dict'
 import { UnitBundle } from '../UnitBundle'
 import { UnitBundleSpec } from '../UnitBundleSpec'
@@ -38,6 +39,7 @@ export type ComponentSetup = {
   stopImmediatePropagation: string[]
   preventDefault: string[]
   attachText: [string, string][]
+  detachTo: { host: string; opt: DetachOpt }
   attachDropTarget: [][]
 }
 
@@ -76,5 +78,6 @@ export interface C {
   stopPropagation(name: string): Unlisten
   attachText(type: string, text: string): Unlisten
   attachDropTarget(): Unlisten
+  detach(host: Component_, opt: DetachOpt): Unlisten
   getSetup(): ComponentSetup
 }

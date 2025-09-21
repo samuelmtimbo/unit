@@ -1,7 +1,10 @@
 import { Graph } from '../Class/Graph'
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
+import { SharedRef } from '../SharefRef'
 import { evaluateDataValue } from '../spec/evaluateDataValue'
+import { globalUrl } from '../spec/globalUrl'
 import { resolveDataRef } from '../spec/resolveDataValue'
+import { DetachOpt } from '../system/platform/api/component/Detach'
 import { Dict } from '../types/Dict'
 import { AnimationSpec } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
@@ -409,5 +412,25 @@ export function attachDropTarget(
     if (attachTextDropTargetArray.length === 0) {
       component.emit('call', { method: 'detachDropTarget', data: [] })
     }
+  }
+}
+
+export function detach(
+  component: Component_,
+  detachTo: SharedRef<{ host: string; opt: DetachOpt }>,
+  host: Component_,
+  opt: DetachOpt
+): Unlisten {
+  const hostUrl = globalUrl(host.__global_id)
+
+  detachTo.current = { host: hostUrl, opt }
+
+  component.emit('call', { method: 'detach', data: [hostUrl, opt] })
+
+  return () => {
+    component.emit('call', {
+      method: 'attach',
+      data: [opt],
+    })
   }
 }

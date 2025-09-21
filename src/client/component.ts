@@ -624,7 +624,6 @@ export class Component<
   private _animateBase = (
     leaves: Component[],
     slot: Component<any>,
-    reverse: boolean = false,
     prepend: boolean = false,
     commit: Callback
   ): Unlisten => {
@@ -648,9 +647,9 @@ export class Component<
       target = target.$slotParent
     }
 
-    const trait = extractTrait(target, measureText)
-    const style = rawExtractStyle(target.$element, trait, measureText)
-    const attr = extractAttr(target.$element)
+    let trait = extractTrait(target, measureText)
+    let style = rawExtractStyle(target.$element, trait, measureText)
+    let attr = extractAttr(target.$element)
 
     // delete style['transform']
     delete style['opacity']
@@ -714,8 +713,6 @@ export class Component<
         target.$element.appendChild(frame)
       }
 
-      !reverse && this.domRemoveLeaf(leaf)
-
       leaf.unmount()
 
       frame.appendChild(leaf.$element)
@@ -742,6 +739,8 @@ export class Component<
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
           if (j % leaves.length === 0) {
+            trait = extractTrait(target, measureText)
+
             reflectTreeTrait(this.$system, trait, [tree], () => {
               return []
             })
@@ -762,16 +761,10 @@ export class Component<
           const scrollDy = scrollY - scrollY0
 
           frame.style.left = `${
-            x -
-            (reverse ? this.$context.$x : trait.x) +
-            ((Math.abs(sx) - 1) * width) / 2 -
-            scrollDx
+            x - trait.x + ((Math.abs(sx) - 1) * width) / 2 - scrollDx
           }px`
           frame.style.top = `${
-            y -
-            (reverse ? this.$context.$y : trait.y) +
-            ((Math.abs(sy) - 1) * height) / 2 -
-            scrollDy
+            y - trait.y + ((Math.abs(sy) - 1) * height) / 2 - scrollDy
           }px`
           frame.style.width = `${width}px`
           frame.style.height = `${height}px`
@@ -870,18 +863,32 @@ export class Component<
 
     this.$detached = true
 
-    if (this._baseAnimationAbort) {
-      this._baseAnimationAbort()
-
-      this._baseAnimationAbort = undefined
-    }
-
     const hostGlobalId = host.replace('unit://', '')
 
     const hosts = getLocalComponents(hostGlobalId)
 
     if (hosts.length === 0) {
       return
+    }
+
+    const leaves = this.getRootLeaves()
+
+    const alreadyAnimating = !!this._baseAnimationAbort
+
+    if (this._baseAnimationAbort) {
+      this._baseAnimationAbort()
+
+      this._baseAnimationAbort = undefined
+    }
+
+    if (alreadyAnimating) {
+      for (const leaf of leaves) {
+        if (leaf.$hostSlot) {
+          remove(leaf.$hostSlot.$attachedChildren, leaf)
+        }
+
+        leaf.$hostSlot = null
+      }
     }
 
     const activeElementInside = this.isFocusInside()
@@ -891,8 +898,6 @@ export class Component<
     const hostComponent = hosts[0] as Component
 
     const hostSlot = hostComponent.getSlot('default')
-
-    const leaves = this.getRootLeaves()
 
     const all = [...leaves]
 
@@ -941,7 +946,6 @@ export class Component<
       this._baseAnimationAbort = this._animateBase(
         all,
         hostSlot,
-        false,
         prepend,
         commit
       )
@@ -963,6 +967,8 @@ export class Component<
 
     this.$detached = false
 
+    const alreadyAnimating = !!this._baseAnimationAbort
+
     if (this._baseAnimationAbort) {
       this._baseAnimationAbort()
 
@@ -970,8 +976,6 @@ export class Component<
     }
 
     const leaves = this.getRootLeaves()
-
-    let leafEnd = 0
 
     const couple = (leaf: Component) => {
       if (leaf.$hostSlot) {
@@ -1013,23 +1017,28 @@ export class Component<
         }
       )
 
-      for (let i = 0; i < leaves.length; i++) {
-        const leaf = leaves[i]
+      const targetSlot = this.$detachedSlotParent
 
-        const targetSlot = this.$detachedSlotParent
+      if (!alreadyAnimating) {
+        for (let i = 0; i < leaves.length; i++) {
+          const leaf = leaves[i]
 
-        this._baseAnimationAbort = this._animateBase(
-          [leaf],
-          targetSlot,
-          true,
-          false,
-          () => {
-            leafEnd++
+          this.domRemoveLeaf(leaf)
+        }
+      }
+
+      this._baseAnimationAbort = this._animateBase(
+        leaves,
+        targetSlot,
+        false,
+        () => {
+          for (let i = 0; i < leaves.length; i++) {
+            const leaf = leaves[i]
 
             couple(leaf)
           }
-        )
-      }
+        }
+      )
     } else {
       for (let i = 0; i < leaves.length; i++) {
         const leaf = leaves[i]
@@ -2335,6 +2344,7 @@ export class Component<
         preventDefault,
         attachDropTarget,
         attachText,
+        detachTo,
       } = setup
 
       for (const event of events) {
@@ -2357,6 +2367,14 @@ export class Component<
 
       for (const [] of attachDropTarget) {
         this.attachDropTarget()
+      }
+
+      if (detachTo) {
+        const { host, opt } = detachTo
+
+        setTimeout(() => {
+          this.detach(host, opt)
+        }, 0)
       }
     })
 
@@ -2882,7 +2900,7 @@ export class Component<
 
     child.$domParent = parent
 
-    const target = this._wrapElement(parent, child)
+    const target = parent._wrapElement(parent, child)
 
     insertAt(parent.$element, target, at)
   }

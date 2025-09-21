@@ -6,34 +6,34 @@ import { getPosition, getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
 
 export const extractTrait = (
-  leafComp: Component,
+  component: Component,
   measureText: MeasureTextFunction
 ): LayoutNode => {
-  const leaf_context = leafComp.$context
+  const leafContext = component.$context
 
-  let { $node } = leafComp
+  let { $node } = component
 
-  if (leafComp.$wrapElement && leafComp.$wrapElement.isConnected) {
-    $node = leafComp.$wrapElement
+  if (component.$wrapElement && component.$wrapElement.isConnected) {
+    $node = component.$wrapElement
   }
 
   if ($node instanceof HTMLElement || $node instanceof SVGElement) {
     let { width, height } = getSize($node)
 
     const { x, y } = getPosition($node)
-    const { sx, sy } = leafComp.getScale()
+    const { sx, sy } = component.getScale()
 
-    const fontSize: number = leafComp.getFontSize()
-    const opacity: number = leafComp.getOpacity()
-    const color: RGBA = leafComp.getColor()
-    const background: RGBA = leafComp.getBackgroundColor()
+    const fontSize: number = component.getFontSize()
+    const opacity: number = component.getOpacity()
+    const color: RGBA = component.getColor()
+    const background: RGBA = component.getBackgroundColor()
 
     width /= Math.abs(sx)
     height /= Math.abs(sy)
 
     return { x, y, width, height, sx, sy, opacity, fontSize, color, background }
   } else if ($node instanceof Text) {
-    const fontSize = leafComp.getFontSize()
+    const fontSize = component.getFontSize()
 
     let x: number
     let y: number
@@ -48,19 +48,19 @@ export const extractTrait = (
 
     let parentTrait: LayoutNode
 
-    if (leafComp.$parent) {
-      parentTrait = extractTrait(leafComp.$parent, measureText)
+    if (component.$parent) {
+      parentTrait = extractTrait(component.$parent, measureText)
 
-      color = leafComp.getColor()
+      color = component.getColor()
     } else {
-      const { $color } = leafComp.$context
+      const { $color } = component.$context
 
       color = hexToRgba($color)
     }
 
     background = TRANSPARENT_RGBA
 
-    const position = getRelativePosition($node, leaf_context.$element)
+    const position = getRelativePosition($node, leafContext.$element)
 
     x = position.x
     y = position.y

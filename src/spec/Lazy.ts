@@ -5,6 +5,7 @@ import { Pin } from '../Pin'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
+import { DetachOpt } from '../system/platform/api/component/Detach'
 import { Classes, GraphPinsSpec, GraphSubPinSpec, Specs } from '../types'
 import { Action } from '../types/Action'
 import { BundleSpec } from '../types/BundleSpec'
@@ -408,6 +409,11 @@ export function lazyFromSpec(
     public unregisterParentRoot(component: Component_, emit?: boolean): void {
       this._ensure()
       return this.__graph.unregisterParentRoot(component, emit)
+    }
+
+    public detach(host: Component_, opt: DetachOpt): Unlisten {
+      this._ensure()
+      return this.__graph.detach(host, opt)
     }
 
     private _load(): void {
