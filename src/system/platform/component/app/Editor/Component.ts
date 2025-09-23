@@ -35099,6 +35099,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_mem_pull_sub_component_child', parent_id, child_id)
 
+    this.__mem_pull_sub_component_child(parent_id, child_id)
+
+    this._layout_mem_move_sub_component_child(parent_id, child_id, null)
+  }
+
+  private __mem_pull_sub_component_child = (
+    parent_id: string | null,
+    child_id: string
+  ): void => {
+    // console.log('Graph', '__mem_pull_sub_component_child', parent_id, child_id)
+
     const { component } = this.$props
 
     const child_component = this._get_sub_component(child_id)
@@ -35110,8 +35121,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       component.pullRoot(child_component)
     }
-
-    this._layout_mem_move_sub_component_child(parent_id, child_id, null)
   }
 
   private _mem_insert_parent_child = (
@@ -36048,11 +36057,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       next_parent_id,
       next_index
     )
-    this._layout_mem_move_sub_component_child(
-      parent_id,
-      child_id,
-      next_parent_id
-    )
     this._spec_move_sub_component_child(
       parent_id,
       child_id,
@@ -36138,7 +36142,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_parent_id: string | null,
     next_index: number
   ) => {
-    this._mem_pull_sub_component_child(parent_id, child_id)
+    this.__mem_pull_sub_component_child(parent_id, child_id)
 
     this._layout_mem_move_sub_component_child(
       parent_id,
