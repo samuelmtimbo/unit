@@ -732,6 +732,7 @@ import {
   revertObj,
 } from '../../../../../util/object'
 import { domToBundle } from '../../../../../util/parser/domToUnit'
+import { TopoNode, topoSort } from '../../../../../util/sort/topoSort'
 import { localeCompare, removeWhiteSpace } from '../../../../../util/string'
 import { getDivTextSize } from '../../../../../util/text/getDivTextSize'
 import { getTextWidth } from '../../../../../util/text/getPlainTextWidth'
@@ -19410,12 +19411,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _order_sub_component_ids = (
     sub_component_ids: string[]
   ): string[] => {
-    return sub_component_ids.sort((a, b) => {
-      const a_index = this._get_sub_component_tree_index(a)
-      const b_index = this._get_sub_component_tree_index(b)
+    const nodes: TopoNode[] = sub_component_ids.map((sub_component_id) => {
+      const id = sub_component_id
 
-      return a_index - b_index
+      let position = this._get_sub_component_parent_index(sub_component_id)
+      let parentId = this._spec_get_sub_component_parent_id(sub_component_id)
+
+      while (parentId && !sub_component_ids.includes(parentId)) {
+        parentId = this._spec_get_sub_component_parent_id(parentId)
+      }
+
+      parentId = parentId ?? ''
+
+      return {
+        id,
+        parentId,
+        position,
+      }
     })
+
+    const sorted = topoSort(nodes)
+
+    return sorted.map((node) => node.id)
   }
 
   private _enter_default_fullwindow = (): void => {

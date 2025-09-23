@@ -48,7 +48,7 @@ export function weakMerge<A extends object, B extends object>(
 
 export function weakReadMerge<A extends object, B extends object>(
   a: A,
-  b: B,
+  b: B
 ): A & B {
   return new Proxy(b, {
     get(_, p) {
