@@ -1103,13 +1103,7 @@ export class Component<
       (parent, leafComp) => {
         const index = parent.$parentRoot.indexOf(leafComp)
 
-        parent.domRemoveParentRootAt(
-          leafComp,
-          'default',
-          index,
-          index,
-          this.$slotParent
-        )
+        parent.domRemoveParentRootAt(leafComp, 'default', index, index)
       },
       (leafComp) => {
         //
@@ -1128,13 +1122,7 @@ export class Component<
       (parent, leafComp) => {
         const index = parent.$parentRoot.indexOf(leafComp)
 
-        parent.domRemoveParentRootAt(
-          leafComp,
-          'default',
-          index,
-          index,
-          this.$slotParent
-        )
+        parent.domRemoveParentRootAt(leafComp, 'default', index, index)
       },
       () => {
         //
@@ -2147,7 +2135,7 @@ export class Component<
 
     at = at ?? slot.$slotChildren[slotName].indexOf(child)
 
-    slot.domRemoveParentChildAt(child, slotName, at, at, this.$slotParent)
+    slot.domRemoveParentChildAt(child, slotName, at, at)
 
     if (child.$detached) {
       return
@@ -3385,8 +3373,7 @@ export class Component<
               component.$mountRoot[i],
               'default',
               at,
-              at,
-              this.$slotParent
+              at
             )
           } else {
             this.domRemoveRoot(component.$mountRoot[i], index, at)
@@ -3398,8 +3385,7 @@ export class Component<
             component,
             'default',
             at,
-            index,
-            this.$slotParent
+            index
           )
         } else {
           this.domCommitRemoveChild(component, at)
@@ -3785,13 +3771,7 @@ export class Component<
     if (slot === this) {
       const _at = this.$parentChildren.indexOf(component)
 
-      this.domRemoveParentChildAt(
-        component,
-        slotName,
-        at,
-        _at,
-        this.$slotParent
-      )
+      this.domRemoveParentChildAt(component, slotName, at, _at)
       this.memRemoveParentChildAt(component, slotName, at, _at)
     } else {
       slot.removeParentChild(component, 'default', at)
@@ -3815,8 +3795,7 @@ export class Component<
     component: Component,
     slotName: string,
     at: number,
-    index: number,
-    slotParent?: Component
+    index: number
   ): void {
     if (component.$detached) {
       return
@@ -3830,16 +3809,14 @@ export class Component<
               component.$mountRoot[i],
               slotName,
               at,
-              index,
-              slotParent
+              index
             )
           } else {
             this.domRemoveParentChildAt(
               component.$mountRoot[i],
               slotName,
               at,
-              index,
-              slotParent
+              index
             )
           }
         }
@@ -3849,11 +3826,8 @@ export class Component<
             component,
             'default',
             at,
-            index,
-            slotParent
+            index
           )
-        } else if (slotParent) {
-          slotParent.domCommitRemoveChild(component, at)
         } else {
           this.domCommitRemoveChild(component, at)
         }
@@ -3861,18 +3835,12 @@ export class Component<
     } else {
       if (!component.$primitive) {
         for (const root of component.$mountRoot) {
-          this.domRemoveParentChildAt(root, slotName, at, at, slotParent)
+          this.domRemoveParentChildAt(root, slotName, at, at)
 
           if (!root.$primitive) {
             let i = 1
             for (const parentRoot of root.$mountParentChildren) {
-              this.domRemoveParentChildAt(
-                parentRoot,
-                slotName,
-                at,
-                index,
-                slotParent
-              )
+              this.domRemoveParentChildAt(parentRoot, slotName, at, index)
             }
           }
         }
@@ -3963,13 +3931,7 @@ export class Component<
     const _at = this.$mountParentRoot.indexOf(component)
     const slotName = this.$parentRootSlotName[at]
     this.postRemoveParentRootAt(component, slotName, at, _at)
-    this.domRemoveParentRootAt(
-      component,
-      slotName,
-      at,
-      _at,
-      slotParent ?? this.$slotParent
-    )
+    this.domRemoveParentRootAt(component, slotName, at, _at)
     this.memRemoveParentRootAt(component, slotName, at, _at)
   }
 
@@ -3998,12 +3960,11 @@ export class Component<
     component: Component,
     slotName: string,
     at: number,
-    _at: number,
-    slotParent?: Component
+    _at: number
   ): void {
     // console.log(this.constructor.name, 'domRemoveParentRootAt', component.constructor.name, slotName, at, _at)
     const slot = this.$slot[slotName]
-    slot.domRemoveParentChildAt(component, 'default', at, _at, slotParent)
+    slot.domRemoveParentChildAt(component, 'default', at, _at)
   }
 
   public postRemoveParentRootAt(
