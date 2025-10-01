@@ -13082,7 +13082,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             fontSize: `${DATUM_FONT_SIZE}px`,
             ...userSelect('none'),
           },
-          fontSize: DATUM_FONT_SIZE,
           data: hidden ? EMPTY_TREE : tree,
         },
         this.$system

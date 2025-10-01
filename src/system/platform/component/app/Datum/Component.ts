@@ -1,6 +1,5 @@
 import { addListener } from '../../../../../client/addListener'
 import { Context } from '../../../../../client/context'
-import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { IOFocusEvent } from '../../../../../client/event/focus/FocusEvent'
@@ -32,7 +31,6 @@ import DataTree from '../DataTree/Component'
 export interface Props {
   style: Dict<string>
   data: TreeNode
-  fontSize: number
 }
 
 export interface _Props {
@@ -49,11 +47,17 @@ export class Datum extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { style = {}, data = getTree(''), fontSize } = $props
+    const { style = {}, data = getTree('') } = $props
+
+    const $element = parentElement($system)
+
+    this.$element = $element
+
+    const fontSize = this._getFontSize()
 
     const data_tree = new DataTree(
       {
-        style: { ...style, fontSize: `${fontSize ?? DEFAULT_FONT_SIZE}px` },
+        style: { ...style, fontSize: `${fontSize}px` },
         data,
         path: [],
         parent: null,
@@ -82,9 +86,6 @@ export class Datum extends Element<HTMLDivElement, Props> {
       makeCustomListener('leafpaste', this._onLeafPaste)
     )
 
-    const $element = parentElement($system)
-
-    this.$element = $element
     this.$slot = data_tree.$slot
 
     this.$subComponent = {
@@ -364,7 +365,7 @@ export class Datum extends Element<HTMLDivElement, Props> {
     this.dispatchEvent('datumchange', { data })
   }
 
-  private _refreshFont = () => {
+  private _getFontSize = () => {
     const { $width, $height } = this.$context
     const { style = {} } = this.$props
 
@@ -372,6 +373,12 @@ export class Datum extends Element<HTMLDivElement, Props> {
       (style.fontSize &&
         parseFontSize(style.fontSize, $width, $height, this.getFontSize())) ||
       this.getFontSize()
+
+    return fontSize
+  }
+
+  private _refreshFont = () => {
+    const fontSize = this._getFontSize()
 
     this._data_tree.setProp('fontSize', fontSize)
   }
@@ -403,7 +410,7 @@ export default class Datum_ extends Element<HTMLDivElement, _Props> {
 
     const data = this._get_tree(value)
 
-    const root = new Datum({ data, style, fontSize: 12 }, this.$system)
+    const root = new Datum({ data, style }, this.$system)
 
     root.addEventListener(
       makeCustomListener('datumchange', (event) => {
