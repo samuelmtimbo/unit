@@ -59603,7 +59603,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._pin_datum_tree[pin_node_id] ?? { value: undefined }
         ).value
 
-        this._state_graph_unit_remove_pin(pin_node_id, graphUnitId, type, pinId)
+        this._sim_graph_unit_remove_pin(pin_node_id)
 
         const unit_pin_spec = deepGetOrDefault(
           this._spec,
@@ -59623,6 +59623,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (hasPinId(spec, type, pinId)) {
         setPinSetId({ type, pinId, newPinId }, spec)
       }
+
+      setSpec(spec.id, spec)
 
       if (path.length === 1) {
         const next_pin_node_id = getPinNodeId(graphUnitId, type, newPinId)
@@ -59673,8 +59675,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           setSpec(this._spec.id, this._spec)
         }
       }
-
-      setSpec(spec.id, spec)
     }
 
     if (path.length === 2) {
