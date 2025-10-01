@@ -915,7 +915,7 @@ export class Component<
       for (let i = 0; i < all.length; i++) {
         const leaf = all[i]
 
-        hostSlot.domInsertChild(leaf, 'default', i)
+        hostSlot.domCommitInsertChild(leaf, i)
       }
 
       if (activeElementInside) {
