@@ -17,6 +17,7 @@ import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { clone } from '../clone'
 import { elementToJson, Tag } from '../element'
+import { getObjSingleKey } from '../object'
 import { TAG_TO_SPEC_ID } from '../tagToId'
 
 export function domToUnit(
@@ -55,9 +56,19 @@ export function domToBundle(
 
   const dom = parser.parseFromString(text, type)
 
-  const element = dom.documentElement
+  const html = dom.documentElement
 
-  const tree = elementToJson(element)
+  let body: HTMLBodyElement
+
+  for (const child of html.childNodes) {
+    if (child.nodeName === 'BODY') {
+      body = child as HTMLBodyElement
+
+      break
+    }
+  }
+
+  const tree = elementToJson(body)
 
   const { width, height } = size
 
@@ -70,7 +81,11 @@ export function domToBundle(
     component: { defaultWidth: width, defaultHeight: height },
   }
 
+  let total = 0
+
   const addChild = (node: Tag, parent_id: string | null) => {
+    total++
+
     const fallbackSpecId = isSvg ? ID_SVG : ID_DIV
 
     const node_spec_id = TAG_TO_SPEC_ID[node.name] ?? fallbackSpecId
@@ -88,6 +103,7 @@ export function domToBundle(
     }
 
     const SURFACE_PROPS = [
+      'src',
       'style',
       'd',
       'x',
@@ -168,23 +184,42 @@ export function domToBundle(
     }
   }
 
-  addChild(tree, null)
+  let bundle: UnitBundleSpec
+
+  for (const child of tree.children) {
+    addChild(child, null)
+  }
 
   const new_spec = newSpec(emptySpec(template_spec))
 
-  const bundle: UnitBundleSpec = {
-    unit: {
-      id: new_spec.id,
-      metadata: {
-        component: {
-          width,
-          height,
+  if (total === 1) {
+    const unit = new_spec.units[getObjSingleKey(new_spec.units)]
+
+    unit.metadata = {
+      component: {
+        width,
+        height,
+      },
+    }
+
+    bundle = {
+      unit,
+    }
+  } else {
+    bundle = {
+      unit: {
+        id: new_spec.id,
+        metadata: {
+          component: {
+            width,
+            height,
+          },
         },
       },
-    },
-    specs: {
-      [new_spec.id]: new_spec,
-    },
+      specs: {
+        [new_spec.id]: new_spec,
+      },
+    }
   }
 
   return bundle
