@@ -253,6 +253,7 @@ import {
   themeBackgroundColor,
 } from '../../../../../client/theme'
 import { time } from '../../../../../client/util/date/time'
+import { dataTransferItemAsString } from '../../../../../client/util/drag'
 import {
   NULL_VECTOR,
   Shape,
@@ -741,11 +742,9 @@ import { weakMerge } from '../../../../../weakMerge'
 import {
   ID_AUDIO,
   ID_BOX,
-  ID_DIV,
   ID_EDITOR,
   ID_IMAGE,
   ID_IMAGE_1,
-  ID_SVG,
   ID_VIDEO,
 } from '../../../../_ids'
 import forEachValueKey from '../../../../core/object/ForEachKeyValue/f'
@@ -3664,16 +3663,41 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { items, files } = dataTransfer
 
       if (items) {
+        const fileItems: DataTransferItem[] = []
+        const stringItems: DataTransferItem[] = []
+
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
 
+          if (item.kind === 'file') {
+            fileItems.push(item)
+          } else if (item.kind === 'string') {
+            stringItems.push(item)
+          }
+        }
+
+        for (let i = 0; i < fileItems.length; i++) {
+          const fileItem = fileItems[i]
+
           void this._drop_data_transfer_item(
-            item,
+            fileItem,
             drop_position,
             screen_position
           )
+        }
 
-          break
+        const DROP_PRIORITY = ['text/plain', 'text/html', 'text/uri-list']
+
+        stringItems.sort((a, b) => {
+          return DROP_PRIORITY.indexOf(a.type) - DROP_PRIORITY.indexOf(b.type)
+        })
+
+        if (stringItems.length > 0) {
+          void this._drop_data_transfer_item(
+            stringItems[0],
+            drop_position,
+            screen_position
+          )
         }
       } else {
         for (let i = 0; i < files.length; i++) {
@@ -3689,13 +3713,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     item: DataTransferItem,
     position: Position
   ) => {
-    return new Promise((resolve) => {
-      item.getAsString((text) => {
-        this._drop_text(text, position)
+    const text = await dataTransferItemAsString(item)
 
-        resolve(text)
-      })
-    })
+    this._drop_text(text, position)
   }
 
   private _drop_data_transfer_item = async (
@@ -3738,15 +3758,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (item.kind === 'string') {
       if (item.type === 'text/plain') {
         await this._drop_data_transfer_item_as_string(item, position)
-      } else if (item.type === 'text/html') {
-        //
       } else if (item.type === 'text/uri-list') {
         await this._drop_data_transfer_item_as_string(item, position)
+      } else if (item.type === 'text/html') {
+        const text = await dataTransferItemAsString(item)
+
+        const size = { width: 200, height: 200 }
+
+        void this._drop_parseable_text('text/html', text, size, position)
       }
-    } else if (item.kind === 'text/uri-list') {
-      //
-    } else if (item.kind === 'text/html') {
-      //
     }
   }
 
@@ -3958,13 +3978,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _drop_parseable_file = async (
     type: DOMParserSupportedType,
-    fallbackSpecId: string,
     file: File | Blob,
     size: Size,
     position?: Position
   ) => {
     const text = await file.text()
 
+    void this._drop_parseable_text(type, text, size, position)
+  }
+
+  private _drop_parseable_text = async (
+    type: DOMParserSupportedType,
+    text: string,
+    size: Size,
+    position?: Position
+  ) => {
     const bundle = domToBundle(this.$system, type, text, size)
 
     const new_unit_id = this._new_unit_id(bundle.unit.id)
@@ -3992,13 +4020,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._drop_image_file__template(
       file,
       async (_: string, __: HTMLImageElement, size) => {
-        return this._drop_parseable_file(
-          'image/svg+xml',
-          ID_SVG,
-          file,
-          size,
-          position
-        )
+        return this._drop_parseable_file('image/svg+xml', file, size, position)
       }
     )
   }
@@ -4006,7 +4028,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _drop_html_file = async (file: File | Blob, position?: Position) => {
     const size = { width: 200, height: 300 }
 
-    return this._drop_parseable_file('text/html', ID_DIV, file, size, position)
+    return this._drop_parseable_file('text/html', file, size, position)
   }
 
   private _drop_image_file = async (file: File | Blob, position?: Position) => {
@@ -22725,9 +22747,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             if (type === 'text/plain' || type === 'text/uri-list') {
               _event.stopPropagation()
 
-              _event.dataTransfer.items[i].getAsString((text) => {
+              const item = _event.dataTransfer.items[i]
+
+              void (async () => {
+                const text = await dataTransferItemAsString(item)
+
                 this._drop_text_on_node(node_id, text)
-              })
+              })()
             }
           }
         }
