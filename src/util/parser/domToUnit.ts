@@ -17,7 +17,7 @@ import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { clone } from '../clone'
 import { elementToJson, Tag } from '../element'
-import { getObjSingleKey } from '../object'
+import { getObjSingleKey, isEmptyObject } from '../object'
 import { TAG_TO_SPEC_ID } from '../tagToId'
 
 export function domToUnit(
@@ -125,14 +125,6 @@ export function domToBundle(
 
     const input: Dict<GraphUnitPinSpec> = {}
 
-    if (node_spec.inputs?.['attr']) {
-      input.attr = {
-        constant: true,
-        ignored: false,
-        data: { ref: [], data: attr },
-      }
-    }
-
     for (const name of SURFACE_PROPS) {
       const pinId = snakeToCamel(name)
 
@@ -148,6 +140,14 @@ export function domToBundle(
       }
 
       delete attr[name]
+    }
+
+    if (node_spec.inputs?.['attr'] && !isEmptyObject(attr)) {
+      input.attr = {
+        constant: true,
+        ignored: false,
+        data: { ref: [], data: attr },
+      }
     }
 
     addUnit(
