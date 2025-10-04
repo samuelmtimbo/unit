@@ -1382,18 +1382,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
   }
 
-  public onMount(): void {
-    // console.log('Search', 'onMount')
-  }
-
-  public onUnmount(): void {
-    // console.log('Search', 'onUnmount')
-  }
-
-  public onConnected(): void {
-    // console.log('Search', 'onConnected')
-  }
-
   onDestroy(): void {
     // console.log('Search', 'onDestroy')
 

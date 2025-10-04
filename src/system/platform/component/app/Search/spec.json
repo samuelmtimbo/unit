@@ -1,0 +1,36 @@
+{
+  "name": "search",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "attr": {
+      "type": "object",
+      "defaultIgnored": true
+    },
+    "selected": {
+      "type": "string"
+    },
+    "selectedColor": {
+      "type": "string"
+    },
+    "specs": {
+      "type": "object{}",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "atom-alt",
+    "description": "unit fuzzy list search implementing editor search protocol",
+    "tags": ["platform", "component", "app"]
+  },
+  "id": "4caaa14d-282f-49a0-832e-c5254735efbf",
+  "base": true,
+  "component": {
+    "defaultWidth": 360,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "render": true
+}
