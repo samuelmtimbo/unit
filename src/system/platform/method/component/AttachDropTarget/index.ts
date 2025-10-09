@@ -46,7 +46,7 @@ export default class AttachDropTarget<T> extends Holder<I<T>, O<T>> {
   }
 
   d() {
-    if (this._i.component) {
+    if (this._unlisten) {
       this._unlisten()
 
       this._done()
