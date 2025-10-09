@@ -13,6 +13,9 @@ export interface O<T> {
 }
 
 export default class Catch<T> extends Primitive<I<T>, O<T>> {
+  private _unlisten: Unlisten
+  private _done: () => void
+
   constructor(system: System) {
     super(
       {
@@ -29,10 +32,12 @@ export default class Catch<T> extends Primitive<I<T>, O<T>> {
       system,
       ID_CATCH
     )
-  }
 
-  private _unlisten: Unlisten
-  private _done: () => void
+    this.addListener('reset', () => {
+      this._unlisten = undefined
+      this._done = undefined
+    })
+  }
 
   onRefInputData(name: string, unit: Unit): void {
     // if (name === 'unit') {
@@ -43,9 +48,12 @@ export default class Catch<T> extends Primitive<I<T>, O<T>> {
         this._output.err.push(err)
       }
     })
+
     this._unlisten = unlisten
     this._done = done
+
     const err = unit.caughtErr()
+
     if (err !== null) {
       this._output.err.push(err)
     }
@@ -56,7 +64,9 @@ export default class Catch<T> extends Primitive<I<T>, O<T>> {
     // if (name === 'unit') {
     this._unlisten()
     this._unlisten = undefined
+
     this._done = undefined
+
     this._forward_all_empty()
     // }
   }

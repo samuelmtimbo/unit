@@ -1096,7 +1096,7 @@ export class Unit<
           throw new Error('unregistered Catcher cannot call done')
         }
       } else {
-        throw new Error("catcher cannot call done when there's no caught error")
+        // throw new Error("catcher cannot call done when there's no caught error")
       }
     }
 
