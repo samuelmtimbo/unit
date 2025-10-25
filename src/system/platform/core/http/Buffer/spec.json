@@ -9,8 +9,8 @@
         "a": {
           "metadata": {
             "position": {
-              "x": -254,
-              "y": 80
+              "x": -231,
+              "y": 98
             }
           }
         }
@@ -18,8 +18,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -207,
-          "y": 68
+          "x": -188,
+          "y": 77
         }
       }
     },
@@ -29,17 +29,17 @@
         "init": {
           "metadata": {
             "position": {
-              "x": -251,
-              "y": 1
+              "x": -256,
+              "y": 25
             }
           }
         },
         "done": {
-          "ignored": true,
+          "ignored": false,
           "metadata": {
             "position": {
-              "x": -230,
-              "y": -24
+              "x": -247,
+              "y": -8
             }
           }
         }
@@ -48,16 +48,16 @@
         "data": {
           "metadata": {
             "position": {
-              "x": -152,
-              "y": 44
+              "x": -146,
+              "y": 38
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -204,
-          "y": 15
+          "x": -206,
+          "y": 18
         }
       }
     },
@@ -72,13 +72,13 @@
           },
           "metadata": {
             "position": {
-              "x": -70,
-              "y": 183
+              "x": 53,
+              "y": 128
             },
             "data": {
               "position": {
-                "x": -87,
-                "y": 210
+                "x": -76,
+                "y": 134
               }
             }
           }
@@ -90,8 +90,8 @@
       },
       "metadata": {
         "position": {
-          "x": -36,
-          "y": 150
+          "x": 13,
+          "y": 100
         }
       }
     },
@@ -101,8 +101,8 @@
         "a": {
           "metadata": {
             "position": {
-              "x": 226,
-              "y": 140
+              "x": 257,
+              "y": 18
             }
           }
         },
@@ -113,8 +113,8 @@
       },
       "metadata": {
         "position": {
-          "x": 181,
-          "y": 118
+          "x": 208,
+          "y": 5
         }
       }
     },
@@ -128,8 +128,8 @@
       },
       "metadata": {
         "position": {
-          "x": 110,
-          "y": 65
+          "x": 116,
+          "y": -22
         }
       }
     },
@@ -152,13 +152,13 @@
           },
           "metadata": {
             "position": {
-              "x": 179,
-              "y": -34
+              "x": 76,
+              "y": -122
             },
             "data": {
               "position": {
-                "x": 198,
-                "y": -64
+                "x": 218,
+                "y": -134
               }
             }
           }
@@ -170,16 +170,16 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 194,
-              "y": -16
+              "x": 135,
+              "y": -135
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 145,
-          "y": -1
+          "x": 114,
+          "y": -94
         }
       }
     },
@@ -200,8 +200,8 @@
       },
       "metadata": {
         "position": {
-          "x": 240,
-          "y": 43
+          "x": 215,
+          "y": -79
         }
       }
     },
@@ -215,8 +215,8 @@
       },
       "metadata": {
         "position": {
-          "x": 73,
-          "y": 129
+          "x": 108,
+          "y": 47
         }
       }
     },
@@ -230,34 +230,8 @@
       },
       "metadata": {
         "position": {
-          "x": 37,
-          "y": 16
-        }
-      }
-    },
-    "pop": {
-      "id": "dff853f8-7bb4-48dc-a792-5efdead94640",
-      "input": {
-        "a": {},
-        "any": {}
-      },
-      "output": {
-        "last": {
-          "metadata": {
-            "position": {
-              "x": -119,
-              "y": -19
-            }
-          }
-        },
-        "done": {
-          "ignored": false
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": -87,
-          "y": 17
+          "x": 21,
+          "y": -44
         }
       }
     },
@@ -271,8 +245,8 @@
       },
       "metadata": {
         "position": {
-          "x": 7,
-          "y": 78
+          "x": 16,
+          "y": 22
         }
       }
     },
@@ -286,8 +260,8 @@
       },
       "metadata": {
         "position": {
-          "x": -57,
-          "y": 49
+          "x": -53,
+          "y": 21
         }
       }
     },
@@ -302,8 +276,34 @@
       },
       "metadata": {
         "position": {
-          "x": -133,
-          "y": 98
+          "x": -100,
+          "y": 80
+        }
+      }
+    },
+    "shift": {
+      "id": "4730fbc1-dd24-4b6a-adc2-d71e2b2df22d",
+      "input": {
+        "a": {},
+        "any": {}
+      },
+      "output": {
+        "first": {
+          "metadata": {
+            "position": {
+              "x": -135,
+              "y": -35
+            }
+          }
+        },
+        "done": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -96,
+          "y": -6
         }
       }
     }
@@ -315,17 +315,17 @@
           "a[]": true
         }
       },
-      "pop": {
-        "input": {
-          "a": true
-        }
-      },
       "state": {
         "output": {
           "data": true
         }
       },
       "length0": {
+        "input": {
+          "a": true
+        }
+      },
+      "shift": {
         "input": {
           "a": true
         }
@@ -388,21 +388,21 @@
           "a": true
         }
       },
-      "pop": {
+      "shift": {
         "output": {
           "done": true
         }
       }
     },
     "5": {
-      "pop": {
-        "input": {
-          "any": true
-        }
-      },
       "ifgreaterthan0": {
         "output": {
           "a": true
+        }
+      },
+      "shift": {
+        "input": {
+          "any": true
         }
       }
     },
@@ -478,14 +478,14 @@
         "position": {
           "0": {
             "ext": {
-              "x": -274,
-              "y": 93
+              "x": -244,
+              "y": 118
             }
           },
           "1": {
             "ext": {
-              "x": 239,
-              "y": 160
+              "x": 276,
+              "y": 33
             }
           }
         }
@@ -504,8 +504,30 @@
         "position": {
           "0": {
             "ext": {
-              "x": -269,
-              "y": -14
+              "x": -280,
+              "y": 27
+            }
+          }
+        }
+      }
+    },
+    "done": {
+      "plug": {
+        "0": {
+          "unitId": "state",
+          "pinId": "done",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -262,
+              "y": -27
             }
           }
         }
@@ -516,8 +538,8 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "pop",
-          "pinId": "last",
+          "unitId": "shift",
+          "pinId": "first",
           "kind": "output"
         }
       },
@@ -525,12 +547,13 @@
         "position": {
           "0": {
             "ext": {
-              "x": -121,
-              "y": -43
+              "x": -142,
+              "y": -59
             }
           }
         }
-      }
+      },
+      "ref": false
     }
   },
   "metadata": {
@@ -539,28 +562,28 @@
     "position": {
       "merge": {
         "1": {
-          "x": -94,
-          "y": 78
+          "x": -59,
+          "y": 65
         },
         "2": {
-          "x": 94,
-          "y": 18
+          "x": 76,
+          "y": -56
         },
         "3": {
-          "x": 18,
-          "y": 128
+          "x": 54,
+          "y": 60
         },
         "4": {
-          "x": -20,
-          "y": 31
+          "x": -28,
+          "y": -13
         },
         "5": {
-          "x": -43,
-          "y": 6
+          "x": -58,
+          "y": -24
         },
         "7": {
-          "x": -90,
-          "y": 133
+          "x": -46,
+          "y": 101
         },
         "11": {
           "x": -124,
@@ -583,16 +606,16 @@
           "y": 42
         },
         "16": {
-          "x": 197,
-          "y": 15
+          "x": 166,
+          "y": -96
         },
         "17": {
-          "x": 225,
-          "y": 88
+          "x": 238,
+          "y": -37
         },
         "19": {
-          "x": 125,
-          "y": 113
+          "x": 153,
+          "y": 15
         },
         "22": {
           "x": 3,
