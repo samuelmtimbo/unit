@@ -7,17 +7,23 @@ export const AsyncWrap = (
 ): any => {
   let $unit = unit
 
+  $unit.$__ = $unit.$__ ?? []
+
   for (const __ of ['$', ..._]) {
-    const AsyncWrapper = wrapper[__]
+    if (!$unit.$__.includes(__)) {
+      $unit.$__.push(__)
 
-    if (!AsyncWrapper) {
-      throw new Error('async wrapper is not registered')
-    }
+      const AsyncWrapper = wrapper[__]
 
-    const api = AsyncWrapper(unit)
+      if (!AsyncWrapper) {
+        throw new Error('async wrapper is not registered')
+      }
 
-    for (const method in api) {
-      $unit[method] = api[method]
+      const api = AsyncWrapper(unit)
+
+      for (const method in api) {
+        $unit[method] = api[method]
+      }
     }
   }
 

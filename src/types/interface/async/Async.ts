@@ -9,15 +9,5 @@ export const Async = (
   instance.__async = true
   instance.$__ = instance.$__ ?? []
 
-  const $_ = []
-
-  for (const __ of ['$', ..._]) {
-    if (!instance.$__.includes(__)) {
-      $_.push(__)
-
-      instance.$__.push(__)
-    }
-  }
-
-  return AsyncWrap(instance, $_, wrapper)
+  return AsyncWrap(instance, _, wrapper)
 }
