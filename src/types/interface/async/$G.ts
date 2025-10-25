@@ -59,6 +59,7 @@ export const G_METHOD_GET = [
 ]
 
 export const G_METHOD_CALL = [
+  'setFork',
   'addUnit',
   'addUnits',
   'removeUnit',
