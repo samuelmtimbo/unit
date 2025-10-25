@@ -1,6 +1,6 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../Class/Functional/Fail'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
 import { ID_SHIFT } from '../../../../_ids'
@@ -12,14 +12,17 @@ export interface I<T> {
 
 export interface O<T> {
   first: T
+  done: any
 }
 
-export default class Shift<T> extends Functional<I<T>, O<T>> {
+export default class Shift<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['a', 'any'],
-        o: ['first'],
+        fi: ['a', 'any'],
+        fo: ['first'],
+        i: [],
+        o: ['done'],
       },
       {
         input: {
@@ -45,5 +48,9 @@ export default class Shift<T> extends Functional<I<T>, O<T>> {
     }
 
     done({ first })
+  }
+
+  b() {
+    this._output.done.push(true)
   }
 }

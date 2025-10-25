@@ -12,6 +12,10 @@
   "outputs": {
     "first": {
       "type": "<T>"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "metadata": {
