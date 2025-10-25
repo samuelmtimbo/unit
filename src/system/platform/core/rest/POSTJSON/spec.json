@@ -7,7 +7,8 @@
           "unitId": "stringify",
           "pinId": "json"
         }
-      }
+      },
+      "functional": true
     },
     "url": {
       "plug": {
@@ -15,7 +16,8 @@
           "unitId": "fetch",
           "pinId": "url"
         }
-      }
+      },
+      "functional": true
     },
     "opt": {
       "plug": {
@@ -23,7 +25,8 @@
           "unitId": "deepmerge",
           "pinId": "b"
         }
-      }
+      },
+      "functional": true
     }
   },
   "outputs": {
