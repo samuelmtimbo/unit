@@ -12,7 +12,7 @@ import { apiNotSupportedError } from '../../../../../exception/APINotImplemented
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
-import { wrapWebSocket } from '../../../../../wrap/Socket'
+import { wrapWebSocket } from '../../../../../wrap/WebSocket'
 import { ID_WEB_SOCKET } from '../../../../_ids'
 
 export type I = {

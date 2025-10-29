@@ -4,19 +4,21 @@ import { WebSocketShape } from '../system/platform/api/network/WebSocket'
 import { Dict } from '../types/Dict'
 import { CH } from '../types/interface/CH'
 
-export type SocketEE = {
+export type WebSocketEE = {
   message: [string]
   close: [number, string]
   error: [string]
 }
 
-export type SocketEvents<_EE extends Dict<any[]>> = $Events<_EE & SocketEE> &
-  SocketEE
+export type WebSocketEvents<_EE extends Dict<any[]>> = $Events<
+  _EE & WebSocketEE
+> &
+  WebSocketEE
 
 export function wrapWebSocket(
   webSocket: WebSocketShape,
   system: System
-): CH & $<SocketEvents<{}>> {
+): CH & $<WebSocketEvents<{}>> {
   const socket = new (class Socket extends $ implements CH {
     __: string[] = ['CH']
 
