@@ -1,0 +1,25 @@
+{
+  "name": "set date",
+  "inputs": {
+    "date": {
+      "type": "`D`",
+      "ref": true
+    },
+    "day": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "done": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "calendar",
+    "description": "set `date` hours, minutes, seconds and milliseconds",
+    "tags": ["f", "date"]
+  },
+  "id": "fb194f3b-b7e6-49c8-a77b-e2c16d6f33d7",
+  "base": true,
+  "type": "`U`"
+}

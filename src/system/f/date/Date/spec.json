@@ -1,0 +1,25 @@
+{
+  "name": "date",
+  "inputs": {
+    "init": {
+      "type": "string|number"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "date": {
+      "type": "`D`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "calendar",
+    "description": "instantiate a date object",
+    "tags": ["f", "date"]
+  },
+  "id": "4f390740-7257-4eca-911a-cea985628b59",
+  "base": true,
+  "type": "`U`"
+}

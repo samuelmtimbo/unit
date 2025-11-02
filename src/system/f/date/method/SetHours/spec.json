@@ -1,0 +1,34 @@
+{
+  "name": "set hours",
+  "inputs": {
+    "date": {
+      "type": "`D`",
+      "ref": true
+    },
+    "hours": {
+      "type": "number"
+    },
+    "min": {
+      "type": "number"
+    },
+    "sec": {
+      "type": "number"
+    },
+    "ms": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "done": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "calendar",
+    "description": "set `date` hours, minutes, seconds and milliseconds",
+    "tags": ["f", "date"]
+  },
+  "id": "17f6b87d-0b29-4c21-90ff-fc3ba7bee516",
+  "base": true,
+  "type": "`U`"
+}
