@@ -41416,6 +41416,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
+    if (this._drag_node_closest_compatible_node_id[node_id]) {
+      this._remove_pressed_node_closest_compatible(node_id)
+    }
+
+    const compatible_closest_node_id_set =
+      this._closest_compatible_node_to_drag_node_id[node_id]
+
+    if (compatible_closest_node_id_set) {
+      for (const pressed_node_id of compatible_closest_node_id_set) {
+        this._remove_pressed_node_closest_compatible(pressed_node_id)
+      }
+    }
+
     const drag_along_source = this._drag_along_source[node_id]
 
     if (drag_along_source) {
@@ -46965,10 +46978,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _selection_rotation_unlisten: Dict<Unlisten> = {}
-
-  private _drag_node_closest_compatible_node_id: Dict<string> = {}
-
   private _start_selection_rotation = (node_id: string): void => {
     const selection = this._node_selection[node_id]
 
@@ -47026,6 +47035,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._drag_node_closest_compatible_node_id[pressed_node_id] =
       closest_compatible_node_id
+
+    this._closest_compatible_node_to_drag_node_id[closest_compatible_node_id] =
+      this._closest_compatible_node_to_drag_node_id[
+        closest_compatible_node_id
+      ] ?? new Set()
+    this._closest_compatible_node_to_drag_node_id[
+      closest_compatible_node_id
+    ].add(pressed_node_id)
   }
 
   private _remove_pressed_node_closest_compatible = (
@@ -47037,6 +47054,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._stop_selection_rotation(closest_compatible_node_id)
 
     delete this._drag_node_closest_compatible_node_id[pressed_node_id]
+
+    const closest_compatible_set =
+      this._closest_compatible_node_to_drag_node_id[closest_compatible_node_id]
+
+    if (closest_compatible_set) {
+      closest_compatible_set.delete(pressed_node_id)
+
+      if (closest_compatible_set.size === 0) {
+        delete this._closest_compatible_node_to_drag_node_id[
+          closest_compatible_node_id
+        ]
+      }
+    }
   }
 
   private _tick_closest_compatible_selection = (pressed_node_id: string) => {
