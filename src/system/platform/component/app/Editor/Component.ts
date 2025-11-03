@@ -43143,6 +43143,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _sim_remove_unit_body = (unit_id: string) => {
+    if (this._is_node_ascend(unit_id)) {
+      this._descend_node(unit_id)
+    }
+
     this._sim_remove_unit_pins(unit_id)
     this._sim_remove_unit_core(unit_id)
   }
