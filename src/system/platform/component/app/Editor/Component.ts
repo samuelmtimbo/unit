@@ -2802,7 +2802,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _drag_and_drop: boolean = false
   private _drag_and_drop_pointer: number | null = null
   private _drag_and_drop_bundle: BundleSpec = null
-  private _drag_and_drop_cancel: Unlisten
 
   private _transcend_pointer_id: number | null = null
   private _transcend_timeout: NodeJS.Timeout | null = null
@@ -18972,10 +18971,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           } else if (this._is_datum_node_id(selected_node_id)) {
             //
           }
-        }
-
-        if (this._drag_and_drop) {
-          this._drag_and_drop_cancel()
         }
       } else if (prev_mode === 'none' && this._mode !== 'none') {
         for (const selected_node_id in this._selected_node_id) {
@@ -51574,11 +51569,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _cancel_drag_and_drop = () => {
     // console.log('Graph', '_cancel_drag_and_drop')
-
-    if (this._drag_and_drop_cancel) {
-      this._drag_and_drop_cancel()
-      this._drag_and_drop_cancel = undefined
-    }
 
     this._drag_and_drop = false
     this._drag_and_drop_bundle = null
