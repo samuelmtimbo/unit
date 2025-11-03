@@ -46013,6 +46013,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_datum_red_drag_end = (datum_node_id: string): void => {
     // console.log('Graph', '_on_datum_red_drag_end' , datum_node_id)
+
+    if (this._is_freeze_mode()) {
+      this._drop_datum(datum_node_id)
+    }
   }
 
   private _on_unit_red_drag_end = (unit_id: string): void => {
