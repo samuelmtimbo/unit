@@ -2803,6 +2803,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _drag_and_drop_pointer: number | null = null
   private _drag_and_drop_bundle: BundleSpec = null
 
+  private _drag_node_closest_compatible_node_id: Dict<string> = {}
+  private _closest_compatible_node_to_drag_node_id: Dict<Set<string>> = {}
+
+  private _selection_rotation_unlisten: Dict<Unlisten> = {}
+
   private _transcend_pointer_id: number | null = null
   private _transcend_timeout: NodeJS.Timeout | null = null
   private _transcend_on_pointer_up: boolean = false
@@ -19104,6 +19109,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else if (prev_mode === 'remove' && this._mode !== 'remove') {
         for (const drag_node_id of start_drag_node_ids) {
           this._on_node_red_drag_end(drag_node_id)
+
+          this._refresh_all_node_fixed()
 
           this._refresh_node_color(drag_node_id)
         }
@@ -45993,8 +46000,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_datum_red_drag_end = (datum_node_id: string): void => {
     // console.log('Graph', '_on_datum_red_drag_end' , datum_node_id)
-
-    this._drop_datum(datum_node_id)
   }
 
   private _on_unit_red_drag_end = (unit_id: string): void => {
