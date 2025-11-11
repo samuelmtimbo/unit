@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "types": ["node", "chrome"],
+    "rootDir": "src",
+    "types": ["node"],
     "lib": ["es2021", "dom", "webworker"],
     "outDir": "lib",
     "allowJs": false,
     "sourceRoot": "src",
     "sourceMap": true,
-    "target": "es2018",
-    "module": "commonjs",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "ES2020",
+    "allowImportingTsExtensions": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "declaration": true,
@@ -24,5 +27,5 @@
     "enable": false
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "lib", "build"]
+  "exclude": ["node_modules", "src/test", "lib", "build"]
 }

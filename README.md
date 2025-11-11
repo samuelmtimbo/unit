@@ -83,7 +83,7 @@ npm install --global @_unit/unit
 To render a unit JSON bundle:
 
 ```js
-import { renderBundle } from '@_unit/unit/lib/client/platform/web/render'
+import { renderBundle } from '@_unit/unit/client/platform/web/render'
 
 const root = document.getElementById('root')
 
@@ -116,9 +116,9 @@ helloworld.push('style', {
 To boot a system and instantiate a new unit on it:
 
 ```js
-import { boot } from '@_unit/unit/lib/client/platform/node/boot'
-import { fromBundle } from '@_unit/unit/lib/spec/fromBundle'
-import _specs from '@_unit/unit/lib/system/_specs'
+import { boot } from '@_unit/unit/client/platform/node/boot'
+import { fromBundle } from '@_unit/unit/spec/fromBundle'
+import _specs from '@_unit/unit/system/_specs'
 
 export const [system] = boot()
 

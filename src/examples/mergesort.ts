@@ -1,6 +1,6 @@
-import { boot } from '../client/platform/node/boot'
-import { fromBundle } from '../spec/fromBundle'
-import _specs from '../system/_specs'
+import { boot } from '@_unit/unit/client/platform/node/boot'
+import { fromBundle } from '@_unit/unit/spec/fromBundle'
+import _specs from '@_unit/unit/system/_specs'
 
 export const [system] = boot()
 

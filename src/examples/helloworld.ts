@@ -1,4 +1,4 @@
-import { renderBundle } from '../client/platform/web/render'
+import { renderBundle } from '@_unit/unit/client/platform/web/render'
 
 const root = document.getElementById('root')
 

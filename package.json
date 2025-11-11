@@ -3,6 +3,18 @@
   "version": "1.0.80",
   "main": "lib/index.js",
   "bin": "./lib/server/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts",
+      "require": "./lib/*.js"
+    },
+    "./*": {
+      "import": "./lib/*.js",
+      "types": "./lib/*.d.ts",
+      "require": "./lib/*.js"
+    }
+  },
   "repository": "git@github.com:samuelmtimbo/unit.git",
   "author": "Samuel Timbó <samuelmtimbo@gmail.com>",
   "license": "MIT",
@@ -27,7 +39,7 @@
     "lib": "run-s rm tsc",
     "tsc": "tsc",
     "rm": "shx rm -rf lib",
-    "test": "ts-node -T src/test/index.ts",
+    "test": "ts-node -T  -P src/test/tsconfig.json src/test/index.ts",
     "uuid": "ts-node -T src/script/uuid.ts",
     "build": "run-s build:system build:client",
     "build:bundle": "ts-node -T src/script/build/client.ts",
@@ -40,6 +52,7 @@
     "electron": "electron lib/client/platform/electron/index.js"
   },
   "dependencies": {
+    "@_unit/unit": "file:.",
     "commander": "12.1.0",
     "compression": "1.8.1",
     "cors": "2.8.5",
