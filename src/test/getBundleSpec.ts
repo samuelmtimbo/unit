@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { ID_IDENTITY } from '../system/_ids'
 import Identity from '../system/f/control/Identity'
 import { system } from './util/system'

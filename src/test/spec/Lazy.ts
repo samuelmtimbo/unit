@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { watchUnitAndLog } from '../../debug'
 import { lazyFromSpec } from '../../spec/Lazy'
 import { fromSpec } from '../../spec/fromSpec'

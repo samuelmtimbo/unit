@@ -33,7 +33,9 @@ export function wrapFileList(fileList: FileList, system: System): A<F & $> & $ {
     async indexOf(a: F): Promise<number> {
       let i = 0
 
-      for (const file of fileList) {
+      while (i < fileList.length) {
+        const file = fileList.item(i)
+
         if (file === a) {
           return i
         }

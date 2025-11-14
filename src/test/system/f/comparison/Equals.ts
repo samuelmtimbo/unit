@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import Equals from '../../../../system/f/comparison/Equals'
 import { system } from '../../../util/system'
 

@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { Unit } from '../Class/Unit'
 import { newSpecId } from '../spec/util'
 import { system } from './util/system'

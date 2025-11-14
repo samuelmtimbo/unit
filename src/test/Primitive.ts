@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { Primitive } from '../Primitive'
 import { system } from './util/system'
 

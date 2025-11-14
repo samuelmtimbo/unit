@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Concat from '../../../../system/f/string/Concat'
 import { system } from '../../../util/system'

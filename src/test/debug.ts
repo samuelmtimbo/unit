@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { NOOP } from '../NOOP'
 import { watchUnit } from '../debug/watchUnit'
 import Identity from '../system/f/control/Identity'

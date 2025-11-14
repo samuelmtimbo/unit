@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromBundle } from '../../../spec/fromBundle'
 import _specs from '../../../system/_specs'

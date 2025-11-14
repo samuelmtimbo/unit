@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import Add from '../../../../system/f/arithmetic/Add'
 import { system } from '../../../util/system'
 

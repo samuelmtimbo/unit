@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { Unit } from '../Class/Unit'
 import { EventEmitter_ } from '../EventEmitter'
 import { MIMO } from '../MIMO'

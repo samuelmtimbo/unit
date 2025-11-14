@@ -24,7 +24,7 @@ export default class Audio
   extends Element_<I, O, AudioJ, AudioEE>
   implements ME, CS
 {
-  __ = [...this.__, 'CS', 'ME']
+  __ = ['CS', 'ME']
 
   constructor(system: System) {
     super(

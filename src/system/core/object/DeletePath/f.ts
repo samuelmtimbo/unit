@@ -15,7 +15,7 @@ export default function dissocPath(
   return _obj
 }
 
-// import * as assert from 'assert'
+// import assert from 'assert'
 // assert.deepEqual(dissocPath({}, []), {})
 // assert.deepEqual(dissocPath({ a: 0 }, ['a']), {})
 // assert.deepEqual(dissocPath({ a: 0 }, ['b']), { a: 0 })

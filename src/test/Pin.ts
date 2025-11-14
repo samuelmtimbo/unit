@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { Pin } from '../Pin'
 import { system } from './util/system'
 

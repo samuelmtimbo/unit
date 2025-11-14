@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { UNTITLED } from '../../constant/STRING'
 import { TreeNodeType } from '../../spec/parser'
 import {

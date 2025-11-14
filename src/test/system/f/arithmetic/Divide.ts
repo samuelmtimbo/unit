@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import Divide from '../../../../system/f/arithmetic/Divide'
 import { system } from '../../../util/system'
 

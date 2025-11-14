@@ -35,15 +35,6 @@ export async function bundle_(
   includeSystem: boolean,
   opt: BuildOptions
 ): Promise<void> {
-  console.log({
-    unitPath,
-    bundlePath,
-    bootPath,
-    outputFolder,
-    includeSystem,
-    opt,
-  })
-
   const systemPath = path.join(unitPath, 'src', 'system')
   const entrypoint = path.join(unitPath, 'src/client/platform/web/index.ts')
   const fallbackBootPath = path.join(
