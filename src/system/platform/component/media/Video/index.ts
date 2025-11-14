@@ -27,7 +27,7 @@ export default class Video
   extends Element_<I, O, VideoJ, VideoEE>
   implements CS, PS, IM, ME
 {
-  __ = [...this.__, 'CS', 'PS', 'IM', 'ME']
+  __ = ['CS', 'PS', 'IM', 'ME']
 
   constructor(system: System) {
     super(

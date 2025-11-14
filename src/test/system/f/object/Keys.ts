@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Keys from '../../../../system/f/object/Keys'
 import { system } from '../../../util/system'

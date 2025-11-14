@@ -40,9 +40,9 @@ export function wrapFormData(
     async keys(): Promise<string[]> {
       const keys = []
 
-      for (const key of formData.keys()) {
+      formData.forEach((value, key) => {
         keys.push(key)
-      }
+      })
 
       return keys
     }

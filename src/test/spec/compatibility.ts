@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { compatibleInterface } from '../../spec/compatibility'
 import { system } from '../util/system'
 

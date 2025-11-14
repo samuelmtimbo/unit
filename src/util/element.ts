@@ -74,9 +74,17 @@ export function elementToJson(element: HTMLElement): Tag {
     }
   }
 
-  const attr = Object.fromEntries(
-    [...element.attributes].map((attr) => [attr.name, attr.value])
-  )
+  let i = 0
+
+  const attr = {}
+
+  while (i < element.attributes.length) {
+    const attribute = element.attributes.item(i)
+
+    attr[attribute.name] = attribute.value
+
+    i++
+  }
 
   const children = [...element.childNodes]
     .filter((node) => !(node instanceof Text) || !!node.textContent.trim())

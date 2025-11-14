@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import At from '../../../../system/f/array/At'
 import { system } from '../../../util/system'

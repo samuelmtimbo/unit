@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import Append from '../../../../system/f/array/Append'
 import { system } from '../../../util/system'
 

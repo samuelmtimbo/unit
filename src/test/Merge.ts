@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import assert from 'assert'
 import Merge from '../Class/Merge'
 import { Pin } from '../Pin'
 import { watchUnitAndLog } from '../debug'

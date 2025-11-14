@@ -21,7 +21,9 @@
     "keyofStringsOnly": true,
     "ignoreDeprecations": "5.0",
     "alwaysStrict": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "typeAcquisition": {
     "enable": false
