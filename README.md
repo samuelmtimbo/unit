@@ -252,4 +252,4 @@ We hope you enjoy Unit and invite you to be part of our community!
 
 MIT License
 
-Copyright 2021 UNIT IO, Inc
+Copyright UNIT IO, Inc
