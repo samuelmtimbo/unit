@@ -53625,7 +53625,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_ctrl_v_keydown = (): void => {
-    const position = this._jiggle_world_screen_center()
+    let position: Position
+
+    if (keyCount(this._pointer_position) === 1) {
+      const pointer_id = getObjSingleKey(this._pointer_position)
+
+      const pointer_position = this._pointer_position[pointer_id]
+
+      position = pointer_position
+    } else {
+      position = this._jiggle_world_screen_center()
+    }
 
     void this._paste_clipboard(position)
   }
