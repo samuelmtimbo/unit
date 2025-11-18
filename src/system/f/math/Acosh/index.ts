@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_ACOSH } from '../../../_ids'
 
@@ -24,7 +25,13 @@ export default class Acosh<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ x }: I<T>, done: Done<O<T>>): void {
+  f({ x }: I<T>, done: Done<O<T>>, fail: Fail): void {
+    if (x === 0) {
+      fail('cannot calculate the inverse hyperbolic cosine of 0')
+
+      return
+    }
+
     done({ rad: Math.acosh(x) })
   }
 }
