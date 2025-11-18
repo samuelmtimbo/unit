@@ -120,6 +120,10 @@ export const ROOT_STYLE = `
     font-size: 12px;
   }
 
+  svg {
+    stroke-width: 1px;
+  }
+
   a {
     color: currentcolor;
   }
