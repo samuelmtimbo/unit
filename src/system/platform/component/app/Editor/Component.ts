@@ -344,6 +344,7 @@ import { GraphMergePinMomentData } from '../../../../../debug/graph/watchGraphPi
 import { GraphPlugMomentData } from '../../../../../debug/graph/watchGraphPlugEvent'
 import { GraphRemoveUnitPinDataMomentData } from '../../../../../debug/graph/watchGraphRemoveUnitPinDataEvent'
 import { GraphReorderSubComponentMomentData } from '../../../../../debug/graph/watchGraphReorderSubComponent'
+import { GraphSetForkMomentData } from '../../../../../debug/graph/watchGraphSetForkEvent'
 import { GraphSetNameMomentData } from '../../../../../debug/graph/watchGraphSetNameEvent'
 import { GraphSetPinSetDefaultIgnoredMomentData } from '../../../../../debug/graph/watchGraphSetPinSetDefaultIgnored'
 import { GraphSetPinSetFunctionalMomentData } from '../../../../../debug/graph/watchGraphSetPinSetFunctionalEvent'
@@ -56381,6 +56382,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             'set_pin_set_default_ignored',
             'bulk_edit',
             'set_metadata',
+            'set_fork',
             'destroy',
           ],
         },
@@ -57165,6 +57167,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       delete this._spec.system
     }
+  }
+
+  private _on_set_fork_moment = (data: GraphSetForkMomentData) => {
+    //
   }
 
   private _on_add_unit_moment = (data: GraphAddUnitMomentData): void => {
@@ -60282,6 +60288,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     },
     graph: {
       fork: this._on_fork_moment,
+      set_fork: this._on_set_fork_moment,
       add_unit: this._on_add_unit_moment,
       remove_unit: this._on_remove_unit_moment,
       move_unit: this._on_move_unit_moment,

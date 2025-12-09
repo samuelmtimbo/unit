@@ -309,5 +309,6 @@ export type G_EE = {
   set_sub_component_size: [string, number, number, string[]]
   set_component_size: [number, number, string[]]
   bulk_edit: [Action[], string[]]
+  set_fork: [boolean, string[]]
   edit: any[]
 }

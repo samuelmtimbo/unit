@@ -2852,6 +2852,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   public setFork(fork: boolean) {
     this._noFork = !fork
+
+    this.emit('set_fork', fork, [])
   }
 
   public fork(specId?: string, emit: boolean = true, bubble: boolean = true) {
