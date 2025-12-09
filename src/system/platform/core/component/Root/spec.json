@@ -12,7 +12,11 @@
         "position": {
           "0": {
             "x": -208,
-            "y": 27
+            "y": 27,
+            "ext": {
+              "x": -393,
+              "y": 75
+            }
           }
         }
       },
@@ -29,7 +33,11 @@
         "position": {
           "0": {
             "x": -234,
-            "y": -81
+            "y": -81,
+            "ext": {
+              "x": -384,
+              "y": -14
+            }
           }
         }
       },
@@ -46,7 +54,11 @@
         "position": {
           "0": {
             "x": -250,
-            "y": -35
+            "y": -35,
+            "ext": {
+              "x": -394,
+              "y": 34
+            }
           }
         }
       }
@@ -63,10 +75,44 @@
         "position": {
           "0": {
             "x": -310,
-            "y": 67
+            "y": 67,
+            "ext": {
+              "x": -512,
+              "y": 171
+            }
           }
         }
       }
+    },
+    "config": {
+      "plug": {
+        "0": {
+          "unitId": "io",
+          "pinId": "config",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -372,
+              "y": 199
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "io",
+          "pinId": "value"
+        }
+      },
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -78,7 +124,17 @@
         }
       },
       "ref": true,
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 140,
+              "y": 40
+            }
+          }
+        }
+      }
     },
     "state": {
       "plug": {
@@ -88,6 +144,25 @@
         }
       },
       "ref": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 140,
+              "y": 139
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "io",
+          "pinId": "value"
+        }
+      },
       "defaultIgnored": true
     }
   },
@@ -99,16 +174,17 @@
           "data": "false",
           "metadata": {
             "position": {
-              "x": -221,
-              "y": 5
+              "x": -372,
+              "y": 83
             }
-          }
+          },
+          "ignored": false
         },
         "style": {
           "metadata": {
             "position": {
-              "x": -223,
-              "y": -24
+              "x": -373,
+              "y": 45
             }
           }
         },
@@ -116,29 +192,70 @@
         "fullwindow": {
           "metadata": {
             "position": {
-              "x": -222,
-              "y": -55
+              "x": -373,
+              "y": 7
             }
-          }
+          },
+          "ignored": false
         },
         "frame": {
           "metadata": {
             "position": {
-              "x": 317,
-              "y": -6
+              "x": 109,
+              "y": 89
+            }
+          },
+          "ignored": true
+        },
+        "d": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -370,
+              "y": 207
             }
           }
+        },
+        "config": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -370,
+              "y": 176
+            }
+          }
+        },
+        "value": {
+          "ignored": false
         }
       },
       "output": {
         "graph": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 117,
+              "y": 58
+            }
+          }
+        },
+        "state": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 117,
+              "y": 120
+            }
+          }
+        },
+        "value": {
           "ignored": false
         }
       },
       "metadata": {
         "position": {
-          "x": -10,
-          "y": -6
+          "x": -132,
+          "y": 89
         }
       }
     },
@@ -148,17 +265,34 @@
         "graph": {
           "metadata": {
             "position": {
-              "x": -286,
-              "y": 53
+              "x": -494,
+              "y": 155
+            }
+          }
+        },
+        "done": {
+          "metadata": {
+            "position": {
+              "x": -497,
+              "y": 121
             }
           }
         }
       },
-      "output": {},
+      "output": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": -390,
+              "y": 129
+            }
+          }
+        }
+      },
       "metadata": {
         "position": {
-          "x": -237,
-          "y": 42
+          "x": -450,
+          "y": 135
         }
       }
     },
@@ -168,8 +302,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 583,
-          "y": -280
+          "x": 411,
+          "y": -179
         }
       }
     }
@@ -203,7 +337,7 @@
     },
     "children": ["io"],
     "defaultWidth": 420,
-    "defaultHeight": 420
+    "defaultHeight": 360
   },
   "metadata": {
     "icon": "chalkboard",

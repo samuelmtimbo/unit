@@ -37,6 +37,10 @@
       "type": "{geometryOverride?:boolean,plugIcons?:boolean,unlinkTake?:boolean,dataCreate?:boolean,dataEdit?:boolean,dataUnlink?:boolean,dataSelect?:boolean,dataCompatible?:boolean,drawing?:boolean,enterGraph?:boolean,highlightCompatible?:boolean,plugReverse?:boolean,plugUnit?:boolean,multiInputMerge?:boolean,edgeDrag?:boolean,plugNames?:boolean,unitNames?:boolean,pinNames?:boolean,zoom?:boolean|{x?:number,y?:number,z?:number,maxZoom?:number,minZoom?:number},metaSelection?:boolean,center?:'node'|'unit'}",
       "optional": true,
       "defaultIgnored": true
+    },
+    "value": {
+      "type": "{zoom:{x:number,y:number,z:number},fullwindow:boolean}",
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -47,9 +51,13 @@
       "icon": "graph"
     },
     "state": {
-      "type": "`J`",
+      "type": "`V`&`J`",
       "defaultIgnored": true,
       "ref": true
+    },
+    "value": {
+      "type": "{zoom?:{x?:number,y?:number,z?:number},fullwindow?:boolean}",
+      "defaultIgnored": true
     }
   },
   "metadata": {
@@ -88,13 +96,9 @@
     "eff80fbe-2f83-4a59-8576-9ec0c79ce439",
     "9487c48c-ab31-45ae-897f-348ec222b35e",
     "e7d8b387-3ea7-490e-80da-40af51c9ac4a",
-    "06823924-b659-4a22-8ed4-b3243121b55d",
     "e80c912e-7508-11ea-966b-436805345ff0",
     "fecc2df2-ce36-4401-8eed-63d65fb67e6d",
-    "059579bb-184f-435b-ace0-64ec95c9f125",
-    "059579bb-184f-435b-ace0-64ec95c9f125",
     "cef90fb7-bfcb-4f9d-8828-df6e68278601",
-    "7a8921eb-c1ad-400b-94fc-6c6cead8163d",
     "4e97caab-d48d-488e-b56b-4141e68fed85",
     "9140df42-1c5e-4e18-a106-6ad9be30bb55",
     "25f45f9e-1a62-4b96-9347-7ea5bc0af651",

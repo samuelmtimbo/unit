@@ -976,7 +976,13 @@ export type Config = {
   center: 'node' | 'unit'
 }
 
-export interface Props {
+export interface Value {
+  fullwindow?: boolean
+  zoom?: Zoom
+  path?: string[]
+}
+
+export interface Props extends Value {
   className?: string
   style?: Dict<string>
   attr?: Dict<string>
@@ -984,7 +990,6 @@ export interface Props {
   graph?: $Graph
   editor?: Editor_
   controls?: boolean
-  fullwindow?: boolean
   component?: Component
   frame?: $Component
   fallback?: Component<HTMLElement>
@@ -992,12 +997,12 @@ export interface Props {
   background?: Div
   transcend?: Transcend
   root?: Frame
-  zoom?: Zoom
   animate?: boolean
   typeCache?: TypeTreeMap
   config?: Config
   fork?: boolean
   system?: System
+  value?: Value
 }
 
 export default class Editor extends Element<HTMLDivElement, Props> {
@@ -1390,6 +1395,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         false
       ),
       makeCustomListener('zoom', this._on_zoom),
+      makeCustomListener('fullwindow', this._on_fullwindow),
     ])
   }
 
@@ -1702,10 +1708,27 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$system,
     (zoom: Zoom) => {
       // console.log('Graph', '_on_zoom')
-      this.set('zoom', zoom)
+      this._set('zoom', zoom)
     },
     200
   )
+
+  private _on_fullwindow = (fullwindow: boolean) => {
+    this._set('fullwidnow', fullwindow)
+  }
+
+  private _set = (name: string, value: any) => {
+    this.set(name, value)
+    this.set('value', this._value())
+  }
+
+  private _value = (): Value => {
+    return {
+      zoom: this._editor.getZoom(),
+      fullwindow: this._editor.isFullwindow(),
+      path: this._editor.getSubgraphPath(),
+    }
+  }
 
   onPropChanged(prop: string, current: any): void {
     // console.log('Graph', name, current)
@@ -1741,6 +1764,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       })
     } else if (prop === 'config') {
       this._editor.setProp('config', current)
+    } else if (prop === 'value') {
+      this._editor.setProp('value', current)
     }
   }
 
@@ -1846,7 +1871,7 @@ export interface AreaOpt {
   style?: Dict<string>
 }
 
-export interface Props_ extends R {
+export interface Props_ extends R, Value {
   className?: string
   style?: Dict<string>
   disabled?: boolean
@@ -1865,6 +1890,7 @@ export interface Props_ extends R {
   typeCache?: TypeTreeInterfaceCache
   config?: Partial<Config>
   zoom?: Zoom
+  value?: Value
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
   enterFullwindow: () => void
   leaveFullwindow: () => void
@@ -19458,13 +19484,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return sorted.map((node) => node.id)
   }
 
-  private _enter_default_fullwindow = (): void => {
+  private _enter_default_fullwindow = (animate: boolean = true): void => {
     // console.log('Graph', '_enter_default_fullwindow')
 
     if (this._selected_component_count > 0 && !this._tree_layout) {
-      this._enter_all_selected_fullwindow(true)
+      this._enter_all_selected_fullwindow(animate)
     } else {
-      this._enter_all_fullwindow(true)
+      this._enter_all_fullwindow(animate)
     }
   }
 
@@ -60565,6 +60591,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     } else if (prop === 'config') {
       this._refresh_config()
+    } else if (prop === 'value') {
+      if (current) {
+        const zoom =
+          (current.zoom && { ...ZOOM_IDENTITY, ...current.zoom }) ||
+          ZOOM_IDENTITY
+        const fullwindow = current.fullwindow || false
+
+        this.onPropChanged('zoom', zoom)
+
+        this._set_zoom(zoom)
+
+        if (this._is_fullwindow && !fullwindow) {
+          this._leave_all_fullwindow(false)
+        } else if (!this._is_fullwindow && fullwindow) {
+          this._enter_default_fullwindow(false)
+        }
+      }
     }
   }
 }

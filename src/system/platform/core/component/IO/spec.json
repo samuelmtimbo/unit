@@ -1,5 +1,5 @@
 {
-  "name": "IO",
+  "name": "io",
   "inputs": {
     "disabled": {
       "plug": {
@@ -14,8 +14,8 @@
             "x": -435,
             "y": -53,
             "ext": {
-              "x": -87,
-              "y": -175
+              "x": -57,
+              "y": -194
             }
           },
           "1": {
@@ -43,8 +43,8 @@
             "x": 248,
             "y": 77,
             "ext": {
-              "x": -100,
-              "y": -126
+              "x": -70,
+              "y": -148
             }
           },
           "1": {
@@ -53,8 +53,8 @@
           },
           "2": {
             "ext": {
-              "x": 5,
-              "y": 20
+              "x": 35,
+              "y": 5
             }
           }
         }
@@ -75,8 +75,8 @@
             "x": -437,
             "y": -89,
             "ext": {
-              "x": -84,
-              "y": -212
+              "x": -54,
+              "y": -228
             }
           }
         }
@@ -95,8 +95,8 @@
             "x": -389,
             "y": -134,
             "ext": {
-              "x": -84,
-              "y": -246
+              "x": -55,
+              "y": -262
             }
           }
         }
@@ -117,8 +117,8 @@
             "x": -419,
             "y": -169,
             "ext": {
-              "x": -88,
-              "y": -327
+              "x": -58,
+              "y": -337
             }
           }
         }
@@ -139,12 +139,42 @@
         "position": {
           "0": {
             "ext": {
-              "x": 21,
-              "y": 394
+              "x": 51,
+              "y": 379
             }
           }
         }
       }
+    },
+    "config": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "config",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -587,
+              "y": -266
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "value"
+        }
+      },
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -161,8 +191,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": -90,
-              "y": -384
+              "x": -59,
+              "y": -393
             }
           }
         }
@@ -181,12 +211,21 @@
         "position": {
           "0": {
             "ext": {
-              "x": -69,
-              "y": -290
+              "x": -38,
+              "y": -303
             }
           }
         }
       }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "value"
+        }
+      },
+      "defaultIgnored": true
     }
   },
   "units": {
@@ -196,42 +235,54 @@
         "style": {
           "metadata": {
             "position": {
-              "x": -110,
-              "y": -148
+              "x": -80,
+              "y": -170
             }
           }
         },
         "disabled": {
           "metadata": {
             "position": {
-              "x": -109,
-              "y": -185
+              "x": -79,
+              "y": -205
             }
           }
         },
         "graph": {
           "metadata": {
             "position": {
-              "x": -108,
-              "y": -218
+              "x": -78,
+              "y": -235
             }
           }
         },
         "fullwindow": {
           "metadata": {
             "position": {
-              "x": -109,
-              "y": -249
+              "x": -80,
+              "y": -264
             }
           }
         },
         "frame": {
           "metadata": {
             "position": {
-              "x": -110,
-              "y": -318
+              "x": -81,
+              "y": -328
             }
           }
+        },
+        "config": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -564,
+              "y": -266
+            }
+          }
+        },
+        "value": {
+          "ignored": false
         }
       },
       "output": {
@@ -239,8 +290,8 @@
           "ignored": false,
           "metadata": {
             "position": {
-              "x": -104,
-              "y": -358
+              "x": -74,
+              "y": -367
             }
           }
         },
@@ -248,17 +299,20 @@
           "ignored": false,
           "metadata": {
             "position": {
-              "x": -99,
-              "y": -283
+              "x": -68,
+              "y": -296
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -351,
-          "y": -251
+          "x": -321,
+          "y": -266
         }
+      },
+      "value": {
+        "ignored": false
       }
     },
     "propifhaskey": {
@@ -269,8 +323,8 @@
           "data": "\"color\"",
           "metadata": {
             "position": {
-              "x": 22,
-              "y": 73
+              "x": 52,
+              "y": 58
             },
             "data": {
               "position": {
@@ -283,8 +337,8 @@
         "obj": {
           "metadata": {
             "position": {
-              "x": 22,
-              "y": 37
+              "x": 52,
+              "y": 22
             }
           }
         }
@@ -295,16 +349,16 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 88,
-              "y": 15
+              "x": 118,
+              "y": 0
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 67,
-          "y": 55
+          "x": 97,
+          "y": 40
         }
       }
     },
@@ -317,8 +371,8 @@
           "data": "{opacity:'0.1',position:'relative',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}",
           "metadata": {
             "position": {
-              "x": 240,
-              "y": 5
+              "x": 270,
+              "y": -10
             },
             "data": {
               "position": {
@@ -334,8 +388,8 @@
       },
       "metadata": {
         "position": {
-          "x": 276,
-          "y": 33
+          "x": 306,
+          "y": 18
         }
       }
     },
@@ -349,8 +403,8 @@
       },
       "metadata": {
         "position": {
-          "x": 172,
-          "y": 53
+          "x": 202,
+          "y": 38
         }
       }
     },
@@ -360,8 +414,8 @@
         "style": {
           "metadata": {
             "position": {
-              "x": 145,
-              "y": 272
+              "x": 175,
+              "y": 257
             },
             "data": {
               "position": {
@@ -383,8 +437,8 @@
           "constant": false,
           "metadata": {
             "position": {
-              "x": 124,
-              "y": -127
+              "x": 91.15384615384616,
+              "y": -143.1025641025641
             }
           }
         },
@@ -394,8 +448,8 @@
           "data": "'evenodd'",
           "metadata": {
             "position": {
-              "x": 144,
-              "y": 309
+              "x": 174,
+              "y": 294
             },
             "data": {
               "position": {
@@ -409,8 +463,8 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 146,
-              "y": 331
+              "x": 175,
+              "y": 316
             }
           }
         }
@@ -420,16 +474,16 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 154,
-              "y": 394
+              "x": 184,
+              "y": 379
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 276,
-          "y": 317
+          "x": 306,
+          "y": 302
         }
       }
     },
@@ -450,16 +504,16 @@
               }
             },
             "position": {
-              "x": 124,
-              "y": 423
+              "x": 154,
+              "y": 408
             }
           }
         },
         "d": {
           "metadata": {
             "position": {
-              "x": 44,
-              "y": 392
+              "x": 74,
+              "y": 377
             }
           }
         }
@@ -469,8 +523,8 @@
       },
       "metadata": {
         "position": {
-          "x": 94,
-          "y": 390
+          "x": 123,
+          "y": 375
         }
       }
     },
@@ -482,19 +536,21 @@
           "height": 202
         },
         "position": {
-          "x": 462,
-          "y": 35
+          "x": 492,
+          "y": 20
         }
       },
       "input": {
         "attr": {
           "metadata": {
             "position": {
-              "x": 335,
-              "y": -7
+              "x": 365,
+              "y": -22
             }
-          }
-        }
+          },
+          "ignored": true
+        },
+        "style": {}
       }
     }
   },
@@ -571,7 +627,7 @@
       ["app", "1"],
       ["app", "2"]
     ],
-    "defaultWidth": 360,
+    "defaultWidth": 420,
     "defaultHeight": 360
   },
   "metadata": {
@@ -585,8 +641,8 @@
           "y": 256
         },
         "1": {
-          "x": 140,
-          "y": 365
+          "x": 170,
+          "y": 350
         },
         "2": {
           "x": 230,
@@ -597,16 +653,16 @@
           "y": 14
         },
         "5": {
-          "x": 119,
-          "y": 55
+          "x": 149,
+          "y": 39
         },
         "6": {
-          "x": 224,
-          "y": 47
+          "x": 254,
+          "y": 32
         },
         "7": {
-          "x": 328,
-          "y": 34
+          "x": 358,
+          "y": 19
         }
       }
     }

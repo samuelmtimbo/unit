@@ -16,7 +16,7 @@ import { J } from '../../../../../types/interface/J'
 import { wrapObject } from '../../../../../wrap/Object'
 import { ID_EDITOR } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
-import EditorComponent from './Component'
+import EditorComponent, { Config, Value } from './Component'
 
 export interface I<T> {
   style: Dict<string>
@@ -26,11 +26,14 @@ export interface I<T> {
   frame: Element_
   zoom: Zoom
   controls: boolean
+  config: Config
+  value: Value
 }
 
 export interface O<T> {
   graph: G
   state: J & $
+  value: Value
 }
 
 export default class Editor<T> extends Element_<I<T>, O<T>> {
@@ -52,8 +55,9 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           'controls',
           'config',
           'attr',
+          'value',
         ],
-        o: ['graph', 'state'],
+        o: ['graph', 'state', 'value'],
       },
       {
         input: {
