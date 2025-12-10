@@ -16796,17 +16796,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   public setZoom = (zoom: Zoom) => {
     // console.log('Graph', 'setZoom', zoom)
 
-    const dx = zoom.x - this._zoom.x
-    const dy = zoom.y - this._zoom.y
-    const dk = zoom.z - this._zoom.z
-
     this._zoom = zoom
 
     const { z, x, y } = zoom
 
     this._set_zoom(zoom)
 
-    this.dispatchEvent('zoom', { z, x, y, dk, dx, dy }, false)
+    this.dispatchEvent('zoom', { z, x, y }, false)
   }
 
   private _on_high_zoom = () => {
@@ -19799,7 +19795,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._transcend.up()
     }
 
-    this.dispatchEvent('leave_fullwindow', {}, false)
+    this.dispatchEvent('fullwindow', false, false)
   }
 
   private _leave_all_fullwindow_sub_component = (_animate: boolean) => {
