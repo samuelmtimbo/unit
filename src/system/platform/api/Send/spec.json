@@ -6,7 +6,7 @@
       "ref": true
     },
     "data": {
-      "type": "any"
+      "type": "string"
     }
   },
   "outputs": {},
