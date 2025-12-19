@@ -9,10 +9,9 @@ import {
 import { CUSTOM_HEADER_X_WEBSOCKET_ID } from '../../../../../client/platform/web/api/http'
 import { intercept } from '../../../../../client/platform/web/api/intercept'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
-import { wrapWebSocket } from '../../../../../wrap/WebSocket'
+import { WebSocket_EE, wrapWebSocket } from '../../../../../wrap/WebSocket'
 import { ID_WEB_SOCKET } from '../../../../_ids'
 
 export type I = {
@@ -22,9 +21,8 @@ export type I = {
 
 export type O = {
   channel: CH & $
+  open: any
 }
-
-export type WebSocket_EE = { message: [any]; close: [any, any] }
 
 export type WebSocketEvents = SemifunctionalEvents<Semifunctional_EE> &
   WebSocket_EE
@@ -189,7 +187,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     const channel = wrapWebSocket(this._web_socket, this.__system)
 
     this._web_socket.onopen = () => {
-      done({ channel })
+      channel.emit('open', {})
     }
     this._web_socket.onmessage = (message) => {
       channel.emit('message', message.data)
