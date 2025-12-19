@@ -7,6 +7,7 @@ import {
   UnitGetPinDataData,
   UnitGetSpecData,
   UnitGetUnitBundleSpecData,
+  UnitHasPinData,
   UnitPauseData,
   UnitPlayData,
   UnitPullInputData,
@@ -50,11 +51,12 @@ export const U_METHOD_CALL = [
   'reset',
 ]
 export const U_METHOD_WATCH = ['watch']
-export const U_METHOD_REF = ['refGlobalObj']
+export const U_METHOD_REF = ['refGlobalObj', 'refPin']
 
 export interface $U_G {
   $getSpec(data: UnitGetSpecData, callback: Callback<Spec>): void
   $paused(data: UnitPauseData, callback: Callback<boolean>): void
+  $hasPin(data: UnitHasPinData, callback: Callback<boolean>): void
   $getPinData(data: UnitGetPinDataData, callback: (data: any) => void): void
   $getAllPinData(
     data: UnitGetAllPinDataData,

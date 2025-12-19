@@ -12,6 +12,11 @@ export type UnitPlayData = {}
 
 export type UnitPauseData = {}
 
+export type UnitHasPinData = {
+  type: IO
+  pinId: string
+}
+
 export type UnitPushData = {
   pinId: string
   data: any

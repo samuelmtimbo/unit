@@ -3,6 +3,7 @@ import { BundleOpt, Unit } from '../../../Class/Unit'
 import {
   UnitDestroyData,
   UnitGetPinDataData,
+  UnitHasPinData,
   UnitRestoreData,
 } from '../../../Class/Unit/interface'
 import { Memory } from '../../../Class/Unit/Memory'
@@ -103,6 +104,14 @@ export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
       const $unitBundleSpec = clone(unitBundleSpec)
 
       callback($unitBundleSpec)
+    },
+
+    $hasPin(data: UnitHasPinData, callback: Callback<boolean>) {
+      const { type, pinId } = data
+
+      const has = unit.hasPinNamed(type, pinId)
+
+      callback(has)
     },
   }
 }
