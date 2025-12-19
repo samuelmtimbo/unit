@@ -26,7 +26,7 @@ export function wrapEvent(
     }
 
     stopPropagation(): void {
-      throw new Error('Method not implemented.')
+      event.stopPropagation()
     }
   })(system)
 
