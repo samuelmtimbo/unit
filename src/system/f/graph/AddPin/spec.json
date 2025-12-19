@@ -1,0 +1,30 @@
+{
+  "name": "add pin",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "pinId": {
+      "type": "string",
+      "metadata": {
+        "examples": ["'a'", "'b'", "'c'", "'d'"]
+      }
+    },
+    "pinSpec": {
+      "type": "{plug?:({unitId?:string,pinId?:string,mergeId?:string}){}}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "add pin of `type` `pinId` to `graph`",
+    "tags": ["f", "graph"]
+  },
+  "id": "db3e8175-eef8-45fc-9676-f7f2672eadf1",
+  "base": true,
+  "type": "`U`"
+}
