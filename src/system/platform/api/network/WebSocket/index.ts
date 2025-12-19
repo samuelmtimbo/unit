@@ -32,7 +32,7 @@ export type WebSocketEvents = SemifunctionalEvents<Semifunctional_EE> &
 export interface WebSocketShape {
   readyState: number
   send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void
-  close(): void
+  close(code?: number, reason?: string): void | Promise<void>
   onopen(evevnt: Event): void
   onmessage(event: MessageEvent): void
   onerror(event: Event): void
@@ -140,11 +140,15 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
 
             server.onmessage(data)
           },
-          close: function (): void {
-            // TODO
+          close: function (code: number, reason: string): void {
+            channel.emit('close', { code, reason })
+
+            const server = wss[internalId]
+
+            server.onclose(code, reason)
           },
           onopen: function (evevnt: Event): void {
-            throw new MethodNotImplementedError()
+            //
           },
           onmessage: function (event: MessageEvent): void {
             const { data } = event
@@ -152,10 +156,10 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             channel.emit('message', data)
           },
           onerror: function (event: Event): void {
-            throw new MethodNotImplementedError()
+            //
           },
           onclose: function (event: CloseEvent): void {
-            throw new MethodNotImplementedError()
+            //
           },
         }
 
@@ -196,12 +200,8 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     this._web_socket.onclose = (event: CloseEvent) => {
       const { code, reason } = event
 
-      channel.emit('close', code, reason)
+      channel.emit('close', { code, reason })
     }
-
-    channel.addListener('error', (err) => {
-      this.err(err)
-    })
 
     done({ channel })
   }

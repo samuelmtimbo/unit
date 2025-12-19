@@ -6,7 +6,7 @@ import { CH } from '../types/interface/CH'
 
 export type WebSocketEE = {
   message: [string]
-  close: [number, string]
+  close: [{ code: number; reason: string }]
   error: [string]
 }
 
