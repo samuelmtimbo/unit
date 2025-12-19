@@ -2211,9 +2211,9 @@ export class Component<
         for (const unitId in this.$subComponent) {
           const childSubComponent = this.$subComponent[unitId]
 
-          const _ = getComponentInterface(childSubComponent)
+          const __ = getComponentInterface(childSubComponent)
 
-          const subUnit = ($unit as $Graph).$refSubComponent({ unitId, _ })
+          const subUnit = ($unit as $Graph).$refSubComponent({ unitId, __ })
 
           childSubComponent.connect(subUnit)
         }
@@ -2426,9 +2426,9 @@ export class Component<
   private _instanceChild = ($child: Child, at: number) => {
     const component = $childToComponent(this.$system, $child)
 
-    const _ = getComponentInterface(component)
+    const __ = getComponentInterface(component)
 
-    const $childRef = this.$unit.$refChild({ at, _ })
+    const $childRef = this.$unit.$refChild({ at, __ })
 
     component.connect($childRef)
 
@@ -2447,11 +2447,11 @@ export class Component<
 
             const child = $childToComponent(this.$system, { bundle })
 
-            const _ = getComponentInterface(child)
+            const __ = getComponentInterface(child)
 
             const $subComponent = (this.$unit as $Graph).$refUnit({
               unitId: subComponentId,
-              _,
+              __,
             }) as $Component
 
             child.connect($subComponent)

@@ -200,8 +200,8 @@ export interface $G_W {
 }
 
 export interface $G_R {
-  $refSubComponent(data: { unitId: string; _: string[] }): $Component
-  $refUnit(data: { unitId: string; _: string[]; detached?: boolean }): $U & any
+  $refSubComponent(data: { unitId: string; __: string[] }): $Component
+  $refUnit(data: { unitId: string; __: string[]; detached?: boolean }): $U & any
 }
 
 export interface $G extends $G_G, $G_C, $G_W, $G_R {}

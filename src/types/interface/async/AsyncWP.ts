@@ -22,28 +22,28 @@ export const AsyncWPWatch = (wrapper: WP): $WP_W => {
 
 export const AsyncWPRef = (wrapper: WP & $): $WP_R => {
   return {
-    $refChildContainer({ at, _ }: { at: number; _: string[] }): $Component {
-      const $container = $refChildContainer(wrapper, { at, _ })
+    $refChildContainer({ at, __ }: { at: number; __: string[] }): $Component {
+      const $container = $refChildContainer(wrapper, { at, __ })
       return $container
     },
     $refParentRootContainer({
       at,
-      _,
+      __,
     }: {
       at: number
-      _: string[]
+      __: string[]
     }): $Component {
-      const $container = $refParentRootContainer(wrapper, { at, _ })
+      const $container = $refParentRootContainer(wrapper, { at, __ })
       return $container
     },
     $refParentChildContainer({
       at,
-      _,
+      __,
     }: {
       at: number
-      _: string[]
+      __: string[]
     }): $Component {
-      const $container = $refParentChildContainer(wrapper, { at, _ })
+      const $container = $refParentChildContainer(wrapper, { at, __ })
       return $container
     },
   }

@@ -16,9 +16,9 @@ export interface $WP_C {}
 export interface $WP_W {}
 
 export interface $WP_R {
-  $refChildContainer(data: { at: number; _: string[] }): $Component
-  $refParentRootContainer(data: { at: number; _: string[] }): $Component
-  $refParentChildContainer(data: { at: number; _: string[] }): $Component
+  $refChildContainer(data: { at: number; __: string[] }): $Component
+  $refParentRootContainer(data: { at: number; __: string[] }): $Component
+  $refParentChildContainer(data: { at: number; __: string[] }): $Component
 }
 
 export interface $WP extends $WP_G, $WP_C, $WP_W, $WP_R {}

@@ -42,7 +42,7 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
     let Class: UnitBundle
 
     try {
-      const unit = graph.$refUnit({ unitId: id, _: ['U'] })
+      const unit = graph.$refUnit({ unitId: id, __: ['U'] })
 
       unit.$getUnitBundleSpec({}, (bundle) => {
         graph.$removeUnit({ unitId: id })

@@ -38,9 +38,9 @@ export interface $C_C {
 export interface $C_W {}
 
 export interface $C_R {
-  $refChild(data: { at: number; _: string[] }): $Component
-  $refRoot(data: { at: number; _: string[] }): $Component
-  $refParentRoot(data: { at: number; _: string[] }): $Component
+  $refChild(data: { at: number; __: string[] }): $Component
+  $refRoot(data: { at: number; __: string[] }): $Component
+  $refParentRoot(data: { at: number; __: string[] }): $Component
 }
 
 export interface $C extends $C_G, $C_C, $C_W, $C_R {}

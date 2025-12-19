@@ -77,9 +77,9 @@ export function makeAsyncWorkerR(
   for (const name of METHOD_REF) {
     const $name = `$${name}`
     _$_R[$name] = (data: any): $U => {
-      const { _ } = data
+      const { __ } = data
       const ref_client = client.ref($name, data)
-      const $ref = AsyncWorker(ref_client, _)
+      const $ref = AsyncWorker(ref_client, __)
       return $ref
     }
   }

@@ -68,22 +68,22 @@ export function $children(
 
 export function $refRoot(
   component: Component_,
-  { at, _ }: { at: number; _: string[] }
+  { at, __ }: { at: number; __: string[] }
 ): $Component {
   const root = component.refRoot(at)
 
-  const $root = Async(root, _, component.__system.async)
+  const $root = Async(root, __, component.__system.async)
 
   return $root
 }
 
 export function $refChild(
   component: Component_,
-  { at, _ }: { at: number; _: string[] }
+  { at, __ }: { at: number; __: string[] }
 ): $Component {
   const child = component.refChild(at)
 
-  const $child = Async(child, _, component.__system.async)
+  const $child = Async(child, __, component.__system.async)
 
   return $child
 }

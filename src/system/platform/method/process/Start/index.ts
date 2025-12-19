@@ -70,7 +70,7 @@ export default class Start extends Holder<I, O> {
 
     const bundle = bundleSpec(spec, specs_, false)
 
-    const $graph = system.$start({ bundle, _: UCGEE })
+    const $graph = system.$start({ bundle, __: UCGEE })
 
     for (const pinId in input) {
       const pin = input[pinId]

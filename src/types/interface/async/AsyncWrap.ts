@@ -9,7 +9,7 @@ export const AsyncWrap = (
 
   $unit.$__ = $unit.$__ ?? []
 
-  for (const __ of ['$', ..._]) {
+  for (const __ of ['$', ...(_ ?? [])]) {
     if (!$unit.$__.includes(__)) {
       $unit.$__.push(__)
 

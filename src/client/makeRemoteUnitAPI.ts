@@ -10,7 +10,9 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
     const method = ref[name]
 
     const _method = (data: any): RemoteAPI => {
-      const { _ } = data
+      const { __ = [] } = data
+
+      data.__ = data.__ ?? []
 
       const $unit = method(data)
 
@@ -21,8 +23,8 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
         ref: {},
       }
 
-      for (const __ of ['$', ..._]) {
-        const methods = METHOD[__]
+      for (const _ of ['$', ...__]) {
+        const methods = METHOD[_]
 
         for (const type in methods) {
           const methodList = methods[type]

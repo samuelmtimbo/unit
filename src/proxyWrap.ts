@@ -79,7 +79,7 @@ export function proxy<T extends object>(
           }
         } else if (ref.has(name)) {
           return (data: Dict<any>) => {
-            const { detached = true } = data
+            const { detached = true, __ } = data
 
             stop_depth = depth + 1
 
@@ -89,7 +89,7 @@ export function proxy<T extends object>(
               return $ref
             }
 
-            const filters = interfaceFilters($ref.__)
+            const filters = interfaceFilters(__)
 
             if (detached) {
               return proxy($ref, filters)

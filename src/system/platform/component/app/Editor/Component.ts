@@ -4662,7 +4662,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!pod) {
       pod = this._pod.$refUnit({
         unitId: unit_id,
-        _: UCGEE,
+        __: UCGEE,
       }) as $Graph
 
       this._subgraph_pod_cache[unit_id] = pod
@@ -4812,7 +4812,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_pod_get_unit_deep_memory', unitId)
 
-    const $unit = this._pod.$refUnit({ unitId, _: ['U'] }) as $U
+    const $unit = this._pod.$refUnit({ unitId, __: ['U'] }) as $U
 
     $unit.$snapshot({}, callback)
   }
@@ -4820,7 +4820,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_restore_unit_memory = (unitId: string, memory: Memory): void => {
     // console.log('Graph', '_pod_restore_unit_memory', unitId, memory)
 
-    const $unit = this._pod.$refUnit({ unitId, _: ['U'] }) as $U
+    const $unit = this._pod.$refUnit({ unitId, __: ['U'] }) as $U
 
     $unit.$restore({ memory })
   }
@@ -7030,11 +7030,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const sub_component = this._get_sub_component(unit_id)
 
-    const _ = getComponentInterface(sub_component)
+    const __ = getComponentInterface(sub_component)
 
     const sub_unit = this._pod.$refUnit({
       unitId: unit_id,
-      _,
+      __,
     }) as $Component
 
     sub_component.connect(sub_unit, deep)
@@ -7780,7 +7780,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const $unit = this._pod.$refUnit({
       unitId,
-      _: ['G'],
+      __: ['G'],
       detached: true,
     }) as $G
 
@@ -9330,7 +9330,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _pod_take_unit_err = (unitId: string): void => {
     const $unit = this._pod.$refUnit({
       unitId,
-      _: ['U'],
+      __: ['U'],
       detached: false,
     }) as $U
 
@@ -9473,7 +9473,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const $unit = this._pod.$refUnit({
       unitId,
-      _: UCGEE,
+      __: UCGEE,
       detached: false,
     }) as $Graph
 
@@ -9670,7 +9670,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const $unit = this._pod.$refUnit({
       unitId,
-      _: UCGEE,
+      __: UCGEE,
       detached: false,
     }) as $Graph
 
@@ -39383,11 +39383,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     // console.log('Graph', '_pod_set_unit_pin_data', unitId, type, pinId, data)
 
-    // const $unit = this._pod.$refUnit({
-    //   unitId,
-    //   _: UCGEE,
-    //   detached: false,
-    // }) as $Graph
 
     // $unit.$setPinData({
     //   pinId,
@@ -52241,7 +52236,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
 
       for (const unitId of unit_ids) {
-        const $unit = this._pod.$refUnit({ unitId, _: ['U'], detached: true })
+        const $unit = this._pod.$refUnit({ unitId, __: ['U'], detached: true })
 
         $unit.$reset({})
       }
@@ -57395,7 +57390,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const graph_unit_pod = this._pod.$refUnit({
       unitId: graph_unit_id,
-      _: UCGEE,
+      __: UCGEE,
     }) as $Graph
 
     const parent_spec = findSpecAtPath(
@@ -57577,7 +57572,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               if (parent_pod) {
                 const added_sub_component_pod = parent_pod.$refUnit({
                   unitId,
-                  _: ['U', 'C', 'G', 'EE', 'V'],
+                  __: ['U', 'C', 'G', 'EE', 'V'],
                 }) as $Graph
 
                 added_sub_component.connect(added_sub_component_pod)

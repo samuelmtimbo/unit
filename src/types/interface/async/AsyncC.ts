@@ -72,13 +72,13 @@ export const AsyncCWatch = (c: Component_): $C_W => {
 
 export const AsyncCRef = (c: Component_): $C_R => {
   return {
-    $refChild(data: { at: number; _: string[] }): $Component {
+    $refChild(data: { at: number; __: string[] }): $Component {
       return $refChild(c, data)
     },
-    $refRoot(data: { at: number; _: string[] }) {
+    $refRoot(data: { at: number; __: string[] }) {
       return $refRoot(c, data)
     },
-    $refParentRoot(data: { at: number; _: string[] }): $Component {
+    $refParentRoot(data: { at: number; __: string[] }): $Component {
       return $refRoot(c, data)
     },
   }

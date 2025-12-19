@@ -887,24 +887,24 @@ export const AsyncGWatch = (graph: Graph): $G_W => {
 
 export const AsyncGRef = (graph: Graph): $G_R => {
   return {
-    $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
+    $refUnit({ unitId, __ }: { unitId: string; __: string[] }): $U {
       const unit = graph.getUnit(unitId)
 
-      const $unit = Async(unit, _, graph.__system.async)
+      const $unit = Async(unit, __, graph.__system.async)
 
       return $unit
     },
 
     $refSubComponent({
       unitId,
-      _,
+      __,
     }: {
       unitId: string
-      _: string[]
+      __: string[]
     }): $Component {
       const unit = graph.getUnit(unitId)
 
-      const $unit = Async(unit, _, graph.__system.async)
+      const $unit = Async(unit, __, graph.__system.async)
 
       return $unit
     },
