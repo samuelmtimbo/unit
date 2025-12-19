@@ -1,6 +1,4 @@
-import { proxyWrap } from '../../../proxyWrap'
 import { S } from '../S'
-import { UCGEE } from '../UCGEE'
 import { $S, $S_C, $S_G, $S_R, $S_W } from './$S'
 import { AsyncGraph } from './AsyncGraph'
 
@@ -23,7 +21,7 @@ export const AsyncSRef = (system: S): $S_R => {
 
       const $graph = AsyncGraph(graph)
 
-      return proxyWrap($graph, UCGEE)
+      return $graph
     },
   }
 }
