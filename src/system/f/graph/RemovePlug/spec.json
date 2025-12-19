@@ -1,0 +1,27 @@
+{
+  "name": "remove plug",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "pinId": {
+      "type": "string"
+    },
+    "subPinId": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "remove plug `type` `pinId` `subPinId` from `graph`",
+    "tags": ["f", "graph"]
+  },
+  "id": "9a7d8615-9216-47d8-b60b-2bc457dc50e9",
+  "base": true,
+  "type": "`U`"
+}
