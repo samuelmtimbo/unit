@@ -21,6 +21,8 @@ graph.play()
 
 const remote = new RemoteGraph(system)
 
+remote.play()
+
 remote.push('opt', {})
 
 remote.push('message', { type: INIT, bundle: {} })

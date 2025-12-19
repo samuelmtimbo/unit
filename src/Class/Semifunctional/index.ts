@@ -71,10 +71,6 @@ export class Semifunctional<
       }
     })(this.__system)
 
-    this._functional = functional
-
-    functional.play()
-
     const primitive = new (class _Primitive extends Primitive<I, O> {
       constructor(system: System) {
         super(
@@ -121,8 +117,12 @@ export class Semifunctional<
       }
     })(this.__system)
 
-    primitive.play()
+    if (!this.paused()) {
+      functional.play()
+      functional.play()
+    }
 
+    this._functional = functional
     this._primitive = primitive
 
     for (const name of fi) {
@@ -132,7 +132,6 @@ export class Semifunctional<
         this.getInputOpt(name)
       )
     }
-
     for (const name of fo) {
       functional.setOutput(
         name as keyof O,
@@ -140,7 +139,6 @@ export class Semifunctional<
         this.getOutputOpt(name)
       )
     }
-
     for (const name of i) {
       primitive.setInput(
         name as keyof I,
@@ -148,7 +146,6 @@ export class Semifunctional<
         this.getInputOpt(name)
       )
     }
-
     for (const name of o) {
       primitive.setOutput(
         name as keyof O,
@@ -173,6 +170,16 @@ export class Semifunctional<
 
     this.addListener('take_caught_err', () => {
       functional.takeCaughtErr()
+    })
+
+    this.addListener('pause', () => {
+      functional.pause()
+      primitive.pause()
+    })
+
+    this.addListener('play', () => {
+      functional.play()
+      primitive.play()
     })
 
     this._f_i = new Set(fi)
