@@ -1,0 +1,472 @@
+{
+  "type": "`U`&`G`",
+  "name": "lower case keys",
+  "units": {
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 129,
+          "y": 3
+        }
+      }
+    },
+    "tolowercase": {
+      "id": "adde2d16-e1e6-4599-9a64-dd0968797041",
+      "input": {
+        "A": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 119,
+          "y": 79
+        }
+      }
+    },
+    "loop": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {
+          "metadata": {
+            "position": {
+              "x": 35,
+              "y": 32
+            }
+          }
+        },
+        "test": {
+          "metadata": {
+            "position": {
+              "x": -46,
+              "y": 18
+            }
+          }
+        },
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 65,
+              "y": -98
+            }
+          },
+          "constant": false
+        }
+      },
+      "output": {
+        "current": {
+          "metadata": {
+            "position": {
+              "x": 35,
+              "y": -31
+            }
+          }
+        },
+        "local": {
+          "metadata": {
+            "position": {
+              "x": 72,
+              "y": -68
+            }
+          },
+          "ignored": true
+        },
+        "final": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -11,
+              "y": -48
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 36,
+          "y": -32
+        }
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 39,
+          "y": 47
+        }
+      }
+    },
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -44,
+              "y": 84
+            }
+          }
+        },
+        "i": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 24,
+              "y": 123
+            }
+          }
+        },
+        "test": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 4,
+          "y": 78
+        }
+      }
+    },
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -112,
+              "y": 10
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -105,
+              "y": 42
+            }
+          }
+        },
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -123,
+              "y": 24
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -61,
+          "y": 20
+        }
+      }
+    },
+    "keys": {
+      "id": "45b9c329-64e9-4c4a-800b-790947c75754",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -136,
+              "y": 141
+            }
+          }
+        }
+      },
+      "output": {
+        "keys": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -88,
+          "y": 133
+        }
+      }
+    },
+    "emptyobject": {
+      "id": "dc6e6bc0-081b-11eb-baf7-b7383b70c236",
+      "input": {
+        "any": {
+          "metadata": {
+            "position": {
+              "x": -52,
+              "y": -136
+            }
+          }
+        }
+      },
+      "output": {
+        "{}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -6,
+          "y": -122
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "keys": {
+        "output": {
+          "keys": true
+        }
+      }
+    },
+    "1": {
+      "loop": {
+        "input": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      }
+    },
+    "2": {
+      "tolowercase": {
+        "input": {
+          "A": true
+        }
+      },
+      "get": {
+        "input": {
+          "key": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "3": {
+      "set": {
+        "input": {
+          "key": true
+        }
+      },
+      "tolowercase": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "4": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "5": {
+      "set": {
+        "input": {
+          "value": true
+        }
+      },
+      "get": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "6": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "loop": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "7": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "set": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "8": {
+      "emptyobject": {
+        "output": {
+          "{}": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "keys",
+          "pinId": "obj",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "looprepeat",
+          "pinId": "init",
+          "kind": "input"
+        },
+        "2": {
+          "unitId": "emptyobject",
+          "pinId": "any",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -156,
+              "y": 153
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -132,
+              "y": -2
+            }
+          },
+          "2": {
+            "ext": {
+              "x": -68,
+              "y": -153
+            }
+          }
+        }
+      },
+      "functional": true
+    }
+  },
+  "outputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -32,
+              "y": -60
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -41,
+          "y": 111
+        },
+        "1": {
+          "x": -4,
+          "y": 17
+        },
+        "2": {
+          "x": 63,
+          "y": 84
+        },
+        "3": {
+          "x": 156,
+          "y": 45
+        },
+        "4": {
+          "x": -16,
+          "y": 42
+        },
+        "5": {
+          "x": 89,
+          "y": 31
+        },
+        "6": {
+          "x": 84,
+          "y": -15
+        },
+        "7": {
+          "x": 94,
+          "y": -35
+        },
+        "8": {
+          "x": 28,
+          "y": -84
+        }
+      }
+    }
+  },
+  "id": "8e17c506-c949-4a94-9691-f0188231dafc",
+  "component": {}
+}
