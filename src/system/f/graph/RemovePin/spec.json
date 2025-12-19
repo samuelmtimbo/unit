@@ -1,0 +1,24 @@
+{
+  "name": "remove pin",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "pinId": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "remove pin of `type` and `pinId` from `graph`",
+    "tags": ["f", "graph"]
+  },
+  "id": "0d93e505-d013-4c95-85d1-ffc424d1be5d",
+  "base": true,
+  "type": "`U`"
+}

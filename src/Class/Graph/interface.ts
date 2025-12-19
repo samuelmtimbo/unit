@@ -134,7 +134,7 @@ export type GraphCoverPinData = {
   type: IO
   pinId: string
   subPinId: string
-  subPinSpec: GraphSubPinSpec
+  subPinSpec?: GraphSubPinSpec
   pinSpec?: GraphPinSpec
 } & Flags
 
