@@ -9,6 +9,7 @@ import {
 import { CUSTOM_HEADER_X_WEBSOCKET_ID } from '../../../../../client/platform/web/api/http'
 import { intercept } from '../../../../../client/platform/web/api/intercept'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
+import { NOOP } from '../../../../../NOOP'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
 import { WebSocket_EE, wrapWebSocket } from '../../../../../wrap/WebSocket'
@@ -204,10 +205,14 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     done({ channel })
   }
 
-  d() {
+  async d() {
     if (this._web_socket) {
-      if (this._web_socket.readyState !== WebSocket.CLOSED) {
-        this._web_socket.close()
+      this._web_socket.onclose = NOOP
+      this._web_socket.onerror = NOOP
+      try {
+        await this._web_socket.close()
+      } catch (err) {
+        //
       }
 
       this._web_socket.onopen = null
