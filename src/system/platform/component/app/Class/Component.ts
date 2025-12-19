@@ -150,6 +150,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
       color: 'currentColor',
       pointerEvents: 'none',
       overflow: 'visible',
+      strokeWidth: '0px',
       ...style,
     }
   }
