@@ -3,7 +3,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { TAG_TO_SPEC_ID } from '../../../../../util/tagToId'
-import { ID_DOM_TO_UNIT } from '../../../../_ids'
+import { ID_TAGS } from '../../../../_ids'
 
 export type I = {
   any: any
@@ -22,7 +22,7 @@ export default class Tags extends Functional<I, O> {
       },
       {},
       system,
-      ID_DOM_TO_UNIT
+      ID_TAGS
     )
   }
 
