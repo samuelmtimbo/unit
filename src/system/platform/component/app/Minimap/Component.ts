@@ -274,7 +274,8 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
 
     const strokeWidth = width / MINIMAP_WIDTH + height / MINIMAP_HEIGHT
 
-    this._map_el.setProp('strokeWidth', strokeWidth)
+    this._map_el.$element.style.strokeWidth = `${strokeWidth}px`
+
     this._map_el.setProp('viewBox', `${min_x} ${min_y} ${width} ${height}`)
   }
 }
