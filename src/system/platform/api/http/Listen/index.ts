@@ -35,7 +35,7 @@ export const makeHandler = (
     let url: string
 
     do {
-      url = `:://${uuid()}`
+      url = `${uuid()}`
     } while (requests[url])
 
     const waiter = new Waiter<ServerResponse>()
