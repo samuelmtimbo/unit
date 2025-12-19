@@ -17,6 +17,7 @@ import { watchGraphPinMergeEvent } from './watchGraphPinMergeEvent'
 import { watchGraphPlugEvent } from './watchGraphPlugEvent'
 import { watchGraphRemoveUnitPinData } from './watchGraphRemoveUnitPinDataEvent'
 import { watchGraphReorderSubComponent } from './watchGraphReorderSubComponent'
+import { watchGraphSetForkEvent } from './watchGraphSetForkEvent'
 import { watchGraphSetNameEvent } from './watchGraphSetNameEvent'
 import { watchGraphSetPinSetDefaultIgnored } from './watchGraphSetPinSetDefaultIgnored'
 import { watchGraphSetUnitPinFunctional } from './watchGraphSetPinSetFunctionalEvent'
@@ -62,6 +63,7 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   set_unit_id: watchGraphSetUnitIdEvent,
   bulk_edit: watchGraphBulkEditEvent,
   destroy: watchGraphDestroyEvent,
+  set_fork: watchGraphSetForkEvent,
   set_metadata: watchGraphSetMetadataEvent,
 }
 
