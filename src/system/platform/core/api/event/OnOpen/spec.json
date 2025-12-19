@@ -1,0 +1,46 @@
+{
+  "name": "on open",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'open'",
+          "constant": true
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "emitter"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` \"open\" event",
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "08467719-795a-4f08-838b-314ac6f4f814",
+  "type": "`U`&`G`"
+}
