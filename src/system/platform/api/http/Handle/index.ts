@@ -1,6 +1,7 @@
 import { ServerRequest } from '../../../../../API'
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { RS } from '../../../../../types/interface/RS'
@@ -49,10 +50,16 @@ export default class Handle extends Holder<I, O> {
     )
   }
 
-  async f({ url: url_ }: I, done: Done<O>): Promise<void> {
+  async f({ url: url_ }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       cache: { requests },
     } = this.__system
+
+    if (!requests[url_]) {
+      fail('request cannot be found')
+
+      return
+    }
 
     const { url, method, headers, body: body_ } = requests[url_]
 
