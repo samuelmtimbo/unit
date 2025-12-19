@@ -9,7 +9,7 @@
           "constant": true,
           "data": {
             "ref": [],
-            "data": "Connection"
+            "data": "connection"
           },
           "metadata": {
             "data": {
@@ -19,22 +19,18 @@
               }
             },
             "position": {
-              "x": -45,
-              "y": 87
+              "x": 18,
+              "y": 91
             }
           }
         },
         "obj": {},
         "default": {
           "constant": true,
-          "data": {
-            "ref": [],
-            "data": ""
-          },
           "metadata": {
             "position": {
-              "x": -90,
-              "y": 64
+              "x": -9,
+              "y": 63
             },
             "data": {
               "position": {
@@ -42,6 +38,10 @@
                 "y": 91
               }
             }
+          },
+          "data": {
+            "ref": [],
+            "data": ""
           }
         }
       },
@@ -50,8 +50,8 @@
       },
       "metadata": {
         "position": {
-          "x": -46,
-          "y": 43
+          "x": 39,
+          "y": 50
         }
       }
     },
@@ -64,16 +64,16 @@
         "a": {
           "metadata": {
             "position": {
-              "x": 44,
-              "y": -36
+              "x": 43.05882352941177,
+              "y": -35.588235294117645
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 58,
-          "y": 74
+          "x": 142,
+          "y": 77
         }
       }
     },
@@ -89,8 +89,8 @@
           },
           "metadata": {
             "position": {
-              "x": 201,
-              "y": 98
+              "x": 285,
+              "y": 96
             },
             "data": {
               "position": {
@@ -106,8 +106,8 @@
       },
       "metadata": {
         "position": {
-          "x": 161,
-          "y": 73
+          "x": 245,
+          "y": 72
         }
       }
     },
@@ -118,7 +118,7 @@
           "constant": true,
           "data": {
             "ref": [],
-            "data": "Upgrade"
+            "data": "upgrade"
           },
           "metadata": {
             "data": {
@@ -128,7 +128,7 @@
               }
             },
             "position": {
-              "x": -17,
+              "x": 18,
               "y": -91
             }
           }
@@ -142,8 +142,8 @@
           },
           "metadata": {
             "position": {
-              "x": -80,
-              "y": -79
+              "x": -9,
+              "y": -63
             },
             "data": {
               "position": {
@@ -159,8 +159,8 @@
       },
       "metadata": {
         "position": {
-          "x": -40,
-          "y": -53
+          "x": 39,
+          "y": -50
         }
       }
     },
@@ -173,16 +173,16 @@
         "a": {
           "metadata": {
             "position": {
-              "x": 93.1875,
-              "y": 24.875
+              "x": 92.24632352941177,
+              "y": 25.28676470588235
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 67,
-          "y": -75
+          "x": 142,
+          "y": -77
         }
       }
     },
@@ -198,8 +198,8 @@
           },
           "metadata": {
             "position": {
-              "x": 212,
-              "y": -94
+              "x": 285,
+              "y": -96
             },
             "data": {
               "position": {
@@ -215,8 +215,8 @@
       },
       "metadata": {
         "position": {
-          "x": 171,
-          "y": -71
+          "x": 245,
+          "y": -72
         }
       }
     },
@@ -230,16 +230,16 @@
         "a and b": {
           "metadata": {
             "position": {
-              "x": 291,
-              "y": 6
+              "x": 370,
+              "y": 0
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 240,
-          "y": 5
+          "x": 319,
+          "y": 0
         }
       }
     },
@@ -254,8 +254,8 @@
           },
           "metadata": {
             "position": {
-              "x": -182,
-              "y": 18
+              "x": -195,
+              "y": 32
             },
             "data": {
               "position": {
@@ -268,8 +268,8 @@
         "obj": {
           "metadata": {
             "position": {
-              "x": -194,
-              "y": -11
+              "x": -212,
+              "y": 0
             }
           }
         },
@@ -281,8 +281,8 @@
           },
           "metadata": {
             "position": {
-              "x": -180,
-              "y": -40
+              "x": -195,
+              "y": -32
             },
             "data": {
               "position": {
@@ -294,12 +294,48 @@
         }
       },
       "output": {
-        "value": {}
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -163.94117647058823,
+              "y": 13.411764705882353
+            }
+          }
+        }
       },
       "metadata": {
         "position": {
-          "x": -141,
-          "y": -10
+          "x": -160,
+          "y": 0
+        }
+      }
+    },
+    "lowercasekeys": {
+      "id": "8e17c506-c949-4a94-9691-f0188231dafc",
+      "output": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 48.05882352941177,
+              "y": 0.4117647058823529
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 0
+        }
+      },
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -49.94117647058823,
+              "y": 0.4117647058823529
+            }
+          }
         }
       }
     }
@@ -316,9 +352,9 @@
           "obj": true
         }
       },
-      "getordefault1": {
+      "lowercasekeys": {
         "output": {
-          "value": true
+          "obj": true
         }
       }
     },
@@ -347,14 +383,14 @@
       }
     },
     "3": {
-      "tolowercase0": {
-        "input": {
-          "A": true
-        }
-      },
       "getordefault0": {
         "output": {
           "value": true
+        }
+      },
+      "tolowercase0": {
+        "input": {
+          "A": true
         }
       }
     },
@@ -367,6 +403,18 @@
       "tolowercase0": {
         "output": {
           "a": true
+        }
+      }
+    },
+    "5": {
+      "lowercasekeys": {
+        "input": {
+          "obj": true
+        }
+      },
+      "getordefault1": {
+        "output": {
+          "value": true
         }
       }
     },
@@ -404,12 +452,13 @@
           "kind": "input"
         }
       },
+      "defaultIgnored": false,
       "metadata": {
         "position": {
           "0": {
             "ext": {
-              "x": -219,
-              "y": -12
+              "x": -236,
+              "y": 0
             }
           }
         }
@@ -426,13 +475,13 @@
         }
       },
       "ref": false,
-      "type": "boolean",
+      "defaultIgnored": false,
       "metadata": {
         "position": {
           "0": {
             "ext": {
-              "x": 314,
-              "y": 7
+              "x": 393,
+              "y": 0
             }
           }
         }
@@ -441,43 +490,44 @@
   },
   "metadata": {
     "icon": null,
-    "description": "test whether http request is a web socket upgrade",
+    "description": "",
     "position": {
-      "data": {
-        "x": 355,
-        "y": 9
-      },
       "merge": {
         "0": {
-          "x": -79,
-          "y": -7
+          "x": 8,
+          "y": 0
         },
         "1": {
-          "x": 7,
-          "y": 61
+          "x": 91,
+          "y": 66
         },
         "2": {
-          "x": 109,
+          "x": 193,
           "y": 78
         },
         "3": {
-          "x": 15,
-          "y": -64
+          "x": 91,
+          "y": -67
         },
         "4": {
-          "x": 119,
-          "y": -77
+          "x": 193,
+          "y": -78
+        },
+        "5": {
+          "x": -106,
+          "y": 0
         },
         "6": {
-          "x": 210,
-          "y": -36
+          "x": 286,
+          "y": -39
         },
         "7": {
-          "x": 204,
-          "y": 42
+          "x": 286,
+          "y": 39
         }
       }
-    }
+    },
+    "tags": ["platform", "core", "http"]
   },
   "id": "fce38491-5fb7-4351-a775-ca4d474fdfe1"
 }
