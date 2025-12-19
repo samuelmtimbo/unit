@@ -26,9 +26,21 @@ export function wrapWebSocket(
     async send(
       data: string | ArrayBufferLike | Blob | ArrayBufferView
     ): Promise<void> {
-      if (webSocket.readyState === WebSocket.OPEN) {
-        webSocket.send(data)
+      const {
+        api: {
+          window: { WebSocket },
+        },
+      } = this.__system
+
+      if (webSocket.readyState === WebSocket.CONNECTING) {
+        throw new Error('cannot send on web socket while still connecting')
       }
+
+      if (webSocket.readyState === WebSocket.CLOSED) {
+        throw new Error('cannot send on closed web socket')
+      }
+
+      webSocket.send(data)
 
       return
     }
