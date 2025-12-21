@@ -9,6 +9,7 @@ import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
 import { Async } from '../../../../../types/interface/async/Async'
 import { UCGEE } from '../../../../../types/interface/UCGEE'
+import { clone } from '../../../../../util/clone'
 import { weakMerge } from '../../../../../weakMerge'
 import { $wrap } from '../../../../../wrap'
 import { ID_START_0 } from '../../../../_ids'
@@ -58,7 +59,9 @@ export default class Start extends Holder<I, O> {
 
     const { paused } = opt || {}
 
-    const { __bundle } = Graph
+    let { __bundle } = Graph
+
+    __bundle = clone(__bundle)
 
     const { unit } = __bundle
 
