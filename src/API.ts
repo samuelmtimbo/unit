@@ -134,10 +134,9 @@ export type API = {
     fetch: (
       url: string,
       opt: RequestInit,
-      servers: Dict<ServerListener>,
       interceptors: ServerInterceptor[]
     ) => Promise<Response>
-    createServer: (opt: ServerOpt, servers?: Dict<any>) => Server
+    createServer: (system: System, opt: ServerOpt) => Server
     handleUpgrade: (
       request: ServerRequest,
       response: Waiter<ServerResponse>,

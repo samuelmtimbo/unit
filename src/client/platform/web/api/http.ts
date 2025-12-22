@@ -1,14 +1,13 @@
 import {
   API,
   Server,
-  ServerHandler,
   ServerOpt,
   ServerRequest,
   ServerResponse,
   ServerSocket,
 } from '../../../../API'
 import { NOOP } from '../../../../NOOP'
-import { BootOpt } from '../../../../system'
+import { BootOpt, System } from '../../../../system'
 import { WebSocketShape } from '../../../../system/platform/api/network/WebSocket'
 import { Dict } from '../../../../types/Dict'
 import { uuidNotIn } from '../../../../util/id'
@@ -22,20 +21,31 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
 
   const http: API['http'] = {
     fetch: __intercept__fetch(fetch),
-    createServer: (
-      opt: ServerOpt,
-      servers?: Dict<{ opt: ServerOpt; handler: ServerHandler }>
-    ): Server => {
+    createServer: (system: System, opt: ServerOpt): Server => {
       return {
         listen: (port, handler) => {
+          const {
+            cache: { servers },
+            intercept,
+          } = system
+
           if (servers[port]) {
             throw new Error(`port ${port} is already in use`)
           }
 
           servers[port] = { opt, handler }
 
+          const unlisten = intercept(
+            {
+              urls: [`http://localhost:${port}`, `ws://localhost:${port}`],
+            },
+            handler
+          )
+
           return () => {
             delete servers[port]
+
+            unlisten()
           }
         },
       }

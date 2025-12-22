@@ -68,7 +68,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
         window: { WebSocket },
         http: { fetch },
       },
-      cache: { ws, wss, servers, interceptors },
+      cache: { ws, wss, interceptors },
     } = this.__system
 
     if (!WebSocket) {
@@ -91,7 +91,6 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             Connection: 'upgrade',
           },
         },
-        servers,
         interceptors
       )
     }
@@ -113,18 +112,6 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
         const newUrl = response.headers.get('Location')
 
         url = newUrl
-      }
-    }
-
-    if (url.startsWith('unit://')) {
-      let response: Response
-
-      try {
-        response = await upgrade()
-      } catch (err) {
-        fail('could not connect')
-
-        return
       }
 
       if (response.ok) {

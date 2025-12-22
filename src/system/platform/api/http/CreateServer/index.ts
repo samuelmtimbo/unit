@@ -41,13 +41,12 @@ export default class CreateServer extends Holder<I, O> {
       api: {
         http: { createServer },
       },
-      cache: { servers },
     } = this.__system
 
     let _server: Server
 
     try {
-      _server = createServer(opt, servers)
+      _server = createServer(this.__system, opt)
     } catch (err) {
       fail(err.message.toLowerCase())
 

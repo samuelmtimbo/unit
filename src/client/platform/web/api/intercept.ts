@@ -2,7 +2,6 @@ import {
   InterceptOpt,
   RequestOpt,
   ServerInterceptor,
-  ServerListener,
   ServerRequest,
   ServerResponse,
 } from '../../../../API'
@@ -105,7 +104,6 @@ export function __intercept__fetch(
   return async (
     url: string,
     init: RequestOpt,
-    servers: Dict<ServerListener>,
     interceptors: ServerInterceptor[]
   ) => {
     for (const interceptor of interceptors) {
@@ -118,26 +116,6 @@ export function __intercept__fetch(
 
         return response
       }
-    }
-
-    if (url.startsWith('unit://')) {
-      const port = defaultPort(url)
-
-      const server = servers[port]
-
-      if (!server) {
-        throw new Error('failed to fetch')
-      }
-
-      const { handler } = server
-
-      const request = requestToServerRequest(init, url)
-
-      const res = await handler(request)
-
-      const response = serverResponseToResponse(res)
-
-      return response
     }
 
     return fetch(url, init)

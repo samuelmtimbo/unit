@@ -147,11 +147,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
   system.api.http.createServer = (opt: ServerOpt) => {
     const server: Server = {
-      listen: function (
-        port: number,
-        handler: ServerHandler,
-        servers: Dict<any>
-      ): Unlisten {
+      listen: function (port: number, handler: ServerHandler): Unlisten {
         const server = http.createServer(
           async (req: http.IncomingMessage, res: http.ServerResponse) => {
             const response = await handleIncoming(req, handler)

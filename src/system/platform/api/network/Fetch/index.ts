@@ -53,7 +53,7 @@ export default class Fetch extends Holder<I, O> {
       api: {
         http: { fetch },
       },
-      cache: { servers, interceptors },
+      cache: { interceptors },
     } = this.__system
 
     opt.body = await body.raw()
@@ -85,7 +85,7 @@ export default class Fetch extends Holder<I, O> {
     }
 
     try {
-      fetch(url, opt, servers, interceptors)
+      fetch(url, opt, interceptors)
         .then((response) => {
           const res = wrapResponse(response, this.__system)
 

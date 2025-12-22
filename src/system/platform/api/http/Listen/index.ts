@@ -28,7 +28,7 @@ export const makeHandler = (
   push: (url: string) => void
 ): ServerHandler => {
   const {
-    cache: { requests, responses, servers },
+    cache: { requests, responses },
   } = system
 
   return async (req: ServerRequest) => {
@@ -80,10 +80,6 @@ export default class Listen0 extends Holder<I, O> {
   }
 
   async f({ server, port }: I, done: Done<O>, fail: Fail): Promise<void> {
-    const {
-      cache: { servers },
-    } = this.__system
-
     if (port < 1 || port > 65535) {
       fail('invalid out-of-range port')
 
@@ -95,7 +91,7 @@ export default class Listen0 extends Holder<I, O> {
     })
 
     try {
-      this._unlisten = server.listen(port, handler, servers)
+      this._unlisten = server.listen(port, handler)
     } catch (err) {
       fail(err.message)
     }
