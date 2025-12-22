@@ -50,6 +50,12 @@ export class Peer extends $<PeerEvents> {
     this._initiator = initiatior
     this._config = config
 
+    const {
+      api: {
+        window: { RTCPeerConnection },
+      },
+    } = system
+
     if (!RTCPeerConnection) {
       throw new APINotSupportedError('Web RTC')
     }

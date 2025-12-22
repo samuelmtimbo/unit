@@ -254,6 +254,7 @@ export function workerApi(): API {
       AudioContext: globalThis.AudioContext,
       OscillatorNode: globalThis.OscillatorNode,
       MediaStreamAudioSourceNode: globalThis.MediaStreamAudioSourceNode,
+      RTCPeerConnection: globalThis.RTCPeerConnection,
       AnalyserNode: globalThis.AnalyserNode,
       GainNode: globalThis.GainNode,
       DelayNode: globalThis.DelayNode,

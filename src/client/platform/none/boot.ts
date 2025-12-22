@@ -267,6 +267,7 @@ export function noneApi(): API {
       OffscreenCanvas: undefined,
       WebSocket: undefined,
       DOMParser: undefined,
+      RTCPeerConnection: undefined,
       open: function (url: string, target: string, features: string): Window {
         throw new MethodNotImplementedError()
       },

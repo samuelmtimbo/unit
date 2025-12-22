@@ -304,6 +304,7 @@ export type API = {
     AudioContext: typeof AudioContext
     OscillatorNode: typeof OscillatorNode
     MediaStreamAudioSourceNode: typeof MediaStreamAudioSourceNode
+    RTCPeerConnection: typeof RTCPeerConnection
     AnalyserNode: typeof AnalyserNode
     GainNode: typeof GainNode
     DelayNode: typeof DelayNode
