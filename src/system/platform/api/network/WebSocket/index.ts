@@ -177,6 +177,12 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
           "Failed to construct 'WebSocket': The URL '' is invalid."
         ) {
           fail('malformed url')
+        } else if (
+          "failed to construct 'websocket': an insecure websocket connection may not be initiated from a page loaded over https."
+        ) {
+          fail(
+            'an insecure websocket connection may not be initiated from a page loaded over https'
+          )
         } else {
           fail(err.message.toLowerCase())
         }

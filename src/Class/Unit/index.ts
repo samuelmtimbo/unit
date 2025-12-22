@@ -5,6 +5,7 @@ import { DuplicatedOutputFoundError } from '../../exception/DuplicatedOutputFoun
 import { InputNotFoundError } from '../../exception/InputNotFoundError'
 import { InvalidArgumentType } from '../../exception/InvalidArgumentType'
 import { OutputNotFoundError } from '../../exception/OutputNotFoundError'
+import { NOOP } from '../../NOOP'
 import { Pin, Pin_M } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
@@ -15,6 +16,7 @@ import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keys } from '../../system/f/object/Keys/f'
 import { Spec } from '../../types'
 import { AllKeys } from '../../types/AllKeys'
+import { Continue } from '../../types/Continue'
 import { Dict } from '../../types/Dict'
 import { U, U_EE } from '../../types/interface/U'
 import { IO } from '../../types/IO'
@@ -347,11 +349,11 @@ export class Unit<
     pin: Pin<any>,
     opt: PinOpt = DEFAULT_PIN_OPT,
     propagate: boolean = true
-  ) {
+  ): Continue {
     if (type === 'input') {
-      this.setInput(pinId as keyof I, pin, opt, propagate)
+      return this.setInput(pinId as keyof I, pin, opt, propagate)
     } else {
-      this.setOutput(pinId as keyof O, pin, opt, propagate)
+      return this.setOutput(pinId as keyof O, pin, opt, propagate)
     }
   }
 
@@ -359,11 +361,33 @@ export class Unit<
     pinId: K,
     input: Pin<I[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT,
-    propagate: boolean = true
-  ) {
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     this._setInput(pinId, input, opt, propagate)
 
-    this.emit('set_input', pinId, input, opt, propagate)
+    return this.react('set_input', pinId, input, opt, propagate, hold)
+  }
+
+  public react(...args: any[]): Continue {
+    const [event, ...rest] = args
+
+    const emitArgs = rest.slice(0, -1)
+
+    const hold = rest[rest.length - 1]
+
+    const emit = () => {
+      // @ts-ignore
+      this.emit(event, ...emitArgs)
+    }
+
+    if (hold) {
+      return emit
+    }
+
+    emit()
+
+    return NOOP
   }
 
   public _setInput<K extends keyof I>(
@@ -507,11 +531,12 @@ export class Unit<
     name: K,
     output: Pin<O[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT,
-    propagate: boolean = true
-  ) {
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     this._setOutput(name, output, opt, propagate)
 
-    this.emit('set_output', name, output, opt, propagate)
+    return this.react('set_output', name, output, opt, propagate, hold)
   }
 
   public _setOutput<K extends keyof O>(

@@ -81,6 +81,7 @@ import {
 } from '../../types'
 import { Action } from '../../types/Action'
 import { BundleSpec } from '../../types/BundleSpec'
+import { Continue } from '../../types/Continue'
 import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
@@ -694,7 +695,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     mergeId: string,
     data: any,
     propagate: boolean = true
-  ): void {
+  ): Continue {
     // console.log('_simPlugPinToMerge', {
     //   type,
     //   pinId,
@@ -709,7 +710,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const subPin = this._pin[mergePinNodeId]
 
-    this._simSetExposedSubPin(type, pinId, type, subPinId, subPin, propagate)
+    return this._simSetExposedSubPin(
+      type,
+      pinId,
+      type,
+      subPinId,
+      subPin,
+      propagate
+    )
   }
 
   private _simUnplugPinFromMerge(
@@ -819,7 +827,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       deepSet(this._plugUnlisten, [type, name, subPinId], unlisten)
     }
 
-    this._simSetExposedSubPin(type, name, kind, subPinId, subPin, propagate)
+    return this._simSetExposedSubPin(
+      type,
+      name,
+      kind,
+      subPinId,
+      subPin,
+      propagate
+    )
   }
 
   private _setExposedSubPin(
@@ -852,7 +867,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPinId: string,
     subPin: Pin,
     propagate: boolean = true
-  ) {
+  ): Continue {
     // console.log(
     //   'Graph',
     //   '_simSetExposedSubPin',
@@ -878,7 +893,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         ? oppositeType
         : type
 
-    exposedMerge.setPin(type_, subPinId, subPin, {}, propagate)
+    return exposedMerge.setPin(type_, subPinId, subPin, {}, propagate)
   }
 
   private _simRemoveExposedSubPin(
