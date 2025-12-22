@@ -6,7 +6,7 @@
       "ref": true
     },
     "opt": {
-      "type": "{behavior?:'smooth'|'auto'|'instant',block?:'nearest'|'start'|'end',top:number,left:number}"
+      "type": "{behavior?:'smooth'|'auto'|'instant',block?:'nearest'|'start'|'end',top?:number,left?:number}"
     }
   },
   "outputs": {},
