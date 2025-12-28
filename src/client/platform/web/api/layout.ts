@@ -199,7 +199,19 @@ const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
   }
 
   const transformRelative = (name: string) => {
-    return parseRelativeUnit(style[name], trait[name], trait[name])
+    let parentTrait = trait[name]
+
+    const value = style[name]
+
+    if (name === 'fontSize') {
+      if (value.endsWith('vw')) {
+        parentTrait = trait['width']
+      } else if (value.endsWith('vh')) {
+        parentTrait = trait['height']
+      }
+    }
+
+    return parseRelativeUnit(style[name], parentTrait, parentTrait)
   }
 
   for (const name of LENGTH_STYLE_PROP_NAMES) {
