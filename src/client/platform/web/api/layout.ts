@@ -101,7 +101,11 @@ const fitTreeChildren = (
   parentTrait: LayoutNode,
   parentNode: HTMLElement | SVGElement,
   tree: Tree<
-    Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement }
+    Tag & {
+      trait?: LayoutNode
+      element?: HTMLElement | SVGElement
+      container?: HTMLElement | SVGElement
+    }
   >[],
   path: number[],
   expandChild: (path: number[]) => Tag[]
@@ -118,6 +122,7 @@ const fitTreeChildren = (
     const { container, element } = tagToElement(tag, parentTrait, parentTagName)
 
     node.value.element = element
+    node.value.container = container
 
     parentNode.appendChild(container)
 
@@ -221,7 +226,13 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
     reflectTreeTrait: function (
       system: System,
       parentTrait: LayoutNode,
-      tree: Tree<Tag & { trait?: LayoutNode; element?: HTMLElement }>[],
+      tree: Tree<
+        Tag & {
+          trait?: LayoutNode
+          element?: HTMLElement
+          container: HTMLElement
+        }
+      >[],
       expandChild: (path: number[]) => Tag[]
     ): void {
       const parentNode = system.api.document.createElement('div')
@@ -245,14 +256,15 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
         traverseTree(root, null, (node, parent) => {
           const { name, attr, style } = node.value
 
-          let { element } = node.value
+          let { container } = node.value
 
-          if (element.style.display === 'contents') {
-            element = (element.childNodes.item(0) ?? element) as HTMLElement
+          if (container.style.display === 'contents') {
+            container = (container.childNodes.item(0) ??
+              container) as HTMLElement
           }
 
-          const computedStyle = window.getComputedStyle(element)
-          const rect = element.getBoundingClientRect()
+          const computedStyle = window.getComputedStyle(container)
+          const rect = container.getBoundingClientRect()
 
           let { x, y, width, height } = rect
 
