@@ -316,6 +316,10 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
           opacity *= ((parent && parent.value.trait.opacity) || 1) ?? 1
 
+          if (typeof fontSizeStr === 'number') {
+            fontSizeStr = `${fontSizeStr}px`
+          }
+
           const fontSizeUnit =
             fontSizeStr?.match(/(px|em|rem|pt|vw|vh|%)$/)?.[1] ?? 'px'
 
