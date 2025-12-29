@@ -91,7 +91,9 @@ export default class Listen0 extends Holder<I, O> {
     })
 
     try {
-      this._unlisten = server.listen(port, handler)
+      this._unlisten = server.listen(port, handler, (err) => {
+        fail(err)
+      })
     } catch (err) {
       fail(err.message)
     }

@@ -139,7 +139,7 @@ export function workerApi(): API {
         throw new APINotSupportedError('Fetch')
       },
       EventSource: undefined,
-      createServer: function (opt: ServerOpt, servers?: Dict<any>): Server {
+      createServer: function (system: System, opt: ServerOpt): Server {
         throw new APINotSupportedError('Server')
       },
       handleUpgrade: function (

@@ -8,6 +8,7 @@ import { Tag } from './system/platform/Style'
 import { WebSocketShape } from './system/platform/api/network/WebSocket'
 import { MeasureTextFunction } from './text'
 import { Tree } from './tree'
+import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import {
@@ -136,7 +137,7 @@ export type API = {
       opt: RequestInit,
       interceptors: ServerInterceptor[]
     ) => Promise<Response>
-    createServer: (system: System, opt: ServerOpt) => Server
+    createServer: (system: System, opt: ServerOpt, onerror: Callback) => Server
     handleUpgrade: (
       request: ServerRequest,
       response: Waiter<ServerResponse>,

@@ -46,7 +46,9 @@ export default class CreateServer extends Holder<I, O> {
     let _server: Server
 
     try {
-      _server = createServer(this.__system, opt)
+      _server = createServer(this.__system, opt, (err) => {
+        fail(err)
+      })
     } catch (err) {
       fail(err.message.toLowerCase())
 
