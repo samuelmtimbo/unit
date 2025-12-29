@@ -23,6 +23,7 @@ import { Memory } from '../../../Class/Unit/Memory'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GlobalRefSpec } from '../../GlobalRefSpec'
+import { IO } from '../../IO'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 
@@ -96,6 +97,7 @@ export interface $U_W {
 }
 
 export interface $U_R {
+  $refPin(data: { type: IO; pinId: string }): any
   $refGlobalObj(data: { globalId: string; __: string[] }): any
 }
 

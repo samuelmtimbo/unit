@@ -11,7 +11,6 @@ import { DataRef } from '../../../DataRef'
 import { Moment } from '../../../debug/Moment'
 import { watchUnit } from '../../../debug/watchUnit'
 import { getGlobalRef } from '../../../global'
-import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
 import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { evaluateDataValue } from '../../../spec/evaluateDataValue'
@@ -214,7 +213,18 @@ export const AsyncURef = (unit: Unit): $U_R => {
 
       const $obj = Async($, __, system.async)
 
-      return proxyWrap($obj, __)
+      return $obj
+    },
+    $refPin(data: { type: IO; pinId: string }) {
+      const { type, pinId } = data
+
+      const system = unit.__system
+
+      const pin = unit.getPin(type, pinId)
+
+      const $pin = Async(pin, ['V'], system.async)
+
+      return $pin
     },
   }
 }
