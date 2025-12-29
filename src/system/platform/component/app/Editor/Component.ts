@@ -21534,6 +21534,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
+      if (this._leaf_frame_active[leaf_id]) {
+        continue
+      }
+
       const leaf_comp_offset = leaf_comp.getOffset() ?? leaf_comp
 
       if (leaf_comp.$wrap) {
@@ -21633,7 +21637,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const leaf_node = leaf_traits[i] || this._leaf_frame_node[leaf_id]
 
-      this._plug_leaf_frame(leaf_id, leaf_comp, leaf_node, leaf_layer)
+      if (!this._leaf_frame_active[leaf_id]) {
+        this._plug_leaf_frame(leaf_id, leaf_comp, leaf_node, leaf_layer)
+      }
 
       i++
     }
@@ -34381,7 +34387,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const { child_foreground: leaf_layer } =
         this._get_sub_component_layout_layer(sub_component_id)
 
-      this._plug_leaf_frame(leaf_id, leaf_comp as any, leaf_node, leaf_layer)
+      if (!this._leaf_frame_active[leaf_id]) {
+        this._plug_leaf_frame(leaf_id, leaf_comp as any, leaf_node, leaf_layer)
+      }
 
       leaf_i++
     }
