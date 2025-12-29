@@ -9,6 +9,7 @@ import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { deepGet } from '../util/object'
+import { weakMerge } from '../weakMerge'
 
 export function collectUnitIdSet(
   unit: GraphUnitSpec,
@@ -49,12 +50,12 @@ export function collectUnitIdSet(
     }
   }
 
-  const unit_spec = _specs[id]
+  const unit_spec = specs[id]
 
   if (unit_spec) {
     collectIdSetFromSpec(unit_spec, specs, set)
   } else {
-    //
+    throw new Error(`spec id not found ${id}`)
   }
 }
 
@@ -100,12 +101,14 @@ export function collectIdSetFromBundle(
 ): Set<string> {
   const { spec = {}, specs = {} } = bundle
 
-  collectIdSetFromSpec(spec, specs, set)
+  const specs_ = weakMerge(specs, _specs)
+
+  collectIdSetFromSpec(spec, specs_, set)
 
   for (const specId in specs) {
     const spec = specs[specId]
 
-    collectIdSetFromSpec(spec, specs, set)
+    collectIdSetFromSpec(spec, specs_, set)
   }
 
   return set
