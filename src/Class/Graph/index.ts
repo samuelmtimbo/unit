@@ -5347,6 +5347,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _setMetadata(path: string[], data: any): void {
+    if (path.length === 0) {
+      this._spec.metadata = data
+
+      return
+    }
+
+    this._spec.metadata = this._spec.metadata ?? {}
+
     deepSet_(this._spec.metadata, path, data)
   }
 
