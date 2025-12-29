@@ -19866,7 +19866,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (this._is_sub_component_fullwindow(sub_component_id)) {
       this._decouple_sub_component(sub_component_id)
     } else {
-      this._leave_sub_component_frame(sub_component_id)
+      if (this._subgraph_unit_id === sub_component_id) {
+        //
+      } else {
+        this._leave_sub_component_frame(sub_component_id)
+      }
     }
   }
 
