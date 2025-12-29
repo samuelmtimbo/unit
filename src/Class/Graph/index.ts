@@ -3385,8 +3385,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       .concat([[unitId, ...(data[data.length - 1] ?? [])]])
 
     this.edit(event, ...data_)
-
-    this._bubble && this._bubble(event, ...data_)
   }
 
   public setParent(
