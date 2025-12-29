@@ -562,6 +562,7 @@ import {
   getSpecOutputs,
   getSpecRender,
   getSpecRenderById,
+  hasSpec,
   hasSubComponent,
   hasSubComponents,
   isComponentId,
@@ -57331,6 +57332,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const subgraph_at_path = this.getSubgraphAtPath(path)
 
       if (!subgraph_at_path) {
+        if (!hasSpec(specs, forked_unit_spec.id)) {
+          setSpec(forked_unit_spec.id, forked_unit_spec)
+        }
+
         this._register_spec(forked_unit_spec.id, specs, false)
       }
     }
