@@ -5,7 +5,7 @@ export const AsyncWrap = (
   _: string[],
   wrapper: Dict<(unit: any) => any>
 ): any => {
-  let $unit = unit
+  const $unit = unit
 
   $unit.$__ = $unit.$__ ?? []
 
