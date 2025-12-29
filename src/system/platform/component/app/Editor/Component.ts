@@ -48199,6 +48199,37 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       })
 
       this._show_search()
+    } else if (this._mode === 'change') {
+      const contained_unit_ids = contained_nodes.filter((node_id) =>
+        this._is_unit_node_id(node_id)
+      )
+
+      if (contained_unit_ids.length === 1) {
+        const contained_node_id = contained_nodes[0]
+
+        if (
+          !this._is_unit_base(contained_node_id) &&
+          !this._is_unit_component(contained_node_id)
+        ) {
+          this._spec_set_unit_spec_render(contained_node_id, true)
+
+          this._componentify_core(contained_node_id, {}, true)
+
+          const component = this._get_sub_component(contained_node_id)
+
+          for (const root of component.$root) {
+            root.collapse()
+          }
+
+          this._append_sub_component_all_missing_root(contained_node_id)
+
+          this._refresh_core_icon_hidden(contained_node_id)
+          this._refresh_core_size(contained_node_id)
+          this._refresh_core_icon_size(contained_node_id)
+
+          this._start_graph_simulation(LAYER_NONE)
+        }
+      }
     }
   }
 
