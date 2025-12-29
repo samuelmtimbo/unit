@@ -17,6 +17,8 @@ export type SystemEvents<_EE extends Dict<any[]>> = $Events<_EE & S_EE> & S_EE
 
 export function wrapSystem(system: System, _system: System): $<any> & S & EE {
   const system_: $ & S = new (class System extends $<any> implements S {
+    __: string[] = ['S', 'EE']
+
     intercept(opt: InterceptOpt, handler: ServerHandler): Unlisten {
       return system.intercept(opt, handler)
     }
