@@ -21270,7 +21270,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const is_table = isTableLike(leaf_comp)
     const is_svg = isSVGLike(leaf_comp)
 
+    const leaf_style = extractStyle(leaf_comp, leaf_node, measureText)
+
     const is_auto = is_svg || is_table
+
+    const is_width_auto = (leaf_style.width ?? 'auto') === 'auto'
+    const is_height_auto = (leaf_style.height ?? 'auto') === 'auto'
 
     const temp_style: Dict<string> = {
       position: 'relative',
@@ -21280,8 +21285,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       left: '0',
       right: '0',
       bottom: '0',
-      width: is_auto ? undefined : '100%',
-      height: is_auto ? undefined : '100%',
+      width: is_auto || is_width_auto ? 'auto' : '100%',
+      height: is_auto || is_height_auto ? 'auto' : '100%',
       opacity: '1',
       transform: '',
       color: 'currentcolor',
@@ -21331,7 +21336,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const style_prop = leaf_comp.getProp('style') ?? {}
       const style = rawExtractStyle(leaf_comp.$node, leaf_node, measureText)
-      const leaf_style = extractStyle(leaf_comp, leaf_node, measureText)
 
       const leaf_path = leaf_id.split('/')
 
