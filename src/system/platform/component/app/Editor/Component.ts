@@ -401,16 +401,20 @@ import {
   REMOVE_UNIT_PIN_DATA,
   SET_COMPONENT_SIZE,
   SET_MERGE_DATA,
+  SET_METADATA,
   SET_NAME,
+  SET_PIN_METADATA,
   SET_PIN_SET_DEFAULT_IGNORED,
   SET_PIN_SET_FUNCTIONAL,
   SET_PIN_SET_ID,
   SET_PLUG_DATA,
   SET_SUB_COMPONENT_SIZE,
   SET_UNIT_ID,
+  SET_UNIT_METADATA,
   SET_UNIT_PIN_CONSTANT,
   SET_UNIT_PIN_DATA,
   SET_UNIT_PIN_IGNORED,
+  SET_UNIT_PIN_METADATA,
   SET_UNIT_PIN_SET_ID,
   SET_UNIT_SIZE,
   TAKE_UNIT_ERR,
@@ -54585,6 +54589,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           const { name } = data as GraphSetNameMomentData
 
           this._spec_set_name(name)
+        }
+        break
+      case SET_METADATA:
+        {
+          //
+        }
+        break
+      case SET_PIN_METADATA:
+        {
+          //
+        }
+        break
+      case SET_UNIT_METADATA:
+        {
+          //
+        }
+        break
+      case SET_UNIT_PIN_METADATA:
+        {
+          //
         }
         break
       default:
