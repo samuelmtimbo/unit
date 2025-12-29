@@ -37164,9 +37164,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._dispatch_action(action)
 
-      this._state_remove_unit_ghost(unit_id, new_spec)
+      this._state_remove_unit_ghost(unit_id, next_unit_id, new_spec)
       this._pod_bulk_edit(actions)
-    })
 
     if (this._is_unit_component(next_unit_id)) {
       this._connect_sub_component(next_unit_id)
@@ -37428,6 +37427,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _state_remove_unit_ghost = (
     unit_id: string,
+    new_unit_id: string,
     new_spec: GraphSpec
   ): void => {
     // console.log('Graph', '_state_remove_unit_ghost', unit_id)
@@ -37440,8 +37440,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       width: prev_width,
       height: prev_height,
     } = unit_node
-
-    const new_unit_id = this._new_unit_id(new_spec.id)
 
     const {
       valid_pin_match,
