@@ -120,7 +120,9 @@ function _bundleUnit(
         for (const specId in bundle.specs) {
           const spec = bundle.specs[specId]
 
-          custom[specId] = spec
+          if (!custom[specId] && (!isSystemSpecId(specs, specId) || system)) {
+            custom[specId] = spec
+          }
 
           _bundle(
             spec,
