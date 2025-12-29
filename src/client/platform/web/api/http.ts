@@ -65,6 +65,7 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
           client.onmessage(new MessageEvent('message', { data }))
         },
         onmessage: NOOP,
+        onclose: NOOP,
       }
 
       const id = uuidNotIn(wss)

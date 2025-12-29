@@ -56,7 +56,7 @@ export function getSpecs(specs: Specs): Specs {
 }
 
 export function hasSpec(specs: Specs, id: string): boolean {
-  const spec = getSpec(specs, id)
+  const spec = specs[id]
 
   return !!spec
 }
@@ -487,6 +487,10 @@ export function isInternalSpecId(specId: string): boolean {
 export function isSystemSpecId(specs: Specs, specId: string): boolean {
   if (isInternalSpecId(specId)) {
     return true
+  }
+
+  if (!hasSpec(specs, specId)) {
+    return false
   }
 
   const spec = getSpec(specs, specId)
