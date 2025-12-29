@@ -67,6 +67,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       api: {
         window: { WebSocket },
         http: { fetch },
+        window: { nextTick },
       },
       cache: { ws, wss, interceptors },
     } = this.__system
@@ -118,7 +119,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
         const internalId = response.headers.get(CUSTOM_HEADER_X_WEBSOCKET_ID)
 
         this._web_socket = {
-          readyState: WebSocket.OPEN,
+          readyState: WebSocket.CLOSED,
           send: function (
             data: string | ArrayBufferLike | Blob | ArrayBufferView
           ): void {
@@ -148,6 +149,14 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             //
           },
         }
+
+        nextTick(() => {
+          if (this._web_socket) {
+            this._web_socket.readyState = WebSocket.OPEN
+
+            channel.emit('open', {})
+          }
+        })
 
         ws[internalId] = this._web_socket
       } else {
