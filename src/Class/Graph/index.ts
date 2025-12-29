@@ -694,7 +694,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPinId: string,
     mergeId: string,
     data: any,
-    propagate: boolean = true
+    propagate: boolean = true,
+    hold: boolean = false
   ): Continue {
     // console.log('_simPlugPinToMerge', {
     //   type,
@@ -716,7 +717,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       type,
       subPinId,
       subPin,
-      propagate
+      propagate,
+      hold
     )
   }
 
@@ -795,9 +797,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unitId: string,
     kind: IO,
     pinId: string,
-    propagate: boolean = true
-  ): void {
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     const subPin = this.getUnitPin(unitId, kind, pinId)
+
+    const continuations: Continue[] = []
 
     if (kind === 'input') {
       if (this.isUnitPinRef(unitId, kind, pinId)) {
@@ -811,7 +816,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       if (subPin.active() && !pin.active()) {
         const data = subPin.peak()
 
-        propagate && pin.push(data, true)
+        if (hold) {
+          continuations.push(() => {
+            propagate && pin.push(data, true)
+          })
+        } else {
+          propagate && pin.push(data, true)
+        }
       }
 
       const unlisten = callAll([
@@ -827,14 +838,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       deepSet(this._plugUnlisten, [type, name, subPinId], unlisten)
     }
 
-    return this._simSetExposedSubPin(
-      type,
-      name,
-      kind,
-      subPinId,
-      subPin,
-      propagate
+    continuations.push(
+      this._simSetExposedSubPin(
+        type,
+        name,
+        kind,
+        subPinId,
+        subPin,
+        propagate,
+        hold
+      )
     )
+
+    return callAll(continuations)
   }
 
   private _setExposedSubPin(
@@ -866,7 +882,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     kind: IO,
     subPinId: string,
     subPin: Pin,
-    propagate: boolean = true
+    propagate: boolean = true,
+    hold: boolean = false
   ): Continue {
     // console.log(
     //   'Graph',
@@ -893,7 +910,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         ? oppositeType
         : type
 
-    return exposedMerge.setPin(type_, subPinId, subPin, {}, propagate)
+    return exposedMerge.setPin(type_, subPinId, subPin, {}, propagate, hold)
   }
 
   private _simRemoveExposedSubPin(
@@ -1374,7 +1391,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     propagate: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
-  ): void {
+  ): Continue {
     // console.log(
     //   'Graph',
     //   '_exposePinSet',
@@ -1397,7 +1414,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._specExposePinSet(type, pinId, pinSpec)
     this._memExposePinSet(type, pinId, pinSpec, exposedPin, exposeMerge)
-    this._simExposePinSet(
+    return this._simExposePinSet(
       type,
       pinId,
       pinSpec,
@@ -1479,20 +1496,26 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     exposedPin: Pin,
     exposedMerge: Merge,
     propagate: boolean = true
-  ) {
+  ): Continue {
     const { plug, ref, functional } = pinSpec
 
-    exposedMerge.setPin(type, pinId, exposedPin)
+    const continuations: Continue[] = []
 
-    this.setPin(type, pinId, exposedPin, { ref }, propagate)
+    continuations.push(exposedMerge.setPin(type, pinId, exposedPin))
+
+    continuations.push(this.setPin(type, pinId, exposedPin, { ref }, propagate))
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-      this._simExposePin(type, pinId, subPinId, subPinSpec, data, propagate)
+      continuations.push(
+        this._simExposePin(type, pinId, subPinId, subPinSpec, data, propagate)
+      )
     })
 
     if (functional) {
       this._plugToWaitAll(type, pinId)
     }
+
+    return callAll(continuations)
   }
 
   public isPinSetFunctional(type: IO, pinId: string): boolean {
@@ -1679,9 +1702,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     emit: boolean = true,
     propagate: boolean = true
   ): void {
-    this._exposePin(type, pinId, subPinId, subPinSpec, pinSpec, propagate)
+    const resume = this._exposePin(
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
+      pinSpec,
+      propagate
+    )
 
     emit && this.edit('expose_pin', type, pinId, subPinId, subPinSpec, [])
+
+    resume()
   }
 
   private _exposePin(
@@ -1690,15 +1722,20 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
     pinSpec: GraphPinSpec = {},
-    propagate: boolean = true
-  ): void {
-    if (!this.hasPinNamed(type, pinId)) {
-      this._exposePinSet(type, pinId, pinSpec, undefined, false, false, false)
-    }
-
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     this._specExposePin(type, pinId, subPinId, subPinSpec)
     this._memExposePin(type, pinId, subPinId, subPinSpec)
-    this._simExposePin(type, pinId, subPinId, subPinSpec, undefined, propagate)
+    return this._simExposePin(
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
+      undefined,
+      propagate,
+      hold
+    )
   }
 
   private _specExposePin(
@@ -1725,8 +1762,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
     data: any,
-    propagate: boolean = true
-  ): void {
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     // console.log(
     //   'Graph',
     //   '_simExposePin',
@@ -1740,9 +1778,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const { unitId, pinId: _pinId, mergeId } = subPinSpec
 
     if (mergeId || (unitId && _pinId)) {
-      this._simPlugPin(type, pinId, subPinId, subPinSpec, data, propagate)
+      return this._simPlugPin(
+        type,
+        pinId,
+        subPinId,
+        subPinSpec,
+        data,
+        propagate,
+        hold
+      )
     } else {
-      this._simPlugEmptyPin(type, pinId, subPinId, propagate)
+      return this._simPlugEmptyPin(type, pinId, subPinId, propagate, hold)
     }
   }
 
@@ -2069,8 +2115,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
     data: any,
-    propagate: boolean = true
-  ): void {
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     // console.log('Graph', '_simPlugPin', pinId, subPinId, subPinSpec)
 
     const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
@@ -2080,20 +2127,29 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         propagate = true
       }
 
-      this._simPlugPinToMerge(type, pinId, subPinId, mergeId, data, propagate)
+      return this._simPlugPinToMerge(
+        type,
+        pinId,
+        subPinId,
+        mergeId,
+        data,
+        propagate,
+        hold
+      )
     } else {
       if (this.isUnitPinRef(unitId, kind, _pinId) === true) {
         propagate = true
       }
 
-      this._simPlugPinToUnitPin(
+      return this._simPlugPinToUnitPin(
         type,
         pinId,
         subPinId,
         unitId!,
         kind,
         _pinId!,
-        propagate
+        propagate,
+        hold
       )
     }
   }
@@ -2406,19 +2462,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     type: IO,
     pinId: string,
     subPinId: string,
-    propagate: boolean = true
-  ): void {
+    propagate: boolean = true,
+    hold: boolean = false
+  ): Continue {
     // console.log('Graph', '_simPlugEmptyPin', type, pinId, subPinId)
 
     const emptySubPin = this._ensureEmptySubPin(type, pinId, subPinId)
 
-    this._simSetExposedSubPin(
+    return this._simSetExposedSubPin(
       type,
       pinId,
       type,
       subPinId,
       emptySubPin,
-      propagate
+      propagate,
+      hold
     )
   }
 
