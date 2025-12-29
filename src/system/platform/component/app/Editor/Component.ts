@@ -49183,11 +49183,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     clientX: number,
     clientY: number
   ): void => {
-    if (this._tree_layout) {
-      //
-    } else {
-      const position = this._screen_to_world(clientX, clientY)
+    const position = this._screen_to_world(clientX, clientY)
 
+    if (this._tree_layout) {
+      if (this._mode === 'add') {
+        void (async () => {
+          await this._paste_clipboard(position)
+
+          this._refresh_current_layout_node_target_position()
+          this._move_all_current_layout_node_target_position()
+        })()
+      }
+    } else {
       if (this._mode === 'none') {
         this._none_double_click_background(position)
       } else if (this._mode === 'add') {
