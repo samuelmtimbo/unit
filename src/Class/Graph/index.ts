@@ -45,7 +45,10 @@ import {
 import { stringify } from '../../spec/stringify'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import { removeBundleMetadata } from '../../spec/util'
-import { getSubComponentParentId } from '../../spec/util/component'
+import {
+  getSubComponentParentId,
+  getSubComponentParentIndex,
+} from '../../spec/util/component'
 import {
   findMergePlugOfType,
   findUnitMerges,
@@ -3107,6 +3110,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return getSubComponentParentId(this._spec, unitId)
   }
 
+  private _getSubComponentParentIndex(unitId: string): number {
+    return getSubComponentParentIndex(this._spec, unitId)
+  }
+
   private _getSubComponentSlotName(unitId: string): string | null {
     const parentId = this._getSubComponentParentId(unitId)
 
@@ -5173,11 +5180,31 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     renameUnitInMerges(unitId, newUnitMerges, newUnitId)
 
+    const isComponent = unit.isElement()
+
+    const componentParentId =
+      isComponent && this._getSubComponentParentId(unitId)
+    const componentParentIndex =
+      isComponent && this._getSubComponentParentIndex(unitId)
+    const componentParentSlotName =
+      isComponent && this._getSubComponentSlotName(unitId)
+
     this._removeUnit(unitId, false, false) as Graph
 
     this._addUnit(newUnitId, unit, null, null)
     this._addUnitMerges(newUnitMerges, false)
     this._addUnitPlugs(newUnitId, newUnitPlugs, false)
+
+    if (componentParentId) {
+      this._moveSubComponentRoot(
+        componentParentId,
+        newUnitId,
+        componentParentIndex,
+        componentParentSlotName,
+        false,
+        false
+      )
+    }
   }
 
   private _addUnitPlugs(
