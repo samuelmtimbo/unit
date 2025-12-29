@@ -11,6 +11,7 @@ import {
   ServerSocket,
 } from '../../../API'
 import { BootOpt, System } from '../../../system'
+import { Callback } from '../../../types/Callback'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { mapObjVK } from '../../../util/object'
@@ -97,6 +98,8 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
   async function handleIncoming(
     req: http.IncomingMessage,
+    socket: any,
+    head: any,
     handler: ServerHandler
   ): Promise<ServerResponse> {
     const headers = mapObjVK(req.headers, (value) => {
@@ -116,12 +119,6 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
     const body = incomingMessageToReadableStream(system, req)
 
-    const head: Promise<Buffer> = new Promise((resolve) => {
-      req.once('data', (chunk) => {
-        resolve(Buffer.from(chunk))
-      })
-    })
-
     const request: ServerRequest = {
       url,
       protocol,
@@ -137,6 +134,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
       _: {
         req,
         head,
+        socket,
       },
     }
 
@@ -147,10 +145,19 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
   system.api.http.createServer = (opt: ServerOpt) => {
     const server: Server = {
-      listen: function (port: number, handler: ServerHandler): Unlisten {
+      listen: function (
+        port: number,
+        handler: ServerHandler,
+        onerror: Callback
+      ): Unlisten {
         const server = http.createServer(
           async (req: http.IncomingMessage, res: http.ServerResponse) => {
-            const response = await handleIncoming(req, handler)
+            const response = await handleIncoming(
+              req,
+              undefined,
+              undefined,
+              handler
+            )
 
             if (response.status >= 100 && response.status <= 599) {
               res.writeHead(response.status, '', response.headers)
@@ -188,7 +195,17 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
         )
 
         server.on('upgrade', async (req, socket, head) => {
-          await handleIncoming(req, handler)
+          await handleIncoming(req, socket, head, handler)
+        })
+
+        server.on('error', async (err) => {
+          if (
+            err.message.startsWith('listen EADDRINUSE: address already in use')
+          ) {
+            onerror('address/port already in use')
+          } else {
+            onerror(err.message)
+          }
         })
 
         server.listen(port)
@@ -209,8 +226,9 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
     return new Promise(async (resolve) => {
       const req = request._.req as http.IncomingMessage
       const head = await request._.head
+      const socket = request._.socket
 
-      wss.handleUpgrade(req, req.socket, head, (ws) => {
+      wss.handleUpgrade(req, socket, head, (ws) => {
         wss.emit('connection', ws, req)
 
         // ws.on('error', (err) => {
