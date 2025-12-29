@@ -85,6 +85,7 @@ export type ServerInterceptor = {
 export type ServerSocket = {
   send: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void
   onmessage: (data: string | ArrayBufferLike | Blob | ArrayBufferView) => void
+  onclose: (code: number, message: string) => void
 }
 
 export type ServerHandler = (req: ServerRequest) => Promise<ServerResponse>

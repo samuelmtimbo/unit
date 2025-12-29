@@ -241,6 +241,14 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
               handler(data)
             }
           },
+
+          set onclose(handler: (code: number, message: string) => void) {
+            ws.onclose = (event) => {
+              const { code, reason } = event
+
+              handler(code, reason)
+            }
+          },
         }
 
         resolve(socket)

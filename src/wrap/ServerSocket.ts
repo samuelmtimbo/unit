@@ -6,7 +6,7 @@ import { CH } from '../types/interface/CH'
 
 export type ServerSocketEE = {
   message: [string]
-  close: [number, string]
+  close: [{ code: number; message: string }]
 }
 
 export type ServerSocketEvents<_EE extends Dict<any[]>> = $Events<
@@ -29,6 +29,9 @@ export function wrapServerSocket(
 
       _socket.onmessage = (data: string) => {
         this.emit('message', data)
+      }
+      _socket.onclose = (code: number, message: string) => {
+        this.emit('close', { code, message })
       }
     }
 
