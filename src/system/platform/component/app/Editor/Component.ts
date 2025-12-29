@@ -10776,7 +10776,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       null
 
     const unit_parent_index =
-      (is_unit_component && this._spec_get_sub_component_index(unit_id)) || null
+      is_unit_component && this._spec_get_sub_component_index(unit_id)
 
     const unit_parent_slot_name =
       (is_unit_component && this._spec_get_sub_component_slot_name(unit_id)) ||
