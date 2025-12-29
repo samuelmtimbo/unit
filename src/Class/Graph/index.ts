@@ -250,7 +250,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       },
       {},
       system,
-      id ?? spec.id
+      spec.id
     )
 
     this._spec = spec
@@ -292,7 +292,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     deepSet_(global.graph, [this.id, this.__global_id], this)
 
-    system.registerUnit(id)
+    system.registerUnit(spec.id)
   }
 
   async get<K extends string>(name: K): Promise<any> {
