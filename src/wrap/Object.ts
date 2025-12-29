@@ -1,10 +1,13 @@
 import { $ } from '../Class/$'
+import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { Object_ } from '../Object'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { SharedRef } from '../SharefRef'
 import { System } from '../system'
+import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
+import { V } from '../types/interface/V'
 import { Unlisten } from '../types/Unlisten'
 
 export function wrapSharedRef<T extends Dict<any>>(data: SharedRef<T>): J<T> {
@@ -68,8 +71,16 @@ export function wrapObject<T extends object>(
 ): J<T> & $ {
   const _data = new Object_<T>(data)
 
-  const _obj = new (class Object__ extends $ implements J<T> {
-    __: string[] = ['J']
+  const _obj = new (class Object__ extends $ implements J<T>, V<T> {
+    __: string[] = ['V', 'J']
+
+    read(callback: Callback<T>): void {
+      callback(data)
+    }
+
+    write(data: T, callback: Callback<undefined>): void {
+      throw new ReadOnlyError('object')
+    }
 
     get<K extends keyof T>(name: K): Promise<T[K]> {
       return _data.get(name)
