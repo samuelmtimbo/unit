@@ -37167,9 +37167,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._state_remove_unit_ghost(unit_id, next_unit_id, new_spec)
       this._pod_bulk_edit(actions)
 
-    if (this._is_unit_component(next_unit_id)) {
-      this._connect_sub_component(next_unit_id)
-    }
+      if (this._is_unit_component(next_unit_id)) {
+        this._connect_sub_component(next_unit_id)
+      }
+    })
   }
 
   private _pod_bulk_edit = (actions: Action[]) => {
