@@ -26753,16 +26753,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._couple_all_fullwindow_component()
         }
-      }
 
-      const last_sub_component_id = last(sub_component_ids)
+        const last_sub_component_id = last(sub_component_ids)
 
-      if (was_focused) {
-        this._fullwindow_focusing = true
+        if (was_focused) {
+          this._fullwindow_focusing = true
 
-        this._focus_sub_component(last_sub_component_id)
+          this._focus_sub_component(last_sub_component_id)
 
-        this._fullwindow_focusing = true
+          this._fullwindow_focusing = true
+        }
       }
     }
 
