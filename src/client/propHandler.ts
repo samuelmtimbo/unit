@@ -139,6 +139,9 @@ export function basePropHandler(
     tabIndex: makeAttrHandler(element, 'tabIndex'),
     title: makeAttrHandler(element, 'title'),
     draggable: makeAttrHandler(element, 'draggable'),
+    offset: makeAttrHandler(element, 'offset'),
+    stopColor: makeAttrHandler(element, 'stop-color'),
+    stopOpacity: makeAttrHandler(element, 'stop-opacity'),
   }
 }
 
