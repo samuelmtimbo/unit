@@ -122,14 +122,12 @@ export function boot(
     style,
     showLongPress: undefined,
     captureGesture: undefined,
-    global: parent
-      ? parent.global
-      : {
-          ref: {},
-          graph: {},
-          data: new Object_({}),
-          scope: {},
-        },
+    global: {
+      ref: {},
+      graph: {},
+      data: new Object_({}),
+      scope: {},
+    },
     api,
     flags: {
       defaultInputModeNone: false,
