@@ -48101,7 +48101,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       })
       this._show_search()
     } else if (this._mode === 'change') {
-      if (contained_nodes.length === 1) {
+      const contained_unit_ids = contained_nodes.filter((node_id) =>
+        this._is_unit_node_id(node_id)
+      )
+
+      if (contained_unit_ids.length === 1) {
         const contained_node_id = contained_nodes[0]
 
         if (
