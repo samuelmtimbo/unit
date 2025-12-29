@@ -14,6 +14,7 @@ import HTMLElement_ from '../../../../client/html'
 import { isTextField } from '../../../../client/isTextField'
 import { renderFrame } from '../../../../client/renderFrame'
 import { Theme } from '../../../../client/theme'
+import { userSelect } from '../../../../client/util/style/userSelect'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
@@ -32,7 +33,7 @@ export const DEFAULT_STYLE = {
   width: '100%',
   height: '100%',
   overflow: 'auto',
-  zIndex: '0',
+  ...userSelect('text'),
 }
 
 export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
