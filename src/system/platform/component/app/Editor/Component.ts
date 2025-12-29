@@ -4846,13 +4846,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     deep: boolean = true,
     branch: string[] = []
   ) => {
-    const { getSpec, registerUnit } = this.$props
+    const { registerUnit } = this.$props
 
     if (branch.includes(spec_id)) {
       return
     }
 
-    const spec = getSpec(spec_id)
+    const spec = getSpec(specs, spec_id)
 
     if (!isBaseSpec(spec)) {
       registerUnit(spec_id)
