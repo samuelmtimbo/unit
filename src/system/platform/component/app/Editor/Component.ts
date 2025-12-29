@@ -31822,9 +31822,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       if (this._subgraph_unit_id === unit_id) {
         this._leave_subgraph()
+      } else {
+        this._subgraph.removeChild(subgraph)
       }
-
-      this._subgraph.removeChild(subgraph)
 
       subgraph.destroy()
     }
