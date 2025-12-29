@@ -28,5 +28,5 @@
     "enable": false
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "src/test", "lib", "build"]
+  "exclude": ["node_modules", "lib", "build"]
 }
