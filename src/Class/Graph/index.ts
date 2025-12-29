@@ -3980,7 +3980,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
         this._simSubComponentRemoveChild(unitId, childId)
 
-        this.registerRoot(child, true)
+        this.registerRoot(child, emit)
       }
 
       if (parentId) {
