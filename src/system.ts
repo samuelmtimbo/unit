@@ -72,6 +72,7 @@ export interface System extends S, Registry {
     ref: Dict<any>
     graph: Dict<Dict<Graph>>
     scope: Dict<any>
+    env: Dict<string>
   }
   api: API
   flags: {

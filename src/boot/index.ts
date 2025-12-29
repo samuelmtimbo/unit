@@ -127,6 +127,7 @@ export function boot(
       graph: {},
       data: new Object_({}),
       scope: {},
+      env: {},
     },
     api,
     flags: {

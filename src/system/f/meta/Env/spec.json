@@ -1,0 +1,19 @@
+{
+  "name": "env",
+  "inputs": {},
+  "outputs": {
+    "obj": {
+      "type": "`J<string>`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "table",
+    "description": "globally accessible environment variables",
+    "tags": ["platform", "api", "storage"],
+    "globals": []
+  },
+  "id": "808f93cd-168d-4f06-9795-6477739a5e51",
+  "base": true,
+  "type": "`U`&`J`"
+}
