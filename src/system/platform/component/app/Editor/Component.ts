@@ -53695,7 +53695,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const pointer_position = this._pointer_position[pointer_id]
 
-      position = pointer_position
+      const pointer_world_position = this._screen_to_world(
+        pointer_position.x,
+        pointer_position.y
+      )
+
+      position = pointer_world_position
     } else {
       position = this._jiggle_world_screen_center()
     }
