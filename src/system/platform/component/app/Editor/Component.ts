@@ -26770,7 +26770,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._set_fullwindow_frame_on(_animate)
     }
 
-    this.dispatchEvent('enter_fullwindow', {}, false)
+    this.dispatchEvent('fullwindow', true, false)
   }
 
   private _fullwindow_datum_id: string | null = null
