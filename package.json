@@ -46,6 +46,7 @@
     "build:client": "run-s build:bundle build:worker",
     "build:system": "ts-node -T src/script/build/system.ts",
     "build:worker": "ts-node -T src/script/build/worker/system.ts",
+    "build:web": "ts-node -T src/script/build/web.ts",
     "lint": "eslint src --ext .ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' 'src/**/*.json' --write",
     "prepublishOnly": "run-s lib build",
