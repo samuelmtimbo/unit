@@ -41,7 +41,7 @@
     "rm": "shx rm -rf lib",
     "test": "ts-node -T  -P src/test/tsconfig.json src/test/index.ts",
     "uuid": "ts-node -T src/script/uuid.ts",
-    "build": "run-s build:system build:client",
+    "build": "run-s build:system build:client build:web",
     "build:bundle": "ts-node -T src/script/build/client.ts",
     "build:client": "run-s build:bundle build:worker",
     "build:system": "ts-node -T src/script/build/system.ts",
