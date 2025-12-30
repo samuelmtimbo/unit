@@ -4,7 +4,18 @@ import { build } from '../build';
 ;(async () => {
   await build({
     minify: true,
-    sourcemap: false,
+    sourcemap: true,
+    bundle: true,
+    format: "iife",
+    logLevel: 'warning',
+    entryPoints: ['src/client/platform/web/web.ts'],
+    outfile: 'dist/index.min.js',
+    metafile: true,
+  })
+
+  await build({
+    minify: false,
+    sourcemap: true,
     bundle: true,
     format: "iife",
     logLevel: 'warning',
@@ -12,7 +23,5 @@ import { build } from '../build';
     outfile: 'dist/index.js',
     metafile: true,
   })
-
-  await copy('dist/index.js', 'public/web.js')
 })()
 
