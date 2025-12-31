@@ -1,0 +1,21 @@
+{
+  "name": "entries",
+  "inputs": {
+    "obj": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "entries": {
+      "type": "[string,any][]"
+    }
+  },
+  "metadata": {
+  "icon": "brackets-curly",
+    "description": "get `obj` list of key-value pairs `entries`",
+    "tags": ["f", "object"]
+  },
+  "id": "75ef6bb6-f7f1-4d48-a16d-2c04e05b14cf",
+  "base": true,
+  "type": "`U`"
+}
