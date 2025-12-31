@@ -3520,6 +3520,24 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       this._pin[nextPinNodeId] = this._pin[pinNodeId]
 
       delete this._pin[pinNodeId]
+
+      const pin_data_unlisten = deepGetOrDefault(
+        unit_pin_listener,
+        [unitId, type, name],
+        undefined
+      )
+
+      if (pin_data_unlisten) {
+        pin_data_unlisten()
+
+        deepDelete(unit_pin_listener, [unitId, type, name])
+      }
+
+      if (type === 'input') {
+        if (unit.isPinConstant('input', newName)) {
+          setup_unit_constant_pin('input', newName)
+        }
+      }
     }
 
     const inputs = unit.getInputNames()
@@ -3741,7 +3759,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       }
     }
 
-    const unlisten = callAll(all_unlisten)
+    const unlisten = () => callAll(all_unlisten)()
 
     this._unitUnlisten[unitId] = unlisten
   }
