@@ -15,6 +15,12 @@ export function evaluateBundleSpec(
   }
 ) {
   evaluateSpec(bundle.spec, specs, classes, resolver)
+
+  for (const specId in bundle.specs ?? {}) {
+    const spec = bundle.specs[specId]
+
+    evaluateSpec(spec, specs, classes, resolver)
+  }
 }
 
 export function evaluateUnitBundleSpec(
