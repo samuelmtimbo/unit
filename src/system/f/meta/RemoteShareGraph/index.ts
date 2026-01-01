@@ -3,7 +3,6 @@ import { Graph } from '../../../../Class/Graph'
 import { Holder } from '../../../../Class/Holder'
 import { makeUnitRemoteRef } from '../../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../../client/RemoteRef'
-import { EXEC, INIT } from '../../../../constant/STRING'
 import { System } from '../../../../system'
 import { UCGEE } from '../../../../types/interface/UCGEE'
 import { ID_REMOTE_SHARE_GRAPH } from '../../../_ids'
@@ -53,22 +52,12 @@ export default class RemoteShareGraph extends Holder<I, O> {
     this._output.message.push(data)
   }
 
-  private _send_init = () => {
-    this._send({ type: INIT })
-  }
-
-  private _send_exec = (data: any) => {
-    this._send({ type: EXEC, data })
-  }
-
   f({ graph, opt }: I, done: Done<O>) {
     const ref = makeUnitRemoteRef(graph, UCGEE, (data) => {
-      this._send_exec(data)
+      this._send(data)
     })
 
     this._ref = ref
-
-    this._send_init()
 
     if (this._input.message.active()) {
       this._ref.exec(this._input.message.peak())

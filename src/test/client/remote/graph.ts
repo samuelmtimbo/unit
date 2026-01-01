@@ -1,7 +1,6 @@
 import { Graph } from '../../../Class/Graph'
 import { RemoteRef } from '../../../client/RemoteRef'
 import { makeRemoteObjectAPI } from '../../../client/makeRemoteUnitAPI'
-import { INIT } from '../../../constant/STRING'
 import { ID_IDENTITY, ID_RANDOM_COLOR_BOX } from '../../../system/_ids'
 import RemoteGraph from '../../../system/f/meta/RemoteGraph'
 import { $Graph } from '../../../types/interface/async/$Graph'
@@ -24,8 +23,6 @@ const remote = new RemoteGraph(system)
 remote.play()
 
 remote.push('opt', {})
-
-remote.push('message', { type: INIT, bundle: {} })
 
 remote.getOutput('message').addListener('data', (message) => {
   ref.exec(message)

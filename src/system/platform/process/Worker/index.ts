@@ -66,8 +66,6 @@ export default class Worker_ extends Functional<I, O> {
 
     const system = $wrap<$S>(this.__system, $system)
 
-    client.init({})
-
     done({
       system,
     })

@@ -3,11 +3,10 @@ import { $ } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
 import { Holder } from '../../../../Class/Holder'
 import { RemotePort } from '../../../../RemotePort'
-import { EXEC, INIT, TERMINATE } from '../../../../constant/STRING'
 import { System } from '../../../../system'
 import { Port } from '../../../../types/global/Port'
-import { UCGEE } from '../../../../types/interface/UCGEE'
 import { $Graph } from '../../../../types/interface/async/$Graph'
+import { UCGEE } from '../../../../types/interface/UCGEE'
 import { $wrap } from '../../../../wrap'
 import { ID_REMOTE_GRAPH } from '../../../_ids'
 
@@ -30,9 +29,9 @@ export default class RemoteGraph extends Holder<I, O> {
     super(
       {
         fi: ['opt'],
-        fo: [],
+        fo: ['graph'],
         i: ['message'],
-        o: ['message', 'graph'],
+        o: ['message'],
       },
       {
         output: {
@@ -56,7 +55,25 @@ export default class RemoteGraph extends Holder<I, O> {
   }
 
   f({ opt }: I, done: Done<O>) {
-    //
+    const port: Port = {
+      send: (data) => {
+        this._output.message.push(data)
+      },
+      onmessage(data: any) {},
+      onerror() {},
+    }
+
+    this._port = port
+
+    const remote_port = new RemotePort(port)
+
+    this._remote_port = remote_port
+
+    const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
+
+    const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
+
+    done({ graph })
   }
 
   d() {
@@ -69,49 +86,13 @@ export default class RemoteGraph extends Holder<I, O> {
     }
   }
 
-  async onIterDataInputData(name: keyof I, _data: any): Promise<void> {
+  async onIterDataInputData(name: keyof I, data: any): Promise<void> {
     // console.log('Remote', 'onIterDataInputData', name, _data)
 
-    super.onIterDataInputData(name, _data)
+    super.onIterDataInputData(name, data)
 
     if (name === 'message') {
-      const { type, data } = _data
-
-      switch (type) {
-        case EXEC:
-          {
-            this._port.onmessage({ data })
-          }
-          break
-        case INIT:
-          {
-            const port: Port = {
-              send: (data) => {
-                this._output.message.push(data)
-              },
-              onmessage(data: any) {},
-              onerror() {},
-            }
-
-            this._port = port
-
-            const remote_port = new RemotePort(port)
-
-            this._remote_port = remote_port
-
-            const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
-
-            const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
-
-            this._output.graph.push(graph)
-          }
-          break
-        case TERMINATE:
-          {
-            this.d()
-          }
-          break
-      }
+      this._port.onmessage(data)
 
       this._backward('message')
     }

@@ -26,9 +26,7 @@ export class RemotePort {
   constructor(port: Port) {
     this._port = port
 
-    this._port.onmessage = (event) => {
-      const { data } = event
-
+    this._port.onmessage = (data) => {
       this.exec(data)
     }
 
