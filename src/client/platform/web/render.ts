@@ -1,4 +1,5 @@
 import { Graph } from '../../../Class/Graph'
+import { evaluateBundleSpec } from '../../../spec/evaluate/evaluateBundleSpec'
 import { start } from '../../../start'
 import { BootOpt, System } from '../../../system'
 import _classes from '../../../system/_classes'
@@ -22,12 +23,16 @@ export function render(
   bundle.spec = spec
   bundle.specs = specs
 
+  const specs_ = weakMerge(specs, _specs)
+
   const [system, deboot] = defaultWebBoot({
-    specs: weakMerge(specs, _specs),
+    specs: specs_,
     classes: _classes,
     components: _components,
     ...opt,
   })
+
+  evaluateBundleSpec(bundle, specs_, _classes)
 
   const graph = start(system, bundle)
 
