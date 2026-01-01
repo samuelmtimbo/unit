@@ -211,6 +211,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
     if (this._web_socket) {
       this._web_socket.onclose = NOOP
       this._web_socket.onerror = NOOP
+
       try {
         await this._web_socket.close()
       } catch (err) {
@@ -219,8 +220,6 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
 
       this._web_socket.onopen = null
       this._web_socket.onmessage = null
-      this._web_socket.onerror = null
-      this._web_socket.onclose = null
 
       this._web_socket = null
     }
