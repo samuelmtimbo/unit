@@ -1,0 +1,46 @@
+{
+  "name": "on edit",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'edit'",
+          "constant": true
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "emitter"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `graph` edit event",
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "3bd7d771-05a8-4677-89d3-6077e7595521",
+  "type": "`U`&`G`"
+}
