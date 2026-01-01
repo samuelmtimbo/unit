@@ -1,18 +1,18 @@
 {
-  "name": "class to bundle",
+  "name": "class to unit bundle",
   "inputs": {
     "class": {
       "type": "`U`"
     }
   },
   "outputs": {
-    "bundle": {
+    "unit": {
       "type": "{unit:object,specs:object}"
     }
   },
   "metadata": {
     "icon": "circle",
-    "description": "extract `bundle` of the given unit `class`",
+    "description": "extract `unit` bundle of the given unit `class`",
     "tags": ["f", "meta"]
   },
   "id": "546fea11-bbb6-4d20-839b-df0011f528ac",
