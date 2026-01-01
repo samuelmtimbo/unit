@@ -158,6 +158,10 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     // console.log('Editor', 'onRefInputData', name, data)
 
     if (name === 'graph') {
+      if (this._input.graph.embodied()) {
+        data = Async(data, UCGEE, this.__system.async)
+      }
+
       this._graph = data as Graph
 
       data.addListener('destroy', (path: string[]) => {
@@ -169,6 +173,10 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           this._fallback()
         }
       })
+
+      if (this._input.graph.embodied()) {
+        data.$play()
+      }
 
       this._output.graph.push(data)
     }

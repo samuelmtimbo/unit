@@ -147,23 +147,7 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
   private _embody = (data: any) => {
     if (this._ref) {
-      if (data instanceof Function) {
-        this._embodied = true
-
-        data = new data(this.__system)
-      }
-
-      if (data instanceof $) {
-        if (data.__.includes('U')) {
-          ;(data as Unit).play()
-        }
-
-        data.register()
-
-        this._unlisten = data.addListener('edit', () => {
-          this.emit('edit', data)
-        })
-      }
+      this.__embody(data)
     }
 
     return data
@@ -322,6 +306,10 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
   public invalid(): boolean {
     return this._invalid
+  }
+
+  public embodied(): boolean {
+    return this._embodied
   }
 
   public snapshot(): Pin_M<T> {
