@@ -1,0 +1,341 @@
+{
+  "type": "`U`&`G`",
+  "name": "local share graph",
+  "units": {
+    "remotesharegraph": {
+      "id": "727133c9-3e87-4219-a91e-a257c9b2669b",
+      "input": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 195,
+              "y": 0
+            }
+          }
+        },
+        "opt": {
+          "metadata": {
+            "position": {
+              "x": 181,
+              "y": 29
+            }
+          }
+        },
+        "message": {},
+        "done": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 181,
+              "y": -30
+            }
+          }
+        }
+      },
+      "output": {
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 143,
+          "y": 0
+        }
+      }
+    },
+    "broadcastchannel": {
+      "id": "adcd6571-0884-45e8-ac58-8c73f307d98e",
+      "input": {
+        "name": {
+          "metadata": {
+            "position": {
+              "x": -203,
+              "y": 18
+            }
+          }
+        },
+        "close": {
+          "metadata": {
+            "position": {
+              "x": -203,
+              "y": -18
+            }
+          }
+        }
+      },
+      "output": {
+        "channel": {
+          "metadata": {
+            "position": {
+              "x": -99,
+              "y": 0
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -158,
+          "y": 0
+        }
+      }
+    },
+    "onmessage": {
+      "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
+      "input": {
+        "emitter": {}
+      },
+      "output": {
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 34
+        }
+      }
+    },
+    "send": {
+      "id": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",
+      "input": {
+        "channel": {},
+        "data": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": -33
+        }
+      }
+    },
+    "parsejson": {
+      "id": "563e92be-ad5e-4a61-a718-9249c3eac51d",
+      "input": {
+        "string": {}
+      },
+      "output": {
+        "json": {
+          "metadata": {
+            "position": {
+              "x": 143,
+              "y": -79
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 49,
+          "y": 48
+        }
+      }
+    },
+    "stringify": {
+      "id": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {
+          "metadata": {
+            "position": {
+              "x": 140,
+              "y": 80
+            }
+          }
+        }
+      },
+      "output": {
+        "string": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 49,
+          "y": -48
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "ref": true,
+      "plug": {
+        "0": {
+          "unitId": "remotesharegraph",
+          "kind": "input",
+          "pinId": "graph"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 220,
+              "y": 0
+            }
+          }
+        }
+      }
+    },
+    "opt": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "remotesharegraph",
+          "kind": "input",
+          "pinId": "opt"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 195,
+              "y": 49
+            }
+          }
+        }
+      }
+    },
+    "close": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "broadcastchannel",
+          "pinId": "close"
+        },
+        "1": {
+          "unitId": "remotesharegraph",
+          "pinId": "done",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -220,
+              "y": -34
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 195,
+              "y": -50
+            }
+          }
+        }
+      }
+    },
+    "id": {
+      "ref": false,
+      "plug": {
+        "1": {
+          "unitId": "broadcastchannel",
+          "pinId": "name",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "1": {
+            "ext": {
+              "x": -220,
+              "y": 35
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "broadcast-tower",
+    "description": "share a graph locally",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 99,
+          "y": -30
+        },
+        "1": {
+          "x": 98,
+          "y": 30
+        },
+        "3": {
+          "x": -3,
+          "y": 49
+        },
+        "4": {
+          "x": -3,
+          "y": -49
+        }
+      }
+    }
+  },
+  "id": "259ba71c-6315-4324-a32c-fc2277200a40",
+  "component": {},
+  "merges": {
+    "0": {
+      "remotesharegraph": {
+        "output": {
+          "message": true
+        }
+      },
+      "stringify": {
+        "input": {
+          "json": true
+        }
+      }
+    },
+    "1": {
+      "parsejson": {
+        "output": {
+          "json": true
+        }
+      },
+      "remotesharegraph": {
+        "input": {
+          "message": true
+        }
+      }
+    },
+    "2": {
+      "onmessage": {
+        "input": {
+          "emitter": true
+        }
+      },
+      "send": {
+        "input": {
+          "channel": true
+        }
+      },
+      "broadcastchannel": {
+        "output": {
+          "channel": true
+        }
+      }
+    },
+    "3": {
+      "parsejson": {
+        "input": {
+          "string": true
+        }
+      },
+      "onmessage": {
+        "output": {
+          "message": true
+        }
+      }
+    },
+    "4": {
+      "send": {
+        "input": {
+          "data": true
+        }
+      },
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      }
+    }
+  }
+}
