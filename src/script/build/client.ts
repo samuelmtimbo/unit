@@ -1,7 +1,6 @@
-import { copy, writeFile } from 'fs-extra'
-import { build } from '../build'
-
-;(async () => {
+import { writeFile } from 'fs-extra';
+import { build } from '../build';
+(async () => {
   const result = await build({
     minify: true,
     sourcemap: false,
@@ -16,6 +15,4 @@ import { build } from '../build'
   })
 
   await writeFile('public/build.json', JSON.stringify(result.metafile ?? {}))
-
-  await copy('public/index.js', 'build/web.js')
 })()
