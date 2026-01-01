@@ -2,7 +2,6 @@ import { $, $Events } from './Class/$'
 import { Unit } from './Class/Unit'
 import { System } from './system'
 import { Callback } from './types/Callback'
-import { $U } from './types/interface/async/$U'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
 import { Unlisten } from './types/Unlisten'
@@ -180,9 +179,6 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     if (data instanceof $) {
       if (data.__.includes('U')) {
         ;(data as Unit).play()
-      } else if (data.$__.includes('U')) {
-        // @ts-ignore
-        ;(data as $U).$play()
       }
 
       data.register()
