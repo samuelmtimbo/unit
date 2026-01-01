@@ -1,0 +1,506 @@
+{
+  "type": "`U`&`G`",
+  "name": "unit bundle to bundle",
+  "units": {
+    "delete": {
+      "id": "664b5d3c-e4cf-11ea-ab74-eb6d2f3bd6f1",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": -21
+        }
+      }
+    },
+    "set0": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": false
+        },
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "spec"
+          },
+          "metadata": {
+            "position": {
+              "x": 182,
+              "y": -49
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 186,
+              "y": -79
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 136,
+          "y": -68
+        }
+      }
+    },
+    "deepget": {
+      "id": "2ff102a7-b469-461f-a3b1-a61b81c1b325",
+      "input": {
+        "path": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": ["unit", "id"]
+          },
+          "metadata": {
+            "position": {
+              "x": -179,
+              "y": -112
+            }
+          }
+        },
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -188,
+              "y": -81
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -138,
+          "y": -86
+        }
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -174,
+              "y": 73
+            }
+          }
+        },
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "specs"
+          },
+          "metadata": {
+            "position": {
+              "x": -188,
+              "y": 41
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -138,
+          "y": 44
+        }
+      }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {}
+          },
+          "metadata": {
+            "position": {
+              "x": 25,
+              "y": 38
+            }
+          }
+        },
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "specs"
+          },
+          "metadata": {
+            "position": {
+              "x": 93,
+              "y": 26
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 2
+        }
+      }
+    },
+    "idtospec": {
+      "id": "b2626d61-b17d-4737-bea3-627c0322f9d6",
+      "input": {
+        "id": {}
+      },
+      "output": {
+        "spec": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -40,
+          "y": -107
+        }
+      }
+    },
+    "getordefault": {
+      "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "base"
+          },
+          "metadata": {
+            "position": {
+              "x": -79,
+              "y": -190
+            }
+          }
+        },
+        "obj": {},
+        "default": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": false
+          },
+          "metadata": {
+            "position": {
+              "x": -58,
+              "y": -221
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -29,
+          "y": -184
+        }
+      }
+    },
+    "ifelse": {
+      "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "if": {},
+        "else": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 63,
+          "y": -151
+        }
+      }
+    },
+    "throw": {
+      "id": "99657eb7-fb94-474e-b03d-4b08c537c0a2",
+      "input": {
+        "message": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 91,
+          "y": -286
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "class is not a graph"
+          },
+          "metadata": {
+            "position": {
+              "x": 199,
+              "y": -221
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 150,
+          "y": -218
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "idtospec": {
+        "output": {
+          "spec": true
+        }
+      },
+      "getordefault": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "get": {
+        "output": {
+          "value": true
+        }
+      },
+      "delete": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "delete": {
+        "output": {
+          "obj": true
+        }
+      },
+      "set": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "3": {
+      "getordefault": {
+        "output": {
+          "value": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "4": {
+      "set0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "set": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "5": {
+      "idtospec": {
+        "input": {
+          "id": true
+        }
+      },
+      "deepget": {
+        "output": {
+          "value": true
+        }
+      },
+      "delete": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "6": {
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      },
+      "set0": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "7": {
+      "wait": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      }
+    },
+    "8": {
+      "throw": {
+        "input": {
+          "message": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "kind": "input",
+          "pinId": "obj"
+        },
+        "1": {
+          "unitId": "deepget",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -184,
+              "y": 94
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -211,
+              "y": -81
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "set0",
+          "kind": "output",
+          "pinId": "obj"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 210,
+              "y": -81
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "attempt to turn a unit class into a graph bundle",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 4,
+          "y": -144
+        },
+        "1": {
+          "x": -95,
+          "y": 16
+        },
+        "2": {
+          "x": -3,
+          "y": -7
+        },
+        "3": {
+          "x": 20,
+          "y": -176
+        },
+        "4": {
+          "x": 97,
+          "y": -31
+        },
+        "5": {
+          "x": -82,
+          "y": -71
+        },
+        "6": {
+          "x": 102,
+          "y": -110
+        },
+        "7": {
+          "x": 107,
+          "y": -185
+        },
+        "8": {
+          "x": 131,
+          "y": -261
+        }
+      }
+    },
+    "tags": ["core", "meta"]
+  },
+  "id": "4025f69f-6c2b-45c1-bbb3-d8d7c1f700bf"
+}

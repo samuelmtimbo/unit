@@ -1,0 +1,109 @@
+{
+  "type": "`U`&`G`",
+  "name": "class to bundle",
+  "units": {
+    "classtounitbundle": {
+      "id": "546fea11-bbb6-4d20-839b-df0011f528ac",
+      "input": {
+        "class": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 445,
+              "y": 222
+            }
+          }
+        }
+      },
+      "output": {
+        "bundle": {
+          "metadata": {
+            "position": {
+              "x": 453.66426426426426,
+              "y": 208.67454954954957
+            }
+          }
+        },
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": 503.4864864864865,
+              "y": 287.2162162162162
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 493,
+          "y": 222
+        }
+      }
+    },
+    "unitbundletobundle": {
+      "id": "4025f69f-6c2b-45c1-bbb3-d8d7c1f700bf",
+      "input": {
+        "unit": {}
+      },
+      "output": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 644,
+              "y": 222
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 594,
+          "y": 222
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "unitbundletobundle": {
+        "input": {
+          "unit": true
+        }
+      },
+      "classtounitbundle": {
+        "output": {
+          "unit": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "class": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "classtounitbundle",
+          "kind": "input",
+          "pinId": "class"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "unitbundletobundle",
+          "kind": "output",
+          "pinId": "graph"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "extract graph `class` `bundle`"
+  },
+  "id": "326994cb-8a47-41b5-b902-3146cf5a8bac"
+}
