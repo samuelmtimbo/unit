@@ -1,0 +1,134 @@
+{
+  "type": "`U`&`G`",
+  "name": "class to unit",
+  "units": {
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "unit"
+          },
+          "metadata": {
+            "position": {
+              "x": 85,
+              "y": -14
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 85,
+              "y": 22
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 40,
+          "y": 4
+        }
+      }
+    },
+    "classtobundle": {
+      "id": "546fea11-bbb6-4d20-839b-df0011f528ac",
+      "input": {
+        "class": {
+          "metadata": {
+            "position": {
+              "x": -109,
+              "y": 4
+            }
+          }
+        }
+      },
+      "output": {
+        "bundle": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -61,
+          "y": 4
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "classtobundle": {
+        "output": {
+          "bundle": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "class": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "classtobundle",
+          "kind": "input",
+          "pinId": "class"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -132,
+              "y": 4
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "unit": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "kind": "output",
+          "pinId": "value"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 101,
+              "y": 39
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "`unit` spec of the given unit `class` bundle",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -11,
+          "y": 4
+        }
+      }
+    }
+  },
+  "id": "ff952613-d9b5-4c96-82e7-16d7289ccbc5"
+}

@@ -1,0 +1,90 @@
+{
+  "type": "`U`&`G`",
+  "name": "class to id",
+  "units": {
+    "classtounit": {
+      "id": "ff952613-d9b5-4c96-82e7-16d7289ccbc5",
+      "metadata": {
+        "position": {
+          "x": 21,
+          "y": -48
+        }
+      },
+      "input": {
+        "class": {
+          "metadata": {
+            "position": {
+              "x": -27,
+              "y": -48
+            }
+          }
+        }
+      }
+    },
+    "getid": {
+      "id": "f7805a56-668d-11eb-a8df-732d644930cc",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "id": {
+          "metadata": {
+            "position": {
+              "x": 171,
+              "y": -48
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 123,
+          "y": -48
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getid": {
+        "input": {
+          "obj": true
+        }
+      },
+      "classtounit": {
+        "output": {
+          "unit": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "class": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "classtounit",
+          "kind": "input",
+          "pinId": "class"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "id": {
+      "ref": false,
+      "plug": {
+        "0": {
+          "unitId": "getid",
+          "kind": "output",
+          "pinId": "id"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "system `id` of the given unit `class`"
+  },
+  "id": "1520b630-93aa-11ea-ac56-7718cb2ad75d"
+}
