@@ -146,7 +146,7 @@ export function processKeydown(
     nextSelectionEnd = nextSelectionStart
   } else {
     if (key === 'Backspace') {
-      processBackspace(
+      return processBackspace(
         { value, selectionStart, selectionEnd, selectionDirection },
         { ctrlKey, shiftKey, altKey }
       )
