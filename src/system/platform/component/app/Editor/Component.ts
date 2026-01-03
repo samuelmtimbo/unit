@@ -39403,7 +39403,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     // console.log('Graph', '_pod_set_unit_pin_data', unitId, type, pinId, data)
 
-
     // $unit.$setPinData({
     //   pinId,
     //   type,
@@ -40922,7 +40921,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._execute_actions(actions, false)
 
+        const action = makeBulkEditAction(actions)
+
         this._pod.$bulkEdit({ actions, fork, bubble })
+
+        this._dispatch_action(action)
       }
     )
   }
