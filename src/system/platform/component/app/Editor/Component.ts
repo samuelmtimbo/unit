@@ -32695,6 +32695,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_layout_node_target_position(sub_component_id)
 
     if (animate) {
+      const parent_animating = animating_sub_component_set.has(sub_component_id)
+
+      if (!parent_animating) {
+        this._measure_sub_component_base(sub_component_id)
+      }
+
       this._plug_sub_component(
         sub_component_id,
         prev_layout_layer.children,
@@ -32769,8 +32775,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     dismount: boolean
   ) => {
     if (dismount) {
-      this._measure_sub_component_base(sub_component_id)
-
       this._leave_sub_component_frame(sub_component_id)
 
       this._remove_sub_component_root_base(sub_component_id)
@@ -33561,10 +33565,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return false
       }
 
+      const parent_animating = animating_sub_component_set.has(parent_id)
+
+      if (!parent_animating) {
+        this._measure_sub_component_base(parent_id)
+      }
+
       this._plug_sub_component(
         parent_id,
         parent_layer.foreground,
-        !animating_sub_component_set.has(parent_id)
+        !parent_animating
       )
 
       const stop_parent_animation = this._animate_parent_component(
