@@ -52,7 +52,7 @@ export function reactToFrameSize(
     }
 
     if (component.$mounted) {
-      addContextListener()  
+      addContextListener()
     }
 
     immediateResize()

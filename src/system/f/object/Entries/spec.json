@@ -11,7 +11,7 @@
     }
   },
   "metadata": {
-  "icon": "brackets-curly",
+    "icon": "brackets-curly",
     "description": "get `obj` list of key-value pairs `entries`",
     "tags": ["f", "object"]
   },

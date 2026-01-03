@@ -51,6 +51,8 @@ export function stringify(value: any, deref: boolean = false): string | null {
         // throw new Error('invalid unit class')
         return 'null'
       }
+    case 'undefined':
+      return ''
     default:
       throw new Error('cannot stringify value')
   }
