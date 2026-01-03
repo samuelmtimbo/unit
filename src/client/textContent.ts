@@ -1,10 +1,11 @@
 import { Component } from './component'
+import { isTextLike } from './isText'
+import { isTextField } from './isTextField'
 import { getNodeApparentTextContent } from './util/style/getNodeApparentTextContent'
 
 export function extractTextContent(component: Component): string {
   const textContent =
-    component.isBase() &&
-    !(component.$element as HTMLHtmlElement).children?.length
+    isTextLike(component) || isTextField(component.$element)
       ? getNodeApparentTextContent(component.$element)
       : ''
 

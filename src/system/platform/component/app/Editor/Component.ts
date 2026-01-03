@@ -21274,8 +21274,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const is_auto = is_svg || is_table
 
-    const is_width_auto = (leaf_style.width ?? 'auto') === 'auto'
-    const is_height_auto = (leaf_style.height ?? 'auto') === 'auto'
+    const is_width_auto = leaf_style.width === 'auto'
+    const is_height_auto = leaf_style.height === 'auto'
 
     const temp_style: Dict<string> = {
       position: 'relative',
@@ -34113,7 +34113,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._component,
             trait,
             sub_component_id,
-            path.slice(1),
+            path,
             false,
             (leaf_id, leaf_comp, leaf_parent) => {
               return this._extract_style(trait, leaf_id, leaf_comp, leaf_parent)
@@ -35089,7 +35089,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               target_trait,
               slot_id,
               path.slice(1),
-              expand,
+              true,
               (leaf_id, leaf_comp, leaf_parent) => {
                 return this._extract_style(
                   target_trait,

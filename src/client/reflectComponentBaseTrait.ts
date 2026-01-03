@@ -287,7 +287,13 @@ export const expandSlot = (
 ): Tag[] => {
   const slot_path = slotId.split('/')
 
-  const slot = component.pathGetSubComponent(slot_path)
+  let slot = component.pathGetSubComponent(slot_path)
+
+  if (expand) {
+    if (!slot.isBase()) {
+      slot = slot.getFirstRootLeaf()
+    }
+  }
 
   let parent = slot
 
