@@ -60,14 +60,14 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
     const new_container = this._connected_parent_root_container(at)
     this._parent_child_container[at] = new_container
 
-    super.domRemoveParentChildAt(container, childSlot, at, _at)
-    super.memRemoveParentChildAt(container, childSlot, at, _at)
+    super.domRemoveParentChildAt(container, childSlot, _at)
+    super.memRemoveParentChildAt(container, childSlot, _at)
 
     container.removeChild(child)
 
     new_container.appendChild(child)
 
-    super.domAppendParentChildAt(new_container, childSlot, at, _at)
+    super.domInsertParentChildAt(new_container, childSlot, at)
     super.memAppendParentChild(new_container, childSlot, at, _at)
   }
 
@@ -83,7 +83,7 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
     this._parent_container[at] = new_container
 
     if (this.$mountParentRoot.includes(child)) {
-      super.domRemoveParentRootAt(container, childSlot, at, at)
+      super.domRemoveParentRootAt(container, childSlot, at)
       super.postRemoveParentRootAt(container, childSlot, at, at)
 
       container.removeChild(child)
@@ -177,28 +177,6 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
     super.memAppendParentChild(component, slotName, at, _at)
   }
 
-  public domAppendParentChildAt(
-    component: Component,
-    slotName: string,
-    _at: number
-  ): void {
-    // console.log(
-    //   'Wrap',
-    //   'domAppendParentChildAt',
-    //   component.constructor.name,
-    //   component.$globalId,
-    //   slotName,
-    //   at,
-    //   _at
-    // )
-
-    const container = this._parent_child_container[_at]
-
-    container.domAppendChild(component, 'default', _at)
-
-    super.domAppendParentChildAt(container, slotName, _at, _at)
-  }
-
   public memInsertParentChildAt(
     component: Component,
     slotName: string,
@@ -247,8 +225,7 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
   public memRemoveParentChildAt(
     component: Component,
     slotName: string,
-    at: number,
-    _at: number
+    at: number
   ): void {
     // console.log(
     //   'Wrap',
@@ -256,19 +233,17 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
     //   component.constructor.name,
     //   component.$globalId,
     //   at,
-    //   _at
     // )
 
-    this._parent_child_container.splice(_at, 1)
+    this._parent_child_container.splice(at, 1)
 
-    super.memRemoveParentChildAt(component, slotName, at, _at)
+    super.memRemoveParentChildAt(component, slotName, at)
   }
 
   public domRemoveParentChildAt(
     component: Component,
     slotName: string,
-    at: number,
-    _at: number
+    at: number
   ): void {
     // console.log(
     //   'Wrap',
@@ -279,11 +254,11 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
     //   _at
     // )
 
-    const container = this._parent_child_container[_at]
+    const container = this._parent_child_container[at]
 
     container.domRemoveChild(component, 'default', at)
 
-    super.domRemoveParentChildAt(container, slotName, at, _at)
+    super.domRemoveParentChildAt(container, slotName, at)
   }
 
   public domAppendChild(child: Component, slotName: string, at: number) {
@@ -405,16 +380,15 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
   public domRemoveParentRootAt(
     component: Component,
     slotName: string,
-    at: number,
-    _at: number
+    at: number
   ): void {
     // console.log('Wrap', 'domRemoveParentRootAt', component, at)
 
-    const container = this._parent_container[_at]
+    const container = this._parent_container[at]
 
     container.domRemoveChild(component, 'default', at)
 
-    super.domRemoveParentRootAt(container, slotName, at, _at)
+    super.domRemoveParentRootAt(container, slotName, at)
   }
 
   public postRemoveParentRootAt(
