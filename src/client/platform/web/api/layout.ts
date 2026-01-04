@@ -187,8 +187,8 @@ const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
     element = container
   }
 
-  mergeAttr(element, attr)
-  applyStyle(element, style)
+  mergeAttr(container, attr)
+  applyStyle(container, style)
 
   if (textContent) {
     setNodeApparentTextContent(container, textContent)
