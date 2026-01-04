@@ -1898,9 +1898,10 @@ export class Component<
 
   appendChild(child: Component, slotName: string = 'default'): number {
     const at = this.$children.length
+    const at_ = this.$slotChildren[slotName].length
 
     this.memAppendChild(child, slotName, at)
-    this.domAppendChild(child, slotName, at)
+    this.domAppendChild(child, slotName, at_)
     this.postAppendChild(child, slotName, at)
 
     return at
@@ -1974,11 +1975,17 @@ export class Component<
 
     const slot = this.getLeafSlot(slotName)
 
+    let i = 0
+
     for (const child of children) {
-      fragment._domAppendChild(child)
+      fragment._domAppendChild(child, slotName, i)
+
+      i++
     }
 
-    this._domAppendChild(fragment, slotName)
+    const at_ = this.$slotChildren[slotName].length
+
+    this._domAppendChild(fragment, slotName, at_)
 
     for (const child of children) {
       child.setSlotParent(slot, slotName)
@@ -2002,10 +2009,9 @@ export class Component<
 
   private _domAppendChild(
     child: Component,
-    slotName: string = 'default'
+    slotName: string = 'default',
+    at: number
   ): void {
-    const at = this.$children.length - 1
-
     this._domInsertChild(child, slotName, at)
   }
 
@@ -2028,7 +2034,7 @@ export class Component<
       return
     }
 
-    this._domAppendChild(child, slotName)
+    this._domAppendChild(child, slotName, at)
   }
 
   public domInsertChild(
@@ -2099,11 +2105,9 @@ export class Component<
   public domRemoveChild(
     child: Component,
     slotName: string = 'default',
-    at?: number
+    at: number
   ): void {
     const slot = this.$slot[slotName]
-
-    at = at ?? slot.$slotChildren[slotName].indexOf(child)
 
     slot.domRemoveParentChildAt(child, slotName, at)
 
@@ -2725,8 +2729,10 @@ export class Component<
     const child = this.$children[at]
     const slotName = this.$childSlotName[at]
 
+    const at_ = this.$slotChildren[slotName].indexOf(child)
+
     this.memRemoveChildAt(child, slotName, at)
-    this.domRemoveChild(child, slotName, at)
+    this.domRemoveChild(child, slotName, at_)
     this.postRemoveChild(child, at)
 
     return at
@@ -3469,14 +3475,23 @@ export class Component<
 
   private _incrementParentChildOffset = (slotName: string, at: number) => {
     if (this.$slotParentChildOffset[slotName][at] === undefined) {
-      this.$slotParentChildOffset[slotName][at] = at
-    } else {
-      this.$slotParentChildOffset[slotName][at]++
+      this.$slotParentChildOffset[slotName][at] =
+        this.$slotParentChildOffset[slotName][at - 1] ?? -1
+    }
+
+    for (let i = at; i < this.$slotParentChildOffset[slotName].length; i++) {
+      this.$slotParentChildOffset[slotName][i] =
+        (this.$slotParentChildOffset[slotName][i] ?? -1) + 1
     }
   }
 
   private _decrementParentChildOffset = (slotName: string, at: number) => {
-    this.$slotParentChildOffset[slotName][at]--
+    for (let i = at; i < this.$slotParentChildOffset[slotName].length; i++) {
+      this.$slotParentChildOffset[slotName][i] = Math.max(
+        this.$slotParentChildOffset[slotName][i] - 1,
+        -1
+      )
+    }
   }
 
   public domInsertParentChildAt(
