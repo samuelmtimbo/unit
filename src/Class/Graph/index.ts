@@ -5510,7 +5510,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const subComponent = this.getUnit(subComponentId) as Component_
 
     if (this._root.includes(subComponent)) {
-      this.unregisterRoot(subComponent, true)
+      this.unregisterRoot(subComponent, emit)
     }
   }
 
