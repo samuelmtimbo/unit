@@ -37717,12 +37717,45 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     map: MoveMap,
     actions: Action[]
   ): void => {
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
     const position = this._get_node_position(unit_id)
 
-    let sub_component_map: Dict<Component> = {}
+    const sub_component_map: Dict<Component> = {}
+
+    let sub_sub_component_ids: string[] = []
+    let base = []
+    let leaf_frame_node = {}
 
     if (this._is_unit_component(unit_id)) {
       const sub_component = this._get_sub_component(unit_id)
+
+      base = sub_component.getBase()
+
+      sub_sub_component_ids = keys(sub_component.$subComponent)
+
+      this._measure_sub_component_base(unit_id, base)
+
+      for (const sub_sub_component_id in sub_component.$subComponent) {
+        const sub_sub_component =
+          sub_component.$subComponent[sub_sub_component_id]
+
+        const sub_base = sub_sub_component.getRootBase()
+
+        for (const [leaf_path] of sub_base) {
+          const leaf_id = [unit_id, sub_sub_component_id, ...leaf_path].join(
+            '/'
+          )
+
+          const leaf_node = this._leaf_frame_node[leaf_id]
+
+          leaf_frame_node[leaf_id] = leaf_node
+        }
+      }
 
       this._decompose_sub_component(unit_id)
       this._displace_sub_component(unit_id)
@@ -37730,13 +37763,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._pull_sub_component(unit_id)
       this._remove_sub_component(unit_id)
 
-      for (const sub_sub_component_id in sub_component.$subComponent) {
+      for (const sub_sub_component_id in sub_sub_component_ids) {
         const sub_sub_component =
           sub_component.$subComponent[sub_sub_component_id]
 
         const next_sub_sub_component_id = deepGetOrDefault(
-          map,
-          ['mapping', 'unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
+          map.mapping,
+          ['unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
           sub_sub_component_id
         )
 
@@ -37756,6 +37789,150 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._simulation_prevent_restart = true
 
     this._execute_actions(actions, false, sub_component_map)
+
+    const all_stop = []
+
+    let sub_component_count = sub_sub_component_ids.length
+    let sub_component_finish_count = 0
+    let finished = false
+
+    const finish = () => {
+      callAll(all_stop)()
+
+      for (const sub_sub_component_id of sub_sub_component_ids) {
+        const sub_sub_component_id_ = deepGetOrDefault(
+          map.mapping,
+          ['unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
+          sub_sub_component_id
+        )
+
+        this._cancel_sub_component_base_animation(sub_sub_component_id_, false)
+
+        this._unplug_sub_component_root_base_frame(sub_sub_component_id_)
+
+        this._append_sub_component_root_base(sub_sub_component_id_)
+
+        this._enter_sub_component_frame(sub_sub_component_id_)
+      }
+    }
+
+    const maybe_finish = () => {
+      if (sub_component_finish_count === sub_component_count) {
+        if (finished) {
+          return
+        }
+
+        finished = true
+
+        finish()
+      }
+    }
+
+    const sub_sub_component_ids_ = sub_sub_component_ids.map(
+      (sub_sub_component_id) =>
+        deepGetOrDefault(
+          map.mapping,
+          ['unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
+          sub_sub_component_id
+        )
+    )
+
+    const ordered_sub_sub_component_ids = this._order_sub_component_ids(
+      sub_sub_component_ids
+    )
+
+    for (const sub_sub_component_id of sub_sub_component_ids) {
+      const sub_sub_component_id_ = deepGetOrDefault(
+        map.mapping,
+        ['unit', sub_sub_component_id, 'in', 'unit', 'unitId'],
+        sub_sub_component_id
+      )
+
+      const base = this._get_sub_component_root_base(sub_sub_component_id_)
+
+      for (const [leaf_path] of base) {
+        const old_leaf_id = [unit_id, sub_sub_component_id, ...leaf_path].join(
+          '/'
+        )
+
+        const leaf_id_ = [sub_sub_component_id_, ...leaf_path].join('/')
+
+        const leaf_node = leaf_frame_node[old_leaf_id]
+
+        this._leaf_frame_node[leaf_id_] = leaf_node
+      }
+
+      this._leave_sub_component_frame(sub_sub_component_id_)
+
+      this._remove_sub_component_root_base(sub_sub_component_id_)
+
+      this._plug_sub_component_base(
+        sub_sub_component_id_,
+        base,
+        [],
+        this._foreground
+      )
+
+      const base_node = []
+
+      const base_length = base.length
+
+      const frame = this._get_sub_component_frame(sub_sub_component_id_)
+
+      let base_trait
+
+      let i = 0
+
+      const stop = this._animate_sub_component_base(
+        sub_sub_component_id_,
+        base,
+        base_node,
+        (leaf_id) => {
+          if (i === 0) {
+            const trait = extractTrait(frame, measureText)
+
+            base_trait = this._reflect_sub_component_base_trait(
+              sub_sub_component_id_,
+              base,
+              trait,
+              false
+            )
+          }
+
+          const trait = base_trait[leaf_id]
+
+          i = (i + 1) % base_length
+
+          const x = (-this.$context.$x + trait.x) / this.$context.$sx
+          const y = (-this.$context.$y + trait.y) / this.$context.$sy
+
+          return {
+            x,
+            y,
+            width: trait.width / this.$context.$sx,
+            height: trait.height / this.$context.$sy,
+            sx: trait.sx,
+            sy: trait.sy,
+            opacity: trait.opacity,
+            fontSize: trait.fontSize,
+            color: trait.color,
+            background: trait.background,
+          }
+        },
+        () => {
+          sub_component_finish_count++
+
+          maybe_finish()
+        },
+        () => {
+          sub_component_count--
+
+          maybe_finish()
+        }
+      )
+
+      all_stop.push(stop)
+    }
 
     this._simulation_prevent_restart = false
 
