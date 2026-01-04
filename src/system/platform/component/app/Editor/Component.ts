@@ -19811,11 +19811,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._abort_fullwindow_animation = this._animate_leave_fullwindow(
           sub_component_ids,
           () => {
-            this._end_leave_fullwindow_animation(sub_component_ids)
-
             for (const sub_component_id of sub_component_ids) {
               this._cancel_sub_component_base_animation(sub_component_id, false)
             }
+
+            this._end_leave_fullwindow_animation(sub_component_ids)
 
             if (this._enabled()) {
               this.focus()
@@ -22040,9 +22040,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._cancel_sub_component_base_animation(sub_component_id, false)
 
         this._unplug_sub_component_root_base_frame(sub_component_id)
-
-        this._append_sub_component_all_missing_root(sub_component_id)
-        this._append_sub_component_root_base(sub_component_id)
       }
 
       for (const sub_component_id of sub_component_root) {
@@ -22055,6 +22052,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (const child_id of children) {
           this._insert_sub_component_child(sub_component_id, child_id)
         }
+      }
+
+      for (const sub_component_id of ordered_sub_component_ids) {
+        this._append_sub_component_all_missing_root(sub_component_id)
+        this._append_sub_component_root_base(sub_component_id)
       }
     }
 
@@ -22234,8 +22236,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               this._component,
               trait,
               slot_id,
-              path.slice(1),
-              expand,
+              slot_path.length ? path.slice(1) : path,
+              expand && path.length === 0,
               (leaf_id, leaf_comp, leaf_parent) => {
                 return this._extract_style(
                   trait,
@@ -22506,8 +22508,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._cancel_sub_component_base_animation(sub_component_id, false)
 
           this._unplug_sub_component_root_base_frame(sub_component_id)
-          this._append_sub_component_root_base(sub_component_id)
+
           this._enter_sub_component_frame(sub_component_id)
+
+          this._append_sub_component_root_base(sub_component_id)
         }
 
         for (const sub_component_id of visible_parent_root) {
@@ -23080,8 +23084,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._is_sub_component_fullwindow(sub_component_id)
 
           if (!animating_sub_component && !fullwindow_sub_component) {
-            this._leave_sub_component_frame(sub_component_id)
             this._remove_sub_component_root_base(sub_component_id)
+            this._leave_sub_component_frame(sub_component_id)
           }
         }
       }
@@ -26699,9 +26703,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             () => {
               for (const sub_component_id of this._fullwindow_component_ids) {
                 this._unplug_sub_component_root_base_frame(sub_component_id)
-
-                this._append_sub_component_all_missing_root(sub_component_id)
-                this._append_sub_component_base(sub_component_id)
               }
 
               for (const sub_component_id of this._fullwindow_component_ids) {
@@ -26718,7 +26719,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                     this._append_sub_component_to_root(sub_component_id)
                   }
                 }
+              }
 
+              for (const sub_component_id of this._fullwindow_component_ids) {
+                this._append_sub_component_all_missing_root(sub_component_id)
+                this._append_sub_component_base(sub_component_id)
+              }
+
+              for (const sub_component_id of this._fullwindow_component_ids) {
                 if (last_sub_component_id === sub_component_id) {
                   const is_last_sub_component =
                     sub_component_id === last_sub_component_id
@@ -28823,9 +28831,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._cancel_sub_component_base_animation(sub_component_id, false)
 
         this._unplug_sub_component_base_frame(sub_component_id)
-        this._compose_sub_component(sub_component_id)
-        this._append_sub_component_base(sub_component_id)
+
         this._enter_sub_component_frame(sub_component_id)
+
+        this._compose_sub_component(sub_component_id)
+
+        this._append_sub_component_all_missing_root(sub_component_id)
+        this._append_sub_component_base(sub_component_id)
 
         callback()
       }
@@ -28857,14 +28869,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       i++
     }
-
-    this._leave_sub_component_frame(sub_component_id)
+    //
+    // this._decompose_sub_component(sub_component_id)
 
     if (this._is_sub_component_animating(sub_component_id)) {
       //
     } else {
       this._remove_sub_component_base(sub_component_id)
     }
+
+    this._leave_sub_component_frame(sub_component_id)
 
     this._plug_sub_component_base(sub_component_id, base, base_node, base_layer)
 
@@ -32775,9 +32789,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     dismount: boolean
   ) => {
     if (dismount) {
-      this._leave_sub_component_frame(sub_component_id)
-
       this._remove_sub_component_root_base(sub_component_id)
+      this._leave_sub_component_frame(sub_component_id)
     }
 
     const leaf_base = this._get_sub_component_root_base(sub_component_id)
@@ -34155,18 +34168,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     for (const sub_component_id of sub_component_ids) {
+      if (!this._is_sub_component_animating(sub_component_id)) {
+        this._remove_sub_component_root_base(sub_component_id)
+        this._remove_sub_component_all_root(sub_component_id)
+      }
+    }
+
+    for (const sub_component_id of sub_component_ids) {
       this._decouple_sub_component(sub_component_id)
     }
 
     if (!this._animating_enter_fullwindow) {
       this._component.decompose()
-    }
-
-    for (const sub_component_id of sub_component_ids) {
-      if (!this._is_sub_component_animating(sub_component_id)) {
-        this._remove_sub_component_root_base(sub_component_id)
-        this._remove_sub_component_all_root(sub_component_id)
-      }
     }
 
     for (const sub_component_id of sub_component_ids) {
