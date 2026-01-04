@@ -89,6 +89,8 @@ const expand = (
 
     childTag.element = element
 
+    tag.element.style.scrollSnapType = 'none'
+
     tag.element.appendChild(container)
 
     maybeExpand(parentTrait, childTag, [...path, i], expandChild)
@@ -123,6 +125,8 @@ const fitTreeChildren = (
 
     node.value.element = element
     node.value.container = container
+
+    parentNode.style.scrollSnapType = 'none'
 
     parentNode.appendChild(container)
 
