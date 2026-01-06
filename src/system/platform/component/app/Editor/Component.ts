@@ -221,7 +221,7 @@ import { isCanvasLike } from '../../../../../client/isCanvas'
 import { isSVGLike } from '../../../../../client/isSVG'
 import { isTableLike } from '../../../../../client/isTable'
 import { isTextLike } from '../../../../../client/isText'
-import { LayoutBase } from '../../../../../client/layout'
+import { LayoutBase, LayoutLeaf } from '../../../../../client/layout'
 import { listenMovement } from '../../../../../client/listenMovement'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
@@ -22004,6 +22004,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._leaf_layer_offset_y = 0
     }
 
+    const all_plugged_leave_ids = keys(this._leaf_frame_active)
+
     this._cancel_fullwindow_animation()
     this._cancel_all_layout_parent_children_animation()
     this._cancel_all_sub_component_base_animation(true)
@@ -22024,7 +22026,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const sub_component_root: string[] = []
     const sub_component_parent_root: string[] = []
-    const sub_component_parent_root_slot_children: Dict<Dict<string[]>> = {}
+    const sub_component_extra_base: Dict<LayoutLeaf[]> = {}
+    const sub_component_all_base: Dict<LayoutLeaf[]> = {}
 
     const visible_parent_sub_component_ids: Dict<string[]> = {}
 
@@ -22057,6 +22060,34 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       for (const sub_component_id of ordered_sub_component_ids) {
         this._append_sub_component_all_missing_root(sub_component_id)
         this._append_sub_component_root_base(sub_component_id)
+      }
+
+      for (const sub_component_id of ordered_sub_component_ids) {
+        const extra_base = sub_component_extra_base[sub_component_id] ?? []
+
+        this._unplug_base_frame(sub_component_id, extra_base)
+      }
+
+      for (const sub_component_id of ordered_sub_component_ids) {
+        const extra_base = sub_component_extra_base[sub_component_id] ?? []
+
+        this._commit_sub_component_base__template(
+          sub_component_id,
+          extra_base,
+          (parent, leaf_comp) => {
+            const slot_name =
+              this._spec_get_sub_component_slot_name(sub_component_id)
+
+            const i = parent.$parentRoot.indexOf(leaf_comp)
+
+            parent.insertParentRootAt(leaf_comp, i, slot_name)
+          },
+          (leaf_parent, leaf_comp) => {
+            const i = leaf_parent.$root.indexOf(leaf_comp)
+
+            leaf_parent.insertRootAt(leaf_comp, i)
+          }
+        )
       }
     }
 
@@ -22119,9 +22150,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           all_slot_children[slot_name] = all_slot_children[slot_name] || []
           all_slot_children[slot_name].push(child_id)
         }
-
-        sub_component_parent_root_slot_children[sub_component_id] =
-          all_slot_children
       }
     }
 
@@ -22196,6 +22224,46 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             ])
           }
         }
+
+        const loose_leaf_ids = all_plugged_leave_ids.filter((leaf_id) => {
+          return leaf_id.startsWith(`${sub_component_id}/`)
+        })
+
+        const base_leaf_id_set = new Set(
+          base.map(([leaf_path]) => leaf_path.join('/'))
+        )
+
+        const extra_leaf_ids = loose_leaf_ids.filter(
+          (leaf_id) => !base_leaf_id_set.has(leaf_id)
+        )
+
+        const extra_base = []
+
+        for (const extra_leaf_id of extra_leaf_ids) {
+          loose_leaf_ids.push(extra_leaf_id)
+
+          const leaf_path = extra_leaf_id.split('/')
+          const leaf_comp = this._leaf_comp[extra_leaf_id]
+
+          base.push([leaf_path, leaf_comp])
+
+          extra_base.push([leaf_path.slice(1), leaf_comp])
+        }
+
+        const all_sub_component_base = [
+          ...(all_base[sub_component_id] ?? []),
+          ...extra_base,
+        ]
+
+        sub_component_extra_base[sub_component_id] = extra_base
+        sub_component_all_base[sub_component_id] = all_sub_component_base
+
+        all_base[sub_component_id] = all_sub_component_base
+
+        this._measure_sub_component_base(
+          sub_component_id,
+          all_sub_component_base
+        )
 
         const all_sub_component_ids = [
           sub_component_id,
@@ -32543,10 +32611,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         parent.insertParentRootAt(leaf_comp, i, slot_name)
       },
-      (leaf_parent, leaf_comp, at) => {
+      (leaf_parent, leaf_comp) => {
         const i = leaf_parent.$root.indexOf(leaf_comp)
 
-        leaf_parent.insertRootAt(leaf_comp, i + at)
+        leaf_parent.insertRootAt(leaf_comp, i)
       }
     )
   }
@@ -32561,14 +32629,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       (parent, leaf_comp) => {
         const slot_name =
           this._spec_get_sub_component_slot_name(sub_component_id)
+
         const i = parent.$parentRoot.indexOf(leaf_comp)
 
         parent.insertParentRootAt(leaf_comp, i, slot_name)
       },
-      (parent, leaf_comp, at) => {
+      (parent, leaf_comp) => {
         const i = parent.$root.indexOf(leaf_comp)
 
-        parent.insertRootAt(leaf_comp, i + at)
+        parent.insertRootAt(leaf_comp, i)
       }
     )
   }
@@ -32576,7 +32645,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private __commit_sub_component_base = (
     sub_component_id: string,
     root: (parent: Component, leaf_comp: Component) => void,
-    parent: (leaf_parent: Component, leaf_comp: Component, at: number) => void
+    parent: (leaf_parent: Component, leaf_comp: Component) => void
   ): void => {
     // console.log('Graph', '__commit_sub_component_base', sub_component_id)
 
@@ -32593,7 +32662,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private __commit_sub_component_root_base = (
     sub_component_id: string,
     root: (parent: Component, leaf_comp: Component) => void,
-    parent: (leaf_parent: Component, leaf_comp: Component, at: number) => void
+    parent: (leaf_parent: Component, leaf_comp: Component) => void
   ): void => {
     // console.log('Graph', '__commit_sub_component_root_base', sub_component_id)
 
@@ -32637,40 +32706,46 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     sub_component_id: string,
     base: LayoutBase,
     root: (parent: Component, leaf_comp: Component) => void,
-    parent: (leaf_parent: Component, leaf_comp: Component, at: number) => void
+    parent: (leaf_parent: Component, leaf_comp: Component) => void
   ): void => {
     // console.log('Graph', '_commit_sub_component_base__template', sub_component_id)
 
     const sub_component = this._get_sub_component(sub_component_id)
 
-    let i = 0
-
     for (const leaf of base) {
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_parent_last = leaf_path[leaf_path.length - 1]
-      const leaf_parent_path = leaf_path.slice(0, -1)
+      let leaf_path_ = leaf_path
+      let leaf_comp_ = leaf_comp
 
-      const leaf_parent = sub_component.pathGetSubComponent(leaf_parent_path)
+      while (leaf_path_.length > 0) {
+        const leaf_parent_last = leaf_path_[leaf_path_.length - 1]
+        const leaf_parent_path = leaf_path_.slice(0, -1)
 
-      if (leaf_parent === leaf_comp) {
-        //
-      } else {
-        const parent_id = leaf_parent.getSubComponentParentId(leaf_parent_last)
-        if (parent_id) {
-          const parent = leaf_parent.getSubComponent(parent_id)
+        const leaf_parent = sub_component.pathGetSubComponent(leaf_parent_path)
 
-          if (!parent.$mountParentRoot.includes(leaf_comp)) {
-            root(parent, leaf_comp)
-          }
+        if (leaf_parent === leaf_comp_) {
+          //
         } else {
-          if (!leaf_parent.$mountRoot.includes(leaf_comp)) {
-            parent(leaf_parent, leaf_comp, i)
+          const parent_id =
+            leaf_parent.getSubComponentParentId(leaf_parent_last)
+
+          if (parent_id) {
+            const parent = leaf_parent.getSubComponent(parent_id)
+
+            if (!parent.$mountParentRoot.includes(leaf_comp_)) {
+              root(parent, leaf_comp_)
+            }
+          } else {
+            if (!leaf_parent.$mountRoot.includes(leaf_comp_)) {
+              parent(leaf_parent, leaf_comp_)
+            }
           }
         }
-      }
 
-      i++
+        leaf_path_ = leaf_parent_path
+        leaf_comp_ = leaf_parent
+      }
     }
   }
 
@@ -32786,9 +32861,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _plug_sub_component = (
     sub_component_id: string,
     layer: Component,
-    dismount: boolean
+    displace: boolean
   ) => {
-    if (dismount) {
+    if (displace) {
       this._remove_sub_component_root_base(sub_component_id)
       this._leave_sub_component_frame(sub_component_id)
     }
