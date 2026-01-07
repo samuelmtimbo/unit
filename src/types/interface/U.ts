@@ -21,6 +21,7 @@ export type U_EE<I extends Dict<any> = any, O extends Dict<any> = any> = {
   rename_input: [keyof I, keyof I]
   rename_output: [keyof O, keyof O]
   set_pin_data: [IO, keyof I | keyof O, boolean]
+  set_pin_ref: [IO, keyof I | keyof O, boolean]
   set_pin_constant: [IO, keyof I | keyof O, boolean]
   set_pin_ignored: [IO, keyof I | keyof O, string, boolean]
   catch_err: [string]

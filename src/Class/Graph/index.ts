@@ -3545,9 +3545,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       }
 
       if (type === 'input') {
-        if (unit.isPinConstant('input', newName)) {
-          setup_unit_constant_pin('input', newName)
-        }
+        setup_unit_pin('input', newName)
       }
     }
 
@@ -3562,7 +3560,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     let unit_pin_listener: Dict<IOOf<Dict<Function>>> = {}
 
-    const setup_unit_constant_pin = (type: IO, pinId: string) => {
+    const setup_unit_pin = (type: IO, pinId: string) => {
       const pin = this.getUnitPin(unitId, type, pinId)
 
       const set = (data: any) => {
@@ -3597,10 +3595,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         set(Class)
       }
 
-      const pin_data_unlisten = pin.addListener('data', set)
-      const pin_edit_unlisten = pin.addListener('edit', edit)
+      const unlisten = []
 
-      const pin_unlisten = callAll([pin_data_unlisten, pin_edit_unlisten])
+      if (pin.constant()) {
+        const pin_data_unlisten = pin.addListener('data', set)
+
+        unlisten.push(pin_data_unlisten)
+      }
+
+      if (pin.ref()) {
+        const pin_edit_unlisten = pin.addListener('edit', edit)
+
+        unlisten.push(pin_edit_unlisten)
+      }
+
+      const pin_unlisten = callAll(unlisten)
 
       deepSet(unit_pin_listener, [unitId, type, pinId], pin_unlisten)
 
@@ -3608,9 +3617,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     forEach(inputs, (pinId) => {
-      if (unit.isPinConstant('input', pinId)) {
-        setup_unit_constant_pin('input', pinId)
-      }
+      setup_unit_pin('input', pinId)
     })
 
     all_unlisten.push(
@@ -3653,33 +3660,39 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     all_unlisten.push(
       unit.addListener('rename_output', rename_unit_pin.bind(this, 'output'))
     )
+
+    const on_unit_pin_change = (type: IO, pinId: string) => {
+      const pin_data_unlisten = deepGetOrDefault(
+        unit_pin_listener,
+        [unitId, type, pinId],
+        undefined
+      )
+
+      if (pin_data_unlisten) {
+        pin_data_unlisten()
+
+        remove(all_unlisten, pin_data_unlisten)
+
+        deepDestroy(unit_pin_listener, [unitId, type, pinId])
+      }
+
+      setup_unit_pin(type, pinId)
+    }
+
     all_unlisten.push(
       unit.addListener(
         'set_pin_constant',
         (type: IO, pinId: string, constant: boolean) => {
           this._specSetUnitPinConstant(unitId, type, pinId, constant)
 
-          const data = this.getUnitPinData(unitId, type, pinId)
-
-          if (constant) {
-            setup_unit_constant_pin(type, pinId)
-          } else {
-            const pin_data_unlisten = deepGetOrDefault(
-              unit_pin_listener,
-              [unitId, type, pinId],
-              undefined
-            )
-
-            if (pin_data_unlisten) {
-              pin_data_unlisten()
-
-              remove(all_unlisten, pin_data_unlisten)
-
-              deepDestroy(unit_pin_listener, [unitId, type, pinId])
-            }
-          }
+          on_unit_pin_change(type, pinId)
         }
       )
+    )
+    all_unlisten.push(
+      unit.addListener('set_pin_ref', (type: IO, pinId: string) => {
+        on_unit_pin_change(type, pinId)
+      })
     )
 
     const selfPinNodeId = getOutputNodeId(unitId, SELF)

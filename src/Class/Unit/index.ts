@@ -302,6 +302,8 @@ export class Unit<
         this._memSetPinOptData(type, pinId)
       }
     }
+
+    this.emit('set_pin_ref', type, pinId, ref)
   }
 
   public setInputRef<K extends keyof I>(pinId: K, ref: boolean): void {
