@@ -1707,7 +1707,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._editor._prevent_next_reset = false
 
-    this._editor.__spec_set_pin_data('editor', 'input', 'graph', {
+    this._editor.__spec_set_unit_pin_data('editor', 'input', 'graph', {
       ref: [[]],
       data: editor_bundle,
     })
@@ -29726,7 +29726,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const { value } = tree
 
-          this._spec_set_pin_data(pin_node_id, value)
+          this._spec_set_unit_pin_data(pin_node_id, value)
         } else {
           this._spec_remove_pin_data(pin_node_id)
         }
@@ -39421,7 +39421,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const is_link_pin = this._is_link_pin_node_id(pin_node_id)
 
     if (is_link_pin) {
-      this._spec_set_pin_data(pin_node_id, value)
+      this._spec_set_unit_pin_data(pin_node_id, value)
     }
   }
 
@@ -39509,7 +39509,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _spec_set_pin_data = (
+  private _spec_set_unit_pin_data = (
     pin_node_id: string,
     data: string | DataRef
   ): void => {
@@ -39520,18 +39520,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        this.__spec_set_pin_data(unitId, type, pinId, data)
+        this.__spec_set_unit_pin_data(unitId, type, pinId, data)
       }
     } else {
       const merge_pin_node_id = this._merge_to_pin[pin_node_id]
 
       for (const pin_node_id in merge_pin_node_id) {
-        this._spec_set_pin_data(pin_node_id, data)
+        this._spec_set_unit_pin_data(pin_node_id, data)
       }
     }
   }
 
-  public __spec_set_pin_data = (
+  public __spec_set_unit_pin_data = (
     unitId: string,
     type: IO,
     pinId: string,
@@ -51057,7 +51057,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _state_set_unit_pin_data(pin_node_id: string, data: string) {
-    this._spec_set_pin_data(pin_node_id, data)
+    this._spec_set_unit_pin_data(pin_node_id, data)
     this._sim_set_pin_data_value(pin_node_id, data)
   }
 
@@ -58968,6 +58968,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (path.length === 0) {
       const dataRef = evaluateDataValue(data, specs, classes)
 
+      const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+      const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
+
+      if (datum_node_id) {
+        const { datumId } = segmentDatumNodeId(datum_node_id)
+
+        const anchor_node_id = this._get_node_anchor_node_id(pin_node_id)
+
+        this._sim_set_datum_value(datumId, datum_node_id, anchor_node_id, data)
+      }
+
       setUnitPinData(
         { unitId, type, pinId, data: dataRef },
         this._spec,
@@ -59906,7 +59918,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    this._spec_set_pin_data(pin_node_id, tree.value)
+    this._spec_set_unit_pin_data(pin_node_id, tree.value)
   }
 
   private _on_graph_unit_link_pin_drop_moment = (
