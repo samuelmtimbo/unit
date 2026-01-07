@@ -1,43 +1,56 @@
 import { Graph } from '../../Class/Graph'
+import { GraphSetUnitPinDataData } from '../../Class/Graph/interface'
 import { stringify } from '../../spec/stringify'
 import { G_EE } from '../../types/interface/G'
-import { IO } from '../../types/IO'
 import { Moment } from '../Moment'
 
-export interface GraphSetUnitPinDataMomentData {
-  unitId: string
-  type: IO
-  pinId: string
-  data: string
+export interface GraphSetUnitPinDataMomentData extends GraphSetUnitPinDataData {
   path: string[]
 }
 
 export interface GraphSetUnitPinDataMoment
   extends Moment<GraphSetUnitPinDataMomentData> {}
 
+export function extractSetUnitPinDataEventData(
+  ...[unitId, type, pinId, data, path]: G_EE['set_unit_pin_data']
+): GraphSetUnitPinDataMomentData {
+  return {
+    unitId,
+    type,
+    pinId,
+    data,
+    path,
+  }
+}
+
+export function stringifySetUnitPinDataEventData(
+  data: GraphSetUnitPinDataMomentData
+) {
+  return {
+    ...data,
+    data: stringify(data.data),
+  }
+}
+
 export function watchGraphSetUnitPinData(
   event: 'set_unit_pin_data',
   graph: Graph,
   callback: (moment: GraphSetUnitPinDataMoment) => void
 ): () => void {
-  const listener = (
-    ...[unitId, type, pinId, data, path]: G_EE['set_unit_pin_data']
-  ) => {
-    const _data = stringify(data)
+  const listener = (...args: G_EE['set_unit_pin_data']) => {
+    const data = stringifySetUnitPinDataEventData(
+      extractSetUnitPinDataEventData(...args)
+    )
 
     callback({
       type: 'graph',
       event,
-      data: {
-        unitId,
-        type,
-        pinId,
-        data: _data,
-        path,
-      },
+      data,
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }

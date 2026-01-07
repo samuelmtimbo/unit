@@ -6,6 +6,7 @@ import { Pins } from '../../Pins'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
 import { refSlot, reorderParentRoot, reorderRoot } from '../../component/method'
 import { SELF } from '../../constant/SELF'
+import { GRAPH_EVENT_TO_EXTRACT } from '../../debug/graph/watchGraphInternal'
 import { deepSet_ } from '../../deepSet'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
@@ -471,9 +472,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ) {
+    const data = this.getUnitPinData(unitId, type, pinId)
+
     this._removeUnitPinData(unitId, type, pinId, undefined, fork, bubble)
 
-    emit && this.edit('remove_unit_pin_data', unitId, type, pinId, [])
+    emit && this.edit('remove_unit_pin_data', unitId, type, pinId, data, [])
   }
 
   removeMergeData(mergeId: string) {
@@ -2107,9 +2110,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   edit(event: keyof G_EE, ...args: any[]): void {
     super.emit(event, ...args)
-    super.emit('edit', [event, ...args])
+
+    const data = GRAPH_EVENT_TO_EXTRACT[event](...args)
+
+    super.emit('edit', { event, data })
 
     this._bubble && this._bubble(event, ...args)
+  }
+
+  private _event_to_data = (event: keyof G_EE, ...args: any[]) => {
+    switch (event) {
+    }
   }
 
   private _simPlugPin(

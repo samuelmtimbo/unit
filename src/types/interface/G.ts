@@ -267,14 +267,13 @@ export type G_EE = {
   before_add_unit: [string, Unit, string[]]
   add_unit: [string, UnitBundleSpec, Unit, string[]]
   remove_unit: [string, UnitBundleSpec, Unit, string[]]
-  move_unit: [string, string, string, string[]]
   remove_unit_from_merge: [string, string, string[]]
   before_add_merge: [string, GraphMergeSpec, Merge, string[]]
   add_merge: [string, GraphMergeSpec, Merge, string[]]
-  add_pin_to_merge: [string, string, string, string, string[]]
+  add_pin_to_merge: [string, string, IO, string, string[]]
   before_remove_merge: [string, GraphMergeSpec, Merge, string[]]
   remove_merge: [string, GraphMergeSpec, Merge, string[]]
-  remove_pin_from_merge: [string, string, string, string, string[]]
+  remove_pin_from_merge: [string, string, IO, string, string[]]
   merge_merges: [string[], string[]]
   move_sub_component_root: [
     string | null,
@@ -295,7 +294,7 @@ export type G_EE = {
   set_unit_pin_data: [string, IO, string, any, string[]]
   set_unit_pin_set_id: [string, IO, string, string, string[]]
   set_plug_pin_data: [IO, string, string, string[]]
-  remove_unit_pin_data: [string, IO, string, string[]]
+  remove_unit_pin_data: [string, IO, string, any, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
   set_metadata: [string[], any, string[]]
   set_pin_metadata: [IO, string, string[], any, string[]]
@@ -311,4 +310,5 @@ export type G_EE = {
   bulk_edit: [Action[], string[]]
   set_fork: [boolean, string[]]
   edit: any[]
+  destroy: [string[]]
 }

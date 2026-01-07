@@ -81,9 +81,9 @@ export type GraphSetUnitIdData = {
   unitId: string
   newUnitId: string
   specId: string
-  lastSpecId: string
+  lastSpecId?: string
   name: string
-  lastName: string
+  lastName?: string
   fork?: boolean
   bubble?: boolean
 } & Flags
@@ -227,7 +227,7 @@ export type GraphAddMergeData = {
 export type GraphRemoveMergeData = {
   mergeId: string
   mergeSpec: GraphMergeSpec
-  position: Position
+  position?: Position
   take?: boolean
 } & Flags
 

@@ -11,32 +11,46 @@ export interface GraphMoveSubgraphIntoMomentData
 export interface GraphMoveSubgraphIntoMoment
   extends Moment<GraphMoveSubgraphIntoMomentData> {}
 
-export function watchGraphMoveSubgraphEvent(
-  event: 'move_subgraph_into' | 'move_subgraph_out_of',
+export function extractMoveSubgraphIntoEventData(
+  ...[
+    graphId,
+    spec,
+    selection,
+    mapping,
+    moves,
+    path,
+  ]: G_EE['move_subgraph_into']
+): GraphMoveSubgraphIntoMomentData {
+  return {
+    graphId,
+    spec,
+    selection,
+    mapping,
+    moves,
+    path,
+  }
+}
+
+export function stringifyMoveSubgraphIntoEventData(
+  data: GraphMoveSubgraphIntoMomentData
+) {
+  return data
+}
+
+export function watchGraphMoveSubgraphIntoEvent(
+  event: 'move_subgraph_into',
   graph: Graph,
   callback: (moment: GraphMoveSubgraphIntoMoment) => void
 ): () => void {
-  const listener = (
-    ...[
-      graphId,
-      spec,
-      selection,
-      mapping,
-      moves,
-      path,
-    ]: G_EE['move_subgraph_into']
-  ) => {
+  const listener = (...args: G_EE['move_subgraph_into']) => {
+    const data = stringifyMoveSubgraphIntoEventData(
+      extractMoveSubgraphIntoEventData(...args)
+    )
+
     callback({
       type: 'graph',
       event,
-      data: {
-        graphId,
-        spec,
-        selection,
-        mapping,
-        moves,
-        path,
-      },
+      data,
     })
   }
   graph.prependListener(event, listener)

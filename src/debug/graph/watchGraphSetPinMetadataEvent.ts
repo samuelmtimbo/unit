@@ -1,40 +1,48 @@
 import { Graph } from '../../Class/Graph'
-import { IO } from '../../types/IO'
+import { GraphSetPinMetadataData } from '../../Class/Graph/interface'
+import { G_EE } from '../../types/interface/G'
 import { Moment } from '../Moment'
 
-export interface GraphSetPinMetadataMomentData {
-  type: IO
-  pinId: string
+export interface GraphSetPinMetadataMomentData extends GraphSetPinMetadataData {
   path_: string[]
-  data: any
   path: string[]
 }
 
 export interface GraphMetadataMoment
   extends Moment<GraphSetPinMetadataMomentData> {}
 
+export function extractSetPinMetadataEventData(
+  ...[type, pinId, path_, value, path]: G_EE['set_pin_metadata']
+): GraphSetPinMetadataMomentData {
+  return {
+    type,
+    pinId,
+    path_,
+    value,
+    path,
+  }
+}
+
+export function stringifySetPinMetadataEventData(
+  data: GraphSetPinMetadataMomentData
+) {
+  return data
+}
+
 export function watchGraphSetPinMetadataEvent(
   event: 'set_pin_metadata',
   graph: Graph,
   callback: (moment) => void
 ): () => void {
-  const listener = (
-    type: IO,
-    pinId: string,
-    path_: string[],
-    data: any,
-    path: string[]
-  ) => {
+  const listener = (...args: G_EE['set_pin_metadata']) => {
+    const data = stringifySetPinMetadataEventData(
+      extractSetPinMetadataEventData(...args)
+    )
+
     callback({
       type: 'graph',
       event,
-      data: {
-        type,
-        pinId,
-        path_,
-        data,
-        path,
-      },
+      data,
     })
   }
 

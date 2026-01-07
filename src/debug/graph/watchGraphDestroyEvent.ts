@@ -1,16 +1,31 @@
 import { Graph } from '../../Class/Graph'
+import { G_EE } from '../../types/interface/G'
 import { Moment } from '../Moment'
 
-export interface GraphMetadataMomentData {
+export interface GraphDestroyMomentData {
   path: string[]
 }
 
-export interface GraphMetadataMoment extends Moment<GraphMetadataMomentData> {}
+export interface GraphDestroyMoment extends Moment<GraphDestroyMomentData> {}
+
+export function extractDestroyEventData([
+  path,
+]: G_EE['destroy']): GraphDestroyMomentData {
+  return {
+    path,
+  }
+}
+
+export function stringifyBulkEditEventData({ path }: GraphDestroyMomentData) {
+  return {
+    path,
+  }
+}
 
 export function watchGraphDestroyEvent(
   event: 'destroy',
   graph: Graph,
-  callback: (moment) => void
+  callback: (moment: GraphDestroyMoment) => void
 ): () => void {
   const listener = (path: string[] = []) => {
     callback({

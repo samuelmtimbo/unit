@@ -11,24 +11,38 @@ export interface GraphSetUnitPinSetIdMomentData
 export interface GraphSetUnitPinSetIdMoment
   extends Moment<GraphSetUnitPinSetIdMomentData> {}
 
+export function extractSetUnitPinSetIdEventData(
+  ...[unitId, type, pinId, newPinId, path]: G_EE['set_unit_pin_set_id']
+): GraphSetUnitPinSetIdMomentData {
+  return {
+    unitId,
+    type,
+    pinId,
+    newPinId,
+    path,
+  }
+}
+
+export function stringifySetUnitPinSetIdEventData(
+  data: GraphSetUnitPinSetIdMomentData
+) {
+  return data
+}
+
 export function watchGraphSetUnitPinSetId(
   event: 'set_unit_pin_set_id',
   graph: Graph,
   callback: (moment: GraphSetUnitPinSetIdMoment) => void
 ): () => void {
-  const listener = (
-    ...[unitId, type, pinId, newPinId, path]: G_EE['set_unit_pin_set_id']
-  ) => {
+  const listener = (...args: G_EE['set_unit_pin_set_id']) => {
+    const data = stringifySetUnitPinSetIdEventData(
+      extractSetUnitPinSetIdEventData(...args)
+    )
+
     callback({
       type: 'graph',
       event,
-      data: {
-        unitId,
-        type,
-        pinId,
-        newPinId,
-        path,
-      },
+      data,
     })
   }
 

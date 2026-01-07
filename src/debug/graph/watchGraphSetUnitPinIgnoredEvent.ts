@@ -1,40 +1,53 @@
 import { Graph } from '../../Class/Graph'
+import { GraphSetUnitPinIgnoredData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { IO } from '../../types/IO'
 import { Moment } from '../Moment'
 
-export interface GraphSetUnitPinIgnoredMomentData {
-  unitId: string
-  type: IO
-  pinId: string
-  ignored: boolean
+export interface GraphSetUnitPinIgnoredMomentData
+  extends GraphSetUnitPinIgnoredData {
   path: string[]
 }
 
-export interface GraphSetUnitPinConstantMoment
+export interface GraphSetUnitPinIgnoredMoment
   extends Moment<GraphSetUnitPinIgnoredMomentData> {}
+
+export function extractSetUnitPinIgnoredEventData(
+  ...[unitId, type, pinId, ignored, path]: G_EE['set_unit_pin_ignored']
+): GraphSetUnitPinIgnoredMomentData {
+  return {
+    unitId,
+    type,
+    pinId,
+    ignored,
+    path,
+  }
+}
+
+export function stringifySetUnitPinIgnoredEventData(
+  data: GraphSetUnitPinIgnoredMomentData
+) {
+  return data
+}
 
 export function watchGraphSetUnitPinIgnored(
   event: 'set_unit_pin_ignored',
   graph: Graph,
-  callback: (moment: GraphSetUnitPinConstantMoment) => void
+  callback: (moment: GraphSetUnitPinIgnoredMoment) => void
 ): () => void {
-  const listener = (
-    ...[unitId, type, pinId, ignored, path]: G_EE['set_unit_pin_ignored']
-  ) => {
+  const listener = (...args: G_EE['set_unit_pin_ignored']) => {
+    const data = stringifySetUnitPinIgnoredEventData(
+      extractSetUnitPinIgnoredEventData(...args)
+    )
+
     callback({
       type: 'graph',
       event,
-      data: {
-        unitId,
-        type,
-        pinId,
-        ignored,
-        path,
-      },
+      data,
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }

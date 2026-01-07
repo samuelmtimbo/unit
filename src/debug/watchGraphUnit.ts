@@ -3,7 +3,7 @@ import { Unit } from '../Class/Unit'
 import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
-import { GRAPH_EVENT_TO_WATCHER } from './graph/watchGraphInternal'
+import { GRAPH_EVENT_TO_WATCH } from './graph/watchGraphInternal'
 import { Moment } from './Moment'
 
 export function watchGraphUnit<T extends Unit>(
@@ -15,7 +15,7 @@ export function watchGraphUnit<T extends Unit>(
 
   if (unit instanceof Graph) {
     for (const event of events) {
-      const watcher = GRAPH_EVENT_TO_WATCHER[event]
+      const watcher = GRAPH_EVENT_TO_WATCH[event]
 
       if (watcher) {
         all.push(watcher(event, unit, callback))

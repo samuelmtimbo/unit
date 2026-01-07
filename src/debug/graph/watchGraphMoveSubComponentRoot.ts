@@ -11,37 +11,53 @@ export interface GraphMoveSubComponentRootMomentData
 export interface GraphMoveSubcomponentRootMoment
   extends Moment<GraphMoveSubComponentRootMomentData> {}
 
+export function extractMoveSubComponentRootEventData(
+  ...[
+    parentId,
+    prevParentIdMap,
+    children,
+    index,
+    slotMap,
+    prevSlotMap,
+    path,
+  ]: G_EE['move_sub_component_root']
+): GraphMoveSubComponentRootMomentData {
+  return {
+    parentId,
+    prevParentIdMap,
+    children,
+    index,
+    slotMap,
+    prevSlotMap,
+    path,
+  }
+}
+
+export function stringifyMoveSubComponentRootEventData(
+  data: GraphMoveSubComponentRootMomentData
+) {
+  return data
+}
+
 export function watchGraphMoveSubComponentRoot(
   event: 'move_sub_component_root',
   graph: Graph,
   callback: (moment: GraphMoveSubcomponentRootMoment) => void
 ): () => void {
-  const listener = (
-    ...[
-      parentId,
-      prevParentIdMap,
-      children,
-      index,
-      slotMap,
-      prevSlotMap,
-      path,
-    ]: G_EE['move_sub_component_root']
-  ) => {
+  const listener = (...args: G_EE['move_sub_component_root']) => {
+    const data = stringifyMoveSubComponentRootEventData(
+      extractMoveSubComponentRootEventData(...args)
+    )
+
     callback({
       type: 'graph',
       event,
-      data: {
-        parentId,
-        prevParentIdMap,
-        children,
-        index,
-        slotMap,
-        prevSlotMap,
-        path,
-      },
+      data,
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }
