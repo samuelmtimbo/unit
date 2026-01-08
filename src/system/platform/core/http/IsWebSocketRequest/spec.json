@@ -489,8 +489,8 @@
     }
   },
   "metadata": {
-    "icon": null,
-    "description": "",
+    "icon": "question",
+    "description": "check weather a HTTP request object is a web socket upgrade request",
     "position": {
       "merge": {
         "0": {

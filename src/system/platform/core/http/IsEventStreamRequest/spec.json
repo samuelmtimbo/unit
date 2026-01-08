@@ -1,0 +1,305 @@
+{
+  "type": "`U`&`G`",
+  "name": "is event stream request",
+  "units": {
+    "getordefault": {
+      "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "accept"
+          },
+          "metadata": {
+            "position": {
+              "x": -7,
+              "y": -8
+            }
+          }
+        },
+        "obj": {},
+        "default": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": ""
+          },
+          "metadata": {
+            "position": {
+              "x": 66,
+              "y": 50
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 28,
+          "y": 22
+        }
+      }
+    },
+    "tolowercase": {
+      "id": "adde2d16-e1e6-4599-9a64-dd0968797041",
+      "input": {
+        "A": {}
+      },
+      "output": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 535.983152173913,
+              "y": 438.86067774936055
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 134,
+          "y": 3
+        }
+      }
+    },
+    "lowercasekeys": {
+      "id": "8e17c506-c949-4a94-9691-f0188231dafc",
+      "output": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 605.9427109974424,
+              "y": 337.01508951406646
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -81,
+          "y": 36
+        }
+      },
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 507.9427109974425,
+              "y": 337.01508951406646
+            }
+          }
+        }
+      }
+    },
+    "equals": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "text/event-stream"
+          },
+          "metadata": {
+            "position": {
+              "x": 205,
+              "y": -49
+            },
+            "data": {
+              "position": {
+                "x": 239,
+                "y": -120
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "a = b": {
+          "metadata": {
+            "position": {
+              "x": 285,
+              "y": -17
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 236,
+          "y": -18
+        }
+      }
+    },
+    "getordefault0": {
+      "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "default": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {}
+          },
+          "metadata": {
+            "position": {
+              "x": -235,
+              "y": 41
+            }
+          }
+        },
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "headers"
+          },
+          "metadata": {
+            "position": {
+              "x": -237,
+              "y": 6
+            }
+          }
+        },
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -156,
+              "y": -10
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -190,
+          "y": 22
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "lowercasekeys": {
+        "input": {
+          "obj": true
+        }
+      },
+      "getordefault0": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "1": {
+      "getordefault": {
+        "input": {
+          "obj": true
+        }
+      },
+      "lowercasekeys": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "tolowercase": {
+        "input": {
+          "A": true
+        }
+      },
+      "getordefault": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "3": {
+      "equals": {
+        "input": {
+          "a": true
+        }
+      },
+      "tolowercase": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "req": {
+      "plug": {
+        "0": {
+          "unitId": "getordefault0",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -155,
+              "y": -34
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "test": {
+      "plug": {
+        "0": {
+          "unitId": "equals",
+          "pinId": "a = b",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 308,
+              "y": -15
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "check weather an HTTP request object is a text event stream request",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -135,
+          "y": 32
+        },
+        "1": {
+          "x": -26,
+          "y": 33
+        },
+        "2": {
+          "x": 82,
+          "y": 9
+        },
+        "3": {
+          "x": 186,
+          "y": -4
+        }
+      }
+    }
+  },
+  "id": "5796118d-f441-405c-ac06-1455ff7e3e79"
+}
