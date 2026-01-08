@@ -1,0 +1,40 @@
+{
+  "name": "readable stream",
+  "inputs": {
+    "opt": {
+      "type": "{}",
+      "metadata": {
+        "examples": ["{}"]
+      }
+    },
+    "data": {
+      "type": "string"
+    },
+    "end": {
+      "type": "any"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "stream": {
+      "type": "`RS`",
+      "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "create a readable stream of byte data",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream",
+    "tags": ["platform", "api", "network"]
+  },
+  "id": "81e15593-293c-4890-ae8e-d1e845673d28",
+  "base": true,
+  "type": "`U`"
+}
