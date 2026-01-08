@@ -2,7 +2,7 @@
   "name": "write",
   "inputs": {
     "value": {
-      "type": "`V<T>`",
+      "type": "`W<T>`",
       "ref": true
     },
     "data": {

@@ -36,7 +36,7 @@ export const CLASS_TYPE_IMAGE_BITMAP_RENDERING_CONTEXT = 'IBRC' // ImageBitmapRe
 export const CLASS_TYPE_IMAGE = 'IM' // IMage
 export const CLASS_TYPE_IMAGE_DATA = 'ID' // ImageData
 export const CLASS_TYPE_WRAPPER = 'WP' // WraPper
-export const CLASS_TYPE_WINDOW = 'W' // Window
+export const CLASS_TYPE_WINDOW = 'WI' // WIndow
 export const CLASS_TYPE_MEDIA_ELEMENT = 'ME' // MediaElement
 export const CLASS_TYPE_OBSERVER = 'OB' // OBserver
 export const CLASS_TYPE_RESPONSE = 'RES' // RESponse
@@ -47,6 +47,8 @@ export const CLASS_TYPE_AUDIO_BUFFER = 'ADB' // AuDioBuffer
 export const CLASS_TYPE_TEXT_ENCODER = 'TE' // TextEncoder
 export const CLASS_TYPE_TEXT_DECODER = 'TD' // TextDecoder
 export const CLASS_TYPE_READABLE_STREAM = 'RS' // ReadableStream
+export const CLASS_TYPE_READABLE = 'R' // Readable
+export const CLASS_TYPE_WRITABLE = 'W' // Writable
 
 export type AllTypes<T> = {
   $: T
@@ -86,6 +88,8 @@ export type AllTypes<T> = {
   AN: T
   BSN: T
   ADB: T
+  W: T
+  R: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -126,6 +130,8 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   AN: true,
   BSN: true,
   ADB: true,
+  W: true,
+  R: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

@@ -1,10 +1,10 @@
 import { BundleSpec } from './types/BundleSpec'
 import { GraphSpecs } from './types/GraphSpecs'
-import { R } from './types/interface/R'
+import { RE } from './types/interface/RE'
 import { weakMerge } from './weakMerge'
 
 export function injectUserBundle(
-  registry: { lockSpec: R['lockSpec']; injectSpecs: R['injectSpecs'] },
+  registry: { lockSpec: RE['lockSpec']; injectSpecs: RE['injectSpecs'] },
   bundle: BundleSpec
 ) {
   const { spec, specs = {} } = bundle
@@ -15,7 +15,7 @@ export function injectUserBundle(
 }
 
 export function injectUserSpecs(
-  registry: { lockSpec: R['lockSpec']; injectSpecs: R['injectSpecs'] },
+  registry: { lockSpec: RE['lockSpec']; injectSpecs: RE['injectSpecs'] },
   specs: GraphSpecs
 ) {
   const specIdMap = registry.injectSpecs(specs)

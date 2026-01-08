@@ -694,7 +694,7 @@ import {
   GraphSelection,
   GraphSelectionData,
 } from '../../../../../types/interface/G'
-import { R } from '../../../../../types/interface/R'
+import { RE } from '../../../../../types/interface/RE'
 import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { $Component } from '../../../../../types/interface/async/$Component'
 import { $G } from '../../../../../types/interface/async/$G'
@@ -1880,7 +1880,7 @@ export interface AreaOpt {
   style?: Dict<string>
 }
 
-export interface Props_ extends R, Value {
+export interface Props_ extends RE, Value {
   className?: string
   style?: Dict<string>
   disabled?: boolean
@@ -33339,7 +33339,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               ...acc,
               [name]: this.$props[name].bind(this.$props),
             }
-          }, {}) as R),
+          }, {}) as RE),
           dispatchEvent,
           enterFullwindow,
           leaveFullwindow,

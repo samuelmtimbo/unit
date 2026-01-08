@@ -1,6 +1,4 @@
-import { Callback } from '../Callback'
+import { R } from './R'
+import { W } from './W'
 
-export interface V<T = any> {
-  read(callback: Callback<T>): void
-  write(data: T, callback: Callback<undefined>): void
-}
+export interface V<T = any> extends W<T>, R<T> {}

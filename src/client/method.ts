@@ -175,6 +175,12 @@ import {
   PS_METHOD_WATCH,
 } from '../types/interface/async/$PS'
 import {
+  R_METHOD_CALL,
+  R_METHOD_GET,
+  R_METHOD_REF,
+  R_METHOD_WATCH,
+} from '../types/interface/async/$R'
+import {
   RS_METHOD_CALL,
   RS_METHOD_GET,
   RS_METHOD_REF,
@@ -215,6 +221,12 @@ import {
   V_METHOD_REF,
   V_METHOD_WATCH,
 } from '../types/interface/async/$V'
+import {
+  W_METHOD_CALL,
+  W_METHOD_GET,
+  W_METHOD_REF,
+  W_METHOD_WATCH,
+} from '../types/interface/async/$W'
 import {
   WP_METHOD_CALL,
   WP_METHOD_GET,
@@ -453,5 +465,17 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     call: AN_METHOD_CALL,
     watch: AN_METHOD_WATCH,
     ref: AN_METHOD_REF,
+  },
+  W: {
+    get: W_METHOD_GET,
+    call: W_METHOD_CALL,
+    watch: W_METHOD_WATCH,
+    ref: W_METHOD_REF,
+  },
+  R: {
+    get: R_METHOD_GET,
+    call: R_METHOD_CALL,
+    watch: R_METHOD_WATCH,
+    ref: R_METHOD_REF,
   },
 }

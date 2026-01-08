@@ -6,13 +6,13 @@ import { Spec, Specs } from './types'
 import { Dict } from './types/Dict'
 import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
-import { R } from './types/interface/R'
+import { RE } from './types/interface/RE'
 import { clone } from './util/clone'
 import { uuidNotIn } from './util/id'
 import { deepGet } from './util/object'
 import { weakMerge } from './weakMerge'
 
-export class Registry implements R {
+export class Registry implements RE {
   specs: Specs
   specs_: Object_<Specs>
   specsCount: Dict<number>
