@@ -3,6 +3,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../Class/Functional/Fail'
 import { Holder } from '../../../../../Class/Holder'
 import { EventEmitter_EE } from '../../../../../EventEmitter'
+import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Listener } from '../../../../../types/Listener'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -49,6 +50,12 @@ export default class EventSource_ extends Holder<I, O> {
         http: { EventSource },
       },
     } = this.__system
+
+    if (!EventSource) {
+      fail(apiNotSupportedError('EventSource'))
+
+      return
+    }
 
     const eventSource = new EventSource(url, opt)
 
