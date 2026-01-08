@@ -53,6 +53,12 @@ export function serverResponseBodyToReadableStream(
   system: System,
   body: ServerResponse['body']
 ) {
+  const {
+    api: {
+      window: { ReadableStream },
+    },
+  } = system
+
   if (typeof body === 'string') {
     return stringToReadableStream(system, body)
   } else if (body instanceof ReadableStream) {
