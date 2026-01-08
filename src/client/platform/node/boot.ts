@@ -1,3 +1,4 @@
+import { EventSource } from 'eventsource'
 import * as http from 'http'
 import { JSDOM } from 'jsdom'
 import { ReadableStream as ReadableStream_ } from 'node:stream/web'
@@ -224,6 +225,8 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
     return server
   }
+
+  system.api.http.EventSource = EventSource
 
   system.api.http.handleUpgrade = async (
     request: ServerRequest,
