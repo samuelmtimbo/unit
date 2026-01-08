@@ -73,6 +73,7 @@ export const G_METHOD_CALL = [
   'exposeUnitPinSet',
   'coverUnitPinSet',
   'setPinSetFunctional',
+  'setPinSetDefaultIgnored',
   'setUnitId',
   'setUnitMetadata',
   'setUnitPinData',
