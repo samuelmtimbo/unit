@@ -17,6 +17,7 @@ import { UnitPointerEvent } from './client/event/pointer'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
 import { AllTypes } from './interface'
+import { EventSourceShape } from './system/platform/api/network/EventSource'
 import { WebSocketShape } from './system/platform/api/network/WebSocket'
 import { Classes, Specs } from './types'
 import { Dict } from './types/Dict'
@@ -44,6 +45,7 @@ export interface System extends S, Registry {
     responses: Dict<Waiter<ServerResponse>>
     ws: Dict<WebSocketShape>
     wss: Dict<ServerSocket>
+    eventSources: Dict<EventSourceShape>
     interceptors: ServerInterceptor[]
   }
   feature: Dict<boolean>

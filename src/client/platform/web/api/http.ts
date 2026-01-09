@@ -8,6 +8,7 @@ import {
 } from '../../../../API'
 import { NOOP } from '../../../../NOOP'
 import { BootOpt, System } from '../../../../system'
+import { CUSTOM_HEADER_X_EVENT_SOURCE_ID } from '../../../../system/platform/api/network/EventSource'
 import { WebSocketShape } from '../../../../system/platform/api/network/WebSocket'
 import { Dict } from '../../../../types/Dict'
 import { uuidNotIn } from '../../../../util/id'
@@ -25,7 +26,10 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
       return {
         listen: (port, handler) => {
           const {
-            cache: { servers },
+            cache: { servers, eventSources },
+            api: {
+              window: { nextTick },
+            },
             intercept,
           } = system
 
@@ -35,11 +39,66 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
 
           servers[port] = { opt, handler }
 
+          const handler_ = async (req: ServerRequest) => {
+            const response = await handler(req)
+
+            if (
+              req.method === 'GET' &&
+              req.headers['Accept'] === 'text/event-stream'
+            ) {
+              const internalId =
+                req.headers[CUSTOM_HEADER_X_EVENT_SOURCE_ID] ?? ''
+
+              const eventSource = eventSources[internalId]
+
+              if (internalId) {
+                if (
+                  response.status === 200 &&
+                  response.headers['Content-Type'] === 'text/event-stream'
+                ) {
+                  if (eventSource) {
+                    eventSource.onopen(new Event('open'))
+
+                    if (response.body instanceof ReadableStream) {
+                      nextTick(async () => {
+                        await (response.body as ReadableStream)
+                          .pipeThrough(new TextDecoderStream())
+                          .pipeTo(
+                            new WritableStream({
+                              write(data: string) {
+                                eventSource.onmessage(
+                                  new MessageEvent('message', {
+                                    data,
+                                  })
+                                )
+                              },
+                              close() {
+                                eventSource.readyState = EventSource.CLOSED
+
+                                eventSource.onerror(new Event('error'))
+                              },
+                              abort() {
+                                eventSource.readyState = EventSource.CLOSED
+
+                                eventSource.onerror(new Event('error'))
+                              },
+                            })
+                          )
+                      })
+                    }
+                  }
+                }
+              }
+            }
+
+            return response
+          }
+
           const unlisten = intercept(
             {
               urls: [`http://localhost:${port}`, `ws://localhost:${port}`],
             },
-            handler
+            handler_
           )
 
           return () => {

@@ -168,6 +168,8 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
             if (response.status >= 100 && response.status <= 599) {
               res.writeHead(response.status, '', response.headers)
+
+              res.flushHeaders()
             } else {
               res.writeHead(500)
 
@@ -189,7 +191,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
                   break
                 }
 
-                res.write(Buffer.from(value))
+                res.write(value)
               }
 
               res.end()
