@@ -39,7 +39,7 @@ export interface WebSocketShape {
 }
 
 export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
-  private _web_socket: WebSocketShape | null = null
+  private _webSocket: WebSocketShape | null = null
 
   constructor(system: System) {
     super(
@@ -110,15 +110,21 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       const redirectStatusCodes = [301, 302, 303, 307, 308]
 
       if (redirectStatusCodes.includes(response.status)) {
-        const newUrl = response.headers.get('Location')
+        nextTick(() => {
+          if (this._webSocket) {
+            this._webSocket.readyState = WebSocket.CLOSED
 
-        url = newUrl
+            channel.emit('close', { code: 0, reason: '' })
+          }
+        })
+
+        return
       }
 
       if (response.ok) {
         const internalId = response.headers.get(CUSTOM_HEADER_X_WEBSOCKET_ID)
 
-        this._web_socket = {
+        const webSocket: WebSocketShape = {
           readyState: WebSocket.CLOSED,
           send: function (
             data: string | ArrayBufferLike | Blob | ArrayBufferView
@@ -135,7 +141,7 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             server.onclose(code, reason)
           },
           onopen: function (evevnt: Event): void {
-            //
+            channel.emit('open', {})
           },
           onmessage: function (event: MessageEvent): void {
             const { data } = event
@@ -143,22 +149,22 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
             channel.emit('message', data)
           },
           onerror: function (event: Event): void {
-            //
+            channel.emit('error', '')
           },
           onclose: function (event: CloseEvent): void {
             //
           },
         }
 
-        nextTick(() => {
-          if (this._web_socket) {
-            this._web_socket.readyState = WebSocket.OPEN
+        this._webSocket = webSocket
 
-            channel.emit('open', {})
-          }
+        nextTick(() => {
+          webSocket.readyState = WebSocket.OPEN
+
+          channel.emit('open', {})
         })
 
-        ws[internalId] = this._web_socket
+        ws[internalId] = this._webSocket
       } else {
         fail('failed to connect')
 
@@ -166,7 +172,22 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       }
     } else {
       try {
-        this._web_socket = new WebSocket(url)
+        this._webSocket = new WebSocket(url)
+
+        this._webSocket.onopen = () => {
+          channel.emit('open', {})
+        }
+        this._webSocket.onmessage = (message) => {
+          channel.emit('message', message.data)
+        }
+        this._webSocket.onerror = (event: Event) => {
+          channel.emit('error', '')
+        }
+        this._webSocket.onclose = (event: CloseEvent) => {
+          const { code, reason } = event
+
+          channel.emit('close', { code, reason })
+        }
       } catch (err) {
         if (
           err.message ===
@@ -187,41 +208,28 @@ export default class WebSocket_ extends Holder<I, O, WebSocketEvents> {
       }
     }
 
-    const channel = wrapWebSocket(this._web_socket, this.__system)
-
-    this._web_socket.onopen = () => {
-      channel.emit('open', {})
-    }
-    this._web_socket.onmessage = (message) => {
-      channel.emit('message', message.data)
-    }
-    this._web_socket.onerror = (event: Event) => {
-      fail('could not connect')
-    }
-    this._web_socket.onclose = (event: CloseEvent) => {
-      const { code, reason } = event
-
-      channel.emit('close', { code, reason })
-    }
+    const channel = wrapWebSocket(this._webSocket, this.__system)
 
     done({ channel })
   }
 
   async d() {
-    if (this._web_socket) {
-      this._web_socket.onclose = NOOP
-      this._web_socket.onerror = NOOP
+    if (this._webSocket) {
+      const webSocket = this._webSocket
+
+      this._webSocket = null
+
+      webSocket.onclose = NOOP
+      webSocket.onerror = NOOP
 
       try {
-        await this._web_socket.close()
+        await webSocket.close()
       } catch (err) {
         //
       }
 
-      this._web_socket.onopen = null
-      this._web_socket.onmessage = null
-
-      this._web_socket = null
+      webSocket.onopen = null
+      webSocket.onmessage = null
     }
   }
 }
