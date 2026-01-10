@@ -5499,7 +5499,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     // console.log('moveSubComponentRoot', subComponentId, children, slotMap, index)
 
     const prevParentMap = this.getSubComponentsParentMap(children)
-    const prevSlotMap = this.getSubComponentsParentMap(children)
+    const prevSlotMap = this.getSubComponentsSlotMap(children)
 
     for (let i = 0; i < children.length; i++) {
       const childId = children[i]
