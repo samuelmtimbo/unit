@@ -22052,8 +22052,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._unplug_sub_component_root_base_frame(sub_component_id)
       }
 
-      for (const sub_component_id of sub_component_root) {
-        this._enter_sub_component_frame(sub_component_id)
+      for (const sub_component_id of ordered_sub_component_ids) {
+        this._append_sub_component_all_missing_root(sub_component_id)
+        this._append_sub_component_root_base(sub_component_id)
       }
 
       for (const sub_component_id of sub_component_parent_root) {
@@ -22064,9 +22065,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      for (const sub_component_id of ordered_sub_component_ids) {
-        this._append_sub_component_all_missing_root(sub_component_id)
-        this._append_sub_component_root_base(sub_component_id)
+      for (const sub_component_id of sub_component_root) {
+        this._enter_sub_component_frame(sub_component_id)
       }
 
       for (const sub_component_id of ordered_sub_component_ids) {
@@ -22584,9 +22584,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._unplug_sub_component_root_base_frame(sub_component_id)
 
-          this._enter_sub_component_frame(sub_component_id)
-
           this._append_sub_component_root_base(sub_component_id)
+
+          this._enter_sub_component_frame(sub_component_id)
         }
 
         for (const sub_component_id of visible_parent_root) {
@@ -22624,8 +22624,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._cancel_layout_child_transfer_animation(child_id, false)
             this._cancel_sub_component_base_animation(child_id, false)
 
-            this._enter_sub_component_frame(child_id)
             this._append_sub_component_root_base(child_id)
+
+            this._enter_sub_component_frame(child_id)
           }
         }
       }
@@ -26781,6 +26782,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
 
               for (const sub_component_id of this._fullwindow_component_ids) {
+                this._append_sub_component_all_missing_root(sub_component_id)
+                this._append_sub_component_base(sub_component_id)
+              }
+
+              for (const sub_component_id of this._fullwindow_component_ids) {
                 const parent_id =
                   this._spec_get_sub_component_parent_id(sub_component_id)
                 const at = this._spec_get_sub_component_index(sub_component_id)
@@ -26794,11 +26800,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                     this._append_sub_component_to_root(sub_component_id)
                   }
                 }
-              }
-
-              for (const sub_component_id of this._fullwindow_component_ids) {
-                this._append_sub_component_all_missing_root(sub_component_id)
-                this._append_sub_component_base(sub_component_id)
               }
 
               for (const sub_component_id of this._fullwindow_component_ids) {
@@ -33730,14 +33731,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
         }
 
-        this._unplug_sub_component_root_base_frame(parent_id)
-        this._append_sub_component_root_base(parent_id)
-        this._enter_sub_component_frame(parent_id)
-
         this._end_layout_sub_component_transfer_children_animation(
           parent_id,
           slot_name
         )
+
+        this._unplug_sub_component_root_base_frame(parent_id)
+        this._append_sub_component_root_base(parent_id)
+
+        this._layout_sub_components_commit_base(all_children)
 
         for (const child_id of slot_children) {
           this._cancel_layout_child_transfer_animation(child_id, false)
@@ -33752,7 +33754,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._insert_sub_component_child(parent_id, child_id)
         }
 
-        this._layout_sub_components_commit_base(all_children)
+        this._enter_sub_component_frame(parent_id)
 
         callback && callback()
       }
@@ -36007,8 +36009,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       for (const child_id of children) {
         this._cancel_layout_child_transfer_animation(child_id, false)
 
-        this._enter_sub_component_frame(child_id)
         this._append_sub_component_base(child_id)
+
+        this._enter_sub_component_frame(child_id)
       }
     }
 
@@ -38702,20 +38705,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       stop_parent_animation()
       stop_children_animation()
 
-      this._unplug_sub_component_root_base_frame(sub_component_id)
-      this._enter_sub_component_frame(sub_component_id)
-      this._append_sub_component_root_base(sub_component_id)
-
       this._end_layout_sub_component_transfer_children_animation(
         sub_component_id,
         'default'
       )
 
+      this._unplug_sub_component_root_base_frame(sub_component_id)
+
+      this._append_sub_component_root_base(sub_component_id)
+
+      this._enter_sub_component_frame(sub_component_id)
+
       for (const child_id of children) {
         this._cancel_layout_child_transfer_animation(child_id, false)
 
-        this._enter_sub_component_frame(child_id)
         this._append_sub_component_base(child_id)
+
+        this._enter_sub_component_frame(child_id)
       }
     }
 
