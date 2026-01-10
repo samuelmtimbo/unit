@@ -24,7 +24,7 @@ import {
 import {
   ADD_MERGE,
   ADD_PIN_TO_MERGE,
-  ADD_UNIT,
+  ADD_UNIT_SPEC,
   BULK_EDIT,
   COVER_PIN,
   COVER_PIN_SET,
@@ -91,7 +91,7 @@ import { reverseSelection } from './reverseSelection'
 
 export const reverseAction = ({ type, data }: Action): Action => {
   switch (type) {
-    case ADD_UNIT:
+    case ADD_UNIT_SPEC:
       return makeRemoveUnitAction(
         data.unitId,
         data.bundle,

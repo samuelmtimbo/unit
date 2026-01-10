@@ -46,6 +46,7 @@ import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
 import {
   ADD_UNIT,
+  ADD_UNIT_SPEC,
   MOVE_SUBGRAPH_INTO,
   MOVE_SUBGRAPH_OUT_OF,
   SET_UNIT_PIN_DATA,
@@ -934,7 +935,7 @@ export function evalBulkEdit(
       action.data.data = resolveDataRef(dataRef, specs, classes)
     }
 
-    if (action.type === ADD_UNIT) {
+    if (action.type === ADD_UNIT || action.type === ADD_UNIT_SPEC) {
       let { unitId, bundle } = action.data as GraphAddUnitData
 
       const { unit } = bundle as UnitBundleSpec
@@ -1019,7 +1020,7 @@ export function stringifyBulkEditActions(actions: Action[]) {
       action.data.data = stringify(action.data.data)
     }
 
-    if (action.type === ADD_UNIT) {
+    if (action.type === ADD_UNIT_SPEC) {
       const { bundle } = action.data
       const { unit, specs = {} } = bundle
 

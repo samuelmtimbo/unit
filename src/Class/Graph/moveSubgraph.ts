@@ -1,5 +1,5 @@
 import { Graph } from '.'
-import { ADD_UNIT, REMOVE_UNIT } from '../../spec/actions/G'
+import { ADD_UNIT_SPEC, REMOVE_UNIT } from '../../spec/actions/G'
 import { Dict } from '../../types/Dict'
 import { UCG } from '../../types/interface/UCG'
 import { clone } from '../../util/clone'
@@ -25,7 +25,7 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
         actions.push(clone(move.action))
       }
 
-      if (move.action.type === ADD_UNIT) {
+      if (move.action.type === ADD_UNIT_SPEC) {
         const { unitId, bundle } = move.action.data
 
         const unit_ = units[unitId]

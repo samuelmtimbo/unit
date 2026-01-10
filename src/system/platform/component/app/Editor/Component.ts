@@ -385,7 +385,7 @@ import {
 import {
   ADD_MERGE,
   ADD_PIN_TO_MERGE,
-  ADD_UNIT,
+  ADD_UNIT_SPEC,
   BULK_EDIT,
   COVER_PIN,
   COVER_PIN_SET,
@@ -54140,7 +54140,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { type, data } = clone(action)
 
     switch (type) {
-      case ADD_UNIT:
+      case ADD_UNIT_SPEC:
         {
           const data_ = data as GraphAddUnitData
 

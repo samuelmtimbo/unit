@@ -4,6 +4,7 @@ import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Pins } from '../../Pins'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
+import { snakeToCamel } from '../../client/id'
 import { refSlot, reorderParentRoot, reorderRoot } from '../../component/method'
 import { SELF } from '../../constant/SELF'
 import { GRAPH_EVENT_TO_EXTRACT } from '../../debug/graph/watchGraphInternal'
@@ -2113,14 +2114,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const data = GRAPH_EVENT_TO_EXTRACT[event](...args)
 
-    super.emit('edit', { event, data })
+    const type = snakeToCamel(event)
+
+    super.emit('edit', { type, data })
 
     this._bubble && this._bubble(event, ...args)
-  }
-
-  private _event_to_data = (event: keyof G_EE, ...args: any[]) => {
-    switch (event) {
-    }
   }
 
   private _simPlugPin(
@@ -5896,6 +5894,20 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     // console.log('act', action.type, action.data, propagate)
 
+    const addUnit = (data: GraphAddUnitData) => {
+      const { unitId, bundle, parentId, merges, plugs } = data
+
+      this._addUnitSpec(unitId, bundle, parentId, fork, bubble)
+
+      if (merges) {
+        this._addUnitMerges(merges, propagate, fork, bubble)
+      }
+
+      if (plugs) {
+        this._addUnitPlugs(unitId, plugs, propagate, fork, bubble)
+      }
+    }
+
     processAction(
       this,
       action,
@@ -5906,17 +5918,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           this._setName(name, fork, bubble)
         },
         addUnitSpec: function (data: GraphAddUnitData) {
-          const { unitId, bundle, parentId, merges, plugs } = data
-
-          this._addUnitSpec(unitId, bundle, parentId, fork, bubble)
-
-          if (merges) {
-            this._addUnitMerges(merges, propagate, fork, bubble)
-          }
-
-          if (plugs) {
-            this._addUnitPlugs(unitId, plugs, propagate, fork, bubble)
-          }
+          addUnit(data)
+        },
+        addUnit: function (data: GraphAddUnitData) {
+          addUnit(data)
         },
         removeUnit: function (data: GraphRemoveUnitData) {
           const { unitId } = data

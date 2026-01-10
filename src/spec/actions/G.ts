@@ -87,7 +87,8 @@ import {
 import { getSpec, isComponentSpec } from '../util'
 import { getPinSpec, getPlugCount, getSubPinSpec } from '../util/spec'
 
-export const ADD_UNIT = 'addUnitSpec'
+export const ADD_UNIT_SPEC = 'addUnitSpec'
+export const ADD_UNIT = 'addUnit'
 export const REMOVE_UNIT = 'removeUnit'
 export const TAKE_UNIT_ERR = 'takeUnitErr'
 export const ADD_MERGE = 'addMerge'
@@ -134,7 +135,7 @@ export const SET_SUB_COMPONENT_SIZE = 'setSubComponentSize'
 
 export const wrapAddUnitAction = (data: GraphAddUnitData) => {
   return {
-    type: ADD_UNIT,
+    type: ADD_UNIT_SPEC,
     data,
   }
 }
