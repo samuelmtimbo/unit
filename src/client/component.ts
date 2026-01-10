@@ -3736,8 +3736,14 @@ export class Component<
     return this.$subComponent[id]
   }
 
-  public setControlled(controlled: boolean): void {
+  public setControlled(controlled: boolean, deep: boolean = true): void {
     this.$controlled = controlled
+
+    for (const subComponentId in this.$subComponent) {
+      const subComponent = this.$subComponent[subComponentId]
+
+      subComponent.setControlled(controlled, deep)
+    }
   }
 
   public setDisabled(disabled: boolean): void {

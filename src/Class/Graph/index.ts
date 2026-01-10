@@ -3174,7 +3174,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const currentParentId = this._getSubComponentParentId(subComponentId)
 
     if (currentParentId) {
-      this._simSubComponentRemoveChild(currentParentId, subComponentId)
+      this._simSubComponentRemoveChild(currentParentId, subComponentId, emit)
     } else {
       this._simRemoveRoot(subComponentId, emit)
     }
@@ -3198,12 +3198,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _simSubComponentRemoveChild(
     parentId: string,
-    subComponentId: string
+    subComponentId: string,
+    emit: boolean
   ) {
     const parentComponent = this.getUnit(parentId) as Component_
     const subComponent = this.getUnit(subComponentId) as Component_
 
-    parentComponent.removeParentChild(subComponent)
+    parentComponent.removeParentChild(subComponent, emit)
   }
 
   private _specSubComponentAppendChild(
@@ -3931,7 +3932,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const isComponent = this._isUnitComponent(unitId)
 
-    this._simRemoveUnit(unitId, propagate)
+    this._simRemoveUnit(unitId, true, propagate)
     this._memRemoveUnit(unitId)
     this._specRemoveUnit(unitId, isComponent)
 
@@ -3985,7 +3986,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     delete this._unit[unitId]
   }
 
-  private _simRemoveUnit(unitId: string, emit: boolean = true): void {
+  private _simRemoveUnit(
+    unitId: string,
+    emit: boolean,
+    propagate: boolean
+  ): void {
     const unit = this.getUnit(unitId)
 
     if (unit.hasErr()) {
@@ -3998,9 +4003,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       kind: 'output',
     })
 
-    this._simUnplugUnit(unitId, emit)
+    this._simUnplugUnit(unitId, propagate)
 
-    if (emit) {
+    if (propagate) {
       if (exposedOutputId) {
         this.takeOutput(exposedOutputId)
       }
@@ -4018,7 +4023,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       for (const childId of children) {
         const child = this.getSubComponent(childId)
 
-        this._simSubComponentRemoveChild(unitId, childId)
+        this._simSubComponentRemoveChild(unitId, childId, emit)
 
         this.registerRoot(child, emit)
       }
@@ -6075,20 +6080,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         moveSubComponentRoot: function (data: GraphMoveSubComponentRootData) {
           const { parentId, children, slotMap = {}, index } = data
 
-          for (let i = 0; i < children.length; i++) {
-            const childId = children[i]
-
-            const slotName = slotMap[childId] || 'default'
-
-            this._moveSubComponentRoot(
-              parentId,
-              childId,
-              index + i,
-              slotName,
-              fork,
-              bubble
-            )
-          }
+          this.moveSubComponentRoot(
+            parentId,
+            children,
+            slotMap,
+            index,
+            true,
+            fork,
+            bubble
+          )
         },
         moveSubgraphInto: function (data: GraphMoveSubGraphIntoData) {
           const { graphId, spec, selection, mapping, moves } = data

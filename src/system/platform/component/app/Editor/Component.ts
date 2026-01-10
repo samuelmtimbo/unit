@@ -1094,6 +1094,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._component = component ?? parentComponent({}, this.$system)
 
+    this._component.setControlled(true)
+
     if (editor) {
       mergeProps(editor, {
         specs: this._system.specs,
@@ -1605,6 +1607,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     component.pushRoot(unit_editor)
 
     this._component = component
+
+    this._component.setControlled(true)
 
     const style = this.getProp('style')
 
@@ -37790,6 +37794,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ),
     ]
 
+    this._component.setControlled(true)
+
     this._pod_explode_unit(actions_)
 
     this._state_explode_unit(unit_id, unit, selection, map, actions)
@@ -60934,6 +60940,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       this._component = current
+
+      this._component.setControlled(true)
 
       if (this._is_fullwindow) {
         this._enter_component_frame()
