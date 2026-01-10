@@ -56,8 +56,8 @@ assert.equal(A.$parentRoot.indexOf(C), 1)
 assert.equal(A.$mountParentRoot.indexOf(B), 0)
 assert.equal(A.$mountParentRoot.indexOf(C), 1)
 
-assert.equal(BDiv.$slotParent, ADiv)
-assert.equal(CDiv.$slotParent, ADiv)
+assert.equal(BDiv.$slotParent, BBox)
+assert.equal(CDiv.$slotParent, CBox)
 
 A.removeParentRoot(B)
 A.removeParentRoot(C)
@@ -83,8 +83,8 @@ assert.equal(A.$parentRoot.indexOf(C), 1)
 assert.equal(A.$mountParentRoot.indexOf(B), 0)
 assert.equal(A.$mountParentRoot.indexOf(C), 1)
 
-assert.equal(BDiv.$slotParent, ADiv)
-assert.equal(CDiv.$slotParent, ADiv)
+assert.equal(BDiv.$slotParent, BBox)
+assert.equal(CDiv.$slotParent, CBox)
 
 parentA.removeRoot(A)
 parentA.appendRoot(A)
@@ -107,8 +107,8 @@ assert.equal(A.$parentRoot.indexOf(C), 1)
 assert.equal(A.$mountParentRoot.indexOf(B), 0)
 assert.equal(A.$mountParentRoot.indexOf(C), 1)
 
-assert.equal(BDiv.$slotParent, ADiv)
-assert.equal(CDiv.$slotParent, ADiv)
+assert.equal(BDiv.$slotParent, BBox)
+assert.equal(CDiv.$slotParent, CBox)
 
 parentB.removeRoot(parentA)
 parentB.appendRoot(parentA)
@@ -131,8 +131,8 @@ assert.equal(A.$parentRoot.indexOf(C), 1)
 assert.equal(A.$mountParentRoot.indexOf(B), 0)
 assert.equal(A.$mountParentRoot.indexOf(C), 1)
 
-assert.equal(BDiv.$slotParent, ADiv)
-assert.equal(CDiv.$slotParent, ADiv)
+assert.equal(BDiv.$slotParent, BBox)
+assert.equal(CDiv.$slotParent, CBox)
 
 assert.equal(A.$slotParent, parentB)
 
@@ -157,7 +157,7 @@ assert.equal(A.$parentRoot.indexOf(C), 1)
 assert.equal(A.$mountParentRoot.indexOf(B), 0)
 assert.equal(A.$mountParentRoot.indexOf(C), 1)
 
-assert.equal(BDiv.$slotParent, ADiv)
-assert.equal(CDiv.$slotParent, ADiv)
+assert.equal(BDiv.$slotParent, BBox)
+assert.equal(CDiv.$slotParent, CBox)
 
 assert.equal(A.$slotParent, parentB)

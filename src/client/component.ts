@@ -2595,23 +2595,7 @@ export class Component<
           }
 
           if (!this.$controlled) {
-            const child = this.getSubComponent(childId)
-
-            if (parentId) {
-              const parent = this.getSubComponent(parentId)
-
-              const slotName = 'default'
-
-              if (parent.hasParentRoot(child)) {
-                parent.removeParentRoot(child)
-              }
-              parent.insertParentChildAt(child, slotName, to)
-            } else {
-              if (this.hasRoot(child)) {
-                this.removeRoot(child)
-              }
-              this.insertRootAt(child, to)
-            }
+            this.reorderSubComponent(parentId, childId, to)
           }
         }
       ),
@@ -2650,10 +2634,10 @@ export class Component<
 
                 const slotName = 'default'
 
-                parent.registerParentRoot(child, slotName)
+                parent.registerParentRoot(child, slotName, index)
               } else {
                 if (!this.hasRoot(child)) {
-                  this.registerRoot(child)
+                  this.registerRoot(child, index)
                 }
               }
             }
@@ -2661,6 +2645,27 @@ export class Component<
         }
       ),
     ])
+  }
+
+  public reorderSubComponent(parentId: string, childId: string, to: number) {
+    const child = this.getSubComponent(childId)
+
+    if (parentId) {
+      const parent = this.getSubComponent(parentId)
+
+      const slotName = 'default'
+
+      if (parent.hasParentRoot(child)) {
+        parent.removeParentRoot(child)
+      }
+
+      parent.insertParentChildAt(child, slotName, to)
+    } else {
+      if (this.hasRoot(child)) {
+        this.removeRoot(child)
+      }
+      this.insertRootAt(child, to)
+    }
   }
 
   public disconnect(deep: boolean = true): void {
@@ -2829,7 +2834,7 @@ export class Component<
   }
 
   protected _insertAt(parent: Component, child: Component, at: number) {
-    this.$domChildren[at] = child
+    this.$domChildren.splice(at, 0, child)
 
     child.$domParent = parent
 
@@ -3492,6 +3497,10 @@ export class Component<
         -1
       )
     }
+
+    if (this.$slotParentChildOffset[slotName][at] < at) {
+      this.$slotParentChildOffset[slotName].splice(at, 1)
+    }
   }
 
   public domInsertParentChildAt(
@@ -3503,7 +3512,8 @@ export class Component<
 
     this.$slotParentChildren[slotName] =
       this.$slotParentChildren[slotName] ?? []
-    this.$slotParentChildren[slotName][at] = component
+
+    this.$slotParentChildren[slotName].splice(at, 0, component)
 
     this.$slotParentChildOffset[slotName] =
       this.$slotParentChildOffset[slotName] ?? []
@@ -3513,8 +3523,12 @@ export class Component<
     }
 
     if (!component.$primitive) {
+      let i = 0
+
       for (const root of component.$mountRoot) {
-        this.domInsertParentChildAt(root, slotName, at)
+        this._domInsertParentChildAt(root, slotName, at + i)
+
+        i++
       }
 
       return
@@ -3522,10 +3536,59 @@ export class Component<
 
     if (!this.$primitive) {
       if (this.$slotParent) {
+        let index =
+          this.$slotParent.$slotParentChildren[
+            this.$slotParentSlotName
+          ].indexOf(this)
+
+        index = Math.max(index, 0)
+
         this.$slotParent.domInsertParentChildAt(
           component,
           this.$slotParentSlotName,
-          at
+          index + at
+        )
+
+        return
+      }
+    }
+
+    this.domCommitInsertChild(component, at)
+  }
+
+  public _domInsertParentChildAt(
+    component: Component,
+    slotName: string,
+    at: number
+  ): void {
+    if (component.$detached) {
+      return
+    }
+
+    if (!component.$primitive) {
+      let i = 0
+      for (const root of component.$mountRoot) {
+        this._domInsertParentChildAt(root, slotName, at + i)
+
+        i++
+      }
+
+      return
+    }
+
+    if (!this.$primitive) {
+      if (this.$slotParent) {
+        let index =
+          this.$slotParent.$slotParentChildren[
+            this.$slotParentSlotName
+          ].indexOf(this)
+
+        index = Math.max(index, 0)
+
+        this.$slotParent.domInsertParentChildAt(
+          component,
+          this.$slotParentSlotName,
+          index + at
         )
 
         return
@@ -3575,9 +3638,15 @@ export class Component<
       return
     }
 
+    this.$slotParentChildren[slotName].splice(at, 1)
+
     if (!component.$primitive) {
+      let i = 0
+
       for (const root of component.$mountRoot) {
-        this.domRemoveParentChildAt(root, slotName, at)
+        this._domRemoveParentChildAt(root, slotName, at + i)
+
+        i++
       }
 
       return
@@ -3585,10 +3654,58 @@ export class Component<
 
     if (!this.$primitive) {
       if (this.$slotParent) {
+        const index =
+          this.$slotParent.$slotParentChildren[
+            this.$slotParentSlotName
+          ].indexOf(this)
+
         this.$slotParent.domRemoveParentChildAt(
           component,
           this.$slotParentSlotName,
-          at
+          index + at
+        )
+
+        return
+      }
+    }
+
+    this._decrementParentChildOffset(slotName, at)
+
+    this.domCommitRemoveChild(component, at)
+  }
+
+  private _domRemoveParentChildAt(
+    component: Component,
+    slotName: string,
+    at: number
+  ): void {
+    if (component.$detached) {
+      return
+    }
+
+    if (!component.$primitive) {
+      let i = 0
+
+      for (const root of component.$mountRoot) {
+        this._domRemoveParentChildAt(root, slotName, at + i)
+
+        i++
+      }
+
+      return
+    }
+
+    if (!this.$primitive) {
+      if (this.$slotParent) {
+        const index =
+          this.$slotParent.$slotParentChildren[
+            this.$slotParentSlotName
+          ].indexOf(this)
+
+        this.$slotParent.domRemoveParentChildAt(
+          component,
+          this.$slotParentSlotName,
+          index + at
         )
 
         return
