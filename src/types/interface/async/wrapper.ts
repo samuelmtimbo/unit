@@ -75,4 +75,6 @@ export const ASYNC: AllTypes<(unit: any) => any> = {
   AN: AsyncAN,
   BSN: AsyncBSN,
   ADB: AsyncADB,
+  W: AsyncV,
+  R: AsyncV,
 }
