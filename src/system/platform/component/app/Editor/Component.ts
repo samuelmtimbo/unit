@@ -58992,12 +58992,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._sim_set_datum_value(datumId, datum_node_id, anchor_node_id, data)
       }
 
-      setUnitPinData(
-        { unitId, type, pinId, data: dataRef },
-        this._spec,
-        specs,
-        classes
-      )
+      if (this._is_link_pin_constant(pin_node_id)) {
+        setUnitPinData(
+          { unitId, type, pinId, data: dataRef },
+          this._spec,
+          specs,
+          classes
+        )
+      }
     }
   }
 
