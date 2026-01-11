@@ -34,3 +34,5 @@ src/client/extension/src/*.js
 src/client/extension/src/*.js.map
 
 public/build.json
+
+public/dist
