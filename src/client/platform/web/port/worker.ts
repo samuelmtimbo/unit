@@ -20,7 +20,7 @@ export const workerPort = (worker: Worker): Port => {
   worker.onmessage = (event: MessageEvent) => {
     const { data } = event
 
-    port.onmessage({ data })
+    port.onmessage(data)
   }
 
   return port
