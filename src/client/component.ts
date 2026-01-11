@@ -3727,8 +3727,12 @@ export class Component<
     }
 
     if (this.isParent()) {
-      if (this.$slotParent) {
-        this.$slotParent.domCommitRemoveChild(component, at)
+      if (
+        (this.$element as Node).parentElement &&
+        (this.$element as Node).parentElement ===
+          component.$element.parentElement
+      ) {
+        this.$element.parentElement.removeChild(component.$element)
       } else {
         this._removeChild(component)
       }
