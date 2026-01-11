@@ -31,7 +31,7 @@ export function evaluateUnitBundleSpec(
     return undefined
   }
 ) {
-  evaluateMemorySpec(bundle.unit.memory, specs, classes, resolver)
+  evaluateMemorySpec(bundle.unit.memory ?? {}, specs, classes, resolver)
 }
 
 export function evaluateSpec(
