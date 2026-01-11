@@ -29,7 +29,13 @@ export function boot(
   api: API,
   opt: BootOpt
 ): System {
-  const { specs = {}, classes = {}, components = {}, flags = {} } = opt
+  const {
+    specs = {},
+    classes = {},
+    components = {},
+    flags = {},
+    env = {},
+  } = opt
 
   const path = opt.path || '/'
 
@@ -128,7 +134,7 @@ export function boot(
       graph: {},
       data: new Object_({}),
       scope: {},
-      env: {},
+      env,
     },
     api,
     flags: {

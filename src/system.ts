@@ -131,4 +131,5 @@ export interface BootOpt {
   classes?: Classes
   components?: ComponentClasses
   flags?: System['flags']
+  env?: Dict<string>
 }
