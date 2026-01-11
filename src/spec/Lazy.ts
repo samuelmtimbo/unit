@@ -386,29 +386,48 @@ export function lazyFromSpec(
       )
     }
 
-    public registerRoot(component: Component_, emit?: boolean): void {
+    public registerRoot(
+      component: Component_,
+      subComponentId: string,
+      emit?: boolean
+    ): void {
       this._ensure()
-      return this.__graph.registerRoot(component, emit)
+      return this.__graph.registerRoot(component, subComponentId, emit)
     }
 
-    public unregisterRoot(component: Component_, emit?: boolean): void {
+    public unregisterRoot(
+      component: Component_,
+      subComponentId: string,
+      emit?: boolean
+    ): void {
       this._ensure()
-      return this.__graph.unregisterRoot(component, emit)
+      return this.__graph.unregisterRoot(component, subComponentId, emit)
     }
 
     public registerParentRoot(
       component: Component_,
+      subComponentId: string,
       slotName: string,
       at: number,
       emit?: boolean
     ): void {
       this._ensure()
-      return this.__graph.registerParentRoot(component, slotName, at, emit)
+      return this.__graph.registerParentRoot(
+        component,
+        subComponentId,
+        slotName,
+        at,
+        emit
+      )
     }
 
-    public unregisterParentRoot(component: Component_, emit?: boolean): void {
+    public unregisterParentRoot(
+      component: Component_,
+      subComponentId: string,
+      emit?: boolean
+    ): void {
       this._ensure()
-      return this.__graph.unregisterParentRoot(component, emit)
+      return this.__graph.unregisterParentRoot(component, subComponentId, emit)
     }
 
     public detach(host: Component_, opt: DetachOpt): Unlisten {

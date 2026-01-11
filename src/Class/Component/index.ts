@@ -105,16 +105,25 @@ export class Component__<
     return true
   }
 
-  registerRoot(component: Component_, emit: boolean = true): void {
-    return registerRoot(this, this._root, component, emit)
+  registerRoot(
+    component: Component_,
+    subComponentId: string,
+    emit: boolean = true
+  ): void {
+    return registerRoot(this, this._root, component, subComponentId, emit)
   }
 
-  unregisterRoot(component: Component_, emit: boolean = true): void {
-    return unregisterRoot(this, this._root, component, emit)
+  unregisterRoot(
+    component: Component_,
+    subComponentId: string,
+    emit: boolean = true
+  ): void {
+    return unregisterRoot(this, this._root, component, subComponentId, emit)
   }
 
   reorderRoot(
     component: Component_<ComponentEvents>,
+
     to: number,
     emit: boolean = true
   ): void {
@@ -123,6 +132,7 @@ export class Component__<
 
   registerParentRoot(
     component: Component_,
+    subComponentId: string,
     slotName: string,
     at?: number,
     emit: boolean = true
@@ -130,6 +140,7 @@ export class Component__<
     return registerParentRoot(
       this,
       this._parent_root,
+      subComponentId,
       component,
       slotName,
       at,
@@ -137,8 +148,18 @@ export class Component__<
     )
   }
 
-  unregisterParentRoot(component: Component_, emit: boolean): void {
-    return unregisterParentRoot(this, this._parent_root, component, emit)
+  unregisterParentRoot(
+    component: Component_,
+    subComponentId: string,
+    emit: boolean
+  ): void {
+    return unregisterParentRoot(
+      this,
+      this._parent_root,
+      subComponentId,
+      component,
+      emit
+    )
   }
 
   reorderParentRoot(component: Component_<ComponentEvents>, to: number): void {

@@ -102,7 +102,11 @@ export default class Wrap extends Element_<I, O> implements WP {
     return super.removeChild(at)
   }
 
-  registerParentRoot(component: Component_, slotName: string): void {
+  registerParentRoot(
+    component: Component_,
+    subComponentId: string,
+    slotName: string
+  ): void {
     // console.log('Wrap', 'registerParentRoot')
 
     const container = new this._Container(this.__system)
@@ -111,15 +115,19 @@ export default class Wrap extends Element_<I, O> implements WP {
 
     this._parent_container.push(container)
 
-    return super.registerParentRoot(component, slotName)
+    return super.registerParentRoot(component, subComponentId, slotName)
   }
 
-  unregisterParentRoot(component: Unit & C, emit: boolean = true): void {
+  unregisterParentRoot(
+    component: Unit & C,
+    subComponentId: string,
+    emit: boolean = true
+  ): void {
     const at = this._parent_container.indexOf(component)
 
     this._parent_container.splice(at, 1)
 
-    return super.unregisterParentRoot(component, emit)
+    return super.unregisterParentRoot(component, subComponentId, emit)
   }
 
   appendParentChild(component: Component_, slotName: string): void {

@@ -15,10 +15,10 @@ export type C_EE = {
   [remove_child_at: `remove_child_at_${number}`]: [number]
   append_parent_root: [string, string, string]
   append_parent_root_children: [string, string[], Dict<string>]
-  register_parent_root: [Component_, string]
-  unregister_parent_root: [Component_]
-  register_root: [Component_]
-  unregister_root: [Component_]
+  register_parent_root: [Component_, string, string]
+  unregister_parent_root: [Component_, string]
+  register_root: [Component_, string]
+  unregister_root: [Component_, string]
   set_sub_component: [string, UnitBundleSpec]
   append_parent_child: [Component_, string]
   remove_parent_child: [Component_]
@@ -44,16 +44,29 @@ export type ComponentSetup = {
 }
 
 export interface C {
-  registerRoot(component: Component_, ...extra: any[]): void
-  unregisterRoot(component: Component_, ...extra: any[]): void
+  registerRoot(
+    component: Component_,
+    subComponentId: string,
+    ...extra: any[]
+  ): void
+  unregisterRoot(
+    component: Component_,
+    subComponentId: string,
+    ...extra: any[]
+  ): void
   reorderRoot(component: Component_, to: number, ...extra: any[]): void
   registerParentRoot(
     component: Component_,
+    subComponentId: string,
     slotName: string,
     at?: number,
     ...extra: any[]
   ): void
-  unregisterParentRoot(component: Component_, ...extra: any[]): void
+  unregisterParentRoot(
+    component: Component_,
+    subComponentId: string,
+    ...extra: any[]
+  ): void
   reorderParentRoot(component: Component_, to: number, ...extra: any[]): void
   appendParentChild(
     component: Component_,

@@ -196,6 +196,7 @@ export function refSlot(
 export function registerParentRoot(
   component: Component_,
   parentRoot: Component_[],
+  subComponentId: string,
   child: Component_,
   slotName: string,
   at: number = undefined,
@@ -211,12 +212,14 @@ export function registerParentRoot(
 
   slot.appendParentChild(component, 'default')
 
-  emit && component.emit('register_parent_root', child, slotName)
+  emit &&
+    component.emit('register_parent_root', child, subComponentId, slotName)
 }
 
 export function unregisterParentRoot(
   component: Component_,
   parentRoot: Component_[],
+  subComponentId: string,
   child: Component_,
   emit: boolean
 ): void {
@@ -224,7 +227,7 @@ export function unregisterParentRoot(
 
   parentRoot.splice(at, 1)
 
-  emit && component.emit('unregister_parent_root', child)
+  emit && component.emit('unregister_parent_root', child, subComponentId)
 }
 
 export function reorderRoot(
@@ -271,24 +274,26 @@ export function unregisterRoot(
   component: Component_,
   root: Component_[],
   child: Component_,
+  subComponentId: string,
   emit: boolean
 ): void {
   const at = root.indexOf(child)
 
   root.splice(at, 1)
 
-  emit && component.emit('unregister_root', child)
+  emit && component.emit('unregister_root', child, subComponentId)
 }
 
 export function registerRoot(
   component: Component_,
   root: Component_[],
   child: Component_,
+  subComponentId: string,
   emit: boolean
 ): void {
   root.push(child)
 
-  emit && component.emit('register_root', child)
+  emit && component.emit('register_root', child, subComponentId)
 }
 
 export function appendParentChild(

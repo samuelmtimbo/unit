@@ -2434,25 +2434,17 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_root' },
-        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
+        ([globalRef, subComponentId, path = []]: [
+          GlobalRefSpec,
+          string,
+          string[],
+        ]) => {
           if (!this.$controlled) {
             if (path.length > 0) {
               return
             }
 
-            const { globalId } = globalRef
-
-            let subComponent: Component
-
-            for (const subComponentId in this.$subComponent) {
-              const siblingComponent = this.$subComponent[subComponentId]
-
-              if (siblingComponent.$remoteId === globalId) {
-                subComponent = siblingComponent
-
-                break
-              }
-            }
+            const subComponent: Component = this.$subComponent[subComponentId]
 
             if (subComponent) {
               if (
@@ -2471,28 +2463,17 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_root' },
-        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
+        ([globalRef, subComponentId, path = []]: [
+          GlobalRefSpec,
+          string,
+          string[],
+        ]) => {
           if (!this.$controlled) {
             if (path.length > 0) {
               return
             }
 
-            const { globalId } = globalRef
-
-            let subComponent: Component
-
-            for (const subComponentId in this.$subComponent) {
-              const siblingComponent = this.$subComponent[subComponentId]
-
-              if (
-                siblingComponent.$remoteId === globalId &&
-                siblingComponent.$mounted
-              ) {
-                subComponent = siblingComponent
-
-                break
-              }
-            }
+            const subComponent: Component = this.$subComponent[subComponentId]
 
             if (subComponent) {
               for (const parentRoot of [...subComponent.$parentRoot]) {
@@ -2510,12 +2491,13 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_parent_root' },
-        ([globalRef, slotName, path = []]: [
+        ([globalRef, subComponentId, slotName, path = []]: [
           GlobalRefSpec,
+          string,
           string,
           string[],
         ]) => {
-          if (!this.$controlled) {
+          if (!this.$controlled && !this.$parent.$controlled) {
             if (path.length > 0) {
               return
             }
@@ -2528,38 +2510,24 @@ export class Component<
               return
             }
 
-            let subComponent: Component
+            const subComponent: Component =
+              this.$parent.$subComponent[subComponentId]
 
-            if (!this.$parent.$controlled) {
-              for (const subComponentId in this.$parent.$subComponent) {
-                const siblingComponent =
-                  this.$parent.$subComponent[subComponentId]
-
-                if (siblingComponent.$remoteId === globalId) {
-                  subComponent = siblingComponent
-
-                  break
-                }
+            if (subComponent) {
+              if (
+                subComponent.$rootParent &&
+                subComponent.$rootParent.$mountParentRoot.includes(subComponent)
+              ) {
+                subComponent.$rootParent.removeParentRoot(subComponent)
+              } else if (
+                subComponent.$parent &&
+                subComponent.$parent.$mountRoot.includes(subComponent)
+              ) {
+                subComponent.$parent.removeRoot(subComponent)
               }
 
-              if (subComponent) {
-                if (
-                  subComponent.$rootParent &&
-                  subComponent.$rootParent.$mountParentRoot.includes(
-                    subComponent
-                  )
-                ) {
-                  subComponent.$rootParent.removeParentRoot(subComponent)
-                } else if (
-                  subComponent.$parent &&
-                  subComponent.$parent.$mountRoot.includes(subComponent)
-                ) {
-                  subComponent.$parent.removeRoot(subComponent)
-                }
-
-                if (!this.hasParentRoot(subComponent)) {
-                  this.registerParentRoot(subComponent)
-                }
+              if (!this.hasParentRoot(subComponent)) {
+                this.registerParentRoot(subComponent, slotName)
               }
             }
           }
@@ -2567,7 +2535,11 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_parent_root' },
-        ([globalRef, path = []]: [GlobalRefSpec, string[]]) => {
+        ([globalRef, subComponentId, path = []]: [
+          GlobalRefSpec,
+          string,
+          string[],
+        ]) => {
           if (!this.$controlled) {
             if (path.length > 0) {
               return
