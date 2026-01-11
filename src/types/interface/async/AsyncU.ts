@@ -16,7 +16,10 @@ import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { evaluateDataValue } from '../../../spec/evaluateDataValue'
 import { resolveDataRef } from '../../../spec/resolveDataValue'
 import { stringify } from '../../../spec/stringify'
-import { stringifyMemorySpecData } from '../../../spec/stringifySpec'
+import {
+  stringifyMemorySpecData,
+  stringifyUnitBundleSpecData,
+} from '../../../spec/stringifySpec'
 import { clone } from '../../../util/clone'
 import { mapObjVK } from '../../../util/object'
 import { Callback } from '../../Callback'
@@ -99,6 +102,8 @@ export const AsyncUGet = (unit: Unit<any, any, any>): $U_G => {
       callback: Callback<UnitBundleSpec>
     ): void {
       const unitBundleSpec = unit.getUnitBundleSpec(data)
+
+      stringifyUnitBundleSpecData(unitBundleSpec)
 
       const $unitBundleSpec = clone(unitBundleSpec)
 
