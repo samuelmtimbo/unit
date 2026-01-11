@@ -59565,6 +59565,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { unitId, err } = data
 
+    if (!this._spec_has_unit(unitId)) {
+      return
+    }
+
     this._graph_debug_set_unit_err(unitId, err)
   }
 
