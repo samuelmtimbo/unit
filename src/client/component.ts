@@ -3506,7 +3506,7 @@ export class Component<
       return
     }
 
-    if (!this.$primitive) {
+    if (this.isParent()) {
       if (this.$slotParent) {
         let index =
           this.$slotParent.$slotParentChildren[
@@ -3624,7 +3624,7 @@ export class Component<
       return
     }
 
-    if (!this.$primitive) {
+    if (this.isParent()) {
       if (this.$slotParent) {
         const index =
           this.$slotParent.$slotParentChildren[
@@ -3705,6 +3705,13 @@ export class Component<
           component.$element.parentElement
       ) {
         this.$element.parentElement.removeChild(component.$element)
+      } else if (this.$slotParent) {
+        const index =
+          this.$slotParent.$slotParentChildren[
+            this.$slotParentSlotName
+          ].indexOf(this)
+
+        this.$slotParent.domCommitRemoveChild(component, index)
       } else {
         this._removeChild(component)
       }
