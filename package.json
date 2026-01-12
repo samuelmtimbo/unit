@@ -33,7 +33,7 @@
     "start": "run-s serve",
     "stop": "sudo node_modules/kill-port/cli.js 4000",
     "serve": "node lib/server/index.js",
-    "setup": "run-s build lib",
+    "setup": "run-s lib build",
     "prepare": "",
     "type": "tsc --noEmit",
     "lib": "run-s rm tsc",
