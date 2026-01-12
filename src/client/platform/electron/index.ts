@@ -20,4 +20,6 @@ app
   .then(() => {
     void createWindow()
   })
-  .catch((err) => {})
+  .catch(() => {
+    process.exit(1)
+  })
