@@ -21978,7 +21978,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     void Promise.all(promises)
       .then(callback)
-      .catch(() => {})
+      .catch(() => {
+        callback()
+      })
   }
 
   private _is_layout_parent_visible = (sub_component_id: string) => {

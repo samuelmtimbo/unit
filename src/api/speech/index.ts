@@ -108,7 +108,9 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
         // throw an exception if it is called twice in a row - swallow it
         try {
           this._recognition.stop()
-        } catch {}
+        } catch {
+          // Expected: stop() throws if called twice per Web Speech API spec
+        }
         // this._recognition.abort()
       }
     }
