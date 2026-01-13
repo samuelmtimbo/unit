@@ -16654,6 +16654,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     link.appendChild(link_base_text)
     link.appendChild(link_text)
 
+    link.preventDefault('mousedown')
+    link.preventDefault('touchdown')
+
     return link
   }
 
