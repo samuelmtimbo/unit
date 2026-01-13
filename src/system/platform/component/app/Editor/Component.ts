@@ -28908,12 +28908,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._unplug_sub_component_base_frame(sub_component_id)
 
-        this._enter_sub_component_frame(sub_component_id)
-
         this._compose_sub_component(sub_component_id)
 
         this._append_sub_component_all_missing_root(sub_component_id)
         this._append_sub_component_base(sub_component_id)
+
+        this._enter_sub_component_frame(sub_component_id)
 
         callback()
       }
@@ -31782,7 +31782,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           for (const sub_sub_component_leaf of base) {
             const [_, leaf_comp] = sub_sub_component_leaf
 
-            const leaf_offset = leaf_comp.getOffset()
+            const leaf_offset = leaf_comp.getOffset() ?? leaf_comp
 
             const leaf_trait = extractTrait(leaf_offset, measureText)
 

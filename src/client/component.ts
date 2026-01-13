@@ -197,6 +197,7 @@ export class Component<
   public $parent: Component | null = null
   public $slotParent: Component | null = null
   public $slotParentSlotName: string | null = null
+  public $slotParentSlotIndex: number | null = null
   public $domParent: Component | null = null
   public $detachedContext: Context | null = null
   public $detachedSlotParent: Component | null = null
@@ -716,7 +717,7 @@ export class Component<
 
       frame.appendChild(leaf.$element)
 
-      leaf.setSlotParent(target, 'default')
+      leaf.setSlotParent(target, 'default', 0)
 
       leaf.mount(target.$context)
 
@@ -1477,7 +1478,7 @@ export class Component<
           offset.$element.style.position === 'absolute')
       )
     ) {
-      offset = offset.$slotParent
+      offset = offset.$slotParent ?? offset.$domParent
     }
 
     return offset
@@ -1986,10 +1987,6 @@ export class Component<
     const at_ = this.$slotChildren[slotName].length
 
     this._domAppendChild(fragment, slotName, at_)
-
-    for (const child of children) {
-      child.setSlotParent(slot, slotName)
-    }
   }
 
   public getLeafSlot(slotName: string) {
@@ -2002,9 +1999,10 @@ export class Component<
     return slot
   }
 
-  protected setSlotParent(slotParent: Component, slotName: string) {
+  protected setSlotParent(slotParent: Component, slotName: string, at: number) {
     this.$slotParent = slotParent
     this.$slotParentSlotName = slotName
+    this.$slotParentSlotIndex = at
   }
 
   private _domAppendChild(
@@ -2114,8 +2112,6 @@ export class Component<
     if (child.$detached) {
       return
     }
-
-    child.setSlotParent(null, null)
   }
 
   public postRemoveChild(child: Component, at: number): void {
@@ -2806,6 +2802,10 @@ export class Component<
   }
 
   protected _insertAt(parent: Component, child: Component, at: number) {
+    if (child.$domParent) {
+      child.$domParent._removeChild_(child)
+    }
+
     this.$domChildren.splice(at, 0, child)
 
     child.$domParent = parent
@@ -2815,7 +2815,8 @@ export class Component<
     insertAt(parent.$element, target, at)
   }
 
-  protected _insertAt__bound = this._insertAt.bind(this)
+  protected _insertAt_ = this._insertAt.bind(this)
+  protected _removeChild_ = this._removeChild.bind(this)
 
   private _svg_wrapper_unlisten: Unlisten[] = []
 
@@ -3105,21 +3106,11 @@ export class Component<
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, this._insertAt__bound)
-  }
-
-  protected _domCommitChild__template = (
-    component: Component,
-    at: number,
-    callback: (parent: Component, child: Component, at: number) => void
-  ) => {
     if (component.isParent()) {
       let i = 0
 
-      for (const root of component.$root) {
-        root.setSlotParent(this, 'default')
-
-        this._domCommitChild__template(root, at + i, callback)
+      for (const root of component.$mountRoot) {
+        this.domCommitInsertChild(root, at + i)
 
         i++
       }
@@ -3129,19 +3120,15 @@ export class Component<
 
     if (this.isParent()) {
       if (this.$slotParent) {
-        const index =
-          this.$slotParent.$slotParentChildren['default'].indexOf(this)
-
-        this.$slotParent._domCommitChild__template(
+        this.$slotParent.domCommitInsertChild(
           component,
-          index + at,
-          callback
+          this.$slotParentSlotIndex + at
         )
       } else {
-        callback(this, component, at)
+        this._insertAt_(this, component, at)
       }
     } else {
-      callback(this, component, at)
+      this._insertAt_(this, component, at)
     }
   }
 
@@ -3229,7 +3216,7 @@ export class Component<
     for (const component of [...this.$mountRoot]) {
       this.removeRoot(component)
 
-      deep && component.uncollapse(deep, this.$slotParent)
+      deep && component.uncollapse(deep)
     }
   }
 
@@ -3299,7 +3286,7 @@ export class Component<
   }
 
   public unregisterParentRoot(component: Component): void {
-    this.removeParentRoot(component, this.$slotParent)
+    this.removeParentRoot(component)
     this.pullParentRoot(component)
   }
 
@@ -3317,11 +3304,11 @@ export class Component<
     }
   }
 
-  public uncollapse(deep: boolean = true, slotParent?: Component): void {
+  public uncollapse(deep: boolean = true): void {
     for (const component of this.$parentRoot) {
-      this.removeParentRoot(component, slotParent)
+      this.removeParentRoot(component)
 
-      deep && component.uncollapse(deep, slotParent ?? this.$slotParent)
+      deep && component.uncollapse(deep)
     }
   }
 
@@ -3480,7 +3467,7 @@ export class Component<
     slotName: string,
     at: number
   ): void {
-    component.setSlotParent(this, slotName)
+    component.setSlotParent(this, slotName, at)
 
     this.$slotParentChildren[slotName] =
       this.$slotParentChildren[slotName] ?? []
@@ -3506,24 +3493,19 @@ export class Component<
       return
     }
 
-    if (this.isParent()) {
+    if (!this.$primitive) {
       if (this.$slotParent) {
-        let index =
-          this.$slotParent.$slotParentChildren[
-            this.$slotParentSlotName
-          ].indexOf(this)
-
-        index = Math.max(index, 0)
-
         this.$slotParent.domInsertParentChildAt(
           component,
           this.$slotParentSlotName,
-          index + at
+          this.$slotParentSlotIndex + at
         )
 
         return
       }
     }
+
+    this._incrementParentChildOffset(slotName, at)
 
     this.domCommitInsertChild(component, at)
   }
@@ -3538,11 +3520,8 @@ export class Component<
     }
 
     if (!component.$primitive) {
-      let i = 0
       for (const root of component.$mountRoot) {
-        this._domInsertParentChildAt(root, slotName, at + i)
-
-        i++
+        this._domInsertParentChildAt(root, slotName, at)
       }
 
       return
@@ -3550,17 +3529,10 @@ export class Component<
 
     if (!this.$primitive) {
       if (this.$slotParent) {
-        let index =
-          this.$slotParent.$slotParentChildren[
-            this.$slotParentSlotName
-          ].indexOf(this)
-
-        index = Math.max(index, 0)
-
         this.$slotParent.domInsertParentChildAt(
           component,
           this.$slotParentSlotName,
-          index + at
+          this.$slotParentSlotIndex + at
         )
 
         return
@@ -3610,8 +3582,6 @@ export class Component<
       return
     }
 
-    this.$slotParentChildren[slotName].splice(at, 1)
-
     if (!component.$primitive) {
       let i = 0
 
@@ -3624,22 +3594,21 @@ export class Component<
       return
     }
 
-    if (this.isParent()) {
+    if (!this.$primitive) {
       if (this.$slotParent) {
-        const index =
-          this.$slotParent.$slotParentChildren[
-            this.$slotParentSlotName
-          ].indexOf(this)
-
-        this.$slotParent.domRemoveParentChildAt(
+        this.$slotParent._domRemoveParentChildAt(
           component,
           this.$slotParentSlotName,
-          index + at
+          this.$slotParentSlotIndex + at
         )
 
         return
       }
     }
+
+    component.setSlotParent(null, null, null)
+
+    this.$slotParentChildren[slotName].splice(at, 1)
 
     this._decrementParentChildOffset(slotName, at)
 
@@ -3656,12 +3625,8 @@ export class Component<
     }
 
     if (!component.$primitive) {
-      let i = 0
-
       for (const root of component.$mountRoot) {
-        this._domRemoveParentChildAt(root, slotName, at + i)
-
-        i++
+        this._domRemoveParentChildAt(root, slotName, at)
       }
 
       return
@@ -3669,15 +3634,10 @@ export class Component<
 
     if (!this.$primitive) {
       if (this.$slotParent) {
-        const index =
-          this.$slotParent.$slotParentChildren[
-            this.$slotParentSlotName
-          ].indexOf(this)
-
-        this.$slotParent.domRemoveParentChildAt(
+        this.$slotParent._domRemoveParentChildAt(
           component,
           this.$slotParentSlotName,
-          index + at
+          this.$slotParentSlotIndex + at
         )
 
         return
@@ -3691,8 +3651,12 @@ export class Component<
 
   protected domCommitRemoveChild(component: Component, at: number) {
     if (component.isParent()) {
+      let i = 0
+
       for (const root of component.$root) {
-        this.domCommitRemoveChild(root, at)
+        this.domCommitRemoveChild(root, at + i)
+
+        i++
       }
 
       return
@@ -3711,12 +3675,12 @@ export class Component<
             this.$slotParentSlotName
           ].indexOf(this)
 
-        this.$slotParent.domCommitRemoveChild(component, index)
+        this.$slotParent.domCommitRemoveChild(component, index + at)
       } else {
-        this._removeChild(component)
+        this._removeChild_(component)
       }
     } else {
-      this._removeChild(component)
+      this._removeChild_(component)
     }
   }
 
@@ -3778,14 +3742,14 @@ export class Component<
     this.insertParentRootAt(component, 0, slotName)
   }
 
-  public removeParentRoot(component: Component, slotParent?: Component): void {
+  public removeParentRoot(component: Component): void {
     const at = this.$parentRoot.indexOf(component)
-    const _at = this.$mountParentRoot.indexOf(component)
+    const at_ = this.$mountParentRoot.indexOf(component)
     const slotName = this.$parentRootSlotName[at]
 
-    this.postRemoveParentRootAt(component, slotName, at, _at)
-    this.domRemoveParentRootAt(component, slotName, _at)
-    this.memRemoveParentRootAt(component, slotName, _at)
+    this.postRemoveParentRootAt(component, slotName, at)
+    this.domRemoveParentRootAt(component, slotName, at_)
+    this.memRemoveParentRootAt(component, slotName, at_)
   }
 
   public memRemoveParentRoot(component: Component): void {
@@ -3824,8 +3788,7 @@ export class Component<
   public postRemoveParentRootAt(
     component: Component,
     slotName: string,
-    at: number,
-    _at: number
+    at: number
   ): void {
     if (this.$mounted) {
       component.unmount()
