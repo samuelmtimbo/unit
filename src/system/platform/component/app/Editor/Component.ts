@@ -16654,6 +16654,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     link.appendChild(link_base_text)
     link.appendChild(link_text)
 
+    link.preventDefault('mousedown')
+    link.preventDefault('touchdown')
+
     return link
   }
 
@@ -28908,12 +28911,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._unplug_sub_component_base_frame(sub_component_id)
 
-        this._enter_sub_component_frame(sub_component_id)
-
         this._compose_sub_component(sub_component_id)
 
         this._append_sub_component_all_missing_root(sub_component_id)
         this._append_sub_component_base(sub_component_id)
+
+        this._enter_sub_component_frame(sub_component_id)
 
         callback()
       }
@@ -31782,7 +31785,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           for (const sub_sub_component_leaf of base) {
             const [_, leaf_comp] = sub_sub_component_leaf
 
-            const leaf_offset = leaf_comp.getOffset()
+            const leaf_offset = leaf_comp.getOffset() ?? leaf_comp
 
             const leaf_trait = extractTrait(leaf_offset, measureText)
 
@@ -34159,8 +34162,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             all_target_layer[sub_component_id] = parent_layer.children
           } else {
-            all_root_base[parent_id] = all_root_base[parent_id] || []
-            all_root_base[parent_id] = [...all_root_base[parent_id], ...base_]
+            let root_id = parent_id
+
+            let root_parent_id = this._spec_get_sub_component_parent_id(root_id)
+
+            while (
+              root_parent_id &&
+              !this._is_layout_component_layer_visible(root_parent_id)
+            ) {
+              root_id = root_parent_id
+              root_parent_id = this._spec_get_sub_component_parent_id(root_id)
+            }
+
+            all_root_base[root_id] = all_root_base[root_id] || []
+            all_root_base[root_id] = [...all_root_base[root_id], ...base_]
 
             all_target_layer[sub_component_id] = grandparent_layer.children
           }
