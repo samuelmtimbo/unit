@@ -14,7 +14,11 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
 
       data.__ = data.__ ?? []
 
-      const $unit = method(data)
+      const $obj = method(data)
+
+      if (!$obj) {
+        return
+      }
 
       const remoteApi: RemoteAPI = {
         get: {},
@@ -34,14 +38,14 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
 
             if (type === 'ref') {
               remoteApi[type][$methodName] = (...args) => {
-                let result = $unit[$methodName](...args)
+                let result = $obj[$methodName](...args)
 
                 result = makeRemoteObjectAPI(result, result.__)
 
                 return result
               }
             } else {
-              remoteApi[type][$methodName] = $unit[$methodName]
+              remoteApi[type][$methodName] = $obj[$methodName]
             }
           }
         }
