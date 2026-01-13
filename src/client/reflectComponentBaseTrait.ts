@@ -250,26 +250,17 @@ export type ExtractStyleFunction = (
   parent: Component
 ) => Style
 
-export const getChildLeaves = (
-  component: Component,
-  expand: boolean
-): Component[] => {
+export const getChildLeaves = (component: Component): Component[] => {
   let leaves: Component[] = []
 
-  const base = component.$parentChildren.reduce((acc, child) => {
+  component.$parentChildren.forEach((child) => {
     const base = child.getRootLeaves()
 
-    return [...acc, ...base]
-  }, [])
-
-  if (expand) {
-    for (const leaf_comp of base) {
-      leaves.push(leaf_comp)
-    }
-  }
+    leaves.push(...base)
+  })
 
   for (const child of component.$domChildren) {
-    if (!leaves.includes(child) && !base.includes(child)) {
+    if (!leaves.includes(child)) {
       leaves.push(child)
     }
   }
@@ -298,7 +289,9 @@ export const expandSlot = (
   let parent = slot
 
   for (let i of path) {
-    const all = getChildLeaves(parent, true)
+    const all = parent.isBase()
+      ? getChildLeaves(parent)
+      : parent.getRootLeaves()
 
     parent = all[i]
 
@@ -314,7 +307,6 @@ export const expandSlot = (
 
   const sub_sub_component_id = sub_parent_path[0]
 
-  // if (expand || path.length === 0) {
   parent.$parentChildren.forEach((child) => {
     const parent_path = getParentPath(child, component)
 
@@ -346,13 +338,8 @@ export const expandSlot = (
       }
     }
   })
-  // }
 
-  for (const child of parent.$domChildren) {
-    if (!child) {
-      continue
-    }
-
+  parent.$domChildren.forEach((child) => {
     if (!leaves.includes(child)) {
       const attr = extractComponentAttr(child, trait)
       const style = rawExtractStyle(
@@ -370,7 +357,7 @@ export const expandSlot = (
         textContent,
       })
     }
-  }
+  })
 
   return styles
 }

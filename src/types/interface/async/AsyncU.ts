@@ -216,6 +216,10 @@ export const AsyncURef = (unit: Unit): $U_R => {
 
       const $ = getGlobalRef(system, globalId)
 
+      if (!$) {
+        return null
+      }
+
       const $obj = Async($, __, system.async)
 
       return $obj

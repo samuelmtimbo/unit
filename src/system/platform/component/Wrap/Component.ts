@@ -84,7 +84,7 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
 
     if (this.$mountParentRoot.includes(child)) {
       super.domRemoveParentRootAt(container, childSlot, at)
-      super.postRemoveParentRootAt(container, childSlot, at, at)
+      super.postRemoveParentRootAt(container, childSlot, at)
 
       container.removeChild(child)
 
@@ -394,12 +394,11 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
   public postRemoveParentRootAt(
     component: Component,
     slotName: string,
-    at: number,
-    _at: number
+    at: number
   ): void {
     // console.log('Wrap', 'postRemoveParentRootAt', component, at)
 
-    super.postRemoveParentRootAt(component, slotName, at, _at)
+    super.postRemoveParentRootAt(component, slotName, at)
   }
 
   public domInsertParentRootAt(
