@@ -34159,8 +34159,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             all_target_layer[sub_component_id] = parent_layer.children
           } else {
-            all_root_base[parent_id] = all_root_base[parent_id] || []
-            all_root_base[parent_id] = [...all_root_base[parent_id], ...base_]
+            let root_id = parent_id
+
+            let root_parent_id = this._spec_get_sub_component_parent_id(root_id)
+
+            while (
+              root_parent_id &&
+              !this._is_layout_component_layer_visible(root_parent_id)
+            ) {
+              root_id = root_parent_id
+              root_parent_id = this._spec_get_sub_component_parent_id(root_id)
+            }
+
+            all_root_base[root_id] = all_root_base[root_id] || []
+            all_root_base[root_id] = [...all_root_base[root_id], ...base_]
 
             all_target_layer[sub_component_id] = grandparent_layer.children
           }
