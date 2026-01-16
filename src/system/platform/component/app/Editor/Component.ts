@@ -50386,7 +50386,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
 
         if (parent_id) {
-          const parent_component = this._get_sub_component(parent_id)
+          const parent_component =
+            this._get_sub_component(parent_id) ?? sub_component_map[parent_id]
 
           let parent_root_id = parent_id
           while (parent_root_id && !this._collapse_node_id.has(parent_id)) {
@@ -50399,12 +50400,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               graph_component.getSubComponent(parent_root_id)
 
             if (parent_root_id === parent_id) {
-              //
+              this._component.pullRoot(sub_component)
             } else {
               parent_component.pullParentRoot(sub_component)
               parent_root_sub_component.pushParentRoot(sub_component, 'default')
             }
           } else {
+            this._component.pullRoot(sub_component)
+
             parent_component.pullParentRoot(sub_component)
 
             push()

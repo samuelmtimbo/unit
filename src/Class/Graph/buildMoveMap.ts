@@ -798,8 +798,9 @@ export function buildMoveMap(
             )
 
             if (
-              !unit?.[type]?.[pinId].ignored &&
-              !spec?.[`${type}s`]?.[pinId].defaultIgnored
+              !(unit?.[type]?.[pinId].ignored === true) ||
+              (unit?.[type]?.[pinId].ignored === undefined &&
+                !spec?.[`${type}s`]?.[pinId].defaultIgnored)
             ) {
               const pinData = deepGetOrDefault(
                 data,
