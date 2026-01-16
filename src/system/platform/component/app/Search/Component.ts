@@ -1312,23 +1312,11 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _on_enter_keydown = (): void => {
-    const {
-      api: {
-        window: { setTimeout },
-      },
-    } = this.$system
-
     if (!this._list_hidden && this._selected_id) {
-      setTimeout(() => {
-        if (this._selected_id) {
-          // Safari
-          // apparently selecting the input might inadvertently refocus it,
-          // which is certainly unexpected, so this call must absolutely
-          // come before dispatching a (possibly side-effecting) event
-          this._select_all()
-          this._dispatch_item_pick(this._selected_id)
-        }
-      }, 0)
+      if (this._selected_id) {
+        this._select_all()
+        this._dispatch_item_pick(this._selected_id)
+      }
     }
   }
 
