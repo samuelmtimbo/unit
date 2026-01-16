@@ -3160,6 +3160,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _abort_sub_component_parent_animation: Dict<Unlisten> = {}
   private _abort_sub_component_child_transfer: Dict<Unlisten> = {}
 
+  private _animating_removed_sub_component_set: Set<string> = new Set()
+
   private _gamepad_connection_unlisten: Unlisten | undefined
   private _gamepad_unlisten: Unlisten | undefined
 
@@ -23016,6 +23018,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (this._abort_sub_component_parent_animation[sub_component_id]) {
+      return true
+    }
+
+    if (this._animating_removed_sub_component_set.has(sub_component_id)) {
       return true
     }
 
@@ -43124,9 +43130,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const collapsing = this._collapse_init_node_id_set.has(unit_id)
 
-    displace = displace && !collapsing
-    pull_from_parent = pull_from_parent && !collapsing
-
     const sub_component = this._get_sub_component(unit_id)
 
     const parent_id = this._spec_get_sub_component_parent_id(unit_id)
@@ -43143,9 +43146,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._cancel_leave_sub_component_animation(unit_id)
 
     if (animating) {
-      const base = this._get_sub_component_base(unit_id)
+      if (!this._animating_removed_sub_component_set.has(unit_id)) {
+        const base = this._get_sub_component_base(unit_id)
 
-      this._unplug_base_frame(unit_id, base)
+        this._unplug_base_frame(unit_id, base)
+      }
     }
 
     if (this._tree_layout) {
@@ -43192,7 +43197,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     if (this._is_sub_component_animating(unit_id)) {
-      this._unplug_sub_component_base_frame(unit_id)
+      if (!this._animating_removed_sub_component_set.has(unit_id)) {
+        this._unplug_sub_component_base_frame(unit_id)
+      }
     }
 
     if (this._layout_path.includes(unit_id)) {
@@ -43281,7 +43288,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (displace) {
       if (!this._tree_layout) {
-        this._sim_move_out_sub_component_children(unit_id, parent_id)
+        if (!this._animating_removed_sub_component_set.has(unit_id)) {
+          this._sim_move_out_sub_component_children(unit_id, parent_id)
+        }
       }
 
       const sub_component = this._get_sub_component(unit_id)
@@ -50275,6 +50284,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const unit_is_component = this._is_unit_component(unit_id)
 
+      if (unit_is_component) {
+        this._animating_removed_sub_component_set.add(unit_id)
+      }
+
       const unit_node = this.get_node(unit_id)
 
       const n0 = { ...unit_node, opacity: 1 }
@@ -50340,6 +50353,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       const sub_components = []
+      const sub_component_map = {}
+
+      for (const sub_component_id of ordered_sub_component_ids) {
+        const sub_component = this._get_sub_component(sub_component_id)
+
+        sub_component_map[sub_component_id] = sub_component
+      }
 
       for (const sub_component_id of ordered_sub_component_ids) {
         const sub_component = this._get_sub_component(sub_component_id)

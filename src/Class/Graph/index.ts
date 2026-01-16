@@ -3805,10 +3805,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           parentComponent.registerParentRoot(
             unit as Component_,
             unitId,
-            'default'
+            'default',
+            undefined,
+            emit
           )
         } else {
-          this.registerRoot(unit as Component_, unitId, true)
+          this.registerRoot(unit as Component_, unitId, emit)
         }
       }
 

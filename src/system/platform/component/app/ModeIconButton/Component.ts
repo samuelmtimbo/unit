@@ -79,6 +79,7 @@ export default class ModeIconButton extends Element<HTMLDivElement, Props> {
 
     this.setSubComponents({
       icon_button,
+      tooltip,
     })
 
     this.registerRoot(icon_button)

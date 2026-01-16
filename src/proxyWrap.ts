@@ -57,9 +57,7 @@ export function proxy<T extends object>(
                       stop_depth = 0
                     }
                   } else {
-                    if (path.length > stop_depth) {
-                      callback(moment)
-                    }
+                    //
                   }
                 } else {
                   callback(moment)
