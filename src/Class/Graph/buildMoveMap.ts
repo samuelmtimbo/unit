@@ -90,6 +90,7 @@ import {
   deepInc,
   deepPush,
 } from '../../util/object'
+import { localeCompare } from '../../util/string'
 import { Moves } from './buildMoves'
 
 export type PinNodeSpec = {
@@ -2066,8 +2067,11 @@ export function buildMoveMap(
   }
 
   const outsidePlugMatched: IOOf<Dict<boolean>> = {}
+  const outsidePinMatchedCount: IOOf<Dict<number>> = {}
 
-  for (const { type, pinId, subPinId, template } of selection.plug ?? []) {
+  for (const { type, pinId, subPinId, template } of selection?.plug?.sort(
+    (a, b) => localeCompare(a.pinId, b.pinId)
+  ) ?? []) {
     const subPinSpec = getSubPinSpec(source, type, pinId, subPinId)
 
     const selectedCount = deepGetOrDefault(
@@ -2488,14 +2492,47 @@ export function buildMoveMap(
               } else {
                 const pin = getSingleMergePin(insideMerge_)
 
-                if (pin.pinId === pinId) {
+                let i = deepGetOrDefault(
+                  outsidePinMatchedCount,
+                  [pin.type, pin.pinId],
+                  undefined
+                )
+
+                const suffix = i === undefined ? '' : `${i}`
+
+                if (
+                  pin.pinId === pinId.substring(0, pinId.length - suffix.length)
+                ) {
                   deepSet_(
                     mapping,
                     ['plug', type, pinId, subPinId, 'in', 'link'],
                     pin
                   )
+
+                  deepInc(outsidePinMatchedCount, [pin.type, pin.pinId])
                 } else {
                   const nextSubPinId = newTargetSubPinId(oppositeType, pinId)
+
+                  let targetExposePinSetTask = deepGetOrDefault(
+                    targetExposePinSetTasks,
+                    [oppositeType, pinId],
+                    undefined
+                  )
+
+                  if (!targetExposePinSetTask) {
+                    targetExposePinSetTask = newTask([
+                      {
+                        in: true,
+                        action: makeExposePinSetAction(oppositeType, pinId, {}),
+                      },
+                    ])
+
+                    deepSet_(
+                      targetExposePinSetTasks,
+                      [oppositeType, pinId],
+                      targetExposePinSetTask
+                    )
+                  }
 
                   let targetExposePinTask = deepGetOrDefault(
                     targetExposePinTasks,
@@ -2519,6 +2556,8 @@ export function buildMoveMap(
                         ),
                       },
                     ])
+
+                    addDependency(targetExposePinSetTask, targetExposePinTask)
 
                     deepSet_(
                       targetExposePinTasks,
@@ -2566,7 +2605,7 @@ export function buildMoveMap(
                     }
                   )
 
-                  addDependency(targetExposePinTask, removeInsideMergeTask)
+                  addDependency(targetExposePinSetTask, removeInsideMergeTask)
                 }
               }
             }
