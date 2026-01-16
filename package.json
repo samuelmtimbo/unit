@@ -1,6 +1,6 @@
 {
   "name": "@_unit/unit",
-  "version": "1.0.92",
+  "version": "1.0.93",
   "main": "lib/index.js",
   "bin": "./lib/server/index.js",
   "exports": {
