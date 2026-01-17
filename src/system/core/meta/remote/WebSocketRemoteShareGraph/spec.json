@@ -1,0 +1,214 @@
+{
+  "type": "`U`&`G`",
+  "name": "web socket remote share graph",
+  "units": {
+    "remotesharegraph": {
+      "id": "727133c9-3e87-4219-a91e-a257c9b2669b",
+      "input": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 81,
+              "y": 30
+            }
+          }
+        },
+        "opt": {
+          "metadata": {
+            "position": {
+              "x": 81,
+              "y": -30
+            }
+          }
+        },
+        "message": {},
+        "done": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 96,
+              "y": 0
+            }
+          }
+        }
+      },
+      "output": {
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 44,
+          "y": 0
+        }
+      }
+    },
+    "websocketjsonduplex": {
+      "id": "625e9caa-fefc-4675-a490-b9a199f25bee",
+      "input": {
+        "close": {
+          "metadata": {
+            "position": {
+              "x": -102,
+              "y": 18
+            }
+          }
+        },
+        "url": {
+          "metadata": {
+            "position": {
+              "x": -102,
+              "y": -18
+            }
+          }
+        },
+        "data": {}
+      },
+      "output": {
+        "data": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -55,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "remotesharegraph": {
+        "input": {
+          "message": true
+        }
+      },
+      "websocketjsonduplex": {
+        "output": {
+          "data": true
+        }
+      }
+    },
+    "1": {
+      "websocketjsonduplex": {
+        "input": {
+          "data": true
+        }
+      },
+      "remotesharegraph": {
+        "output": {
+          "message": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "remotesharegraph",
+          "pinId": "opt",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 94,
+              "y": -51
+            }
+          }
+        }
+      }
+    },
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "remotesharegraph",
+          "pinId": "graph",
+          "kind": "input"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 94,
+              "y": 51
+            }
+          }
+        }
+      }
+    },
+    "close": {
+      "plug": {
+        "0": {
+          "unitId": "websocketjsonduplex",
+          "pinId": "close",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "remotesharegraph",
+          "pinId": "done",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -120,
+              "y": 33
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 120,
+              "y": 0
+            }
+          }
+        }
+      }
+    },
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "websocketjsonduplex",
+          "pinId": "url",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -120,
+              "y": -33
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "link",
+    "description": "share a graph through web socket",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -6,
+          "y": -12
+        },
+        "1": {
+          "x": -6,
+          "y": 12
+        }
+      }
+    }
+  },
+  "id": "17f39380-0732-41b1-bb5e-e90cc703de82"
+}
