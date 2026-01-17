@@ -27,7 +27,7 @@ export function stringify(value: any, deref: boolean = false): string | null {
             .join(',')}}`
         } else {
           if (deref) {
-            if ((value as $).__.includes('U')) {
+            if ((value as $).__?.includes('U')) {
               return stringify(value.constructor)
             } else {
               return 'null'
