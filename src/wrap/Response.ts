@@ -82,19 +82,16 @@ export function wrapResponse(response: Response, system: System): RES & $ {
       return response
     }
 
-    get<K extends keyof ServerResponse>(name: K): Promise<ServerResponse[K]> {
+    get<K extends keyof ServerResponse>(name: K): any {
       if (name === 'body') {
-        // @ts-ignore
-        return Promise.resolve(wrapReadableStream(response.body, system))
+        return wrapReadableStream(response.body, system)
       }
 
       if (name === 'headers') {
-        // @ts-ignore
-        return Promise.resolve(headersToObj(response.headers))
+        return headersToObj(response.headers)
       }
 
-      // @ts-ignore
-      return Promise.resolve(response[name])
+      return response[name]
     }
 
     set<K extends keyof ServerResponse>(
@@ -108,21 +105,21 @@ export function wrapResponse(response: Response, system: System): RES & $ {
       throw new ReadOnlyError('request')
     }
 
-    hasKey(name: string): Promise<boolean> {
-      return Promise.resolve(response[name] !== undefined)
+    hasKey(name: string): boolean {
+      return response[name] !== undefined
     }
 
-    keys(): Promise<string[]> {
-      return Promise.resolve(Object.keys(response))
+    keys(): string[] {
+      return Object.keys(response)
     }
 
-    deepGet(path: string[]): Promise<any> {
+    deepGet(path: string[]): any {
       if (path.length > 1) {
         throw new ObjectPathTooDeepError()
       }
 
       if (path.length === 0) {
-        return Promise.resolve(this)
+        return this
       }
 
       // @ts-ignore
@@ -137,9 +134,9 @@ export function wrapResponse(response: Response, system: System): RES & $ {
       throw new ReadOnlyError('request')
     }
 
-    async deepHas(path: string[]): Promise<boolean> {
+    deepHas(path: string[]): boolean {
       try {
-        await this.deepGet(path)
+        this.deepGet(path)
 
         return true
       } catch (err) {

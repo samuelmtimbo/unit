@@ -6,16 +6,14 @@ import { $J, $J_C, $J_G, $J_R, $J_W } from './$J'
 export const AsyncJGet: (value: J) => $J_G = (value) => {
   return {
     $get({ name }: { name: string }, callback: Callback<any>): void {
-      void (async () => {
-        let data: any
+      let data: any
 
-        try {
-          data = await value.get(name)
-        } catch (err) {
-          callback(undefined, err.message)
-        }
-        callback(data)
-      })()
+      try {
+        data = value.get(name)
+      } catch (err) {
+        callback(undefined, err.message)
+      }
+      callback(data)
     },
   }
 }
@@ -26,17 +24,15 @@ export const AsyncJCall: (value: J) => $J_C = (value) => {
       { name, data }: { name: string; data: string },
       callback: Callback<any>
     ): void {
-      void (async () => {
-        try {
-          const _data = evaluate(data, {}, {})
+      try {
+        const _data = evaluate(data, {}, {})
 
-          await value.set(name, _data)
-        } catch (err) {
-          callback(undefined, err.message)
-        }
+        value.set(name, _data)
+      } catch (err) {
+        callback(undefined, err.message)
+      }
 
-        callback()
-      })()
+      callback()
     },
   }
 }

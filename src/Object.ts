@@ -128,7 +128,7 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     this._dispatch('set', parent_path, key, data)
   }
 
-  private _delete = async <K extends keyof T>(name: K): Promise<void> => {
+  private _delete = <K extends keyof T>(name: K): void => {
     this._delete_path([name] as string[])
     return
   }
@@ -158,7 +158,7 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     callback()
   }
 
-  public async get<K extends keyof T>(name: K): Promise<any> {
+  public get<K extends keyof T>(name: K): any {
     const value = this._obj[name]
 
     if (value === undefined) {
@@ -168,36 +168,36 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     return this._obj[name]
   }
 
-  public async set<K extends keyof T>(name: K, data: any): Promise<void> {
+  public set<K extends keyof T>(name: K, data: any): void {
     this._set_path([name] as string[], data)
   }
 
-  public async hasKey(name: string): Promise<boolean> {
+  public hasKey(name: string): boolean {
     return this._obj[name] !== undefined
   }
 
-  public async delete<K extends keyof T>(name: K): Promise<void> {
+  public delete<K extends keyof T>(name: K): void {
     return this._delete(name)
   }
 
-  public async deepGet(path: string[]): Promise<any> {
+  public deepGet(path: string[]): any {
     const value = this._obj_at_path(path)
 
     return value
   }
 
-  public async deepSet(path: string[], data: any): Promise<void> {
+  public deepSet(path: string[], data: any): void {
     this._set_path(path, data)
 
     return
   }
 
-  public async deepDelete(path: string[]): Promise<void> {
+  public deepDelete(path: string[]): void {
     this._delete_path(path)
     return
   }
 
-  public async deepHas(path: string[]): Promise<boolean> {
+  public deepHas(path: string[]): boolean {
     let cursor: any = this._obj
 
     for (const p of path) {
@@ -213,7 +213,7 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     return has
   }
 
-  public async keys(): Promise<string[]> {
+  public keys(): string[] {
     return keys(this._obj)
   }
 

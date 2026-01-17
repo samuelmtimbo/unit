@@ -16,7 +16,7 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
       return imageData
     }
 
-    async get(name: string): Promise<any> {
+    get(name: string): any {
       if (imageData[name] !== undefined) {
         if (name === 'data') {
           return wrapUint8Array(imageData.data, system)
@@ -26,15 +26,15 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
       }
     }
 
-    async set(name: string, data: any): Promise<void> {
+    set(name: string, data: any): void {
       throw new ReadOnlyError('image data')
     }
 
-    async delete(name: string): Promise<void> {
+    delete(name: string): void {
       throw new ReadOnlyError('image data')
     }
 
-    async hasKey(name: string): Promise<boolean> {
+    hasKey(name: string): boolean {
       if (imageData[name] !== undefined) {
         return true
       }
@@ -42,11 +42,11 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
       return false
     }
 
-    async keys(): Promise<string[]> {
+    keys(): string[] {
       return ['width', 'height', 'data', 'colorSpace']
     }
 
-    deepGet(path: string[]): Promise<any> {
+    deepGet(path: string[]): any {
       if (path.length === 1) {
         return this.get(path[0])
       }
@@ -58,14 +58,14 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
       throw new ReadOnlyError('image data')
     }
 
-    deepDelete(path: string[]): Promise<void> {
+    deepDelete(path: string[]): void {
       throw new ReadOnlyError('image data')
     }
 
-    async deepHas(path: string[]): Promise<boolean> {
+    deepHas(path: string[]): boolean {
       try {
-        await this.deepGet(path)
-  
+        this.deepGet(path)
+
         return true
       } catch (err) {
         return false

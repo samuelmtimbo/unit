@@ -14,35 +14,35 @@ export function wrapSharedRef<T extends Dict<any>>(data: SharedRef<T>): J<T> {
   const _data = new Object_<T>(data.current)
 
   return {
-    get<K extends keyof T>(name: K): Promise<T[K]> {
+    get<K extends keyof T>(name: K): T[K] {
       return _data.get(name)
     },
 
-    set<K extends keyof T>(name: K, data: T[K]): Promise<void> {
+    set<K extends keyof T>(name: K, data: T[K]): void {
       return _data.set(name, data)
     },
 
-    delete<K extends keyof T>(name: K): Promise<void> {
+    delete<K extends keyof T>(name: K): void {
       return _data.delete(name)
     },
 
-    hasKey(name: string): Promise<boolean> {
+    hasKey(name: string): boolean {
       return _data.hasKey(name)
     },
 
-    keys(): Promise<string[]> {
+    keys(): string[] {
       return _data.keys()
     },
 
-    deepGet(path: string[]): Promise<any> {
+    deepGet(path: string[]): any {
       return _data.deepGet(path)
     },
 
-    deepSet(path: string[], data: any): Promise<void> {
+    deepSet(path: string[], data: any): void {
       return _data.deepSet(path, data)
     },
 
-    deepDelete(path: string[]): Promise<void> {
+    deepDelete(path: string[]): void {
       return _data.deepDelete(path)
     },
 
@@ -86,39 +86,39 @@ export function wrapObject<T extends object>(
       throw new ReadOnlyError('object')
     }
 
-    get<K extends keyof T>(name: K): Promise<T[K]> {
+    get<K extends keyof T>(name: K): T[K] {
       return _data.get(name)
     }
 
-    set<K extends keyof T>(name: K, data: T[K]): Promise<void> {
+    set<K extends keyof T>(name: K, data: T[K]): void {
       return _data.set(name, data)
     }
 
-    delete<K extends keyof T>(name: K): Promise<void> {
+    delete<K extends keyof T>(name: K): void {
       return _data.delete(name)
     }
 
-    hasKey(name: string): Promise<boolean> {
+    hasKey(name: string): boolean {
       return _data.hasKey(name)
     }
 
-    keys(): Promise<string[]> {
+    keys(): string[] {
       return _data.keys()
     }
 
-    deepGet(path: string[]): Promise<any> {
+    deepGet(path: string[]): any {
       return _data.deepGet(path)
     }
 
-    deepSet(path: string[], data: any): Promise<void> {
+    deepSet(path: string[], data: any): void {
       return _data.deepSet(path, data)
     }
 
-    deepDelete(path: string[]): Promise<void> {
+    deepDelete(path: string[]): void {
       return _data.deepDelete(path)
     }
 
-    deepHas(path: string[]): Promise<boolean> {
+    deepHas(path: string[]): boolean {
       return _data.deepHas(path)
     }
 

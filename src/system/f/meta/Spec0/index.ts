@@ -60,7 +60,7 @@ export default class Spec_ extends Functional<I, O> {
         return Promise.resolve(_spec[name])
       }
 
-      set(name: Key, data: any): Promise<void> {
+      set(name: Key, data: any): void {
         const _spec = unit.getSpec()
 
         _spec[name] = data
@@ -68,7 +68,7 @@ export default class Spec_ extends Functional<I, O> {
         return
       }
 
-      delete(name: Key): Promise<void> {
+      delete(name: Key): void {
         const _spec = unit.getSpec()
 
         delete _spec[name]
@@ -76,7 +76,7 @@ export default class Spec_ extends Functional<I, O> {
         return
       }
 
-      async hasKey(name: string): Promise<boolean> {
+      hasKey(name: string): boolean {
         const _spec = unit.getSpec()
 
         const has = hasKey(_spec, name)
@@ -84,19 +84,19 @@ export default class Spec_ extends Functional<I, O> {
         return has
       }
 
-      async keys(): Promise<string[]> {
+      keys(): string[] {
         const _spec = unit.getSpec()
 
         return keys(_spec)
       }
 
-      deepGet(path: string[]): Promise<any> {
+      deepGet(path: string[]): any {
         const _spec = unit.getSpec()
 
         return deepGet(_spec, path)
       }
 
-      deepSet(path: string[], data: any): Promise<void> {
+      deepSet(path: string[], data: any): void {
         const _spec = unit.getSpec()
 
         if (path[0] === 'metadata') {
@@ -114,10 +114,10 @@ export default class Spec_ extends Functional<I, O> {
         throw new MethodNotImplementedError()
       }
 
-      async deepHas(path: string[]): Promise<boolean> {
+      deepHas(path: string[]): boolean {
         try {
-          await this.deepGet(path)
-    
+          this.deepGet(path)
+
           return true
         } catch (err) {
           return false

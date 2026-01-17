@@ -297,29 +297,29 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     system.registerUnit(spec.id)
   }
 
-  async get<K extends string>(name: K): Promise<any> {
+  get<K extends string>(name: K): any {
     const unitId = name
 
     return this.getUnit(unitId)
   }
 
-  set<K extends string>(name: K, data: any): Promise<void> {
+  set<K extends string>(name: K, data: any): void {
     throw new ReadOnlyError('graph')
   }
 
-  delete<K extends string>(name: K): Promise<void> {
+  delete<K extends string>(name: K): void {
     throw new ReadOnlyError('graph')
   }
 
-  async hasKey<K extends string>(name: K): Promise<boolean> {
+  hasKey<K extends string>(name: K): boolean {
     return !!this._unit[name]
   }
 
-  async keys(): Promise<string[]> {
+  keys(): string[] {
     return keys(this._unit)
   }
 
-  async deepGet(path: string[]): Promise<any> {
+  deepGet(path: string[]): any {
     if (path.length === 0) {
       return this
     }
@@ -339,9 +339,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return unit
   }
 
-  async deepHas(path: string[]): Promise<boolean> {
+  deepHas(path: string[]): boolean {
     try {
-      await this.deepGet(path)
+      this.deepGet(path)
 
       return true
     } catch (err) {
@@ -349,7 +349,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
-  deepSet(path: string[], data: any): Promise<void> {
+  deepSet(path: string[], data: any): void {
     throw new ReadOnlyError('graph')
   }
 

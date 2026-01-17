@@ -15,29 +15,29 @@ export function wrapFormData(
   const _obj = new (class FormData_ extends $ implements J<Dict<any>>, FD {
     __: string[] = ['J', 'FD']
 
-    async get(name: string): Promise<any> {
+    get(name: string): any {
       const data = formData.get(name)
 
       return Promise.resolve(data)
     }
 
-    async set(name: string, data: any): Promise<void> {
+    set(name: string, data: any): void {
       formData.set(name, data)
 
       return
     }
 
-    async delete(name: string): Promise<void> {
+    delete(name: string): void {
       formData.delete(name)
 
       return
     }
 
-    async hasKey(name: string): Promise<boolean> {
+    hasKey(name: string): boolean {
       return formData.has(name)
     }
 
-    async keys(): Promise<string[]> {
+    keys(): string[] {
       const keys = []
 
       formData.forEach((value, key) => {
@@ -47,7 +47,7 @@ export function wrapFormData(
       return keys
     }
 
-    deepGet(path: string[]): Promise<any> {
+    deepGet(path: string[]): any {
       if (path.length === 1) {
         return Promise.resolve(formData.get(path[0]))
       }
@@ -55,7 +55,7 @@ export function wrapFormData(
       throw new InvalidKeyPathError()
     }
 
-    deepSet(path: string[], data: any): Promise<void> {
+    deepSet(path: string[], data: any): void {
       if (path.length === 1) {
         formData.set(path[0], data)
 
@@ -75,10 +75,10 @@ export function wrapFormData(
       throw new InvalidKeyPathError()
     }
 
-    async deepHas(path: string[]): Promise<boolean> {
+    deepHas(path: string[]): boolean {
       try {
-        await this.deepGet(path)
-  
+        this.deepGet(path)
+
         return true
       } catch (err) {
         return false

@@ -5,15 +5,15 @@ import { Unlisten } from '../Unlisten'
 export type J_EE = Dict<any[]>
 
 export interface J<T extends Dict<any> = Dict<any>> {
-  get<K extends keyof T>(name: K): Promise<T[K]>
-  set<K extends keyof T>(name: K, data: T[K]): Promise<void>
-  delete<K extends keyof T>(name: K): Promise<void>
-  hasKey(name: string): Promise<boolean>
-  keys(): Promise<string[]>
-  deepGet(path: string[]): Promise<any>
-  deepSet(path: string[], data: any): Promise<void>
-  deepDelete(path: string[]): Promise<void>
-  deepHas(path: string[]): Promise<boolean>
+  get<K extends keyof T>(name: K): T[K]
+  set<K extends keyof T>(name: K, data: T[K]): void
+  delete<K extends keyof T>(name: K): void
+  hasKey(name: string): boolean
+  keys(): string[]
+  deepGet(path: string[]): any
+  deepSet(path: string[], data: any): void
+  deepDelete(path: string[]): void
+  deepHas(path: string[]): boolean
   subscribe(
     path: string[],
     key: string,

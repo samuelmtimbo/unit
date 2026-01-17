@@ -36,33 +36,33 @@ export default class Global extends Unit<I, O> implements J<Dict<any>> {
     return this.__system.global.data.subscribe(path, key, listener)
   }
 
-  async get(name: string): Promise<any> {
+  get(name: string): any {
     return this.__system.global.data.get(name)
   }
 
-  async set(name: string, data: string): Promise<void> {
+  set(name: string, data: string): void {
     return this.__system.global.data.set(name, data)
   }
 
-  async delete(name: string): Promise<any> {
+  delete(name: string): any {
     return this.__system.global.data.delete(name)
   }
 
-  async deepSet(path: string[], data: any): Promise<void> {
+  deepSet(path: string[], data: any): void {
     return this.__system.global.data.deepSet(path, data)
   }
 
-  async deepGet(path: string[]): Promise<any> {
+  deepGet(path: string[]): any {
     return this.__system.global.data.deepGet(path)
   }
 
-  async deepDelete(path: string[]): Promise<void> {
+  deepDelete(path: string[]): void {
     return this.__system.global.data.deepDelete(path)
   }
 
-  async deepHas(path: string[]): Promise<boolean> {
+  deepHas(path: string[]): boolean {
     try {
-      await this.deepGet(path)
+      this.deepGet(path)
 
       return true
     } catch (err) {
@@ -70,11 +70,11 @@ export default class Global extends Unit<I, O> implements J<Dict<any>> {
     }
   }
 
-  async keys(): Promise<string[]> {
+  keys(): string[] {
     return this.__system.global.data.keys()
   }
 
-  async hasKey(name: string): Promise<boolean> {
+  hasKey(name: string): boolean {
     return this.__system.global.data.hasKey(name)
   }
 }

@@ -93,7 +93,7 @@ export class Stateful<
     }
   }
 
-  public async get<K extends keyof I>(name: K): Promise<any> {
+  public get<K extends keyof I>(name: K): any {
     return this._state[name] ?? this._defaultState[name]
   }
 
@@ -107,11 +107,11 @@ export class Stateful<
     callback()
   }
 
-  public async set<K extends keyof I>(
+  public set<K extends keyof I>(
     name: K,
     data: any,
     auto: boolean = false
-  ): Promise<void> {
+  ): void {
     this._set_from_input = auto
 
     this._state[name] = data
@@ -120,7 +120,7 @@ export class Stateful<
     this.emit(name, data)
   }
 
-  hasKey<K extends keyof I>(name: K): Promise<boolean> {
+  hasKey<K extends keyof I>(name: K): boolean {
     throw new MethodNotImplementedError()
   }
 
@@ -130,21 +130,21 @@ export class Stateful<
     return
   }
 
-  deepSet(path: string[], data: any): Promise<void> {
+  deepSet(path: string[], data: any): void {
     throw new MethodNotImplementedError()
   }
 
-  deepGet(path: string[]): Promise<any> {
+  deepGet(path: string[]): any {
     throw new MethodNotImplementedError()
   }
 
-  deepDelete(path: string[]): Promise<void> {
+  deepDelete(path: string[]): void {
     throw new MethodNotImplementedError()
   }
 
-  async deepHas(path: string[]): Promise<boolean> {
+  deepHas(path: string[]): boolean {
     try {
-      await this.deepGet(path)
+      this.deepGet(path)
 
       return true
     } catch (err) {
@@ -152,7 +152,7 @@ export class Stateful<
     }
   }
 
-  keys(): Promise<string[]> {
+  keys(): string[] {
     throw new MethodNotImplementedError()
   }
 

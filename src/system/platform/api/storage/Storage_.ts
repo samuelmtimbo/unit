@@ -62,7 +62,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     callback()
   }
 
-  async get(name: string): Promise<any> {
+  get(name: string): any {
     const { path } = this.__system
 
     const storage = this._storage()
@@ -70,7 +70,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     return get(storage, path, name)
   }
 
-  async set(name: string, data: any): Promise<void> {
+  set(name: string, data: any): void {
     const { path, emitter } = this.__system
 
     const storage = this._storage()
@@ -80,7 +80,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     emitter.emit(`${this._prefix}_storage`, name, data)
   }
 
-  async delete(name: string): Promise<any> {
+  delete(name: string): any {
     const { path, emitter } = this.__system
 
     const storage = this._storage()
@@ -90,7 +90,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     emitter.emit(`${this._prefix}_storage`, name, undefined)
   }
 
-  async deepSet(path_: string[], data: any): Promise<void> {
+  deepSet(path_: string[], data: any): void {
     const { path } = this.__system
 
     const storage = this._storage()
@@ -102,7 +102,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     return set(storage, path_[0], data, path)
   }
 
-  async deepGet(path_: string[]): Promise<any> {
+  deepGet(path_: string[]): any {
     const { path } = this.__system
 
     const storage = this._storage()
@@ -114,7 +114,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     return get(storage, path, path_[0])
   }
 
-  async deepDelete(path_: string[]): Promise<void> {
+  deepDelete(path_: string[]): void {
     const { path } = this.__system
 
     const storage = this._storage()
@@ -126,9 +126,9 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     return delete_(storage, path, path_[0])
   }
 
-  async deepHas(path: string[]): Promise<boolean> {
+  deepHas(path: string[]): boolean {
     try {
-      await this.deepGet(path)
+      this.deepGet(path)
 
       return true
     } catch (err) {
@@ -163,7 +163,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     })
   }
 
-  async keys(): Promise<string[]> {
+  keys(): string[] {
     const { path } = this.__system
 
     const storage = this._storage()
@@ -171,7 +171,7 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     return keys(storage, path)
   }
 
-  async hasKey(name: string): Promise<boolean> {
+  hasKey(name: string): boolean {
     const { path } = this.__system
 
     const storage = this._storage()

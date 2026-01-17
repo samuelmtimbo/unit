@@ -14,7 +14,7 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
   const stream = new (class Image extends $ implements IM, J {
     __: string[] = ['IM', 'J']
 
-    async get<K extends string>(name: K): Promise<any> {
+    get<K extends string>(name: K): any {
       if (KNOWN_IMAGE_PROPERTIES.includes(name)) {
         // @ts-ignore
         return image[name]
@@ -23,15 +23,15 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
       return false
     }
 
-    set<K extends string>(name: K, data: any): Promise<void> {
+    set<K extends string>(name: K, data: any): void {
       throw new ReadOnlyError('image')
     }
 
-    delete<K extends string>(name: K): Promise<void> {
+    delete<K extends string>(name: K): void {
       throw new ReadOnlyError('image')
     }
 
-    async hasKey<K extends string>(name: K): Promise<boolean> {
+    hasKey<K extends string>(name: K): boolean {
       if (KNOWN_IMAGE_PROPERTIES.includes(name)) {
         return true
       }
@@ -39,11 +39,11 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
       return false
     }
 
-    keys(): Promise<string[]> {
+    keys(): string[] {
       throw KNOWN_IMAGE_PROPERTIES
     }
 
-    deepGet(path: string[]): Promise<any> {
+    deepGet(path: string[]): any {
       if (path.length > 1) {
         throw new ObjectPathTooDeepError()
       }
@@ -51,18 +51,18 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
       return this.get(path[0])
     }
 
-    deepSet(path: string[], data: any): Promise<void> {
+    deepSet(path: string[], data: any): void {
       throw new ReadOnlyError('image')
     }
 
-    deepDelete(path: string[]): Promise<void> {
+    deepDelete(path: string[]): void {
       throw new ReadOnlyError('image')
     }
 
-    async deepHas(path: string[]): Promise<boolean> {
+    deepHas(path: string[]): boolean {
       try {
-        await this.deepGet(path)
-  
+        this.deepGet(path)
+
         return true
       } catch (err) {
         return false
@@ -82,11 +82,11 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
       throw new CodePathNotImplementedError()
     }
 
-    async image(): Promise<any> {
+    image(): any {
       return image
     }
 
-    async raw() {
+    raw() {
       return image
     }
   })(system)
