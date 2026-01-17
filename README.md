@@ -210,7 +210,7 @@ https://unit.moe#https://unit.tools will show the code for https://unit.tools.
 
 ## Documentation
 
-The unit Programming Environment was designed to be learnable by Experimentation and Exploration. Visual and written documentation about each unit can be accessed using [Info Mode](https://github.com/samuelmtimbo/unit/tree/main/src/docs/start#info-mode).
+The Unit Programming Environment was designed to be learnable by Experimentation and Exploration. Visual and written documentation about each unit can be accessed using [Info Mode](https://github.com/samuelmtimbo/unit/tree/main/src/docs/start#info-mode).
 
 This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment.
 
