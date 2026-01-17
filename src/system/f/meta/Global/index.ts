@@ -60,6 +60,16 @@ export default class Global extends Unit<I, O> implements J<Dict<any>> {
     return this.__system.global.data.deepDelete(path)
   }
 
+  async deepHas(path: string[]): Promise<boolean> {
+    try {
+      await this.deepGet(path)
+
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
   async keys(): Promise<string[]> {
     return this.__system.global.data.keys()
   }

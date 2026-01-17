@@ -137,6 +137,16 @@ export function wrapResponse(response: Response, system: System): RES & $ {
       throw new ReadOnlyError('request')
     }
 
+    async deepHas(path: string[]): Promise<boolean> {
+      try {
+        await this.deepGet(path)
+
+        return true
+      } catch (err) {
+        return false
+      }
+    }
+
     subscribe(
       path: string[],
       key: string,

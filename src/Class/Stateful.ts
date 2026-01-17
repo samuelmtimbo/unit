@@ -142,6 +142,16 @@ export class Stateful<
     throw new MethodNotImplementedError()
   }
 
+  async deepHas(path: string[]): Promise<boolean> {
+    try {
+      await this.deepGet(path)
+
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
   keys(): Promise<string[]> {
     throw new MethodNotImplementedError()
   }

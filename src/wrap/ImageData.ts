@@ -62,6 +62,16 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
       throw new ReadOnlyError('image data')
     }
 
+    async deepHas(path: string[]): Promise<boolean> {
+      try {
+        await this.deepGet(path)
+  
+        return true
+      } catch (err) {
+        return false
+      }
+    }
+
     subscribe(
       path: string[],
       key: string,

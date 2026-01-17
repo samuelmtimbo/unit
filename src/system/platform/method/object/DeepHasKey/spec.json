@@ -1,0 +1,28 @@
+{
+  "name": "deep has key",
+  "inputs": {
+    "obj": {
+      "type": "`J`",
+      "ref": true
+    },
+    "path": {
+      "type": "string[]"
+    },
+    "key": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "has": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "check whether `obj` has `key` property at `path`",
+    "tags": ["platform", "method", "object"]
+  },
+  "id": "dfb2c4fb-2536-4cd1-bece-1c1bd3796c3f",
+  "base": true,
+  "type": "`U`"
+}

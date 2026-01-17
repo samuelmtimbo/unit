@@ -126,6 +126,16 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     return delete_(storage, path, path_[0])
   }
 
+  async deepHas(path: string[]): Promise<boolean> {
+    try {
+      await this.deepGet(path)
+
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
   subscribe(
     path: string[],
     key: string,

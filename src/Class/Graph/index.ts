@@ -339,6 +339,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return unit
   }
 
+  async deepHas(path: string[]): Promise<boolean> {
+    try {
+      await this.deepGet(path)
+
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
   deepSet(path: string[], data: any): Promise<void> {
     throw new ReadOnlyError('graph')
   }

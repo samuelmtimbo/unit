@@ -46,6 +46,10 @@ export function wrapSharedRef<T extends Dict<any>>(data: SharedRef<T>): J<T> {
       return _data.deepDelete(path)
     },
 
+    deepHas(path: string[]) {
+      return _data.deepHas(path)
+    },
+
     subscribe(
       path: string[],
       key: string,
@@ -112,6 +116,10 @@ export function wrapObject<T extends object>(
 
     deepDelete(path: string[]): Promise<void> {
       return _data.deepDelete(path)
+    }
+
+    deepHas(path: string[]): Promise<boolean> {
+      return _data.deepHas(path)
     }
 
     subscribe(

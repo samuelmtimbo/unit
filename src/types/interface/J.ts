@@ -13,6 +13,7 @@ export interface J<T extends Dict<any> = Dict<any>> {
   deepGet(path: string[]): Promise<any>
   deepSet(path: string[], data: any): Promise<void>
   deepDelete(path: string[]): Promise<void>
+  deepHas(path: string[]): Promise<boolean>
   subscribe(
     path: string[],
     key: string,

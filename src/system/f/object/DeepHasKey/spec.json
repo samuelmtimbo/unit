@@ -1,8 +1,11 @@
 {
-  "name": "has key",
+  "name": "deep has key",
   "inputs": {
     "obj": {
       "type": "object"
+    },
+    "path": {
+      "type": "string[]"
     },
     "key": {
       "type": "string"
@@ -15,10 +18,10 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "check if `key` is in `obj`",
+    "description": "check if `key` is in `obj` at `path`",
     "tags": ["f", "object"]
   },
-  "id": "ad2ae8b9-9674-4b22-bed4-4458e0030b1a",
+  "id": "740fde5d-8de1-448f-87d9-2ddd397e9c4b",
   "base": true,
   "type": "`U`"
 }

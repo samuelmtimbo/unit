@@ -197,6 +197,22 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
     return
   }
 
+  public async deepHas(path: string[]): Promise<boolean> {
+    let cursor: any = this._obj
+
+    for (const p of path) {
+      if (cursor[p] === undefined) {
+        return false
+      }
+
+      cursor = cursor[p]
+    }
+
+    const has = cursor !== undefined
+
+    return has
+  }
+
   public async keys(): Promise<string[]> {
     return keys(this._obj)
   }
