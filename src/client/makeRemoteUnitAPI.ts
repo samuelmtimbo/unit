@@ -40,7 +40,11 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
               remoteApi[type][$methodName] = (...args) => {
                 let result = $obj[$methodName](...args)
 
-                result = makeRemoteObjectAPI(result, result.__)
+                if (result === null) {
+                  return null
+                }
+
+                result = makeRemoteObjectAPI(result, result.__ ?? result.$__)
 
                 return result
               }
