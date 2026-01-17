@@ -1,0 +1,227 @@
+{
+  "type": "`U`&`G`",
+  "name": "web socket json duplex",
+  "units": {
+    "parsejson": {
+      "id": "563e92be-ad5e-4a61-a718-9249c3eac51d",
+      "input": {
+        "string": {
+          "metadata": {
+            "position": {
+              "x": 86.15384615384616,
+              "y": -70.6923076923077
+            }
+          }
+        }
+      },
+      "output": {
+        "json": {
+          "metadata": {
+            "position": {
+              "x": 90,
+              "y": 71
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 43,
+          "y": 58
+        }
+      }
+    },
+    "stringify": {
+      "id": "2b24877a-3221-4288-9f59-efbf29964368",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 90,
+              "y": -71
+            }
+          }
+        }
+      },
+      "output": {
+        "str": {
+          "metadata": {
+            "position": {
+              "x": 88.15384615384616,
+              "y": 70.3076923076923
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 43,
+          "y": -58
+        }
+      }
+    },
+    "websocketduplex": {
+      "id": "acfb72f1-d215-4c8c-ac8b-a2efcc64677d",
+      "input": {
+        "close": {
+          "metadata": {
+            "position": {
+              "x": -90,
+              "y": 17
+            }
+          }
+        },
+        "url": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -90,
+              "y": -17
+            }
+          }
+        },
+        "message": {}
+      },
+      "output": {
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -42,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "stringify": {
+        "output": {
+          "str": true
+        }
+      },
+      "websocketduplex": {
+        "input": {
+          "message": true
+        }
+      }
+    },
+    "1": {
+      "parsejson": {
+        "input": {
+          "string": true
+        }
+      },
+      "websocketduplex": {
+        "output": {
+          "message": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "close": {
+      "plug": {
+        "0": {
+          "unitId": "websocketduplex",
+          "pinId": "close",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -110,
+              "y": 30
+            }
+          }
+        }
+      }
+    },
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "websocketduplex",
+          "pinId": "url",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -110,
+              "y": -30
+            }
+          }
+        }
+      }
+    },
+    "data": {
+      "plug": {
+        "0": {
+          "unitId": "stringify",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 110,
+              "y": -82
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "data": {
+      "plug": {
+        "0": {
+          "unitId": "parsejson",
+          "pinId": "json",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 110,
+              "y": 82
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "network",
+    "description": "web socket send and receive json",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -2,
+          "y": -34
+        },
+        "1": {
+          "x": -2,
+          "y": 34
+        }
+      }
+    }
+  },
+  "id": "625e9caa-fefc-4675-a490-b9a199f25bee"
+}
