@@ -11,7 +11,7 @@ import { IO } from '../../../../types/IO'
 import { ID_PIN } from '../../../_ids'
 
 export interface I<T> {
-  unit: $U
+  unit: $U & $
   name: string
   type: IO
   done: T
@@ -52,7 +52,7 @@ export default class Pin_<T> extends Holder<I<T>, O<T>> {
     unit = Async(unit, ['U'], this.__system.async)
 
     try {
-      const pin = unit.$refPin({ type, pinId: name })
+      const pin = unit.$refPin({ type, pinId: name, __: ['EE', 'V', 'J'] })
 
       done({ pin })
     } catch (err) {

@@ -97,7 +97,7 @@ export interface $U_W {
 }
 
 export interface $U_R {
-  $refPin(data: { type: IO; pinId: string }): any
+  $refPin(data: { type: IO; pinId: string; __: string[] }): any
   $refGlobalObj(data: { globalId: string; __: string[] }): any
 }
 

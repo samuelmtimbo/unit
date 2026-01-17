@@ -224,14 +224,14 @@ export const AsyncURef = (unit: Unit): $U_R => {
 
       return $obj
     },
-    $refPin(data: { type: IO; pinId: string }) {
-      const { type, pinId } = data
+    $refPin(data: { type: IO; pinId: string; __: string[] }) {
+      const { type, pinId, __ } = data
 
       const system = unit.__system
 
       const pin = unit.getPin(type, pinId)
 
-      const $pin = Async(pin, ['V'], system.async)
+      const $pin = Async(pin, __, system.async)
 
       return $pin
     },
