@@ -18,7 +18,7 @@ export function stringifyDataValue(
   } else if (t === 'object' && t !== null) {
     value = clone(value) as DataRef
 
-    if (value.ref.length === 0) {
+    if ((value.ref ?? []).length === 0) {
       return stringify(value.data)
     } else {
       for (const path of value.ref) {
