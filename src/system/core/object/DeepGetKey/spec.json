@@ -1,0 +1,178 @@
+{
+  "type": "`U`&`G`",
+  "name": "deep get key",
+  "units": {
+    "deepget": {
+      "id": "2ff102a7-b469-461f-a3b1-a61b81c1b325",
+      "input": {
+        "path": {},
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 96,
+              "y": -18
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 96,
+              "y": 18
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 0
+        }
+      }
+    },
+    "append": {
+      "id": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -96,
+              "y": -18
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -96,
+              "y": 18
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "inputs": {
+    "key": {
+      "plug": {
+        "0": {
+          "unitId": "append",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -112,
+              "y": 35
+            }
+          }
+        }
+      }
+    },
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "deepget",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 112,
+              "y": -35
+            }
+          }
+        }
+      }
+    },
+    "path": {
+      "plug": {
+        "0": {
+          "unitId": "append",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -112,
+              "y": -35
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "deepget",
+          "pinId": "value",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 112,
+              "y": 35
+            }
+          }
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "append": {
+        "output": {
+          "a": true
+        }
+      },
+      "deepget": {
+        "input": {
+          "path": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "get `obj` property `key` at `path`",
+    "tags": ["core", "object"],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "id": "544571e6-f01b-40a3-8191-d077319958b4"
+}
