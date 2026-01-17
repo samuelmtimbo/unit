@@ -2125,7 +2125,7 @@ export function buildMoveMap(
 
       movePlugTask.moves.push({
         in: false,
-        action: makePlugPinAction(type, pinId, nextSubPinId, {
+        action: makePlugPinAction(type, pinId, subPinId, {
           unitId: graphId,
           kind: type,
           pinId: nextPinId,
