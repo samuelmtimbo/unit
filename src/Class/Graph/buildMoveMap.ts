@@ -2557,14 +2557,14 @@ export function buildMoveMap(
                       },
                     ])
 
-                    addDependency(targetExposePinSetTask, targetExposePinTask)
-
                     deepSet_(
                       targetExposePinTasks,
                       [oppositeType, pinId, nextSubPinId],
                       targetExposePinTask
                     )
                   }
+
+                  addDependency(targetExposePinTask, targetExposePinSetTask)
 
                   const data_ = reverse
                     ? deepGetOrDefault(
