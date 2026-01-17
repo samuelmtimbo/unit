@@ -1,0 +1,195 @@
+{
+  "type": "`U`&`G`",
+  "name": "web socket duplex",
+  "units": {
+    "onmessage": {
+      "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
+      "input": {
+        "emitter": {}
+      },
+      "output": {
+        "message": {
+          "metadata": {
+            "position": {
+              "x": 100,
+              "y": -44
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 53,
+          "y": -30
+        }
+      }
+    },
+    "websocket": {
+      "id": "b8fc168e-ee2f-11ea-a42a-730934861ff1",
+      "input": {
+        "url": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": 18
+            }
+          }
+        },
+        "close": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": -18
+            }
+          }
+        }
+      },
+      "output": {
+        "channel": {
+          "metadata": {
+            "position": {
+              "x": 4,
+              "y": 0
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -56,
+          "y": 0
+        }
+      }
+    },
+    "send": {
+      "id": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",
+      "input": {
+        "channel": {},
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 98,
+              "y": 43
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 30
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "onmessage": {
+        "input": {
+          "emitter": true
+        }
+      },
+      "send": {
+        "input": {
+          "channel": true
+        }
+      },
+      "websocket": {
+        "output": {
+          "channel": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "close": {
+      "plug": {
+        "0": {
+          "unitId": "websocket",
+          "pinId": "close",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -118,
+              "y": -34
+            }
+          }
+        }
+      }
+    },
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "websocket",
+          "pinId": "url",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -117,
+              "y": 35
+            }
+          }
+        }
+      }
+    },
+    "message": {
+      "plug": {
+        "0": {
+          "unitId": "send",
+          "pinId": "data",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 115,
+              "y": 60
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "message": {
+      "plug": {
+        "0": {
+          "unitId": "onmessage",
+          "pinId": "message",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 118,
+              "y": -60
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "network",
+    "description": "web socket send and receive"
+  },
+  "id": "acfb72f1-d215-4c8c-ac8b-a2efcc64677d"
+}
