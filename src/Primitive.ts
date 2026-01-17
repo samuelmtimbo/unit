@@ -99,6 +99,10 @@ export class Primitive<
             this._activateInput(name as keyof I, data)
 
             if (ref) {
+              if (!data) {
+                return
+              }
+
               this.__onRefInputData(name as keyof I, data)
             } else {
               this.onDataInputData(name as keyof I, data)
