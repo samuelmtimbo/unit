@@ -1,0 +1,216 @@
+{
+  "type": "`U`&`G`",
+  "name": "web socket remote graph",
+  "units": {
+    "remotegraph": {
+      "id": "57bcdd88-a4f4-49ab-92d4-ed1969895520",
+      "input": {
+        "opt": {
+          "metadata": {
+            "position": {
+              "x": 77,
+              "y": -33
+            }
+          }
+        },
+        "close": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 96,
+              "y": -4
+            }
+          }
+        },
+        "message": {}
+      },
+      "output": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 92,
+              "y": 32
+            }
+          }
+        },
+        "message": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 45,
+          "y": 1
+        }
+      }
+    },
+    "websocketjsonduplex": {
+      "id": "625e9caa-fefc-4675-a490-b9a199f25bee",
+      "input": {
+        "data": {},
+        "close": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": 22
+            }
+          }
+        },
+        "url": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": -13
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -54,
+          "y": 4
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "remotegraph": {
+        "input": {
+          "message": true
+        }
+      },
+      "websocketjsonduplex": {
+        "output": {
+          "data": true
+        }
+      }
+    },
+    "1": {
+      "websocketjsonduplex": {
+        "input": {
+          "data": true
+        }
+      },
+      "remotegraph": {
+        "output": {
+          "message": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "remotegraph",
+          "pinId": "opt",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 87,
+              "y": -55
+            }
+          }
+        }
+      }
+    },
+    "close": {
+      "plug": {
+        "0": {
+          "unitId": "websocketjsonduplex",
+          "pinId": "close",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "remotegraph",
+          "pinId": "close",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -118,
+              "y": 38
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 120,
+              "y": -10
+            }
+          }
+        }
+      },
+      "defaultIgnored": true
+    },
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "websocketjsonduplex",
+          "pinId": "url",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -120,
+              "y": -28
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "remotegraph",
+          "pinId": "graph",
+          "kind": "output"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 111,
+              "y": 55
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "connect to a web socket shared graph",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -5,
+          "y": -10
+        },
+        "1": {
+          "x": -4,
+          "y": 15
+        }
+      }
+    }
+  },
+  "id": "f91983d2-be26-4487-afa7-dc5eb6f22b6c"
+}
