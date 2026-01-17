@@ -30,7 +30,7 @@ export function appendChild(
 
   const { __bundle } = child.constructor as UnitBundle
 
-  emit && component.emit('append_child', __bundle, child, [])
+  emit && component.emit('append_child', { child, bundle: __bundle, path: [] })
 
   return i
 }
@@ -46,7 +46,7 @@ export function appendChildren(
 
   const bundles = Classes.map((c) => c.__bundle)
 
-  component.emit('append_children', bundles, [])
+  component.emit('append_children', { bundles, path: [] })
 
   return children.length
 }
@@ -114,7 +114,7 @@ export function insertChild(
 
   const { __bundle: bundle } = Class
 
-  component.emit('insert_child', bundle, at, [])
+  component.emit('insert_child', { bundle, at, path: [] })
 }
 
 export function hasChild(
@@ -150,8 +150,8 @@ export function removeChild(
 ): Component_ {
   const child = pullChild(element, children, at)
 
-  emit && element.emit('remove_child', at, [])
-  emit && element.emit(`remove_child_at_${at}`, at)
+  emit && element.emit('remove_child', { at, path: [] })
+  emit && element.emit(`remove_child_at_${at}`, { at, path: [] })
 
   return child
 }
@@ -213,7 +213,7 @@ export function registerParentRoot(
   slot.appendParentChild(component, 'default')
 
   emit &&
-    component.emit('register_parent_root', child, subComponentId, slotName)
+    component.emit('register_parent_root', { component, slotName, path: [] })
 }
 
 export function unregisterParentRoot(
@@ -227,7 +227,8 @@ export function unregisterParentRoot(
 
   parentRoot.splice(at, 1)
 
-  emit && component.emit('unregister_parent_root', child, subComponentId)
+  emit &&
+    component.emit('unregister_parent_root', { component: child, path: [] })
 }
 
 export function reorderRoot(
@@ -237,17 +238,17 @@ export function reorderRoot(
   to: number,
   emit: boolean
 ): void {
-  const currentIndex = root.indexOf(child)
+  const from = root.indexOf(child)
 
-  if (currentIndex === -1) {
+  if (from === -1) {
     throw new Error('root not found')
   }
 
-  root.splice(currentIndex, 1)
+  root.splice(from, 1)
 
   insert(root, child, to)
 
-  emit && component.emit('reorder_root', component, to)
+  emit && component.emit('reorder_root', { from, to, path: [] })
 }
 
 export function reorderParentRoot(
@@ -257,17 +258,17 @@ export function reorderParentRoot(
   to: number,
   emit: boolean
 ): void {
-  const currentIndex = parentRoot.indexOf(child)
+  const from = parentRoot.indexOf(child)
 
-  if (currentIndex === -1) {
+  if (from === -1) {
     throw new Error('root not found')
   }
 
-  parentRoot.splice(currentIndex, 1)
+  parentRoot.splice(from, 1)
 
   insert(parentRoot, child, to)
 
-  emit && component.emit('reorder_parent_root', component, to)
+  emit && component.emit('reorder_parent_root', { from, to, path: [] })
 }
 
 export function unregisterRoot(
@@ -281,7 +282,7 @@ export function unregisterRoot(
 
   root.splice(at, 1)
 
-  emit && component.emit('unregister_root', child, subComponentId)
+  emit && component.emit('unregister_root', { subComponentId, path: [] })
 }
 
 export function registerRoot(
@@ -293,7 +294,7 @@ export function registerRoot(
 ): void {
   root.push(child)
 
-  emit && component.emit('register_root', child, subComponentId)
+  emit && component.emit('register_root', { subComponentId, path: [] })
 }
 
 export function appendParentChild(
@@ -307,8 +308,6 @@ export function appendParentChild(
 
   if (component === slot) {
     parentChild.push(child)
-
-    emit && component.emit('append_parent_child', component, slotName)
   } else {
     slot.appendParentChild(child, 'default', emit)
   }
@@ -323,8 +322,6 @@ export function removeParentChild(
   const at = parentRoot.indexOf(child)
 
   parentRoot.splice(at, 1)
-
-  emit && component.emit('remove_parent_child', component)
 }
 
 export function animate(

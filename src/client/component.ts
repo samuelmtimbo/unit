@@ -8,7 +8,6 @@ import { Tag } from '../system/platform/Style'
 import { Tree } from '../tree'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
-import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Unlisten } from '../types/Unlisten'
 import { SelectionObject } from '../types/interface/SEL'
@@ -2226,7 +2225,7 @@ export class Component<
           this._disconnect()
           this._connect($unit)
         } else if (event_event === 'append_child') {
-          const bundle = event_data
+          const { bundle } = event_data
 
           const at = this.$children.length
 
@@ -2238,7 +2237,7 @@ export class Component<
 
           this.appendChild(child, slot_name)
         } else if (event_event === 'append_children') {
-          const bundles = event_data
+          const { bundles } = event_data
 
           const children = bundles.map((bundle: UnitBundleSpec, i: number) =>
             this._instanceChild({ bundle }, this.$children.length + i)
@@ -2252,7 +2251,7 @@ export class Component<
 
           this.appendChildren(children, slot_name)
         } else if (event_event === 'remove_child') {
-          const at = event_data
+          const { at } = event_data
 
           const child = this.$remoteChildren[at]
 
@@ -2355,17 +2354,17 @@ export class Component<
     all_unlisten.push(unlisten_control)
 
     const unlisten_emitter = callAll([
-      $emitter.$addListener({ event: 'listen' }, ([{ event }]) => {
+      $emitter.$addListener({ event: 'listen' }, ({ event }) => {
         if (UI_EVENT_SET.has(event as UIEventName) || event.startsWith('_')) {
           listen(event)
         }
       }),
-      $emitter.$addListener({ event: 'unlisten' }, ([{ event }]) => {
+      $emitter.$addListener({ event: 'unlisten' }, ({ event }) => {
         if (UI_EVENT_SET.has((event as UIEventName) || event.startsWith('_'))) {
           unlisten(event)
         }
       }),
-      $emitter.$addListener({ event: 'call' }, ([{ method, data }]) => {
+      $emitter.$addListener({ event: 'call' }, ({ method, data }) => {
         this._call(method, data)
       }),
     ])
@@ -2405,12 +2404,8 @@ export class Component<
     return callAll([
       $emitter.$addListener(
         { event: 'set_sub_component' },
-        ([subComponentId, bundle, path = []]) => {
+        ({ subComponentId, bundle, path = [] }) => {
           if (!this.$controlled) {
-            if (path.length > 0) {
-              return
-            }
-
             const child = $childToComponent(this.$system, { bundle })
 
             const __ = getComponentInterface(child)
@@ -2428,16 +2423,8 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_root' },
-        ([globalRef, subComponentId, path = []]: [
-          GlobalRefSpec,
-          string,
-          string[],
-        ]) => {
+        ({ subComponentId, path = [] }) => {
           if (!this.$controlled) {
-            if (path.length > 0) {
-              return
-            }
-
             const subComponent: Component = this.$subComponent[subComponentId]
 
             if (subComponent) {
@@ -2457,16 +2444,8 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_root' },
-        ([globalRef, subComponentId, path = []]: [
-          GlobalRefSpec,
-          string,
-          string[],
-        ]) => {
+        ({ subComponentId, path = [] }) => {
           if (!this.$controlled) {
-            if (path.length > 0) {
-              return
-            }
-
             const subComponent: Component = this.$subComponent[subComponentId]
 
             if (subComponent) {
@@ -2485,18 +2464,13 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_parent_root' },
-        ([globalRef, subComponentId, slotName, path = []]: [
-          GlobalRefSpec,
-          string,
-          string,
-          string[],
-        ]) => {
+        ({ component, subComponentId, slotName, path = [] }) => {
           if (!this.$controlled && !this.$parent.$controlled) {
             if (path.length > 0) {
               return
             }
 
-            const { globalId } = globalRef
+            const { globalId } = component
 
             const components = this.$system.getLocalComponents(globalId)
 
@@ -2529,17 +2503,13 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_parent_root' },
-        ([globalRef, subComponentId, path = []]: [
-          GlobalRefSpec,
-          string,
-          string[],
-        ]) => {
+        ({ component, path = [] }) => {
           if (!this.$controlled) {
             if (path.length > 0) {
               return
             }
 
-            const { globalId } = globalRef
+            const { globalId } = component
 
             const components = this.$system.getLocalComponents(globalId)
 
@@ -2555,7 +2525,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'reorder_sub_component' },
-        ([parentId, childId, to, path = []]) => {
+        ({ parentId, childId, to, path = [] }) => {
           if (path.length > 0) {
             return
           }
@@ -2567,7 +2537,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'move_sub_component_root' },
-        ([
+        ({
           parentId,
           prevParentMap,
           children,
@@ -2575,11 +2545,7 @@ export class Component<
           slotMap,
           prevSlotMap,
           path = [],
-        ]) => {
-          if (path.length > 0) {
-            return
-          }
-
+        }) => {
           if (!this.$controlled) {
             for (const childId of children) {
               const child = this.getSubComponent(childId)

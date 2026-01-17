@@ -3028,17 +3028,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private injectSubComponent(
-    unitId: string,
+    subComponentId: string,
     unitSpec: GraphUnitSpec,
     unit: Component_,
     emit: boolean = true
   ): void {
-    this._specInjectSubComponent(unitId)
-    this._simInjectSubComponent(unitId, unitSpec, unit)
+    this._specInjectSubComponent(subComponentId)
+    this._simInjectSubComponent(subComponentId, unitSpec, unit)
 
     const bundle = unit.getUnitBundleSpec({})
 
-    this.emit('set_sub_component', unitId, bundle)
+    this.emit('set_sub_component', { subComponentId, bundle, path: [] })
   }
 
   private _simInjectSubComponent(
@@ -3806,7 +3806,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     registerRoot: boolean = true
   ): void {
     if (unit.isElement()) {
-      this.emit('set_sub_component', unitId, bundle)
+      this.emit('set_sub_component', {
+        subComponentId: unitId,
+        bundle,
+        path: [],
+      })
 
       if (registerRoot) {
         if (parentId) {

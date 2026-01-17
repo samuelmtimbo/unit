@@ -1,5 +1,4 @@
 import { DetachOpt } from '../../system/platform/api/component/Detach'
-import { Dict } from '../Dict'
 import { UnitBundle } from '../UnitBundle'
 import { UnitBundleSpec } from '../UnitBundleSpec'
 import { Unlisten } from '../Unlisten'
@@ -8,22 +7,24 @@ import { Component_ } from './Component'
 export type C_J = {}
 
 export type C_EE = {
-  append_child: [UnitBundleSpec, Component_, string[]]
-  append_children: [UnitBundleSpec[], string[]]
-  insert_child: [UnitBundleSpec, number, string[]]
-  remove_child: [number, string[]]
-  [remove_child_at: `remove_child_at_${number}`]: [number]
-  append_parent_root: [string, string, string]
-  append_parent_root_children: [string, string[], Dict<string>]
-  register_parent_root: [Component_, string, string]
-  unregister_parent_root: [Component_, string]
-  register_root: [Component_, string]
-  unregister_root: [Component_, string]
-  set_sub_component: [string, UnitBundleSpec]
-  append_parent_child: [Component_, string]
-  remove_parent_child: [Component_]
-  reorder_root: [Component_, number]
-  reorder_parent_root: [Component_, number]
+  append_child: [{ child: Component_; bundle: UnitBundleSpec; path: string[] }]
+  append_children: [{ bundles: UnitBundleSpec[]; path: string[] }]
+  insert_child: [{ bundle: UnitBundleSpec; at: number; path: string[] }]
+  remove_child: [{ at: number; path: string[] }]
+  [remove_child_at: `remove_child_at_${number}`]: [
+    { at: number; path: string[] },
+  ]
+  register_parent_root: [
+    { component: Component_; slotName: string; path: string[] },
+  ]
+  unregister_parent_root: [{ component: Component_; path: string[] }]
+  register_root: [{ subComponentId: string; path: string[] }]
+  unregister_root: [{ subComponentId: string; path: string[] }]
+  set_sub_component: [
+    { subComponentId: string; bundle: UnitBundleSpec; path: string[] },
+  ]
+  reorder_root: [{ from: number; to: number; path: string[] }]
+  reorder_parent_root: [{ from: number; to: number; path: string[] }]
   call: [{ method: string; data: any[] }]
 }
 

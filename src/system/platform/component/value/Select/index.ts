@@ -59,7 +59,13 @@ export default class Select extends Field<'value', I, O> {
 
     const setFirstOption = (option: Option) => {}
 
-    const appendChildListener = (_: UnitBundleSpec, child: Component_) => {
+    const appendChildListener = ({
+      bundle,
+      child,
+    }: {
+      bundle: UnitBundleSpec
+      child: Component_
+    }) => {
       if (!this._first_option) {
         const option = findFirstOption(child)
 

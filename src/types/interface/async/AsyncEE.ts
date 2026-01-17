@@ -1,4 +1,6 @@
 import { $ } from '../../../Class/$'
+import { isObjNotNull } from '../../../system/f/object/DeepMerge/isObjNotNull'
+import { mapObjKV } from '../../../util/object'
 import { Callback } from '../../Callback'
 import { Unlisten } from '../../Unlisten'
 import { EE } from '../EE'
@@ -25,16 +27,26 @@ export const AsyncEECall = (emitter: EE): $EE_C => {
 export const AsyncEEWatch = (emitter: EE): $EE_W => {
   return {
     $addListener({ event }: { event: string }, callback: Callback): Unlisten {
-      return emitter.addListener(event, (...args) => {
-        args = args.map((arg) => {
-          if (arg instanceof $) {
-            return { globalId: arg.getGlobalId(), __: arg.getInterface() }
-          } else {
-            return arg
+      return emitter.addListener(event, (data) => {
+        const deref = (data) => {
+          if (data instanceof $) {
+            return { globalId: data.getGlobalId(), __: data.getInterface() }
           }
-        })
 
-        callback(args)
+          if (Array.isArray(data)) {
+            data = data.map(deref)
+          } else if (isObjNotNull(data)) {
+            data = mapObjKV(data, (key, value) => {
+              return deref(value)
+            })
+          }
+
+          return data
+        }
+
+        data = deref(data)
+
+        callback(data)
       })
     },
   }

@@ -1,11 +1,13 @@
+import { $ } from '../../../../../Class/$'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
-import { EE } from '../../../../../types/interface/EE'
+import { $EE } from '../../../../../types/interface/async/$EE'
+import { Async } from '../../../../../types/interface/async/Async'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_LISTEN } from '../../../../_ids'
 
 export interface I<T> {
-  emitter: EE<any>
+  emitter: $EE & $
   event: string
   remove: string
 }
@@ -39,11 +41,15 @@ export default class Listen<T> extends Holder<I<T>, O<T>> {
   }
 
   f({ emitter, event }: I<T>) {
-    const listener = (...data: any[]) => {
-      this._output.data.push(data[0])
+    emitter = Async(emitter, ['EE'], this.__system.async)
+
+    const listener = (data: any) => {
+      this._output.data.push(data)
     }
 
-    this._unlisten = emitter.addListener(event, listener)
+    this._unlisten = emitter.$addListener({ event }, (data) => {
+      listener(data)
+    })
   }
 
   d() {
