@@ -1,0 +1,364 @@
+{
+  "type": "`U`&`G`",
+  "name": "deep get or default",
+  "units": {
+    "deepgetkey": {
+      "id": "544571e6-f01b-40a3-8191-d077319958b4",
+      "input": {
+        "key": {},
+        "obj": {},
+        "path": {}
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -160,
+              "y": -50
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -109,
+          "y": -48
+        }
+      }
+    },
+    "if3": {
+      "id": "13a16a8a-5dc6-11ea-a3d4-9bda49772976",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 9,
+              "y": -77
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": 35,
+              "y": -53
+            }
+          }
+        },
+        "c": {
+          "metadata": {
+            "position": {
+              "x": -38,
+              "y": 5
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -11,
+          "y": -34
+        }
+      }
+    },
+    "deephaskey": {
+      "id": "740fde5d-8de1-448f-87d9-2ddd397e9c4b",
+      "metadata": {
+        "position": {
+          "x": 108,
+          "y": -16
+        }
+      },
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 142,
+              "y": -50
+            }
+          }
+        },
+        "path": {
+          "metadata": {
+            "position": {
+              "x": 159,
+              "y": -23
+            }
+          }
+        },
+        "key": {
+          "metadata": {
+            "position": {
+              "x": 152,
+              "y": 6
+            }
+          }
+        }
+      }
+    },
+    "ifnot": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 17,
+              "y": 80
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a if not b": {
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": 79
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 56,
+          "y": 52
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "if3": {
+        "input": {
+          "test": true
+        }
+      },
+      "deephaskey": {
+        "output": {
+          "has": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "deepgetkey": {
+        "input": {
+          "path": true
+        }
+      },
+      "if3": {
+        "output": {
+          "b": true
+        }
+      }
+    },
+    "2": {
+      "deepgetkey": {
+        "input": {
+          "obj": true
+        }
+      },
+      "if3": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "deepgetkey": {
+        "input": {
+          "key": true
+        }
+      },
+      "if3": {
+        "output": {
+          "c": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "if3",
+          "pinId": "a",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "deephaskey",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 13,
+              "y": -102
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 154,
+              "y": -72
+            }
+          }
+        }
+      }
+    },
+    "key": {
+      "plug": {
+        "0": {
+          "unitId": "deephaskey",
+          "pinId": "key",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "if3",
+          "pinId": "c",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 171,
+              "y": 20
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -49,
+              "y": 28
+            }
+          }
+        }
+      }
+    },
+    "path": {
+      "plug": {
+        "0": {
+          "unitId": "deephaskey",
+          "pinId": "path",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "if3",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 184,
+              "y": -29
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 49,
+              "y": -73
+            }
+          }
+        }
+      }
+    },
+    "default": {
+      "plug": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 7,
+              "y": 102
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "deepgetkey",
+          "pinId": "value",
+          "kind": "output"
+        },
+        "1": {
+          "unitId": "ifnot",
+          "pinId": "a if not b",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -184,
+              "y": -52
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 106,
+              "y": 101
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "if `key` in `obj` at `path`, get its `value`, `default` otherwise",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 48,
+          "y": -3
+        },
+        "1": {
+          "x": -66,
+          "y": -23
+        },
+        "2": {
+          "x": -58,
+          "y": -63
+        },
+        "3": {
+          "x": -61,
+          "y": -44
+        }
+      }
+    }
+  },
+  "id": "852a1b1e-2ee3-4802-8cfb-e2093e35aa09"
+}
