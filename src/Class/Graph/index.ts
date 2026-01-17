@@ -3317,7 +3317,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       this._branch
     )
 
-    this._addUnit(unitId, unit, bundle, parentId, false, fork, bubble)
+    this._addUnit(unitId, unit, bundle, parentId, undefined, fork, bubble)
 
     return unit
   }
