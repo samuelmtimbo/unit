@@ -6,7 +6,7 @@ import { RemotePort } from '../../../../RemotePort'
 import { System } from '../../../../system'
 import { Port } from '../../../../types/global/Port'
 import { $Graph } from '../../../../types/interface/async/$Graph'
-import { UCGEE } from '../../../../types/interface/UCGEE'
+import { UCGJEE } from '../../../../types/interface/UCGJEE'
 import { $wrap } from '../../../../wrap'
 import { ID_REMOTE_GRAPH } from '../../../_ids'
 
@@ -69,9 +69,9 @@ export default class RemoteGraph extends Holder<I, O> {
 
     this._remote_port = remote_port
 
-    const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
+    const $graph: $Graph = AsyncWorker(remote_port, UCGJEE)
 
-    const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
+    const graph = $wrap<$Graph>(this.__system, $graph, UCGJEE)
 
     done({ graph })
   }

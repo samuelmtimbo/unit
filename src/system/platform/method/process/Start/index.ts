@@ -8,7 +8,7 @@ import { GraphSpec } from '../../../../../types/GraphSpec'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
 import { Async } from '../../../../../types/interface/async/Async'
-import { UCGEE } from '../../../../../types/interface/UCGEE'
+import { UCGJEE } from '../../../../../types/interface/UCGJEE'
 import { clone } from '../../../../../util/clone'
 import { weakMerge } from '../../../../../weakMerge'
 import { $wrap } from '../../../../../wrap'
@@ -73,7 +73,7 @@ export default class Start extends Holder<I, O> {
 
     const bundle = bundleSpec(spec, specs_, false)
 
-    const $graph = system.$start({ bundle, __: UCGEE })
+    const $graph = system.$start({ bundle, __: UCGJEE })
 
     for (const pinId in input) {
       const pin = input[pinId]
@@ -88,7 +88,7 @@ export default class Start extends Holder<I, O> {
       }
     }
 
-    const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
+    const graph = $wrap<$Graph>(this.__system, $graph, UCGJEE)
 
     if (!paused) {
       graph.$play({})

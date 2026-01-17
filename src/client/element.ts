@@ -1,5 +1,6 @@
 import { Moment } from '../debug/Moment'
 import { NOOP } from '../NOOP'
+import { proxyWrap } from '../proxyWrap'
 import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'
 import { Dict } from '../types/Dict'
@@ -33,8 +34,11 @@ export class Element<
 
   public $preventLoad: boolean = false
   public $input: Dict<string[]>
+  public $$unit: $Element
 
   onConnected($unit: $Element) {
+    this.$$unit = proxyWrap($unit, ['V', 'J'])
+
     const handler = {
       unit: (moment: Moment) => {
         const { specs, classes } = this.$system
@@ -50,7 +54,7 @@ export class Element<
 
               const __ = this.$input[name] ?? []
 
-              return this.$unit.$refGlobalObj({ globalId, __ })
+              return this.$$unit.$refGlobalObj({ globalId, __ })
             })
 
             this.setProp(name, _data)
@@ -67,7 +71,7 @@ export class Element<
       handler[type] && handler[type](moment)
     }
 
-    const element_unlisten = this.$unit.$watch(
+    const element_unlisten = this.$$unit.$watch(
       { events: ['set', 'call'] },
       element_listener
     )
@@ -75,7 +79,7 @@ export class Element<
     this._element_unlisten = element_unlisten
 
     if (!this.$preventLoad) {
-      $unit.$read({}, (state) => {
+      this.$$unit.$read({}, (state) => {
         const { specs, classes } = this.$system
 
         state = evaluate(state, specs, classes, (url) => {
@@ -90,7 +94,7 @@ export class Element<
 
             const __ = this.$input[name]
 
-            state[name] = this.$unit.$refGlobalObj({ globalId, __ })
+            state[name] = this.$$unit.$refGlobalObj({ globalId, __ })
           }
         }
 
@@ -111,7 +115,7 @@ export class Element<
     if (this.$connected) {
       const value = stringify(data)
 
-      this.$unit.$set({ name, data: value }, NOOP)
+      this.$$unit.$set({ name, data: value }, NOOP)
     }
   }
 

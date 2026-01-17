@@ -14,7 +14,7 @@ import { Dict } from '../../../../../types/Dict'
 import { Async } from '../../../../../types/interface/async/Async'
 import { G } from '../../../../../types/interface/G'
 import { J } from '../../../../../types/interface/J'
-import { UCGEE } from '../../../../../types/interface/UCGEE'
+import { UCGJEE } from '../../../../../types/interface/UCGJEE'
 import { wrapObject } from '../../../../../wrap/Object'
 import { ID_EDITOR } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
@@ -161,7 +161,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     if (name === 'graph') {
       if (this._input.graph.embodied()) {
-        data = Async(data, UCGEE, this.__system.async)
+        data = Async(data, UCGJEE, this.__system.async)
       }
 
       this._graph = data as Graph

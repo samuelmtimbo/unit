@@ -5,7 +5,7 @@ import { parentElement } from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { $Component } from '../../../../types/interface/async/$Component'
-import { UCGEE } from '../../../../types/interface/UCGEE'
+import { UCGJEE } from '../../../../types/interface/UCGJEE'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
 import { Unlisten } from '../../../../types/Unlisten'
 import { weakMerge } from '../../../../weakMerge'
@@ -21,7 +21,7 @@ export default class Render extends Element<HTMLDivElement, Props> {
   private _component: Component
 
   public $input = {
-    component: [...UCGEE, 'V'],
+    component: [...UCGJEE, 'V'],
   }
 
   constructor($props: Props, $system: System) {

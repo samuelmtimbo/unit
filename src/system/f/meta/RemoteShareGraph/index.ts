@@ -4,7 +4,7 @@ import { Holder } from '../../../../Class/Holder'
 import { makeUnitRemoteRef } from '../../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../../client/RemoteRef'
 import { System } from '../../../../system'
-import { UCGEE } from '../../../../types/interface/UCGEE'
+import { UCGJEE } from '../../../../types/interface/UCGJEE'
 import { ID_REMOTE_SHARE_GRAPH } from '../../../_ids'
 
 export interface I {
@@ -53,7 +53,7 @@ export default class RemoteShareGraph extends Holder<I, O> {
   }
 
   f({ graph, opt }: I, done: Done<O>) {
-    const ref = makeUnitRemoteRef(graph, UCGEE, (data) => {
+    const ref = makeUnitRemoteRef(graph, UCGJEE, (data) => {
       this._send(data)
     })
 

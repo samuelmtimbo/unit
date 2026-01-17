@@ -695,7 +695,7 @@ import {
   GraphSelectionData,
 } from '../../../../../types/interface/G'
 import { RE } from '../../../../../types/interface/RE'
-import { UCGEE } from '../../../../../types/interface/UCGEE'
+import { UCGJEE } from '../../../../../types/interface/UCGJEE'
 import { $Component } from '../../../../../types/interface/async/$Component'
 import { $G } from '../../../../../types/interface/async/$G'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
@@ -1016,7 +1016,7 @@ export interface Props extends Value {
 
 export default class Editor extends Element<HTMLDivElement, Props> {
   public $input: Dict<string[]> = {
-    graph: UCGEE,
+    graph: UCGJEE,
     frame: ['C'],
   }
 
@@ -1616,7 +1616,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     parent_graph.play()
 
-    const parent_pod = proxyWrap(AsyncGraph(parent_graph), UCGEE)
+    const parent_pod = proxyWrap(AsyncGraph(parent_graph), UCGJEE)
 
     const editor_unit = parent_graph.getUnit(editor_unit_id)
 
@@ -2559,7 +2559,7 @@ export type LayoutLayer = {
 
 export class Editor_ extends Element<HTMLDivElement, Props_> {
   public $input: Dict<string[]> = {
-    graph: UCGEE,
+    graph: UCGJEE,
   }
 
   private _spec: GraphSpec = emptyGraphSpec()
@@ -4676,7 +4676,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!pod) {
       pod = this._pod.$refUnit({
         unitId: unit_id,
-        __: UCGEE,
+        __: UCGJEE,
       }) as $Graph
 
       this._subgraph_pod_cache[unit_id] = pod
@@ -9487,7 +9487,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const $unit = this._pod.$refUnit({
       unitId,
-      __: UCGEE,
+      __: UCGJEE,
       detached: false,
     }) as $Graph
 
@@ -9684,7 +9684,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     const $unit = this._pod.$refUnit({
       unitId,
-      __: UCGEE,
+      __: UCGJEE,
       detached: false,
     }) as $Graph
 
@@ -33305,7 +33305,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const graph = start(system, bundle, true)
 
-      const pod = proxyWrap(AsyncGraph(graph), UCGEE)
+      const pod = proxyWrap(AsyncGraph(graph), UCGJEE)
       const component = componentFromUnitBundle(system, unit_bundle)
 
       for (const subComponentId in component.$subComponent) {
@@ -57813,7 +57813,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const graph_unit_pod = this._pod.$refUnit({
       unitId: graph_unit_id,
-      __: UCGEE,
+      __: UCGJEE,
     }) as $Graph
 
     const parent_spec = findSpecAtPath(
