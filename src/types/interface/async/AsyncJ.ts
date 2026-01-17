@@ -1,7 +1,9 @@
+import { $ } from '../../../Class/$'
 import { evaluate } from '../../../spec/evaluate'
 import { Callback } from '../../Callback'
 import { J } from '../J'
 import { $J, $J_C, $J_G, $J_R, $J_W } from './$J'
+import { Async } from './Async'
 
 export const AsyncJGet: (value: J) => $J_G = (value) => {
   return {
@@ -42,7 +44,29 @@ export const AsyncJWatch: (value: J) => $J_W = (value) => {
 }
 
 export const AsyncJRef: (value: J) => $J_R = (value) => {
-  return {}
+  return {
+    $ref({ name }: { name: string }): any {
+      let obj: any
+
+      try {
+        obj = value.get(name)
+      } catch (err) {
+        return null
+      }
+
+      if (obj === undefined) {
+        return null
+      }
+
+      if (obj instanceof $) {
+        const $obj = Async(obj, obj.__, obj.__system.async)
+
+        return $obj
+      } else {
+        return null
+      }
+    },
+  }
 }
 
 export const AsyncJ: (value: J) => $J = (value: J) => {
