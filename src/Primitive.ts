@@ -100,7 +100,7 @@ export class Primitive<
 
             if (ref) {
               if (!data) {
-                return
+                continue
               }
 
               this.__onRefInputData(name as keyof I, data)
