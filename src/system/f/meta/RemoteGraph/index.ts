@@ -65,7 +65,7 @@ export default class RemoteGraph extends Holder<I, O> {
 
     this._port = port
 
-    const remote_port = new RemotePort(port)
+    const remote_port = new RemotePort(this.__system, port)
 
     this._remote_port = remote_port
 

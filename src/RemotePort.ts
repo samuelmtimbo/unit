@@ -1,6 +1,8 @@
+import { $ } from './Class/$'
 import { MethodType } from './client/method'
 import { CALL, GET, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
 import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
+import { System } from './system'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Port } from './types/global/Port'
@@ -9,7 +11,7 @@ import { randomIdNotInSet } from './util/id'
 
 export type AnyEmitterEvents = EventEmitter_EE<Dict<any[]>> & Dict<any[]>
 
-export class RemotePort {
+export class RemotePort extends $ {
   private _port: Port
 
   private _call_id: Set<string> = new Set<string>()
@@ -23,7 +25,9 @@ export class RemotePort {
 
   private _valid: boolean = true
 
-  constructor(port: Port) {
+  constructor(system: System, port: Port) {
+    super(system)
+
     this._port = port
 
     this._port.onmessage = (data) => {
@@ -157,7 +161,7 @@ export class RemotePort {
       onerror() {},
     }
 
-    const remote_port = new RemotePort(port)
+    const remote_port = new RemotePort(this.__system, port)
 
     this._ref[id] = remote_port
 

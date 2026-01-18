@@ -1,13 +1,14 @@
 import { DataEvent } from './events/DataEvent'
 import { ErrorEvent_ } from './events/ErrorEvent'
 import { RemotePort } from './RemotePort'
+import { System } from './system'
 import { Port } from './types/global/Port'
 
 export class RemoteClient {
   private _remote_port: RemotePort
   private _port: Port
 
-  constructor(port: Port) {
+  constructor(system: System, port: Port) {
     this._port = port
 
     const _port: Port = {
@@ -22,7 +23,7 @@ export class RemoteClient {
       _port.onmessage(data)
     }
 
-    this._remote_port = new RemotePort(_port)
+    this._remote_port = new RemotePort(system, _port)
   }
 
   port(): RemotePort {

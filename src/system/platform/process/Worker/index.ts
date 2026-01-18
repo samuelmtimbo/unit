@@ -58,7 +58,7 @@ export default class Worker_ extends Functional<I, O> {
 
     const port = workerPort(worker)
 
-    const client = new RemoteClient(port)
+    const client = new RemoteClient(this.__system, port)
 
     const remote = client.port()
 

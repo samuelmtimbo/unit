@@ -44,7 +44,7 @@ export function remoteRef(ref: RemoteAPI['ref']): RemoteAPI['ref'] {
                   return null
                 }
 
-                result = makeRemoteObjectAPI(result, result.__ ?? result.$__)
+                result = makeRemoteObjectAPI(result, result.$__ ?? result.__)
 
                 return result
               }
