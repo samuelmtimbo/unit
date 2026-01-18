@@ -67,6 +67,10 @@ export class RemoteRef {
 
           const ref = this._api[REF][method](__data)
 
+          if (!ref) {
+            return
+          }
+
           const remote_ref = new RemoteRef(ref, (data) => {
             this._post({ type: REF, data: { id, data } })
           })
