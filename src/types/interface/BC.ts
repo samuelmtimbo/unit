@@ -1,3 +1,4 @@
-import { V } from './V'
-
-export interface BC extends V {}
+export interface BC {
+  readValue(): Promise<string>
+  writeValue(data: string): Promise<void>
+}

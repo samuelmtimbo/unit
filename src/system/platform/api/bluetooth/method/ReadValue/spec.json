@@ -1,0 +1,27 @@
+{
+  "name": "read value",
+  "type": "`U`",
+  "inputs": {
+    "charac": {
+      "type": "`BC`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "charac": {
+      "type": "`V`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "bluetooth",
+    "description": "read `value` from a remote GATT `charac`teristic",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTDescriptor/readValue",
+    "tags": ["platform", "api", "bluetooth"]
+  },
+  "id": "cdea4530-d391-4661-bf92-21450d2e825a",
+  "base": true
+}

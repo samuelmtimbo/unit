@@ -15,18 +15,13 @@
   },
   "outputs": {
     "charac": {
-      "type": "`V`",
+      "type": "`BC`",
       "ref": true
-    }
-  },
-  "events": {
-    "characteristicvaluechanged": {
-      "type": "string"
     }
   },
   "metadata": {
     "icon": "bluetooth",
-    "description": "remote GATT charact",
+    "description": "remote GATT characteristic",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic",
     "tags": ["platform", "api", "bluetooth"]
   },

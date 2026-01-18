@@ -1,0 +1,26 @@
+{
+  "name": "write value",
+  "type": "`U`",
+  "inputs": {
+    "charac": {
+      "type": "`BC`",
+      "ref": true
+    },
+    "value": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "done": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "bluetooth",
+    "description": "write `value` to a remote GATT `charac`teristic",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTDescriptor/writeValue",
+    "tags": ["platform", "api", "bluetooth"]
+  },
+  "id": "56eb0818-308a-4459-98c0-b05ffb219c05",
+  "base": true
+}

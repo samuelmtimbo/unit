@@ -3,7 +3,6 @@ import { Functional, FunctionalEvents } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../Class/Functional/Fail'
 import { System } from '../../../../../system'
-import { Callback } from '../../../../../types/Callback'
 import { BluetoothCharacteristic } from '../../../../../types/global/BluetoothCharacteristic'
 import { BC } from '../../../../../types/interface/BC'
 import { BSE } from '../../../../../types/interface/BSE'
@@ -67,7 +66,7 @@ export default class BluetoothCharacteristic_ extends Functional<
   }
 
   async f({ service, uuid }, done: Done<O>, fail: Fail): Promise<void> {
-    let characteristic: any
+    let characteristic: BluetoothCharacteristic
 
     try {
       characteristic = await service.getCharacteristic(uuid)
@@ -82,28 +81,20 @@ export default class BluetoothCharacteristic_ extends Functional<
     const charac = new (class _BluetoothDevice extends $ implements BC {
       __ = ['BC']
 
-      read(callback: Callback<any>): void {
-        void (async () => {
-          const dataView = await characteristic.readValue()
+      async readValue(): Promise<string> {
+        const dataView = await characteristic.readValue()
 
-          const data = dataView.getUint8(0).toString()
+        const data = dataView.getUint8(0).toString()
 
-          callback(data)
-        })()
+        return data
       }
 
-      write(data: any, callback: Callback): void {
-        void (async () => {
-          try {
-            const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
+      async writeValue(data: string): Promise<void> {
+        const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
 
-            const buffer = Uint8Array.from(charCodeArray)
+        const buffer = Uint8Array.from(charCodeArray)
 
-            await characteristic.writeValue(buffer)
-          } catch (err) {
-            callback(err.message)
-          }
-        })()
+        await characteristic.writeValue(buffer)
       }
     })(this.__system)
 

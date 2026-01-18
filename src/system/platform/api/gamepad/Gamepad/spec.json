@@ -18,7 +18,6 @@
       "ref": true
     }
   },
-  "events": {},
   "metadata": {
     "icon": "gamepad",
     "description": "connect to gamepad controller",
