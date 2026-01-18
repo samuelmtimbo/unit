@@ -176,7 +176,7 @@ export function watchComponentRemoveEvent(
     callback({
       type: 'unit',
       event,
-      data: at,
+      data: { at },
       path,
     })
   }
