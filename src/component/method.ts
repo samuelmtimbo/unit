@@ -212,7 +212,12 @@ export function registerParentRoot(
 
   slot.appendParentChild(component, 'default')
 
-  emit && component.emit('register_parent_root', { component, slotName }, [])
+  emit &&
+    component.emit(
+      'register_parent_root',
+      { component, subComponentId, slotName },
+      []
+    )
 }
 
 export function unregisterParentRoot(

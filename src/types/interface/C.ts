@@ -12,7 +12,10 @@ export type C_EE = {
   insert_child: [{ bundle: UnitBundleSpec; at: number }, string[]]
   remove_child: [{ at: number }, string[]]
   [remove_child_at: `remove_child_at_${number}`]: [{ at: number }, string[]]
-  register_parent_root: [{ component: Component_; slotName: string }, string[]]
+  register_parent_root: [
+    { component: Component_; subComponentId: string; slotName: string },
+    string[],
+  ]
   unregister_parent_root: [{ component: Component_ }, string[]]
   register_root: [{ subComponentId: string }, string[]]
   unregister_root: [{ subComponentId: string }, string[]]
