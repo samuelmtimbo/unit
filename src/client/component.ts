@@ -3,6 +3,7 @@ import { Child } from '../component/Child'
 import { Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
+import { proxyWrap } from '../proxyWrap'
 import { System } from '../system'
 import { Tag } from '../system/platform/Style'
 import { Tree } from '../tree'
@@ -11,6 +12,7 @@ import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Unlisten } from '../types/Unlisten'
 import { SelectionObject } from '../types/interface/SEL'
+import { UCGEE } from '../types/interface/UCGEE'
 import { $Component } from '../types/interface/async/$Component'
 import { $EE } from '../types/interface/async/$EE'
 import { $Graph } from '../types/interface/async/$Graph'
@@ -2198,7 +2200,7 @@ export class Component<
       return
     }
 
-    this.$unit = $unit
+    this.$unit = proxyWrap($unit, UCGEE)
 
     const listen = (event: UIEventName): void => {
       this.$named_listener_count[event] = this.$named_listener_count[event] || 0
