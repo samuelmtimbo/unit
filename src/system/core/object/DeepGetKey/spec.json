@@ -64,6 +64,7 @@
     }
   },
   "inputs": {
+    "functional": true,
     "key": {
       "plug": {
         "0": {
@@ -85,6 +86,7 @@
       }
     },
     "obj": {
+      "functional": true,
       "plug": {
         "0": {
           "unitId": "deepget",
@@ -105,6 +107,7 @@
       }
     },
     "path": {
+      "functional": true,
       "plug": {
         "0": {
           "unitId": "append",
