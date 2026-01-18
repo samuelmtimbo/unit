@@ -5538,7 +5538,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     emit &&
       this.edit('move_sub_component_root', {
-        subComponentId,
+        parentId: subComponentId,
         prevParentMap,
         children,
         index,
