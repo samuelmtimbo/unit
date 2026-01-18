@@ -3038,7 +3038,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const bundle = unit.getUnitBundleSpec({})
 
-    this.emit('set_sub_component', { subComponentId, bundle, path: [] })
+    this.emit('set_sub_component', { subComponentId, bundle }, [])
   }
 
   private _simInjectSubComponent(
@@ -3806,11 +3806,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     registerRoot: boolean = true
   ): void {
     if (unit.isElement()) {
-      this.emit('set_sub_component', {
-        subComponentId: unitId,
-        bundle,
-        path: [],
-      })
+      this.emit(
+        'set_sub_component',
+        {
+          subComponentId: unitId,
+          bundle,
+        },
+        []
+      )
 
       if (registerRoot) {
         if (parentId) {
@@ -5537,15 +5540,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     emit &&
-      this.edit('move_sub_component_root', {
-        parentId: subComponentId,
-        prevParentMap,
-        children,
-        index,
-        slotMap,
-        prevSlotMap,
-        path: [],
-      })
+      this.edit(
+        'move_sub_component_root',
+        {
+          parentId: subComponentId,
+          prevParentMap,
+          children,
+          index,
+          slotMap,
+          prevSlotMap,
+        },
+        []
+      )
   }
 
   private _specRemoveRoot(subComponentId: string): void {

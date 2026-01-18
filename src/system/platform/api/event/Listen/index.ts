@@ -47,7 +47,9 @@ export default class Listen<T> extends Holder<I<T>, O<T>> {
       this._output.data.push(data)
     }
 
-    this._unlisten = emitter.$addListener({ event }, (data) => {
+    this._unlisten = emitter.$addListener({ event }, (args) => {
+      const data = args[0]
+
       listener(data)
     })
   }

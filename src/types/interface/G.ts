@@ -283,11 +283,12 @@ export type G_EE = {
       index: number
       slotMap: Dict<string>
       prevSlotMap: Dict<string>
-      path: string[]
     },
+    string[],
   ]
   reorder_sub_component: [
-    { parentId: string | null; childId: string; to: number; path: string[] },
+    { parentId: string | null; childId: string; to: number },
+    string[],
   ]
   move_subgraph_into: [...G_MoveSubgraphIntoArgs, string[]]
   move_subgraph_out_of: [...G_MoveSubgraphIntoArgs, string[]]

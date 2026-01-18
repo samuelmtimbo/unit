@@ -12,7 +12,7 @@ export interface GraphMoveSubcomponentRootMoment
   extends Moment<GraphReorderSubComponentMomentData> {}
 
 export function extractReorderSubComponentEventData(
-  ...[{ parentId, childId, to, path }]: G_EE['reorder_sub_component']
+  ...[{ parentId, childId, to }, path]: G_EE['reorder_sub_component']
 ): GraphReorderSubComponentMomentData {
   return {
     parentId,

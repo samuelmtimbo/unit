@@ -2356,17 +2356,17 @@ export class Component<
     all_unlisten.push(unlisten_control)
 
     const unlisten_emitter = callAll([
-      $emitter.$addListener({ event: 'listen' }, ({ event }) => {
+      $emitter.$addListener({ event: 'listen' }, ([{ event }]) => {
         if (UI_EVENT_SET.has(event as UIEventName) || event.startsWith('_')) {
           listen(event)
         }
       }),
-      $emitter.$addListener({ event: 'unlisten' }, ({ event }) => {
+      $emitter.$addListener({ event: 'unlisten' }, ([{ event }]) => {
         if (UI_EVENT_SET.has((event as UIEventName) || event.startsWith('_'))) {
           unlisten(event)
         }
       }),
-      $emitter.$addListener({ event: 'call' }, ({ method, data }) => {
+      $emitter.$addListener({ event: 'call' }, ([{ method, data }]) => {
         this._call(method, data)
       }),
     ])
@@ -2406,7 +2406,7 @@ export class Component<
     return callAll([
       $emitter.$addListener(
         { event: 'set_sub_component' },
-        ({ subComponentId, bundle, path = [] }) => {
+        ([{ subComponentId, bundle }, path = []]) => {
           if (!this.$controlled) {
             const child = $childToComponent(this.$system, { bundle })
 
@@ -2425,7 +2425,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_root' },
-        ({ subComponentId, path = [] }) => {
+        ([{ subComponentId }, path = []]) => {
           if (!this.$controlled) {
             const subComponent: Component = this.$subComponent[subComponentId]
 
@@ -2446,7 +2446,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_root' },
-        ({ subComponentId, path = [] }) => {
+        ([{ subComponentId }, path = []]) => {
           if (!this.$controlled) {
             const subComponent: Component = this.$subComponent[subComponentId]
 
@@ -2466,7 +2466,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'register_parent_root' },
-        ({ component, subComponentId, slotName, path = [] }) => {
+        ([{ component, subComponentId, slotName }, path = []]) => {
           if (!this.$controlled && !this.$parent.$controlled) {
             if (path.length > 0) {
               return
@@ -2505,7 +2505,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'unregister_parent_root' },
-        ({ component, path = [] }) => {
+        ([{ component }, path = []]) => {
           if (!this.$controlled) {
             if (path.length > 0) {
               return
@@ -2527,7 +2527,7 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'reorder_sub_component' },
-        ({ parentId, childId, to, path = [] }) => {
+        ([{ parentId, childId, to }, path = []]) => {
           if (path.length > 0) {
             return
           }
@@ -2539,16 +2539,15 @@ export class Component<
       ),
       $emitter.$addListener(
         { event: 'move_sub_component_root' },
-        ({
-          parentId,
-          prevParentMap,
-          children,
-          index,
-          slotMap,
-          prevSlotMap,
+        ([
+          { parentId, prevParentMap, children, index, slotMap, prevSlotMap },
           path = [],
-        }) => {
+        ]) => {
           if (!this.$controlled) {
+            if (path.length > 0) {
+              return
+            }
+
             for (const childId of children) {
               const child = this.getSubComponent(childId)
               const currentParentId = this.getSubComponentParentId(childId)

@@ -7,24 +7,21 @@ import { Component_ } from './Component'
 export type C_J = {}
 
 export type C_EE = {
-  append_child: [{ child: Component_; bundle: UnitBundleSpec; path: string[] }]
-  append_children: [{ bundles: UnitBundleSpec[]; path: string[] }]
-  insert_child: [{ bundle: UnitBundleSpec; at: number; path: string[] }]
-  remove_child: [{ at: number; path: string[] }]
-  [remove_child_at: `remove_child_at_${number}`]: [
-    { at: number; path: string[] },
-  ]
-  register_parent_root: [
-    { component: Component_; slotName: string; path: string[] },
-  ]
-  unregister_parent_root: [{ component: Component_; path: string[] }]
-  register_root: [{ subComponentId: string; path: string[] }]
-  unregister_root: [{ subComponentId: string; path: string[] }]
+  append_child: [{ child: Component_; bundle: UnitBundleSpec }, string[]]
+  append_children: [{ bundles: UnitBundleSpec[] }, string[]]
+  insert_child: [{ bundle: UnitBundleSpec; at: number }, string[]]
+  remove_child: [{ at: number }, string[]]
+  [remove_child_at: `remove_child_at_${number}`]: [{ at: number }, string[]]
+  register_parent_root: [{ component: Component_; slotName: string }, string[]]
+  unregister_parent_root: [{ component: Component_ }, string[]]
+  register_root: [{ subComponentId: string }, string[]]
+  unregister_root: [{ subComponentId: string }, string[]]
   set_sub_component: [
-    { subComponentId: string; bundle: UnitBundleSpec; path: string[] },
+    { subComponentId: string; bundle: UnitBundleSpec },
+    string[],
   ]
-  reorder_root: [{ from: number; to: number; path: string[] }]
-  reorder_parent_root: [{ from: number; to: number; path: string[] }]
+  reorder_root: [{ from: number; to: number }, string[]]
+  reorder_parent_root: [{ from: number; to: number }, string[]]
   call: [{ method: string; data: any[] }]
 }
 

@@ -30,7 +30,7 @@ export function appendChild(
 
   const { __bundle } = child.constructor as UnitBundle
 
-  emit && component.emit('append_child', { child, bundle: __bundle, path: [] })
+  emit && component.emit('append_child', { child, bundle: __bundle }, [])
 
   return i
 }
@@ -46,7 +46,7 @@ export function appendChildren(
 
   const bundles = Classes.map((c) => c.__bundle)
 
-  component.emit('append_children', { bundles, path: [] })
+  component.emit('append_children', { bundles }, [])
 
   return children.length
 }
@@ -114,7 +114,7 @@ export function insertChild(
 
   const { __bundle: bundle } = Class
 
-  component.emit('insert_child', { bundle, at, path: [] })
+  component.emit('insert_child', { bundle, at }, [])
 }
 
 export function hasChild(
@@ -150,8 +150,8 @@ export function removeChild(
 ): Component_ {
   const child = pullChild(element, children, at)
 
-  emit && element.emit('remove_child', { at, path: [] })
-  emit && element.emit(`remove_child_at_${at}`, { at, path: [] })
+  emit && element.emit('remove_child', { at }, [])
+  emit && element.emit(`remove_child_at_${at}`, { at }, [])
 
   return child
 }
@@ -212,8 +212,7 @@ export function registerParentRoot(
 
   slot.appendParentChild(component, 'default')
 
-  emit &&
-    component.emit('register_parent_root', { component, slotName, path: [] })
+  emit && component.emit('register_parent_root', { component, slotName }, [])
 }
 
 export function unregisterParentRoot(
@@ -227,8 +226,7 @@ export function unregisterParentRoot(
 
   parentRoot.splice(at, 1)
 
-  emit &&
-    component.emit('unregister_parent_root', { component: child, path: [] })
+  emit && component.emit('unregister_parent_root', { component: child }, [])
 }
 
 export function reorderRoot(
@@ -248,7 +246,7 @@ export function reorderRoot(
 
   insert(root, child, to)
 
-  emit && component.emit('reorder_root', { from, to, path: [] })
+  emit && component.emit('reorder_root', { from, to }, [])
 }
 
 export function reorderParentRoot(
@@ -268,7 +266,7 @@ export function reorderParentRoot(
 
   insert(parentRoot, child, to)
 
-  emit && component.emit('reorder_parent_root', { from, to, path: [] })
+  emit && component.emit('reorder_parent_root', { from, to }, [])
 }
 
 export function unregisterRoot(
@@ -282,7 +280,7 @@ export function unregisterRoot(
 
   root.splice(at, 1)
 
-  emit && component.emit('unregister_root', { subComponentId, path: [] })
+  emit && component.emit('unregister_root', { subComponentId }, [])
 }
 
 export function registerRoot(
@@ -294,7 +292,7 @@ export function registerRoot(
 ): void {
   root.push(child)
 
-  emit && component.emit('register_root', { subComponentId, path: [] })
+  emit && component.emit('register_root', { subComponentId }, [])
 }
 
 export function appendParentChild(

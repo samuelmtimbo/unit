@@ -13,7 +13,8 @@ export interface GraphMoveSubcomponentRootMoment
 
 export function extractMoveSubComponentRootEventData(
   ...[
-    { parentId, prevParentIdMap, children, index, slotMap, prevSlotMap, path },
+    { parentId, prevParentIdMap, children, index, slotMap, prevSlotMap },
+    path,
   ]: G_EE['move_sub_component_root']
 ): GraphMoveSubComponentRootMomentData {
   return {
