@@ -13,6 +13,8 @@ export interface $R_C {}
 
 export interface $R_W {}
 
-export interface $R_R {}
+export interface $R_R {
+  $refer(data: {}): any
+}
 
 export interface $R extends $R_G, $R_C, $R_W, $R_R {}

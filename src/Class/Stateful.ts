@@ -2,7 +2,6 @@ import { MethodNotImplementedError } from '../exception/MethodNotImplementedErro
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { System } from '../system'
 import isEqual from '../system/f/comparison/Equals/f'
-import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
 import { V } from '../types/interface/V'
@@ -97,14 +96,12 @@ export class Stateful<
     return this._state[name] ?? this._defaultState[name]
   }
 
-  public read(callback: Callback<any>): void {
-    callback(this._state)
+  public read(): any {
+    return this._state
   }
 
-  public write(data: any, callback: Callback): void {
+  public write(data: any): void {
     this._state = data
-
-    callback()
   }
 
   public set<K extends keyof I>(

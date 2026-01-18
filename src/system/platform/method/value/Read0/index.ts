@@ -2,12 +2,14 @@ import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../Class/Functional/Fail'
+import { ALL_INTERFACES } from '../../../../../client/method'
 import { System } from '../../../../../system'
-import { V } from '../../../../../types/interface/V'
+import { $V } from '../../../../../types/interface/async/$V'
+import { Async } from '../../../../../types/interface/async/Async'
 import { ID_READ_0 } from '../../../../_ids'
 
 export interface I<T> {
-  value: V<T & $>
+  value: $V
   any: any
 }
 
@@ -40,14 +42,10 @@ export default class Read0<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ value, any }: I<T>, done: Done<O<T>>, fail: Fail) {
-    value.read((data, err) => {
-      if (err) {
-        fail(err)
+    value = Async(value, ['V'], this.__system.async)
 
-        return
-      }
+    const data = value.$refer({ __: ALL_INTERFACES })
 
-      done({ data })
-    })
+    done({ data })
   }
 }

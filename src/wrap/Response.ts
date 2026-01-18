@@ -1,13 +1,11 @@
 import { ServerResponse } from '../API'
 import { $ } from '../Class/$'
-import { CodePathNotImplementedError } from '../exception/CodePathNotImplemented'
 import { ObjectPathTooDeepError } from '../exception/ObjectPathTooDeep'
 import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { NOOP } from '../NOOP'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { System } from '../system'
 import { headersToObj } from '../system/platform/api/http/Handle'
-import { Callback } from '../types/Callback'
 import { RES } from '../types/interface/RES'
 import { Unlisten } from '../types/Unlisten'
 import { wrapReadableStream } from './ReadableStream'
@@ -18,7 +16,7 @@ export function usedBodyToString(usedBody: UsedBody): string {
   if (typeof usedBody === 'string') {
     return usedBody
   } else {
-    throw new CodePathNotImplementedError()
+    return ''
   }
 }
 
@@ -28,29 +26,23 @@ export function wrapResponse(response: Response, system: System): RES & $ {
 
     _body: UsedBody
 
-    read(callback: Callback<ServerResponse>): void {
-      void (async () => {
-        if (!this._body) {
-          this._body = await response.text()
-        }
+    read(): any {
+      const res: ServerResponse = {
+        url: response.url,
+        type: response.type,
+        status: response.status,
+        statusText: response.statusText,
+        redirected: response.redirected,
+        bodyUsed: response.bodyUsed,
+        headers: headersToObj(response.headers),
+        body: usedBodyToString(this._body ?? ''),
+        ok: response.ok,
+      }
 
-        const res: ServerResponse = {
-          url: response.url,
-          type: response.type,
-          status: response.status,
-          statusText: response.statusText,
-          redirected: response.redirected,
-          bodyUsed: response.bodyUsed,
-          headers: headersToObj(response.headers),
-          body: usedBodyToString(this._body),
-          ok: response.ok,
-        }
-
-        callback(res)
-      })()
+      return res
     }
 
-    write(data: ServerResponse, callback: Callback<undefined>): void {
+    write(data: ServerResponse): void {
       throw new ReadOnlyError('')
     }
 

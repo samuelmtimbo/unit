@@ -9,9 +9,6 @@
       "type": "string",
       "_init": "N"
     },
-    "__": {
-      "type": "string[]"
-    },
     "done": {
       "type": "any"
     }

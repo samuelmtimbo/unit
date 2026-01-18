@@ -4,7 +4,6 @@ import { Object_ } from '../Object'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { SharedRef } from '../SharefRef'
 import { System } from '../system'
-import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
 import { V } from '../types/interface/V'
@@ -78,11 +77,11 @@ export function wrapObject<T extends object>(
   const _obj = new (class Object__ extends $ implements J<T>, V<T> {
     __: string[] = ['V', 'J']
 
-    read(callback: Callback<T>): void {
-      callback(data)
+    read(): T {
+      return data
     }
 
-    write(data: T, callback: Callback<undefined>): void {
+    write(data: T): void {
       throw new ReadOnlyError('object')
     }
 

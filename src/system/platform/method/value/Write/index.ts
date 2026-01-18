@@ -2,11 +2,12 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../Class/Functional/Fail'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
-import { V } from '../../../../../types/interface/V'
+import { $V } from '../../../../../types/interface/async/$V'
+import { Async } from '../../../../../types/interface/async/Async'
 import { ID_WRITE } from '../../../../_ids'
 
 export interface I<T> {
-  value: V<T>
+  value: $V
   data: T
 }
 
@@ -36,7 +37,9 @@ export default class Write<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   async f({ value, data }: I<T>, done: Done<O<T>>, fail: Fail) {
-    value.write(data, (data, err) => {
+    value = Async(value, ['V'], this.__system.async)
+
+    value.$write({ data }, (_, err) => {
       if (err) {
         fail(err)
 

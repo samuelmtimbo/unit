@@ -1,7 +1,6 @@
 import { $ } from '../Class/$'
 import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { System } from '../system'
-import { Callback } from '../types/Callback'
 import { EV } from '../types/interface/E'
 import { V } from '../types/interface/V'
 
@@ -13,11 +12,11 @@ export function wrapEvent(
   const event_ = new (class Event_ extends $ implements EV, V {
     __: string[] = ['EV']
 
-    read(callback: Callback<any>): void {
-      callback(data)
+    read(): any {
+      return data
     }
 
-    write(data: any, callback: Callback<undefined>): void {
+    write(data: any): void {
       throw new ReadOnlyError('event')
     }
 

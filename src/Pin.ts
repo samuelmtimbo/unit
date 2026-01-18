@@ -1,7 +1,6 @@
 import { $, $Events } from './Class/$'
 import { Unit } from './Class/Unit'
 import { System } from './system'
-import { Callback } from './types/Callback'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
 import { Unlisten } from './types/Unlisten'
@@ -338,13 +337,11 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     }
   }
 
-  read(callback: Callback<T>): void {
-    callback(this._register)
+  read(): T {
+    return this._register
   }
 
-  write(data: T, callback: Callback<undefined>): void {
+  write(data: T): void {
     this.push(data)
-
-    callback()
   }
 }

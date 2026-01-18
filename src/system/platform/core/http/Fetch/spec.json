@@ -8,16 +8,16 @@
         "url": {
           "metadata": {
             "position": {
-              "x": -93,
-              "y": 244
+              "x": 17,
+              "y": 103
             }
           }
         },
         "opt": {
           "metadata": {
             "position": {
-              "x": -146,
-              "y": 240
+              "x": -31,
+              "y": 95
             }
           }
         },
@@ -30,8 +30,8 @@
         "res": {
           "metadata": {
             "position": {
-              "x": -58,
-              "y": 211
+              "x": 55,
+              "y": 31
             }
           }
         },
@@ -41,8 +41,8 @@
       },
       "metadata": {
         "position": {
-          "x": -116,
-          "y": 204
+          "x": -1,
+          "y": 60
         }
       }
     },
@@ -58,16 +58,16 @@
         "data": {
           "metadata": {
             "position": {
-              "x": -174,
-              "y": 208
+              "x": -59,
+              "y": 65
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -221,
-          "y": 184
+          "x": -107,
+          "y": 42
         }
       }
     },
@@ -82,8 +82,8 @@
           },
           "metadata": {
             "position": {
-              "x": -375,
-              "y": 182
+              "x": -261,
+              "y": 40
             },
             "data": {
               "position": {
@@ -96,8 +96,8 @@
         "obj": {
           "metadata": {
             "position": {
-              "x": -376,
-              "y": 147
+              "x": -262,
+              "y": 5
             }
           }
         },
@@ -109,8 +109,8 @@
           },
           "metadata": {
             "position": {
-              "x": -296,
-              "y": 131
+              "x": -182,
+              "y": -10
             },
             "data": {
               "position": {
@@ -126,8 +126,8 @@
       },
       "metadata": {
         "position": {
-          "x": -329,
-          "y": 163
+          "x": -215,
+          "y": 21
         }
       }
     },
@@ -137,16 +137,16 @@
         "value": {
           "metadata": {
             "position": {
-              "x": 164,
-              "y": 81
+              "x": 161.61904761904762,
+              "y": 55.95238095238095
             }
           }
         },
         "any": {
           "metadata": {
             "position": {
-              "x": 38,
-              "y": 203
+              "x": 141,
+              "y": 90
             },
             "data": {
               "position": {
@@ -166,8 +166,8 @@
         "data": {
           "metadata": {
             "position": {
-              "x": 35,
-              "y": 168
+              "x": 194.61904761904762,
+              "y": -20.047619047619047
             }
           }
         },
@@ -177,8 +177,72 @@
       },
       "metadata": {
         "position": {
-          "x": -9,
-          "y": 189
+          "x": 106,
+          "y": 58
+        }
+      }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "body"
+          },
+          "metadata": {
+            "position": {
+              "x": 248,
+              "y": 21
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 244,
+              "y": -13
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 200,
+          "y": 8
+        }
+      }
+    },
+    "totext": {
+      "id": "b0d71197-fad7-4fc6-87e4-97636d365de6",
+      "input": {
+        "body": {},
+        "any": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "xxx"
+          },
+          "metadata": {
+            "position": {
+              "x": 60,
+              "y": -43
+            }
+          }
+        }
+      },
+      "output": {
+        "text": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 96,
+          "y": -12
         }
       }
     }
@@ -218,6 +282,11 @@
         "input": {
           "value": true
         }
+      },
+      "totext": {
+        "input": {
+          "body": true
+        }
       }
     },
     "3": {
@@ -232,6 +301,18 @@
         }
       }
     },
+    "4": {
+      "set": {
+        "input": {
+          "value": true
+        }
+      },
+      "totext": {
+        "output": {
+          "text": true
+        }
+      }
+    },
     "5": {
       "fetch": {
         "output": {
@@ -241,6 +322,18 @@
       "state": {
         "input": {
           "done": true
+        }
+      }
+    },
+    "6": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "read": {
+        "output": {
+          "data": true
         }
       }
     }
@@ -254,23 +347,17 @@
           "kind": "input"
         }
       },
+      "defaultIgnored": false,
       "metadata": {
         "position": {
           "0": {
             "ext": {
-              "x": -87,
-              "y": 268
-            }
-          },
-          "1": {
-            "ext": {
-              "x": 9,
-              "y": -99
+              "x": 20,
+              "y": 128
             }
           }
         }
-      },
-      "functional": true
+      }
     },
     "opt": {
       "plug": {
@@ -285,31 +372,31 @@
           "kind": "input"
         }
       },
+      "defaultIgnored": false,
       "metadata": {
         "position": {
           "0": {
             "ext": {
-              "x": -154,
-              "y": 264
+              "x": -39,
+              "y": 119
             }
           },
           "1": {
             "ext": {
-              "x": -396,
-              "y": 133
+              "x": -282,
+              "y": -9
             }
           }
         }
-      },
-      "functional": true
+      }
     }
   },
   "outputs": {
     "response": {
       "plug": {
         "0": {
-          "unitId": "read",
-          "pinId": "data",
+          "unitId": "set",
+          "pinId": "obj",
           "kind": "output"
         }
       },
@@ -318,8 +405,8 @@
         "position": {
           "0": {
             "ext": {
-              "x": 52,
-              "y": 152
+              "x": 261,
+              "y": -29
             }
           }
         }
@@ -331,34 +418,34 @@
     "description": "fetch a resource across the network through HTTP (with text body)",
     "position": {
       "merge": {
+        "0": {
+          "x": -48,
+          "y": 16
+        },
         "1": {
-          "x": -275,
-          "y": 176
+          "x": -161,
+          "y": 34
+        },
+        "2": {
+          "x": 66,
+          "y": -18
         },
         "3": {
-          "x": -64,
-          "y": 183
+          "x": 53,
+          "y": 68
         },
         "4": {
-          "x": 68,
-          "y": -8
+          "x": 150,
+          "y": -11
         },
         "5": {
-          "x": -166,
-          "y": 181
+          "x": -52,
+          "y": 38
         },
-        "7": {
-          "x": -106,
-          "y": 63
-        },
-        "8": {
-          "x": -6,
-          "y": -4
+        "6": {
+          "x": 157,
+          "y": 38
         }
-      },
-      "data": {
-        "x": 135,
-        "y": 74
       }
     },
     "tags": ["platform", "core", "http"]

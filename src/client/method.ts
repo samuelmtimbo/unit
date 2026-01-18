@@ -233,6 +233,7 @@ import {
   WP_METHOD_REF,
   WP_METHOD_WATCH,
 } from '../types/interface/async/$WP'
+import { keys } from '../util/object'
 
 export type MethodType = 'get' | 'call' | 'watch' | 'ref'
 
@@ -479,3 +480,5 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     ref: R_METHOD_REF,
   },
 }
+
+export const ALL_INTERFACES = keys(METHOD)

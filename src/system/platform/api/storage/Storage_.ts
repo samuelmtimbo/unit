@@ -12,7 +12,7 @@ import {
 import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { ObjectPathTooDeepError } from '../../../../exception/ObjectPathTooDeep'
 import { System } from '../../../../system'
-import { Callback } from '../../../../types/Callback'
+import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
 import { J } from '../../../../types/interface/J'
 import { V } from '../../../../types/interface/V'
@@ -42,24 +42,22 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
     throw new MethodNotImplementedError()
   }
 
-  read(callback: Callback<any>): void {
+  read(): Dict<string> {
     const { path } = this.__system
 
     const storage = this._storage()
 
     const data = read(storage, path)
 
-    callback(data)
+    return data
   }
 
-  write(data: any, callback: Callback): void {
+  write(data: any): void {
     const { path } = this.__system
 
     const storage = this._storage()
 
     write(storage, path, data)
-
-    callback()
   }
 
   get(name: string): any {
