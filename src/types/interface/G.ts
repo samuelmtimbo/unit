@@ -276,16 +276,19 @@ export type G_EE = {
   remove_pin_from_merge: [string, string, IO, string, string[]]
   merge_merges: [string[], string[]]
   move_sub_component_root: [
-    string | null,
-    Dict<string>,
-    string[],
-    number,
-    Dict<string>,
-    Dict<string>,
-    string[],
+    {
+      parentId: string | null
+      prevParentIdMap: Dict<string>
+      children: string[]
+      index: number
+      slotMap: Dict<string>
+      prevSlotMap: Dict<string>
+      path: string[]
+    },
   ]
-  reorder_sub_component: [string | null, string, number, string[]]
-  remove_root: [string, string[]]
+  reorder_sub_component: [
+    { parentId: string | null; childId: string; to: number; path: string[] },
+  ]
   move_subgraph_into: [...G_MoveSubgraphIntoArgs, string[]]
   move_subgraph_out_of: [...G_MoveSubgraphIntoArgs, string[]]
   explode_unit: [string, Dict<string>, Dict<string>, string[]]

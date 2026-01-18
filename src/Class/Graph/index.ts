@@ -5537,16 +5537,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     emit &&
-      this.edit(
-        'move_sub_component_root',
+      this.edit('move_sub_component_root', {
         subComponentId,
         prevParentMap,
         children,
         index,
         slotMap,
         prevSlotMap,
-        []
-      )
+        path: [],
+      })
   }
 
   private _specRemoveRoot(subComponentId: string): void {
@@ -5735,7 +5734,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._reorderSubComponent(parentId, childId, to, emit, fork, bubble)
 
-    emit && this.edit('reorder_sub_component', parentId, childId, to, [])
+    emit && this.edit('reorder_sub_component', { parentId, childId, to }, [])
   }
 
   private _reorderSubComponent(
