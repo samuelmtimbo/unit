@@ -3593,6 +3593,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       const edit = (data: Graph) => {
         const { specs, classes } = this.__system
 
+        if (data === this) {
+          return
+        }
+
         const bundle = data.getBundleSpec()
 
         const Class = fromBundle(
