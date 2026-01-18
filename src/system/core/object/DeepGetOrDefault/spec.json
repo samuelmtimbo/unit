@@ -190,6 +190,7 @@
   },
   "inputs": {
     "obj": {
+      "functional": true,
       "plug": {
         "0": {
           "unitId": "if3",
@@ -221,6 +222,7 @@
       }
     },
     "key": {
+      "functional": true,
       "plug": {
         "0": {
           "unitId": "deephaskey",
@@ -252,6 +254,7 @@
       }
     },
     "path": {
+      "functional": true,
       "plug": {
         "0": {
           "unitId": "deephaskey",
@@ -283,6 +286,7 @@
       }
     },
     "default": {
+      "functional": true,
       "plug": {
         "0": {
           "unitId": "ifnot",
