@@ -2,6 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { $D } from '../../../../../types/interface/async/$D'
+import { Async } from '../../../../../types/interface/async/Async'
 import { ID_SET_DATE } from '../../../../_ids'
 
 export interface I<T> {
@@ -33,6 +34,8 @@ export default class SetHours<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ date, day }: Partial<I<T>>, done: Done<O<T>>): void {
+    date = Async(date, ['D'], this.__system.async)
+
     date.$setDate({ day })
 
     done({ done: true })

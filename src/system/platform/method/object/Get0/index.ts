@@ -1,6 +1,4 @@
-import { Functional } from '../../../../../Class/Functional'
-import { Done } from '../../../../../Class/Functional/Done'
-import { Fail } from '../../../../../Class/Functional/Fail'
+import { Getter } from '../../../../../Class/Getter'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
 import { ID_GET_0 } from '../../../../_ids'
@@ -14,12 +12,16 @@ export interface O<T> {
   value: T
 }
 
-export default class Get0<T> extends Functional<I<T>, O<T>> {
+export default class Get0<T> extends Getter<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         i: ['obj', 'name'],
         o: ['value'],
+        $i: 'obj',
+        $o: 'value',
+        $m: 'get',
+        $_: ['J'],
       },
       {
         input: {
@@ -33,17 +35,7 @@ export default class Get0<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, name }: I<T>, done: Done<O<T>>, fail: Fail) {
-    let value: any
-
-    try {
-      value = await obj.get(name)
-    } catch (err) {
-      fail(err.message)
-
-      return
-    }
-
-    done({ value })
+  opt({ name }) {
+    return { name }
   }
 }

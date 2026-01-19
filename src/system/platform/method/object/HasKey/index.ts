@@ -1,6 +1,4 @@
-import { Functional } from '../../../../../Class/Functional'
-import { Done } from '../../../../../Class/Functional/Done'
-import { Fail } from '../../../../../Class/Functional/Fail'
+import { Getter } from '../../../../../Class/Getter'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
 import { ID_HAS_KEY_0 } from '../../../../_ids'
@@ -14,12 +12,16 @@ export interface O<T> {
   has: boolean
 }
 
-export default class HasKey<T> extends Functional<I<T>, O<T>> {
+export default class HasKey<T> extends Getter<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         i: ['obj', 'key'],
         o: ['has'],
+        $i: 'obj',
+        $o: 'has',
+        $m: 'hasKey',
+        $_: ['J'],
       },
       {
         input: {
@@ -33,17 +35,7 @@ export default class HasKey<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ obj, key }: I<T>, done: Done<O<T>>, fail: Fail) {
-    let has: boolean
-
-    try {
-      has = await obj.hasKey(key)
-    } catch (err) {
-      fail(err.message)
-
-      return
-    }
-
-    done({ has })
+  opt({ key }) {
+    return { key }
   }
 }

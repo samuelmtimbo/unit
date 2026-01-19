@@ -3,6 +3,7 @@ import { Holder } from '../../../Class/Holder'
 import { extractValueInterface } from '../../../extractValueInterface'
 import { SharedRef } from '../../../SharefRef'
 import { System } from '../../../system'
+import { Async } from '../../../types/interface/async/Async'
 import { V } from '../../../types/interface/V'
 import { clone } from '../../../util/clone'
 import { weakMerge } from '../../../weakMerge'
@@ -51,7 +52,7 @@ export default class State<T> extends Holder<I<T>, O<T>> {
       },
     })
 
-    const _ = extractValueInterface(init)
+    let _ = extractValueInterface(init)
 
     if (_) {
       switch (_) {
@@ -71,7 +72,11 @@ export default class State<T> extends Holder<I<T>, O<T>> {
       }
     }
 
-    const data = $wrap<V<T>>(this.__system, api, _ ? ['V', _] : ['V'])
+    const __ = _ ? ['V', _] : ['V']
+
+    let data = Async(api, __, this.__system.async)
+
+    data = $wrap<V<T>>(this.__system, api, __)
 
     done({
       data,

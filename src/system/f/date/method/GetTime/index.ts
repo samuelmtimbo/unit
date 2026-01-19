@@ -1,5 +1,4 @@
-import { Functional } from '../../../../../Class/Functional'
-import { Done } from '../../../../../Class/Functional/Done'
+import { Getter } from '../../../../../Class/Getter'
 import { System } from '../../../../../system'
 import { $D } from '../../../../../types/interface/async/$D'
 import { ID_GET_TIME } from '../../../../_ids'
@@ -13,12 +12,16 @@ export interface O<T> {
   time: number
 }
 
-export default class GetTime<T> extends Functional<I<T>, O<T>> {
+export default class GetTime<T> extends Getter<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['any', 'date'],
+        i: ['date', 'any'],
         o: ['time'],
+        $i: 'date',
+        $o: 'time',
+        $m: 'getTime',
+        $_: ['D'],
       },
       {
         input: {
@@ -30,11 +33,5 @@ export default class GetTime<T> extends Functional<I<T>, O<T>> {
       system,
       ID_GET_TIME
     )
-  }
-
-  f({ date }: Partial<I<T>>, done: Done<O<T>>): void {
-    date.$getTime({}, (time) => {
-      done({ time })
-    })
   }
 }

@@ -1,9 +1,6 @@
-import { Functional } from '../../../../../../Class/Functional'
-import { Done } from '../../../../../../Class/Functional/Done'
-import { Fail } from '../../../../../../Class/Functional/Fail'
+import { Getter } from '../../../../../../Class/Getter'
 import { System } from '../../../../../../system'
 import { $BC } from '../../../../../../types/interface/async/$BC'
-import { Async } from '../../../../../../types/interface/async/Async'
 import { ID_READ_VALUE } from '../../../../../_ids'
 
 export interface I {
@@ -15,12 +12,16 @@ export interface O {
   value: string
 }
 
-export default class ReadValue extends Functional<I, O> {
+export default class ReadValue extends Getter<I, O> {
   constructor(system: System) {
     super(
       {
         i: ['charac', 'any'],
         o: ['value'],
+        $i: 'charac',
+        $o: 'value',
+        $m: 'readValue',
+        $_: ['BC'],
       },
       {
         input: {
@@ -32,25 +33,5 @@ export default class ReadValue extends Functional<I, O> {
       system,
       ID_READ_VALUE
     )
-  }
-
-  async f({ charac }: I, done: Done<O>, fail: Fail): Promise<void> {
-    charac = Async(charac, ['BC'], this.__system.async)
-
-    try {
-      charac.$readValue({}, (value, err) => {
-        if (err) {
-          fail(err)
-
-          return
-        }
-
-        done({ value })
-      })
-    } catch (err) {
-      fail(err.message.toLowerCase())
-
-      return
-    }
   }
 }

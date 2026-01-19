@@ -6,7 +6,6 @@ export const Async = (
   _: string[],
   wrapper: Dict<(unit: any) => any>
 ) => {
-  instance.__async = true
   instance.$__ = instance.$__ ?? []
 
   return AsyncWrap(instance, _, wrapper)

@@ -1,5 +1,6 @@
 import { $ } from '../Class/$'
 import { SharedRef } from '../SharefRef'
+import { IndexOutOfBoundaryError } from '../exception/IndexOutOfBOundaryError'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import { A } from '../types/interface/A'
@@ -21,6 +22,10 @@ export function wrapSharedRefArrayInterface<T extends any[]>(
       return Promise.resolve()
     },
     at(i: number): Promise<any> {
+      if (i < 0 && i >= data.current.length) {
+        throw new IndexOutOfBoundaryError()
+      }
+
       return Promise.resolve(data.current[i])
     },
     length(): Promise<number> {
@@ -57,6 +62,10 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
     }
 
     async at(i: number): Promise<T> {
+      if (i < 0 && i >= array.length) {
+        throw new IndexOutOfBoundaryError()
+      }
+
       return array[i]
     }
 
