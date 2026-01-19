@@ -57,7 +57,9 @@ export default class Scope<T> extends Functional<I<T>, O<T>> {
 
     const _obj = wrapSharedRef(sharedRef)
 
-    const obj = $wrap<any>(this.__system, _obj, ['J'])
+    const __ = ['J']
+
+    const obj = $wrap<any>(this.__system, _obj, __)
 
     done({ obj })
   }

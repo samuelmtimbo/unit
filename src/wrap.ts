@@ -2,12 +2,10 @@ import { $ } from './Class/$'
 import { System } from './system'
 import { Dict } from './types/Dict'
 
-export function $wrap<T>(
-  system: System,
-  obj: Dict<any>,
-  __: string[] = []
-): T & $ {
+export function $wrap<T>(system: System, obj: Dict<any>, __: string[]): T & $ {
   const wrap = new (class Wrapped extends $ {
+    $__ = [...__]
+
     constructor(system) {
       super(system)
 

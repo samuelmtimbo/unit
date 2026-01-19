@@ -73,7 +73,9 @@ export default class Start extends Holder<I, O> {
 
     const bundle = bundleSpec(spec, specs_, false)
 
-    const $graph = system.$start({ bundle, __: UCGJEE })
+    const __ = UCGJEE
+
+    const $graph = system.$start({ bundle, __ })
 
     for (const pinId in input) {
       const pin = input[pinId]
@@ -88,7 +90,7 @@ export default class Start extends Holder<I, O> {
       }
     }
 
-    const graph = $wrap<$Graph>(this.__system, $graph, UCGJEE)
+    const graph = $wrap<$Graph>(this.__system, $graph, __)
 
     if (!paused) {
       graph.$play({})

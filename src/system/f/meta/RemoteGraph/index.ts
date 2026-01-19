@@ -69,9 +69,11 @@ export default class RemoteGraph extends Holder<I, O> {
 
     this._remote_port = remote_port
 
-    const $graph: $Graph = AsyncWorker(remote_port, UCGJEE)
+    const __ = UCGJEE
 
-    const graph = $wrap<$Graph>(this.__system, $graph, UCGJEE)
+    const $graph: $Graph = AsyncWorker(remote_port, __)
+
+    const graph = $wrap<$Graph>(this.__system, $graph, __)
 
     done({ graph })
   }

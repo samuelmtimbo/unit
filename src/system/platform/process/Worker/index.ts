@@ -62,9 +62,11 @@ export default class Worker_ extends Functional<I, O> {
 
     const remote = client.port()
 
-    const $system = AsyncWorker(remote, ['S'])
+    const __ = ['S']
 
-    const system = $wrap<$S>(this.__system, $system)
+    const $system = AsyncWorker(remote, __)
+
+    const system = $wrap<$S>(this.__system, $system, __)
 
     done({
       system,
