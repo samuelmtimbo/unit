@@ -2242,6 +2242,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     this._memUnplugPin(type, pinId, subPinId)
+    this._memRemoveEmptyPin(type, pinId, subPinId)
   }
 
   private _simCoverPin(
