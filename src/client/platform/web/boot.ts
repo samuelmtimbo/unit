@@ -42,6 +42,12 @@ import { webURL } from './api/url'
 import { webWindow } from './api/window'
 import { webWorker } from './api/worker'
 
+export const DEFAULT_BOOT_OPT = {
+  specs: _specs,
+  classes: _classes,
+  components: _components,
+}
+
 export function defaultWebBoot(opt?: BootOpt): [System, Unlisten] {
   const root = document.getElementById(SYSTEM_ROOT_ID)
 
@@ -51,11 +57,7 @@ export function defaultWebBoot(opt?: BootOpt): [System, Unlisten] {
 export function webBoot(
   window: Window,
   root: HTMLElement,
-  opt: BootOpt = {
-    specs: _specs,
-    classes: _classes,
-    components: _components,
-  }
+  opt: BootOpt = DEFAULT_BOOT_OPT
 ): [System, Unlisten] {
   root.attachShadow({ mode: 'open' })
 
