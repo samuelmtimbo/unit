@@ -32,7 +32,12 @@ import { COLOR_NONE } from '../../../../../client/theme'
 import { Shape } from '../../../../../client/util/geometry'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { UNTITLED } from '../../../../../constant/STRING'
-import { getSpec, isComponentId, isSystemSpec } from '../../../../../spec/util'
+import {
+  getSpec,
+  hasSpec,
+  isComponentId,
+  isSystemSpec,
+} from '../../../../../spec/util'
 import { System } from '../../../../../system'
 import { Spec } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
@@ -1142,6 +1147,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
       .join(' ')
 
     for (const id of this._ordered_id_list) {
+      if (!hasSpec(specs, id)) {
+        continue
+      }
+
       if (this._list_item_div[id]) {
         this._refresh_list_item(id)
       } else {
