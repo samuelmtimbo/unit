@@ -60,7 +60,7 @@ export default class GUIControlKeyboard extends Component<
       },
       this.$system
     )
-    root.registerParentRoot(keyboard)
+
     this._content = keyboard
 
     const $element = parentElement($system)
@@ -74,6 +74,8 @@ export default class GUIControlKeyboard extends Component<
       root,
       keyboard,
     })
+
+    root.registerParentRoot(keyboard)
 
     this.registerRoot(root)
   }

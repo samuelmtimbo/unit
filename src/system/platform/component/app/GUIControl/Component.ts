@@ -176,7 +176,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
           ...userSelect('none'),
         })
 
-        mergePropStyle(_icon, {
+        mergePropStyle(icon_, {
           opacity: '1',
           pointerEvents: 'auto',
         })
@@ -252,12 +252,12 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
           transition: `opacity ${ANIMATION_T_S}s linear`,
         })
 
-        mergePropStyle(_icon, {
+        mergePropStyle(icon_, {
           pointerEvents: 'none',
         })
       }, ANIMATION_T_MS)
 
-      mergePropStyle(_icon, {
+      mergePropStyle(icon_, {
         opacity: '0',
       })
 
@@ -448,7 +448,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
       }),
     ])
 
-    const _icon = new Icon(
+    const icon_ = new Icon(
       {
         className: 'control-icon',
         icon,
@@ -469,14 +469,14 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
       },
       this.$system
     )
-    _icon.preventDefault('mousedown')
-    _icon.preventDefault('touchdown')
-    _icon.addEventListener(
+    icon_.preventDefault('mousedown')
+    icon_.preventDefault('touchdown')
+    icon_.addEventListener(
       makeClickListener({
         onClick: uncollapse,
       })
     )
-    _icon.$element.setAttribute('dropTarget', 'true')
+    icon_.$element.setAttribute('dropTarget', 'true')
 
     const button = new Div(
       {
@@ -554,16 +554,17 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     this.$primitive = true
     this.$unbundled = false
 
+    this.setSubComponents({
+      root,
+      container,
+      button,
+      icon: icon_,
+    })
+
     container.registerParentRoot(button)
 
     root.registerParentRoot(container)
-    root.registerParentRoot(_icon)
-
-    this.setSubComponents({
-      root,
-      button,
-      icon: _icon,
-    })
+    root.registerParentRoot(icon_)
 
     this.registerRoot(root)
   }
