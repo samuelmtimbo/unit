@@ -22063,6 +22063,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       for (const sub_component_id of ordered_sub_component_ids) {
+        const extra_base = sub_component_extra_base[sub_component_id] ?? []
+
+        this._unplug_base_frame(sub_component_id, extra_base)
+      }
+
+      for (const sub_component_id of sub_component_root) {
+        this._enter_sub_component_frame(sub_component_id)
+      }
+
+      for (const sub_component_id of ordered_sub_component_ids) {
         this._append_sub_component_all_missing_root(sub_component_id)
         this._append_sub_component_root_base(sub_component_id)
       }
@@ -22073,16 +22083,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         for (const child_id of children) {
           this._insert_sub_component_child(sub_component_id, child_id)
         }
-      }
-
-      for (const sub_component_id of sub_component_root) {
-        this._enter_sub_component_frame(sub_component_id)
-      }
-
-      for (const sub_component_id of ordered_sub_component_ids) {
-        const extra_base = sub_component_extra_base[sub_component_id] ?? []
-
-        this._unplug_base_frame(sub_component_id, extra_base)
       }
 
       for (const sub_component_id of ordered_sub_component_ids) {
@@ -24497,9 +24497,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     for (const sub_component_id of ordered_sub_component_ids) {
       this._unplug_sub_component_root_base_frame(sub_component_id)
-
-      this._append_sub_component_all_missing_root(sub_component_id)
-      this._append_sub_component_root_base(sub_component_id)
     }
 
     for (const sub_component_id of ordered_sub_component_ids) {
@@ -24507,6 +24504,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     this._finish_component()
+
+    for (const sub_component_id of ordered_sub_component_ids) {
+      this._append_sub_component_all_missing_root(sub_component_id)
+      this._append_sub_component_root_base(sub_component_id)
+    }
   }
 
   private _show_unit_ignored_pins(unit_id: string) {
@@ -28922,12 +28924,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._unplug_sub_component_base_frame(sub_component_id)
 
-        this._compose_sub_component(sub_component_id)
+        this._enter_sub_component_frame(sub_component_id)
 
         this._append_sub_component_all_missing_root(sub_component_id)
         this._append_sub_component_base(sub_component_id)
-
-        this._enter_sub_component_frame(sub_component_id)
 
         callback()
       }
@@ -33001,19 +33001,23 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
         }
 
-        this._layout_sub_components_commit_base(children)
-
         for (const child_id of children) {
           this._cancel_layout_child_transfer_animation(child_id, false)
-
-          this._insert_sub_component_child(sub_component_id, child_id)
         }
 
         this._cancel_layout_parent_children_all_slot_animation(sub_component_id)
 
         this._unplug_sub_component_root_base_frame(sub_component_id)
-        this._append_sub_component_root_base(sub_component_id)
+
         this._enter_sub_component_frame(sub_component_id)
+
+        this._layout_sub_components_commit_base(children)
+
+        for (const child_id of children) {
+          this._insert_sub_component_child(sub_component_id, child_id)
+        }
+
+        this._append_sub_component_root_base(sub_component_id)
       }
 
       const slot_count = keyCount(all_slot_children)
@@ -33753,7 +33757,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._unplug_sub_component_root_base_frame(parent_id)
         this._append_sub_component_root_base(parent_id)
 
-        this._layout_sub_components_commit_base(all_children)
+        this._enter_sub_component_frame(parent_id)
 
         for (const child_id of slot_children) {
           this._cancel_layout_child_transfer_animation(child_id, false)
@@ -33768,7 +33772,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._insert_sub_component_child(parent_id, child_id)
         }
 
-        this._enter_sub_component_frame(parent_id)
+        this._layout_sub_components_commit_base(all_children)
 
         callback && callback()
       }
