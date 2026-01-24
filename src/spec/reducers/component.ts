@@ -205,7 +205,7 @@ export const _removeSubComponentFromParent = (
 }
 
 export const moveSubComponentRoot = (
-  { parentId, children, slotMap = {} }: GraphMoveSubComponentRootData,
+  { parentId, children, slotMap = {}, index }: GraphMoveSubComponentRootData,
   state: GraphComponentSpec
 ) => {
   for (const childId of children) {
@@ -220,9 +220,9 @@ export const moveSubComponentRoot = (
     }
 
     if (parentId) {
-      appendSubComponentChild({ parentId, childId, slotName }, state)
+      insertSubComponentChild({ parentId, childId, slotName, at: index }, state)
     } else {
-      appendRoot({ childId }, state)
+      insertRoot({ childId, at: index }, state)
     }
   }
 }

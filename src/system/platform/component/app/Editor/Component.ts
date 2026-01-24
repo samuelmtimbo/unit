@@ -33919,7 +33919,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._mem_insert_sub_component_child(parent_id, child_id, slot_name, at)
     this._spec_remove_sub_component_from_parent(child_id)
-    this._spec_append_sub_component_child(parent_id, child_id, slot_name)
+    this._spec_insert_sub_component_child(parent_id, child_id, slot_name, at)
 
     if (is_child_fullwindow) {
       this._couple_sub_component(child_id, at)
@@ -35770,6 +35770,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_tree_sub_component_index()
   }
 
+  private _spec_insert_sub_component_child = (
+    parent_id: string,
+    child_id: string,
+    slot_name: string,
+    at: number
+  ): void => {
+    // console.log('Graph', '_spec_insert_sub_component_child', parent_id, child_id, slot_name)
+
+    this.__spec_insert_sub_component_child(parent_id, child_id, slot_name, at)
+
+    this._refresh_component_children_counter(parent_id)
+    this._refresh_tree_sub_component_index()
+  }
+
   private __spec_append_sub_component_child = (
     parent_id: string,
     child_id: string,
@@ -35784,6 +35798,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._layout_sub_component_parent[child_id] = parent_id
     } else {
       appendRoot({ childId: child_id }, this._spec.component)
+
+      delete this._layout_sub_component_parent[child_id]
+    }
+  }
+
+  private __spec_insert_sub_component_child = (
+    parent_id: string,
+    child_id: string,
+    slot_name: string,
+    at: number
+  ): void => {
+    if (parent_id) {
+      insertSubComponentChild(
+        { parentId: parent_id, childId: child_id, slotName: slot_name, at },
+        this._spec.component
+      )
+
+      this._layout_sub_component_parent[child_id] = parent_id
+    } else {
+      insertRoot({ childId: child_id, at }, this._spec.component)
 
       delete this._layout_sub_component_parent[child_id]
     }
@@ -58912,13 +58946,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           this._pull_sub_component(child_id)
 
-          this._state_pre_append_sub_component_child(
+          this._state_pre_insert_sub_component_child(
             data.parentId,
             child_id,
-            slot_name
+            slot_name,
+            data.index
           )
 
-          this._append_sub_component_parent_root(data.parentId, child_id)
+          this._insert_sub_component_parent_root_at(
+            data.parentId,
+            child_id,
+            data.index
+          )
 
           this._layout_layer_move_sub_component_child(
             prev_parent_id,
@@ -58947,17 +58986,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._pull_sub_component(child_id)
 
-        this._state_pre_append_sub_component_child(
+        this._state_pre_insert_sub_component_child(
           data.parentId,
           child_id,
-          slot_name
+          slot_name,
+          data.index
         )
 
         this._layout_layer_move_sub_component_child(
           prev_parent_id,
           data.parentId,
           child_id,
-          data.index + i
+          data.index
         )
       }
 
