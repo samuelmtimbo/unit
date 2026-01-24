@@ -173,7 +173,8 @@ export const insertSubComponentChild = (
 
   const { children, childSlot } = subComponent
 
-  insert(children, childId, at)
+  // insert(children, childId, at)
+  children[at] = childId
   set(childSlot, childId, slotName)
 }
 

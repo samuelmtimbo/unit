@@ -3301,9 +3301,19 @@ export class Component<
   public domAppendParentRoot(
     component: Component,
     slotName: string,
-    at: number
+    i: number
   ): void {
     const slot = get(this.$slot, slotName)
+
+    let at = i
+
+    if (!slot.$primitive) {
+      const base = slot.getRootBase()
+
+      const offset = base.length
+
+      at += offset
+    }
 
     slot.domInsertParentChildAt(component, 'default', at)
   }
@@ -3701,7 +3711,17 @@ export class Component<
   ): void {
     const slot = get(this.$slot, slotName)
 
-    slot.domInsertParentChildAt(component, slotName, i)
+    let at = i
+
+    if (!slot.$primitive) {
+      const base = slot.getRootBase()
+
+      const offset = base.length
+
+      at += offset
+    }
+
+    slot.domInsertParentChildAt(component, slotName, at)
   }
 
   public postInsertParentRootAt(
