@@ -17,11 +17,14 @@
           }
         },
         "done": {
-          "ignored": true
+          "ignored": false
         }
       },
       "output": {
-        "pin": {}
+        "pin": {},
+        "done": {
+          "ignored": false
+        }
       }
     }
   },

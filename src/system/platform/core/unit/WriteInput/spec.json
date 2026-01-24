@@ -128,6 +128,9 @@
               "y": 19
             }
           }
+        },
+        "done": {
+          "ignored": false
         }
       },
       "metadata": {
