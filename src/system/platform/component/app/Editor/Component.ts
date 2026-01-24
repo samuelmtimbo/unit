@@ -42989,13 +42989,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._dispatch_action_remove_unit(unit_id)
   }
 
-  private _remove_unit = (unit_id: string, emit: boolean = true) => {
+  private _remove_unit = (
+    unit_id: string,
+    emit: boolean = true,
+    component_displace: boolean = true,
+    component_pull_from_parent: boolean = true
+  ) => {
     // console.log('Graph', '_remove_unit', unit_id)
 
     const is_component = this._is_unit_component(unit_id)
 
     emit && this._pod_remove_unit(unit_id, is_component)
-    this._state_remove_unit(unit_id)
+    this._state_remove_unit(
+      unit_id,
+      undefined,
+      undefined,
+      component_displace,
+      component_pull_from_parent
+    )
   }
 
   public state_remove_unit = (unit_id: string) => {
@@ -50460,14 +50471,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const parent_root_sub_component =
               graph_component.getSubComponent(parent_root_id)
 
-            if (parent_root_id === parent_id) {
-              this._component.pullRoot(sub_component)
-            } else {
-              parent_component.pullParentRoot(sub_component)
-              parent_root_sub_component.pushParentRoot(sub_component, 'default')
-            }
+            parent_component.pullParentRoot(sub_component)
+            parent_root_sub_component.pushParentRoot(sub_component, 'default')
           } else {
-            this._component.pullRoot(sub_component)
+            if (this._component.hasRoot(sub_component)) {
+              this._component.pullRoot(sub_component)
+            }
 
             parent_component.pullParentRoot(sub_component)
 
@@ -51202,12 +51211,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
     }
 
-    this._process_move_into_moves(graph_id, moves)
+    this._process_move_into_moves(
+      graph_id,
+      moves,
+      {},
+      {
+        [unit_id]: true,
+      }
+    )
 
     this._next_node_position = {}
   }
 
-  private _process_move_into_moves = (graph_id: string, moves: Moves) => {
+  private _process_move_into_moves = (
+    graph_id: string,
+    moves: Moves,
+    sub_component_map: Dict<Component> = {},
+    do_not_displace_sub_component: Dict<boolean> = {}
+  ) => {
     for (const move of moves) {
       if (move.in) {
         const actions = [move.action]
@@ -51223,7 +51244,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           subgraph._on_bulk_edit({ actions: clone(actions) })
         }
       } else {
-        this._execute_actions([move.action], false)
+        this._execute_actions(
+          [move.action],
+          false,
+          sub_component_map,
+          do_not_displace_sub_component
+        )
       }
     }
   }
@@ -54204,14 +54230,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _execute_actions = (
     actions: Action[],
     emit: boolean,
-    sub_component_map: Dict<Component> = {}
+    sub_component_map: Dict<Component> = {},
+    do_not_displace_sub_component = {}
   ) => {
     // console.log('_execute_actions', actions)
 
     for (const action of actions) {
       const path = action.path ?? []
       if (path.length === 0) {
-        this._execute_action(action, emit, sub_component_map)
+        this._execute_action(
+          action,
+          emit,
+          sub_component_map,
+          do_not_displace_sub_component
+        )
       } else {
         this._on_graph_unit_bulk_edit({
           actions: [action],
@@ -54224,7 +54256,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _execute_action = (
     action: Action,
     emit: boolean,
-    sub_component_map: Dict<Component> = {}
+    sub_component_map: Dict<Component> = {},
+    do_not_displace_sub_component = {}
   ): void => {
     // console.log('_execute_action', action, emit)
 
@@ -54405,7 +54438,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         break
       case REMOVE_UNIT:
         {
-          this._remove_unit(data.unitId, emit)
+          const component_displace = !do_not_displace_sub_component[data.unitId]
+          const component_pull_from_parent = component_displace
+
+          this._remove_unit(
+            data.unitId,
+            emit,
+            component_displace,
+            component_pull_from_parent
+          )
         }
         break
       case ADD_MERGE:
@@ -59230,7 +59271,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const commit = () => {
         if (path.length === 0) {
-          this._process_move_into_moves(graphId, moves)
+          this._process_move_into_moves(graphId, moves, {}, {})
         } else if (path.length === 1) {
           for (const move of moves) {
             if (move.in) {
