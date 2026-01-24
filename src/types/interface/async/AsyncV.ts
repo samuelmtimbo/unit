@@ -26,6 +26,8 @@ export const AsyncVCall: (value: V) => $V_C = (value) => {
     $write({ data }: { data: any }, callback: Callback): void {
       try {
         value.write(data)
+
+        callback(undefined, undefined)
       } catch (err) {
         callback(undefined, err)
       }
