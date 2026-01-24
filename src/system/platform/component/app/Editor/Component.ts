@@ -3030,7 +3030,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _search_start_unit_parent_slot_name: string | null = null
   private _search_start_unit_parent_index: number | null = null
   private _search_start_graph_unit_spec: GraphUnitSpec | null = null
-  private _search_start_unit_children: string[] = []
+  private _search_start_unit_children: string[] = undefined
   private _search_start_unit_children_slot_map: Dict<string> = {}
 
   private _search_unit_id: string | null = null
@@ -18527,7 +18527,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     search_start_unit_children: string[],
     search_start_unit_children_slot_map: Dict<string>
   ) => {
-    if (search_start_unit_children) {
+    if (search_start_unit_children && search_start_unit_children.length > 0) {
       const parent_map = this._get_sub_components_parent_map(
         search_start_unit_children
       )
@@ -18728,6 +18728,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._search_start_unit_data = null
     this._search_start_graph_unit_spec = null
     this._search_start_unit_parent_index = null
+
+    this._search_start_unit_children = undefined
+    this._search_start_unit_children_slot_map = undefined
 
     this._search_unit_spec_id_changed = false
 
