@@ -16,7 +16,7 @@ export interface O {
   pointerleave: UnitPointerEvent
 }
 
-export default class IconButton extends Element_<I, O> {
+export default class Icon extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
