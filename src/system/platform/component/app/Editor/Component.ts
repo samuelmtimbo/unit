@@ -32914,7 +32914,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._flush_all_layout_layer_opacity_animation()
 
-    this._measure_sub_component_base(sub_component_id)
+    if (animate) {
+      this._measure_sub_component_base(sub_component_id)
+    }
 
     this._layout_path.pop()
 
