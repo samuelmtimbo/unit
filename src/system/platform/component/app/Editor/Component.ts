@@ -52805,17 +52805,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         component.subComponents[unit_id] =
           component.subComponents[unit_id] ?? {}
 
-        const parent_id = this._spec_get_sub_component_parent_id(unit_id)
+        const children = this._spec_get_sub_component_children(unit_id)
 
-        if (parent_id && unit_ids.includes(parent_id)) {
-          component.subComponents[parent_id] = component.subComponents[
-            parent_id
-          ] ?? { children: [] }
-          component.subComponents[parent_id].children =
-            component.subComponents[parent_id].children ?? []
-          component.subComponents[parent_id].children.push(unit_id)
-        } else {
-          component.children.push(unit_id)
+        for (const child_id of children) {
+          if (node_ids.includes(child_id)) {
+            component.subComponents[unit_id] = component.subComponents[
+              unit_id
+            ] ?? { children: [] }
+            component.subComponents[unit_id].children =
+              component.subComponents[unit_id].children ?? []
+            component.subComponents[unit_id].children.push(child_id)
+          }
         }
       }
     }
