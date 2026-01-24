@@ -1735,6 +1735,24 @@ export class Component<
       ])
 
       p = [...p, ...subComponentRootBase]
+
+      if (!subComponent.$primitive) {
+        for (const parentRoot of subComponent.$parentRoot) {
+          const subComponentId = this.getSubComponentId(parentRoot)
+
+          const slotName = parentRoot.$slotParentSlotName
+          const slot = subComponent.getSlot(slotName)
+
+          if (subComponent === slot) {
+            const parentRootBase = parentRoot.getRootBase([
+              ...path,
+              subComponentId,
+            ])
+
+            p = [...p, ...parentRootBase]
+          }
+        }
+      }
     }
 
     if (p.length === 0) {
@@ -1745,34 +1763,17 @@ export class Component<
   }
 
   getRootLeaves(path: string[] = []): Component[] {
-    if (this.isBase()) {
-      return [this]
-    }
+    const base = this.getRootBase(path)
 
-    let p = []
+    const leaves = base.map(([_, leaf]) => leaf)
 
-    for (const subComponent of this.$root) {
-      const subComponentId = this.getSubComponentId(subComponent)
-
-      const subComponentRootBase = subComponent.getRootLeaves([
-        ...path,
-        subComponentId,
-      ])
-
-      p = [...p, ...subComponentRootBase]
-    }
-
-    if (p.length === 0) {
-      p = [this]
-    }
-
-    return p
+    return leaves
   }
 
   getFirstRootLeaf(): Component {
-    const base = this.getRootBase()
+    const leaves = this.getRootLeaves()
 
-    const [_, leaf] = base[0]
+    const leaf = leaves[0]
 
     return leaf
   }
@@ -3455,6 +3456,12 @@ export class Component<
         i++
       }
 
+      for (const parentRoot of component.$mountParentChildren) {
+        this._domInsertParentChildAt(parentRoot, slotName, at + i)
+
+        i++
+      }
+
       return
     }
 
@@ -3487,6 +3494,10 @@ export class Component<
     if (!component.$primitive) {
       for (const root of component.$mountRoot) {
         this._domInsertParentChildAt(root, slotName, at)
+      }
+
+      for (const parentRoot of component.$mountParentChildren) {
+        this._domInsertParentChildAt(parentRoot, slotName, at)
       }
 
       return
