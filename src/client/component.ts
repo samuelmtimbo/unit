@@ -2506,7 +2506,7 @@ export class Component<
       $emitter.$addListener(
         { event: 'unregister_parent_root' },
         ([{ component }, path = []]) => {
-          if (!this.$controlled) {
+          if (!this.$controlled && !this.$parent.$controlled) {
             if (path.length > 0) {
               return
             }
