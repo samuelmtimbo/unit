@@ -50505,6 +50505,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         const finish = () => {
           for (const unit_id of ordered_sub_component_ids) {
             this._mem_remove_component(unit_id)
+
+            this._animating_removed_sub_component_set.delete(unit_id)
           }
         }
 
