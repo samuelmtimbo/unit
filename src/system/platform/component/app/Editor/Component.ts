@@ -612,7 +612,6 @@ import {
   getSpecPinIcon,
   getSubPinSpec,
   getUnit,
-  getUnitSpec,
   hasDatum,
   hasMerge,
   hasMergePin,
@@ -58534,38 +58533,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       spec.component?.subComponents ?? {}
     )
 
-    let all_ancestors_are_component = true
-
-    for (let i = path.length - 1; i >= 0; i--) {
-      const sub_path = path.slice(0, i + 1)
-
-      const ancestor_spec = findSpecAtPath(specs, this._spec, sub_path)
-
-      all_ancestors_are_component =
-        all_ancestors_are_component &&
-        (isComponentSpec(ancestor_spec) ||
-          getSpecRender(ancestor_spec) === undefined)
-    }
-
     const graph_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
 
-    const possibly_turned_circle_unit_id = path[1] ?? unitId
-
-    if (is_removed_unit_component && all_ancestors_are_component) {
+    if (is_removed_unit_component) {
       let parent_path_to_update: string[] = path
       let unit_id_to_update: string = unitId
-      let unit_to_update_spec: Spec = spec
+      let unit_to_update_spec: Spec = getSpec(specs, bundle.unit.id)
       let parent_spec = findSpecAtPath(
         specs,
         this._spec,
         parent_path_to_update
       ) as GraphSpec
+      let parent_subgraph: Editor_ = this.getSubgraphAtPath(
+        parent_path_to_update
+      )
 
       const remove_at_path = (
         parent_spec,
         parent_path_to_update,
         unit_id_to_update,
-        unit_to_update_spec
+        remove_sub_component: boolean
       ) => {
         const next_parent_spec = clone(parent_spec)
 
@@ -58630,55 +58617,66 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           }
         }
 
-        if (parent_component) {
-          if (parent_component.$subComponent[unit_id_to_update]) {
-            const subgraph = this.getSubgraphAtPath(path)
+        if (remove_sub_component) {
+          if (parent_component) {
+            if (parent_component.$subComponent[unit_id_to_update]) {
+              const subgraph = this.getSubgraphAtPath(path)
 
-            if (subgraph) {
-              if (!subgraph._animating_unit_explosion[unit_id_to_update]) {
+              if (subgraph) {
+                if (!subgraph._animating_unit_explosion[unit_id_to_update]) {
+                  parent_component.removeSubComponent(unit_id_to_update)
+                }
+              } else {
                 parent_component.removeSubComponent(unit_id_to_update)
               }
-            } else {
-              parent_component.removeSubComponent(unit_id_to_update)
             }
           }
-        }
 
-        if (hasSubComponent(next_parent_spec, possibly_turned_circle_unit_id)) {
-          removeSubComponent(
-            { unitId: possibly_turned_circle_unit_id },
-            next_parent_spec.component
-          )
-          removeSubComponentFromParent(
-            { subComponentId: unit_id_to_update },
-            next_parent_spec.component
-          )
+          if (hasSubComponent(next_parent_spec, unit_id_to_update)) {
+            removeSubComponent(
+              { unitId: unit_id_to_update },
+              next_parent_spec.component
+            )
+            removeSubComponentFromParent(
+              { subComponentId: unit_id_to_update },
+              next_parent_spec.component
+            )
 
-          setSpec(next_parent_spec.id, next_parent_spec)
+            setSpec(next_parent_spec.id, next_parent_spec)
+          }
         }
       }
 
+      const subgraph_at_path = this.getSubgraphAtPath(parent_path_to_update)
+
       do {
-        remove_at_path(
-          parent_spec,
-          parent_path_to_update,
-          unit_id_to_update,
-          unit_to_update_spec
-        )
+        if (parent_path_to_update.length === 1 || !parent_subgraph) {
+          remove_at_path(
+            parent_spec,
+            parent_path_to_update,
+            unit_id_to_update,
+            true
+          )
+        }
 
         unit_id_to_update = last(parent_path_to_update)
         parent_path_to_update = parent_path_to_update.slice(0, -1)
         parent_spec = findSpecAtPath(specs, this._spec, parent_path_to_update)
-        unit_to_update_spec = getUnitSpec(specs, parent_spec, unit_id_to_update)
+        unit_to_update_spec = findSpecAtPath(specs, this._spec, [
+          ...parent_path_to_update,
+          unit_id_to_update,
+        ])
+
+        parent_subgraph = this.getSubgraphAtPath(parent_path_to_update)
 
         if (
-          parent_spec.render === true ||
-          (parent_spec.render === undefined &&
-            (parent_spec.component?.children?.length ?? 0) > 0)
+          unit_to_update_spec.render === true ||
+          (unit_to_update_spec.render === undefined &&
+            (unit_to_update_spec.component?.children?.length ?? 0) > 0)
         ) {
           break
         }
-      } while (parent_path_to_update.length >= 0)
+      } while (parent_path_to_update.length > 0)
     }
 
     if (this._is_spec_updater(path)) {
