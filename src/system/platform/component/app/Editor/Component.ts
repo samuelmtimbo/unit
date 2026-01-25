@@ -8588,12 +8588,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         parent.placeParentRoot(sub_component, index, slot_name)
       }
 
-      this._mem_layout_insert_parent_root(
-        parent_id,
-        unit_id,
-        slot_name,
-        index
-      )
+      this._mem_layout_insert_parent_root(parent_id, unit_id, slot_name, index)
     } else {
       if (!this._component.$root.includes(sub_component)) {
         this._component.placeRootAt(sub_component, index)
@@ -52780,6 +52775,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const _ref_unit_merge_count: Dict<number> = {}
 
+    const sub_component_ids = []
+
     for (const unit_id of unit_ids) {
       const unit = clone(this._get_unit(unit_id))
 
@@ -52804,23 +52801,29 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
 
       if (this._is_unit_component(unit_id)) {
-        component.children = component.children || []
-        component.subComponents = component.subComponents || {}
-        component.subComponents[unit_id] =
-          component.subComponents[unit_id] ?? {}
+        sub_component_ids.push(unit_id)
+      }
+    }
 
-        const children = this._spec_get_sub_component_children(unit_id)
+    const ordered_sub_component_ids =
+      this._order_sub_component_ids(sub_component_ids)
 
-        for (const child_id of children) {
-          if (node_ids.includes(child_id)) {
-            component.subComponents[unit_id] = component.subComponents[
-              unit_id
-            ] ?? { children: [] }
-            component.subComponents[unit_id].children =
-              component.subComponents[unit_id].children ?? []
-            component.subComponents[unit_id].children.push(child_id)
-          }
-        }
+    for (const unit_id of ordered_sub_component_ids) {
+      component.children = component.children || []
+      component.subComponents = component.subComponents || {}
+      component.subComponents[unit_id] = component.subComponents[unit_id] ?? {}
+
+      const parent_id = this._spec_get_sub_component_parent_id(unit_id)
+
+      if (parent_id && unit_ids.includes(parent_id)) {
+        component.subComponents[parent_id] = component.subComponents[
+          parent_id
+        ] ?? { children: [] }
+        component.subComponents[parent_id].children =
+          component.subComponents[parent_id].children ?? []
+        component.subComponents[parent_id].children.push(unit_id)
+      } else {
+        component.children.push(unit_id)
       }
     }
 
