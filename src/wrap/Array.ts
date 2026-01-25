@@ -11,37 +11,37 @@ export function wrapSharedRefArrayInterface<T extends any[]>(
   data: SharedRef<T>
 ): A<T> {
   const array: A<T> = {
-    append(a: T): Promise<void> {
+    async append(a: T): Promise<void> {
       data.current.push(a)
 
       return
     },
-    put(i: number, data: any): Promise<void> {
+    async put(i: number, data: any): Promise<void> {
       data.current[i] = data
 
       return Promise.resolve()
     },
-    at(i: number): Promise<any> {
+    async at(i: number): Promise<any> {
       if (i < 0 && i >= data.current.length) {
         throw new IndexOutOfBoundaryError()
       }
 
       return Promise.resolve(data.current[i])
     },
-    length(): Promise<number> {
+    async length(): Promise<number> {
       return Promise.resolve(data.current.length)
     },
-    indexOf(a: T): Promise<number> {
+    async indexOf(a: T): Promise<number> {
       return Promise.resolve(data.current.indexOf(a))
     },
-    pop: function (): Promise<T> {
+    async pop(): Promise<T> {
       if (!data.current.length) {
         throw new Error('empty array')
       }
 
       return Promise.resolve(data.current.pop())
     },
-    shift: function (): Promise<T> {
+    async shift(): Promise<T> {
       return Promise.resolve(data.current.shift())
     },
   }
