@@ -41,6 +41,8 @@ export default class New extends Holder<I, O> {
 
     this._graph = graph
 
+    graph.play()
+
     done({ graph })
   }
 
