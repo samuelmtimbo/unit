@@ -6406,7 +6406,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     sub_component_parent_index =
       sub_component_parent_index ??
-      this._spec_get_sub_component_children_count(sub_component_parent_id)
+      ((sub_component_parent_id &&
+        this._spec_get_sub_component_children_count(sub_component_parent_id)) ||
+        undefined)
     sub_component_parent_slot_name = sub_component_parent_slot_name ?? 'default'
 
     if (is_component) {
