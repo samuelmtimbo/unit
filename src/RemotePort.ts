@@ -52,13 +52,13 @@ export class RemotePort extends $ {
 
     if (type === GET) {
       if (!this._call_id.has(id)) {
-        throw new Error('unexpected worker call message id')
+        return
       }
 
       this._call_emitter.emit(id, __data)
     } else if (type === CALL) {
       if (!this._call_id.has(id)) {
-        throw new Error('unexpected worker call message id')
+        return
       }
 
       this._call_emitter.emit(id, __data)
