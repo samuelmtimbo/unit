@@ -58539,21 +58539,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const possibly_turned_circle_unit_id = path[1] ?? unitId
 
-    let parent_path_to_update: string[] = path
-    let unit_id_to_update: string = unitId
-    let unit_to_update_spec: Spec = spec
-    let parent_spec = findSpecAtPath(
-      specs,
-      this._spec,
-      parent_path_to_update
-    ) as GraphSpec
+    if (is_removed_unit_component && all_ancestors_are_component) {
+      let parent_path_to_update: string[] = path
+      let unit_id_to_update: string = unitId
+      let unit_to_update_spec: Spec = spec
+      let parent_spec = findSpecAtPath(
+        specs,
+        this._spec,
+        parent_path_to_update
+      ) as GraphSpec
 
-    const subgraph_path = this.getSubgraphPath()
+      const remove_at_path = (
+        parent_spec,
+        parent_path_to_update,
+        unit_id_to_update,
+        unit_to_update_spec
+      ) => {
+        const next_parent_spec = clone(parent_spec)
 
-    while (parent_path_to_update.length >= 0) {
-      const next_parent_spec = clone(parent_spec)
-
-      if (is_removed_unit_component && all_ancestors_are_component) {
         const parent_sub_component_count = keyCount(
           deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
         )
@@ -58640,25 +58643,30 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           )
 
           setSpec(next_parent_spec.id, next_parent_spec)
-        } else {
-          break
         }
+      }
 
-        if (!parent_path_to_update.length) {
-          break
-        }
-
-        if (parent_spec.render === true) {
-          break
-        }
+      do {
+        remove_at_path(
+          parent_spec,
+          parent_path_to_update,
+          unit_id_to_update,
+          unit_to_update_spec
+        )
 
         unit_id_to_update = last(parent_path_to_update)
         parent_path_to_update = parent_path_to_update.slice(0, -1)
         parent_spec = findSpecAtPath(specs, this._spec, parent_path_to_update)
         unit_to_update_spec = getUnitSpec(specs, parent_spec, unit_id_to_update)
-      } else {
-        break
-      }
+
+        if (
+          parent_spec.render === true ||
+          (parent_spec.render === undefined &&
+            (parent_spec.component?.children?.length ?? 0) > 0)
+        ) {
+          break
+        }
+      } while (parent_path_to_update.length >= 0)
     }
 
     if (this._is_spec_updater(path)) {
