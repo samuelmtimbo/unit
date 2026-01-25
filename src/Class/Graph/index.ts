@@ -46,7 +46,7 @@ import {
 } from '../../spec/reducers/spec'
 import { stringify } from '../../spec/stringify'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
-import { removeBundleMetadata } from '../../spec/util'
+import { isComponentSpec, removeBundleMetadata } from '../../spec/util'
 import {
   getSubComponentParentId,
   getSubComponentParentIndex,
@@ -1071,15 +1071,23 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   public setElement(): void {
+    const wasNotElement = !this._element
+
     this._element = true
 
-    this.emit('element', [])
+    if (wasNotElement) {
+      this.emit('element', [])
+    }
   }
 
   public setNotElement(): void {
+    const wasElement = this._element
+
     this._element = false
 
-    this.emit('not_element', [])
+    if (wasElement) {
+      this.emit('not_element', [])
+    }
   }
 
   public getSpec(): GraphSpec {
@@ -3025,6 +3033,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._memAddUnit(unitId, unit, bundle)
     this._simAddUnit(unitId, bundle, unit, parentId, emit)
 
+    const isComponent = this._isUnitComponent(unitId)
+
+    if (!this.isElement()) {
+      if (isComponent) {
+        if (isComponentSpec(this._spec)) {
+          this.setElement()
+        }
+      }
+    }
+
     return unit
   }
 
@@ -3783,18 +3801,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     if (unit instanceof Graph) {
-      if (unit.isElement()) {
-        all_unlisten.push(
-          unit.addListener('element', () => {
-            this._onUnitElement(unitId, unitSpec, unit)
-          })
-        )
-        all_unlisten.push(
-          unit.addListener('not_element', () => {
-            this._onUnitNotElement(unitId)
-          })
-        )
-      }
+      all_unlisten.push(
+        unit.addListener('element', () => {
+          this._onUnitElement(unitId, unitSpec, unit)
+        })
+      )
+      all_unlisten.push(
+        unit.addListener('not_element', () => {
+          this._onUnitNotElement(unitId)
+        })
+      )
     }
 
     const unlisten = () => callAll(all_unlisten)()
@@ -3854,12 +3870,30 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unit: Component_
   ): void {
     this.injectSubComponent(unitId, unitSpec, unit)
+    this.registerRoot(unit as Component_, unitId, true)
+
+    if (!this._element) {
+      this.setElement()
+    }
   }
 
   private _onUnitNotElement(unitId: string): void {
     const parentId = getSubComponentParentId(this._spec, unitId)
+    const unit = this.getUnit(unitId) as Component_
 
     this._specRemoveSubComponent(unitId, parentId)
+
+    if (parentId) {
+      const parent = this.getUnit(parentId)
+
+      ;(parent as Component_).unregisterParentRoot(unit, unitId, true)
+    }
+
+    if (this._element) {
+      if (!isComponentSpec(this._spec)) {
+        this.setNotElement()
+      }
+    }
   }
 
   public removeUnit(
@@ -3965,6 +3999,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._specRemoveUnit(unitId, isComponent)
 
     destroy && unit.destroy()
+
+    if (this.isElement()) {
+      if (isComponent) {
+        if (!isComponentSpec(this._spec)) {
+          this.setNotElement()
+        }
+      }
+    }
 
     this._removingUnit.delete(unitId)
     if (!this._removingUnit.size) {
