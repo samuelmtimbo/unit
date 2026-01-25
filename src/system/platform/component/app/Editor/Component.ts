@@ -57656,6 +57656,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_core_shape(unit_id, 'circle')
 
     this._show_core_icon(unit_id)
+
+    this._refresh_core_size(unit_id)
+
+    const ref_merge_id = this._ref_unit_to_merge[unit_id]
+
+    if (ref_merge_id) {
+      const ref_merge_inputs = this._merge_to_input[ref_merge_id]
+
+      for (const ref_merge_input_id in ref_merge_inputs) {
+        this._refresh_link_pin_marker(ref_merge_input_id, unit_id)
+      }
+    }
   }
 
   private _on_fork_moment = (data: GraphForkMomentData) => {
