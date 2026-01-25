@@ -1716,10 +1716,6 @@ export class Component<
   }
 
   getRootBase(path: string[] = []): [string[], Component][] {
-    if (this.$detached) {
-      return []
-    }
-
     if (this.isBase()) {
       return [[path, this]]
     }
@@ -1779,10 +1775,6 @@ export class Component<
   }
 
   getBase(path: string[] = []): [string[], Component][] {
-    if (this.$detached) {
-      return []
-    }
-
     if (this.isBase()) {
       return [[path, this]]
     }
