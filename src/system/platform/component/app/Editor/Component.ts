@@ -8586,14 +8586,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (parent_id) {
       if (!parent.$parentRoot.includes(sub_component)) {
         parent.placeParentRoot(sub_component, index, slot_name)
-
-        this._mem_layout_insert_parent_root(
-          parent_id,
-          unit_id,
-          slot_name,
-          index
-        )
       }
+
+      this._mem_layout_insert_parent_root(
+        parent_id,
+        unit_id,
+        slot_name,
+        index
+      )
     } else {
       if (!this._component.$root.includes(sub_component)) {
         this._component.placeRootAt(sub_component, index)
