@@ -3424,6 +3424,32 @@ export function buildMoveMap(
             }
           )
 
+          let exposePinSetTask = deepGetOrDefault(
+            targetExposePinSetTasks,
+            [type, nextPinId],
+            undefined
+          )
+
+          if (!exposePinSetTask) {
+            exposePinSetTask = newTask([
+              {
+                in: true,
+                action: makeExposePinSetAction(type, nextPinId, {
+                  plug: {},
+                  ref,
+                }),
+              },
+            ])
+
+            deepSet_(
+              targetExposePinSetTasks,
+              [type, nextPinId],
+              exposePinSetTask
+            )
+
+            addDependency(exposePinSetTask, movePlugTask)
+          }
+
           let exposePinTask = deepGetOrDefault(
             targetExposePinTasks,
             [type, nextPinId, nextSubPinId],
@@ -3438,7 +3464,7 @@ export function buildMoveMap(
               },
             ])
 
-            addDependency(exposePinTask, movePlugTask)
+            addDependency(exposePinTask, exposePinSetTask)
 
             deepSet_(
               targetExposePinTasks,
