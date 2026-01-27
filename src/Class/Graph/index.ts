@@ -1,4 +1,5 @@
 import { $ } from '../$'
+import { DataRef } from '../../DataRef'
 import { ObjectUpdateType } from '../../ObjectUpdateType'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
@@ -15,7 +16,7 @@ import { ReadOnlyError } from '../../exception/ObjectReadOnly'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
 import { processAction } from '../../spec/actions/G'
 import { cloneUnitClass } from '../../spec/cloneUnit'
-import { evaluateData } from '../../spec/evaluateDataValue'
+import { evaluateData, evaluateDataValue } from '../../spec/evaluateDataValue'
 import { fromBundle } from '../../spec/fromBundle'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
@@ -98,6 +99,7 @@ import { GraphUnitSpec } from '../../types/GraphUnitSpec'
 import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { IOOf, forIOObjKV } from '../../types/IOOf'
+import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { AnimationSpec, C, C_EE } from '../../types/interface/C'
@@ -977,6 +979,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _destroy(path: string[]) {
+    const {
+      api: {
+        window: { nextTick },
+      },
+    } = this.__system
     if (path.length > 0) {
       return
     }
@@ -1007,7 +1014,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const { global } = this.__system
 
-    this.__system.unregisterUnit(this.id)
+    nextTick(() => {
+      this.__system.unregisterUnit(this.id)
+    })
 
     deepDestroy(global.graph, [this.id, this.__global_id])
 
@@ -3815,7 +3824,62 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unlisten = () => callAll(all_unlisten)()
 
+    this._registerUnitDataSpecs(bundle)
+
     this._unitUnlisten[unitId] = unlisten
+  }
+
+  private _registerUnitDataSpecs = (bundle: UnitBundleSpec) => {
+    const { unit } = bundle
+
+    const { input = {} } = unit
+
+    for (const name in input) {
+      const { data } = input[name]
+
+      const specs_ = weakMerge(this.__system.specs, bundle.specs ?? {})
+
+      if (data !== undefined) {
+        const dataRef = evaluateDataValue(data, specs_, {})
+
+        for (const path of dataRef.ref ?? []) {
+          let bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+          bundle = unitBundleSpec(
+            bundle.unit,
+            weakMerge(specs_, bundle.specs ?? {})
+          )
+
+          for (const specId in bundle.specs ?? {}) {
+            this.__system.registerUnit(specId)
+          }
+        }
+      }
+    }
+  }
+
+  private _unregisterUnitDataSpecs = (bundle: UnitBundleSpec) => {
+    const { unit } = bundle
+
+    const { input = {} } = unit
+
+    for (const name in input) {
+      const { data } = input[name]
+
+      const specs_ = weakMerge(this.__system.specs, bundle.specs ?? {})
+
+      if (data !== undefined) {
+        const dataRef = evaluateDataValue(data, specs_, {})
+
+        for (const path of dataRef.ref ?? []) {
+          const bundle = deepGet(dataRef.data, path)
+
+          for (const specId in bundle.specs ?? {}) {
+            this.__system.unregisterUnit(specId)
+          }
+        }
+      }
+    }
   }
 
   private _simAddUnit(
@@ -4038,6 +4102,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     // console.log('_memRemoveUnit', unitId, removeFromMerge)
 
     const unit = this.getUnit(unitId)
+
+    const bundle = unit.getUnitBundleSpec()
+
+    this._unregisterUnitDataSpecs(bundle)
 
     const unlisten = this._unitUnlisten[unitId]
 
@@ -5410,6 +5478,27 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this.getUnit(unitId)
 
+    const unitSpec = this.getUnitSpec(unitId)
+
+    const currentData = unitSpec?.inputs?.[type]?.[pinId]?.data as DataRef
+
+    if (currentData !== undefined) {
+      const dataRef = evaluateDataValue(data, specs, {})
+
+      for (const path of dataRef.ref ?? []) {
+        let bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+        bundle = unitBundleSpec(
+          bundle.unit,
+          weakMerge(specs, bundle.specs ?? {})
+        )
+
+        for (const specId in bundle.specs ?? {}) {
+          this.__system.unregisterUnit(specId)
+        }
+      }
+    }
+
     if (
       type === 'input' &&
       unit.hasInputNamed(pinId) &&
@@ -5419,12 +5508,25 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         ;[data] = cloneUnitClass(data)
       }
 
+      if (data instanceof Function) {
+        let bundle = (data as UnitBundle).__bundle
+
+        bundle = unitBundleSpec(
+          bundle.unit,
+          weakMerge(specs, bundle.specs ?? {})
+        )
+
+        this._registerUnitDataSpecs(bundle)
+      }
+
+      const dataRef = evaluateData(data, specs, classes)
+
       setUnitPinData(
         {
           unitId,
           type,
           pinId,
-          data: evaluateData(data, specs, classes),
+          data: dataRef,
         },
         this._spec,
         specs,
