@@ -1,6 +1,5 @@
 import { $ } from '../../../../../Class/$'
 import { Element_ } from '../../../../../Class/Element'
-import { Graph } from '../../../../../Class/Graph'
 import { SnapshotOpt } from '../../../../../Class/Unit'
 import { Rect } from '../../../../../client/util/geometry/types'
 import { Zoom } from '../../../../../client/zoom'
@@ -11,6 +10,8 @@ import { System } from '../../../../../system'
 import { GraphNodeSpec } from '../../../../../types'
 import { BundleSpec } from '../../../../../types/BundleSpec'
 import { Dict } from '../../../../../types/Dict'
+import { GraphBundle } from '../../../../../types/GraphClass'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { Async } from '../../../../../types/interface/async/Async'
 import { G } from '../../../../../types/interface/G'
 import { J } from '../../../../../types/interface/J'
@@ -41,8 +42,7 @@ export interface O<T> {
 export default class Editor<T> extends Element_<I<T>, O<T>> {
   __ = ['U', 'C', 'V', 'J', 'G', 'EE']
 
-  private _fallback_graph: Graph
-  private _graph: Graph
+  private _fallback_graph_class: GraphBundle
 
   constructor(system: System) {
     super(
@@ -85,7 +85,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     this._fallback()
 
-    this._input.graph.push(this._fallback_graph)
+    this._input.graph.push(this._fallback_graph_class)
 
     this.register()
 
@@ -140,10 +140,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     const Class = fromSpec(spec, specs, classes, {})
 
-    const fallback_graph = new Class(this.__system)
-    this._fallback_graph = fallback_graph
-
-    this._fallback_graph.play()
+    this._fallback_graph_class = Class
   }
 
   onRefInputInvalid(name: string) {
@@ -160,25 +157,21 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     // console.log('Editor', 'onRefInputData', name, data)
 
     if (name === 'graph') {
-      if (this._input.graph.embodied()) {
-        data = Async(data, UCGJEE, this.__system.async)
-      }
+      data = Async(data, UCGJEE, this.__system.async)
+      ;(data as $Graph).$addListener(
+        { event: 'destroy' },
+        ([path]: [path: string[]]) => {
+          if (path.length > 0) {
+            return
+          }
 
-      this._graph = data as Graph
+          if (data.constructor === this._fallback_graph_class) {
+            this._fallback()
 
-      data.addListener('destroy', (path: string[]) => {
-        if (path.length > 0) {
-          return
+            this._input.graph.push(this._fallback_graph_class)
+          }
         }
-
-        if (this._graph === this._fallback_graph) {
-          this._fallback()
-        }
-      })
-
-      if (this._input.graph.embodied()) {
-        data.$play()
-      }
+      )
 
       this._output.graph.push(data)
     }
@@ -189,10 +182,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     // console.log('Editor', 'onRefInputDrop', name)
 
     if (name === 'graph') {
-      this._graph = this._fallback_graph
-
-      this._input.graph.push(this._fallback_graph)
-      this._output.graph.push(this._fallback_graph)
+      this._input.graph.push(this._fallback_graph_class)
     }
   }
 
@@ -201,7 +191,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
   }
 
   public snapshotSelf(opt: SnapshotOpt = {}): Dict<any> {
-    const bundle = this._fallback_graph.getUnitBundleSpec(opt)
+    const bundle = this._input.graph.peak().getUnitBundleSpec(opt)
 
     return {
       ...super.snapshotSelf(),
@@ -216,8 +206,6 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     const Class = fromBundle(_fallback_graph, this.__system.specs, {})
 
-    const graph = new Class(this.__system)
-
-    this._fallback_graph = graph
+    this._fallback_graph_class = Class
   }
 }
