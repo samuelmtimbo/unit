@@ -50467,7 +50467,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           if (parent_root_id) {
             const parent_root_sub_component =
-              graph_component.getSubComponent(parent_root_id)
+              graph_component.getSubComponent(parent_root_id) ??
+              sub_component_map[parent_root_id]
 
             parent_component.pullParentRoot(sub_component)
             parent_root_sub_component.pushParentRoot(sub_component, 'default')
