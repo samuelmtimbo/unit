@@ -39,7 +39,7 @@ export function extractAttr(element: IOElement): Dict<string> {
 
   const attr = {}
 
-  for (let attribute of element.attributes) {
+  for (let attribute of (element.attributes ?? [])) {
     attr[attribute.name] = attribute.value
   }
 

@@ -29,7 +29,7 @@ export function rawExtractStyle(
     return {}
   }
 
-  const { style } = element
+  const { style = { cssText: '' } } = element
 
   return cssTextToObj(style.cssText)
 }

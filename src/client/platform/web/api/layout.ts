@@ -1,7 +1,7 @@
 import { API } from '../../../../API'
 import { isFrameRelativeValue } from '../../../../isFrameRelative'
 import { BootOpt, System } from '../../../../system'
-import { Style, Tag } from '../../../../system/platform/Style'
+import { Tag } from '../../../../system/platform/Style'
 import { traverseTree, Tree } from '../../../../tree'
 import { LayoutNode } from '../../../LayoutNode'
 import { mergeAttr } from '../../../attr'
@@ -40,12 +40,16 @@ export const isSVGName = (tag: string) => {
   return ['path', 'rect', 'circle', 'line', 'ellipse'].includes(tag)
 }
 
-const shouldExpandStyle = (style: Style) => {
+const shouldExpandStyle = (tag: Tag) => {
+  if (tag.name === '#document-fragment') {
+    return false
+  }
+
   let {
     display: childDisplay = 'block',
     width: childWidthStr = 'auto',
     height: childHeightStr = 'auto',
-  } = style
+  } = tag.style
 
   const displayContents = childDisplay === 'contents'
   const fitWidth = childWidthStr === 'fit-content' || childWidthStr === 'auto'
@@ -65,7 +69,7 @@ const maybeExpand = (
     path: number[]
   ) => (Tag & { element?: HTMLElement | SVGElement })[]
 ) => {
-  const shouldExpand = shouldExpandStyle(tag.style)
+  const shouldExpand = shouldExpandStyle(tag)
 
   if (shouldExpand) {
     expand(parentTrait, tag, path, expandChild)
