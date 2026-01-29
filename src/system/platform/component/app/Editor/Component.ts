@@ -51212,13 +51212,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
     }
 
+    const do_not_displace_sub_component = {
+      [unit_id]: true,
+    }
+
     this._process_move_into_moves(
       graph_id,
       moves,
       {},
-      {
-        [unit_id]: true,
-      }
+      do_not_displace_sub_component
     )
 
     this._next_node_position = {}
@@ -52039,7 +52041,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const moves = moveMerge(map, merge_id) ?? []
 
-    this._process_move_into_moves(graph_id, moves)
+    const do_not_displace_sub_component = {}
+
+    for (const move of moves) {
+      if (!move.in) {
+        if (move.action.type === REMOVE_UNIT) {
+          do_not_displace_sub_component[move.action.data.unitId] = true
+        }
+      }
+    }
+
+    this._process_move_into_moves(
+      graph_id,
+      moves,
+      {},
+      do_not_displace_sub_component
+    )
 
     this._next_node_position = {}
   }
