@@ -29,7 +29,7 @@
     "watch:client": "run-p watch:bundle watch:worker",
     "watch:worker": "run-s watch:worker:system",
     "watch:worker:system": "ts-node -T src/script/watch/worker/system.ts",
-    "watch": "run-p watch:server watch:client watch:worker",
+    "watch": "run-p watch:server watch:client",
     "start": "run-s serve",
     "stop": "sudo node_modules/kill-port/cli.js 4000",
     "serve": "node lib/server/index.js",
