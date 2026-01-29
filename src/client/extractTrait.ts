@@ -48,11 +48,11 @@ export const extractTrait = (
 
     let parentTrait: LayoutNode
 
-    if (component.$parent) {
-      parentTrait = extractTrait(component.$parent, measureText)
+    if (component.$domParent && component.$domParent.$mounted) {
+      parentTrait = extractTrait(component.$domParent, measureText)
 
       color = component.getColor()
-    } else {
+    } else if (component.$mounted) {
       const { $color } = component.$context
 
       color = hexToRgba($color)
