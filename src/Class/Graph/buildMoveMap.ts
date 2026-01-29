@@ -58,6 +58,7 @@ import {
   getPlugCount,
   getSubPinSpec,
   hasPin,
+  hasPinId,
   isMergeRef,
   isPinRef,
   isUnitPinConstant,
@@ -3430,7 +3431,7 @@ export function buildMoveMap(
             undefined
           )
 
-          if (!exposePinSetTask) {
+          if (!exposePinSetTask && !hasPinId(target, type, nextPinId)) {
             exposePinSetTask = newTask([
               {
                 in: true,
@@ -3464,7 +3465,11 @@ export function buildMoveMap(
               },
             ])
 
-            addDependency(exposePinTask, exposePinSetTask)
+            if (exposePinSetTask) {
+              addDependency(exposePinTask, exposePinSetTask)
+            } else {
+              addDependency(exposePinTask, movePlugTask)
+            }
 
             deepSet_(
               targetExposePinTasks,
