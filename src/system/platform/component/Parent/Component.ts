@@ -15,8 +15,6 @@ export default class Parent extends HTMLElement_<HTMLDivElement, Props> {
     )
 
     this.$element.style.display = 'contents'
-
-    this.$wrap = true
   }
 
   focus() {
