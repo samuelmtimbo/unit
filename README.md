@@ -64,6 +64,14 @@ For development mode:
 npm run watch
 ```
 
+## Server
+
+The quickest way to serve local Unit Environment:
+
+```
+npx @_unit/unit
+```
+
 ## Library
 
 Unit source code can be used as a general purpose library in any JavaScript project, both on Web and Node.js.
