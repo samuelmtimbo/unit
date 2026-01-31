@@ -388,7 +388,7 @@
       },
       "localstorage": {
         "output": {
-          "_self": true
+          "obj": true
         }
       }
     },
@@ -412,7 +412,7 @@
       },
       "localstorage0": {
         "output": {
-          "_self": true
+          "obj": true
         }
       }
     },

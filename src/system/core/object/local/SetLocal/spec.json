@@ -44,7 +44,7 @@
       },
       "localstorage": {
         "output": {
-          "_self": true
+          "obj": true
         }
       }
     }

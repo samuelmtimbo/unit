@@ -1,7 +1,12 @@
 {
   "name": "local storage",
   "inputs": {},
-  "outputs": {},
+  "outputs": {
+    "obj": {
+      "type": "`J`",
+      "ref": true
+    }
+  },
   "metadata": {
     "icon": "table",
     "description": "persist data on local storage",
@@ -10,5 +15,5 @@
   },
   "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
   "base": true,
-  "type": "`U`&`V`&`J`"
+  "type": "`U`"
 }

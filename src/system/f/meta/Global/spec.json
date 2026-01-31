@@ -1,7 +1,12 @@
 {
   "name": "global",
   "inputs": {},
-  "outputs": {},
+  "outputs": {
+    "obj": {
+      "type": "`J`",
+      "ref": true
+    }
+  },
   "metadata": {
     "icon": "table",
     "description": "globally accessible object scope",
