@@ -126,6 +126,7 @@ export type ComponentClass<T = any> = {
 export type ComponentClasses = Dict<ComponentClass>
 
 export interface BootOpt {
+  dir?: string
   path?: string
   specs?: Specs
   classes?: Classes

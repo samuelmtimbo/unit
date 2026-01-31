@@ -2,6 +2,7 @@ import { EventSource } from 'eventsource'
 import * as http from 'http'
 import { JSDOM } from 'jsdom'
 import { ReadableStream as ReadableStream_ } from 'node:stream/web'
+import * as path from 'path'
 import { MessageEvent, WebSocket, WebSocketServer } from 'ws'
 import {
   Server,
@@ -22,6 +23,7 @@ import { SYSTEM_ROOT_ID } from '../../constants/SYSTEM_ROOT_ID'
 import { searchToQuery } from '../web/api/intercept'
 import { webBoot } from '../web/boot'
 import { NoopCanvasRenderingContext2D } from './canvas'
+import { FileSystemLocalStorage } from './localStorage'
 
 function incomingMessageToReadableStream(
   system: System,
@@ -70,11 +72,31 @@ export function serverResponseBodyToReadableStream(
 }
 
 export function boot(opt?: BootOpt): [System, Unlisten] {
-  const { window } = new JSDOM(`<div id="${SYSTEM_ROOT_ID}"></div>`, {
-    url: 'http://localhost/',
+  let { window } = new JSDOM(`<div id="${SYSTEM_ROOT_ID}"></div>`, {
+    url: 'http://localhost',
   })
 
   const root = window.document.getElementById(SYSTEM_ROOT_ID)
+
+  let localStorage: Storage = window.localStorage
+
+  if (opt?.dir) {
+    const fileSystemDir = path.join(opt.dir, opt.path ?? '')
+
+    localStorage = new FileSystemLocalStorage(
+      path.join(fileSystemDir, '.localStorage')
+    )
+
+    window = new Proxy(window, {
+      get(target, prop, receiver) {
+        if (prop === 'localStorage') {
+          return localStorage
+        }
+
+        return Reflect.get(target, prop, receiver)
+      },
+    })
+  }
 
   window.fetch = globalThis.fetch
   window.HTMLCanvasElement.prototype.getContext = <
