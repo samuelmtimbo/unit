@@ -66,10 +66,18 @@ npm run watch
 
 ## Server
 
-The quickest way to serve local Unit Environment:
+The quickest way to serve a local Unit Environment:
 
 ```
 npx @_unit/unit
+```
+
+Then visit http://localhost:4000
+
+Alternatively, specify a port:
+
+```
+npx @_unit/unit --port 8042
 ```
 
 ## Library
