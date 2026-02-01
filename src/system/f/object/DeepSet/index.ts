@@ -13,7 +13,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  result: object
+  obj: object
 }
 
 export default class DeepSet<T> extends Functional<I<T>, O<T>> {
@@ -21,7 +21,7 @@ export default class DeepSet<T> extends Functional<I<T>, O<T>> {
     super(
       {
         i: ['obj', 'path', 'value'],
-        o: ['result'],
+        o: ['obj'],
       },
       {},
       system,
@@ -30,10 +30,10 @@ export default class DeepSet<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ obj, path, value }: I<T>, done: Done<O<T>>, fail: Fail): void {
-    let result = clone(obj)
+    let obj_ = clone(obj)
 
     try {
-      deepSet(result, path, value)
+      deepSet(obj_, path, value)
     } catch (err) {
       fail(err.message)
 
@@ -41,7 +41,7 @@ export default class DeepSet<T> extends Functional<I<T>, O<T>> {
     }
 
     done({
-      result,
+      obj: obj_,
     })
   }
 }

@@ -45,9 +45,7 @@
         },
         "obj": {}
       },
-      "output": {
-        "result": {}
-      },
+      "output": {},
       "metadata": {
         "position": {
           "x": -109,
@@ -72,7 +70,7 @@
     "1": {
       "deepset": {
         "output": {
-          "result": true
+          "obj": true
         }
       },
       "fetchbody": {
