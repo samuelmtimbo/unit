@@ -12,7 +12,7 @@
     "url": {
       "type": "string"
     },
-    "request": {
+    "req": {
       "type": "object"
     },
     "body": {

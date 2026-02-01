@@ -14,7 +14,7 @@ export type I = {
 
 export type O = {
   body: RS & $
-  request: ServerRequest
+  req: ServerRequest
   url: string
 }
 
@@ -33,7 +33,7 @@ export default class Handle extends Holder<I, O> {
     super(
       {
         fi: ['url'],
-        fo: ['request', 'body', 'url'],
+        fo: ['req', 'body', 'url'],
         i: [],
         o: [],
       },
@@ -67,7 +67,7 @@ export default class Handle extends Holder<I, O> {
 
     const { search, pathname, hostname, origin, protocol, port } = new URL(url)
 
-    const request: ServerRequest = {
+    const req: ServerRequest = {
       url,
       headers,
       search,
@@ -83,7 +83,7 @@ export default class Handle extends Holder<I, O> {
 
     done({
       url: url_,
-      request,
+      req,
       body,
     })
   }

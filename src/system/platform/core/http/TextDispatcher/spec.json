@@ -45,7 +45,7 @@
             }
           }
         },
-        "request": {
+        "req": {
           "metadata": {
             "position": {
               "x": 41,
@@ -275,11 +275,11 @@
         }
       }
     },
-    "request": {
+    "req": {
       "plug": {
         "0": {
           "unitId": "dispatcher",
-          "pinId": "request",
+          "pinId": "req",
           "kind": "output"
         }
       },

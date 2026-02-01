@@ -24,7 +24,7 @@
       },
       "output": {
         "url": {},
-        "request": {
+        "req": {
           "ignored": false,
           "metadata": {
             "position": {
@@ -253,11 +253,11 @@
         }
       }
     },
-    "request": {
+    "req": {
       "plug": {
         "0": {
           "unitId": "handle",
-          "pinId": "request",
+          "pinId": "req",
           "kind": "output"
         }
       },

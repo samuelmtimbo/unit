@@ -133,7 +133,7 @@
             }
           }
         },
-        "request": {
+        "req": {
           "metadata": {
             "position": {
               "x": 227,
@@ -335,11 +335,11 @@
       },
       "type": "string"
     },
-    "request": {
+    "req": {
       "plug": {
         "0": {
           "unitId": "textdispatcher",
-          "pinId": "request",
+          "pinId": "req",
           "kind": "output"
         }
       },
