@@ -1651,16 +1651,30 @@ export function _applyGenerics(
       }
     }
     case TreeNodeType.Class: {
-      const children = tree.children.map((child) =>
-        child.type === TreeNodeType.Generic ? _applyGenerics(child, map) : child
-      )
+      const children = tree.children.map((child) => {
+        if (child.type === TreeNodeType.Generic) {
+          const child_ = _applyGenerics(child, map)
+
+          if (
+            child_.type === TreeNodeType.Generic ||
+            child_.type === TreeNodeType.Placeholder
+          ) {
+            return child_
+          }
+
+          return getTree(`<${child_.value}>`)
+        }
+
+        return child
+      })
       const value = tree.children.reduce((acc, child, i) => {
         const child_ = children[i]
 
         if (child.type === TreeNodeType.Generic) {
           return acc.replace(
             trimSides(child.value),
-            child_.type === TreeNodeType.Generic
+            child_.type === TreeNodeType.Generic ||
+              child_.type === TreeNodeType.Placeholder
               ? trimSides(child_.value)
               : child_.value
           )
@@ -1668,6 +1682,7 @@ export function _applyGenerics(
           return tree.value
         }
       }, tree.value)
+
       return {
         ...tree,
         value,

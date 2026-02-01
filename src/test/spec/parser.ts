@@ -338,6 +338,8 @@ assert(
 assert(_isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
 assert(_isTypeMatch('`A<`F`>`', '`A<T>`'))
 assert(_isTypeMatch('`A<`F`>`', '`A<A>`'))
+assert(_isTypeMatch('`V`', '`BO`'))
+assert(_isTypeMatch('`V<string>`', '`BO`'))
 
 assert(!_isTypeMatch('', 'any'))
 assert(!_isTypeMatch('abc', 'any'))
