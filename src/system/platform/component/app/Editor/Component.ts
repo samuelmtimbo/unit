@@ -159,7 +159,7 @@ import {
 import { extractStyle } from '../../../../../client/extractStyle'
 import { extractTrait } from '../../../../../client/extractTrait'
 import { findRef } from '../../../../../client/findRef'
-import { getSize } from '../../../../../client/getSize'
+import { getElementSize } from '../../../../../client/getSize'
 import { marchingSquares, pointsToSmoothPath } from '../../../../../client/glob'
 import {
   GraphNodeMap,
@@ -2847,7 +2847,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _selection_rotation_unlisten: Dict<Unlisten> = {}
 
   private _transcend_pointer_id: number | null = null
-  private _transcend_timeout: NodeJS.Timeout | null = null
+  private _transcend_timeout: number | null = null
   private _transcend_on_pointer_up: boolean = false
 
   private _static: boolean = false
@@ -3007,7 +3007,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _simulation_layer: number = 0
   private _simulation_end: boolean = false
 
-  private _debug_interval: NodeJS.Timeout | null = null
+  private _debug_interval: number | null = null
   private _debug_buffer: Moment<any>[] = []
   private _debug_cursor: number = -1
 
@@ -3404,7 +3404,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     area_select_svg.appendChild(area_select_rect)
     this._multiselect_area_svg = area_select_svg
 
-    this._simulation = new Simulation({
+    this._simulation = new Simulation(this.$system, {
       alpha: 0.25,
       alphaDecay: SIMULATION_DEFAULT_ALPHA_DECAY,
       // alphaDecay: 0,
@@ -21555,7 +21555,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         leaf_comp = leaf_comp_offset
       }
 
-      const leaf_node = extractTrait(leaf_comp, measureText)
+      const leaf_node = extractTrait(this.$system, leaf_comp, measureText)
 
       leaf_node.x -= offset.x
       leaf_node.y -= offset.y
@@ -21671,6 +21671,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     abort: () => void = NOOP
   ): Unlisten => {
     // console.log('Graph', '_animate_sub_component_base', sub_component_id)
+
+    const {
+      api: {
+        animation: { requestAnimationFrame, cancelAnimationFrame },
+      },
+    } = this.$system
 
     const base_length = leaf_base.length
 
@@ -21931,7 +21937,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         (leaf_parent &&
           leaf_parent.isBase() &&
           leaf_parent !== leaf_comp &&
-          extractTrait(leaf_parent, measureText)) ||
+          extractTrait(this.$system, leaf_parent, measureText)) ||
         trait
 
       return extractStyle(leaf_comp, trait_, measureText)
@@ -22195,6 +22201,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._get_sub_component_frame(sub_component_id)
 
         const sub_component_frame_trait = extractTrait(
+          this.$system,
           sub_component_frame,
           measureText
         )
@@ -22283,7 +22290,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           ...inner_sub_component_ids,
         ]
 
-        const trait: LayoutNode = extractTrait(sub_component_frame, measureText)
+        const trait: LayoutNode = extractTrait(
+          this.$system,
+          sub_component_frame,
+          measureText
+        )
 
         const { tree, map } = buildTree(
           '',
@@ -22302,6 +22313,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const reset_all_trait = () => {
           const trait: LayoutNode = extractTrait(
+            this.$system,
             sub_component_frame,
             measureText
           )
@@ -26727,7 +26739,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           const layer = this._get_fullwindow_foreground()
 
-          let layer_trait = extractTrait(layer, measureText)
+          let layer_trait = extractTrait(this.$system, layer, measureText)
 
           for (const sub_component_id of sub_component_ids) {
             const { base } =
@@ -31794,7 +31806,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             const leaf_offset = leaf_comp.getOffset() ?? leaf_comp
 
-            const leaf_trait = extractTrait(leaf_offset, measureText)
+            const leaf_trait = extractTrait(
+              this.$system,
+              leaf_offset,
+              measureText
+            )
 
             leaf_trait.x -= this.$context.$x
             leaf_trait.y -= this.$context.$y
@@ -32079,7 +32095,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      const trait = extractTrait(frame, measureText)
+      const trait = extractTrait(this.$system, frame, measureText)
 
       if (!this._is_sub_component_animating(sub_component_id)) {
         this._plug_sub_component_base(
@@ -32108,7 +32124,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           base_node,
           (leaf_id) => {
             if (i === 0) {
-              const trait = extractTrait(frame, measureText)
+              const trait = extractTrait(this.$system, frame, measureText)
 
               base_trait = this._reflect_sub_component_base_trait(
                 sub_component_id,
@@ -32222,7 +32238,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const leaf of sub_base) {
       const [_, leaf_comp] = leaf
 
-      const leaf_trait = extractTrait(leaf_comp, measureText)
+      const leaf_trait = extractTrait(this.$system, leaf_comp, measureText)
 
       leaf_trait.x -= this.$context.$x
       leaf_trait.y -= this.$context.$y
@@ -32381,7 +32397,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     for (const sub_component_base_leaf of base) {
       const [_, leaf_comp] = sub_component_base_leaf
 
-      const leaf_node = extractTrait(leaf_comp, measureText)
+      const leaf_node = extractTrait(this.$system, leaf_comp, measureText)
 
       base_node.push(leaf_node)
     }
@@ -32512,7 +32528,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             sub_base,
             sub_base_node,
             () => {
-              const trait = extractTrait(frame, measureText)
+              const trait = extractTrait(this.$system, frame, measureText)
 
               trait.x -= 1
               trait.y -= 1
@@ -34028,11 +34044,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             let target_slot = frame_slot
 
             const frame_position = getRelativePosition(
+              this.$system,
               this._frame.$element,
               this._frame.$context.$element
             )
 
-            const frame_size = getSize(target_slot.$element)
+            const frame_size = getElementSize(
+              this.$system,
+              target_slot.$element
+            )
 
             let width =
               frame_slot.isParent() || frame_slot.$wrap
@@ -34065,8 +34085,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             )
           }
 
-          const layer_trait = extractTrait(layer, measureText)
-          const frame_trait = extractTrait(frame_slot, measureText)
+          const layer_trait = extractTrait(this.$system, layer, measureText)
+          const frame_trait = extractTrait(
+            this.$system,
+            frame_slot,
+            measureText
+          )
 
           const offset_x = this._frame_out ? frame_trait.x : this.$context.$x
           const offset_y = this._frame_out ? frame_trait.y : this.$context.$y
@@ -34135,7 +34159,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const layer = this._get_fullwindow_foreground()
 
-    const layer_trait = extractTrait(layer, measureText)
+    const layer_trait = extractTrait(this.$system, layer, measureText)
 
     const all_target_layer: Dict<Div> = {}
 
@@ -34150,7 +34174,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._measure_sub_component_base(sub_component_id, base, layer_trait)
 
-      const frame_trait = extractTrait(frame, measureText)
+      const frame_trait = extractTrait(this.$system, frame, measureText)
       const frame_style = extractStyle(frame, frame_trait, measureText)
 
       parent_frame_style[sub_component_id] = frame_style
@@ -34221,7 +34245,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const frame = this._get_sub_component_frame(sub_component_id)
 
-        const trait = extractTrait(frame, measureText)
+        const trait = extractTrait(this.$system, frame, measureText)
 
         const { tree, map } = buildTree(
           '',
@@ -34254,11 +34278,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           (v) => !!v
         )
 
-        const layer_trait = extractTrait(layer, measureText)
+        const layer_trait = extractTrait(this.$system, layer, measureText)
 
         const target_layer = all_target_layer[sub_component_id]
 
-        const target_layer_trait = extractTrait(target_layer, measureText)
+        const target_layer_trait = extractTrait(
+          this.$system,
+          target_layer,
+          measureText
+        )
 
         for (const leaf_id in all_traits) {
           const leaf_trait = all_traits[leaf_id]
@@ -34407,7 +34435,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const parent_frame = this._get_sub_component_frame(parent_id)
 
-    const parent_trait = extractTrait(parent_frame, measureText)
+    const parent_trait = extractTrait(this.$system, parent_frame, measureText)
 
     for (const leaf_comp of all_children_base_comp) {
       const leaf_style = extractStyle(leaf_comp, parent_trait, measureText)
@@ -34494,7 +34522,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           slot_name
         ].push(child_id)
 
-        const frame_trait = extractTrait(frame, measureText)
+        const frame_trait = extractTrait(this.$system, frame, measureText)
 
         const leaf_style = extractStyle(leaf_comp, frame_trait, measureText)
 
@@ -34586,6 +34614,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     parent_id: string,
     slot_name: string
   ): void => {
+    const {
+      api: {
+        animation: { cancelAnimationFrame },
+      },
+    } = this.$system
+
     if (this._layout_parent_children_animation_frame[parent_id] !== undefined) {
       if (
         this._layout_parent_children_animation_frame[parent_id][slot_name] !==
@@ -34628,6 +34662,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     slot_name: string,
     frame: () => void
   ): void => {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this.$system
+
     // console.log(
     //   'Graph',
     //   '_start_layout_children_animation',
@@ -35070,7 +35110,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     for (const target_id in target_to_base) {
       const target_frame = this._get_sub_component_frame(target_id)
-      const target_frame_trait = extractTrait(target_frame, measureText)
+      const target_frame_trait = extractTrait(
+        this.$system,
+        target_frame,
+        measureText
+      )
 
       const base = target_to_base[target_id]
 
@@ -35190,7 +35234,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           target_trait.opacity *= layer_opacity
         } else {
           const target_frame = this._get_sub_component_frame(target_frame_id)
-          const target_frame_trait = extractTrait(target_frame, measureText)
+          const target_frame_trait = extractTrait(
+            this.$system,
+            target_frame,
+            measureText
+          )
 
           target_trait = target_frame_trait
 
@@ -38051,7 +38099,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         base_node,
         (leaf_id) => {
           if (i === 0) {
-            const trait = extractTrait(frame, measureText)
+            const trait = extractTrait(this.$system, frame, measureText)
 
             base_trait = this._reflect_sub_component_base_trait(
               sub_sub_component_id_,
@@ -45302,6 +45350,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     tick: (d: number) => void
   ): void => {
     // console.log('Graph', '_refresh_layout_component_scroll', unit_id)
+    const {
+      api: {
+        animation: { requestAnimationFrame, cancelAnimationFrame },
+      },
+    } = this.$system
+
     const { $height } = this.$context
 
     const node = this._layout_node[unit_id]
@@ -45355,6 +45409,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _on_layout_component_drag_end = (unit_id: string): void => {
     // console.log('Graph', '_on_layout_component_drag_end', unit_id)
+    const {
+      api: {
+        animation: { cancelAnimationFrame },
+      },
+    } = this.$system
 
     const init_index = this._layout_drag_index[unit_id]
     const final_index = this._layout_drag_swap_index[unit_id]
@@ -45600,6 +45659,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _drag_edge_animation_tick = () => {
     // console.log('Graph', '_drag_edge_animation_tick')
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this.$system
 
     if (this._drag_count === 0) {
       this._drag_edge_animation = undefined
@@ -45703,6 +45767,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _cancel_drag_edge_animation = () => {
     // console.log('_cancel_drag_edge_animation')
+    const {
+      api: {
+        animation: { cancelAnimationFrame },
+      },
+    } = this.$system
 
     if (this._drag_edge_animation) {
       cancelAnimationFrame(this._drag_edge_animation)

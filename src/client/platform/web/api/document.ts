@@ -1,4 +1,5 @@
 import { API } from '../../../../API'
+import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { BootOpt } from '../../../../system'
 import { PositionObserver_ } from '../../../PositionObserver'
 import { NoopIntersectionObserver } from '../../../noop/IntersectionObserver'
@@ -67,6 +68,32 @@ export function webDocument(
     PositionObserver: PositionObserver_,
     IntersectionObserver: IntersectionObserver,
     pictureInPictureElement: document.pictureInPictureElement,
+    addEventListener: function <K extends keyof DocumentEventMap>(
+      type: K,
+      listener: (this: Document, ev: DocumentEventMap[K]) => any,
+      options?: boolean | AddEventListenerOptions
+    ): void {
+      return document.addEventListener(type, listener, options)
+    },
+    removeEventListener: function <K extends keyof DocumentEventMap>(
+      type: K,
+      listener: (this: Document, ev: DocumentEventMap[K]) => any,
+      options?: boolean | EventListenerOptions
+    ): void {
+      return document.removeEventListener(type, listener, options)
+    },
+    exitFullscreen: function (): Promise<void> {
+      throw new MethodNotImplementedError()
+    },
+    get visibilityState() {
+      return document.visibilityState
+    },
+    get fullscreenElement() {
+      return document.fullscreenElement
+    },
+    get documentElement() {
+      return document.documentElement
+    },
   }
 
   return _document

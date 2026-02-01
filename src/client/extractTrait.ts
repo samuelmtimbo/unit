@@ -1,3 +1,4 @@
+import { System } from '../system'
 import { MeasureTextFunction } from '../text'
 import { hexToRgba, RGBA, TRANSPARENT_RGBA } from './color'
 import { Component } from './component'
@@ -6,6 +7,7 @@ import { getPosition, getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
 
 export const extractTrait = (
+  system: System,
   component: Component,
   measureText: MeasureTextFunction
 ): LayoutNode => {
@@ -18,7 +20,7 @@ export const extractTrait = (
   }
 
   if ($node instanceof HTMLElement || $node instanceof SVGElement) {
-    let { width, height } = getSize($node)
+    let { width, height } = getSize(system, $node)
 
     const { x, y } = getPosition($node)
     const { sx, sy } = component.getScale()
@@ -44,12 +46,12 @@ export const extractTrait = (
     let opacity: number = 1
     let color: RGBA
     let background: RGBA
-    ;({ width, height } = getSize($node))
+    ;({ width, height } = getSize(system, $node))
 
     let parentTrait: LayoutNode
 
     if (component.$domParent && component.$domParent.$mounted) {
-      parentTrait = extractTrait(component.$domParent, measureText)
+      parentTrait = extractTrait(system, component.$domParent, measureText)
 
       color = component.getColor()
     } else if (component.$mounted) {
@@ -60,7 +62,7 @@ export const extractTrait = (
 
     background = TRANSPARENT_RGBA
 
-    const position = getRelativePosition($node, leafContext.$element)
+    const position = getRelativePosition(system, $node, leafContext.$element)
 
     x = position.x
     y = position.y

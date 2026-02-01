@@ -35,7 +35,7 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
   private _alt_lock: boolean = false
 
   private _backspace_key: PhoneKeyboardKey
-  private _backspace_interval: NodeJS.Timeout | null = null
+  private _backspace_interval: number | null = null
 
   constructor($props: Props, $system: System) {
     super($props, $system)

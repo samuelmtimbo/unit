@@ -47,7 +47,7 @@ export default class DocumentPictureInPicture extends Holder<I, O> {
   async f({ component, opt }: I, done: Done<O>, fail: Fail): Promise<void> {
     const {
       api: {
-        document: { createTextNode },
+        document: { createElement, createTextNode },
         window: { documentPictureInPicture },
       },
     } = this.__system
@@ -80,12 +80,12 @@ export default class DocumentPictureInPicture extends Holder<I, O> {
       return
     }
 
-    const root = document.createElement('div')
+    const root = createElement('div')
 
     root.style.width = '100%'
     root.style.height = '100%'
 
-    const style = document.createElement('style')
+    const style = createElement('style')
 
     style.appendChild(
       createTextNode(`${HTML_STYLE}

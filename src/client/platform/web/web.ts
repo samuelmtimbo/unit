@@ -4,10 +4,10 @@ import { SYSTEM_BOOT_ID } from '../../constants/SYSTEM_BOOT_ID'
 import { SYSTEM_BUNDLE_ID } from '../../constants/SYSTEM_BUNDLE_ID'
 import { render } from './render'
 
-function objFromElement(id: string): object {
+function objFromElement(window: Window, id: string): object {
   let obj: object = {}
 
-  const jsonElement = document.getElementById(id)
+  const jsonElement = window.document.getElementById(id)
 
   if (jsonElement) {
     const json = jsonElement.textContent
@@ -22,7 +22,7 @@ function objFromElement(id: string): object {
   return obj
 }
 
-const bundle: BundleSpec = objFromElement(SYSTEM_BUNDLE_ID)
-const system: BootOpt = objFromElement(SYSTEM_BOOT_ID)
+const bundle: BundleSpec = objFromElement(window, SYSTEM_BUNDLE_ID)
+const system: BootOpt = objFromElement(window, SYSTEM_BOOT_ID)
 
 render(bundle, system)

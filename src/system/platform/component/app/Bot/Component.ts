@@ -12,7 +12,7 @@ import { makePointerEnterListener } from '../../../../../client/event/pointer/po
 import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
-import { getSize } from '../../../../../client/getSize'
+import { getElementSize } from '../../../../../client/getSize'
 import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
@@ -253,8 +253,15 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _resize_observer: ResizeObserver
 
   private _enabled = (): boolean => {
+    const {
+      api: {
+        document: { visibilityState },
+      },
+    } = this.$system
+
     const { disabled } = this.$props
-    if (document.visibilityState === 'visible') {
+
+    if (visibilityState === 'visible') {
       return !disabled
     } else {
       return false
@@ -333,7 +340,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _synced: boolean = true
 
   private _get_pointer_xyz = (): [number, number, number] => {
-    const { width, height } = getSize(this._container.$element)
+    const { width, height } = getElementSize(
+      this.$system,
+      this._container.$element
+    )
 
     let x: number = 1
     let y: number = 1
@@ -603,7 +613,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
     const { r = DEFAULT_R } = this.$props
 
-    const { width, height } = getSize(this._container.$element)
+    const { width, height } = getElementSize(
+      this.$system,
+      this._container.$element
+    )
 
     const D = 2 * r + 3
 
@@ -932,7 +945,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   }
 
   private _resizeSVG = () => {
-    const { width, height } = getSize(this._container.$element)
+    const { width, height } = getElementSize(
+      this.$system,
+      this._container.$element
+    )
 
     this._svg.$element.setAttribute('width', `${width}`)
     this._svg.$element.setAttribute('height', `${height}`)
@@ -942,7 +958,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     // console.count('_translate')
     const { r = DEFAULT_R } = this.$props
 
-    const { width, height } = getSize(this._container.$element)
+    const { width, height } = getElementSize(
+      this.$system,
+      this._container.$element
+    )
 
     const dw = width - this._width
     const dh = height - this._height
@@ -1105,7 +1124,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _first: boolean = true
 
   onMount() {
-    const { width, height } = getSize(this._container.$element)
+    const { width, height } = getElementSize(
+      this.$system,
+      this._container.$element
+    )
 
     const { r = DEFAULT_R, x, y } = this.$props
 
@@ -1133,7 +1155,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       this._refresh_enabled()
     }
 
-    document.addEventListener(
+    this.$system.api.document.addEventListener(
       'visibilitychange',
       this._document_listener,
       false
@@ -1157,6 +1179,13 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   }
 
   onUnmount($context: Context): void {
+    const {
+      api: {
+        document,
+        animation: { cancelAnimationFrame },
+      },
+    } = this.$system
+
     const {} = $context
 
     this._disable()
@@ -1165,6 +1194,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
     if (this._move_animation_frame !== undefined) {
       cancelAnimationFrame(this._move_animation_frame)
+
       this._move_animation_frame = undefined
     }
 
@@ -1210,7 +1240,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       if (typeof current === 'string') {
         current = parseLayoutValue(current)
 
-        const { width } = getSize(this._container.$element)
+        const { width } = getElementSize(this.$system, this._container.$element)
 
         current = current[0] + (current[1] * width) / 100
       }
@@ -1224,7 +1254,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       if (typeof current === 'string') {
         current = parseLayoutValue(current)
 
-        const { height } = getSize(this._container.$element)
+        const { height } = getElementSize(
+          this.$system,
+          this._container.$element
+        )
 
         current = current[0] + (current[1] * height) / 100
       }

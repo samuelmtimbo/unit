@@ -180,11 +180,10 @@ export function workerApi(): API {
         throw new MethodNotImplementedError()
       },
       getSelection(): Selection {
-        // @ts-ignore
-        return root.shadowRoot.getSelection() || document.getSelection()
+        throw new APINotSupportedError('Selection')
       },
       createRange(): Range {
-        return document.createRange()
+        throw new APINotSupportedError('Create Range')
       },
       exitPictureInPicture() {
         throw new MethodNotImplementedError()
@@ -197,6 +196,26 @@ export function workerApi(): API {
       ResizeObserver: null,
       IntersectionObserver: null,
       pictureInPictureElement: undefined,
+      addEventListener: function <K extends keyof DocumentEventMap>(
+        type: K,
+        listener: (this: Document, ev: DocumentEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions
+      ): void {
+        throw new MethodNotImplementedError()
+      },
+      removeEventListener: function <K extends keyof DocumentEventMap>(
+        type: K,
+        listener: (this: Document, ev: DocumentEventMap[K]) => any,
+        options?: boolean | EventListenerOptions
+      ): void {
+        throw new MethodNotImplementedError()
+      },
+      exitFullscreen: function (): Promise<void> {
+        throw new MethodNotImplementedError()
+      },
+      visibilityState: 'hidden',
+      fullscreenElement: undefined,
+      documentElement: undefined,
     },
     querystring: {
       stringify: function (obj: Dict<any>): string {
@@ -288,6 +307,20 @@ export function workerApi(): API {
       },
       nextTick: function (callback: () => any) {
         return setTimeout(callback, 0)
+      },
+      addEventListener: function <K extends keyof WindowEventMap>(
+        type: K,
+        listener: (this: Window, ev: WindowEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions
+      ): void {
+        return globalThis.addEventListener(type, listener, options)
+      },
+      removeEventListener: function <K extends keyof WindowEventMap>(
+        type: K,
+        listener: (this: Window, ev: WindowEventMap[K]) => any,
+        options?: boolean | EventListenerOptions
+      ): void {
+        return globalThis.removeEventListener(type, listener, options)
       },
     },
     navigator: {

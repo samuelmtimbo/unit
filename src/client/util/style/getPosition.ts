@@ -1,3 +1,4 @@
+import { System } from '../../../system'
 import { IOElement } from '../../IOElement'
 import { parseTransform } from '../../parseTransform'
 import { addVector3, NULL_VECTOR } from '../geometry'
@@ -14,11 +15,12 @@ export function getPosition(element: IOElement): Position {
 }
 
 export function getRelativePosition(
+  system: System,
   element: IOElement,
   relative: HTMLElement
 ): Position {
   if (element instanceof Text) {
-    return getTextRelativePosition(element, relative)
+    return getTextRelativePosition(system, element, relative)
   }
 
   if (element instanceof SVGElement) {
@@ -31,10 +33,17 @@ export function getRelativePosition(
 }
 
 export function getTextRelativePosition(
+  system: System,
   element: Text,
   relative: HTMLElement
 ): Position {
-  const range = document.createRange()
+  const {
+    api: {
+      document: { createRange },
+    },
+  } = system
+
+  const range = createRange()
 
   range.selectNodeContents(element)
 

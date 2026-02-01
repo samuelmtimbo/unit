@@ -183,11 +183,10 @@ export function noneApi(): API {
         return false
       },
       getSelection(): Selection {
-        // @ts-ignore
-        return root.shadowRoot.getSelection() || document.getSelection()
+        throw new MethodNotImplementedError()
       },
       createRange(): Range {
-        return document.createRange()
+        throw new MethodNotImplementedError()
       },
       exitPictureInPicture() {
         throw new MethodNotImplementedError()
@@ -197,6 +196,26 @@ export function noneApi(): API {
       ResizeObserver: null,
       IntersectionObserver: null,
       pictureInPictureElement: undefined,
+      visibilityState: 'visible',
+      fullscreenElement: null,
+      documentElement: null,
+      addEventListener: function <K extends keyof DocumentEventMap>(
+        type: K,
+        listener: (this: Document, ev: DocumentEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions
+      ): void {
+        throw new MethodNotImplementedError()
+      },
+      removeEventListener: function <K extends keyof DocumentEventMap>(
+        type: K,
+        listener: (this: Document, ev: DocumentEventMap[K]) => any,
+        options?: boolean | EventListenerOptions
+      ): void {
+        throw new MethodNotImplementedError()
+      },
+      exitFullscreen: function (): Promise<void> {
+        throw new MethodNotImplementedError()
+      },
     },
     querystring: {
       stringify: function (obj: Dict<any>): string {
@@ -289,6 +308,20 @@ export function noneApi(): API {
       nextTick: function (callback: () => any) {
         throw new MethodNotImplementedError()
       },
+      addEventListener: function <K extends keyof WindowEventMap>(
+        type: K,
+        listener: (this: Window, ev: WindowEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions
+      ): void {
+        throw new MethodNotImplementedError()
+      },
+      removeEventListener: function <K extends keyof WindowEventMap>(
+        type: K,
+        listener: (this: Window, ev: WindowEventMap[K]) => any,
+        options?: boolean | EventListenerOptions
+      ): void {
+        throw new MethodNotImplementedError()
+      },
     },
     navigator: {
       share: function (data: ShareData): Promise<void> {
@@ -302,7 +335,7 @@ export function noneApi(): API {
         tree: Tree<Tag>[],
         expandChild: (path: number[]) => Tag[]
       ): void {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     },
     history: {

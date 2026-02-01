@@ -5,8 +5,8 @@ import { BootOpt } from '../../../../system'
 export function webDevice(window: Window, opt: BootOpt): API['device'] {
   const device = {
     vibrate: async (pattern: VibratePattern) => {
-      if (navigator.vibrate) {
-        navigator.vibrate(pattern)
+      if (window.navigator.vibrate) {
+        window.navigator.vibrate(pattern)
       } else {
         throw new APINotSupportedError('Vibrate')
       }

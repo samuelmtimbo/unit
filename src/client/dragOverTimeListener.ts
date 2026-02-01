@@ -23,7 +23,7 @@ export function dragOverTimeListener(
       component.$element.removeEventListener('_dragdrop', stopListener)
     }
 
-    let over_timeout: NodeJS.Timeout
+    let over_timeout: number
 
     const set_over_timeout = () => {
       over_timeout = setTimeout(() => {

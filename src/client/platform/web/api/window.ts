@@ -66,6 +66,20 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     clearTimeout: window.clearTimeout,
     clearInterval: window.clearInterval,
     nextTick,
+    addEventListener: function <K extends keyof WindowEventMap>(
+      type: K,
+      listener: (this: Window, ev: WindowEventMap[K]) => any,
+      options?: boolean | AddEventListenerOptions
+    ): void {
+      return window.addEventListener(type, listener, options)
+    },
+    removeEventListener: function <K extends keyof WindowEventMap>(
+      type: K,
+      listener: (this: Window, ev: WindowEventMap[K]) => any,
+      options?: boolean | EventListenerOptions
+    ): void {
+      return window.removeEventListener(type, listener, options)
+    },
   }
 
   return _window

@@ -1,5 +1,6 @@
 import { EventEmitter_, EventEmitter_EE } from '../EventEmitter'
 import { NOOP } from '../NOOP'
+import { System } from '../system'
 import { Dict } from '../types/Dict'
 import { ANIMATION_C } from './animation/ANIMATION_C'
 import { Shape } from './util/geometry'
@@ -87,6 +88,7 @@ export class Simulation<
 
   private _paused: boolean = true
 
+  private _system: System
   private _alpha: number = 1
   private _alphaDecay: number
   private _alphaMin: number
@@ -100,19 +102,23 @@ export class Simulation<
 
   private _frame: number
 
-  constructor({
-    alpha = 0.25,
-    alphaMin = 0.001,
-    alphaTarget = 0,
-    alphaDecay,
-    velocityDecay = 0.2,
-    n = 1,
-    t = 1 / ANIMATION_C,
-    stability = 1,
-    force = NOOP,
-  }: SimulationOpt) {
+  constructor(
+    system: System,
+    {
+      alpha = 0.25,
+      alphaMin = 0.001,
+      alphaTarget = 0,
+      alphaDecay,
+      velocityDecay = 0.2,
+      n = 1,
+      t = 1 / ANIMATION_C,
+      stability = 1,
+      force = NOOP,
+    }: SimulationOpt
+  ) {
     super()
 
+    this._system = system
     this._alphaDecay =
       alphaDecay === undefined ? 1 - Math.pow(alphaMin, 1 / 300) : alphaDecay
     this._alpha = alpha
@@ -126,8 +132,15 @@ export class Simulation<
   }
 
   public start() {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this._system
+
     if (this._paused) {
       this._paused = false
+
       this._frame = requestAnimationFrame(this._tick)
     }
   }
@@ -137,7 +150,14 @@ export class Simulation<
   }
 
   public stop() {
+    const {
+      api: {
+        animation: { cancelAnimationFrame },
+      },
+    } = this._system
+
     this._paused = true
+
     cancelAnimationFrame(this._frame)
   }
 
@@ -201,6 +221,12 @@ export class Simulation<
   }
 
   private _tick = (): void => {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this._system
+
     this._alpha += (this._alphaTarget - this._alpha) * this._alphaDecay
 
     if (this._alpha < this._alphaMin) {

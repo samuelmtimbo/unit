@@ -1,5 +1,5 @@
 import { draw } from '../../../../../client/canvas/draw'
-import { getSize } from '../../../../../client/getSize'
+import { getElementSize } from '../../../../../client/getSize'
 import HTMLElement_ from '../../../../../client/html'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
 import { applyStyle, reactToFrameSize } from '../../../../../client/style'
@@ -186,7 +186,7 @@ export default class Canvas_
 
   private _get_parent_width = (): number => {
     if (this.$slotParent) {
-      return getSize(this.$slotParent.$element).width
+      return getElementSize(this.$system, this.$slotParent.$element).width
     }
 
     return 0
@@ -194,7 +194,7 @@ export default class Canvas_
 
   private _get_parent_height = (): number => {
     if (this.$slotParent) {
-      return getSize(this.$slotParent.$element).width
+      return getElementSize(this.$system, this.$slotParent.$element).height
     }
 
     return 0

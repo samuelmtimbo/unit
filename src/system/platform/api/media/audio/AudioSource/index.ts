@@ -1,6 +1,7 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { Fail } from '../../../../../../Class/Functional/Fail'
+import { APINotSupportedError } from '../../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../../system'
 import { MS } from '../../../../../../types/interface/MS'
 import { wrapMediaStream } from '../../../../../../wrap/MediaStream'
@@ -15,12 +16,20 @@ export type O = {
 }
 
 async function createMediaStreamFromUrl(
+  system: System,
   src: string
 ): Promise<{ stream: MediaStream; source: AudioBufferSourceNode }> {
-  // @ts-ignore
-  const audioContext = new (window.AudioContext ||
-    // @ts-ignore
-    window.webkitAudioContext)() as AudioContext
+  const {
+    api: {
+      window: { AudioContext },
+    },
+  } = system
+
+  if (!AudioContext) {
+    throw new APINotSupportedError('Audio Context')
+  }
+
+  const audioContext = new AudioContext()
 
   let source: AudioBufferSourceNode
 
@@ -95,7 +104,10 @@ export default class AudioSource extends Functional<I, O> {
     let source: AudioBufferSourceNode
 
     try {
-      ;({ stream: srcObject, source } = await createMediaStreamFromUrl(src))
+      ;({ stream: srcObject, source } = await createMediaStreamFromUrl(
+        this.__system,
+        src
+      ))
     } catch (err) {
       fail(err.message)
 

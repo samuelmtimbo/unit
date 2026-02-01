@@ -8,7 +8,7 @@ export function debounce(
   threshold: number = 100,
   execAsap: boolean = false
 ) {
-  let timeout: NodeJS.Timeout
+  let timeout: number
 
   return function debounced(...args: any[]) {
     const {
@@ -17,7 +17,6 @@ export function debounce(
       },
     } = system
 
-    // @ts-ignore
     let obj = this
 
     function delayed() {
@@ -37,11 +36,20 @@ export function debounce(
   }
 }
 
-export function animateDebounce(func: Function, execAsap: boolean = false) {
+export function animateDebounce(
+  system: System,
+  func: Function,
+  execAsap: boolean = false
+) {
+  const {
+    api: {
+      animation: { requestAnimationFrame, cancelAnimationFrame },
+    },
+  } = system
+
   let frame: number
 
   return function debounced() {
-    // @ts-ignore
     let obj = this
     let args = arguments
 

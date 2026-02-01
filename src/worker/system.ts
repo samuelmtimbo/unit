@@ -12,14 +12,14 @@ const system = boot(null, workerApi(), {
 })
 
 const post = (data) => {
-  postMessage(data, null)
+  globalThis.postMessage(data, null)
 }
 
 const api = makeRemoteObjectAPI(system, ['S'])
 
 const ref = new RemoteRef(api, post)
 
-onmessage = function (event: MessageEvent) {
+globalThis.onmessage = function (event: MessageEvent) {
   const { data } = event
 
   ref.exec(data)

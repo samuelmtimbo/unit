@@ -646,7 +646,7 @@ export class Component<
       target = target.$slotParent
     }
 
-    let trait = extractTrait(target, measureText)
+    let trait = extractTrait(this.$system, target, measureText)
     let style = rawExtractStyle(target.$element, trait, measureText)
     let attr = extractAttr(target.$element)
 
@@ -691,7 +691,7 @@ export class Component<
     for (let i = 0; i < leaves.length; i++) {
       const leaf = leaves[i]
 
-      const leafTrait = extractTrait(leaf, measureText)
+      const leafTrait = extractTrait(this.$system, leaf, measureText)
 
       const frame = createElement('div')
 
@@ -738,7 +738,7 @@ export class Component<
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
           if (j % leaves.length === 0) {
-            trait = extractTrait(target, measureText)
+            trait = extractTrait(this.$system, target, measureText)
 
             reflectTreeTrait(this.$system, trait, [tree], () => {
               return []
@@ -1494,6 +1494,7 @@ export class Component<
     }
 
     const relative_position = getRelativePosition(
+      this.$system,
       this.$element,
       this.$context.$element
     )
@@ -1508,7 +1509,7 @@ export class Component<
       throw new Error('cannot calculate size of multiple elements')
     }
 
-    return getSize(this.$element)
+    return getSize(this.$system, this.$element)
   }
 
   getColor(): RGBA {
@@ -1820,7 +1821,7 @@ export class Component<
   }
 
   getRect(): Rect {
-    return getRect(this.$node)
+    return getRect(this.$system, this.$node)
   }
 
   getBoundingClientRect(): Rect {
@@ -2785,6 +2786,12 @@ export class Component<
     mirror,
     $element: Element
   ) => {
+    const {
+      api: {
+        window: { getComputedStyle },
+      },
+    } = this.$system
+
     if (!$element.isConnected) {
       const oldViewBox = $element.getAttribute('data-viewbox')
 
@@ -2890,6 +2897,7 @@ export class Component<
       const {
         api: {
           document: { MutationObserver },
+          animation: { requestAnimationFrame, cancelAnimationFrame },
         },
       } = this.$system
 

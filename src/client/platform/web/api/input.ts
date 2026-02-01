@@ -83,7 +83,7 @@ export function webInput(
     keyboard: {},
     gamepad: {
       getGamepad: (i) => {
-        const gamepads = navigator.getGamepads()
+        const gamepads = window.navigator.getGamepads()
         const gamepad = gamepads[i]
         return gamepad
       },

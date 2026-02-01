@@ -62,6 +62,7 @@ const shouldExpandStyle = (tag: Tag) => {
 }
 
 const maybeExpand = (
+  system: System,
   parentTrait: LayoutNode,
   tag: Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement },
   path: number[],
@@ -72,11 +73,12 @@ const maybeExpand = (
   const shouldExpand = shouldExpandStyle(tag)
 
   if (shouldExpand) {
-    expand(parentTrait, tag, path, expandChild)
+    expand(system, parentTrait, tag, path, expandChild)
   }
 }
 
 const expand = (
+  system: System,
   parentTrait: LayoutNode,
   tag: Tag & { trait?: LayoutNode; element?: HTMLElement | SVGElement },
   path: number[],
@@ -89,7 +91,12 @@ const expand = (
   let i = 0
 
   for (const childTag of childrenTags) {
-    const { container, element } = tagToElement(childTag, parentTrait, 'div')
+    const { container, element } = tagToElement(
+      system,
+      childTag,
+      parentTrait,
+      'div'
+    )
 
     childTag.element = element
 
@@ -97,13 +104,14 @@ const expand = (
 
     tag.element.appendChild(container)
 
-    maybeExpand(parentTrait, childTag, [...path, i], expandChild)
+    maybeExpand(system, parentTrait, childTag, [...path, i], expandChild)
 
     i++
   }
 }
 
 const fitTreeChildren = (
+  system: System,
   parentTrait: LayoutNode,
   parentNode: HTMLElement | SVGElement,
   tree: Tree<
@@ -125,7 +133,12 @@ const fitTreeChildren = (
 
     const parentTagName = parentNode.tagName.toLowerCase()
 
-    const { container, element } = tagToElement(tag, parentTrait, parentTagName)
+    const { container, element } = tagToElement(
+      system,
+      tag,
+      parentTrait,
+      parentTagName
+    )
 
     node.value.element = element
     node.value.container = container
@@ -135,16 +148,32 @@ const fitTreeChildren = (
     parentNode.appendChild(container)
 
     if (!node.children.length) {
-      maybeExpand(parentTrait, tag, childPath, expandChild)
+      maybeExpand(system, parentTrait, tag, childPath, expandChild)
     }
 
-    fitTreeChildren(parentTrait, element, node.children, childPath, expandChild)
+    fitTreeChildren(
+      system,
+      parentTrait,
+      element,
+      node.children,
+      childPath,
+      expandChild
+    )
 
     i++
   }
 }
 
-const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
+const tagToElement = (
+  system: System,
+  child: Tag,
+  trait: LayoutNode,
+  parentTagName: string
+) => {
+  const {
+    api: { document },
+  } = system
+
   const { name, attr, style, textContent } = child
 
   let tag = name.replace('#', '').toLocaleLowerCase()
@@ -158,12 +187,15 @@ const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
   let element: HTMLElement | SVGElement
 
   if (isSvg || tag === 'svg') {
-    element = window.document.createElementNS(namespaceURI, tag)
+    element = document.createElementNS(
+      namespaceURI,
+      tag as keyof SVGElementTagNameMap
+    )
 
     if (isSvg && parentTagName !== 'svg') {
       const viewBox = attr['data-viewbox'] ?? '0 0 100 100'
 
-      container = window.document.createElementNS(namespaceURI, 'svg')
+      container = document.createElementNS(namespaceURI, 'svg')
       container.style.display = 'block'
       container.style.width = '100%'
       container.style.height = '100%'
@@ -191,7 +223,7 @@ const tagToElement = (child: Tag, trait: LayoutNode, parentTagName: string) => {
       container = element
     }
   } else {
-    container = window.document.createElement(tag_)
+    container = document.createElement(tag_ as keyof HTMLElementTagNameMap)
     element = container
   }
 
@@ -268,7 +300,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
       parentNode.style.margin = '0'
       parentNode.style.color = rgbaToHex(parentTrait.color)
 
-      fitTreeChildren(parentTrait, parentNode, tree, [], expandChild)
+      fitTreeChildren(system, parentTrait, parentNode, tree, [], expandChild)
 
       system.foreground.layout.appendChild(parentNode)
 

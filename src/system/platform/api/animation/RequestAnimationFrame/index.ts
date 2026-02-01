@@ -71,6 +71,12 @@ export default class RequestAnimationFrame extends Functional<I, O> {
   }
 
   public restoreSelf(state: Dict<any>): void {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this.__system
+
     const { _frame, ...rest } = state
 
     super.restoreSelf(rest)

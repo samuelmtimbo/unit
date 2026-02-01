@@ -35,6 +35,7 @@ export class PositionObserver_ implements PositionObserver {
       api: {
         document: { MutationObserver, ResizeObserver },
         animation: { requestAnimationFrame, cancelAnimationFrame },
+        window: { getComputedStyle },
       },
     } = this._system
 

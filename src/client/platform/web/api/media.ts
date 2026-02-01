@@ -8,16 +8,16 @@ import { Rect } from '../../../util/geometry/types'
 export function webMedia(window: Window, opt: BootOpt): API['media'] {
   const media: API['media'] = {
     getUserMedia: async (opt: MediaStreamConstraints): Promise<MediaStream> => {
-      if (!navigator || !navigator.mediaDevices) {
+      if (!window.navigator || !window.navigator.mediaDevices) {
         throw new MediaDevicesAPINotSupported()
       }
 
-      if (!navigator.mediaDevices.getUserMedia) {
+      if (!window.navigator.mediaDevices.getUserMedia) {
         throw new MediaDevicesAPINotSupported()
       }
 
       try {
-        return await navigator.mediaDevices.getUserMedia(opt)
+        return await window.navigator.mediaDevices.getUserMedia(opt)
       } catch (err) {
         const { message } = err
 
@@ -34,22 +34,28 @@ export function webMedia(window: Window, opt: BootOpt): API['media'] {
     getDisplayMedia: async (
       opt: DisplayMediaStreamOptions
     ): Promise<MediaStream> => {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+      if (
+        !window.navigator.mediaDevices ||
+        !window.navigator.mediaDevices.getDisplayMedia
+      ) {
         throw new DisplayMediaAPINotSupported()
       }
 
       try {
-        return navigator.mediaDevices.getDisplayMedia(opt)
+        return window.navigator.mediaDevices.getDisplayMedia(opt)
       } catch (err) {
         throw new Error(err.message)
       }
     },
     enumerateDevices: async () => {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+      if (
+        !window.navigator.mediaDevices ||
+        !window.navigator.mediaDevices.enumerateDevices
+      ) {
         throw new APINotSupportedError('Enumerate Media Devices')
       }
 
-      return navigator.mediaDevices.enumerateDevices()
+      return window.navigator.mediaDevices.enumerateDevices()
     },
     image: {
       createImageBitmap: function (

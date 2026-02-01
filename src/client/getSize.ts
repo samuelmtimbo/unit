@@ -1,9 +1,17 @@
+import { System } from '../system'
 import { IOElement } from './IOElement'
 import { Size } from './util/geometry/types'
 
-export function getSize(element: IOElement): Size {
+export function getElementSize(system: System, element: IOElement): Size {
+  const {
+    api: {
+      window: { HTMLElement },
+      document: { createRange },
+    },
+  } = system
+
   if (!(element instanceof HTMLElement)) {
-    const range = document.createRange()
+    const range = createRange()
 
     range.selectNodeContents(element)
 

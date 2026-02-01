@@ -328,6 +328,8 @@ export type API = {
     nextTick(callback: () => any): any
     clearTimeout(timer: any): void
     clearInterval(timer: any): void
+    addEventListener: Window['addEventListener']
+    removeEventListener: Window['removeEventListener']
   }
   document: {
     createElement<K extends keyof HTMLElementTagNameMap>(
@@ -345,7 +347,13 @@ export type API = {
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>
-    pictureInPictureElement: Element
+    addEventListener: Window['document']['addEventListener']
+    removeEventListener: Window['document']['removeEventListener']
+    exitFullscreen: Document['exitFullscreen']
+    visibilityState: Document['visibilityState']
+    pictureInPictureElement: Document['pictureInPictureElement']
+    fullscreenElement: Document['fullscreenElement']
+    documentElement: Document['documentElement']
     MutationObserver: { new (callback: MutationCallback): MutationObserver }
     PositionObserver: PositionObserverConstructor
     ResizeObserver: { new (callback: ResizeObserverCallback): ResizeObserver }

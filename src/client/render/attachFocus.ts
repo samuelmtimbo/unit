@@ -1,6 +1,6 @@
 import { System } from '../../system'
 import { namespaceURI } from '../component/namespaceURI'
-import { getSize } from '../getSize'
+import { getElementSize } from '../getSize'
 import { IOElement } from '../IOElement'
 import { PositionObserver_ } from '../PositionObserver'
 
@@ -129,7 +129,7 @@ export function attachFocus(system: System): void {
       }
     }
 
-    const { width, height } = getSize(target)
+    const { width, height } = getElementSize(this.$system, target)
 
     _width = width / _sx
     _height = height / _sy

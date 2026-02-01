@@ -1,11 +1,17 @@
+import { System } from '../system'
 import { enterFullscreen } from './enterFullscreen'
 import { leaveFullscreen } from './leaveFullscreen'
 
-export function toggleFullscreen(): void {
+export function toggleFullscreen(system: System): void {
+  const {
+    api: { document },
+  } = system
+
   const isFullscreen = !!document.fullscreenElement
+
   if (isFullscreen) {
-    leaveFullscreen()
+    leaveFullscreen(system)
   } else {
-    enterFullscreen()
+    enterFullscreen(system)
   }
 }

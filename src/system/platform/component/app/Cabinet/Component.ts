@@ -77,7 +77,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     )
     this._cabinet = cabinet
 
-    this._simulation = new Simulation({
+    this._simulation = new Simulation(this.$system, {
       n: 6,
       force: this._force,
     })
