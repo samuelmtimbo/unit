@@ -51,11 +51,11 @@
     }
   },
   "outputs": {
-    "response": {
+    "res": {
       "plug": {
         "0": {
           "unitId": "fetch",
-          "pinId": "response"
+          "pinId": "res"
         }
       },
       "metadata": {
@@ -84,7 +84,7 @@
         "opt": {}
       },
       "output": {
-        "response": {
+        "res": {
           "metadata": {
             "position": {
               "x": 120,

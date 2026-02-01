@@ -100,11 +100,11 @@
     }
   },
   "outputs": {
-    "response": {
+    "res": {
       "plug": {
         "0": {
           "unitId": "fetch",
-          "pinId": "response"
+          "pinId": "res"
         }
       }
     }

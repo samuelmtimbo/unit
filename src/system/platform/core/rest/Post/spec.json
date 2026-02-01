@@ -21,11 +21,11 @@
     }
   },
   "outputs": {
-    "response": {
+    "res": {
       "plug": {
         "0": {
           "unitId": "fetch",
-          "pinId": "response"
+          "pinId": "res"
         }
       },
       "ref": false
@@ -60,7 +60,7 @@
         "opt": {}
       },
       "output": {
-        "response": {}
+        "res": {}
       },
       "metadata": {
         "position": {

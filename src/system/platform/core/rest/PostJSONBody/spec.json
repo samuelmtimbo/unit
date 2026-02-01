@@ -49,7 +49,7 @@
         "opt": {}
       },
       "output": {
-        "response": {}
+        "res": {}
       },
       "metadata": {
         "position": {
@@ -83,7 +83,7 @@
       },
       "postJSON": {
         "output": {
-          "response": true
+          "res": true
         }
       }
     }
