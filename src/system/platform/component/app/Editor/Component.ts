@@ -20675,8 +20675,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const writeToSearch = () => {
       value = value.substr(0, 30)
 
-      this._search.setValue(value)
-      this._search.focus()
+      if (this._search) {
+        this._search.setValue(value)
+        this._search.focus()
+      }
     }
 
     const writeToEditDatum = () => {
