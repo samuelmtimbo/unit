@@ -755,7 +755,7 @@ export function isSubPinSpecRef(
   spec: GraphSpec,
   type: IO,
   subPinSpec: GraphSubPinSpec,
-  visited: Set<string>
+  visited: Set<string> = new Set()
 ) {
   let ref = false
 

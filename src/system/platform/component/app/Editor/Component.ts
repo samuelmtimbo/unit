@@ -2971,6 +2971,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _collapsing: boolean = false
   private _collapse_pointer_to_unit: Dict<string> = {}
   private _collapse_init_node_id_set: Set<string> = new Set()
+  private _collapse_init_output_ref_merge_id: Dict<string> = {}
   private _collapse_world_position: Position = NULL_VECTOR
   private _collapse_init_spec: GraphSpec = null
   private _collapse_unit_id: string | null = null
@@ -49859,8 +49860,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else if (this._is_link_pin_node_id(selected_node_id)) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(selected_node_id)
 
-        selection.link.push({ unitId, type, pinId })
-
         const merge_node_id = this._pin_to_merge[selected_node_id]
 
         if (merge_node_id) {
@@ -49871,7 +49870,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const { mergeId } = segmentMergeNodeId(merge_node_id)
 
             selection.merge.push(mergeId)
+          } else {
+            selection.link.push({ unitId, type, pinId })
           }
+        } else {
+          selection.link.push({ unitId, type, pinId })
         }
       } else if (this._is_merge_node_id(selected_node_id)) {
         const { mergeId } = segmentMergeNodeId(selected_node_id)
@@ -50249,6 +50252,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._collapse_unit_id = init_unit_id
     this._collapse_init_node_id_set = new Set(selected_node_ids)
     this._collapse_pointer_to_unit[pointer_id] = graph_id
+
+    this._collapse_init_output_ref_merge_id = {}
+
+    for (const node_id of selected_node_ids) {
+      if (this._is_link_pin_node_id(node_id)) {
+        const ref_merge_node_id = this._ref_output_to_merge[node_id]
+
+        if (ref_merge_node_id) {
+          this._collapse_init_output_ref_merge_id[node_id] = ref_merge_node_id
+        }
+      }
+    }
 
     this._start_nodes_anchor_long_press_collapse(selected_node_ids)
 
@@ -51996,6 +52011,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const pin_position = this._get_node_position(pin_node_id)
 
     this._stop_node_long_press_collapse(pin_node_id)
+
+    const ref_merge_node_id =
+      this._collapse_init_output_ref_merge_id[pin_node_id]
+
+    if (ref_merge_node_id) {
+      return
+    }
 
     io((type) => {
       const next_pin = deepGetOrDefault(
@@ -58385,8 +58407,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const next_unit_spec = clone(spec)
 
-      // delete next_unit_spec[`${type}s`][pinId].type
-
       plugPin(
         {
           pinId,
@@ -58402,7 +58422,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const was_ref =
         isPinSpecRef(specs, spec, type, prev_pin_spec, new Set()) ?? false
       const ref =
-        isSubPinSpecRef(specs, spec, type, subPinSpec, new Set()) ?? false
+        was_ref || isSubPinSpecRef(specs, next_unit_spec, type, subPinSpec)
 
       const commit = () => {
         setPinSetRef({ type, pinId, ref }, next_unit_spec)
