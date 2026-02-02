@@ -2292,10 +2292,38 @@ export function buildMoveMap(
           if (nextInsideMergeId) {
             const nextSubPinId = newTargetSubPinId(type, pinId)
 
+            let exposePinSetTask = undefined
+
+            if (!hasPinId(target, type, pinId)) {
+              exposePinSetTask = deepGetOrDefault(
+                targetExposePinSetTasks,
+                [type, pinId],
+                undefined
+              )
+
+              if (!exposePinSetTask) {
+                exposePinSetTask = newTask([
+                  {
+                    in: true,
+                    action: makeExposePinSetAction(type, pinId, {
+                      plug: {},
+                      ref,
+                    }),
+                  },
+                ])
+
+                deepSet_(
+                  targetExposePinSetTasks,
+                  [type, pinId],
+                  exposePinSetTask
+                )
+              }
+            }
+
             const exposePinOutsideTask = newTask([
               {
                 in: true,
-                action: makeExposePinAction(oppositeType, pinId, nextSubPinId, {
+                action: makeExposePinAction(type, pinId, nextSubPinId, {
                   mergeId: nextInsideMergeId,
                 }),
               },
@@ -2305,13 +2333,18 @@ export function buildMoveMap(
               mapping,
               ['plug', type, pinId, subPinId, 'in', 'plug', type],
               {
-                type: oppositeType,
+                type,
                 pinId,
                 subPinId: nextSubPinId,
               }
             )
 
-            addDependency(exposePinOutsideTask, coverPlugTask)
+            if (exposePinSetTask) {
+              addDependency(exposePinSetTask, coverPlugTask)
+              addDependency(exposePinOutsideTask, exposePinSetTask)
+            } else {
+              addDependency(exposePinOutsideTask, coverPlugTask)
+            }
           } else {
             if (getMergePinCount(insideMerge_) > 1) {
               if (shouldCoverPinSet) {

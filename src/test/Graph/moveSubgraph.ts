@@ -3797,7 +3797,7 @@ assert.deepEqual(applyMoves(specs, source, target, moves), {
       },
     },
     inputs: {
-      y: {
+      x: {
         plug: {
           '0': {
             mergeId: '1',
@@ -3806,7 +3806,7 @@ assert.deepEqual(applyMoves(specs, source, target, moves), {
       },
     },
     outputs: {
-      x: {
+      y: {
         plug: {
           '0': {
             mergeId: '1',
