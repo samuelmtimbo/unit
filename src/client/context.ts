@@ -59,7 +59,7 @@ export function setParent($context: Context, $parent: Context | null): void {
   }
 }
 
-export function mount($context: Context): void {
+export function mount($context: Context): Unlisten {
   $context.$mounted = true
 
   const { $element, $positionObserver, $resizeObserver } = $context
@@ -80,6 +80,10 @@ export function mount($context: Context): void {
 
   for (const component of $context.$children) {
     component.mount($context)
+  }
+
+  return () => {
+    unmount($context)
   }
 }
 

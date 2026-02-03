@@ -8,8 +8,8 @@ import { callAll } from '../../util/call/callAll'
 import { clone } from '../../util/clone'
 import { weakMerge } from '../../weakMerge'
 import { componentFromSpec } from '../componentFromSpec'
-import { Context } from '../context'
-import { renderComponent } from './renderComponent'
+import { appendChild, Context, mount } from '../context'
+import { renderFrame } from '../renderFrame'
 
 export function renderGraph(
   root: HTMLElement,
@@ -22,29 +22,24 @@ export function renderGraph(
   $graph.$getBundle({ deep: true }, async (bundle: BundleSpec) => {
     const { spec, specs } = clone(bundle)
 
+    const specs_ = weakMerge(specs ?? {}, system.specs)
+
     for (const unitId in spec.units) {
       const unit = spec.units[unitId]
 
-      evaluateMemorySpec(
-        unit.memory,
-        weakMerge(specs, system.specs),
-        system.classes
-      )
+      evaluateMemorySpec(unit.memory, specs_, system.classes)
     }
 
-    const component = componentFromSpec(
-      system,
-      spec,
-      weakMerge(system.specs, bundle.specs ?? {})
-    )
+    const context_ = renderFrame(system, context, root)
+    const component = componentFromSpec(system, spec, specs_)
 
     const disconnect = component.connect($graph, true)
-
-    const unrender = renderComponent(system, context, root, component)
+    const unrender = appendChild(context_, component)
+    const unmount = mount(context_)
 
     component.focus()
 
-    unlisten = callAll([disconnect, unrender])
+    unlisten = callAll([unmount, unrender, disconnect])
   })
 
   return unlisten
