@@ -1890,6 +1890,7 @@ export interface Props_ extends RE, Value {
   fullwindow?: boolean
   parent?: Editor_
   leave?: boolean
+  bundle?: BundleSpec
   graph: $Graph
   component: Component
   frame?: Component<HTMLElement>
@@ -5643,7 +5644,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _center_graph_frame: number
 
   private _reset_spec = (): void => {
-    const { parent, injectSpecs } = this.$props
+    const { parent, bundle, injectSpecs } = this.$props
 
     if (!this._pod) {
       return
@@ -5651,7 +5652,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._fetching_bundle = true
 
-    this._pod.$getBundle({}, (bundle) => {
+    const set_bundle = (bundle: BundleSpec) => {
       const { spec, specs } = clone(bundle)
 
       this._fetching_bundle = false
@@ -5664,7 +5665,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._reset(spec)
       this._setup_pod(this._pod)
-    })
+    }
+
+    if (bundle) {
+      set_bundle(bundle)
+
+      return
+    }
+
+    this._pod.$getBundle({}, set_bundle)
   }
 
   public reset() {
@@ -31684,6 +31693,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const pod = this._get_subgraph_pod(unit_id)
 
+      const spec = this._get_unit_spec(unit_id) as GraphSpec
+      const bundle = bundleSpec(spec, specs)
+
       graph = new Editor_(
         {
           graph: pod,
@@ -31703,6 +31715,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           fork: this._subgraph_fork,
           bubble: fork,
           component: sub_component,
+          bundle,
           system,
           typeCache,
           specs,
