@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Fail } from '../../../../Class/Functional/Fail'
 import { System } from '../../../../system'
 import { ID_ASIN } from '../../../_ids'
 
@@ -24,7 +25,15 @@ export default class Asin<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ x }: I<T>, done: Done<O<T>>): void {
-    done({ rad: Math.asin(x) })
+  f({ x }: I<T>, done: Done<O<T>>, fail: Fail): void {
+    if (Math.abs(x) > 1) {
+      fail('invalid sin value')
+
+      return
+    }
+
+    const rad = Math.asin(x)
+
+    done({ rad })
   }
 }
