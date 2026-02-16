@@ -322,7 +322,7 @@ export default class Canvas_
     this._d = []
   }
 
-  async drawImage(
+  private async _drawImage(
     image: CanvasImageSource,
     x: number,
     y: number,
@@ -344,6 +344,28 @@ export default class Canvas_
     } else {
       this._ctx.drawImage(image, x, y, width, height)
     }
+  }
+
+  async drawImage(
+    image: CanvasImageSource,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
+    let args_:
+      | [number, number, number, number]
+      | [number, number, number, number, number, number, number, number]
+
+    if (image instanceof ImageBitmap) {
+      args_ = [0, 0, image.width, image.height, x, y, width, height]
+    } else {
+      args_ = [x, y, width, height]
+    }
+
+    this._d.push(['drawImage', image, ...args_])
+
+    return await this._drawImage(image, x, y, width, height)
   }
 
   strokePath(d: string) {
