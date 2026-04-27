@@ -1,0 +1,409 @@
+{
+  "type": "`U`&`G`",
+  "name": "key equals",
+  "units": {
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -119,
+              "y": 33
+            }
+          }
+        },
+        "key": {
+          "metadata": {
+            "position": {
+              "x": -119,
+              "y": -1
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 87,
+              "y": -41
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 94,
+          "y": -41
+        }
+      }
+    },
+    "equals": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 58,
+              "y": -48
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -71,
+              "y": 22
+            }
+          }
+        }
+      },
+      "output": {
+        "a = b": {
+          "metadata": {
+            "position": {
+              "x": 159,
+              "y": 57
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 111,
+          "y": 44
+        }
+      }
+    },
+    "haskey": {
+      "id": "ad2ae8b9-9674-4b22-bed4-4458e0030b1a",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -155,
+              "y": -12
+            }
+          }
+        },
+        "key": {
+          "metadata": {
+            "position": {
+              "x": -146,
+              "y": -44
+            }
+          }
+        }
+      },
+      "output": {
+        "has": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -104,
+          "y": -18
+        }
+      }
+    },
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "metadata": {
+        "position": {
+          "x": -16,
+          "y": -50
+        }
+      },
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -50,
+              "y": -84
+            }
+          }
+        }
+      }
+    },
+    "if0": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "metadata": {
+        "position": {
+          "x": 6,
+          "y": -6
+        }
+      },
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 52,
+              "y": 7
+            }
+          }
+        }
+      }
+    },
+    "if1": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "metadata": {
+        "position": {
+          "x": -4,
+          "y": 47
+        }
+      },
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -34,
+              "y": 83
+            }
+          }
+        }
+      }
+    },
+    "iffalse": {
+      "id": "bbbe75ed-d436-47d7-a9a0-59bcfa41dfda",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "false": {
+          "metadata": {
+            "position": {
+              "x": -139,
+              "y": 54
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -92,
+          "y": 35
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "equals": {
+        "input": {
+          "b": true
+        }
+      },
+      "get": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "1": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "if0": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "2": {
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "get": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "3": {
+      "equals": {
+        "input": {
+          "a": true
+        }
+      },
+      "if1": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "4": {
+      "if0": {
+        "input": {
+          "b": true
+        }
+      },
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "haskey": {
+        "output": {
+          "has": true
+        }
+      },
+      "if1": {
+        "input": {
+          "b": true
+        }
+      },
+      "iffalse": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "haskey",
+          "pinId": "obj",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "if0",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -180,
+              "y": -11
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 71,
+              "y": 19
+            }
+          }
+        }
+      }
+    },
+    "key": {
+      "plug": {
+        "0": {
+          "unitId": "haskey",
+          "pinId": "key",
+          "kind": "input"
+        },
+        "2": {
+          "unitId": "if",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -163,
+              "y": -62
+            }
+          },
+          "2": {
+            "ext": {
+              "x": -55,
+              "y": -108
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -38,
+              "y": 108
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "test": {
+      "plug": {
+        "0": {
+          "unitId": "equals",
+          "pinId": "a = b",
+          "kind": "output"
+        },
+        "1": {
+          "unitId": "iffalse",
+          "pinId": "false",
+          "kind": "output"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 180,
+              "y": 69
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -156,
+              "y": 71
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "check whether `obj` has `key` `value`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 128,
+          "y": -3
+        },
+        "1": {
+          "x": 50,
+          "y": -29
+        },
+        "2": {
+          "x": 41,
+          "y": -60
+        },
+        "3": {
+          "x": 55,
+          "y": 56
+        },
+        "4": {
+          "x": -46,
+          "y": 2
+        }
+      }
+    },
+    "tags": ["core", "common"]
+  },
+  "id": "db072d27-eb40-4364-9104-8cd68b91e39a"
+}
