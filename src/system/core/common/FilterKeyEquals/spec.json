@@ -1,0 +1,404 @@
+{
+  "type": "`U`&`G`",
+  "name": "filter key equals",
+  "units": {
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -105,
+              "y": 46
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -79,
+              "y": 76
+            }
+          }
+        },
+        "current": {
+          "metadata": {
+            "position": {
+              "x": -16,
+              "y": 75
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -110,
+              "y": 23
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -56,
+          "y": 32
+        }
+      }
+    },
+    "keyequals": {
+      "id": "db072d27-eb40-4364-9104-8cd68b91e39a",
+      "input": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 166,
+              "y": 35
+            }
+          }
+        },
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 7,
+              "y": 19
+            }
+          }
+        },
+        "key": {
+          "metadata": {
+            "position": {
+              "x": 153,
+              "y": 64
+            }
+          }
+        }
+      },
+      "output": {
+        "test": {
+          "metadata": {
+            "position": {
+              "x": 155,
+              "y": 14
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 32,
+          "y": 33
+        }
+      }
+    },
+    "filter": {
+      "id": "ea426391-2104-41fd-8963-626d21415d09",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 84,
+              "y": -53
+            }
+          }
+        },
+        "test": {
+          "metadata": {
+            "position": {
+              "x": -155,
+              "y": 21
+            }
+          }
+        }
+      },
+      "output": {
+        "a[i]": {
+          "metadata": {
+            "position": {
+              "x": 113,
+              "y": -44
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": 105,
+              "y": -24
+            }
+          }
+        },
+        "test": {
+          "ignored": false
+        },
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 39,
+              "y": -62
+            }
+          }
+        },
+        "i": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 104,
+              "y": -43
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": -15
+        }
+      }
+    },
+    "looprepeat1": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -110,
+              "y": -33
+            }
+          }
+        },
+        "test": {
+          "metadata": {
+            "position": {
+              "x": 82,
+              "y": -129
+            }
+          }
+        }
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -98,
+              "y": -56
+            }
+          }
+        },
+        "current": {
+          "metadata": {
+            "position": {
+              "x": -11,
+              "y": -91
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -54,
+              "y": -65
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -61,
+          "y": -18
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "filter": {
+        "output": {
+          "test": true
+        }
+      },
+      "looprepeat1": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "keyequals": {
+        "input": {
+          "obj": true
+        }
+      },
+      "filter": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "2": {
+      "keyequals": {
+        "input": {
+          "value": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "3": {
+      "keyequals": {
+        "input": {
+          "key": true
+        }
+      },
+      "looprepeat1": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "4": {
+      "filter": {
+        "input": {
+          "test": true
+        }
+      },
+      "keyequals": {
+        "output": {
+          "test": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "filter list `a` all elements with `key` `value`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -11,
+          "y": -8
+        },
+        "1": {
+          "x": 86,
+          "y": 14
+        },
+        "2": {
+          "x": -12,
+          "y": 54
+        },
+        "3": {
+          "x": -18,
+          "y": 14
+        },
+        "4": {
+          "x": 77,
+          "y": 31
+        }
+      }
+    }
+  },
+
+  "inputs": {
+    "a": {
+      "functional": true,
+      "plug": {
+        "0": {
+          "unitId": "filter",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 92,
+              "y": -76
+            }
+          }
+        }
+      }
+    },
+    "key": {
+      "functional": true,
+      "plug": {
+        "0": {
+          "unitId": "looprepeat1",
+          "pinId": "init",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -129,
+              "y": -47
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "functional": true,
+      "plug": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -126,
+              "y": 58
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "b": {
+      "plug": {
+        "0": {
+          "unitId": "filter",
+          "pinId": "b",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 129,
+              "y": -31
+            }
+          }
+        }
+      }
+    }
+  },
+  "id": "37dacb15-a5fe-468c-9495-6ec2c4ab6641"
+}
