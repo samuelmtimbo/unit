@@ -76,7 +76,7 @@
     "@typescript-eslint/eslint-plugin": "8.54.0",
     "@typescript-eslint/parser": "8.54.0",
     "@typescript-eslint/typescript-estree": "8.58.0",
-    "electron": "38.0.0",
+    "electron": "41.3.0",
     "esbuild": "0.25.0",
     "eslint": "9.39.2",
     "eslint-config-prettier": "8.3.0",
