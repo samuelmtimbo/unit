@@ -1,4 +1,5 @@
 export const INHERITANCE = {
+  CA: ['IM'],
   S: ['EE'],
   U: ['EE', 'J'],
   G: ['U', 'C'],

@@ -1,4 +1,6 @@
-export interface CA {
+import { IM } from './IM'
+
+export interface CA extends IM {
   draw(step: any[]): Promise<void>
   drawImage(
     imageBitmap: CanvasImageSource,

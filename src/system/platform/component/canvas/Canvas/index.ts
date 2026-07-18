@@ -189,6 +189,12 @@ export default class Canvas
     return component.getImageData(x, y, width, height, opt)
   }
 
+  async image(): Promise<HTMLCanvasElement> {
+    const component = await this._local_component()
+
+    return component.$element
+  }
+
   async putImageData(
     image: ImageData,
     dx: number,

@@ -79,6 +79,10 @@ export function wrapOffscreenCanvas(
       return offscreenCanvasCtx.getImageData(x, y, width, height)
     }
 
+    image(): Promise<OffscreenCanvas> {
+      throw offscreenCanvas
+    }
+
     async putImageData(
       image: ImageData,
       dx: number,

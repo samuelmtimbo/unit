@@ -420,6 +420,10 @@ export default class Canvas_
     })
   }
 
+  async image(): Promise<HTMLCanvasElement> {
+    return this.$element
+  }
+
   async toDataUrl(type: string, quality: number) {
     return this.$element.toDataURL()
   }

@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
+import { Fail } from '../../../../../../Class/Functional/Fail'
 import { System } from '../../../../../../system'
 import { IM } from '../../../../../../types/interface/IM'
 import { wrapImage } from '../../../../../../wrap/Image'
@@ -37,8 +38,14 @@ export default class Image1 extends Functional<I, O> {
     )
   }
 
-  async f({ image }: I, done: Done<O>): Promise<void> {
+  async f({ image }: I, done: Done<O>, fail: Fail): Promise<void> {
     const image_ = await image.image()
+
+    if (!(image_ instanceof HTMLImageElement)) {
+      fail('unsupported image type')
+
+      return
+    }
 
     const image__ = wrapImage(image_, this.__system)
 
