@@ -13932,21 +13932,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           let closest_l_b = Number.MAX_SAFE_INTEGER
 
           for (const comp_node_id in this._compatible_node_id) {
-            if (this._is_node_visible_in_screen(comp_node_id)) {
-              const comp_node = this._node[comp_node_id]
+            const comp_node = this._node[comp_node_id]
 
-              const { l: l_a } = surfaceDistance(a, comp_node)
-              const { l: l_b } = surfaceDistance(b, comp_node)
+            const { l: l_a } = surfaceDistance(a, comp_node)
+            const { l: l_b } = surfaceDistance(b, comp_node)
 
-              const comp_closest_l = Math.min(l_a, l_b)
+            const comp_closest_l = Math.min(l_a, l_b)
 
-              if (comp_closest_l < 3 * LINK_DISTANCE) {
-                if (comp_closest_l < closest_l) {
-                  closest_l = comp_closest_l
-                  closest_l_a = l_a
-                  closest_l_b = l_b
-                  closest_compatible_node_id = comp_node_id
-                }
+            if (comp_closest_l < 3 * LINK_DISTANCE) {
+              if (comp_closest_l < closest_l) {
+                closest_l = comp_closest_l
+                closest_l_a = l_a
+                closest_l_b = l_b
+                closest_compatible_node_id = comp_node_id
               }
             }
           }
@@ -24207,9 +24205,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _node_node_center_distance = (a_id: string, b_id: string): number => {
     const a_node = this._node[a_id]
     const b_node = this._node[b_id]
-
     const d = pointDistance(a_node, b_node)
-
     return d
   }
 
@@ -24223,17 +24219,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     filter: (node_id: string) => boolean = () => true
   ): string | null => {
     const node = this.get_node(node_id)
-
     let nearest: string | null = null
     let nearest_l: number = Infinity
 
     for (const n_id in this._unit_node) {
       if (n_id !== node_id) {
         const n = this._node[n_id]
-
         if (filter(n_id)) {
           const d = distance(node, n)
-
           if (d < maxDistance / this._zoom.z && d < nearest_l) {
             nearest = n_id
             nearest_l = d
@@ -24284,35 +24277,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     point: Point,
     padding: number
   ): string | null => {
+    // const nodes = {
+    //   ...this._unit_node,
+    //   ...this._pin_node,
+    // }
     const nodes = this._normal_node
-
     return this._find_inside_node_id(point, nodes, padding)
   }
 
-  private _find_nearest_visible_node_id = (
-    node_id: string,
-    max_distance: number = NEAR,
-    filter: (node_id: string, other_node_id: string) => boolean = () => true,
-    nodes: GraphSimNodes = this._node
-  ): string => {
-    return this._find_nearest_node_id(
-      node_id,
-      max_distance,
-      (node_id: string, other_node_id: string) => {
-        if (!this._is_node_visible_in_screen(other_node_id)) {
-          return false
-        }
-
-        return filter(node_id, other_node_id)
-      },
-      nodes
-    )
+  private _find_inside_core_id = (
+    point: Point,
+    padding: number
+  ): string | null => {
+    return this._find_inside_node_id(point, this._unit_node, padding)
   }
 
   private _find_nearest_node_id = (
     node_id: string,
     max_distance: number = NEAR,
-    filter: (node_id: string, other_node_id: string) => boolean = () => true,
+    filter: (node_id: string, n_id: string) => boolean = () => true,
     nodes: GraphSimNodes = this._node
   ): string => {
     let nearest: string[] = []
@@ -24360,6 +24343,25 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     return nearest_node_id
+  }
+
+  private _find_nearest_unit_id_to_center = (): string => {
+    const center = this._world_screen_center()
+
+    return this._find_nearest_node_id_to(center, () => true, this._unit_node)
+  }
+
+  private _find_nearest_pin_node_id_from = (
+    node_id: string,
+    max_distance: number = NEAR,
+    filter: (node_id: string) => boolean = () => true
+  ): string => {
+    return this._find_nearest_node_id(
+      node_id,
+      max_distance,
+      filter,
+      this._pin_node
+    )
   }
 
   private _is_pin_unit_connected = (
@@ -24450,7 +24452,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _drop_unit = (unit_id: string): void => {
-    const nearest_ref_pin_node_id: string = this._find_nearest_visible_node_id(
+    const nearest_ref_pin_node_id: string = this._find_nearest_node_id(
       unit_id,
       NEAR,
       this._is_unit_node_match
@@ -24496,13 +24498,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       return
     }
 
-    const nearest_compatible_node_id: string =
-      this._find_nearest_visible_node_id(
-        pin_node_id,
-        NEAR,
-        this._is_pin_node_match,
-        { ...this._node, ...this._exposed_int_node }
-      )
+    const nearest_compatible_node_id: string = this._find_nearest_node_id(
+      pin_node_id,
+      NEAR,
+      this._is_pin_node_match,
+      { ...this._node, ...this._exposed_int_node }
+    )
 
     if (nearest_compatible_node_id) {
       this.__drop_pin(pin_node_id, nearest_compatible_node_id)
@@ -24626,12 +24627,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._hide_search()
     }
 
-    const nearest_compatible_node_id: string =
-      this._find_nearest_visible_node_id(
-        datum_node_id,
-        NEAR,
-        this._is_datum_node_match
-      )
+    const nearest_compatible_node_id: string = this._find_nearest_node_id(
+      datum_node_id,
+      NEAR,
+      this._is_datum_node_match
+    )
 
     if (nearest_compatible_node_id) {
       if (this._is_pin_node_id(nearest_compatible_node_id)) {
@@ -25082,12 +25082,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const int_node_id = getIntNodeId(type, pinId, subPinId)
 
     if (!this._ext_to_node[ext_node_id]) {
-      const nearest_compatible_node_id: string =
-        this._find_nearest_visible_node_id(
-          int_node_id,
-          NEAR,
-          this._is_plug_node_match
-        )
+      const nearest_compatible_node_id: string = this._find_nearest_node_id(
+        int_node_id,
+        NEAR,
+        this._is_plug_node_match
+      )
 
       if (nearest_compatible_node_id) {
         const plug_datum_node_id = this._plug_to_datum[ext_node_id]
@@ -56337,16 +56336,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     let closest_l = Number.MAX_SAFE_INTEGER
 
     for (const compatible_node_id in this._compatible_node_id) {
-      if (this._is_node_visible_in_screen(compatible_node_id)) {
-        const comp_node = this._node[compatible_node_id]
+      const comp_node = this._node[compatible_node_id]
 
-        const l = distance(comp_node)
+      const l = distance(comp_node)
 
-        if (l < NEAR) {
-          if (l < closest_l) {
-            closest_l = l
-            closest_comp_node_id = compatible_node_id
-          }
+      if (l < NEAR) {
+        if (l < closest_l) {
+          closest_l = l
+          closest_comp_node_id = compatible_node_id
         }
       }
     }
@@ -58954,20 +58951,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._register_unit(spec_id, specs)
     this._unregister_unit(old_spec_id)
-  }
-
-  private _is_node_visible_in_screen = (node_id: string): boolean => {
-    const { $width, $height } = this.$context
-
-    const node_screen_position = this._get_node_screen_position(node_id)
-
-    const visible =
-      node_screen_position.x > 0 &&
-      node_screen_position.y > 0 &&
-      node_screen_position.x < $width &&
-      node_screen_position.y < $height
-
-    return visible
   }
 
   private _is_node_visible = (node_id: string): boolean => {
