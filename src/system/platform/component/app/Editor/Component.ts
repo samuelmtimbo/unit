@@ -23395,6 +23395,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._subgraph_graph) {
       this._subgraph_graph.focus()
+    } else if (this._datum_graph_editor) {
+      this._datum_graph_editor.focus()
     } else if (
       this._core_component_unlocked_count > 0 &&
       !this._temp_control_lock &&
@@ -33497,9 +33499,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             this._foreground.removeChild(editor)
           }
 
+          this._datum_graph_editor = null
+
           this.focus()
         })
       )
+
+      this._datum_graph_editor = editor
 
       this._datum_sub_graph[datum_node_id] = editor
       this._datum_graph[datum_node_id] = graph
@@ -33524,6 +33530,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _datum_sub_graph: Dict<Editor_> = {}
   private _datum_graph: Dict<Graph> = {}
+  private _datum_graph_editor: Editor_ = null
 
   private _on_link_pin_long_press = (pin_node_id: string): void => {
     if (this._mode === 'none') {
