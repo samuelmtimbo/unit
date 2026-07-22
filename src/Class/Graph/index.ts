@@ -2464,7 +2464,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         }
       }
 
-      if (ref) {
+      if (ref && propagate) {
         this.removePinData('output', pinId)
       }
     } else if (_unitId && _pinId) {
