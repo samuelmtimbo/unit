@@ -109,7 +109,6 @@ export async function html(opt: WebTemplate): Promise<string> {
     ${head}
   </head>
   <body>
-    ${baseHtml || ''}
     <div
       id="__SYSTEM__ROOT__"
       style="
@@ -120,6 +119,7 @@ export async function html(opt: WebTemplate): Promise<string> {
         overflow: auto;
       "
     >
+      ${baseHtml || ''}
     </div>${
       script
         ? `<script type="text/javascript" src="${pathname ? `${pathname}/` : ''}index.js"></script>`
