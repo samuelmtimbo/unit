@@ -1,10 +1,17 @@
 {
-  "name": "fetch JSON body",
+  "name": "fetch json body",
   "units": {
     "fetchbody": {
       "id": "7ba3db14-6f80-434b-b9dc-bd38462b20fc",
       "input": {
-        "url": {},
+        "url": {
+          "metadata": {
+            "position": {
+              "x": 125,
+              "y": 66
+            }
+          }
+        },
         "opt": {}
       },
       "output": {
@@ -12,44 +19,70 @@
       },
       "metadata": {
         "position": {
-          "x": 2,
-          "y": 6
+          "x": 90,
+          "y": 37
         }
       }
     },
-    "parse": {
+    "parsejson": {
       "id": "563e92be-ad5e-4a61-a718-9249c3eac51d",
       "input": {
         "string": {}
       },
       "output": {
-        "json": {}
+        "json": {
+          "metadata": {
+            "position": {
+              "x": 241,
+              "y": 15
+            }
+          }
+        }
       },
       "metadata": {
         "position": {
-          "x": 105,
-          "y": 2
+          "x": 192,
+          "y": 17
         }
       }
     },
-    "deepset": {
-      "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798",
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
       "input": {
-        "path": {
+        "a": {
           "constant": true,
-          "data": "['headers','Content-Type']"
+          "data": {
+            "ref": [],
+            "data": {
+              "headers": {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              }
+            }
+          },
+          "metadata": {
+            "position": {
+              "x": -60,
+              "y": 17
+            }
+          }
         },
-        "value": {
-          "constant": true,
-          "data": "'application/json'"
-        },
-        "obj": {}
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -60,
+              "y": 53
+            }
+          }
+        }
       },
-      "output": {},
+      "output": {
+        "ab": {}
+      },
       "metadata": {
         "position": {
-          "x": -109,
-          "y": -9
+          "x": -15,
+          "y": 35
         }
       }
     }
@@ -61,16 +94,16 @@
           "body": true
         }
       },
-      "parse": {
+      "parsejson": {
         "input": {
           "string": true
         }
       }
     },
     "1": {
-      "deepset": {
+      "merge": {
         "output": {
-          "obj": true
+          "ab": true
         }
       },
       "fetchbody": {
@@ -92,15 +125,39 @@
       "plug": {
         "0": {
           "unitId": "fetchbody",
-          "pinId": "url"
+          "pinId": "url",
+          "kind": "input"
+        }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 130,
+              "y": 89
+            }
+          }
         }
       }
     },
     "options": {
       "plug": {
         "0": {
-          "unitId": "deepset",
-          "pinId": "obj"
+          "unitId": "merge",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -76,
+              "y": 69
+            }
+          }
         }
       }
     }
@@ -109,12 +166,25 @@
     "json": {
       "plug": {
         "0": {
-          "unitId": "parse",
-          "pinId": "json"
+          "unitId": "parsejson",
+          "pinId": "json",
+          "kind": "output"
+        }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 264,
+              "y": 12
+            }
+          }
         }
       }
     }
   },
+
   "id": "00a8a078-91bf-4676-aa32-c9cfacdfd527",
   "type": "`U`&`G`"
 }
