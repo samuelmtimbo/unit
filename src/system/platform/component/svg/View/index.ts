@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_ANIMATE_0 } from '../../../../_ids'
+import { ID_VIEW } from '../../../../_ids'
 
 export interface I {
   attributeName: string
@@ -24,7 +24,7 @@ export default class SVGView extends Element_<I, O> {
       },
       {},
       system,
-      ID_ANIMATE_0
+      ID_VIEW
     )
   }
 }

@@ -18,7 +18,7 @@ export interface O<T> {
   graph: GraphBundle
 }
 
-export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
+export default class AddUnitSpec<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {

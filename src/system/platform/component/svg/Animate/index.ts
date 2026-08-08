@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_ANIMATE_0 } from '../../../../_ids'
+import { ID_ANIMATE } from '../../../../_ids'
 import { Attr } from '../../../Style'
 
 export interface I {
@@ -24,7 +24,7 @@ export default class SVGAnimate extends Element_<I, O> {
       },
       {},
       system,
-      ID_ANIMATE_0
+      ID_ANIMATE
     )
   }
 }

@@ -1,7 +1,7 @@
 import { Graph } from '../../Class/Graph'
 import { SELF } from '../../constant/SELF'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
-import { ID_ADD_UNIT, ID_EMPTY, ID_RANGE } from '../../system/_ids'
+import { ID_ADD_UNIT_0, ID_EMPTY, ID_RANGE } from '../../system/_ids'
 import { assert } from '../../util/assert'
 import { system } from '../util/system'
 
@@ -31,7 +31,7 @@ composition0.addUnitSpec(UNIT_ID_EMPTY, {
 
 composition0.addUnitSpec(UNIT_ID_ADD_UNIT, {
   unit: {
-    id: ID_ADD_UNIT,
+    id: ID_ADD_UNIT_0,
     input: {
       class: {
         data: {

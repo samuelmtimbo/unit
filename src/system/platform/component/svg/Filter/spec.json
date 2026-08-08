@@ -1,5 +1,5 @@
 {
-  "name": "filter",
+  "name": "svg filter",
   "inputs": {
     "attr": {
       "type": "object",

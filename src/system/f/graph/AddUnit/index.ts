@@ -8,7 +8,7 @@ import { Async } from '../../../../types/interface/async/Async'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { clone } from '../../../../util/clone'
 import { weakMerge } from '../../../../weakMerge'
-import { ID_ADD_UNIT } from '../../../_ids'
+import { ID_ADD_UNIT_0 } from '../../../_ids'
 
 export interface I<T> {
   id: string
@@ -33,7 +33,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_ADD_UNIT
+      ID_ADD_UNIT_0
     )
   }
 

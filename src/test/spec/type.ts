@@ -11,7 +11,7 @@ import {
 } from '../../spec/type'
 import {
   ID_ARRAY_BUILDER_FROM,
-  ID_CONCAT_3_0,
+  ID_CONCAT_3,
   ID_CONSTANT_ONE,
   ID_HEAD_OR_DEFAULT,
   ID_INCREMENT,
@@ -97,7 +97,7 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_LOOP_INCREMENT, _specs, cache), {
   output: { local: 'number', current: 'number', final: 'number' },
 })
 
-assert.deepEqual(getSpecTypeInterfaceById(ID_CONCAT_3_0, _specs), {
+assert.deepEqual(getSpecTypeInterfaceById(ID_CONCAT_3, _specs), {
   input: { a: 'string', b: 'string', c: 'string' },
   output: { abc: 'string' },
 })

@@ -753,7 +753,7 @@ import {
   ID_EDITOR,
   ID_IMAGE,
   ID_IMAGE_1,
-  ID_VIDEO,
+  ID_VIDEO,,
 } from '../../../../_ids'
 import forEachValueKey from '../../../../core/object/ForEachKeyValue/f'
 import { keyCount } from '../../../../core/object/KeyCount/f'
