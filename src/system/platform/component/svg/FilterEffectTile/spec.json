@@ -1,5 +1,5 @@
 {
-  "name": "filter effect tile",
+  "name": "svg filter effect tile",
   "inputs": {
     "attr": {
       "type": "object",

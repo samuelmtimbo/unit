@@ -1,5 +1,5 @@
 {
-  "name": "filter effect diffuse lighting",
+  "name": "svg filter effect diffuse lighting",
   "inputs": {
     "attr": {
       "type": "object",

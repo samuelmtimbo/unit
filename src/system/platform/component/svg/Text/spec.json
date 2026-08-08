@@ -1,5 +1,5 @@
 {
-  "name": "text",
+  "name": "svg text",
   "inputs": {
     "style": {
       "type": "object",

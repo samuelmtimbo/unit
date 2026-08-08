@@ -1,5 +1,5 @@
 {
-  "name": "mpath",
+  "name": "svg mpath",
   "inputs": {
     "attr": {
       "type": "object",

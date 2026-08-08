@@ -1,5 +1,5 @@
 {
-  "name": "filter effect color matrix",
+  "name": "svg filter effect color matrix",
   "inputs": {
     "attr": {
       "type": "object",

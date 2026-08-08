@@ -1,5 +1,5 @@
 {
-  "name": "use",
+  "name": "svg use",
   "inputs": {
     "href": {
       "type": "string",

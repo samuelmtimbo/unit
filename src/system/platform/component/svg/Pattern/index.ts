@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_PATTERN } from '../../../../_ids'
+import { ID_SVG_PATTERN } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -23,7 +23,7 @@ export default class SVGPattern extends Element_<I, O> {
       },
       {},
       system,
-      ID_PATTERN
+      ID_SVG_PATTERN
     )
   }
 }

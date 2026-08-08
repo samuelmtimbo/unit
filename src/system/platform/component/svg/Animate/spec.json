@@ -1,5 +1,5 @@
 {
-  "name": "animate",
+  "name": "svg animate",
   "inputs": {
     "attr": {
       "type": "object",

@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_TEXT } from '../../../../_ids'
+import { ID_SVG_TEXT } from '../../../../_ids'
 
 export interface I {
   value: string
@@ -24,7 +24,7 @@ export default class SVGText extends Element_<I, O> {
       },
       {},
       system,
-      ID_TEXT
+      ID_SVG_TEXT
     )
   }
 }

@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_GROUP } from '../../../../_ids'
+import { ID_SVG_GROUP } from '../../../../_ids'
 
 export interface I {
   style: object
@@ -19,7 +19,7 @@ export default class SVGGroup extends Element_<I, O> {
       },
       {},
       system,
-      ID_GROUP
+      ID_SVG_GROUP
     )
   }
 }

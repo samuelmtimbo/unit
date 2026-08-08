@@ -1,5 +1,5 @@
 {
-  "name": "defs",
+  "name": "svg defs",
   "inputs": {
     "style": {
       "type": "object",

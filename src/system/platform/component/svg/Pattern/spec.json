@@ -1,5 +1,5 @@
 {
-  "name": "pattern",
+  "name": "svg pattern",
   "inputs": {
     "attr": {
       "type": "object",

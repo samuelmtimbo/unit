@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_MARKER } from '../../../../_ids'
+import { ID_SVG_MARKER } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
@@ -19,7 +19,7 @@ export default class SVGMarker extends Element_<I, O> {
       },
       {},
       system,
-      ID_MARKER
+      ID_SVG_MARKER
     )
   }
 }

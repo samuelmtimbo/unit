@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_SET_1 } from '../../../../_ids'
+import { ID_SVG_SET } from '../../../../_ids'
 import { Attr } from '../../../Style'
 
 export interface I {
@@ -22,7 +22,7 @@ export default class SVGSet extends Element_<I, O> {
       },
       {},
       system,
-      ID_SET_1
+      ID_SVG_SET
     )
   }
 }

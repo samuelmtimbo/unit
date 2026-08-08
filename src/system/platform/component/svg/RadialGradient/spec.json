@@ -1,5 +1,5 @@
 {
-  "name": "radial gradient",
+  "name": "svg radial gradient",
   "inputs": {
     "attr": {
       "type": "object",

@@ -1,5 +1,5 @@
 {
-  "name": "set",
+  "name": "svg set",
   "inputs": {
     "attributeName": {
       "type": "string",

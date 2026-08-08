@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_ANIMATE_TRANSFORM } from '../../../../_ids'
+import { ID_SVG_ANIMATE_TRANSFORM } from '../../../../_ids'
 import { Attr } from '../../../Style'
 
 export interface I {
@@ -32,7 +32,7 @@ export default class SVGAnimateTransform extends Element_<I, O> {
       },
       {},
       system,
-      ID_ANIMATE_TRANSFORM
+      ID_SVG_ANIMATE_TRANSFORM
     )
   }
 }

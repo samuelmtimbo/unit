@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_LINEAR_GRADIENT } from '../../../../_ids'
+import { ID_SVG_LINEAR_GRADIENT } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -23,7 +23,7 @@ export default class SVGLinearGradient extends Element_<I, O> {
       },
       {},
       system,
-      ID_LINEAR_GRADIENT
+      ID_SVG_LINEAR_GRADIENT
     )
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "mask",
+  "name": "svg mask",
   "inputs": {
     "attr": {
       "type": "object",

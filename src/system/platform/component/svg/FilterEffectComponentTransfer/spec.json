@@ -1,5 +1,5 @@
 {
-  "name": "filter effect component transfer",
+  "name": "svg filter effect component transfer",
   "inputs": {
     "attr": {
       "type": "object",

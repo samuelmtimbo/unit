@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_FILTER_EFFECT_CONVOLVE_MATRIX } from '../../../../_ids'
+import { ID_SVG_FILTER_EFFECT_CONVOLVE_MATRIX } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -20,7 +20,7 @@ export default class SVGSFilterEffectConvolveMatrix extends Element_<I, O> {
       },
       {},
       system,
-      ID_FILTER_EFFECT_CONVOLVE_MATRIX
+      ID_SVG_FILTER_EFFECT_CONVOLVE_MATRIX
     )
   }
 }

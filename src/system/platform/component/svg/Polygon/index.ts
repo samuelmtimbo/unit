@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_POLYGON } from '../../../../_ids'
+import { ID_SVG_POLYGON } from '../../../../_ids'
 import { Attr, Style } from '../../../Style'
 
 export interface I {
@@ -19,7 +19,7 @@ export default class SVGPolygon extends Element_<I, O> {
       },
       {},
       system,
-      ID_POLYGON
+      ID_SVG_POLYGON
     )
   }
 }

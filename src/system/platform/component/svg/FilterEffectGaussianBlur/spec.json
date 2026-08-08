@@ -1,5 +1,5 @@
 {
-  "name": "filter effect gaussian blur",
+  "name": "svg filter effect gaussian blur",
   "inputs": {
     "attr": {
       "type": "object",

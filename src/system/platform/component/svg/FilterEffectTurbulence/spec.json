@@ -1,5 +1,5 @@
 {
-  "name": "filter effect turbulence",
+  "name": "svg filter effect turbulence",
   "inputs": {
     "attr": {
       "type": "object",

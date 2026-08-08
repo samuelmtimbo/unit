@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_SYMBOL } from '../../../../_ids'
+import { ID_SVG_SYMBOL } from '../../../../_ids'
 
 export interface I {
   id: string
@@ -20,7 +20,7 @@ export default class SVGSymbol extends Element_<I, O> {
       },
       {},
       system,
-      ID_SYMBOL
+      ID_SVG_SYMBOL
     )
   }
 }

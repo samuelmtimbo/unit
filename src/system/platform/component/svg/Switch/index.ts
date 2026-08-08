@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_SWITCH } from '../../../../_ids'
+import { ID_SVG_SWITCH } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -18,7 +18,7 @@ export default class SVGSwitch extends Element_<I, O> {
       },
       {},
       system,
-      ID_SWITCH
+      ID_SVG_SWITCH
     )
   }
 }

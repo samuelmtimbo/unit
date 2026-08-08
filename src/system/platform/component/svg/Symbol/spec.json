@@ -1,5 +1,5 @@
 {
-  "name": "symbol",
+  "name": "svg symbol",
   "inputs": {
     "id": {
       "type": "string",

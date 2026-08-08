@@ -1,5 +1,5 @@
 {
-  "name": "clip path",
+  "name": "svg clip path",
   "inputs": {
     "attr": {
       "type": "object",

@@ -1,5 +1,5 @@
 {
-  "name": "filter effect drop shadow",
+  "name": "svg filter effect drop shadow",
   "inputs": {
     "attr": {
       "type": "object",

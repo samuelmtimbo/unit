@@ -1,5 +1,5 @@
 {
-  "name": "filter effect point light",
+  "name": "svg filter effect point light",
   "inputs": {
     "attr": {
       "type": "object",

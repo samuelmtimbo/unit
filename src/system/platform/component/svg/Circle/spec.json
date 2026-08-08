@@ -1,5 +1,5 @@
 {
-  "name": "circle",
+  "name": "svg circle",
   "inputs": {
     "style": {
       "type": "object",

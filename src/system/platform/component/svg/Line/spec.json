@@ -1,5 +1,5 @@
 {
-  "name": "line",
+  "name": "svg line",
   "inputs": {
     "style": {
       "type": "object",

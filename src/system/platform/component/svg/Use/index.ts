@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_USE } from '../../../../_ids'
+import { ID_SVG_USE } from '../../../../_ids'
 
 export interface I {
   href: string
@@ -20,7 +20,7 @@ export default class SVGUse extends Element_<I, O> {
       },
       {},
       system,
-      ID_USE
+      ID_SVG_USE
     )
   }
 }

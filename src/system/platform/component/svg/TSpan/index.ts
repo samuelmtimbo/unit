@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_TSPAN } from '../../../../_ids'
+import { ID_SVG_TSPAN } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -18,7 +18,7 @@ export default class SVGTSpan extends Element_<I, O> {
       },
       {},
       system,
-      ID_TSPAN
+      ID_SVG_TSPAN
     )
   }
 }

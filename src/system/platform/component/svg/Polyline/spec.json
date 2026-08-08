@@ -1,5 +1,5 @@
 {
-  "name": "polyline",
+  "name": "svg polyline",
   "inputs": {
     "style": {
       "type": "object",

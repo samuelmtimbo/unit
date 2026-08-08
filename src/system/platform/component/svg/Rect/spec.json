@@ -1,5 +1,5 @@
 {
-  "name": "rect",
+  "name": "svg rect",
   "inputs": {
     "style": {
       "type": "object",

@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_ELLIPSE } from '../../../../_ids'
+import { ID_SVG_ELLIPSE } from '../../../../_ids'
 import { Style } from '../../../Style'
 
 export interface I {
@@ -24,7 +24,7 @@ export default class SVGEllipse extends Element_<I, O> {
       },
       {},
       system,
-      ID_ELLIPSE
+      ID_SVG_ELLIPSE
     )
   }
 }

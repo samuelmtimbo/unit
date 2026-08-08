@@ -1,5 +1,5 @@
 {
-  "name": "filter effect image",
+  "name": "svg filter effect image",
   "inputs": {
     "attr": {
       "type": "object",

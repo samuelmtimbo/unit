@@ -1,5 +1,5 @@
 {
-  "name": "tspan",
+  "name": "svg tspan",
   "inputs": {
     "attr": {
       "type": "object",

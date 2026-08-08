@@ -1,5 +1,5 @@
 {
-  "name": "linear gradient",
+  "name": "svg linear gradient",
   "inputs": {
     "attr": {
       "type": "object",

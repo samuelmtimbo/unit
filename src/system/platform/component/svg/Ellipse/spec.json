@@ -1,5 +1,5 @@
 {
-  "name": "ellipse",
+  "name": "svg ellipse",
   "inputs": {
     "style": {
       "type": "object",

@@ -1,5 +1,5 @@
 {
-  "name": "filter effect flood",
+  "name": "svg filter effect flood",
   "inputs": {
     "attr": {
       "type": "object",

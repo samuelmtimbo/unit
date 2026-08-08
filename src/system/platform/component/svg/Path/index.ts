@@ -1,7 +1,7 @@
 import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_PATH } from '../../../../_ids'
+import { ID_SVG_PATH } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
@@ -23,7 +23,7 @@ export default class SVGPath extends Field<'d', I, O> {
       },
       {},
       system,
-      ID_PATH,
+      ID_SVG_PATH,
       'd'
     )
 

@@ -752,8 +752,7 @@ import {
   ID_BOX,
   ID_EDITOR,
   ID_IMAGE,
-  ID_IMAGE_1,
-  ID_VIDEO,,
+  ID_VIDEO,
 } from '../../../../_ids'
 import forEachValueKey from '../../../../core/object/ForEachKeyValue/f'
 import { keyCount } from '../../../../core/object/KeyCount/f'
@@ -4091,7 +4090,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._drop_image_file__template(
       file,
       (image_data_url: string, image: HTMLImageElement, { width, height }) => {
-        const id = ID_IMAGE_1
+        const id = ID_IMAGE
 
         const new_unit_id = this._new_unit_id(id)
 

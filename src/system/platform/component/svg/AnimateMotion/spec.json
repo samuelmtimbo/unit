@@ -1,5 +1,5 @@
 {
-  "name": "animate motion",
+  "name": "svg animate motion",
   "inputs": {
     "dur": {
       "type": "string",

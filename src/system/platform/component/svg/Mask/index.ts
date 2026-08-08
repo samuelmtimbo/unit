@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_MASK } from '../../../../_ids'
+import { ID_SVG_MASK } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -19,7 +19,7 @@ export default class SVGMask extends Element_<I, O> {
       },
       {},
       system,
-      ID_MASK
+      ID_SVG_MASK
     )
   }
 }

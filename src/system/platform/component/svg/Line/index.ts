@@ -2,7 +2,7 @@ import { Style } from 'util'
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_LINE } from '../../../../_ids'
+import { ID_SVG_LINE } from '../../../../_ids'
 
 export interface I {
   x1: number
@@ -24,7 +24,7 @@ export default class SVGLine extends Element_<I, O> {
       },
       {},
       system,
-      ID_LINE
+      ID_SVG_LINE
     )
   }
 }

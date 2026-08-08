@@ -1,6 +1,6 @@
 import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
-import { ID_TEXT_0 } from '../../../../_ids'
+import { ID_TEXT } from '../../../../_ids'
 
 export interface I {
   value: string
@@ -10,7 +10,7 @@ export interface O {
   value: string
 }
 
-export default class Text0 extends Field<'value', I, O> {
+export default class Text extends Field<'value', I, O> {
   constructor(system: System) {
     super(
       {
@@ -19,7 +19,7 @@ export default class Text0 extends Field<'value', I, O> {
       },
       {},
       system,
-      ID_TEXT_0,
+      ID_TEXT,
       'value'
     )
 

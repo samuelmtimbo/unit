@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_FILTER_EFFECT_POINT_LIGHT } from '../../../../_ids'
+import { ID_SVG_FILTER_EFFECT_POINT_LIGHT } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -11,7 +11,7 @@ export interface I {
 
 export interface O {}
 
-export default class SVGSFilterEffectPointLight extends Element_<I, O> {
+export default class SVGFilterEffectPointLight extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
@@ -20,7 +20,7 @@ export default class SVGSFilterEffectPointLight extends Element_<I, O> {
       },
       {},
       system,
-      ID_FILTER_EFFECT_POINT_LIGHT
+      ID_SVG_FILTER_EFFECT_POINT_LIGHT
     )
   }
 }

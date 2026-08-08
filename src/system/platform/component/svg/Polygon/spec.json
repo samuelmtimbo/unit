@@ -1,5 +1,5 @@
 {
-  "name": "polygon",
+  "name": "svg polygon",
   "inputs": {
     "style": {
       "type": "object",

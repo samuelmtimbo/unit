@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_IMAGE_2 } from '../../../../_ids'
+import { ID_SVG_IMAGE } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
@@ -19,7 +19,7 @@ export default class SVGImage extends Element_<I, O> {
       },
       {},
       system,
-      ID_IMAGE_2
+      ID_SVG_IMAGE
     )
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "filter effect offset",
+  "name": "svg filter effect offset",
   "inputs": {
     "attr": {
       "type": "object",

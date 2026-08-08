@@ -1,5 +1,5 @@
 {
-  "name": "filter effect spot light",
+  "name": "svg filter effect spot light",
   "inputs": {
     "attr": {
       "type": "object",

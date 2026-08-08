@@ -1,25 +1,27 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_FILTER_EFFECT_TILE } from '../../../../_ids'
+import { ID_SVG_FILTER_EFFECT_TURBULENCE } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
-  in: string
+  offset: string
+  stopColor: string
+  stopOpacity: string
 }
 
 export interface O {}
 
-export default class SVGSFilterEffectTile extends Element_<I, O> {
+export default class SVGFilterEffectTurbulence extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['attr', 'in'],
+        i: ['attr', 'type', 'baseFrequency', 'numOctaves'],
         o: [],
       },
       {},
       system,
-      ID_FILTER_EFFECT_TILE
+      ID_SVG_FILTER_EFFECT_TURBULENCE
     )
   }
 }

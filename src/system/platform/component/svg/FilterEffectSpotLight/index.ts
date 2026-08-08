@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_FILTER_EFFECT_SPOT_LIGHT } from '../../../../_ids'
+import { ID_SVG_FILTER_EFFECT_SPOT_LIGHT } from '../../../../_ids'
 
 export interface I {
   attr: Dict<string>
@@ -23,7 +23,7 @@ export default class SVGSFilterEffectSpotLight extends Element_<I, O> {
       },
       {},
       system,
-      ID_FILTER_EFFECT_SPOT_LIGHT
+      ID_SVG_FILTER_EFFECT_SPOT_LIGHT
     )
   }
 }

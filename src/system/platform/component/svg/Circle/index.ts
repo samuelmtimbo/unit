@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_CIRCLE } from '../../../../_ids'
+import { ID_SVG_CIRCLE } from '../../../../_ids'
 import { Style } from '../../../Style'
 
 export interface I {
@@ -23,7 +23,7 @@ export default class SVGCircle extends Element_<I, O> {
       },
       {},
       system,
-      ID_CIRCLE
+      ID_SVG_CIRCLE
     )
   }
 }

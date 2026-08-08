@@ -1,5 +1,5 @@
 {
-  "name": "animate transform",
+  "name": "svg animate transform",
   "inputs": {
     "attr": {
       "type": "object",

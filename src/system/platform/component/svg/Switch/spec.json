@@ -1,5 +1,5 @@
 {
-  "name": "switch",
+  "name": "svg switch",
   "inputs": {
     "attr": {
       "type": "object",

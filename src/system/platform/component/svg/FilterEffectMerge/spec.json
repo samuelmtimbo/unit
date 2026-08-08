@@ -1,5 +1,5 @@
 {
-  "name": "filter effect merge",
+  "name": "svg filter effect merge",
   "inputs": {
     "attr": {
       "type": "object",

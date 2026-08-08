@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_RECT } from '../../../../_ids'
+import { ID_SVG_RECT } from '../../../../_ids'
 import { Style } from '../../../Style'
 
 export interface I {
@@ -23,7 +23,7 @@ export default class SVGRect extends Element_<I, O> {
       },
       {},
       system,
-      ID_RECT
+      ID_SVG_RECT
     )
   }
 }

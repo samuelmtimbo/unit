@@ -2,7 +2,7 @@ import { Style } from 'util'
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ID_FOREIGN_OBJECT } from '../../../../_ids'
+import { ID_SVG_FOREIGN_OBJECT } from '../../../../_ids'
 
 export interface I {
   style: Style
@@ -20,7 +20,7 @@ export default class SVGForeignObject extends Element_<I, O> {
       },
       {},
       system,
-      ID_FOREIGN_OBJECT
+      ID_SVG_FOREIGN_OBJECT
     )
   }
 }

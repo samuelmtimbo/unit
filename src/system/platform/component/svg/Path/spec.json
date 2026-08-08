@@ -1,5 +1,5 @@
 {
-  "name": "path",
+  "name": "svg path",
   "inputs": {
     "style": {
       "type": "object",

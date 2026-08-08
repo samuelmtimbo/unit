@@ -1,5 +1,5 @@
 {
-  "name": "foreign object",
+  "name": "svg foreign object",
   "inputs": {
     "style": {
       "type": "object",

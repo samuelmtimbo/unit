@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_POLYLINE } from '../../../../_ids'
+import { ID_SVG_POLYLINE } from '../../../../_ids'
 import { Attr, Style } from '../../../Style'
 
 export interface I {
@@ -20,7 +20,7 @@ export default class SVGPolyline extends Element_<I, O> {
       },
       {},
       system,
-      ID_POLYLINE
+      ID_SVG_POLYLINE
     )
   }
 }

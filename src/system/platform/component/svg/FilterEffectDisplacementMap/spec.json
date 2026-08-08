@@ -1,5 +1,5 @@
 {
-  "name": "filter effect displacement map",
+  "name": "svg filter effect displacement map",
   "inputs": {
     "attr": {
       "type": "object",

@@ -1,5 +1,5 @@
 {
-  "name": "filter effect distant light",
+  "name": "svg filter effect distant light",
   "inputs": {
     "attr": {
       "type": "object",
