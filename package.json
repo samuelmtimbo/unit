@@ -49,8 +49,7 @@
     "build:web": "ts-node -T src/script/build/web.ts",
     "lint": "eslint src --ext .ts -f unix",
     "format": "prettier --config .prettierrc 'src/**/*.ts' 'src/**/*.json' --write",
-    "prepublishOnly": "run-s lib build",
-    "electron": "electron lib/client/platform/electron/index.js"
+    "prepublishOnly": "run-s lib build"
   },
   "dependencies": {
     "@_unit/unit": "file:.",
@@ -76,7 +75,6 @@
     "@typescript-eslint/eslint-plugin": "8.65.0",
     "@typescript-eslint/parser": "8.65.0",
     "@typescript-eslint/typescript-estree": "8.58.0",
-    "electron": "41.3.0",
     "esbuild": "0.25.0",
     "eslint": "10.8.0",
     "eslint-config-prettier": "8.3.0",

@@ -1,6 +1,6 @@
-import { Size } from 'electron'
 import { snakeToCamel } from '../../client/id'
 import { cssTextToObj } from '../../client/rawExtractStyle'
+import { Size } from '../../client/util/geometry/types'
 import { fromUnitBundle } from '../../spec/fromUnitBundle'
 import {
   appendRoot,
