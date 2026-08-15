@@ -159,7 +159,7 @@ In Change Mode, clicking on a graph input plug will toggle the input set between
 All functional inputs of a graph will have the following behavior:
 
 1. They need to be all activated before data can move into the graph through them.
-2. They are all invalidated together, mening invalidating one functional input will invalidate all others.
+2. They are all invalidated together, meaning invalidating one functional input will invalidate all others.
 3. They all need to be consumed internally, before they are consumed externally.
 
 ![](/public/gif/start/57.gif)
@@ -176,7 +176,7 @@ To switch between Graph View or Tree View, click on the "circle or square" toggl
 
 ![](/public/gif/start/20.gif)
 
-This view will show only components, which can composed and reordered into a parent-children tree structure, making it possible to build any type of visual layout.
+This view will show only components, which can be composed and reordered into a parent-children tree structure, making it possible to build any type of visual layout.
 
 Search will only show component units.
 
@@ -218,7 +218,7 @@ To unlock a component unit, Double Click on it.
 
 To open or close the minimap drawer, click on the "graph" knob, or press <kbd>M</kbd>.
 
-The minimap is useful for navigating the entirety of the graph, especially on small screens.
+The minimap is useful for navigating big graphs, especially on small screens.
 
 ![](/public/gif/start/41.gif)
 
