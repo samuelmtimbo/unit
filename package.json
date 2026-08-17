@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@_unit/unit": "file:.",
+    "@eslint/js": "10.0.1",
     "commander": "12.1.0",
     "compression": "1.8.1",
     "cors": "2.8.5",

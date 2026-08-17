@@ -5,9 +5,6 @@ const tsParser = require('@typescript-eslint/parser')
 const tsPluginRaw = require('@typescript-eslint/eslint-plugin')
 const tsPlugin = tsPluginRaw.default ?? tsPluginRaw
 
-const importPluginRaw = require('eslint-plugin-import')
-const importPlugin = importPluginRaw.default ?? importPluginRaw
-
 const unusedImportsRaw = require('eslint-plugin-unused-imports')
 const unusedImports = unusedImportsRaw.default ?? unusedImportsRaw
 
@@ -44,7 +41,6 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
-      import: importPlugin,
       'unused-imports': unusedImports,
       prettier,
     },
@@ -60,11 +56,12 @@ module.exports = [
       'no-inner-declarations': 'off',
       'no-dupe-keys': 0,
       'no-empty': 'off',
-      'import/no-duplicates': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       'prefer-const': 'off',
       'prefer-rest-params': 'off',
       'no-useless-catch': 'off',
+      'no-useless-assignment': 'off',
+      'preserve-caught-error': 'off',
       'no-prototype-builtins': 'off',
       'no-misleading-character-class': 'off',
       'no-self-assign': 'off',

@@ -52,15 +52,14 @@ export function evaluateData(
   ) {
     const data_ = Array.isArray(data) ? [] : {}
 
-    let ref_: string[]
+    for (const key in data) {
+      const valueRef = evaluateData(data, specs, classes, [...path, key])
 
-    for (const k in data) {
-      const dataRef_ = evaluateData(data, specs, classes, [...path, k])
+      ref = ref.concat([path, ...valueRef.ref])
 
-      ref = ref.concat([path, ...dataRef_.ref])
-      data_[k] = dataRef_.data
+      data_[key] = valueRef.data
 
-      ref.push(ref_)
+      ref.push(valueRef)
     }
 
     data = data_
