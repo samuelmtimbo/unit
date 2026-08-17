@@ -16833,8 +16833,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { z, x, y } = zoom
 
     this._set_zoom(zoom)
-
-    this.dispatchEvent('zoom', { z, x, y }, false)
   }
 
   private _on_high_zoom = () => {
