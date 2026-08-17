@@ -238,11 +238,7 @@ This is the best place to learn about Unit's design and implementation, and the 
 
 The project is open for pull requests.
 
-If you have a feature idea or hit a malfunction, this is a basic workflow to follow:
-
-1. Iterate over a solution on top the latest main, testing it locally until it works and the code is clean;
-2. Open a pull request explaining the problem and solution;
-3. Iterate over it to make sure the change is positive and aligned with Unit's design and vision.
+See [CONTRIBUTING](CONTRIBUTING.md) for guidelines.
 
 Everyone interacting in Unit and its sub-projects' codebases, issue trackers, chat rooms, and mailing lists is expected to follow the [Unit code of conduct](CODE_OF_CONDUCT.md).
 
