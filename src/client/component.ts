@@ -1,7 +1,7 @@
 import { NOOP } from '../NOOP'
 import { Child } from '../component/Child'
 import { Children } from '../component/Children'
-import { Moment } from '../debug/Moment'
+import { GraphMoment } from '../debug/GraphMoment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { proxyWrap } from '../proxyWrap'
 import { System } from '../system'
@@ -2271,7 +2271,7 @@ export class Component<
       },
     }
 
-    const unit_listener = (moment: Moment): void => {
+    const unit_listener = (moment: GraphMoment): void => {
       const { type } = moment
 
       handler[type] && handler[type](moment)

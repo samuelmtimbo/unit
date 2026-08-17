@@ -1,18 +1,18 @@
 import { Graph } from '../../Class/Graph'
 import { GraphAddPinToMergeData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphAddPinToMergeMomentData extends GraphAddPinToMergeData {
   path: string[]
 }
 
 export interface GraphAddPinToMergeMoment
-  extends Moment<GraphAddPinToMergeMomentData> {}
+  extends GraphMoment<GraphAddPinToMergeMomentData> {}
 
 export function extractAddPinToMergeEventData(
   ...[mergeId, unitId, type, pinId, path]: G_EE['add_pin_to_merge']
-): GraphAddPinToMergeMomentData {
+): GraphAddPinToMergeMoment['data'] {
   return {
     mergeId,
     unitId,
@@ -23,7 +23,7 @@ export function extractAddPinToMergeEventData(
 }
 
 export function stringifyAddPinToMergeEventData(
-  data: GraphAddPinToMergeMomentData
+  data: GraphAddPinToMergeMoment['data']
 ): any {
   return data
 }

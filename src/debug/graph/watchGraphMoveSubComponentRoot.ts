@@ -1,22 +1,20 @@
 import { Graph } from '../../Class/Graph'
 import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphMoveSubComponentRootMomentData
-  extends GraphMoveSubComponentRootData {
-  path?: string[]
-}
+  extends GraphMoveSubComponentRootData {}
 
-export interface GraphMoveSubcomponentRootMoment
-  extends Moment<GraphMoveSubComponentRootMomentData> {}
+export interface GraphMoveSubComponentRootMoment
+  extends GraphMoment<GraphMoveSubComponentRootMomentData> {}
 
 export function extractMoveSubComponentRootEventData(
   ...[
     { parentId, prevParentIdMap, children, index, slotMap, prevSlotMap },
     path,
   ]: G_EE['move_sub_component_root']
-): GraphMoveSubComponentRootMomentData {
+): GraphMoveSubComponentRootMoment['data'] {
   return {
     parentId,
     prevParentIdMap,
@@ -29,7 +27,7 @@ export function extractMoveSubComponentRootEventData(
 }
 
 export function stringifyMoveSubComponentRootEventData(
-  data: GraphMoveSubComponentRootMomentData
+  data: GraphMoveSubComponentRootMoment['data']
 ) {
   return data
 }
@@ -37,7 +35,7 @@ export function stringifyMoveSubComponentRootEventData(
 export function watchGraphMoveSubComponentRoot(
   event: 'move_sub_component_root',
   graph: Graph,
-  callback: (moment: GraphMoveSubcomponentRootMoment) => void
+  callback: (moment: GraphMoveSubComponentRootMoment) => void
 ): () => void {
   const listener = (...args: G_EE['move_sub_component_root']) => {
     const data = stringifyMoveSubComponentRootEventData(

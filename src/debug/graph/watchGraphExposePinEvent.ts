@@ -1,17 +1,18 @@
 import { Graph } from '../../Class/Graph'
 import { GraphExposePinData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphExposePinEventData extends GraphExposePinData {
   path: string[]
 }
 
-export interface GraphExposePinEvent extends Moment<GraphExposePinEventData> {}
+export interface GraphExposePinEvent
+  extends GraphMoment<GraphExposePinEventData> {}
 
 export function extractExposePinEventData(
   ...[type, pinId, subPinId, subPinSpec, path]: G_EE['expose_pin']
-): GraphExposePinEventData {
+): GraphExposePinEvent['data'] {
   return {
     type,
     pinId,
@@ -21,7 +22,7 @@ export function extractExposePinEventData(
   }
 }
 
-export function stringifyExposePinEventData(data: GraphExposePinEventData) {
+export function stringifyExposePinEventData(data: GraphExposePinEvent['data']) {
   return data
 }
 
@@ -39,7 +40,9 @@ export function watchGraphExposePinEvent(
       data,
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }

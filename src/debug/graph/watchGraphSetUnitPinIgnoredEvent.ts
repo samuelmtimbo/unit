@@ -1,19 +1,17 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetUnitPinIgnoredData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphSetUnitPinIgnoredMomentData
-  extends GraphSetUnitPinIgnoredData {
-  path: string[]
-}
+  extends GraphSetUnitPinIgnoredData {}
 
 export interface GraphSetUnitPinIgnoredMoment
-  extends Moment<GraphSetUnitPinIgnoredMomentData> {}
+  extends GraphMoment<GraphSetUnitPinIgnoredMomentData> {}
 
 export function extractSetUnitPinIgnoredEventData(
   ...[unitId, type, pinId, ignored, path]: G_EE['set_unit_pin_ignored']
-): GraphSetUnitPinIgnoredMomentData {
+): GraphSetUnitPinIgnoredMoment['data'] {
   return {
     unitId,
     type,
@@ -24,7 +22,7 @@ export function extractSetUnitPinIgnoredEventData(
 }
 
 export function stringifySetUnitPinIgnoredEventData(
-  data: GraphSetUnitPinIgnoredMomentData
+  data: GraphSetUnitPinIgnoredMoment['data']
 ) {
   return data
 }

@@ -1,19 +1,17 @@
 import { Graph } from '../../Class/Graph'
 import { GraphRemovePinFromMergeData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphRemovePinFromMergeMomentData
-  extends GraphRemovePinFromMergeData {
-  path: string[]
-}
+  extends GraphRemovePinFromMergeData {}
 
-export interface GraphAddPinToMergeMoment
-  extends Moment<GraphRemovePinFromMergeMomentData> {}
+export interface GraphRemovePinFromMergeMoment
+  extends GraphMoment<GraphRemovePinFromMergeMomentData> {}
 
 export function extractRemovePinFromMergeEventData(
   ...[mergeId, unitId, type, pinId, path]: G_EE['remove_pin_from_merge']
-): GraphRemovePinFromMergeMomentData {
+): GraphRemovePinFromMergeMoment['data'] {
   return {
     mergeId,
     unitId,
@@ -24,7 +22,7 @@ export function extractRemovePinFromMergeEventData(
 }
 
 export function stringifyAddUnitEventData(
-  data: GraphRemovePinFromMergeMomentData
+  data: GraphRemovePinFromMergeMoment['data']
 ): any {
   return data
 }
@@ -32,7 +30,7 @@ export function stringifyAddUnitEventData(
 export function watchGraphRemovePinFromMergeEvent(
   event: 'remove_pin_from_merge',
   graph: Graph,
-  callback: (moment: GraphAddPinToMergeMoment) => void
+  callback: (moment: GraphRemovePinFromMergeMoment) => void
 ): () => void {
   const listener = (...args: G_EE['remove_pin_from_merge']) => {
     const data = stringifyAddUnitEventData(

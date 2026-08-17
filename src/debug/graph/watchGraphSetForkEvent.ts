@@ -1,24 +1,23 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetForkData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphSetForkMomentData extends GraphSetForkData {
-  path: string[]
-}
+export interface GraphSetForkMomentData extends GraphSetForkData {}
 
-export interface GraphSetForkMoment extends Moment<GraphSetForkMomentData> {}
+export interface GraphSetForkMoment
+  extends GraphMoment<GraphSetForkMomentData> {}
 
 export function extractSetForkEventData(
   ...[fork, path]: G_EE['set_fork']
-): GraphSetForkMomentData {
+): GraphSetForkMoment['data'] {
   return {
     fork,
     path,
   }
 }
 
-export function stringifySetForkEventData(data: GraphSetForkMomentData) {
+export function stringifySetForkEventData(data: GraphSetForkMoment['data']) {
   return data
 }
 

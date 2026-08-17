@@ -1,17 +1,16 @@
 import { Graph } from '../../Class/Graph'
 import { GraphPlugPinData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphPlugPinMomentData extends GraphPlugPinData {
-  path: string[]
-}
+export interface GraphPlugPinMomentData extends GraphPlugPinData {}
 
-export interface GraphPlugPinMoment extends Moment<GraphPlugPinMomentData> {}
+export interface GraphPlugPinMoment
+  extends GraphMoment<GraphPlugPinMomentData> {}
 
 export function extractPlugPinEventData(
   ...[type, pinId, subPinId, subPinSpec, path]: G_EE['plug_pin']
-): GraphPlugPinMomentData {
+): GraphPlugPinMoment['data'] {
   return {
     type,
     pinId,
@@ -21,7 +20,7 @@ export function extractPlugPinEventData(
   }
 }
 
-export function stringifyPlugPinEventData(data: GraphPlugPinMomentData) {
+export function stringifyPlugPinEventData(data: GraphPlugPinMoment['data']) {
   return data
 }
 

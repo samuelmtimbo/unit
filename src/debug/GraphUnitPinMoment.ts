@@ -1,4 +1,11 @@
-import { GraphUnitPinDataMoment } from './GraphUnitPinDataMoment'
-import { GraphUnitPinDropMoment } from './GraphUnitPinDropMoment'
+import { IO } from '../types/IO'
+import { GraphUnitMoment } from './GraphUnitMoment'
 
-export type GraphUnitPinMoment = GraphUnitPinDataMoment | GraphUnitPinDropMoment
+export type GraphUnitPinMomentData = {
+  type: IO
+  pinId: string
+  data: any
+}
+
+export interface GraphUnitPinMoment
+  extends GraphUnitMoment<GraphUnitPinMomentData> {}

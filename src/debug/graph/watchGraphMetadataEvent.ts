@@ -1,18 +1,16 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetMetadataData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphSetMetadataMomentData extends GraphSetMetadataData {
-  path: string[]
-}
+export interface GraphSetMetadataMomentData extends GraphSetMetadataData {}
 
-export interface GraphMetadataMoment
-  extends Moment<GraphSetMetadataMomentData> {}
+export interface GraphSetMetadataMoment
+  extends GraphMoment<GraphSetMetadataMomentData> {}
 
 export function extractSetMetadataEventData(
   ...[path_, value, path]: G_EE['set_metadata']
-): GraphSetMetadataMomentData {
+): GraphSetMetadataMoment['data'] {
   return {
     path_,
     value,

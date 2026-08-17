@@ -1,13 +1,3 @@
-import { IO } from '../types/IO'
-import { Moment } from './Moment'
+import { GraphUnitPinMoment } from './GraphUnitPinMoment'
 
-export interface GraphUnitPinDropMomentData {
-  unitId: string
-  type: IO
-  pinId: string
-}
-
-export interface GraphUnitPinDropMoment extends Moment {
-  type: IO
-  event: 'drop'
-}
+export interface GraphUnitPinDropMoment extends GraphUnitPinMoment {}

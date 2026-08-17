@@ -1,14 +1,7 @@
-import { PinEvent } from '../Pin'
-import { IO } from '../types/IO'
-import { Moment } from './Moment'
-import { PinType } from './PinType'
+import { PinMoment } from './PinMoment'
 
 export interface PinDropMomentData {
-  type: IO
-  pinId: string
+  data: any
 }
 
-export interface PinDropMoment extends Moment {
-  type: PinType
-  event: PinEvent
-}
+export interface PinDropMoment extends PinMoment<PinDropMoment> {}

@@ -1,17 +1,18 @@
 import { Graph } from '../../Class/Graph'
 import { GraphCoverPinData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphCoverPinEventData extends GraphCoverPinData {
   path: string[]
 }
 
-export interface GraphCoverPinEvent extends Moment<GraphCoverPinEventData> {}
+export interface GraphCoverPinEvent
+  extends GraphMoment<GraphCoverPinEventData> {}
 
 export function extractCoverPinEventData(
   ...[type, pinId, subPinId, subPinSpec, path]: G_EE['cover_pin']
-): GraphCoverPinEventData {
+): GraphCoverPinEvent['data'] {
   return {
     type,
     pinId,
@@ -21,7 +22,7 @@ export function extractCoverPinEventData(
   }
 }
 
-export function stringifyCoverPinEventData(data: GraphCoverPinEventData) {
+export function stringifyCoverPinEventData(data: GraphCoverPinEvent['data']) {
   return data
 }
 

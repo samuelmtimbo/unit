@@ -9,7 +9,7 @@ import { EE } from '../types/interface/EE'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { ComponentAppendChildMoment } from './ComponentAppendChildMoment'
 import { ComponentAppendChildrenMoment } from './ComponentAppendChildrenMoment'
-import { ComponentRemoveChildAtMoment } from './ComponentRemoveChildAtMoment'
+import { ComponentRemoveChildMoment } from './ComponentRemoveChildAtMoment'
 import { UnitMoment } from './UnitMoment'
 import { UnitRenamePinMoment } from './UnitRenamePinMoment'
 
@@ -47,7 +47,6 @@ export function watchUnitRenamePinEvent(
 ): () => void {
   const listener = (name: string, newName: string) => {
     callback({
-      type: 'unit',
       event,
       data: {
         name,
@@ -124,7 +123,6 @@ export function watchComponentAppendEvent(
     }
 
     callback({
-      type: 'unit',
       event,
       data: { bundle },
       path,
@@ -154,7 +152,6 @@ export function watchComponentAppendChildrenEvent(
     }
 
     callback({
-      type: 'unit',
       event,
       data: { bundles },
       path,
@@ -166,10 +163,10 @@ export function watchComponentAppendChildrenEvent(
   }
 }
 
-export function watchComponentRemoveEvent(
-  event: 'remove_child',
+export function watchComponentRemoveChildEvent(
+  event: 'remove_child_at',
   unit: Graph | Element_,
-  callback: (moment: ComponentRemoveChildAtMoment) => void
+  callback: (moment: ComponentRemoveChildMoment) => void
 ): () => void {
   const listener = ({ at }: { at: number }, path: string[] = []) => {
     if (path.length > 0) {
@@ -177,14 +174,15 @@ export function watchComponentRemoveEvent(
     }
 
     callback({
-      type: 'unit',
       event,
       data: { at },
       path,
     })
   }
+
   // @ts-ignore
   unit.addListener(event, listener)
+
   return () => {
     // @ts-ignore
     unit.removeListener(event, listener)

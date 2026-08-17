@@ -1,15 +1,13 @@
 import { Graph } from '../../Class/Graph'
 import { GraphMoveSubGraphOutOfData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphMoveSubgraphOutOfMomentData
-  extends GraphMoveSubGraphOutOfData {
-  path: string[]
-}
+  extends GraphMoveSubGraphOutOfData {}
 
 export interface GraphMoveSubgraphOutOfMoment
-  extends Moment<GraphMoveSubgraphOutOfMomentData> {}
+  extends GraphMoment<GraphMoveSubgraphOutOfMomentData> {}
 
 export function extractMoveSubgraphOutOfEventData(
   ...[
@@ -20,7 +18,7 @@ export function extractMoveSubgraphOutOfEventData(
     moves,
     path,
   ]: G_EE['move_subgraph_out_of']
-): GraphMoveSubgraphOutOfMomentData {
+): GraphMoveSubgraphOutOfMoment['data'] {
   return {
     graphId,
     spec,
@@ -32,7 +30,7 @@ export function extractMoveSubgraphOutOfEventData(
 }
 
 export function stringifyMoveSubgraphOutOfEventData(
-  data: GraphMoveSubgraphOutOfMomentData
+  data: GraphMoveSubgraphOutOfMoment['data']
 ) {
   return data
 }

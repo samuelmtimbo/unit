@@ -1,5 +1,4 @@
-import { Moment } from './Moment'
+import { ComponentMoment } from './ComponentMoment'
 
-export interface ComponentRemoveChildAtMoment extends Moment<{ at: number }> {
-  path: string[]
-}
+export interface ComponentRemoveChildMoment
+  extends ComponentMoment<{ at: number }> {}

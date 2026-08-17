@@ -1,24 +1,23 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetNameData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphSetNameMomentData extends GraphSetNameData {
-  path: string[]
-}
+export interface GraphSetNameMomentData extends GraphSetNameData {}
 
-export interface GraphSetNameMoment extends Moment<GraphSetNameMomentData> {}
+export interface GraphSetNameMoment
+  extends GraphMoment<GraphSetNameMomentData> {}
 
 export function extractSetNameEventData(
   ...[name, path]: G_EE['set_name']
-): GraphSetNameMomentData {
+): GraphSetNameMoment['data'] {
   return {
     name,
     path,
   }
 }
 
-export function stringifySetNameEventData(data: GraphSetNameMomentData) {
+export function stringifySetNameEventData(data: GraphSetNameMoment['data']) {
   return data
 }
 

@@ -1,18 +1,16 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetPinSetIdData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphSetPinSetIdMomentData extends GraphSetPinSetIdData {
-  path: string[]
-}
+export interface GraphSetPinSetIdMomentData extends GraphSetPinSetIdData {}
 
 export interface GraphSetPinSetIdMoment
-  extends Moment<GraphSetPinSetIdMomentData> {}
+  extends GraphMoment<GraphSetPinSetIdMomentData> {}
 
 export function extractSetPinSetIdEventData(
   ...[type, pinId, newPinId, pinSpec, path]: G_EE['set_pin_set_id']
-): GraphSetPinSetIdMomentData {
+): GraphSetPinSetIdMoment['data'] {
   return {
     type,
     pinId,
@@ -23,7 +21,7 @@ export function extractSetPinSetIdEventData(
 }
 
 export function stringifySetPinSetIdEventData(
-  data: GraphSetPinSetIdMomentData
+  data: GraphSetPinSetIdMoment['data']
 ) {
   return data
 }

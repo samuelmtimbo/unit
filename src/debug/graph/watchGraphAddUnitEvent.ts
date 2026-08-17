@@ -1,13 +1,14 @@
 import { Graph } from '../../Class/Graph'
 import { GraphAddUnitData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphAddUnitMomentData extends GraphAddUnitData {
   path: string[]
 }
 
-export interface GraphAddUnitMoment extends Moment<GraphAddUnitMomentData> {}
+export interface GraphAddUnitMoment
+  extends GraphMoment<GraphAddUnitMomentData> {}
 
 export function extractAddUnitEventData(
   ...[unitId, bundle, unit, path]: G_EE['add_unit']

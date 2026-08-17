@@ -1,18 +1,16 @@
 import { Graph } from '../../Class/Graph'
 import { GraphUnplugPinData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphUnplugPinMomentData extends GraphUnplugPinData {
-  path: string[]
-}
+export interface GraphUnplugPinMomentData extends GraphUnplugPinData {}
 
 export interface GraphUnplugPinMoment
-  extends Moment<GraphUnplugPinMomentData> {}
+  extends GraphMoment<GraphUnplugPinMomentData> {}
 
 export function extractUnplugPinEventData(
   ...[type, pinId, subPinId, subPinSpec, path]: G_EE['unplug_pin']
-): GraphUnplugPinMomentData {
+): GraphUnplugPinMoment['data'] {
   return {
     type,
     pinId,
@@ -22,7 +20,9 @@ export function extractUnplugPinEventData(
   }
 }
 
-export function stringifyUnplugPinEventData(data: GraphUnplugPinMomentData) {
+export function stringifyUnplugPinEventData(
+  data: GraphUnplugPinMoment['data']
+) {
   return data
 }
 

@@ -1,14 +1,11 @@
 import { Pin, PinEvent } from '../Pin'
 import { stringify } from '../spec/stringify'
-import { IO } from '../types/IO'
-import { PinDataMoment } from './PinDataMoment'
+import { PinMoment } from './PinMoment'
 
 export function watchPinEvent<T>(
   event: PinEvent,
-  type: IO,
-  pinId: string,
   pin: Pin<any>,
-  callback: (moment: PinDataMoment) => void
+  callback: (moment: PinMoment) => void
 ): () => void {
   // console.log(event, type, pin)
 
@@ -18,11 +15,8 @@ export function watchPinEvent<T>(
     }
 
     callback({
-      type,
       event,
       data: {
-        type,
-        pinId,
         data,
       },
     })

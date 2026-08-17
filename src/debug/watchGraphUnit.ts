@@ -4,12 +4,12 @@ import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
 import { GRAPH_EVENT_TO_WATCH } from './graph/watchGraphInternal'
-import { Moment } from './Moment'
+import { GraphMoment } from './GraphMoment'
 
 export function watchGraphUnit<T extends Unit>(
   unit: T,
   events: string[] = GRAPH_DEFAULT_EVENTS,
-  callback: (moment: Moment) => void
+  callback: (moment: GraphMoment) => void
 ): Unlisten {
   let all: Unlisten[] = []
 

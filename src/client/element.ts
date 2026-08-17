@@ -1,3 +1,4 @@
+import { GraphMoment } from '../debug/GraphMoment'
 import { Moment } from '../debug/Moment'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
@@ -61,7 +62,7 @@ export class Element<
       },
     }
 
-    const element_listener = (moment: Moment): void => {
+    const element_listener = (moment: GraphMoment): void => {
       const { type } = moment
 
       handler[type] && handler[type](moment)

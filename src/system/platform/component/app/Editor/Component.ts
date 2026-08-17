@@ -324,40 +324,38 @@ import {
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
 import { SELF } from '../../../../../constant/SELF'
 import { UNTITLED } from '../../../../../constant/STRING'
-import { GraphMergePinDataMomentData } from '../../../../../debug/GraphMergePinDataMoment'
+import { GraphMergePinDataMoment } from '../../../../../debug/GraphMergePinDataMoment'
 import { GraphMoment } from '../../../../../debug/GraphMoment'
-import { GraphUnitErrMomentData } from '../../../../../debug/GraphUnitErrMoment'
-import { GraphUnitPinDataMomentData } from '../../../../../debug/GraphUnitPinDataMoment'
-import { GraphUnitPinDropMomentData } from '../../../../../debug/GraphUnitPinDropMoment'
-import { Moment } from '../../../../../debug/Moment'
-import { PinDataMomentData } from '../../../../../debug/PinDataMoment'
-import { PinDropMomentData } from '../../../../../debug/PinDropMoment'
-import { GraphAddMergeMomentData } from '../../../../../debug/graph/watchGraphAddMergeEvent'
-import { GraphAddPinToMergeMomentData } from '../../../../../debug/graph/watchGraphAddPinToMergeEvent'
-import { GraphAddUnitMomentData } from '../../../../../debug/graph/watchGraphAddUnitEvent'
-import { GraphBulkEditMomentData } from '../../../../../debug/graph/watchGraphBulkEditEvent'
-import { GraphCoverPinSetMomentData } from '../../../../../debug/graph/watchGraphCoverPinSetEvent'
+import { GraphUnitErrMoment } from '../../../../../debug/GraphUnitErrMoment'
+import { GraphUnitPinDataMoment } from '../../../../../debug/GraphUnitPinDataMoment'
+import { GraphUnitPinDropMoment } from '../../../../../debug/GraphUnitPinDropMoment'
+import { GraphUnitPinMoment } from '../../../../../debug/GraphUnitPinMoment'
+import { GraphAddMergeMoment } from '../../../../../debug/graph/watchGraphAddMergeEvent'
+import { GraphAddPinToMergeMoment } from '../../../../../debug/graph/watchGraphAddPinToMergeEvent'
+import { GraphAddUnitMoment } from '../../../../../debug/graph/watchGraphAddUnitEvent'
+import { GraphBulkEditMoment } from '../../../../../debug/graph/watchGraphBulkEditEvent'
+import { GraphCoverPinSetMoment } from '../../../../../debug/graph/watchGraphCoverPinSetEvent'
 import { GraphExposePinEventData } from '../../../../../debug/graph/watchGraphExposePinEvent'
-import { GraphExposePinSetMomentData } from '../../../../../debug/graph/watchGraphExposePinSetEvent'
-import { GraphForkMomentData } from '../../../../../debug/graph/watchGraphForkEvent'
-import { GraphSetMetadataMomentData } from '../../../../../debug/graph/watchGraphMetadataEvent'
-import { GraphMoveSubComponentRootMomentData } from '../../../../../debug/graph/watchGraphMoveSubComponentRoot'
-import { GraphMoveSubgraphIntoMomentData } from '../../../../../debug/graph/watchGraphMoveSubgraphIntoEvent'
-import { GraphMoveSubgraphOutOfMomentData } from '../../../../../debug/graph/watchGraphMoveSubgraphOutEvent'
-import { GraphPlugPinMomentData } from '../../../../../debug/graph/watchGraphPlugPinEvent'
-import { GraphRemoveMergeMomentData } from '../../../../../debug/graph/watchGraphRemoveMergeEvent'
-import { GraphRemoveUnitPinDataMomentData } from '../../../../../debug/graph/watchGraphRemoveUnitPinDataEvent'
-import { GraphReorderSubComponentMomentData } from '../../../../../debug/graph/watchGraphReorderSubComponent'
-import { GraphSetForkMomentData } from '../../../../../debug/graph/watchGraphSetForkEvent'
-import { GraphSetNameMomentData } from '../../../../../debug/graph/watchGraphSetNameEvent'
-import { GraphSetPinSetDefaultIgnoredMomentData } from '../../../../../debug/graph/watchGraphSetPinSetDefaultIgnored'
-import { GraphSetPinSetFunctionalMomentData } from '../../../../../debug/graph/watchGraphSetPinSetFunctionalEvent'
-import { GraphSetPinSetIdMomentData } from '../../../../../debug/graph/watchGraphSetPinSetIdEvent'
-import { GraphSetUnitIdMomentData } from '../../../../../debug/graph/watchGraphSetUnitIdEvent'
-import { GraphSetUnitPinConstantMomentData } from '../../../../../debug/graph/watchGraphSetUnitPinConstantEvent'
-import { GraphSetUnitPinDataMomentData } from '../../../../../debug/graph/watchGraphSetUnitPinDataEvent'
-import { GraphSetUnitPinIgnoredMomentData } from '../../../../../debug/graph/watchGraphSetUnitPinIgnoredEvent'
-import { GraphUnplugPinMomentData } from '../../../../../debug/graph/watchGraphUnplugPinEvent'
+import { GraphExposePinSetMoment } from '../../../../../debug/graph/watchGraphExposePinSetEvent'
+import { GraphForkMoment } from '../../../../../debug/graph/watchGraphForkEvent'
+import { GraphSetMetadataMoment } from '../../../../../debug/graph/watchGraphMetadataEvent'
+import { GraphMoveSubComponentRootMoment } from '../../../../../debug/graph/watchGraphMoveSubComponentRoot'
+import { GraphMoveSubgraphIntoMoment } from '../../../../../debug/graph/watchGraphMoveSubgraphIntoEvent'
+import { GraphMoveSubgraphOutOfMoment } from '../../../../../debug/graph/watchGraphMoveSubgraphOutEvent'
+import { GraphPlugPinMoment } from '../../../../../debug/graph/watchGraphPlugPinEvent'
+import { GraphRemoveMergeMoment } from '../../../../../debug/graph/watchGraphRemoveMergeEvent'
+import { GraphRemoveUnitPinDataMoment } from '../../../../../debug/graph/watchGraphRemoveUnitPinDataEvent'
+import { GraphReorderSubComponentMoment } from '../../../../../debug/graph/watchGraphReorderSubComponent'
+import { GraphSetForkMoment } from '../../../../../debug/graph/watchGraphSetForkEvent'
+import { GraphSetNameMoment } from '../../../../../debug/graph/watchGraphSetNameEvent'
+import { GraphSetPinSetDefaultIgnoredMoment } from '../../../../../debug/graph/watchGraphSetPinSetDefaultIgnored'
+import { GraphSetPinSetFunctionalMoment } from '../../../../../debug/graph/watchGraphSetPinSetFunctionalEvent'
+import { GraphSetPinSetIdMoment } from '../../../../../debug/graph/watchGraphSetPinSetIdEvent'
+import { GraphSetUnitIdMoment } from '../../../../../debug/graph/watchGraphSetUnitIdEvent'
+import { GraphSetUnitPinConstantMoment } from '../../../../../debug/graph/watchGraphSetUnitPinConstantEvent'
+import { GraphSetUnitPinDataMoment } from '../../../../../debug/graph/watchGraphSetUnitPinDataEvent'
+import { GraphSetUnitPinIgnoredMoment } from '../../../../../debug/graph/watchGraphSetUnitPinIgnoredEvent'
+import { GraphUnplugPinMoment } from '../../../../../debug/graph/watchGraphUnplugPinEvent'
 import { deepSet_ } from '../../../../../deepSet'
 import { CodePathNotImplementedError } from '../../../../../exception/CodePathNotImplemented'
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
@@ -1261,7 +1259,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._editor.destroy()
   }
 
-  moment(path, data: { type: 'unit' | 'graph'; moment: Moment }): void {
+  moment(path, data: { type: 'unit' | 'graph'; moment: GraphMoment }): void {
     this._editor.moment(path, data)
   }
 
@@ -3009,7 +3007,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _simulation_end: boolean = false
 
   private _debug_interval: number | null = null
-  private _debug_buffer: Moment<any>[] = []
+  private _debug_buffer: GraphMoment<any>[] = []
   private _debug_cursor: number = -1
 
   private _control_lock: boolean = false
@@ -6957,7 +6955,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           merge[mergeId] = data
         },
-        drop: (moment: GraphMoment) => {
+        drop: (moment: GraphMergePinDataMoment['data']) => {
           const { mergeId } = moment
 
           merge[mergeId] = undefined
@@ -6991,6 +6989,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               this._graph_debug_drop_pin_data(pin_node_id)
             } else {
               this._on_graph_unit_pin_data_moment({
+                path: [],
                 unitId,
                 type,
                 pinId,
@@ -7002,6 +7001,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               //
             } else {
               this._on_graph_unit_pin_data_moment({
+                path: [],
                 unitId,
                 type,
                 pinId,
@@ -55291,7 +55291,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         break
       case SET_NAME:
         {
-          const { name } = data as GraphSetNameMomentData
+          const { name } = data as GraphSetNameMoment['data']
 
           this._spec_set_name(name)
         }
@@ -57072,8 +57072,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             'set_name',
             'input',
             'output',
-            'ref_input',
-            'ref_output',
             'add_unit',
             'remove_unit',
             'expose_pin_set',
@@ -57116,8 +57114,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             'insert_child',
             'input',
             'output',
-            'ref_input',
-            'ref_output',
             'err',
             'take_err',
             'catch_err',
@@ -57445,12 +57441,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   public moment(
     path: string[],
-    data: { type: 'unit' | 'graph'; moment: Moment }
+    data: { type: 'unit' | 'graph'; moment: GraphMoment }
   ): void {
     if (path.length > 0) {
       const [first, ..._path] = path
+
       if (first === this._subgraph_unit_id) {
         const subgraph = this._subgraph_cache[first]
+
         subgraph.moment(_path, data)
       } else {
         // swallow (async) debug moment if subgraph not visible
@@ -57458,6 +57456,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     } else {
       const { type, moment } = data
+
       if (type === 'unit') {
         this._on_moment(moment)
       } else {
@@ -57624,7 +57623,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _next_node_position: Dict<Position> = {}
 
   private _on_graph_unit_expose_pin_set = (
-    data: GraphExposePinSetMomentData
+    data: GraphExposePinSetMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_expose_pin_set', data)
 
@@ -57675,7 +57674,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_graph_unit_set_unit_id = (data: GraphSetUnitIdMomentData) => {
+  private _on_graph_unit_set_unit_id = (data: GraphSetUnitIdMoment['data']) => {
     // console.log('Graph', '_on_graph_unit_set_unit_id', data)
 
     const { setSpec, getSpec, hasSpec, newSpec, specs, parent } = this.$props
@@ -57716,7 +57715,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_cover_pin_set = (
-    data: GraphCoverPinSetMomentData
+    data: GraphCoverPinSetMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_cover_pin_set', data)
 
@@ -57788,19 +57787,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     {}
 
   private _on_set_pin_set_functional = (
-    data: GraphSetPinSetFunctionalMomentData
+    data: GraphSetPinSetFunctionalMoment['data']
   ): void => {
     // console.log('Grapb', '_on_set_pin_set_functional', data)
   }
 
-  private _on_set_pin_set_id = (data: GraphSetPinSetIdMomentData) => {
+  private _on_set_pin_set_id = (data: GraphSetPinSetIdMoment['data']) => {
     const { type, pinId, newPinId } = data
 
     this._state_set_pin_set_id(type, pinId, newPinId)
   }
 
   private _on_set_pin_set_default_ignored = (
-    data: GraphSetPinSetDefaultIgnoredMomentData
+    data: GraphSetPinSetDefaultIgnoredMoment['data']
   ): void => {
     // console.log('Graph', '_on_set_pin_set_default_ignored', data)
   }
@@ -57888,7 +57887,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_fork_moment = (data: GraphForkMomentData) => {
+  private _on_fork_moment = (data: GraphForkMoment['data']) => {
     // console.log('Graph', '_on_fork_moment', data)
 
     const { spec, path } = data
@@ -57900,11 +57899,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_set_fork_moment = (data: GraphSetForkMomentData) => {
+  private _on_set_fork_moment = (data: GraphSetForkMoment['data']) => {
     //
   }
 
-  private _on_add_unit_moment = (data: GraphAddUnitMomentData): void => {
+  private _on_add_unit_moment = (data: GraphAddUnitMoment['data']): void => {
     // console.log('Graph', '_on_add_unit_moment', data)
 
     const { specs } = this.$props
@@ -57948,7 +57947,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_fork_moment = (
-    data: GraphForkMomentData & { unitId: string }
+    data: GraphForkMoment['data'] & { unitId: string }
   ) => {
     // console.log('Graph', '_on_graph_unit_fork_moment', data)
 
@@ -58011,7 +58010,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_name_moment = (
-    data: GraphSetNameMomentData & { unitId: string }
+    data: GraphSetNameMoment['data'] & { unitId: string }
   ) => {
     const { setSpec, specs } = this.$props
 
@@ -58088,7 +58087,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec_id_map: Dict<string> = {}
 
   private _on_graph_unit_add_unit_moment = (
-    data: GraphAddUnitMomentData
+    data: GraphAddUnitMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_add_unit_moment', data, this._id)
 
@@ -58407,7 +58406,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_add_merge_moment = (
-    data: GraphAddMergeMomentData
+    data: GraphAddMergeMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_add_merge_moment', data)
 
@@ -58425,7 +58424,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_remove_merge_moment = (
-    data: GraphRemoveMergeMomentData
+    data: GraphRemoveMergeMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_remove_merge_moment', data)
 
@@ -58443,7 +58442,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_remove_unit_pin_data_moment = (
-    data: GraphRemoveUnitPinDataMomentData
+    data: GraphRemoveUnitPinDataMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_remove_unit_pin_data_moment', data)
 
@@ -58461,7 +58460,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_remove_pin_from_merge_moment = (
-    data: GraphAddPinToMergeMomentData
+    data: GraphAddPinToMergeMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_remove_pin_from_merge_moment', data)
 
@@ -58481,7 +58480,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_add_pin_to_merge_moment = (
-    data: GraphAddPinToMergeMomentData
+    data: GraphAddPinToMergeMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_add_pin_to_merge_moment', data)
     const { parent, specs, setSpec } = this.$props
@@ -58500,7 +58499,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_plug_pin_moment = (
-    data: GraphPlugPinMomentData
+    data: GraphPlugPinMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_plug_pin_moment', data)
 
@@ -58573,7 +58572,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_unplug_pin_moment = (
-    data: GraphUnplugPinMomentData
+    data: GraphUnplugPinMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_unplug_pin_moment', data)
 
@@ -58710,7 +58709,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_node_position(unit_id, { x: x - dr, y: y - dr })
   }
 
-  private _on_remove_unit_moment = (data: GraphAddUnitMomentData): void => {
+  private _on_remove_unit_moment = (data: GraphAddUnitMoment['data']): void => {
     // console.log('Graph', '_on_remove_unit_moment')
 
     const { unitId } = data
@@ -58721,7 +58720,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_remove_unit_moment = (
-    data: GraphAddUnitMomentData
+    data: GraphAddUnitMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_remove_unit_moment', data)
 
@@ -59061,7 +59060,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     })
   }
 
-  private _on_add_merge_moment = (moment: GraphAddMergeMomentData): void => {
+  private _on_add_merge_moment = (
+    moment: GraphAddMergeMoment['data']
+  ): void => {
     // console.log('Graph', '_on_add_merge_moment', moment)
 
     const { mergeId, mergeSpec } = moment
@@ -59075,7 +59076,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_remove_merge_moment = (
-    data: GraphRemoveMergeMomentData
+    data: GraphRemoveMergeMoment['data']
   ): void => {
     // console.log('Graph', '_on_remove_merge_moment', moment)
 
@@ -59085,7 +59086,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_add_pin_to_merge_moment = (
-    data: GraphAddPinToMergeMomentData
+    data: GraphAddPinToMergeMoment['data']
   ): void => {
     // console.log('Graph', '_on_add_pin_to_merge_moment', data)
     const { mergeId, unitId, type, pinId } = data
@@ -59096,7 +59097,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_remove_pin_from_merge_moment = (
-    data: GraphAddPinToMergeMomentData
+    data: GraphAddPinToMergeMoment['data']
   ): void => {
     // console.log('Graph', '_on_remove_pin_from_merge_moment', data)
 
@@ -59113,7 +59114,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     //
   }
 
-  private _on_expose_pin_set = (data: GraphExposePinSetMomentData): void => {
+  private _on_expose_pin_set = (
+    data: GraphExposePinSetMoment['data']
+  ): void => {
     // console.log('Graph', '_on_expose_pin_set', data)
 
     const { type, pinId, pinSpec } = data
@@ -59122,7 +59125,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._sim_expose_pin_set(type, pinId, pinSpec)
   }
 
-  private _on_cover_pin_set = (data: GraphCoverPinSetMomentData): void => {
+  private _on_cover_pin_set = (data: GraphCoverPinSetMoment['data']): void => {
     // console.log('Graph', '_on_cover_pin_set', data)
 
     const { type, pinId, path } = data
@@ -59151,7 +59154,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.__spec_remove_exposed_sub_pin(type, pinId, subPinId)
   }
 
-  private _on_plug_pin = (data: GraphPlugPinMomentData): void => {
+  private _on_plug_pin = (data: GraphPlugPinMoment['data']): void => {
     // console.log('Graph', '_on_plug_pin', data)
 
     const { type, pinId, subPinId, subPinSpec } = data
@@ -59159,7 +59162,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._spec_plug_sub_pin(type, pinId, subPinId, subPinSpec)
   }
 
-  private _on_unplug_pin = (data: GraphUnplugPinMomentData): void => {
+  private _on_unplug_pin = (data: GraphUnplugPinMoment['data']): void => {
     // console.log('Graph', '_on_unplug_pin', data)
 
     const { type, pinId, subPinId } = data
@@ -59168,7 +59171,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_reorder_sub_component = (
-    data: GraphReorderSubComponentMomentData
+    data: GraphReorderSubComponentMoment['data']
   ) => {
     // console.log('Graph', '_on_reorder_sub_component', data)
 
@@ -59317,7 +59320,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_set_unit_pin_constant = (
-    data: GraphSetUnitPinConstantMomentData
+    data: GraphSetUnitPinConstantMoment['data']
   ) => {
     // console.log('Graph', '_on_set_unit_pin_constant', data)
 
@@ -59329,7 +59332,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_set_unit_pin_ignored = (
-    data: GraphSetUnitPinIgnoredMomentData
+    data: GraphSetUnitPinIgnoredMoment['data']
   ) => {
     // console.log('Graph', '_on_set_unit_pin_ignored', data)
 
@@ -59340,7 +59343,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._state_set_link_pin_ignored(pin_node_id, ignored)
   }
 
-  private _on_set_unit_pin_data = (_data: GraphSetUnitPinDataMomentData) => {
+  private _on_set_unit_pin_data = (
+    _data: GraphSetUnitPinDataMoment['data']
+  ) => {
     // console.log('Graph', '_on_set_unit_pin_data', _data)
 
     const { classes } = this.$system
@@ -59394,7 +59399,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_set_unit_id = (data: GraphSetUnitIdMomentData) => {
+  private _on_set_unit_id = (data: GraphSetUnitIdMoment['data']) => {
     // console.log('_on_set_unit_id', data, this._id)
 
     this._on_graph_unit_set_unit_id(data)
@@ -59405,7 +59410,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_pin_set_functional = (
-    data: GraphSetPinSetFunctionalMomentData & { unitId: string }
+    data: GraphSetPinSetFunctionalMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_set_pin_set_functional', data)
 
@@ -59425,7 +59430,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_pin_set_default_ignored = (
-    data: GraphSetPinSetDefaultIgnoredMomentData
+    data: GraphSetPinSetDefaultIgnoredMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_set_pin_set_default_ignored', data)
 
@@ -59490,7 +59495,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_move_subgraph_into = (
-    data: GraphMoveSubgraphIntoMomentData
+    data: GraphMoveSubgraphIntoMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_move_subgraph_into', data)
 
@@ -59557,7 +59562,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_move_subgraph_out_of = (
-    data: GraphMoveSubgraphOutOfMomentData
+    data: GraphMoveSubgraphOutOfMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_move_subgraph_out_of', data)
 
@@ -59626,7 +59631,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_move_sub_component_root = (
-    data: GraphMoveSubComponentRootMomentData
+    data: GraphMoveSubComponentRootMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_move_sub_component_root', data)
 
@@ -59701,7 +59706,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_reorder_sub_component = (
-    data: GraphReorderSubComponentMomentData
+    data: GraphReorderSubComponentMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_reorder_sub_component', data)
 
@@ -59816,7 +59821,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_pin_data_moment = (
-    _data: GraphUnitPinDataMomentData
+    _data: GraphUnitPinMoment['data']
   ) => {
     const { unitId, type, pinId } = _data
 
@@ -59834,7 +59839,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_link_pin_data_moment = (
-    _data: GraphUnitPinDataMomentData
+    _data: GraphUnitPinMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_link_pin_data_moment', _data)
 
@@ -59848,7 +59853,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_ref_link_pin_data_moment = (
-    _data: GraphUnitPinDataMomentData
+    _data: GraphUnitPinMoment['data']
   ) => {
     // console.log('Graph', '_on_graph_unit_ref_link_pin_data_moment', _data)
 
@@ -59932,7 +59937,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_graph_unit_err_moment = (data: GraphUnitErrMomentData) => {
+  private _on_graph_unit_err_moment = (data: GraphUnitErrMoment['data']) => {
     // console.log('Graph', '_on_graph_unit_err_moment', data)
 
     const { unitId, err } = data
@@ -59956,7 +59961,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_graph_unit_take_err_moment = (data: GraphUnitErrMomentData) => {
+  private _on_graph_unit_take_err_moment = (
+    data: GraphUnitErrMoment['data']
+  ) => {
     // console.log('Graph', '_on_graph_unit_take_err_moment', data)
 
     const { unitId } = data
@@ -60312,7 +60319,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_link_pin_drop_moment = (
-    data: GraphUnitPinDropMomentData
+    data: GraphUnitPinMoment['data']
   ): void => {
     // console.log('Graph', '_graph_debug_link_pin_drop_moment', data)
 
@@ -60355,7 +60362,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_merge_data_moment = (
-    data: GraphMergePinDataMomentData
+    data: GraphMergePinDataMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_merge_data_moment', data)
 
@@ -60367,7 +60374,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_merge_drop_moment = (
-    data: GraphMergePinDataMomentData
+    data: GraphMergePinDataMoment['data']
   ): void => {
     // console.log('Graph', '_on_graph_unit_merge_drop_moment', data)
 
@@ -60403,7 +60410,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_pin_set_id = (
-    data: GraphSetPinSetIdMomentData
+    data: GraphSetPinSetIdMoment['data']
   ) => {
     // console.log('Editor', '_on_graph_unit_set_pin_set_id', data)
 
@@ -60566,7 +60573,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_unit_pin_constant = (
-    data: GraphSetUnitPinConstantMomentData
+    data: GraphSetUnitPinConstantMoment['data']
   ) => {
     // console.log('Editor', '_on_graph_unit_set_unit_pin_constant', data)
 
@@ -60602,7 +60609,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_unit_pin_ignored = (
-    data: GraphSetUnitPinIgnoredMomentData
+    data: GraphSetUnitPinIgnoredMoment['data']
   ) => {
     // console.log('Editor', '_on_graph_unit_set_unit_pin_ignored', data)
 
@@ -60643,7 +60650,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _on_graph_unit_set_unit_pin_data = (
-    _data: GraphSetUnitPinDataMomentData
+    _data: GraphSetUnitPinDataMoment['data']
   ) => {
     // console.log('Editor', '_on_graph_unit_set_unit_pin_data', _data)
 
@@ -60721,7 +60728,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_graph_unit_set_metadata = (data: GraphSetMetadataMomentData) => {
+  private _on_graph_unit_set_metadata = (
+    data: GraphSetMetadataMoment['data']
+  ) => {
     // console.log('Graph', '_on_graph_unit_set_metadata', data)
 
     const { specs, setSpec } = this.$props
@@ -60757,7 +60766,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _on_graph_unit_bulk_edit = (data: GraphBulkEditMomentData) => {
+  private _on_graph_unit_bulk_edit = (data: GraphBulkEditMoment['data']) => {
     // console.log('Graph', '_on_graph_unit_bulk_edit', data, this._id)
 
     const { parent } = this.$props
@@ -60888,12 +60897,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _graph_moment_handler: Dict<Dict<Function>> = {
-    input: {
-      data: this._on_graph_unit_link_pin_data_moment,
-      drop: this._on_graph_unit_link_pin_drop_moment,
-      invalid: this._on_graph_unit_link_pin_invalid_moment,
-    },
-    output: {
+    pin: {
       data: this._on_graph_unit_link_pin_data_moment,
       drop: this._on_graph_unit_link_pin_drop_moment,
       invalid: this._on_graph_unit_link_pin_invalid_moment,
@@ -60945,7 +60949,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     },
   }
 
-  private _debug_moment = (moment: Moment<any>): void => {
+  private _debug_moment = (moment: GraphMoment<any>): void => {
     // console.log('Graph', '_debug_moment', moment)
 
     const { event, type, data } = moment
@@ -60953,10 +60957,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._graph_moment_handler[type][event](data)
   }
 
-  private _on_data_moment = (moment: PinDataMomentData): void => {
+  private _on_data_moment = (data_: GraphUnitPinDataMoment['data']): void => {
     // console.log('Graph', '_on_data_moment', moment)
 
-    let { type, pinId, data } = moment
+    let { type, pinId, data } = data_
 
     const ref = this._is_pin_ref(type as IO, pinId)
 
@@ -60976,10 +60980,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.__sim_set_pin_set_data(type as IO, pinId, data)
   }
 
-  private _on_drop_moment = (moment: PinDropMomentData): void => {
+  private _on_drop_moment = (data_: GraphUnitPinDropMoment['data']): void => {
     // console.log('Graph', '_on_drop_moment', moment)
 
-    const { type, pinId } = moment
+    const { type, pinId } = data_
 
     if (this._spec_has_exposed_pin_named(type, pinId)) {
       this._sim_remove_pin_data(type, pinId)
@@ -60992,10 +60996,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._pin_invalid_set.add(pin_node_id)
   }
 
-  private _on_invalid_moment = (moment: PinDataMomentData) => {
-    // console.log('Graph', '_on_data_moment', moment)
+  private _on_invalid_moment = (moment: GraphUnitPinMoment) => {
+    // console.log('Graph', '_on_invalid_moment', moment)
 
-    const { type, pinId, data } = moment
+    const { type, pinId, data } = moment.data
 
     //
   }
@@ -61005,22 +61009,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _unit_moment_handler: Dict<Dict<Function>> = {
-    input: {
-      data: this._on_data_moment,
-      drop: this._on_drop_moment,
-      invalid: this._on_invalid_moment,
-    },
-    output: {
-      data: this._on_data_moment,
-      drop: this._on_drop_moment,
-      invalid: this._on_invalid_moment,
-    },
-    ref_input: {
-      data: this._on_data_moment,
-      drop: this._on_drop_moment,
-      invalid: this._on_invalid_moment,
-    },
-    ref_output: {
+    pin: {
       data: this._on_data_moment,
       drop: this._on_drop_moment,
       invalid: this._on_invalid_moment,

@@ -1,20 +1,19 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSpec } from '../../types/GraphSpec'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphForkMomentData {
   specId: string
-  path: string[]
   spec: GraphSpec
   bubble: boolean
 }
 
-export interface GraphForkMoment extends Moment<GraphForkMomentData> {}
+export interface GraphForkMoment extends GraphMoment<GraphForkMomentData> {}
 
 export function extractForkEventData(
   ...[specId, spec, bubble, path]: G_EE['fork']
-): GraphForkMomentData {
+): GraphForkMoment['data'] {
   return {
     path,
     specId,
@@ -23,9 +22,7 @@ export function extractForkEventData(
   }
 }
 
-export function stringifyForkEventData(
-  data: GraphForkMomentData
-): GraphForkMomentData {
+export function stringifyForkEventData(data: GraphForkMoment['data']) {
   return data
 }
 

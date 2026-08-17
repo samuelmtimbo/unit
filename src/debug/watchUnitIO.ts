@@ -9,13 +9,14 @@ import { IOOf } from '../types/IOOf'
 import { Unlisten } from '../types/Unlisten'
 import { remove } from '../util/array'
 import { callAll } from '../util/call/callAll'
-import { Moment } from './Moment'
+import { GraphMoment } from './GraphMoment'
+import { PinDataMoment } from './PinDataMoment'
 import { watchPin } from './watchPin'
 import { watchUnitErr } from './watchUnitErr'
 import {
   watchComponentAppendChildrenEvent,
   watchComponentAppendEvent,
-  watchComponentRemoveEvent,
+  watchComponentRemoveChildEvent,
   watchUnitRenamePinEvent,
 } from './watchUnitEvent'
 import { watchUnitIOSpec } from './watchUnitIOSpec'
@@ -23,7 +24,7 @@ import { watchUnitIOSpec } from './watchUnitIOSpec'
 export function watchUnitIO<T extends Unit>(
   unit: T,
   events: string[] = GRAPH_DEFAULT_EVENTS,
-  callback: (moment: Moment) => void
+  callback: (moment: GraphMoment) => void
 ): Unlisten {
   let all: Unlisten[] = []
 
@@ -36,7 +37,17 @@ export function watchUnitIO<T extends Unit>(
   const pin_listener_map: IOOf<Dict<Unlisten>> = emptyIO({}, {})
 
   const watchPin_ = (type: IO, pinId: string, pin: Pin<any>) => {
-    const unlisten = watchPin(type, pinId, pin, callback)
+    const unlisten = watchPin(pin, ({ event, data }: PinDataMoment) => {
+      callback({
+        type: 'pin',
+        event,
+        data: {
+          ...data,
+          type,
+          pinId,
+        },
+      })
+    })
 
     pin_listener_map[type][pinId] = unlisten
 
@@ -157,7 +168,7 @@ export function watchUnitIO<T extends Unit>(
 
     if (events.includes('remove_child')) {
       // @ts-ignore
-      all.push(watchComponentRemoveEvent('remove_child', unit, callback))
+      all.push(watchComponentRemoveChildEvent('remove_child', unit, callback))
     }
   }
 

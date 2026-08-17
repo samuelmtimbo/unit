@@ -7,15 +7,16 @@ import { Dict } from '../../types/Dict'
 import { Unlisten } from '../../types/Unlisten'
 import { callAll } from '../../util/call/callAll'
 import { callAllDict } from '../../util/call/callAllDict'
+import { GraphMoment } from '../GraphMoment'
+import { GraphUnitMoment } from '../GraphUnitMoment'
 import { GraphUnitPinMoment } from '../GraphUnitPinMoment'
-import { Moment } from '../Moment'
 import { watchGraphUnit } from '../watchGraphUnit'
 import { watchPin } from '../watchPin'
 import { watchUnitIO } from '../watchUnitIO'
 
 export function watchGraph<T extends Graph>(
   graph: T,
-  callback: (moment: any) => void,
+  callback: (moment: GraphMoment) => void,
   events: string[] = GRAPH_DEFAULT_EVENTS
 ): Unlisten {
   const _unit_unlisten: Dict<Unlisten> = {}
@@ -25,7 +26,7 @@ export function watchGraph<T extends Graph>(
     const unitIOUnlisten = watchUnitIO(
       unit,
       events,
-      ({ type, event, data }: Moment<any>) => {
+      ({ type, event, data }: GraphUnitMoment<any>) => {
         callback({
           type,
           event,
@@ -41,7 +42,7 @@ export function watchGraph<T extends Graph>(
     const unitGraphUnlisten = watchGraphUnit(
       unit,
       events,
-      ({ type, event, data }: Moment<any>) => {
+      ({ type, event, data }: GraphUnitMoment<any>) => {
         callback({
           type,
           event,
@@ -59,23 +60,20 @@ export function watchGraph<T extends Graph>(
 
   const _watchMerge = (merge: Unit<any>, mergeId: string) => {
     const mergeInputNodeId = getMergePinNodeId(mergeId, 'input')
+
     const input = merge.getInput(mergeInputNodeId)
 
-    const unlisten = watchPin(
-      'input',
-      mergeId,
-      input,
-      ({ type, event, data }: Moment) => {
-        callback({
-          type,
-          event,
-          data: {
-            ...data,
-            mergeId,
-          },
-        })
-      }
-    )
+    const unlisten = watchPin(input, ({ event, data }: GraphUnitPinMoment) => {
+      callback({
+        type: 'merge',
+        event,
+        data: {
+          ...data,
+          type: 'input',
+          mergeId,
+        },
+      })
+    })
 
     _merge_unlisten[mergeId] = unlisten
   }

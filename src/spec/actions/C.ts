@@ -1,11 +1,11 @@
-import { GraphMoveSubComponentRootMomentData } from '../../debug/graph/watchGraphMoveSubComponentRoot'
+import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
 import { Dict } from '../../types/Dict'
 
 export const MOVE_SUB_COMPONENT_ROOT = 'moveSubComponentRoot'
 export const REORDER_SUB_COMPONENT = 'reorderSubComponent'
 
 export const wrapMoveSubComponentRootAction = (
-  data: GraphMoveSubComponentRootMomentData
+  data: GraphMoveSubComponentRootData
 ) => {
   return {
     type: MOVE_SUB_COMPONENT_ROOT,

@@ -3,20 +3,19 @@ import { Graph } from '../../Class/Graph'
 import { GraphSetUnitPinConstantData } from '../../Class/Graph/interface'
 import { stringify } from '../../spec/stringify'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphSetUnitPinConstantMomentData
   extends GraphSetUnitPinConstantData {
   data: any
-  path: string[]
 }
 
 export interface GraphSetUnitPinConstantMoment
-  extends Moment<GraphSetUnitPinConstantMomentData> {}
+  extends GraphMoment<GraphSetUnitPinConstantMomentData> {}
 
 export function extractSetUnitPinConstantEventData(
   ...[unitId, type, pinId, constant, data, path]: G_EE['set_unit_pin_constant']
-): GraphSetUnitPinConstantMomentData {
+): GraphSetUnitPinConstantMoment['data'] {
   return {
     unitId,
     type,
@@ -28,7 +27,7 @@ export function extractSetUnitPinConstantEventData(
 }
 
 export function stringifySetUnitPinConstantEventData(
-  data: GraphSetUnitPinConstantMomentData
+  data: GraphSetUnitPinConstantMoment['data']
 ) {
   let data_: string
 

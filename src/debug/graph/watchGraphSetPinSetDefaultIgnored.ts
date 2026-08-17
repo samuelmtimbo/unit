@@ -1,19 +1,17 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetPinSetDefaultIgnoredData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphSetPinSetDefaultIgnoredMomentData
-  extends GraphSetPinSetDefaultIgnoredData {
-  path: string[]
-}
+  extends GraphSetPinSetDefaultIgnoredData {}
 
 export interface GraphSetPinSetDefaultIgnoredMoment
-  extends Moment<GraphSetPinSetDefaultIgnoredMomentData> {}
+  extends GraphMoment<GraphSetPinSetDefaultIgnoredMomentData> {}
 
 export function extractSetPinSetDefaultIgnoredEventData(
   ...[type, pinId, defaultIgnored, path]: G_EE['set_pin_set_default_ignored']
-): GraphSetPinSetDefaultIgnoredMomentData {
+): GraphSetPinSetDefaultIgnoredMoment['data'] {
   return {
     type,
     pinId,
@@ -23,7 +21,7 @@ export function extractSetPinSetDefaultIgnoredEventData(
 }
 
 export function stringifySetPinSetDefaultIgnoredEventData(
-  data: GraphSetPinSetDefaultIgnoredMomentData
+  data: GraphSetPinSetDefaultIgnoredMoment['data']
 ) {
   return data
 }

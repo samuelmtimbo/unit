@@ -1,5 +1,4 @@
-export interface Moment<T = any> {
-  type: string
+export interface Moment<D = any> {
   event: string
-  data: T
+  data: D
 }

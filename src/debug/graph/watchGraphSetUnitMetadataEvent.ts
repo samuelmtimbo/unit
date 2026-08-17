@@ -1,19 +1,17 @@
 import { Graph } from '../../Class/Graph'
 import { GraphSetUnitMetadataData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphSetUnitMetadataMomentData
-  extends GraphSetUnitMetadataData {
-  path: string[]
-}
+  extends GraphSetUnitMetadataData {}
 
 export interface GraphSetUnitMetadataMoment
-  extends Moment<GraphSetUnitMetadataMomentData> {}
+  extends GraphMoment<GraphSetUnitMetadataMomentData> {}
 
 export function extractSetUnitMetadataEventData(
   ...[unitId, path_, value, path]: G_EE['set_unit_metadata']
-): GraphSetUnitMetadataMomentData {
+): GraphSetUnitMetadataMoment['data'] {
   return {
     unitId,
     path_,
@@ -23,7 +21,7 @@ export function extractSetUnitMetadataEventData(
 }
 
 export function stringifySetUnitMetadataEventData(
-  data: GraphSetUnitMetadataMomentData
+  data: GraphSetUnitMetadataMoment['data']
 ) {
   return data
 }

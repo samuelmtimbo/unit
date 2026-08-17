@@ -1,18 +1,16 @@
 import { Graph } from '../../Class/Graph'
 import { GraphAddUnitData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphUnitMoment } from '../GraphUnitMoment'
 
-export interface GraphRemoveUnitMomentData extends GraphAddUnitData {
-  path: string[]
-}
+export interface GraphRemoveUnitMomentData extends GraphAddUnitData {}
 
 export interface GraphRemoveUnitMoment
-  extends Moment<GraphRemoveUnitMomentData> {}
+  extends GraphUnitMoment<GraphRemoveUnitMomentData> {}
 
 export function extractRemoveUnitEventData(
   ...[unitId, bundle, unit, path]: G_EE['remove_unit']
-): GraphRemoveUnitMomentData {
+): GraphRemoveUnitMoment['data'] {
   return {
     unitId,
     bundle,
@@ -20,7 +18,9 @@ export function extractRemoveUnitEventData(
   }
 }
 
-export function stringifyRemoveUnitEventData(data: GraphRemoveUnitMomentData) {
+export function stringifyRemoveUnitEventData(
+  data: GraphRemoveUnitMoment['data']
+) {
   return data
 }
 

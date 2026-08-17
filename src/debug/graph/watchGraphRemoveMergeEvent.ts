@@ -3,22 +3,19 @@ import { GraphRemoveMergeData } from '../../Class/Graph/interface'
 import Merge from '../../Class/Merge'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphRemoveMergeMomentData extends GraphRemoveMergeData {
-  mergeSpec: GraphMergeSpec
-  path: string[]
-}
+export interface GraphRemoveMergeMomentData extends GraphRemoveMergeData {}
 
 export interface GraphRemoveMergeMoment
-  extends Moment<GraphRemoveMergeMomentData> {}
+  extends GraphMoment<GraphRemoveMergeMomentData> {}
 
 export function extractRemoveMergeEventData(
   mergeId: string,
   mergeSpec: GraphMergeSpec,
   merge: Merge,
   path: string[]
-): GraphRemoveMergeMomentData {
+): GraphRemoveMergeMoment['data'] {
   return {
     mergeId,
     mergeSpec,
@@ -27,7 +24,7 @@ export function extractRemoveMergeEventData(
 }
 
 export function stringifyRemoveMergeEventData(
-  data: GraphRemoveMergeMomentData
+  data: GraphRemoveMergeMoment['data']
 ) {
   return data
 }

@@ -1,19 +1,17 @@
 import { Graph } from '../../Class/Graph'
 import { GraphReorderSubComponentData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphReorderSubComponentMomentData
-  extends GraphReorderSubComponentData {
-  path: string[]
-}
+  extends GraphReorderSubComponentData {}
 
-export interface GraphMoveSubcomponentRootMoment
-  extends Moment<GraphReorderSubComponentMomentData> {}
+export interface GraphReorderSubComponentMoment
+  extends GraphMoment<GraphReorderSubComponentMomentData> {}
 
 export function extractReorderSubComponentEventData(
   ...[{ parentId, childId, to }, path]: G_EE['reorder_sub_component']
-): GraphReorderSubComponentMomentData {
+): GraphReorderSubComponentMoment['data'] {
   return {
     parentId,
     childId,
@@ -23,7 +21,7 @@ export function extractReorderSubComponentEventData(
 }
 
 export function stringifyReorderSubComponentEventData(
-  data: GraphReorderSubComponentMomentData
+  data: GraphReorderSubComponentMoment['data']
 ) {
   return data
 }
@@ -31,7 +29,7 @@ export function stringifyReorderSubComponentEventData(
 export function watchGraphReorderSubComponent(
   event: 'reorder_sub_component',
   graph: Graph,
-  callback: (moment: GraphMoveSubcomponentRootMoment) => void
+  callback: (moment: GraphReorderSubComponentMoment) => void
 ): () => void {
   const listener = (...args: G_EE['reorder_sub_component']) => {
     const data = stringifyReorderSubComponentEventData(

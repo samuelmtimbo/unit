@@ -1,19 +1,17 @@
 import { Graph } from '../../Class/Graph'
 import { GraphRemoveUnitPinDataData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphRemoveUnitPinDataMomentData
-  extends GraphRemoveUnitPinDataData {
-  path: string[]
-}
+  extends GraphRemoveUnitPinDataData {}
 
 export interface GraphRemoveUnitPinDataMoment
-  extends Moment<GraphRemoveUnitPinDataMomentData> {}
+  extends GraphMoment<GraphRemoveUnitPinDataMomentData> {}
 
 export function extractRemoveUnitPinDataEventData(
   ...[unitId, type, pinId, data, path]: G_EE['remove_unit_pin_data']
-): GraphRemoveUnitPinDataMomentData {
+): GraphRemoveUnitPinDataMoment['data'] {
   return {
     unitId,
     type,
@@ -24,7 +22,7 @@ export function extractRemoveUnitPinDataEventData(
 }
 
 export function stringifyRemoveUnitPinDataEventData(
-  data: GraphRemoveUnitPinDataMomentData
+  data: GraphRemoveUnitPinDataMoment['data']
 ) {
   return data
 }

@@ -1,19 +1,19 @@
 import { Graph } from '../../Class/Graph'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphAddMergeMomentData {
   mergeId: string
   mergeSpec: GraphMergeSpec
-  path: string[]
 }
 
-export interface GraphAddMergeMoment extends Moment<GraphAddMergeMomentData> {}
+export interface GraphAddMergeMoment
+  extends GraphMoment<GraphAddMergeMomentData> {}
 
 export function extractAddMergeEventData(
   ...[mergeId, mergeSpec, merge, path]: G_EE['add_merge']
-): GraphAddMergeMomentData {
+): GraphAddMergeMoment['data'] {
   return {
     mergeId,
     mergeSpec,
@@ -21,7 +21,7 @@ export function extractAddMergeEventData(
   }
 }
 
-export function stringifyAddMergeEventData(data: GraphAddMergeMomentData) {
+export function stringifyAddMergeEventData(data: GraphAddMergeMoment['data']) {
   return data
 }
 

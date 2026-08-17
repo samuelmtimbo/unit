@@ -1,22 +1,23 @@
 import { Graph } from '../../Class/Graph'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
-export interface GraphDestroyMomentData {
-  path: string[]
-}
+export interface GraphDestroyMomentData {}
 
-export interface GraphDestroyMoment extends Moment<GraphDestroyMomentData> {}
+export interface GraphDestroyMoment
+  extends GraphMoment<GraphDestroyMomentData> {}
 
 export function extractDestroyEventData([
   path,
-]: G_EE['destroy']): GraphDestroyMomentData {
+]: G_EE['destroy']): GraphDestroyMoment['data'] {
   return {
     path,
   }
 }
 
-export function stringifyBulkEditEventData({ path }: GraphDestroyMomentData) {
+export function stringifyBulkEditEventData({
+  path,
+}: GraphDestroyMoment['data']) {
   return {
     path,
   }

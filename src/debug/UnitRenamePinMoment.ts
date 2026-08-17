@@ -6,7 +6,4 @@ export interface UnitRenamePinMomentData {
 }
 
 export interface UnitRenamePinMoment<T = any>
-  extends Moment<UnitRenamePinMomentData & T> {
-  type: 'unit'
-  event: 'rename_input' | 'rename_output'
-}
+  extends Moment<UnitRenamePinMomentData & T> {}

@@ -19,7 +19,6 @@ export const watchUnitSpecEvent = (
   const all: Unlisten[] = []
   const listener = (pinId: string, pin: Pin, take: boolean) => {
     callback({
-      type: 'unit',
       event,
       data: { pinId },
     })

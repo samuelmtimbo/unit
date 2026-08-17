@@ -2,18 +2,19 @@ import { Graph } from '../../Class/Graph'
 import { Action } from '../../types/Action'
 import { stringifyBulkEditActions } from '../../types/interface/async/AsyncG'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from '../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphBulkEditMomentData {
   actions: Action[]
   path: string[]
 }
 
-export interface GraphBulkEditMoment extends Moment<GraphBulkEditMomentData> {}
+export interface GraphBulkEditMoment
+  extends GraphMoment<GraphBulkEditMomentData> {}
 
 export function extractBulkEditEventData(
   ...[actions, path]: G_EE['bulk_edit']
-): GraphBulkEditMomentData {
+): GraphBulkEditMoment['data'] {
   return {
     actions,
     path,
@@ -23,7 +24,7 @@ export function extractBulkEditEventData(
 export function stringifyBulkEditEventData({
   path,
   actions,
-}: GraphBulkEditMomentData) {
+}: GraphBulkEditMoment['data']) {
   actions = stringifyBulkEditActions(actions)
 
   return {

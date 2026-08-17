@@ -1,15 +1,13 @@
 import { Graph } from '../../Class/Graph'
 import { GraphMoveSubGraphIntoData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
-import { Moment } from './../Moment'
+import { GraphMoment } from '../GraphMoment'
 
 export interface GraphMoveSubgraphIntoMomentData
-  extends GraphMoveSubGraphIntoData {
-  path: string[]
-}
+  extends GraphMoveSubGraphIntoData {}
 
 export interface GraphMoveSubgraphIntoMoment
-  extends Moment<GraphMoveSubgraphIntoMomentData> {}
+  extends GraphMoment<GraphMoveSubgraphIntoMomentData> {}
 
 export function extractMoveSubgraphIntoEventData(
   ...[
@@ -20,7 +18,7 @@ export function extractMoveSubgraphIntoEventData(
     moves,
     path,
   ]: G_EE['move_subgraph_into']
-): GraphMoveSubgraphIntoMomentData {
+): GraphMoveSubgraphIntoMoment['data'] {
   return {
     graphId,
     spec,
@@ -32,7 +30,7 @@ export function extractMoveSubgraphIntoEventData(
 }
 
 export function stringifyMoveSubgraphIntoEventData(
-  data: GraphMoveSubgraphIntoMomentData
+  data: GraphMoveSubgraphIntoMoment['data']
 ) {
   return data
 }
