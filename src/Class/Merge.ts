@@ -285,4 +285,8 @@ export default class Merge<
 
     return undefined
   }
+
+  public getCurrent() {
+    return this._current
+  }
 }

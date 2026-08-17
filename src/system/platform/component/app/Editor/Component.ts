@@ -6914,39 +6914,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const merge: Dict<any> = {}
 
-    const input_data_handler = (_data: GraphUnitPinDataMomentData) => {
+    const input_data_handler = (_data: GraphUnitPinMoment['data']) => {
       const { unitId, pinId, data } = _data
+
       input[unitId] = input[unitId] || {}
       input[unitId][pinId] = data
     }
 
-    const input_drop_handler = (_data: GraphUnitPinDataMomentData) => {
+    const input_drop_handler = (_data: GraphUnitPinMoment['data']) => {
       const { unitId, pinId } = _data
+
       input[unitId] = input[unitId] || {}
       input[unitId][pinId] = undefined
     }
 
-    const output_data_handler = (_data: GraphUnitPinDataMomentData) => {
+    const output_data_handler = (_data: GraphUnitPinMoment['data']) => {
       const { unitId, pinId, data } = _data
+
       output[unitId] = output[unitId] || {}
       output[unitId][pinId] = data
     }
 
-    const output_drop_handler = (_data: GraphUnitPinDataMomentData) => {
+    const output_drop_handler = (_data: GraphUnitPinMoment['data']) => {
       const { unitId, pinId } = _data
+
       output[unitId] = output[unitId] || {}
       output[unitId][pinId] = undefined
     }
 
     const handler: Dict<Dict<Function>> = {
-      ref_input: {
-        data: input_data_handler,
-        drop: input_drop_handler,
-      },
-      ref_output: {
-        data: output_data_handler,
-        drop: output_drop_handler,
-      },
       input: {
         data: input_data_handler,
         drop: input_drop_handler,
@@ -6956,13 +6952,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         drop: output_drop_handler,
       },
       merge: {
-        data: (moment: GraphMoment) => {
-          const { id, data } = moment
-          merge[id] = data
+        data: (moment: GraphMergePinDataMoment['data']) => {
+          const { mergeId, data } = moment
+
+          merge[mergeId] = data
         },
         drop: (moment: GraphMoment) => {
-          const { id } = moment
-          merge[id] = undefined
+          const { mergeId } = moment
+
+          merge[mergeId] = undefined
         },
       },
       unit: this._graph_moment_handler['unit'],
@@ -60380,7 +60378,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._graph_debug_drop_pin_data(merge_node_id)
   }
 
-  private _on_graph_moment = (moment: Moment<any>): void => {
+  private _on_graph_moment = (moment: GraphMoment<any>): void => {
     // console.log('Graph', '_on_graph_moment', moment)
 
     this._debug_buffer.push(moment)
@@ -61073,7 +61071,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     },
   }
 
-  private _on_moment = (moment: Moment): void => {
+  private _on_moment = (moment: GraphMoment): void => {
     // console.log('_on_moment', moment, this._id)
 
     moment = clone(moment)

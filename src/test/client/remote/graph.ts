@@ -32,15 +32,7 @@ const local = remote.getOutput('graph').peak() as $Graph
 
 local.$watchGraph(
   {
-    events: [
-      'input',
-      'output',
-      'ref_input',
-      'ref_output',
-      'err',
-      'take_err',
-      'catch_err',
-    ],
+    events: ['input', 'output', 'err', 'take_err', 'catch_err'],
   },
   (event) => {
     // console.log('event', event)
