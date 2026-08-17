@@ -16833,6 +16833,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const { z, x, y } = zoom
 
     this._set_zoom(zoom)
+    this.dispatchEvent('zoom', { z, x, y }, false)
   }
 
   private _on_high_zoom = () => {
@@ -19413,7 +19414,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._search.setProp('selectedColor', selected_color)
     }
 
-    this.dispatchEvent('_graph_mode', { mode })
+    this.dispatchEvent('_mode', { mode })
   }
 
   private _disable_crud = (): void => {

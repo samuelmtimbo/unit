@@ -1032,19 +1032,9 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       true
     )
 
-    // const enterModeListener = makeCustomListener(
-    //   'entermode',
-    //   ({ mode }) => {
-    //     console.log('Bot', '_on_enter_mode')
-    //     this.setProp('mode', mode)
-    //   },
-    //   true
-    // )
-
-    const graphEnterModeListener = makeCustomListener(
-      '_graph_mode',
+    const modeListener = makeCustomListener(
+      '_mode',
       ({ mode }) => {
-        // console.log('Bot', '_on_graph_enter_mode')
         this.setProp('mode', mode)
       },
       true
@@ -1057,8 +1047,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       pointerEnterListener,
       pointerLeaveListener,
       pointerCancelListener,
-      // enterModeListener,
-      graphEnterModeListener,
+      modeListener,
     ])
   }
 
