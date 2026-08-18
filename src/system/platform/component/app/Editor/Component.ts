@@ -6906,48 +6906,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     let cursor = this._debug_cursor + 1
 
-    const input: Dict<Dict<any>> = {}
-
-    const output: Dict<Dict<any>> = {}
+    const pin: IOOf<Dict<Dict<any>>> = { input: {}, output: {} }
 
     const merge: Dict<any> = {}
 
-    const input_data_handler = (_data: GraphUnitPinMoment['data']) => {
-      const { unitId, pinId, data } = _data
+    const data_handler = (_data: GraphUnitPinMoment['data']) => {
+      const { type, unitId, pinId, data } = _data
 
-      input[unitId] = input[unitId] || {}
-      input[unitId][pinId] = data
+      deepSet_(pin, [type, unitId, pinId], data)
     }
 
-    const input_drop_handler = (_data: GraphUnitPinMoment['data']) => {
-      const { unitId, pinId } = _data
+    const drop_handler = (_data: GraphUnitPinMoment['data']) => {
+      const { type, unitId, pinId } = _data
 
-      input[unitId] = input[unitId] || {}
-      input[unitId][pinId] = undefined
-    }
-
-    const output_data_handler = (_data: GraphUnitPinMoment['data']) => {
-      const { unitId, pinId, data } = _data
-
-      output[unitId] = output[unitId] || {}
-      output[unitId][pinId] = data
-    }
-
-    const output_drop_handler = (_data: GraphUnitPinMoment['data']) => {
-      const { unitId, pinId } = _data
-
-      output[unitId] = output[unitId] || {}
-      output[unitId][pinId] = undefined
+      deepDestroy(pin, [type, unitId, pinId])
     }
 
     const handler: Dict<Dict<Function>> = {
-      input: {
-        data: input_data_handler,
-        drop: input_drop_handler,
-      },
-      output: {
-        data: output_data_handler,
-        drop: output_drop_handler,
+      pin: {
+        data: data_handler,
+        drop: drop_handler,
       },
       merge: {
         data: (moment: GraphMergePinDataMoment['data']) => {
@@ -6975,7 +6953,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       cursor++
     }
 
-    forIO({ input, output }, (type, pins) => {
+    forIO({ input: pin['input'], output: pin['output'] }, (type, pins) => {
       for (const unitId in pins) {
         const unit_pin = pins[unitId]
 
