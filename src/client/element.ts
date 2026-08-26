@@ -36,36 +36,43 @@ export class Element<
   public $input: Dict<string[]>
 
   onConnected() {
-    const handler = {
-      unit: (moment: Moment) => {
-        const { specs, classes } = this.$system
+    const _handler = (moment: Moment) => {
+      const { specs, classes } = this.$system
 
-        const { event: event_event, data: event_data } = moment
+      const { event: event_event, data: event_data } = moment
 
-        if (event_event === 'set') {
-          const { name, data } = event_data
+      if (event_event === 'set') {
+        const { name, data } = event_data
 
-          if (data !== undefined) {
-            const _data = evaluate(data, specs, classes, (url) => {
-              const globalId = url.slice(7)
+        if (data !== undefined) {
+          const _data = evaluate(data, specs, classes, (url) => {
+            const globalId = url.slice(7)
 
-              const __ = this.$input[name] ?? []
+            const __ = this.$input[name] ?? []
 
-              return this.$unit.$refGlobalObj({ globalId, __ })
-            })
+            return this.$unit.$refGlobalObj({ globalId, __ })
+          })
 
-            this.setProp(name, _data)
-          } else {
-            this.setProp(name, undefined)
-          }
+          this.setProp(name, _data)
+        } else {
+          this.setProp(name, undefined)
         }
-      },
+      }
+    }
+
+    const handler = {
+      unit: _handler,
+      component: _handler,
     }
 
     const element_listener = (moment: GraphMoment): void => {
       const { type } = moment
 
-      handler[type] && handler[type](moment)
+      if (!handler[type]) {
+        throw new Error('no element event handler defined for this event')
+      }
+
+      handler[type](moment)
     }
 
     const element_unlisten = this.$unit.$watch(

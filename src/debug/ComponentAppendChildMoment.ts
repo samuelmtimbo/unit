@@ -3,5 +3,4 @@ import { ComponentMoment } from './ComponentMoment'
 
 export interface ComponentAppendChildMoment
   extends ComponentMoment<{ bundle: UnitBundleSpec }> {
-  path: string[]
 }

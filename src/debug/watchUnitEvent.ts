@@ -123,9 +123,9 @@ export function watchComponentAppendEvent(
     }
 
     callback({
+      type: 'component',
       event,
       data: { bundle },
-      path,
     })
   }
   unit.addListener(event, listener)
@@ -152,9 +152,9 @@ export function watchComponentAppendChildrenEvent(
     }
 
     callback({
+      type: 'component',
       event,
       data: { bundles },
-      path,
     })
   }
   unit.addListener(event, listener)
@@ -174,9 +174,9 @@ export function watchComponentRemoveChildEvent(
     }
 
     callback({
+      type: 'component',
       event,
       data: { at },
-      path,
     })
   }
 

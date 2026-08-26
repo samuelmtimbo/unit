@@ -2213,68 +2213,75 @@ export class Component<
       }
     }
 
-    const handler = {
-      unit: (moment: UnitMoment) => {
-        const { event: event_event, data: event_data } = moment
+    const handler_ = (moment: UnitMoment) => {
+      const { event: event_event, data: event_data } = moment
 
-        if (event_event === 'restore') {
-          this._disconnect()
-          this._connect($unit)
-        } else if (event_event === 'append_child') {
-          const { bundle } = event_data
+      if (event_event === 'restore') {
+        this._disconnect()
+        this._connect($unit)
+      } else if (event_event === 'append_child') {
+        const { bundle } = event_data
 
-          const at = this.$children.length
+        const at = this.$children.length
 
-          const child = this._instanceChild({ bundle }, at)
+        const child = this._instanceChild({ bundle }, at)
 
-          const slot_name = 'default'
+        const slot_name = 'default'
 
+        push(this.$remoteChildren, child)
+
+        this.appendChild(child, slot_name)
+      } else if (event_event === 'append_children') {
+        const { bundles } = event_data
+
+        const children = bundles.map((bundle: UnitBundleSpec, i: number) =>
+          this._instanceChild({ bundle }, this.$children.length + i)
+        )
+
+        const slot_name = 'default'
+
+        for (const child of children) {
           push(this.$remoteChildren, child)
-
-          this.appendChild(child, slot_name)
-        } else if (event_event === 'append_children') {
-          const { bundles } = event_data
-
-          const children = bundles.map((bundle: UnitBundleSpec, i: number) =>
-            this._instanceChild({ bundle }, this.$children.length + i)
-          )
-
-          const slot_name = 'default'
-
-          for (const child of children) {
-            push(this.$remoteChildren, child)
-          }
-
-          this.appendChildren(children, slot_name)
-        } else if (event_event === 'remove_child') {
-          const { at } = event_data
-
-          const child = this.$remoteChildren[at]
-
-          this.removeChildAt(at)
-
-          child.disconnect()
-          child.destroy()
-
-          remove(this.$remoteChildren, child)
-        } else if (event_event === 'play') {
-          this.play()
-        } else if (event_event === 'pause') {
-          this.pause()
-        } else if (event_event === 'register') {
-          this.register(event_data)
-        } else if (event_event === 'unregister') {
-          this.unregister()
-        } else {
-          throw new Error('invalid event')
         }
-      },
+
+        this.appendChildren(children, slot_name)
+      } else if (event_event === 'remove_child') {
+        const { at } = event_data
+
+        const child = this.$remoteChildren[at]
+
+        this.removeChildAt(at)
+
+        child.disconnect()
+        child.destroy()
+
+        remove(this.$remoteChildren, child)
+      } else if (event_event === 'play') {
+        this.play()
+      } else if (event_event === 'pause') {
+        this.pause()
+      } else if (event_event === 'register') {
+        this.register(event_data)
+      } else if (event_event === 'unregister') {
+        this.unregister()
+      } else {
+        throw new Error('invalid event')
+      }
+    }
+
+    const handler = {
+      unit: handler_,
+      component: handler_,
     }
 
     const unit_listener = (moment: GraphMoment): void => {
       const { type } = moment
 
-      handler[type] && handler[type](moment)
+      if (!handler[type]) {
+        throw new Error('no component event handler defined for this event')
+      }
+
+      handler[type](moment)
     }
 
     this.$named_listener_count = {}

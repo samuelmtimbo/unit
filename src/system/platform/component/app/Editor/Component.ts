@@ -60890,9 +60890,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       err: this._on_graph_unit_err_moment,
       take_err: this._on_graph_unit_take_err_moment,
       catch_err: this._on_graph_unit_take_err_moment,
-      append_child: this._on_graph_unit_append_child_moment,
-      remove_child: this._on_graph_unit_remove_child_at_moment,
-      insert_child: this._on_graph_unit_insert_child_at_moment,
     },
     graph: {
       fork: this._on_graph_unit_fork_moment,
@@ -60925,6 +60922,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       set_metadata: this._on_graph_unit_set_metadata,
       bulk_edit: this._on_graph_unit_bulk_edit,
     },
+    component: {
+      append_child: this._on_graph_unit_append_child_moment,
+      remove_child: this._on_graph_unit_remove_child_at_moment,
+      insert_child: this._on_graph_unit_insert_child_at_moment,
+    }
   }
 
   private _debug_moment = (moment: GraphMoment<any>): void => {
