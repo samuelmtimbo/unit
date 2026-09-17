@@ -10340,6 +10340,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._zoom_comp.appendChild(pin_link, 'svg')
 
+    this._sim_add_ext_pin_type(ext_node_id, int_node_id)
+
     this._start_graph_simulation(LAYER_EXPOSED)
   }
 
@@ -11542,11 +11544,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const node_content = this._node_content[type_node_id]
 
+    node_content.$element.style.pointerEvents = 'none'
+
     const type_selection = this._create_selection(type_node_id, {
       width,
       height,
       shape,
       stroke: COLOR_NONE,
+      style: {
+        pointerEvents: 'none',
+      },
     })
 
     node_content.appendChild(type_selection)
@@ -11595,6 +11602,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._link_layer[link_id] = LAYER_TYPE
 
     this._zoom_comp.appendChild(type_link, 'svg')
+
+    const type_link_id = link_id
+
+    this._set_node_opacity(type_node_id, 0)
+    this._set_link_opacity(type_link_id, 0)
 
     this._start_graph_simulation(LAYER_TYPE)
   }
@@ -13233,6 +13245,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._enable_datum_overlay(datum_node_id)
     }
 
+    this._sim_add_datum_type(datum_node_id)
+
     if (emit) {
       this._dispatch_data_added(datum_id, tree.value)
     }
@@ -14388,7 +14402,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             if (this._is_node_infoable(node_id)) {
               if (!this._is_node_selected(node_id)) {
                 if (this._hover_node_count === 1 && !this._edit_node_name_id) {
-                  this._set_all_nodes_links_opacity(0.2)
+                  this._set_all_physical_nodes_links_opacity(0.2)
 
                   for (const selected_node_id in this._selected_node_id) {
                     this._hide_node_info(selected_node_id)
@@ -14463,13 +14477,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                         this._edit_node_name_id))
                 ) {
                   if (this._selected_node_count > 0) {
-                    this._set_all_nodes_links_opacity(0.2)
+                    this._set_all_physical_nodes_links_opacity(0.2)
 
                     for (const selected_node_id in this._selected_node_id) {
                       this._show_node_info(selected_node_id)
                     }
                   } else {
-                    this._set_all_nodes_links_opacity(1)
+                    this._set_all_physical_nodes_links_opacity(1)
                   }
                 }
               }
@@ -15065,6 +15079,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._set_nodes_links_opacity(opacity, this._node, this._link)
   }
 
+  private _set_all_layer_nodes_links_opacity = (
+    opacity: number,
+    layer: number
+  ): void => {
+    this._set_nodes_links_opacity(
+      opacity,
+      this._layer_node[layer],
+      this._layer_link[layer]
+    )
+  }
+
+  private _set_all_physical_nodes_links_opacity = (opacity: number): void => {
+    console.log('_set_all_physical_nodes_links_opacity', opacity)
+
+    this._set_all_layer_nodes_links_opacity(opacity, LAYER_NORMAL)
+    this._set_all_layer_nodes_links_opacity(opacity, LAYER_IGNORED)
+    this._set_all_layer_nodes_links_opacity(opacity, LAYER_EXPOSED)
+    this._set_all_layer_nodes_links_opacity(opacity, LAYER_DATA_LINKED)
+    this._set_all_layer_nodes_links_opacity(opacity, LAYER_DATA)
+    this._set_all_layer_nodes_links_opacity(opacity, LAYER_ERR)
+  }
+
   private _set_nodes_opacity = (nodes: string[], opacity: number): void => {
     for (const node_id of nodes) {
       this._set_node_opacity(node_id, opacity)
@@ -15126,7 +15162,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.__show_pin_info(pin_node_id)
 
     const { unitId } = segmentLinkPinNodeId(pin_node_id)
+
     this._set_node_opacity(unitId, 1)
+
     this._for_each_unit_pin(unitId, (pin_node_id: string) => {
       if (!this._spec_is_link_pin_ignored(pin_node_id)) {
         this._show_pin_info_opacity(pin_node_id)
@@ -15166,6 +15204,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (!this._has_node(type_node_id)) {
         this._sim_add_pin_type(anchor_node_id, { x, y })
       }
+
+      this._sim_show_node_type(pin_node_id)
 
       const datum_node_id = this._get_pin_datum_node_id(anchor_node_id)
 
@@ -15236,6 +15276,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._set_node_opacity(datum_node_id, 1)
 
+    this._sim_ensure_datum_type(datum_node_id)
+
+    this._sim_show_node_type(datum_node_id)
+  }
+
+  private _sim_ensure_datum_type = (datum_node_id: string) => {
+    const datum_type_node_id = getTypeNodeId(datum_node_id)
+
+    if (this._has_node(datum_type_node_id)) {
+      return
+    }
+
+    this._sim_add_datum_type(datum_node_id)
+  }
+
+  private _sim_add_datum_type = (datum_node_id: string) => {
     let datum_type_tree = this._get_datum_type(datum_node_id)
 
     if (datum_type_tree.type === TreeNodeType.Invalid) {
@@ -15256,17 +15312,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _show_ext_pin_type = (ext_node_id: string, int_node_id: string) => {
-    // console.log('Graph', '_show_ext_pin_type', ext_node_id, int_node_id)
+    this._sim_ensure_ext_pin_type(ext_node_id, int_node_id)
+    this._sim_show_node_type(ext_node_id)
+  }
 
+  private _sim_ensure_ext_pin_type = (
+    ext_node_id: string,
+    int_node_id: string
+  ) => {
     const type_node_id = getTypeNodeId(ext_node_id)
 
     if (this._has_node(type_node_id)) {
       return
     }
 
-    const type_tree = this._get_plug_type(ext_node_id)
+    this._sim_add_ext_pin_type(ext_node_id, int_node_id)
+  }
 
-    const ext_node = this.get_node(ext_node_id)
+  private _sim_add_ext_pin_type = (
+    ext_node_id: string,
+    int_node_id: string
+  ) => {
+    const type_tree = this._get_plug_type(ext_node_id)
 
     const position = this._predict_plug_type_initial_position(ext_node_id)
 
@@ -15302,6 +15369,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else {
         if (this._is_link_pin_node_id(node_id)) {
           const { unitId } = segmentLinkPinNodeId(node_id)
+
           if (this._should_show_node_info(unitId)) {
             this._show_node_info(node_id)
           } else {
@@ -15375,7 +15443,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _hide_ext_info(ext_node_id: string): void {
     // console.log('Graph', '_hide_ext_info', ext_node_id)
 
-    this._sim_remove_node_type(ext_node_id)
+    this._sim_hide_node_type(ext_node_id)
   }
 
   private _hide_int_info(int_node_id: string): void {
@@ -15387,7 +15455,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _hide_datum_info(datum_node_id: string): void {
     // console.log('Graph', '_hide_datum_info', datum_node_id)
 
-    this._sim_remove_node_type(datum_node_id)
+    this._sim_hide_node_type(datum_node_id)
   }
 
   private _hide_unit_info = (unit_id: string): void => {
@@ -15400,8 +15468,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const type_node_id = getTypeNodeId(anchor_node_id)
 
     if (this._has_node(type_node_id)) {
-      this._sim_remove_pin_type(anchor_node_id)
+      this._sim_hide_node_type(anchor_node_id)
     }
+
+    const { unitId } = segmentLinkPinNodeId(pin_node_id)
+
+    this._for_each_unit_pin(unitId, (pin_node_id: string) => {
+      if (!this._spec_is_link_pin_ignored(pin_node_id)) {
+        const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
+
+        this._sim_hide_node_type(anchor_node_id)
+      }
+    })
 
     this._refresh_pin_datum_visible(anchor_node_id)
   }
@@ -16330,7 +16408,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         strokeDashOffset,
         style: {
           ...userSelect('none'),
-          // ...style,
+          ...style,
         },
       },
       this.$system
@@ -19060,13 +19138,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._enable_all_node_name()
 
         if (this._hover_node_count > 0) {
-          this._set_all_nodes_links_opacity(0.2)
+          this._set_all_physical_nodes_links_opacity(0.2)
 
           for (const hovered_node_id in this._hover_node_id) {
             this._show_node_info(hovered_node_id)
           }
         } else if (this._selected_node_count > 0) {
-          this._set_all_nodes_links_opacity(0.2)
+          this._set_all_physical_nodes_links_opacity(0.2)
 
           for (const selected_node_id in this._selected_node_id) {
             this._show_node_info(selected_node_id)
@@ -19076,7 +19154,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._disable_all_node_name()
 
         if (this._info_node_id.size > 0) {
-          this._set_all_nodes_links_opacity(1)
+          this._set_all_physical_nodes_links_opacity(1)
 
           for (const info_node_id of this._info_node_id) {
             this._hide_node_info(info_node_id)
@@ -26080,9 +26158,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._refresh_all_selected_pin_datum_visible()
 
     if (this._mode === 'info') {
-      if (this._hover_node_count === 0) {
+      if (
+        this._hover_node_count === 0 ||
+        (this._hover_node_count === 1 &&
+          getObjSingleKey(this._hover_node_id) === node_id)
+      ) {
         if (this._selected_node_count === 1) {
-          this._set_all_nodes_links_opacity(0.2)
+          this._set_all_physical_nodes_links_opacity(0.2)
         }
 
         this._show_node_info(node_id)
@@ -26431,21 +26513,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this.__deselect_node(node_id)
 
-    const has_node = this._has_node(node_id)
-
-    if (has_node) {
-      this._refresh_node_selection(node_id)
-      this._refresh_node_color(node_id)
-    }
+    this._refresh_node_selection(node_id)
+    this._refresh_node_color(node_id)
 
     if (this._mode === 'info') {
-      if (this._hover_node_count === 0) {
-        if (has_node) {
-          this._hide_node_info(node_id)
-        }
+      if (
+        this._hover_node_count === 0 ||
+        (this._hover_node_count === 1 &&
+          getObjSingleKey(this._hover_node_id) !== node_id)
+      ) {
+        this._hide_node_info(node_id)
 
         if (this._selected_node_count === 0) {
-          this._set_all_nodes_links_opacity(1)
+          this._set_all_physical_nodes_links_opacity(1)
         }
       }
     }
@@ -41489,6 +41569,36 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     )
   }
 
+  private _sim_hide_node_type = (node_id: string): void => {
+    const type_node_id = getTypeNodeId(node_id)
+
+    if (this._has_node(type_node_id)) {
+      this._set_node_opacity(type_node_id, 0)
+    }
+
+    const type_link_id = getLinkId(type_node_id, node_id)
+
+    if (this._has_link(type_link_id)) {
+      this._set_link_opacity(type_link_id, 0)
+    }
+  }
+
+  private _sim_show_node_type = (node_id: string): void => {
+    // console.log('_sim_show_pin_type', node_id)
+
+    const type_node_id = getTypeNodeId(node_id)
+
+    if (this._has_node(type_node_id)) {
+      this._set_node_opacity(type_node_id, 1)
+    }
+
+    const type_link_id = getLinkId(type_node_id, node_id)
+
+    if (this._has_link(type_link_id)) {
+      this._set_link_opacity(type_link_id, 1)
+    }
+  }
+
   private _sim_remove_pin_type = (pin_node_id: string): void => {
     return this._sim_remove_node_type(pin_node_id)
   }
@@ -41846,6 +41956,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_sim_remove_node', node_id)
 
     this._node_count--
+
+    this._sim_remove_node_type(node_id)
 
     const was_selected = this._selected_node_id[node_id]
 
@@ -60926,7 +61038,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       append_child: this._on_graph_unit_append_child_moment,
       remove_child: this._on_graph_unit_remove_child_at_moment,
       insert_child: this._on_graph_unit_insert_child_at_moment,
-    }
+    },
   }
 
   private _debug_moment = (moment: GraphMoment<any>): void => {
