@@ -8,6 +8,7 @@ export interface I {
   value: string
   name: string
   attr: Attr
+  checked: boolean
 }
 
 export interface O {
@@ -18,7 +19,7 @@ export default class RadioField extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'value', 'name', 'attr'],
+        i: ['style', 'value', 'name', 'attr', 'checked'],
         o: [],
       },
       {},

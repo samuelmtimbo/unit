@@ -15,6 +15,10 @@
     "attr": {
       "type": "object",
       "optional": true
+    },
+    "checked": {
+      "type": "boolean",
+      "optional": true
     }
   },
   "outputs": {},
