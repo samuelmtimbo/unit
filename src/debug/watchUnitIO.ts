@@ -108,14 +108,18 @@ export function watchUnitIO<T extends Unit>(
 
   all.push(
     unit.addListener('rename_input', (name: string, newName: string) => {
-      unlistenPin('input', name)
-      listenPin('input', newName)
+      if (watch_data_input) {
+        unlistenPin('input', name)
+        listenPin('input', newName)
+      }
     })
   )
   all.push(
     unit.addListener('rename_output', (name: string, newName: string) => {
-      unlistenPin('output', name)
-      listenPin('output', newName)
+      if (watch_data_output) {
+        unlistenPin('output', name)
+        listenPin('output', newName)
+      }
     })
   )
 
