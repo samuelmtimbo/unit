@@ -219,7 +219,7 @@ export interface G<
     data: any
   ): void
   setPinMetadata(type: IO, pinId: string, path: string[], data: any): void
-  
+
   moveSubgraphInto(...args: G_MoveSubgraphIntoArgs): void
   moveSubgraphOutOf(...args: G_MoveSubgraphIntoArgs): void
 

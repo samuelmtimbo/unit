@@ -28865,6 +28865,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     event: UnitPointerEvent
   ): void => {
     // console.log('Graph', '_on_node_multiselect_click', node_id)
+
     if (this._is_node_selectable(node_id)) {
       if (this._selected_node_id[node_id]) {
         this.deselect_node(node_id)
@@ -57910,6 +57911,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     should_add_component: boolean = true
   ): void => {
     // console.log('Graph', '_componentify_core', unit_id)
+    const { setSpec } = this.$props
 
     this._set_core_shape(unit_id, 'rect')
     this._spec_append_component(null, unit_id, 'default')
@@ -57942,6 +57944,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._connect_sub_component(unit_id)
 
     this._hide_core_icon(unit_id)
+
+    this._spec_set_unit_spec_render(unit_id, true)
   }
 
   private _decomponentify_core = (
@@ -57975,6 +57979,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._refresh_link_pin_marker(ref_merge_input_id, unit_id)
       }
     }
+
+    this._spec_set_unit_spec_render(unit_id, false)
   }
 
   private _on_fork_moment = (data: GraphForkMoment['data']) => {
@@ -58149,7 +58155,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const graphUnitId: string = path[0]
 
-    return !!(
+    return (
       !this._subgraph_cache[graphUnitId] ||
       (path.length === 1 && last(path) === graphUnitId)
     )
