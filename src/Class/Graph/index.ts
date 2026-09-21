@@ -5513,11 +5513,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._addUnitPlugs(newUnitId, newUnitPlugs, false)
 
     if (componentParentId) {
-      this._moveSubComponentRoot(
+      this._moveSubComponent(
         componentParentId,
         newUnitId,
         componentParentIndex,
         componentParentSlotName,
+        true,
         false,
         false
       )
@@ -5807,20 +5808,14 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const prevParentMap = this.getSubComponentsParentMap(children)
     const prevSlotMap = this.getSubComponentsSlotMap(children)
 
-    for (let i = 0; i < children.length; i++) {
-      const childId = children[i]
-
-      const slotName = slotMap[childId] || 'default'
-
-      this._moveSubComponentRoot(
-        subComponentId,
-        childId,
-        index + i,
-        slotName,
-        fork,
-        bubble
-      )
-    }
+    this._moveSubComponentRoot(
+      subComponentId,
+      children,
+      slotMap,
+      index,
+      fork,
+      bubble
+    )
 
     emit &&
       this.edit(
@@ -5835,6 +5830,36 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         },
         []
       )
+  }
+
+  private _moveSubComponentRoot(
+    subComponentId: string | null,
+    children: string[],
+    slotMap: Dict<string> = {},
+    index: number = 0,
+    emit: boolean,
+    fork: boolean = true,
+    bubble: boolean = true
+  ): void {
+    // console.log('moveSubComponentRoot', subComponentId, children, slotMap, index)
+
+    fork && this._fork(undefined, true, bubble)
+
+    for (let i = 0; i < children.length; i++) {
+      const childId = children[i]
+
+      const slotName = slotMap[childId] || 'default'
+
+      this._moveSubComponent(
+        subComponentId,
+        childId,
+        index + i,
+        slotName,
+        emit,
+        fork,
+        bubble
+      )
+    }
   }
 
   private _specRemoveRoot(subComponentId: string): void {
@@ -6073,28 +6098,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
-  public moveRoot(
+  private _moveSubComponent(
     parentId: string | null,
     childId: string,
     to: number,
     slotName: string,
-    fork: boolean = true,
-    bubble: boolean = true
-  ): void {
-    // console.log('Graph', 'moveRoot', parentId, childId, to, slotName)
-
-    this._moveSubComponentRoot(parentId, childId, to, slotName, fork, bubble)
-  }
-
-  private _moveSubComponentRoot(
-    parentId: string | null,
-    childId: string,
-    to: number,
-    slotName: string,
+    emit: boolean,
     fork: boolean,
     bubble: boolean
   ): void {
-    this._removeSubComponentFromParent(childId, false, fork, bubble)
+    this._removeSubComponentFromParent(childId, emit, fork, bubble)
 
     if (parentId) {
       this._insertSubComponentChild(
@@ -6102,7 +6115,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         childId,
         to,
         slotName,
-        false,
+        emit,
         fork,
         bubble
       )
@@ -6111,7 +6124,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       const subComponent = this.getSubComponent(childId)
 
-      this.registerRoot(subComponent, childId, false)
+      this.registerRoot(subComponent, childId, emit)
     }
   }
 
@@ -6388,7 +6401,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         moveSubComponentRoot: function (data: GraphMoveSubComponentRootData) {
           const { parentId, children, slotMap = {}, index } = data
 
-          this.moveSubComponentRoot(
+          this._moveSubComponentRoot(
             parentId,
             children,
             slotMap,
@@ -6397,6 +6410,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             fork,
             bubble
           )
+        },
+        reorderSubComponent: function (data: GraphReorderSubComponentData) {
+          const { parentId, childId, to } = data
+
+          this._reorderSubComponent(parentId, childId, to, true, fork, bubble)
         },
         moveSubgraphInto: function (data: GraphMoveSubGraphIntoData) {
           const { graphId, spec, selection, mapping, moves } = data
@@ -6407,11 +6425,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           const { graphId, spec, selection, moves, mapping } = data
 
           this._moveSubgraphOutOf(graphId, spec, selection, mapping, moves)
-        },
-        reorderSubComponent: function (data: GraphReorderSubComponentData) {
-          const { parentId, childId, to } = data
-
-          this._reorderSubComponent(parentId, childId, to, false, fork, bubble)
         },
         removePinData: function (data: UnitRemovePinDataData) {
           const { type, pinId } = data

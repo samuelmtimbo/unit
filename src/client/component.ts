@@ -20,7 +20,7 @@ import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
 import { insertAt, isElementFocusable, removeChild } from '../util/element'
-import { forEachObjKV, get, set } from '../util/object'
+import { entries, forEachObjKV, get, set } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import {
   DEFAULT_FONT_SIZE,
@@ -2404,181 +2404,179 @@ export class Component<
   }
 
   private $control = ($emitter: $EE) => {
-    return callAll([
-      $emitter.$addListener(
-        { event: 'set_sub_component' },
-        ([{ subComponentId, bundle }, path = []]) => {
-          if (!this.$controlled) {
-            const child = $childToComponent(this.$system, { bundle })
+    const handlers = {
+      set_sub_component: ([{ subComponentId, bundle }, path = []]) => {
+        if (!this.$controlled) {
+          console.log('set_sub_component')
 
-            const __ = getComponentInterface(child)
+          const child = $childToComponent(this.$system, { bundle })
 
-            const $subComponent = (this.$unit as $Graph).$refUnit({
-              unitId: subComponentId,
-              __,
-            }) as $Component
+          const __ = getComponentInterface(child)
 
-            child.connect($subComponent)
+          const $subComponent = (this.$unit as $Graph).$refUnit({
+            unitId: subComponentId,
+            __,
+          }) as $Component
 
-            this.setSubComponent(subComponentId, child)
-          }
+          child.connect($subComponent)
+
+          this.setSubComponent(subComponentId, child)
         }
-      ),
-      $emitter.$addListener(
-        { event: 'register_root' },
-        ([{ subComponentId }, path = []]) => {
-          if (!this.$controlled) {
-            const subComponent: Component = this.$subComponent[subComponentId]
+      },
+      register_root: ([{ subComponentId }, path = []]) => {
+        if (!this.$controlled) {
+          const subComponent: Component = this.$subComponent[subComponentId]
 
-            if (subComponent) {
-              if (
-                subComponent.$rootParent &&
-                subComponent.$rootParent.$mountParentRoot.includes(subComponent)
-              ) {
-                subComponent.$rootParent.removeParentRoot(subComponent)
-              }
+          console.log('register_root')
 
-              if (!this.hasRoot(subComponent)) {
-                this.registerRoot(subComponent)
-              }
+          if (subComponent) {
+            if (
+              subComponent.$rootParent &&
+              subComponent.$rootParent.$mountParentRoot.includes(subComponent)
+            ) {
+              subComponent.$rootParent.removeParentRoot(subComponent)
             }
-          }
-        }
-      ),
-      $emitter.$addListener(
-        { event: 'unregister_root' },
-        ([{ subComponentId }, path = []]) => {
-          if (!this.$controlled) {
-            const subComponent: Component = this.$subComponent[subComponentId]
 
-            if (subComponent) {
-              for (const parentRoot of [...subComponent.$parentRoot]) {
-                subComponent.unregisterParentRoot(parentRoot)
-
-                this.registerRoot(parentRoot)
-              }
-
-              if (this.hasRoot(subComponent)) {
-                this.unregisterRoot(subComponent)
-              }
+            if (!this.hasRoot(subComponent)) {
+              this.registerRoot(subComponent)
             }
           }
         }
-      ),
-      $emitter.$addListener(
-        { event: 'register_parent_root' },
-        ([{ component, subComponentId, slotName }, path = []]) => {
-          if (!this.$controlled && !this.$parent?.$controlled) {
-            if (path.length > 0) {
-              return
+      },
+      unregister_root: ([{ subComponentId }, path = []]) => {
+        if (!this.$controlled) {
+          console.log('unregister_root')
+
+          const subComponent: Component = this.$subComponent[subComponentId]
+
+          if (subComponent) {
+            for (const parentRoot of [...subComponent.$parentRoot]) {
+              subComponent.unregisterParentRoot(parentRoot)
+
+              this.registerRoot(parentRoot)
             }
 
-            const { globalId } = component
-
-            const components = this.$system.getLocalComponents(globalId)
-
-            if (!components.length) {
-              return
-            }
-
-            const subComponent: Component =
-              this.$parent.$subComponent[subComponentId]
-
-            if (subComponent) {
-              if (
-                subComponent.$rootParent &&
-                subComponent.$rootParent.$mountParentRoot.includes(subComponent)
-              ) {
-                subComponent.$rootParent.removeParentRoot(subComponent)
-              } else if (
-                subComponent.$parent &&
-                subComponent.$parent.$mountRoot.includes(subComponent)
-              ) {
-                subComponent.$parent.removeRoot(subComponent)
-              }
-
-              if (!this.hasParentRoot(subComponent)) {
-                this.registerParentRoot(subComponent, slotName)
-              }
+            if (this.hasRoot(subComponent)) {
+              this.unregisterRoot(subComponent)
             }
           }
         }
-      ),
-      $emitter.$addListener(
-        { event: 'unregister_parent_root' },
-        ([{ component }, path = []]) => {
-          if (!this.$controlled && !this.$parent?.$controlled) {
-            if (path.length > 0) {
-              return
-            }
-
-            const { globalId } = component
-
-            const components = this.$system.getLocalComponents(globalId)
-
-            for (const component of components) {
-              if (this.hasParentRoot(component)) {
-                this.unregisterParentRoot(component)
-
-                break
-              }
-            }
-          }
-        }
-      ),
-      $emitter.$addListener(
-        { event: 'reorder_sub_component' },
-        ([{ parentId, childId, to }, path = []]) => {
+      },
+      register_parent_root: ([
+        { component, subComponentId, slotName },
+        path = [],
+      ]) => {
+        if (!this.$controlled && !this.$parent?.$controlled) {
           if (path.length > 0) {
             return
           }
 
-          if (!this.$controlled) {
-            this.reorderSubComponent(parentId, childId, to)
+          console.log('register_parent_root')
+
+          const { globalId } = component
+
+          const components = this.$system.getLocalComponents(globalId)
+
+          if (!components.length) {
+            return
           }
-        }
-      ),
-      $emitter.$addListener(
-        { event: 'move_sub_component_root' },
-        ([
-          { parentId, prevParentMap, children, index, slotMap, prevSlotMap },
-          path = [],
-        ]) => {
-          if (!this.$controlled) {
-            if (path.length > 0) {
-              return
+
+          const subComponent: Component =
+            this.$parent.$subComponent[subComponentId]
+
+          if (subComponent) {
+            if (
+              subComponent.$rootParent &&
+              subComponent.$rootParent.$mountParentRoot.includes(subComponent)
+            ) {
+              subComponent.$rootParent.removeParentRoot(subComponent)
+            } else if (
+              subComponent.$parent &&
+              subComponent.$parent.$mountRoot.includes(subComponent)
+            ) {
+              subComponent.$parent.removeRoot(subComponent)
             }
 
-            for (const childId of children) {
-              const child = this.getSubComponent(childId)
-              const currentParentId = this.getSubComponentParentId(childId)
-
-              if (currentParentId) {
-                const parent = this.getSubComponent(currentParentId)
-
-                parent.unregisterParentRoot(child)
-              } else {
-                if (this.hasRoot(child)) {
-                  this.unregisterRoot(child)
-                }
-              }
-
-              if (parentId) {
-                const parent = this.getSubComponent(parentId)
-
-                const slotName = 'default'
-
-                parent.registerParentRoot(child, slotName, index)
-              } else {
-                if (!this.hasRoot(child)) {
-                  this.registerRoot(child, index)
-                }
-              }
+            if (!this.hasParentRoot(subComponent)) {
+              this.registerParentRoot(subComponent, slotName)
             }
           }
         }
-      ),
-    ])
+      },
+      unregister_parent_root: ([{ component }, path = []]) => {
+        if (!this.$controlled && !this.$parent?.$controlled) {
+          if (path.length > 0) {
+            return
+          }
+
+          console.log('unregister_parent_root')
+
+          const { globalId } = component
+
+          const components = this.$system.getLocalComponents(globalId)
+
+          for (const component of components) {
+            if (this.hasParentRoot(component)) {
+              this.unregisterParentRoot(component)
+
+              break
+            }
+          }
+        }
+      },
+      reorder_sub_component: ([{ parentId, childId, to }, path = []]) => {
+        if (path.length > 0) {
+          return
+        }
+
+        if (!this.$controlled) {
+          this.reorderSubComponent(parentId, childId, to)
+        }
+      },
+      move_sub_component_root: ([
+        { parentId, prevParentMap, children, index, slotMap, prevSlotMap },
+        path = [],
+      ]) => {
+        if (!this.$controlled) {
+          if (path.length > 0) {
+            return
+          }
+
+          for (const childId of children) {
+            const child = this.getSubComponent(childId)
+            const currentParentId = this.getSubComponentParentId(childId)
+
+            if (currentParentId) {
+              const parent = this.getSubComponent(currentParentId)
+
+              parent.unregisterParentRoot(child)
+            } else {
+              if (this.hasRoot(child)) {
+                this.unregisterRoot(child)
+              }
+            }
+
+            if (parentId) {
+              const parent = this.getSubComponent(parentId)
+
+              const slotName = 'default'
+
+              parent.registerParentRoot(child, slotName, index)
+            } else {
+              if (!this.hasRoot(child)) {
+                this.registerRoot(child, index)
+              }
+            }
+          }
+        }
+      },
+    }
+
+    return callAll(
+      entries(handlers).map(([event, handler]) =>
+        $emitter.$addListener({ event }, handler)
+      )
+    )
   }
 
   public reorderSubComponent(parentId: string, childId: string, to: number) {
