@@ -219,24 +219,20 @@ export interface G<
     data: any
   ): void
   setPinMetadata(type: IO, pinId: string, path: string[], data: any): void
+  
+  moveSubgraphInto(...args: G_MoveSubgraphIntoArgs): void
+  moveSubgraphOutOf(...args: G_MoveSubgraphIntoArgs): void
+
   moveSubComponentRoot(
     subComponentId: string | null,
     children: string[],
     slotMap: Dict<string>,
     index: number
   ): void
-  moveSubgraphInto(...args: G_MoveSubgraphIntoArgs): void
-  moveSubgraphOutOf(...args: G_MoveSubgraphIntoArgs): void
   reorderSubComponent(
     parentId: string | null,
     childId: string,
     to: number
-  ): void
-  moveRoot(
-    parentId: string | null,
-    childId: string,
-    to: number,
-    slotName: string
   ): void
 
   setPlugData(type: IO, pinId: string, subPinId: string, data: any): void
