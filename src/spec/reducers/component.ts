@@ -209,6 +209,8 @@ export const moveSubComponentRoot = (
   { parentId, children, slotMap = {}, index }: GraphMoveSubComponentRootData,
   state: GraphComponentSpec
 ) => {
+  let i = 0
+
   for (const childId of children) {
     const slotName = slotMap[childId]
 
@@ -220,11 +222,15 @@ export const moveSubComponentRoot = (
       removeRoot({ childId }, state)
     }
 
+    const at = index + i
+
     if (parentId) {
-      insertSubComponentChild({ parentId, childId, slotName, at: index }, state)
+      insertSubComponentChild({ parentId, childId, slotName, at }, state)
     } else {
-      insertRoot({ childId, at: index }, state)
+      insertRoot({ childId, at }, state)
     }
+
+    i++
   }
 }
 
