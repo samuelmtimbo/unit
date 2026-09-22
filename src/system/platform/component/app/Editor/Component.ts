@@ -21086,7 +21086,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ['sy', ANIMATION_DELTA_THRESHOLD / 100],
         ['opacity', ANIMATION_DELTA_THRESHOLD / 100],
         ['fontSize', ANIMATION_DELTA_THRESHOLD / 10],
-        ['color', ANIMATION_DELTA_THRESHOLD / 100],
+        ['color', ANIMATION_DELTA_THRESHOLD],
         ['background', ANIMATION_DELTA_THRESHOLD / 100],
       ],
       tick,
@@ -35070,7 +35070,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         ['opacity', ANIMATION_DELTA_THRESHOLD / 100],
         ['sx', ANIMATION_DELTA_THRESHOLD / 10],
         ['sy', ANIMATION_DELTA_THRESHOLD / 10],
-        ['color', ANIMATION_DELTA_THRESHOLD / 100],
+        ['color', ANIMATION_DELTA_THRESHOLD],
         ['background', ANIMATION_DELTA_THRESHOLD / 100],
       ],
       (n) => {
