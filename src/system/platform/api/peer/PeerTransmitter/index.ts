@@ -124,22 +124,21 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
     // if (name === 'stream') {
     const _stream = await unit.mediaStream()
 
-    void (async () => {
-      if (_stream === null) {
-        if (this._stream) {
-          await this._remove_stream(this._stream)
-        }
-        this._stream = null
-      } else {
-        if (this._stream) {
-          await this._remove_stream(this._stream)
-        }
-
-        void this._add_stream(_stream)
-
-        this._stream = _stream
+    if (_stream === null) {
+      if (this._stream) {
+        await this._remove_stream(this._stream)
       }
-    })
+      this._stream = null
+    } else {
+      if (this._stream) {
+        await this._remove_stream(this._stream)
+      }
+
+      void this._add_stream(_stream)
+
+      this._stream = _stream
+    }
+
     // }
   }
 
