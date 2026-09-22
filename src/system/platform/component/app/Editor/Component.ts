@@ -34419,14 +34419,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     for (const sub_component_id of sub_component_ids) {
+      this._decouple_sub_component(sub_component_id)
+    }
+
+    for (const sub_component_id of sub_component_ids) {
       if (!this._is_sub_component_animating(sub_component_id)) {
         this._remove_sub_component_root_base(sub_component_id)
         this._remove_sub_component_all_root(sub_component_id)
       }
-    }
-
-    for (const sub_component_id of sub_component_ids) {
-      this._decouple_sub_component(sub_component_id)
     }
 
     if (!this._animating_enter_fullwindow) {
