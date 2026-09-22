@@ -6919,7 +6919,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const drop_handler = (_data: GraphUnitPinMoment['data']) => {
       const { type, unitId, pinId } = _data
 
-      deepDestroy(pin, [type, unitId, pinId])
+      deepSet_(pin, [type, unitId, pinId], undefined)
     }
 
     const handler: Dict<Dict<Function>> = {
