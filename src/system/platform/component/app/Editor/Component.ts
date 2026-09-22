@@ -15161,15 +15161,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _show_pin_info = (pin_node_id: string): void => {
     this.__show_pin_info(pin_node_id)
 
-    const { unitId } = segmentLinkPinNodeId(pin_node_id)
+    if (this._is_link_pin_node_id(pin_node_id)) {
+      const { unitId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._set_node_opacity(unitId, 1)
+      this._set_node_opacity(unitId, 1)
 
-    this._for_each_unit_pin(unitId, (pin_node_id: string) => {
-      if (!this._spec_is_link_pin_ignored(pin_node_id)) {
-        this._show_pin_info_opacity(pin_node_id)
-      }
-    })
+      this._for_each_unit_pin(unitId, (pin_node_id: string) => {
+        if (!this._spec_is_link_pin_ignored(pin_node_id)) {
+          this._show_pin_info_opacity(pin_node_id)
+        }
+      })
+    }
   }
 
   private _show_unit_info = (unit_id: string): void => {
@@ -15471,15 +15473,17 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._sim_hide_node_type(anchor_node_id)
     }
 
-    const { unitId } = segmentLinkPinNodeId(pin_node_id)
+    if (this._is_link_pin_node_id(pin_node_id)) {
+      const { unitId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._for_each_unit_pin(unitId, (pin_node_id: string) => {
-      if (!this._spec_is_link_pin_ignored(pin_node_id)) {
-        const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
+      this._for_each_unit_pin(unitId, (pin_node_id: string) => {
+        if (!this._spec_is_link_pin_ignored(pin_node_id)) {
+          const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
 
-        this._sim_hide_node_type(anchor_node_id)
-      }
-    })
+          this._sim_hide_node_type(anchor_node_id)
+        }
+      })
+    }
 
     this._refresh_pin_datum_visible(anchor_node_id)
   }
