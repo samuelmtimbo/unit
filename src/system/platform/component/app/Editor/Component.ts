@@ -22443,8 +22443,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               const height = leaf_trait.height / Math.abs(leaf_trait.sy)
 
               const leaf_trait_ = {
-                x: (-$x + leaf_trait.x) / leaf_trait.sx,
-                y: (-$y + leaf_trait.y) / leaf_trait.sy,
+                x: (-$x + leaf_trait.x) / Math.abs(leaf_trait.sx),
+                y: (-$y + leaf_trait.y) / Math.abs(leaf_trait.sy),
                 width,
                 height,
                 sx: leaf_trait.sx,
