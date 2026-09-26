@@ -83,5 +83,17 @@ export function _extractFromRawStyle(
     treatProp('height')
   }
 
+  if (element instanceof HTMLVideoElement) {
+    if (!style['aspectRatio']) {
+      style.aspectRatio = `${element.videoWidth} / ${element.videoHeight}`
+    }
+  }
+
+  if (element instanceof HTMLImageElement) {
+    if (!style['aspectRatio']) {
+      style.aspectRatio = `${element.naturalWidth} / ${element.naturalHeight}`
+    }
+  }
+
   return style
 }
