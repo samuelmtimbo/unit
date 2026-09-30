@@ -21,7 +21,14 @@
       "optional": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "string"
+    },
+    "checked": {
+      "type": "boolean"
+    }
+  },
   "metadata": {
     "icon": "form-input",
     "description": "form input of type radio",
