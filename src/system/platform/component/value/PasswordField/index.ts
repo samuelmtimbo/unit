@@ -11,7 +11,7 @@ export interface O {
   value: string
 }
 
-export default class PasswordField extends Field<'value', I, O> {
+export default class PasswordField extends Field<['value'], I, O> {
   constructor(system: System) {
     super(
       {
@@ -21,7 +21,7 @@ export default class PasswordField extends Field<'value', I, O> {
       {},
       system,
       ID_PASSWORD_FIELD,
-      'value'
+      ['value']
     )
 
     this._defaultState = {

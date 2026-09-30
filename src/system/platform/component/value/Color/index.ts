@@ -10,7 +10,7 @@ export interface O {
   value: string
 }
 
-export default class Color extends Field<'value', I, O> {
+export default class Color extends Field<['value'], I, O> {
   constructor(system: System) {
     super(
       {
@@ -20,7 +20,7 @@ export default class Color extends Field<'value', I, O> {
       {},
       system,
       ID_COLOR,
-      'value'
+      ['value']
     )
 
     this._defaultState = {

@@ -14,7 +14,7 @@ export interface O {
   d: string
 }
 
-export default class SVGPath extends Field<'d', I, O> {
+export default class SVGPath extends Field<['d'], I, O> {
   constructor(system: System) {
     super(
       {
@@ -24,7 +24,7 @@ export default class SVGPath extends Field<'d', I, O> {
       {},
       system,
       ID_SVG_PATH,
-      'd'
+      ['d']
     )
 
     this._defaultState = {

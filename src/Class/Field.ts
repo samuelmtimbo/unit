@@ -9,21 +9,21 @@ export type FieldEvents<_EE extends Dict<any[]>> = ElementEE<_EE & Field_EE> &
   Field_EE
 
 export class Field<
-  K extends string,
-  I extends Record<K, any>,
-  O extends Record<K, any>,
+  K extends string[],
+  I extends Record<string, any>,
+  O extends Record<string, any>,
   _J extends Dict<any> = {},
   _EE extends FieldEvents<_EE> = FieldEvents<Field_EE>,
 > extends Element_<I, O, _EE> {
   private _ever_played: boolean = false
-  private _key: K
+  private _keys: K
 
   constructor(
     { i = [], o = [] }: ION<I, O>,
     opt: Opt,
     system: System,
     id: string,
-    key: K
+    keys: K
   ) {
     super(
       {
@@ -35,7 +35,7 @@ export class Field<
       id
     )
 
-    this._key = key
+    this._keys = keys
 
     this.addListener('reset', () => {
       this._ever_played = false
@@ -45,16 +45,18 @@ export class Field<
       if (!this._ever_played) {
         this._ever_played = true
 
-        const value = this.initialValue()
+        for (const key of this._keys) {
+          const value = this.initialValue(key)
 
-        if (value !== undefined) {
-          this._output[this._key].push(value)
+          if (value !== undefined) {
+            this._output[key].push(value)
+          }
         }
       }
     })
   }
 
-  initialValue() {
-    return this._input?.[this._key]?.peak() ?? this._defaultState[this._key]
+  initialValue(key: string) {
+    return this._input?.[key]?.peak() ?? this._defaultState[key]
   }
 }

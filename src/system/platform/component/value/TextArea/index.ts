@@ -13,7 +13,7 @@ export interface O {
   value: string
 }
 
-export default class TextArea extends Field<'value', I, O> {
+export default class TextArea extends Field<['value'], I, O> {
   constructor(system: System) {
     super(
       {
@@ -23,7 +23,7 @@ export default class TextArea extends Field<'value', I, O> {
       {},
       system,
       ID_TEXT_AREA,
-      'value'
+      ['value']
     )
 
     this._defaultState = {
