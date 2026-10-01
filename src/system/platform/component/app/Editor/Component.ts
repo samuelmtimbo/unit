@@ -37912,6 +37912,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._select_many(anchor_node_ids)
   }
 
+  private _select_selection_if_visible = (selection: GraphSelection): void => {
+    const anchor_node_ids = this._selection_to_anchor_node_ids(selection)
+
+    const visible_node_ids = anchor_node_ids.filter((node_id) =>
+      this._has_node(node_id)
+    )
+
+    this._select_many(visible_node_ids)
+  }
+
   private _make_gut_unit_map = (unit_id: string) => {
     const { specs, newSpec } = this.$props
 
@@ -38264,7 +38274,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       map.mapping
     )
 
-    this._select_selection(new_selection)
+    this._select_selection_if_visible(new_selection)
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
 
