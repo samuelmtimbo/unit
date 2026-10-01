@@ -51057,6 +51057,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._start_graph_simulation(LAYER_NONE)
 
+    this._start_debugger()
+
     this.dispatchEvent('collapse_end', undefined, false)
   }
 
@@ -60489,6 +60491,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '_on_graph_moment', moment)
 
     this._debug_buffer.push(moment)
+
+    if (this._collapsing) {
+      return
+    }
 
     if (this._debug_interval) {
       if (this._debug_buffer.length > MAX_DEBUG_BUFFER_SIZE) {
