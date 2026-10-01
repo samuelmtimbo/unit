@@ -66,6 +66,7 @@ import {
   isUnitPinRef,
   opposite,
 } from '../../spec/util/spec'
+import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import { keys } from '../../system/f/object/Keys/f'
 import {
@@ -2388,6 +2389,23 @@ export function buildMoveMap(
                   const addUnitTask = targetAddUnitTasks[subPinSpec.unitId]
 
                   addDependency(addPinToMergeAction, addUnitTask)
+
+                  const removePinFromMergeTasks =
+                    targetRemovePinFromMergeTasks[insideMergeId]
+
+                  if (removePinFromMergeTasks) {
+                    forEachValueKey(
+                      removePinFromMergeTasks,
+                      ({ input, output }) => {
+                        forEachValueKey(input || {}, (task) => {
+                          addDependency(addPinToMergeAction, task)
+                        })
+                        forEachValueKey(output || {}, (task) => {
+                          addDependency(addPinToMergeAction, task)
+                        })
+                      }
+                    )
+                  }
                 } else {
                   if (
                     !subPinSpec.mergeId ||
