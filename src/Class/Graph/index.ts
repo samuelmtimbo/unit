@@ -745,25 +745,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     let source: Pin
     let target: Pin
 
-    if (type !== kind) {
+    if (type === kind) {
+      if (type === 'input') {
+        source = pin
+        target = subPin
+      } else {
+        source = subPin
+        target = pin
+      }
+    } else {
       if (type === 'input') {
         source = subPin
         target = pin
       } else {
         source = pin
         target = subPin
-      }
-
-      if (source.active()) {
-        const data = source.peak()
-
-        if (hold) {
-          continuations.push(() => {
-            propagate && target.push(data, type === 'input')
-          })
-        } else {
-          propagate && target.push(data, type === 'input')
-        }
       }
 
       if (type === 'input') {
@@ -778,6 +774,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         ])
 
         deepSet(this._plugUnlisten, [type, pinId, subPinId], unlisten)
+      }
+    }
+
+    if (source.active()) {
+      const data = source.peak()
+
+      if (hold) {
+        continuations.push(() => {
+          propagate && target.push(data, type === 'input')
+        })
+      } else {
+        propagate && target.push(data, type === 'input')
       }
     }
 
@@ -874,22 +882,23 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     propagate: boolean = true,
     hold: boolean = false
   ): Continue {
+    const pin = this.getPin(type, pinId)
     const subPin = this.getUnitPin(unitId, kind, pinId_)
 
     const continuations: Continue[] = []
 
-    if (type !== kind) {
-      if (this.isUnitPinRef(unitId, kind, pinId)) {
-        propagate = true
+    let source: Pin
+    let target: Pin
+
+    if (type == kind) {
+      if (type === 'input') {
+        source = pin
+        target = subPin
+      } else {
+        source = subPin
+        target = pin
       }
-    }
-
-    if (type !== kind) {
-      const pin = this.getPin(type, pinId)
-
-      let source: Pin
-      let target: Pin
-
+    } else {
       if (type === 'input') {
         source = subPin
         target = pin
@@ -898,16 +907,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         target = subPin
       }
 
-      if (source.active()) {
-        const data = source.peak()
-
-        if (hold) {
-          continuations.push(() => {
-            propagate && target.push(data)
-          })
-        } else {
-          propagate && target.push(data)
-        }
+      if (this.isUnitPinRef(unitId, kind, pinId)) {
+        propagate = true
       }
 
       if (type === 'input') {
@@ -922,6 +923,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         ])
 
         deepSet(this._plugUnlisten, [type, pinId, subPinId], unlisten)
+      }
+    }
+
+    if (source.active()) {
+      const data = source.peak()
+
+      if (hold) {
+        continuations.push(() => {
+          propagate && target.push(data)
+        })
+      } else {
+        propagate && target.push(data)
       }
     }
 
@@ -2193,7 +2206,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         mergeId,
         data,
         opt,
-        propagate
+        propagate || ref
       )
     } else if (unitId && _pinId) {
       this._plugPinToUnitPin(
@@ -2204,7 +2217,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         kind,
         _pinId,
         opt,
-        propagate
+        propagate || ref
       )
     } else {
       //
