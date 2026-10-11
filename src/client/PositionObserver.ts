@@ -385,29 +385,6 @@ export class PositionObserver_ implements PositionObserver {
 
         const unlitenScroll = callAll(scrollParentUnlisten)
 
-        const parentConfig = {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ['style'],
-        }
-
-        function parentMutationCallback() {
-          if (element.offsetParent !== offsetParent) {
-            unlisten_parent()
-
-            unlisten_parent = update_parent()
-          }
-
-          update_local()
-        }
-
-        const parentMutationObserver = new MutationObserver(
-          parentMutationCallback
-        )
-
-        parentMutationObserver.observe(targetParent, parentConfig)
-
         function parentPositionCallback(
           x: number,
           y: number,
@@ -470,7 +447,6 @@ export class PositionObserver_ implements PositionObserver {
           unlitenScroll()
 
           parentResizeObserver.disconnect()
-          parentMutationObserver.disconnect()
           parentPositionObserver.disconnect()
         }
       } else {
