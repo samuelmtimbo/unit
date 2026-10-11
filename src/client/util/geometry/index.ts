@@ -694,36 +694,6 @@ export function _surfaceDistance(
   }
 }
 
-export function surfaceDistanceY(
-  a: Thing,
-  b: Thing
-): { l: number; d: number; u: number } {
-  const a_y = a.y
-  const b_y = b.y
-
-  const d = Math.abs(a_y - b_y)
-  const u = Math.sign(a_y - b_y)
-
-  const a_d: number = a.height / 2
-  const b_d: number = b.height / 2
-
-  let l: number
-  const ds = b_d + a_d
-  const dd = Math.abs(a_d - b_d)
-  if (d <= ds && d >= dd - 1) {
-    l = 0
-  } else if (d < dd) {
-    l = d - dd
-  }
-  l = d - ds
-
-  return {
-    d,
-    l,
-    u,
-  }
-}
-
 export type Thing = {
   shape: Shape
   x: number
@@ -735,6 +705,7 @@ export type Thing = {
 
 export function centerToSurfaceDistance(node: Thing, u: Position): number {
   const { shape, x, y, r, width, height } = node
+
   return _centerToSurfaceDistance(shape, x, y, r, width, height, u)
 }
 
