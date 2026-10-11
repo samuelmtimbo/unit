@@ -25,6 +25,9 @@ export function reactToFrameSize(
   const vw = value.endsWith('vw')
 
   if (vw || vh) {
+    component.addMountListener()
+    component.addUnmountListener()
+
     const percent = parseFloat(value.replace('vh', '').replace('vw', '')) / 100
 
     const resize = ({ width, height }) => {
@@ -70,7 +73,12 @@ export function reactToFrameSize(
       makeCustomListener('unmount', removeContextListener),
     ])
 
-    return callAll([removeContextListener, unlistenComponent])
+    const unlistenMount = () => {
+      component.removeMountListener()
+      component.removeUnmountListener()
+    }
+
+    return callAll([removeContextListener, unlistenComponent, unlistenMount])
   }
 
   return NOOP

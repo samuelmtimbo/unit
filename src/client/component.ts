@@ -213,6 +213,12 @@ export class Component<
   private _stopImmediatePropagationSet: Set<string>
   private _preventDefaultCounter: Dict<number> = {}
 
+  private _namedListenerCount: Dict<number> = {}
+  private _namedUnlisten: Dict<Unlisten> = {}
+
+  private _mountListenerCount: number = 0
+  private _unmountListenerCount: number = 0
+
   constructor($props: P, $system: System, $element?: E, $node?: E) {
     this.$props = $props
     this.$system = $system
@@ -1211,6 +1217,22 @@ export class Component<
     return current
   }
 
+  addMountListener() {
+    this._mountListenerCount++
+  }
+
+  addUnmountListener() {
+    this._unmountListenerCount++
+  }
+
+  removeMountListener() {
+    this._mountListenerCount--
+  }
+
+  removeUnmountListener() {
+    this._unmountListenerCount--
+  }
+
   mount(context: Context, commit: boolean = true): void {
     if (this.$detached) {
       return
@@ -1231,7 +1253,7 @@ export class Component<
       this.commit()
     }
 
-    if (this.isBase()) {
+    if (this._mountListenerCount > 0) {
       this.dispatchEvent('mount', {}, false)
     }
   }
@@ -1261,7 +1283,7 @@ export class Component<
 
     this.onUnmount(_$context)
 
-    if (this.isBase()) {
+    if (this._unmountListenerCount > 0) {
       this.dispatchEvent('unmount', {}, false)
     }
   }
@@ -2123,12 +2145,6 @@ export class Component<
     this.appendChild(child, slotName)
   }
 
-  public $listener: Listener[] = []
-  public $unlisten: Unlisten[] = []
-
-  public $named_listener_count: Dict<number> = {}
-  public $named_unlisten: Dict<Unlisten> = {}
-
   private _unit_unlisten: Unlisten
 
   private _addUnitEventListener = (event: UIEventName): void => {
@@ -2141,7 +2157,7 @@ export class Component<
         })
       )
 
-      this.$named_unlisten[event] = unlisten
+      this._namedUnlisten[event] = unlisten
     } else {
       const unlisten = this.addEventListener(
         makeUIEventListener(event, (data) => {
@@ -2149,14 +2165,14 @@ export class Component<
         })
       )
 
-      this.$named_unlisten[event] = unlisten
+      this._namedUnlisten[event] = unlisten
     }
   }
 
   private _removeUnitEventListener = (event: string): void => {
-    const unlisten = this.$named_unlisten[event]
+    const unlisten = this._namedUnlisten[event]
 
-    delete this.$named_unlisten[event]
+    delete this._namedUnlisten[event]
 
     unlisten()
   }
@@ -2197,18 +2213,18 @@ export class Component<
     this.$unit = proxyWrap($unit, UCGEE)
 
     const listen = (event: UIEventName): void => {
-      this.$named_listener_count[event] = this.$named_listener_count[event] || 0
-      this.$named_listener_count[event]++
+      this._namedListenerCount[event] = this._namedListenerCount[event] || 0
+      this._namedListenerCount[event]++
 
-      if (!this.$named_unlisten[event]) {
+      if (!this._namedUnlisten[event]) {
         this._addUnitEventListener(event)
       }
     }
 
     const unlisten = (event: string): void => {
-      this.$named_listener_count[event]--
+      this._namedListenerCount[event]--
 
-      if (this.$named_listener_count[event] === 0) {
+      if (this._namedListenerCount[event] === 0) {
         this._removeUnitEventListener(event)
       }
     }
@@ -2284,7 +2300,7 @@ export class Component<
       handler[type](moment)
     }
 
-    this.$named_listener_count = {}
+    this._namedListenerCount = {}
 
     $unit.$getGlobalId({}, (remoteId: string) => {
       this.register(remoteId)
