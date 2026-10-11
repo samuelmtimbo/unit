@@ -55,7 +55,6 @@
     "@_unit/unit": "file:.",
     "commander": "12.1.0",
     "cors": "2.8.5",
-    "cross-env": "7.0.3",
     "eventsource": "4.1.0",
     "express": "4.22.3",
     "fuzzy": "0.1.3",
