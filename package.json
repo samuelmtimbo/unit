@@ -24,7 +24,7 @@
   "scripts": {
     "v": "ts-node -T src/script/v.ts",
     "dev:node": "cross-env NODE_ENV=development node",
-    "watch:server": "cross-env NODE_ENV=development nodemon --config nodemon.json",
+    "watch:server": "cross-env NODE_ENV=development tsx watch src/server/index.ts",
     "watch:bundle": "ts-node -T src/script/watch/client.ts",
     "watch:client": "run-p watch:bundle watch:worker",
     "watch:worker": "run-s watch:worker:system",
@@ -64,6 +64,7 @@
     "glob": "13.0.6",
     "http-errors": "1.8.0",
     "jsdom": "24.0.0",
+    "tsx": "4.23.15",
     "ws": "8.21.0"
   },
   "devDependencies": {
@@ -85,7 +86,6 @@
     "fs-extra": "10.1.0",
     "globals": "17.3.0",
     "kill-port": "2.0.1",
-    "nodemon": "3.1.14",
     "npm-run-all": "1.1.3",
     "npm-run-scripts": "2.1.3",
     "prettier": "3.2.5",
