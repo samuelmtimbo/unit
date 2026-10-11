@@ -15,6 +15,7 @@ import {
   rotateVector,
   subtractVector,
 } from './util/geometry'
+import { Size } from './util/geometry/types'
 
 export class PositionObserver_ implements PositionObserver {
   private _system: System
@@ -28,7 +29,7 @@ export class PositionObserver_ implements PositionObserver {
     this._callback = callback
   }
 
-  public observe(element: HTMLElement): IPositionObserverEntry {
+  public observe(element: HTMLElement): IPositionObserverEntry & Size {
     // console.log('PositionObserver', 'observe')
 
     const {
@@ -490,7 +491,7 @@ export class PositionObserver_ implements PositionObserver {
     __update_local()
     _update()
 
-    return { x, y, sx, sy, rx, ry, rz, bx, by, gbx, gby }
+    return { x, y, sx, sy, rx, ry, rz, bx, by, gbx, gby, width, height }
   }
 
   disconnect() {

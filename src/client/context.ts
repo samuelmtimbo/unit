@@ -1,11 +1,15 @@
 import { System } from '../system'
-import { PositionObserver } from '../types/global/PositionObserver'
+import {
+  IPositionObserverEntry,
+  PositionObserver,
+} from '../types/global/PositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { remove } from '../util/array'
 import { Component } from './component'
 import { IOElement } from './IOElement'
 import { Listenable } from './Listenable'
 import { Theme } from './theme'
+import { Size } from './util/geometry/types'
 
 export interface Context extends Listenable {
   $system: System
@@ -64,13 +68,12 @@ export function mount($context: Context): Unlisten {
 
   const { $element, $positionObserver, $resizeObserver } = $context
 
-  const { width, height } = $element.getBoundingClientRect()
+  const { x, y, sx, sy, width, height } = $positionObserver.observe(
+    $element
+  ) as IPositionObserverEntry & Size
 
   $context.$width = width
   $context.$height = height
-
-  const { x, y, sx, sy } = $positionObserver.observe($element)
-
   $context.$x = x
   $context.$y = y
   $context.$sx = sx
