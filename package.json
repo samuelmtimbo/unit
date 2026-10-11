@@ -23,8 +23,8 @@
   },
   "scripts": {
     "v": "ts-node -T src/script/v.ts",
-    "dev:node": "cross-env NODE_ENV=development node",
-    "watch:server": "cross-env NODE_ENV=development tsx watch src/server/index.ts",
+    "dev:node": "NODE_ENV=development node",
+    "watch:server": "NODE_ENV=development tsx watch src/server/index.ts",
     "watch:bundle": "ts-node -T src/script/watch/client.ts",
     "watch:client": "run-p watch:bundle watch:worker",
     "watch:worker": "run-s watch:worker:system",
