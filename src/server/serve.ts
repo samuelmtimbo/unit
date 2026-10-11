@@ -5,7 +5,6 @@ import { PATH_PUBLIC } from '../path'
 import { LOCAL_IP_ADDRESS } from './ip'
 import { files } from './middleware'
 import { PORT } from './port'
-import compression = require('compression')
 
 /* eslint-disable no-console */
 
@@ -35,7 +34,6 @@ export function serve(opt: ServerOpt = { port: PORT }) {
   app.set('port', port)
   app.use(cors(corsOptions))
   // @ts-ignore
-  app.use(compression())
   app.use(express.static(PATH_PUBLIC))
   app.use(files())
   app.use('*', express.static(PATH_PUBLIC))
