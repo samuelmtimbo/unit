@@ -315,10 +315,30 @@ export function unitVector(
 ): Point {
   const dx = x1 - x0
   const dy = y1 - y0
+
   const d = norm(dx, dy)
+
   if (d === 0) {
     return randomUnitVector()
   }
+
+  return { x: dx / d, y: dy / d }
+}
+
+export function unitVector_(
+  d: number,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number
+): Point {
+  const dx = x1 - x0
+  const dy = y1 - y0
+
+  if (d === 0) {
+    return randomUnitVector()
+  }
+
   return { x: dx / d, y: dy / d }
 }
 
@@ -634,36 +654,43 @@ export function _surfaceDistance(
   b_width: number,
   b_height: number
 ): { l: number; d: number; u: Point } {
-  const d = distance(a_x, a_y, b_x, b_y)
-  const u = unitVector(a_x, a_y, b_x, b_y)
+  const dx = b_x - a_x
+  const dy = b_y - a_y
 
-  const a_d: number = _centerToSurfaceDistance(
-    a_shape,
-    a_x,
-    a_y,
-    a_r,
-    a_width,
-    a_height,
-    u
-  )
-  const b_d: number = _centerToSurfaceDistance(
-    b_shape,
-    b_x,
-    b_y,
-    b_r,
-    b_width,
-    b_height,
-    u
-  )
+  const d = Math.sqrt(dx * dx + dy * dy)
 
-  const d_sum = b_d + a_d
+  let ux: number
+  let uy: number
 
-  const l = d - d_sum
+  if (d === 0) {
+    const u = randomUnitVector()
+
+    ux = u.x
+    uy = u.y
+  } else {
+    ux = dx / d
+    uy = dy / d
+  }
+
+  let ad: number
+  let bd: number
+
+  if (a_shape === 'circle') {
+    ad = a_r
+  } else {
+    ad = Math.min(a_width / 2 / Math.abs(ux), a_height / 2 / Math.abs(uy))
+  }
+
+  if (b_shape === 'circle') {
+    bd = b_r
+  } else {
+    bd = Math.min(b_width / 2 / Math.abs(ux), b_height / 2 / Math.abs(uy))
+  }
 
   return {
     d,
-    l,
-    u,
+    l: d - ad - bd,
+    u: { x: ux, y: uy },
   }
 }
 
@@ -722,15 +749,12 @@ export function _centerToSurfaceDistance(
 ): number {
   if (shape === 'circle') {
     return r
-  } else {
-    const tan = u.x / u.y
-    const region = rectangleRegion(x, y, width, height, u)
-    if (region === 'left' || region === 'right') {
-      return norm(width / 2, width / 2 / tan)
-    } else {
-      return norm((height / 2) * tan, height / 2)
-    }
   }
+
+  const tx = width / 2 / Math.abs(u.x)
+  const ty = height / 2 / Math.abs(u.y)
+
+  return Math.min(tx, ty)
 }
 
 export function rectCenter(rect: Rect): Point {
