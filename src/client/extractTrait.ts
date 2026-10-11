@@ -53,7 +53,7 @@ export const extractTrait = (
     if (component.$domParent && component.$domParent.$mounted) {
       parentTrait = extractTrait(system, component.$domParent, measureText)
 
-      color = component.getColor()
+      color = parentTrait.color
     } else if (component.$mounted) {
       const { $color } = component.$context
 
@@ -66,8 +66,6 @@ export const extractTrait = (
 
     x = position.x
     y = position.y
-
-    color = parentTrait.color
 
     return {
       x,
