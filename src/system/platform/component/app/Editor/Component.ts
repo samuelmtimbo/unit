@@ -32134,6 +32134,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const {
       api: {
+        document: { MutationObserver },
         text: { measureText },
       },
     } = this.$system
@@ -32208,6 +32209,35 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const base_length = base.length
 
+      let unlisten_base = []
+
+      let tree_changed = false
+
+      const on_leaf_mutation = () => {
+        tree_changed = true
+      }
+
+      const mutationConfig = {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style'],
+      }
+
+      for (const leaf of base) {
+        const [leaf_id, leaf_comp] = leaf
+
+        const mutationObserver = new MutationObserver(on_leaf_mutation)
+
+        mutationObserver.observe(leaf_comp.$element, mutationConfig)
+
+        unlisten_base.push(() => {
+          mutationObserver.disconnect()
+        })
+      }
+
+      const unlisten_mutation = callAll(unlisten_base)
+
       i = 0
 
       this._abort_sub_component_enter_base_animation[sub_component_id] =
@@ -32216,7 +32246,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           base,
           base_node,
           (leaf_id) => {
-            if (i === 0) {
+            if (i === 0 && tree_changed) {
               const trait = extractTrait(this.$system, frame, measureText)
 
               base_trait = this._reflect_sub_component_base_trait(
@@ -32225,6 +32255,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 trait,
                 false
               )
+
+              tree_changed = false
             }
 
             const trait = base_trait[leaf_id]
@@ -32249,6 +32281,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           },
           async () => {
             await wait_for
+
+            unlisten_mutation()
 
             this._cancel_sub_component_base_animation(sub_component_id, false)
             this._cancel_enter_sub_component_animation(sub_component_id)
