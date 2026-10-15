@@ -1614,6 +1614,10 @@ export class Component<
   }
 
   getFontSize(): number {
+    if (!this.$mounted) {
+      return DEFAULT_FONT_SIZE
+    }
+
     const { $width, $height } = this.$context
 
     if (this.$primitive) {
