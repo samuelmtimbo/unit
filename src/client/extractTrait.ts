@@ -44,7 +44,7 @@ export const extractTrait = (
     let sx: number = 1
     let sy: number = 1
     let opacity: number = 1
-    let color: RGBA
+    let color: RGBA = hexToRgba(system.color)
     let background: RGBA
     ;({ width, height } = getSize(system, $node))
 
