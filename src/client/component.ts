@@ -2427,8 +2427,6 @@ export class Component<
     const handlers = {
       set_sub_component: ([{ subComponentId, bundle }, path = []]) => {
         if (!this.$controlled) {
-          console.log('set_sub_component')
-
           const child = $childToComponent(this.$system, { bundle })
 
           const __ = getComponentInterface(child)
@@ -2447,8 +2445,6 @@ export class Component<
         if (!this.$controlled) {
           const subComponent: Component = this.$subComponent[subComponentId]
 
-          console.log('register_root')
-
           if (subComponent) {
             if (
               subComponent.$rootParent &&
@@ -2465,8 +2461,6 @@ export class Component<
       },
       unregister_root: ([{ subComponentId }, path = []]) => {
         if (!this.$controlled) {
-          console.log('unregister_root')
-
           const subComponent: Component = this.$subComponent[subComponentId]
 
           if (subComponent) {
@@ -2490,8 +2484,6 @@ export class Component<
           if (path.length > 0) {
             return
           }
-
-          console.log('register_parent_root')
 
           const { globalId } = component
 
@@ -2528,8 +2520,6 @@ export class Component<
           if (path.length > 0) {
             return
           }
-
-          console.log('unregister_parent_root')
 
           const { globalId } = component
 

@@ -15089,8 +15089,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _set_all_physical_nodes_links_opacity = (opacity: number): void => {
-    console.log('_set_all_physical_nodes_links_opacity', opacity)
-
     this._set_all_layer_nodes_links_opacity(opacity, LAYER_NORMAL)
     this._set_all_layer_nodes_links_opacity(opacity, LAYER_IGNORED)
     this._set_all_layer_nodes_links_opacity(opacity, LAYER_EXPOSED)
