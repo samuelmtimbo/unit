@@ -11333,8 +11333,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _refresh_type_graph_map = () => {
     this._graph_type_map = this._get_graph_type_map()
-
-    this._refresh_all_visible_linked_datum_color()
   }
 
   private _get_graph_type_map = () => {
