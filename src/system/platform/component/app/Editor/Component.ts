@@ -37954,15 +37954,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._select_many(visible_node_ids)
   }
 
-  private _make_gut_unit_map = (unit_id: string) => {
+  private _make_gut_unit_map = (
+    unit_id: string,
+    spec: GraphSpec,
+    new_spec: GraphSpec
+  ) => {
     const { specs, newSpec } = this.$props
 
-    const spec = this._get_unit_spec(unit_id) as GraphSpec
     const unit = this._get_unit(unit_id)
-
-    const new_spec = newSpec(clone(spec))
-
-    this._spec_set_unit_spec_id(unit_id, new_spec.id)
 
     const new_unit = { id: unit.id }
 
@@ -38044,8 +38043,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _explode_unit = (unit_id: string): { actions: Action[] } => {
     // console.log('Graph', 'explode_unit', unit_id)
 
-    const { actions, selection, map, unit, spec } =
-      this._make_gut_unit_map(unit_id)
+    const { newSpec } = this.$props
+
+    const spec = this._get_unit_spec(unit_id) as GraphSpec
+    const new_spec = newSpec(clone(spec))
+
+    const { specs } = this.$props
+
+    const old_spec_id = this._get_unit_spec_id(unit_id)
+
+    this._spec.units[unit_id].id = new_spec.id
+
+    this._register_unit(new_spec.id, specs, false)
+
+    const { actions, selection, map, unit } = this._make_gut_unit_map(
+      unit_id,
+      spec,
+      new_spec
+    )
 
     const actions_ = [
       ...actions,
@@ -38065,6 +38080,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._pod_explode_unit(actions_)
 
     this._state_explode_unit(unit_id, unit, selection, map, actions)
+
+    this._unregister_unit(old_spec_id)
 
     this._download_pod_data()
 

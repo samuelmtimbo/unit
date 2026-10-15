@@ -241,6 +241,7 @@ export interface G<
   bulkEdit(actions: Action[]): void
   setFork(fork: boolean): void
   fork(): void
+  act(action: Action, fork: boolean, bubble: boolean, propagate: boolean): void
 }
 
 export type G_J = {}

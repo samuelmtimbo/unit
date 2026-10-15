@@ -2,6 +2,7 @@ import { Graph } from '../Class/Graph'
 import Merge from '../Class/Merge'
 import { Unit, UnitEvents } from '../Class/Unit'
 import { Pin } from '../Pin'
+import { isBaseSpecId } from '../client/id'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
@@ -25,7 +26,57 @@ import { Unlisten } from '../types/Unlisten'
 import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
-import { isComponentSpec } from './util'
+import { clone } from '../util/clone'
+import { getSpec, isComponentSpec } from './util'
+
+const registerGraph = (
+  system: System,
+  specs: Specs,
+  spec: GraphSpec,
+  branch: Dict<true> = {}
+) => {
+  system.registerUnit(spec.id)
+
+  for (const unitId in spec.units) {
+    const unit = spec.units[unitId]
+
+    if (!isBaseSpecId(specs, unit.id)) {
+      const unitSpec = getSpec(specs, unit.id) as GraphSpec
+
+      if (branch[unitSpec.id]) {
+        continue
+      }
+
+      registerGraph(system, specs, unitSpec, { ...branch, [unitSpec.id]: true })
+    }
+  }
+}
+
+const unregisterGraph = (
+  system: System,
+  specs: Specs,
+  spec: GraphSpec,
+  branch: Dict<true> = {}
+) => {
+  system.unregisterUnit(spec.id)
+
+  for (const unitId in spec.units) {
+    const unit = spec.units[unitId]
+
+    if (!isBaseSpecId(specs, unit.id)) {
+      const unitSpec = getSpec(specs, unit.id) as GraphSpec
+
+      if (branch[unitSpec.id]) {
+        continue
+      }
+
+      unregisterGraph(system, specs, unitSpec, {
+        ...branch,
+        [unitSpec.id]: true,
+      })
+    }
+  }
+}
 
 export function lazyFromSpec(
   spec: GraphSpec,
@@ -38,6 +89,8 @@ export function lazyFromSpec(
     branch: Dict<true>
   ) => GraphBundle
 ): UnitClass {
+  spec = clone(spec)
+
   const { inputs = {}, outputs = {}, id } = spec
 
   class Lazy<
@@ -111,6 +164,32 @@ export function lazyFromSpec(
           this.__graph.reset()
         }
       })
+
+      this.addListener('destroy', () => {
+        if (this.__graph) {
+          this.__graph.destroy()
+        }
+
+        unregisterGraph(system, specs, spec, branch)
+      })
+
+      this.addListener('parent', (parent) => {
+        if (!parent) {
+          this._ensure()
+        }
+      })
+
+      registerGraph(system, specs, spec, branch)
+    }
+
+    act(
+      action: Action,
+      fork: boolean,
+      bubble: boolean,
+      propagate: boolean
+    ): void {
+      this._ensure()
+      this.__graph.act(action, fork, bubble, propagate)
     }
 
     setFork(fork: boolean): void {
@@ -430,7 +509,7 @@ export function lazyFromSpec(
 
       const Class = fromSpec(spec, specs, this.__system.classes, branch)
 
-      this.__graph = new Class(this.__system)
+      this.__graph = new Class(this.__system, this.id, undefined)
 
       this.__graph.addListener('err', (err) => {
         this.err(err)
