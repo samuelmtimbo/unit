@@ -11,7 +11,7 @@ function isFilename(name: string): boolean {
 
 export function files(): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
-    const segments = req.path.split('/')
+    const segments = req.path?.split('/') ?? []
 
     const name = last(segments) || last(segments, -1)
 
