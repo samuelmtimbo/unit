@@ -22192,10 +22192,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._commit_sub_component_base__template(
           sub_component_id,
           extra_base,
-          (parent, leaf_comp) => {
-            const slot_name =
-              this._spec_get_sub_component_slot_name(sub_component_id)
-
+          (parent, leaf_comp, slot_name) => {
             const i = parent.$parentRoot.indexOf(leaf_comp)
 
             parent.insertParentRootAt(leaf_comp, i, slot_name)
@@ -32791,10 +32788,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     return this.__commit_sub_component_base(
       sub_component_id,
-      (parent, leaf_comp) => {
-        const slot_name =
-          this._spec_get_sub_component_slot_name(sub_component_id)
-
+      (parent, leaf_comp, slot_name) => {
         const i = parent.$parentRoot.indexOf(leaf_comp)
 
         parent.insertParentRootAt(leaf_comp, i, slot_name)
@@ -32832,8 +32826,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private __commit_sub_component_base = (
     sub_component_id: string,
-    root: (parent: Component, leaf_comp: Component) => void,
-    parent: (leaf_parent: Component, leaf_comp: Component) => void
+    parentRoot: (
+      parent: Component,
+      child: Component,
+      slot_name: string
+    ) => void,
+    root: (parent: Component, child: Component) => void
   ): void => {
     // console.log('Graph', '__commit_sub_component_base', sub_component_id)
 
@@ -32842,15 +32840,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._commit_sub_component_base__template(
       sub_component_id,
       base,
-      root,
-      parent
+      parentRoot,
+      root
     )
   }
 
   private __commit_sub_component_root_base = (
     sub_component_id: string,
-    root: (parent: Component, leaf_comp: Component) => void,
-    parent: (leaf_parent: Component, leaf_comp: Component) => void
+    parentRoot: (
+      parent: Component,
+      child: Component,
+      slot_name: string
+    ) => void,
+    root: (leaf_parent: Component, child: Component) => void
   ): void => {
     // console.log('Graph', '__commit_sub_component_root_base', sub_component_id)
 
@@ -32859,8 +32861,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return this._commit_sub_component_base__template(
       sub_component_id,
       base,
-      root,
-      parent
+      parentRoot,
+      root
     )
   }
 
@@ -32893,8 +32895,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _commit_sub_component_base__template = (
     sub_component_id: string,
     base: LayoutBase,
-    root: (parent: Component, leaf_comp: Component) => void,
-    parent: (leaf_parent: Component, leaf_comp: Component) => void
+    parentRoot: (
+      parent: Component,
+      child: Component,
+      slot_name: string
+    ) => void,
+    root: (parent: Component, child: Component) => void
   ): void => {
     // console.log('Graph', '_commit_sub_component_base__template', sub_component_id)
 
@@ -32922,11 +32928,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             const parent = leaf_parent.getSubComponent(parent_id)
 
             if (!parent.$mountParentRoot.includes(leaf_comp_)) {
-              root(parent, leaf_comp_)
+              const slot_name = parent.getParentRootSlotId(leaf_comp_)
+
+              parentRoot(parent, leaf_comp_, slot_name)
             }
           } else {
             if (!leaf_parent.$mountRoot.includes(leaf_comp_)) {
-              parent(leaf_parent, leaf_comp_)
+              root(leaf_parent, leaf_comp_)
             }
           }
         }
