@@ -1,233 +1,5 @@
 {
   "name": "io",
-  "inputs": {
-    "disabled": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "disabled"
-        }
-      },
-      "metadata": {
-        "position": {
-          "0": {
-            "x": -435,
-            "y": -53,
-            "ext": {
-              "x": -57,
-              "y": -194
-            }
-          },
-          "1": {
-            "x": 250,
-            "y": -164
-          }
-        }
-      },
-      "defaultIgnored": true
-    },
-    "style": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "style"
-        },
-        "2": {
-          "unitId": "propifhaskey",
-          "pinId": "obj"
-        }
-      },
-      "metadata": {
-        "position": {
-          "0": {
-            "x": 248,
-            "y": 77,
-            "ext": {
-              "x": -70,
-              "y": -148
-            }
-          },
-          "1": {
-            "x": -419,
-            "y": -9
-          },
-          "2": {
-            "ext": {
-              "x": 35,
-              "y": 5
-            }
-          }
-        }
-      }
-    },
-    "graph": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "graph"
-        }
-      },
-      "type": "`G`",
-      "ref": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "x": -437,
-            "y": -89,
-            "ext": {
-              "x": -54,
-              "y": -228
-            }
-          }
-        }
-      }
-    },
-    "fullwindow": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "fullwindow"
-        }
-      },
-      "metadata": {
-        "position": {
-          "0": {
-            "x": -389,
-            "y": -134,
-            "ext": {
-              "x": -55,
-              "y": -262
-            }
-          }
-        }
-      },
-      "defaultIgnored": true
-    },
-    "frame": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "frame"
-        }
-      },
-      "ref": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "x": -419,
-            "y": -169,
-            "ext": {
-              "x": -58,
-              "y": -337
-            }
-          }
-        }
-      },
-      "defaultIgnored": true
-    },
-    "d": {
-      "plug": {
-        "0": {
-          "unitId": "default",
-          "pinId": "d",
-          "kind": "input"
-        }
-      },
-      "ref": false,
-      "defaultIgnored": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "ext": {
-              "x": 51,
-              "y": 379
-            }
-          }
-        }
-      }
-    },
-    "config": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "config",
-          "kind": "input"
-        }
-      },
-      "ref": false,
-      "defaultIgnored": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "ext": {
-              "x": -587,
-              "y": -266
-            }
-          }
-        }
-      }
-    },
-    "value": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "value"
-        }
-      },
-      "defaultIgnored": true
-    }
-  },
-  "outputs": {
-    "graph": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "graph"
-        }
-      },
-      "ref": true,
-      "defaultIgnored": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "ext": {
-              "x": -59,
-              "y": -393
-            }
-          }
-        }
-      }
-    },
-    "state": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "state"
-        }
-      },
-      "ref": true,
-      "defaultIgnored": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "ext": {
-              "x": -38,
-              "y": -303
-            }
-          }
-        }
-      }
-    },
-    "value": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "value"
-        }
-      },
-      "defaultIgnored": true
-    }
-  },
   "units": {
     "app": {
       "id": "4181691b-4790-4191-9b03-86c6c968d1b8",
@@ -235,40 +7,40 @@
         "style": {
           "metadata": {
             "position": {
-              "x": -80,
-              "y": -170
+              "x": 22,
+              "y": -192
             }
           }
         },
         "disabled": {
           "metadata": {
             "position": {
-              "x": -79,
-              "y": -205
+              "x": 23,
+              "y": -227
             }
           }
         },
         "graph": {
           "metadata": {
             "position": {
-              "x": -78,
-              "y": -235
+              "x": 24,
+              "y": -257
             }
           }
         },
         "fullwindow": {
           "metadata": {
             "position": {
-              "x": -80,
-              "y": -264
+              "x": 22,
+              "y": -287
             }
           }
         },
         "frame": {
           "metadata": {
             "position": {
-              "x": -81,
-              "y": -328
+              "x": 21,
+              "y": -351
             }
           }
         },
@@ -276,13 +48,19 @@
           "ignored": false,
           "metadata": {
             "position": {
-              "x": -564,
-              "y": -266
+              "x": -462,
+              "y": -261
             }
           }
         },
         "value": {
-          "ignored": false
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -462,
+              "y": -315
+            }
+          }
         }
       },
       "output": {
@@ -290,8 +68,8 @@
           "ignored": false,
           "metadata": {
             "position": {
-              "x": -74,
-              "y": -367
+              "x": 28,
+              "y": -389
             }
           }
         },
@@ -299,16 +77,25 @@
           "ignored": false,
           "metadata": {
             "position": {
-              "x": -68,
-              "y": -296
+              "x": 34,
+              "y": -318
+            }
+          }
+        },
+        "value": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 20,
+              "y": -164
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": -321,
-          "y": -266
+          "x": -219,
+          "y": -288
         }
       },
       "value": {
@@ -320,11 +107,14 @@
       "input": {
         "key": {
           "constant": true,
-          "data": "\"color\"",
+          "data": {
+            "ref": [],
+            "data": "color"
+          },
           "metadata": {
             "position": {
-              "x": 52,
-              "y": 58
+              "x": 147,
+              "y": 53
             },
             "data": {
               "position": {
@@ -337,8 +127,8 @@
         "obj": {
           "metadata": {
             "position": {
-              "x": 52,
-              "y": 22
+              "x": 147,
+              "y": 17
             }
           }
         }
@@ -349,16 +139,16 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 118,
-              "y": 0
+              "x": 212,
+              "y": -4
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 97,
-          "y": 40
+          "x": 192,
+          "y": 35
         }
       }
     },
@@ -368,11 +158,21 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{opacity:'0.1',position:'relative',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}",
+          "data": {
+            "ref": [],
+            "data": {
+              "opacity": "0.1",
+              "position": "relative",
+              "width": "240px",
+              "top": "50%",
+              "left": "50%",
+              "transform": "translate(-50%,-50%)"
+            }
+          },
           "metadata": {
             "position": {
-              "x": 270,
-              "y": -10
+              "x": 364,
+              "y": -15
             },
             "data": {
               "position": {
@@ -388,8 +188,8 @@
       },
       "metadata": {
         "position": {
-          "x": 306,
-          "y": 18
+          "x": 401,
+          "y": 13
         }
       }
     },
@@ -403,8 +203,8 @@
       },
       "metadata": {
         "position": {
-          "x": 202,
-          "y": 38
+          "x": 296,
+          "y": 33
         }
       }
     },
@@ -414,8 +214,8 @@
         "style": {
           "metadata": {
             "position": {
-              "x": 175,
-              "y": 257
+              "x": 270,
+              "y": 252
             },
             "data": {
               "position": {
@@ -437,19 +237,22 @@
           "constant": false,
           "metadata": {
             "position": {
-              "x": 91.15384615384616,
-              "y": -143.1025641025641
+              "x": -14.890598290598291,
+              "y": -99.99145299145297
             }
           }
         },
         "fillRule": {
           "ignored": false,
           "constant": true,
-          "data": "'evenodd'",
+          "data": {
+            "ref": [],
+            "data": "evenodd"
+          },
           "metadata": {
             "position": {
-              "x": 174,
-              "y": 294
+              "x": 269,
+              "y": 289
             },
             "data": {
               "position": {
@@ -463,8 +266,8 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 175,
-              "y": 316
+              "x": 270,
+              "y": 311
             }
           }
         }
@@ -474,16 +277,16 @@
           "ignored": true,
           "metadata": {
             "position": {
-              "x": 184,
-              "y": 379
+              "x": 279,
+              "y": 374
             }
           }
         }
       },
       "metadata": {
         "position": {
-          "x": 306,
-          "y": 302
+          "x": 401,
+          "y": 297
         }
       }
     },
@@ -491,11 +294,7 @@
       "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
       "input": {
         "a": {
-          "constant": true,
-          "data": {
-            "ref": [],
-            "data": "M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001z M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001zM14,36.00000000000001 L24,36.00000000000001M24,36 A24,24,1,1,0,24,35.999z M24,36 A24,24,1,1,0,24,35.999zM82,36 A6,6,1,1,0,82,35.999zM82,36 L72,36"
-          },
+          "constant": false,
           "metadata": {
             "data": {
               "position": {
@@ -504,17 +303,22 @@
               }
             },
             "position": {
-              "x": 154,
-              "y": 408
+              "x": 249,
+              "y": 403
             }
           }
         },
         "d": {
           "metadata": {
             "position": {
-              "x": 74,
-              "y": 377
+              "x": 169,
+              "y": 372
             }
+          },
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001z M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001zM14,36.00000000000001 L24,36.00000000000001M24,36 A24,24,1,1,0,24,35.999z M24,36 A24,24,1,1,0,24,35.999zM82,36 A6,6,1,1,0,82,35.999zM82,36 L72,36"
           }
         }
       },
@@ -523,8 +327,8 @@
       },
       "metadata": {
         "position": {
-          "x": 123,
-          "y": 375
+          "x": 218,
+          "y": 370
         }
       }
     },
@@ -536,16 +340,16 @@
           "height": 202
         },
         "position": {
-          "x": 492,
-          "y": 20
+          "x": 587,
+          "y": 15
         }
       },
       "input": {
         "attr": {
           "metadata": {
             "position": {
-              "x": 365,
-              "y": -22
+              "x": 460,
+              "y": -27
             }
           },
           "ignored": true
@@ -604,6 +408,236 @@
       }
     }
   },
+  "inputs": {
+    "disabled": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "disabled"
+        }
+      },
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 45,
+              "y": -216
+            }
+          }
+        }
+      }
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "style"
+        },
+        "2": {
+          "unitId": "propifhaskey",
+          "pinId": "obj"
+        }
+      },
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 37,
+              "y": -174
+            }
+          },
+          "2": {
+            "ext": {
+              "x": 130,
+              "y": 0
+            }
+          }
+        }
+      }
+    },
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 48,
+              "y": -250
+            }
+          }
+        }
+      }
+    },
+    "fullwindow": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "fullwindow"
+        }
+      },
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 47,
+              "y": -284
+            }
+          }
+        }
+      }
+    },
+    "frame": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "frame"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 43,
+              "y": -359
+            }
+          }
+        }
+      }
+    },
+    "d": {
+      "plug": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 250,
+              "y": 427
+            }
+          }
+        }
+      }
+    },
+    "config": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "config",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -481,
+              "y": -248
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "value"
+        }
+      },
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -481,
+              "y": -329
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 43,
+              "y": -415
+            }
+          }
+        }
+      }
+    },
+    "state": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "state"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 64,
+              "y": -325
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "value"
+        }
+      },
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 25,
+              "y": -142
+            }
+          }
+        }
+      }
+    }
+  },
   "render": true,
   "component": {
     "subComponents": {
@@ -636,33 +670,21 @@
     "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
-        "0": {
-          "x": 134,
-          "y": 256
-        },
         "1": {
-          "x": 170,
-          "y": 350
-        },
-        "2": {
-          "x": 230,
-          "y": -102
-        },
-        "3": {
-          "x": 229,
-          "y": 14
+          "x": 265,
+          "y": 346
         },
         "5": {
-          "x": 149,
-          "y": 39
+          "x": 244,
+          "y": 35
         },
         "6": {
-          "x": 254,
-          "y": 32
+          "x": 349,
+          "y": 27
         },
         "7": {
-          "x": 358,
-          "y": 19
+          "x": 453,
+          "y": 14
         }
       }
     }
