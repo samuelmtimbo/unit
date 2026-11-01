@@ -13123,8 +13123,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const bundle = evaluateBundleStr(tree.value, specs, this.$system.classes)
 
       const {
-        unit: { id },
+        unit: { id, input },
       } = bundle
+
+      this._register_spec(id, specs, true)
+
+      for (const inputId in input) {
+        const _input = input[inputId] ?? {}
+
+        const { data } = _input
+
+        if (data !== undefined) {
+          const dataRef = evaluateDataValue(data, specs, {})
+
+          for (const path of dataRef.ref ?? []) {
+            const bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+            this._register_spec(bundle.unit.id, specs, true)
+          }
+        }
+      }
 
       datum = new ClassDatum(
         {
@@ -43071,7 +43089,39 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _sim_remove_datum = (datum_node_id: string): void => {
     // console.log('Graph', '_sim_remove_datum', datum_node_id)
 
+    const { specs } = this.$props
+
     const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    const tree = this._datum_tree[datumId]
+
+    const datum_class_literal: boolean = tree.type === TreeNodeType.Unit
+
+    if (datum_class_literal) {
+      const bundle = evaluateBundleStr(tree.value, specs, this.$system.classes)
+
+      const {
+        unit: { id, input },
+      } = bundle
+
+      this._unregister_spec(id, true)
+
+      for (const inputId in input) {
+        const _input = input[inputId] ?? {}
+
+        const { data } = _input
+
+        if (data !== undefined) {
+          const dataRef = evaluateDataValue(data, specs, {})
+
+          for (const path of dataRef.ref ?? []) {
+            const bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+            this._unregister_spec(bundle.unit.id, true)
+          }
+        }
+      }
+    }
 
     const unlisten = this._datum_unlisten[datumId]
 
