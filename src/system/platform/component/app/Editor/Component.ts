@@ -53226,9 +53226,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         component.subComponents[parent_id] = component.subComponents[
           parent_id
         ] ?? { children: [] }
+
         component.subComponents[parent_id].children =
           component.subComponents[parent_id].children ?? []
+
         component.subComponents[parent_id].children.push(unit_id)
+
+        component.subComponents[parent_id].childSlot =
+          component.subComponents[parent_id].childSlot ?? {}
+
+        const slot_name = this._spec_get_sub_component_slot_name(unit_id)
+
+        component.subComponents[parent_id].childSlot[unit_id] = slot_name
       } else {
         component.children.push(unit_id)
       }
