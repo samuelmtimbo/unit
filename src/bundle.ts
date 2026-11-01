@@ -1,3 +1,4 @@
+import { deepSet_ } from './deepSet'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { getSpec, isSystemSpecId } from './spec/util'
 import { Specs } from './types'
@@ -6,7 +7,7 @@ import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { GraphUnitSpec } from './types/GraphUnitSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
-import { deepGet } from './util/object'
+import { deepDelete, deepGet } from './util/object'
 import { weakMerge } from './weakMerge'
 
 export function unitBundleSpec(
@@ -114,6 +115,8 @@ function _bundleUnit(
     if (data !== undefined) {
       const dataRef = evaluateDataValue(data, specs, {})
 
+      deepSet_(unit, ['input', inputId, 'data'], dataRef)
+
       for (const path of dataRef.ref ?? []) {
         const bundle = deepGet(dataRef.data, path)
 
@@ -134,6 +137,8 @@ function _bundleUnit(
         }
 
         _bundleUnit(bundle.unit, specs, custom, branch, system)
+
+        deepDelete(bundle, ['specs'])
       }
     }
   }

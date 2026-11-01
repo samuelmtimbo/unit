@@ -63,7 +63,10 @@ assert.deepEqual(bundle.take('bundle'), {
         id: '260d774e-bc89-4027-aa92-cb1985fb312b',
         input: {
           a: {
-            data: '1',
+            data: {
+              ref: [],
+              data: 1,
+            },
             ignored: false,
           },
         },
@@ -112,7 +115,10 @@ assert.deepEqual(bundle.take('bundle'), {
         input: {
           a: {
             ignored: false,
-            data: '1',
+            data: {
+              ref: [],
+              data: 1,
+            },
           },
         },
         output: {
