@@ -66,6 +66,7 @@ import {
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone } from '../../../util/clone'
+import { keys } from '../../../util/object'
 import { weakMerge, weakReadMerge } from '../../../weakMerge'
 import { Action } from '../../Action'
 import { BundleSpec } from '../../BundleSpec'
@@ -1026,7 +1027,7 @@ export function stringifyBulkEditActions(actions: Action[]) {
 
       stringifyGraphUnitSpecData(unit)
 
-      for (const specId in specs) {
+      for (const specId of keys(specs)) {
         const spec = specs[specId]
 
         stringifyGraphSpecData(spec)

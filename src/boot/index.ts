@@ -19,6 +19,7 @@ import { PointerState } from '../types/global/PointerState'
 import { ASYNC } from '../types/interface/async/wrapper'
 import { remove } from '../util/array'
 import { clone } from '../util/clone'
+import { keys } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import { style } from './style'
 
@@ -94,7 +95,7 @@ export function boot(
     unlockSpec,
   } = registry
 
-  for (const specId in specs) {
+  for (const specId of keys(specs)) {
     specsLock[specId] = true
   }
 

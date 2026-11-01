@@ -5,6 +5,7 @@ import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { stringifyDataObj } from '../types/stringifyPinData'
+import { keys } from '../util/object'
 
 export const stringifyBundleSpec = (bundle: UnitBundleSpec): void => {
   const { unit, specs } = bundle
@@ -13,7 +14,7 @@ export const stringifyBundleSpec = (bundle: UnitBundleSpec): void => {
 }
 
 export const stringifySpecs = (specs: GraphSpecs): void => {
-  for (const specId in specs) {
+  for (const specId of keys(specs)) {
     const spec = specs[specId]
 
     stringifyGraphSpecData(spec)

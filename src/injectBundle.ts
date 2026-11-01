@@ -1,6 +1,7 @@
 import { BundleSpec } from './types/BundleSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { RE } from './types/interface/RE'
+import { keys } from './util/object'
 import { weakMerge } from './weakMerge'
 
 export function injectUserBundle(
@@ -21,7 +22,7 @@ export function injectUserSpecs(
   const specIdMap = registry.injectSpecs(specs)
 
   // lock spec to prevent deletion
-  for (const specId in specs) {
+  for (const specId of keys(specs)) {
     registry.lockSpec(specId)
   }
 

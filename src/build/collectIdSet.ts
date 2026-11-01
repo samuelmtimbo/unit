@@ -8,7 +8,7 @@ import { GraphSpec } from '../types/GraphSpec'
 import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { deepGet } from '../util/object'
+import { deepGet, keys } from '../util/object'
 import { weakMerge } from '../weakMerge'
 
 export function collectUnitIdSet(
@@ -105,7 +105,7 @@ export function collectIdSetFromBundle(
 
   collectIdSetFromSpec(spec, specs_, set)
 
-  for (const specId in specs) {
+  for (const specId of keys(specs)) {
     const spec = specs[specId]
 
     collectIdSetFromSpec(spec, specs_, set)

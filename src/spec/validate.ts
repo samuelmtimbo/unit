@@ -64,7 +64,7 @@ export function validateBundleSpec(bundle: BundleSpec) {
 }
 
 export function validateSpecs(specs: GraphSpecs) {
-  for (const specId in specs) {
+  for (const specId of keys(specs)) {
     if (!validateGraphSpec(specs[specId])) {
       return false
     }
