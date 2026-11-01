@@ -108,4 +108,16 @@ export default class Start extends Holder<I, O> {
       this._graph = undefined
     }
   }
+
+  onFuncRefOutputDrop(name: any) {
+    super.onIterRefOutputDrop(name)
+
+    // if (name === 'graph') {
+    if (this._graph) {
+      this._graph.$destroy({})
+
+      this._graph = undefined
+    }
+    // }
+  }
 }

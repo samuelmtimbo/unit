@@ -10,6 +10,9 @@ import { themeColor } from '../client/theme'
 import { InvalidStateError } from '../exception/InvalidStateError'
 import { start } from '../start'
 import { BootOpt, System } from '../system'
+import _classes from '../system/_classes'
+import _components from '../system/_components'
+import _specs from '../system/_specs'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { Listener } from '../types/Listener'
@@ -28,17 +31,13 @@ const SYSTEM_USER_VISIBLE_EVENTS = ['hashchange']
 export function boot(
   parent: System | null = null,
   api: API,
-  opt: BootOpt
+  opt: BootOpt = {}
 ): System {
-  const {
-    specs = {},
-    classes = {},
-    components = {},
-    flags = {},
-    env = {},
-  } = opt
+  const { specs = {}, flags = {}, env = {} } = opt
 
   const path = opt.path || '/'
+
+  const __specs = parent ? parent.specs : _specs
 
   const keyboard: KeyboardState = {
     pressed: [],
@@ -70,7 +69,7 @@ export function boot(
 
   const feature = {}
 
-  const specs__ = weakMerge(specs, {})
+  const specs__ = weakMerge(__specs, weakMerge(specs, {}))
 
   const registry = new Registry(specs__)
 
@@ -119,8 +118,8 @@ export function boot(
     context,
     specs_,
     specs: specs__,
-    classes,
-    components,
+    classes: _classes,
+    components: _components,
     icons,
     specsCount,
     lock: specsLock,

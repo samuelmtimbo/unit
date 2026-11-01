@@ -2,14 +2,10 @@ import { Graph } from '../../../Class/Graph'
 import { evaluateBundleSpec } from '../../../spec/evaluate/evaluateBundleSpec'
 import { start } from '../../../start'
 import { BootOpt, System } from '../../../system'
-import _classes from '../../../system/_classes'
-import _components from '../../../system/_components'
-import _specs from '../../../system/_specs'
 import { BundleSpec } from '../../../types/BundleSpec'
 import { Unlisten } from '../../../types/Unlisten'
 import { AsyncGraph } from '../../../types/interface/async/AsyncGraph'
 import { callAll } from '../../../util/call/callAll'
-import { weakMerge } from '../../../weakMerge'
 import { render as render_ } from '../../render'
 import { defaultWebBoot, webBoot } from './boot'
 import { webInit } from './init'
@@ -23,20 +19,16 @@ export function render(
   bundle.spec = spec
   bundle.specs = specs
 
-  const specs_ = weakMerge(specs, _specs)
-
   const [system, deboot] = defaultWebBoot({
     env: {
       HOSTNAME: 'localhost',
       ...opt?.env,
     },
-    specs: specs_,
-    classes: _classes,
-    components: _components,
+    specs,
     ...opt,
   })
 
-  evaluateBundleSpec(bundle, specs_, _classes)
+  evaluateBundleSpec(bundle, system.specs, system.classes)
 
   const graph = start(system, bundle)
 

@@ -1093,9 +1093,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const { global } = this.__system
 
-    nextTick(() => {
-      this.__system.unregisterUnit(this.id)
-    })
+    this.__system.unregisterUnit(this.id)
 
     deepDestroy(global.graph, [this.id, this.__global_id])
 

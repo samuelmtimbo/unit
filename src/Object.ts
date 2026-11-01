@@ -142,9 +142,7 @@ export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
 
     delete obj[key]
 
-    if (obj[key] === undefined) {
-      this._dispatch('delete', parent_path, key, value)
-    }
+    this._dispatch('delete', parent_path, key, value)
   }
 
   public read(): T {

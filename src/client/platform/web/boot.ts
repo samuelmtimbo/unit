@@ -1,9 +1,6 @@
 import { API } from '../../../API'
 import { boot } from '../../../boot'
 import { BootOpt, System } from '../../../system'
-import _classes from '../../../system/_classes'
-import _components from '../../../system/_components'
-import _specs from '../../../system/_specs'
 import { Unlisten } from '../../../types/Unlisten'
 import { SYSTEM_ROOT_ID } from '../../constants/SYSTEM_ROOT_ID'
 import { attachApp } from '../../render/attachApp'
@@ -51,11 +48,7 @@ export function defaultWebBoot(opt?: BootOpt): [System, Unlisten] {
 export function webBoot(
   window: Window,
   root: HTMLElement,
-  opt: BootOpt = {
-    specs: _specs,
-    classes: _classes,
-    components: _components,
-  }
+  opt: BootOpt = {}
 ): [System, Unlisten] {
   root.attachShadow({ mode: 'open' })
 

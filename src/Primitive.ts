@@ -305,7 +305,22 @@ export class Primitive<
     name: K,
     output: Pin<any>
   ): void => {
-    this.__setupOutput(name, output)
+    const dataListener = this._onRefOutputData.bind(this, name)
+    const dropListener = this._onRefOutputDrop.bind(this, name)
+    const invalidListener = this._onRefOutputInvalid.bind(this, name)
+
+    output.addListener('data', dataListener)
+    output.addListener('invalid', invalidListener)
+
+    output.prependListener('drop', dropListener)
+
+    const unlisten = () => {
+      output.removeListener('data', dataListener)
+      output.removeListener('invalid', invalidListener)
+      output.removeListener('drop', dropListener)
+    }
+
+    this._outputUnlisten[name] = unlisten
 
     if (output.active()) {
       const data = output.peak()
@@ -602,6 +617,12 @@ export class Primitive<
     this.onRefInputInvalid(name)
   }
 
+  private _onRefOutputInvalid = <K extends keyof O>(name: K): void => {
+    this._o_invalid.add(name)
+
+    this.onRefOutputInvalid(name)
+  }
+
   public onDataInputDrop<K extends keyof I>(name: K, data: any): void {}
 
   public onRefInputDrop<K extends keyof I>(name: K, data: any): void {}
@@ -656,7 +677,7 @@ export class Primitive<
 
   public onRefOutputData<K extends keyof O>(name: K, data: any): void {}
 
-  public onRefOutputDrop<K extends keyof O>(name: K): void {}
+  public onRefOutputDrop<K extends keyof O>(name: K, data?: any): void {}
 
   public onOutputInvalid(name: string): void {}
 
@@ -748,6 +769,8 @@ export class Primitive<
   public onDataInputInvalid<K extends keyof I>(name: K) {}
 
   public onRefInputInvalid<K extends keyof I>(name: K) {}
+
+  public onRefOutputInvalid<K extends keyof O>(name: K) {}
 
   public snapshotSelf(): Dict<any> {
     return {

@@ -69,6 +69,48 @@ export class Semifunctional<
       b() {
         self.b()
       }
+
+      onRefInputData<K extends keyof I>(name: any, data: any) {
+        super.onRefInputData(name, data)
+
+        self.onFuncRefInputData(name, data)
+      }
+
+      onDataInputDrop(name: any, data: any): void {
+        super.onDataInputDrop(name, data)
+
+        self.onFuncDataInputDrop(name)
+      }
+
+      onRefInputDrop<K extends keyof I>(name: any, data: any): void {
+        super.onRefInputDrop(name, data)
+
+        self.onFuncRefInputDrop(name)
+      }
+
+      onDataOutputDrop<K extends keyof O>(name: any): void {
+        super.onDataOutputDrop(name)
+
+        self.onFuncDataOutputDrop(name)
+      }
+
+      onRefOutputDrop<K extends keyof O>(name: any): void {
+        super.onRefOutputDrop(name)
+
+        self.onFuncRefOutputDrop(name)
+      }
+
+      onDataInputInvalid<K extends keyof I>(name: any) {
+        super.onDataInputInvalid(name)
+
+        self.onFuncDataInputInvalid(name)
+      }
+
+      onRefInputInvalid<K extends keyof I>(name: any) {
+        super.onRefInputInvalid(name)
+
+        self.onFuncRefInputInvalid(name)
+      }
     })(this.__system)
 
     const primitive = new (class _Primitive extends Primitive<I, O> {
@@ -85,34 +127,50 @@ export class Semifunctional<
       }
 
       onDataInputData<K extends keyof I>(name: K, data) {
+        super.onDataInputData(name, data)
+
         self.onIterDataInputData(name, data)
       }
 
       onRefInputData<K extends keyof I>(name: K, data) {
+        super.onRefInputData(name, data)
+
         self.onIterRefInputData(name, data)
       }
 
-      onDataInputDrop<K extends keyof I>(name: K): void {
+      onDataInputDrop(name: any, data: any): void {
+        super.onDataInputDrop(name as any, data)
+
         self.onIterDataInputDrop(name)
       }
 
-      onRefInputDrop<K extends keyof I>(name: K): void {
+      onRefInputDrop<K extends keyof I>(name: K, data: any): void {
+        super.onRefInputDrop(name, data)
+
         self.onIterRefInputDrop(name)
       }
 
       onDataOutputDrop<K extends keyof O>(name: K): void {
+        super.onDataOutputDrop(name)
+
         self.onIterDataOutputDrop(name)
       }
 
       onRefOutputDrop<K extends keyof O>(name: K): void {
+        super.onRefOutputDrop(name)
+
         self.onIterRefOutputDrop(name)
       }
 
       onDataInputInvalid<K extends keyof I>(name: K) {
+        super.onDataInputInvalid(name)
+
         self.onIterDataInputInvalid(name)
       }
 
       onRefInputInvalid<K extends keyof I>(name: K) {
+        super.onRefInputInvalid(name)
+
         self.onIterRefInputInvalid(name)
       }
     })(this.__system)
@@ -208,6 +266,22 @@ export class Semifunctional<
   protected _done: Done<O> = (data) => {
     this._functional._done(data)
   }
+
+  public onFuncDataInputData<K extends keyof I>(name: K, data: any): void {}
+
+  public onFuncRefInputData<K extends keyof I>(name: K, data: any): void {}
+
+  public onFuncDataInputDrop<K extends keyof I>(name: K): void {}
+
+  public onFuncRefInputDrop<K extends keyof I>(name: K): void {}
+
+  public onFuncDataOutputDrop<K extends keyof O>(name: K): void {}
+
+  public onFuncRefOutputDrop<K extends keyof O>(name: K): void {}
+
+  public onFuncDataInputInvalid<K extends keyof I>(name: K) {}
+
+  public onFuncRefInputInvalid<K extends keyof I>(name: K) {}
 
   public onIterDataInputData<K extends keyof I>(name: K, data: any): void {}
 

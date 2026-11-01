@@ -129,8 +129,6 @@ export interface BootOpt {
   dir?: string
   path?: string
   specs?: Specs
-  classes?: Classes
-  components?: ComponentClasses
   flags?: System['flags']
   env?: Dict<string>
 }
