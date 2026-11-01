@@ -113,6 +113,15 @@
         }
       },
       "defaultIgnored": true
+    },
+    "d": {
+      "plug": {
+        "0": {
+          "unitId": "io",
+          "pinId": "d"
+        }
+      },
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -208,7 +217,7 @@
           "ignored": true
         },
         "d": {
-          "ignored": true,
+          "ignored": false,
           "metadata": {
             "position": {
               "x": -370,
