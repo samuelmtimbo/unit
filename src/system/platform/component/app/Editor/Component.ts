@@ -53413,6 +53413,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       center
     )
 
+    if (keyCount(graph.component?.subComponents ?? {}) > 0) {
+      graph.render = true
+    }
+
     this._set_spec_node_positions(graph, this, nodes_position)
 
     const bundle = bundleSpec(graph, specs)
