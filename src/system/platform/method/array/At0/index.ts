@@ -20,7 +20,7 @@ export default class At0<T> extends Getter<I<T>, O<T>> {
         o: ['a[i]'],
         $i: 'a',
         $o: 'a[i]',
-        $m: 'length',
+        $m: 'at',
         $_: ['A'],
       },
       {
