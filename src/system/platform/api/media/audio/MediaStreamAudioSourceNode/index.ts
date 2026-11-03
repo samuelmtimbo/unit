@@ -69,11 +69,19 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
     if (sourceNode.__.includes('AC')) {
       sourceNode = sourceNode as AC & $
 
-      context = sourceNode.audioContext()
+      try {
+        context = sourceNode.audioContext()
+      } catch (err) {
+        fail(err.message.toLowerCase())
+      }
     } else {
       sourceNode = sourceNode as AN & $
 
-      context = sourceNode.getContext()
+      try {
+        context = sourceNode.getContext()
+      } catch (err) {
+        fail(err.message.toLowerCase())
+      }
     }
 
     const mediaStream = await stream.mediaStream()
@@ -84,6 +92,15 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
         mediaStream,
       })
     } catch (err) {
+      if (
+        err.message ===
+        "Failed to construct 'MediaStreamAudioSourceNode': MediaStream has no audio track"
+      ) {
+        fail('media stream has no audio track')
+
+        return
+      }
+
       fail(err.message.toLowerCase())
 
       return
