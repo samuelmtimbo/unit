@@ -117,15 +117,17 @@ export class Functional<
 
   onRefOutputData<K extends keyof O>(name: K, data: any): void {}
 
-  onRefOutputDrop<K extends keyof O>(name: K, data?: any): void {}
-
-  private _on_data_output_drop = <K extends keyof O>(name: K): void => {
+  private _on_output_drop = <K extends keyof O>(name: K): void => {
     this._backward_if_ready()
     this._forward_if_ready()
   }
 
   onDataOutputDrop<K extends keyof O>(name: K) {
-    this._on_data_output_drop(name)
+    this._on_output_drop(name)
+  }
+
+  onRefOutputDrop<K extends keyof O>(name: K) {
+    this._on_output_drop(name)
   }
 
   public onInputSet<K extends keyof I>(
