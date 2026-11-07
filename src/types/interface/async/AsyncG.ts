@@ -61,6 +61,10 @@ import { evaluateDataValue } from '../../../spec/evaluateDataValue'
 import { resolveDataRef } from '../../../spec/resolveDataValue'
 import { stringify } from '../../../spec/stringify'
 import {
+  stringifyDataObj,
+  stringifyPinData,
+} from '../../../spec/stringifyPinData'
+import {
   stringifyGraphSpecData,
   stringifyGraphUnitSpecData,
 } from '../../../spec/stringifySpec'
@@ -76,7 +80,6 @@ import { IO } from '../../IO'
 import { Key } from '../../Key'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
-import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_G, $G_R, $G_W } from './$G'
 import { $U } from './$U'

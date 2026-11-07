@@ -16,6 +16,7 @@ import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { evaluateDataValue } from '../../../spec/evaluateDataValue'
 import { resolveDataRef } from '../../../spec/resolveDataValue'
 import { stringify } from '../../../spec/stringify'
+import { stringifyPinData } from '../../../spec/stringifyPinData'
 import {
   stringifyMemorySpecData,
   stringifyUnitBundleSpecData,
@@ -26,7 +27,6 @@ import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GlobalRefSpec } from '../../GlobalRefSpec'
 import { IO } from '../../IO'
-import { stringifyPinData } from '../../stringifyPinData'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { $U, $U_C, $U_G, $U_R, $U_W } from './$U'

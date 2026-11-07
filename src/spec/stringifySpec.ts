@@ -4,8 +4,8 @@ import { GraphSpec } from '../types/GraphSpec'
 import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { stringifyDataObj } from '../types/stringifyPinData'
 import { keys } from '../util/object'
+import { stringifyDataObj } from './stringifyPinData'
 
 export const stringifyBundleSpec = (bundle: UnitBundleSpec): void => {
   const { unit, specs } = bundle

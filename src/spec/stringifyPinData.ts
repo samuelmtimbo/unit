@@ -1,5 +1,5 @@
-import { stringify } from '../spec/stringify'
-import { Dict } from './Dict'
+import { Dict } from '../types/Dict'
+import { stringify } from './stringify';
 
 export function stringifyPinData(
   data: {
