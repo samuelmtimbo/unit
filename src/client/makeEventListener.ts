@@ -1,3 +1,4 @@
+import { makeAnimationListener } from './event/animation'
 import { makeChangeListener } from './event/change'
 import { makeDragEndListener } from './event/drag/dragend'
 import { makeDragOverListener } from './event/drag/dragover'
@@ -56,6 +57,17 @@ export type UIEventName =
   | 'load'
   | 'ended'
   | 'loadeddata'
+  | 'animationstart'
+  | 'animationiteration'
+  | 'animationend'
+  | 'animationcancel'
+  | 'finish'
+  | 'cancel'
+  | 'remove'
+  | 'transitionrun'
+  | 'transitionstart'
+  | 'transitionend'
+  | 'transitioncancel'
 
 export const UI_EVENT_SET: Set<UIEventName> = new Set([
   'click',
@@ -85,6 +97,17 @@ export const UI_EVENT_SET: Set<UIEventName> = new Set([
   'load',
   'ended',
   'loadeddata',
+  'animationstart',
+  'animationiteration',
+  'animationend',
+  'animationcancel',
+  'finish',
+  'cancel',
+  'remove',
+  'transitionrun',
+  'transitionstart',
+  'transitionend',
+  'transitioncancel',
 ])
 
 export function makeUIEventListener(
@@ -146,6 +169,18 @@ export function makeUIEventListener(
       return makeEndedListener(callback)
     case 'loadeddata':
       return makeLoadedDataListener(callback)
+    case 'animationstart':
+    case 'animationiteration':
+    case 'animationend':
+    case 'animationcancel':
+    case 'finish':
+    case 'cancel':
+    case 'remove':
+    case 'transitionrun':
+    case 'transitionstart':
+    case 'transitionend':
+    case 'transitioncancel':
+      return makeAnimationListener(event, callback)
     default:
       throw new Error(`unknown UI event: ${event}`)
   }

@@ -234,7 +234,10 @@ export class Component__<
     return this._animations
   }
 
-  animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
+  animate(
+    keyframes: Keyframe[],
+    opt: KeyframeAnimationOptions & { id: string }
+  ): void {
     return animate(this, this._animations, keyframes, opt)
   }
 

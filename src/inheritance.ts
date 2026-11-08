@@ -16,4 +16,5 @@ export const INHERITANCE = {
   RES: ['BO', 'J', 'V'],
   RS: ['BO'],
   BSN: ['AN', 'EE'],
+  ANI: ['EE'],
 }

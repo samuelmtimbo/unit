@@ -29,7 +29,7 @@ export type C_EE = {
 }
 
 export type AnimationSpec = {
-  opt: KeyframeAnimationOptions
+  opt: KeyframeAnimationOptions & { id: string }
   keyframes: Keyframe[]
 }
 

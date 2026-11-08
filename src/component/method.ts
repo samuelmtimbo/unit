@@ -331,7 +331,7 @@ export function animate(
   component: Component_,
   animations: AnimationSpec[],
   keyframes: Keyframe[],
-  opt: KeyframeAnimationOptions
+  opt: KeyframeAnimationOptions & { id: string }
 ) {
   animations.push({ keyframes, opt })
 

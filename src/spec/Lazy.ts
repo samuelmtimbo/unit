@@ -623,7 +623,10 @@ export function lazyFromSpec(
       return this.__graph.getSlot(slotName)
     }
 
-    public animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
+    public animate(
+      keyframes: Keyframe[],
+      opt: KeyframeAnimationOptions & { id: string }
+    ): void {
       this._ensure()
       return this.__graph.animate(keyframes, opt)
     }

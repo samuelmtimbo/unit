@@ -1378,14 +1378,18 @@ export class Component<
 
   animate(
     keyframes: Keyframe[],
-    options: KeyframeAnimationOptions
+    options: KeyframeAnimationOptions & { id: string }
   ): Animation[] {
+    const { id } = options
+
     const base = this.getAnimatableBase()
 
     const animations = []
 
     for (const leaf of base) {
       const animation = leaf.$element.animate(keyframes, options)
+
+      this.$system.cache.animations[id] = animation
 
       leaf.$element.dispatchEvent(new CustomEvent('animationstart'))
 
@@ -1400,6 +1404,10 @@ export class Component<
         leaf.$animationCount--
 
         leaf.$element.dispatchEvent(new CustomEvent('animationend'))
+      })
+
+      animation.addEventListener('finish', () => {
+        delete this.$system.cache.animations[id]
       })
 
       animations.push(animation)

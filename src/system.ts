@@ -47,6 +47,7 @@ export interface System extends S, Registry {
     wss: Dict<ServerSocket>
     eventSources: Dict<EventSourceShape>
     interceptors: ServerInterceptor[]
+    animations: Dict<Animation>
   }
   feature: Dict<boolean>
   foreground: {

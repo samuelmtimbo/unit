@@ -65,6 +65,7 @@ export function boot(
     wss: {},
     interceptors: [],
     eventSources: {},
+    animations: {},
   }
 
   const feature = {}
