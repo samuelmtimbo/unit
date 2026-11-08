@@ -61,7 +61,7 @@ export function noneApi(): API {
     },
     device: {
       vibrate: () => {
-        throw new APINotSupportedError('Vibrate')
+        throw new APINotSupportedError('Vibration')
       },
     },
     geolocation: {

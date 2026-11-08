@@ -61,7 +61,7 @@ export function workerApi(): API {
     },
     device: {
       vibrate: () => {
-        throw new APINotSupportedError('Vibrate')
+        throw new APINotSupportedError('Vibration')
       },
     },
     geolocation: {

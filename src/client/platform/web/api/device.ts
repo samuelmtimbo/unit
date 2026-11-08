@@ -8,7 +8,7 @@ export function webDevice(window: Window, opt: BootOpt): API['device'] {
       if (window.navigator.vibrate) {
         window.navigator.vibrate(pattern)
       } else {
-        throw new APINotSupportedError('Vibrate')
+        throw new APINotSupportedError('Vibration')
       }
     },
   }
