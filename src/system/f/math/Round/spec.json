@@ -1,0 +1,21 @@
+{
+  "name": "round",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "value-absolute",
+    "description": "`a` rounded to the nearest integer `b`",
+    "tags": ["f", "math"]
+  },
+  "id": "8362a358-83bd-4249-a376-f4b552ebc490",
+  "base": true,
+  "type": "`U`"
+}
