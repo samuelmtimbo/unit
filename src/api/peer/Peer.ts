@@ -130,7 +130,19 @@ export class Peer extends $<PeerEvents> {
 
   send(message: string): void {
     const _message = JSON.stringify({ type: 'message', data: message })
-    this._rtc_channel.send(_message)
+
+    try {
+      this._rtc_channel.send(_message)
+    } catch (err) {
+      if (
+        err.message ===
+        `Failed to execute 'send' on 'RTCDataChannel': RTCDataChannel.readyState is not 'open'`
+      ) {
+        throw new Error('rtc data channel is not open')
+      }
+
+      throw err
+    }
   }
 
   async offer(): Promise<string> {
