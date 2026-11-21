@@ -16,16 +16,26 @@ export default class Image_ extends HTMLElement_<HTMLImageElement, Props> {
       $system.style['image'],
       {},
       {
-        src: (url: string | undefined) => {
-          this.$element.src = url ?? ''
+        src: (src: string | undefined) => {
+          if (src === undefined) {
+            this.$element.removeAttribute('src')
+          } else {
+            this.$element.src = src
+          }
         },
       }
     )
+  }
 
+  onMount() {
     const { src } = this.$props
 
     if (src !== undefined) {
       this.$element.src = src
     }
+  }
+
+  onUnmount() {
+    this.$element.removeAttribute('src')
   }
 }
