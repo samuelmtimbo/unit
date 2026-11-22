@@ -1,6 +1,5 @@
 import { build, BuildOptions } from 'esbuild'
-import { pathExists, readJSON } from 'fs-extra'
-import { unlink } from 'fs/promises'
+import { access, readFile, unlink } from 'fs/promises'
 import * as path from 'path'
 import { PATH_UNIT } from '../path'
 import { sync } from '../script/sync'
@@ -43,8 +42,11 @@ export async function bundle_(
   )
   const outputPath = path.join(outputFolder, 'index.js')
 
-  const bootPathExists = await pathExists(bootPath)
-  const bundle = await readJSON(bundlePath)
+  const bootPathExists = await access(bootPath).then(
+    () => true,
+    () => false
+  )
+  const bundle = JSON.parse(await readFile(bundlePath, 'utf8'))
 
   const set = includeSystem ? undefined : collectIdSetFromBundle(bundle)
 

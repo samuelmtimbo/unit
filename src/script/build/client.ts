@@ -1,6 +1,7 @@
-import { writeFile } from 'fs-extra';
-import { build } from '../build';
-(async () => {
+import { writeFile } from 'fs/promises'
+import { build } from '../build'
+
+;(async () => {
   const result = await build({
     minify: true,
     sourcemap: false,

@@ -1,27 +1,26 @@
-import { copyFile, ensureDir } from 'fs-extra';
-import * as path from 'path';
-import { PATH_PUBLIC } from '../../path';
-import { build } from '../build';
+import { copyFile, mkdir } from 'fs/promises'
+import * as path from 'path'
+import { PATH_PUBLIC } from '../../path'
+import { build } from '../build'
 
 const build_ = async (source: string, target: string, minify: boolean) => {
-  const outfile =  `dist/${target}${minify ? '.min' : ''}.js`
+  const outfile = `dist/${target}${minify ? '.min' : ''}.js`
 
   await build({
     minify: true,
     sourcemap: true,
     bundle: true,
-    format: "iife",
+    format: 'iife',
     logLevel: 'warning',
     entryPoints: [`src/client/platform/web/${source}.ts`],
     outfile,
     metafile: true,
   })
 
-  
-  await ensureDir(path.join(PATH_PUBLIC, 'dist'))
-  
+  await mkdir(path.join(PATH_PUBLIC, 'dist'), { recursive: true })
+
   const publicPath = path.join(PATH_PUBLIC, outfile)
-  
+
   await copyFile(outfile, publicPath)
 }
 
@@ -33,4 +32,3 @@ void (async () => {
     build_('global', 'global', false),
   ])
 })()
-

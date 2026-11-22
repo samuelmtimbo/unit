@@ -1,26 +1,21 @@
-import { writeFileSync } from 'fs'
-import { readJSONSync } from 'fs-extra'
-import * as glob from 'glob'
+import { readdirSync, readFileSync, writeFileSync } from 'fs'
+import { basename, join } from 'path'
 import { PATH_BUILD_SYSTEM_PLATFORM_CORE_COMPONENT } from '../path'
-import { removeLastSegment } from '../util/removeLastSegment'
 
 // const cwd = PATH_BUILD_SYSTEM_PLATFORM_COMPONENT
 const cwd = PATH_BUILD_SYSTEM_PLATFORM_CORE_COMPONENT
 
-glob
-  .sync(`**/**/spec.json`, {
-    cwd,
-  })
-  .map((path) => removeLastSegment(path))
-  .forEach((_) => {
-    const spec_file_path = `${cwd}/${_}/spec.json`
-    const spec = readJSONSync(spec_file_path)
-    const segments = _.split('/')
-    const { id, name, inputs = {}, outputs = {} } = spec
+const files = readdirSync(cwd, { recursive: true, encoding: 'utf8' })
 
-    console.log(name)
+for (const file of files) {
+  if (basename(file) !== 'spec.json') continue
 
-    spec.render = true
+  const specFilePath = join(cwd, file)
+  const spec = JSON.parse(readFileSync(specFilePath, 'utf8'))
 
-    writeFileSync(spec_file_path, JSON.stringify(spec, null, 2))
-  })
+  console.log(spec.name)
+
+  spec.render = true
+
+  writeFileSync(specFilePath, JSON.stringify(spec, null, 2))
+}
