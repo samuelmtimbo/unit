@@ -53,7 +53,6 @@
   },
   "dependencies": {
     "@_unit/unit": "file:.",
-    "commander": "12.1.0",
     "eventsource": "4.1.0",
     "jsdom": "24.0.0",
     "ws": "8.21.0"

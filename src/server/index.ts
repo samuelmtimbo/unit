@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { Command } from 'commander'
 import { readFileSync } from 'fs'
 import * as path from 'path'
+import { parseArgs } from 'util'
 import { defaultBundle } from '../build/bundle'
 import { PATH_UNIT } from '../path'
 import { serve } from './serve'
@@ -19,68 +19,104 @@ const packageJson = JSON.parse(
 
 const { version } = packageJson
 
-const program = new Command()
+const ROOT_HELP = `Usage: unit [options] [command]
 
-program
-  .version(version)
-  .option('-p, --port <number>', 'Port to run unit server on')
+Options:
+  -V, --version          output the version number
+  -p, --port <number>    Port to run unit server on
+  -h, --help             display help for command
 
-// "serve" as default/root command
-program.action(() => {
-  const { port } = program.opts()
-  serve({ port })
-})
+Commands:
+  build [options] [input]  Build from a bundle or system file. Shorthand: "unit build bundle.json"
+`
 
-// "build" subcommand
-program
-  .command('build [input]')
-  .description(
-    'Build from a bundle or system file. Shorthand: "unit build bundle.json"'
-  )
-  .option('-b, --bundle <path>', 'Path to bundle file (e.g., bundle.json)')
-  .option('-s, --system <path>', 'Path to system file (e.g., system.json)')
-  .option(
-    '-o, --output <path>',
-    'Output directory (defaults to same dir as input)'
-  )
-  .action(
-    async (
-      input: string | undefined,
-      cmdOptions: {
-        bundle?: string
-        system?: string
-        output?: string
-      }
-    ) => {
-      const bundle = cmdOptions.bundle
-        ? path.resolve(cmdOptions.bundle)
-        : input
-          ? path.resolve(input)
-          : undefined
+const BUILD_HELP = `Usage: unit build [options] [input]
 
-      const system = cmdOptions.system
-        ? path.resolve(cmdOptions.system)
+Build from a bundle or system file. Shorthand: "unit build bundle.json"
+
+Options:
+  -b, --bundle <path>    Path to bundle file (e.g., bundle.json)
+  -s, --system <path>    Path to system file (e.g., system.json)
+  -o, --output <path>    Output directory (defaults to same dir as input)
+  -h, --help             display help for command
+`
+
+async function main() {
+  const args = process.argv.slice(2)
+
+  if (args[0] === 'build') {
+    const { values, positionals } = parseArgs({
+      args: args.slice(1),
+      allowPositionals: true,
+      options: {
+        bundle: { type: 'string', short: 'b' },
+        system: { type: 'string', short: 's' },
+        output: { type: 'string', short: 'o' },
+        help: { type: 'boolean', short: 'h' },
+      },
+    })
+
+    if (values.help) {
+      console.log(BUILD_HELP)
+      process.exit(0)
+    }
+
+    const input = positionals[0]
+
+    const bundle = values.bundle
+      ? path.resolve(values.bundle)
+      : input
+        ? path.resolve(input)
         : undefined
 
-      const basisForOutput = cmdOptions.output
-        ? path.resolve(cmdOptions.output)
-        : bundle ?? system ?? (input ? path.resolve(input) : undefined)
+    const system = values.system ? path.resolve(values.system) : undefined
 
-      if (!basisForOutput) {
-        console.error(
-          'Error: provide at least a positional [input] or --bundle or --system'
-        )
-        process.exit(1)
-      }
+    const basisForOutput = values.output
+      ? path.resolve(values.output)
+      : bundle ?? system ?? (input ? path.resolve(input) : undefined)
 
-      const output = cmdOptions.output
-        ? path.resolve(cmdOptions.output)
-        : path.extname(basisForOutput)
-          ? path.dirname(basisForOutput)
-          : basisForOutput
-
-      await defaultBundle(bundle, system, output, false, {})
+    if (!basisForOutput) {
+      console.error(
+        'Error: provide at least a positional [input] or --bundle or --system'
+      )
+      process.exit(1)
     }
-  )
 
-program.parse(process.argv)
+    const output = values.output
+      ? path.resolve(values.output)
+      : path.extname(basisForOutput)
+        ? path.dirname(basisForOutput)
+        : basisForOutput
+
+    await defaultBundle(bundle, system, output, false, {})
+    return
+  }
+
+  // "serve" as default/root command
+  const { values } = parseArgs({
+    args,
+    allowPositionals: false,
+    options: {
+      port: { type: 'string', short: 'p' },
+      version: { type: 'boolean', short: 'V' },
+      help: { type: 'boolean', short: 'h' },
+    },
+  })
+
+  if (values.version) {
+    console.log(version)
+    process.exit(0)
+  }
+
+  if (values.help) {
+    console.log(ROOT_HELP)
+    process.exit(0)
+  }
+
+  serve({ port: values.port })
+}
+
+main().catch((err) => {
+  console.error(err instanceof Error ? err.message : err)
+  process.exit(1)
+})
